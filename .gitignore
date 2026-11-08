@@ -34,3 +34,10 @@
 # Private editorial/reconstructed research fixtures; keep authored adapters.
 /Modules/DynastyEnhancer/Tests/Fixtures/ulm-close-games-2026.json
 /Modules/DynastyEnhancer/Content/Editorial/review-samples.json
+
+# User-created content exports stay local.
+/Exports/
+
+# Authored release guides are source, unlike generated Release assets.
+!/docs/release/
+!/docs/release/*.md

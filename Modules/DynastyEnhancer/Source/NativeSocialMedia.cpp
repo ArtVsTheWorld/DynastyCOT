@@ -47,12 +47,14 @@ unsigned feedContainerCount=listFeed?1:feedPostCount;
 std::mutex feedMutex;
 std::shared_ptr<const social::Feed> latestFeed=social::statusFeed(feedPostCount),pageFeed=latestFeed;
 std::deque<std::shared_ptr<const social::Feed>> retiredFeeds;
+bool sidebarAvailable(){return listFeed&&pageFeed->catalog&&!pageFeed->catalog->weeks.at(pageFeed->edition).sidebar.empty();}
+unsigned containerCount(){return listFeed?(sidebarAvailable()?2u:1u):feedPostCount;}
 bool nativeFeedIdentity=false;uint32_t nativeFeedLeague=0; // Protected by feedMutex.
 bool currentFeedLeague(){uint32_t league=0;return !nativeFeedIdentity||(read(base+0xf55c998,&league,4)&&league==nativeFeedLeague);}
 void collectRetiredFeeds(){std::deque<std::shared_ptr<const social::Feed>> retired;{std::lock_guard<std::mutex> lock(feedMutex);retired.swap(retiredFeeds);}}
-void adoptFeed(){std::lock_guard<std::mutex> lock(feedMutex);if(pageFeed!=latestFeed){retiredFeeds.push_back(std::move(pageFeed));pageFeed=latestFeed;}feedPostCount=static_cast<unsigned>(pageFeed->posts.size());feedContainerCount=listFeed?1:feedPostCount;}
+void adoptFeed(){std::lock_guard<std::mutex> lock(feedMutex);if(pageFeed!=latestFeed){retiredFeeds.push_back(std::move(pageFeed));pageFeed=latestFeed;}feedPostCount=static_cast<unsigned>(pageFeed->posts.size());feedContainerCount=containerCount();}
 bool feedReady(){std::lock_guard<std::mutex> lock(feedMutex);return latestFeed&&latestFeed->catalog!=nullptr&&currentFeedLeague();}
-bool adoptReadyFeed(){std::lock_guard<std::mutex> lock(feedMutex);if(!latestFeed||!latestFeed->catalog||!currentFeedLeague())return false;if(pageFeed!=latestFeed){retiredFeeds.push_back(std::move(pageFeed));pageFeed=latestFeed;}feedPostCount=static_cast<unsigned>(pageFeed->posts.size());feedContainerCount=listFeed?1:feedPostCount;return true;}
+bool adoptReadyFeed(){std::lock_guard<std::mutex> lock(feedMutex);if(!latestFeed||!latestFeed->catalog||!currentFeedLeague())return false;if(pageFeed!=latestFeed){retiredFeeds.push_back(std::move(pageFeed));pageFeed=latestFeed;}feedPostCount=static_cast<unsigned>(pageFeed->posts.size());feedContainerCount=containerCount();return true;}
 void publishFeed(const Json&);
 void waitingFeed(){auto feed=social::statusFeed();std::lock_guard<std::mutex> lock(feedMutex);retiredFeeds.push_back(std::move(latestFeed));latestFeed=std::move(feed);}
 
@@ -512,7 +514,7 @@ void __fastcall containerHook(void* self,void* panel,void* out){
             else if(value.is_number_float())rowSet(out,row,key.c_str(),value.get<float>(),5);
             else if(value.is_string())rowText(out,row,key.c_str(),key=="tileCoords"?coords.c_str():key=="panelId"?"CM_NEWSSUB":value.get_ref<const std::string&>().c_str());
         }
-            if constexpr(listFeed){rowText(out,row,"linkage","art_control.group.PanelListContainer");rowSet(out,row,"Width",1200,4);rowSet(out,row,"Height",600,4);rowSet(out,row,"ScrollByMount",false,3);rowSet(out,row,"UseScrollArrows",false,3);rowSet(out,row,"ShowScroller",true,3);rowSet(out,row,"WrapList",false,3);}
+            if constexpr(listFeed){rowText(out,row,"linkage","art_control.group.PanelListContainer");rowSet(out,row,"Width",row==1?520:1200,4);rowSet(out,row,"Height",600,4);rowText(out,row,"PositionOffset",row==1?"1220,0":"0,0");rowSet(out,row,"ScrollByMount",false,3);rowSet(out,row,"UseScrollArrows",false,3);rowSet(out,row,"ShowScroller",true,3);rowSet(out,row,"WrapList",false,3);}
         }note({{"event","social_feed_containers"},{"donor",proxy.captured},{"listFeed",listFeed}});return;
     }
     if(disabled||!feedEnabled||!entry){if(entry&&!feedEnabled)admittedHubEntries[entry->panel]=false;containers(self,panel,out);return;}const bool first=entry==&teamEntry;ContainerProxy proxy{containerVt,out,{},first};containers(self,panel,&proxy);admittedHubEntries[entry->panel]=appendContainer(proxy,*entry);
@@ -528,9 +530,18 @@ void populatePost(void* tile,unsigned number){
             // AllowFocus controls the card accent separately; DO_NOTHING keeps
             // the posts read-only even though the input route remains enabled.
             tileText(tile,"linkage","art_control.paneltile.NewsStoryTile");tileText(tile,"display",author.c_str());tileInt(tile,"Width",1200);tileInt(tile,"Height",(post.bodyHeight?post.bodyHeight:social::postHeight(post.body))+32);tileBool(tile,"isFocusable",true);tileBool(tile,"isInteractive",true);tileBool(tile,"ForceContainer",listFeed);
-            void* extra=makeObject();tileText(extra,"SubText",post.body.c_str());auto stamp=post.stamp+" | "+std::to_string(number)+"/"+std::to_string(feedPostCount)+" shown | "+std::to_string(pageFeed->total)+" eligible";if(pageFeed->pages>1)stamp+=" | page "+std::to_string(pageFeed->page+1)+"/"+std::to_string(pageFeed->pages);tileText(extra,"DateText",stamp.c_str());const auto likes=post.bodyHeight?post.displayLikes:post.likes>=0?social::compactCount(post.likes)+" likes":std::string();tileText(extra,"TertiaryText",likes.c_str());tileBool(extra,"UseJersey",post.uniformTeamLogo>=0);tileInt(extra,"UniformTeamLogo",post.uniformTeamLogo);tileInt(extra,"AltImageLibrary",92);tileInt(extra,"AltImageValue",post.uniformTeamLogo>=0?post.uniformTeamLogo+1:0);tileText(extra,"AltImageRenderType","SwappableImage");tileInt(extra,"ImageLibrary",post.imageLibrary);tileInt(extra,"ImageValue",post.imageValue);tileText(extra,"ImageRenderType","SwappableImage");tileInt(extra,"VisualStyle",2);tileBool(extra,"UseFrame",false);tileBool(extra,"AllowFocus",selectablePosts);tileBool(extra,"ShowDisableOverlay",false);tileInt(extra,"DisableButtonAlpha",0);tileInt(extra,"FillFocusAlpha",100);tileInt(extra,"FillUnFocusAlpha",100);tileInt(extra,"FillUnfocusAlpha",100);tileBool(extra,"StrokeEnabled",false);tileBool(extra,"SendAsData",true);tileBool(extra,"ImmediateUpdate",true);tileInt(tile,"VisualStyle",2);
+            void* extra=makeObject();tileText(extra,"SubText",post.body.c_str());const auto& stamp=post.stamp;tileText(extra,"DateText",stamp.c_str());const auto likes=post.bodyHeight?post.displayLikes:post.likes>=0?social::compactCount(post.likes)+" likes":std::string();tileText(extra,"TertiaryText",likes.c_str());tileBool(extra,"UseJersey",post.uniformTeamLogo>=0);tileInt(extra,"UniformTeamLogo",post.uniformTeamLogo);tileInt(extra,"AltImageLibrary",92);tileInt(extra,"AltImageValue",post.uniformTeamLogo>=0?post.uniformTeamLogo+1:0);tileText(extra,"AltImageRenderType","SwappableImage");tileInt(extra,"ImageLibrary",post.imageLibrary);tileInt(extra,"ImageValue",post.imageValue);tileText(extra,"ImageRenderType","SwappableImage");tileInt(extra,"VisualStyle",2);tileBool(extra,"UseFrame",false);tileBool(extra,"AllowFocus",selectablePosts);tileBool(extra,"ShowDisableOverlay",false);tileInt(extra,"DisableButtonAlpha",0);tileInt(extra,"FillFocusAlpha",100);tileInt(extra,"FillUnFocusAlpha",100);tileInt(extra,"FillUnfocusAlpha",100);tileBool(extra,"StrokeEnabled",false);tileBool(extra,"SendAsData",true);tileBool(extra,"ImmediateUpdate",true);tileInt(tile,"VisualStyle",2);
             objectValue(tile,"ExtraInfo",extra);releaseValue(extra);
             // Per-card logging is intentionally omitted from this hot UI callback.
+}
+// Read-only companion summaries reuse the verified native News tile. They are
+// not publications and do not change author identities, likes or team budgets.
+std::string sidebarLine(const std::string& text){if(text.size()<=24)return text;size_t end=21;while(end&&(static_cast<unsigned char>(text[end])&0xc0)==0x80)--end;return text.substr(0,end)+"...";}
+void populateSidebar(void* tile,unsigned number){
+    const auto& card=pageFeed->catalog->weeks.at(pageFeed->edition).sidebar.at(number-1);std::string body;
+    for(size_t i=0;i<card.lines.size()&&i<(number==1?3u:2u);++i){if(!body.empty())body+="\n";body+=sidebarLine(card.lines[i]);}
+    tileText(tile,"Id",("SOCIAL_SUMMARY_"+std::to_string(number)).c_str());tileText(tile,"Coordinates",std::to_string(number).c_str());tileText(tile,"linkage","art_control.paneltile.NewsStoryTile");tileText(tile,"Linkage","art_control.paneltile.NewsStoryTile");tileText(tile,"display",card.title.c_str());tileText(tile,"Text0",card.title.c_str());tileText(tile,"Text1",body.c_str());tileText(tile,"NavigationId","DO_NOTHING");tileInt(tile,"Width",520);tileInt(tile,"Height",number==1?208:172);tileBool(tile,"isFocusable",false);tileBool(tile,"isInteractive",false);tileBool(tile,"ForceContainer",true);
+    void* extra=makeObject();tileText(extra,"SubText",body.c_str());tileText(extra,"DateText","");tileText(extra,"TertiaryText","");tileInt(extra,"ImageLibrary",79);tileInt(extra,"ImageValue",598);tileBool(extra,"AllowFocus",false);tileBool(extra,"UseFrame",false);tileInt(extra,"VisualStyle",2);tileBool(extra,"ImmediateUpdate",true);objectValue(tile,"ExtraInfo",extra);releaseValue(extra);
 }
 void* makeArray(){void* value=nullptr;auto manager=reinterpret_cast<void*(__fastcall*)()>(base+0x3f0a1d0)();reinterpret_cast<void*(__fastcall*)(void*,void**)>(base+0x8ae99d0)(manager,&value);return value;}
 void appendArray(void* array,void* value){
@@ -542,12 +553,13 @@ void appendArray(void* array,void* value){
 void* __fastcall tileHook(void* self,void** out,void* panel,void* coords){
     Guard guard;const auto p=argument(panel),c=argument(coords);void* result=nullptr;
     if constexpr(listFeed){
-        if(!disabled&&opened&&p=="CM_NEWSSUB"&&c=="1"&&out){
+        if(!disabled&&opened&&p=="CM_NEWSSUB"&&(c=="1"||c=="2"&&sidebarAvailable())&&out){
             void* array=makeArray();if(!array){*out=nullptr;return out;}
-            for(unsigned number=1;number<=feedPostCount;++number){
+            const bool sidebar=c=="2";const auto count=sidebar?static_cast<unsigned>(pageFeed->catalog->weeks.at(pageFeed->edition).sidebar.size()):feedPostCount;
+            for(unsigned number=1;number<=count;++number){
                 Alias donorPanel{aliasVt,feedEntry.panel},donorCoords{aliasVt,feedEntry.donor};void* donor=nullptr;tiles(self,&donor,&donorPanel,&donorCoords);
                 uintptr_t span[2]{};void* tile=nullptr;
-                if(donor&&read(reinterpret_cast<uintptr_t>(donor)+0x18,span,16)&&span[1]-span[0]==8&&read(span[0],&tile,8)&&tile){populatePost(tile,number);appendArray(array,tile);}
+                if(donor&&read(reinterpret_cast<uintptr_t>(donor)+0x18,span,16)&&span[1]-span[0]==8&&read(span[0],&tile,8)&&tile){if(sidebar)populateSidebar(tile,number);else populatePost(tile,number);appendArray(array,tile);}
                 releaseValue(donor);
             }
             *out=array;return out;
@@ -630,7 +642,7 @@ void __fastcall filterChangedHook(void* self,const char* panel,const char* kind,
                 else{if(key<1)return;const auto encoded=static_cast<unsigned>(key);const auto editionKey=encoded&0xffff;if(editionKey<1||editionKey>pageFeed->catalog->weeks.size())return;week=editionKey-1;page=encoded>>16;}
             }
             if(week==pageFeed->edition&&scope==pageFeed->scope&&type==pageFeed->type&&page==pageFeed->page)return;
-            pageFeed=social::selectFeed(pageFeed->catalog,week,scope,type,page);feedPostCount=static_cast<unsigned>(pageFeed->posts.size());feedContainerCount=listFeed?1:feedPostCount;
+            pageFeed=social::selectFeed(pageFeed->catalog,week,scope,type,page);feedPostCount=static_cast<unsigned>(pageFeed->posts.size());feedContainerCount=containerCount();
             note({{"event","social_selection_changed"},{"week",pageFeed->key},{"scope",social::scopesFor(*pageFeed->catalog)[scope].key},{"type",social::typeLabels[type]},{"posts",feedPostCount}});
             changingSelection=true;void* params=makeObject();const bool requested=requestSocialPanel(self,params);releaseValue(params);changingSelection=false;
             note({{"event","social_selection_refresh"},{"requested",requested}});
@@ -693,7 +705,7 @@ void __fastcall panelReadyHook(void* self,const char* name,void* data){
     if(preflightRunning){unsigned kind=0;bool valid=name&&strcmp(name,feedEntry.panel)==0&&data&&read(reinterpret_cast<uintptr_t>(data)+0x10,&kind,4)&&kind==5;preflightReady=valid;if(valid&&!preflightPanelData){InterlockedIncrement(reinterpret_cast<volatile LONG*>(reinterpret_cast<uintptr_t>(data)+0x14));preflightPanelData=data;}note({{"event","preflight_panel_ready"},{"name",name?name:""},{"kind",kind},{"valid",valid}});return;}
     if(!disabled&&opened&&name&&strcmp(name,feedEntry.panel)==0){
         unsigned kind=0;
-        if(data&&read(reinterpret_cast<uintptr_t>(data)+0x10,&kind,4)&&kind==5){tileText(data,"id","CM_NEWSSUB");tileText(data,"name",pageFeed->label.c_str());tileInt(data,"numRows",static_cast<int>(feedContainerCount));tileInt(data,"numColumns",1);tileText(data,"FilterTypeA","NEWS_CATEGORY");tileText(data,"PositionOffset","0,0");}
+        if(data&&read(reinterpret_cast<uintptr_t>(data)+0x10,&kind,4)&&kind==5){tileText(data,"id","CM_NEWSSUB");tileText(data,"name",pageFeed->label.c_str());tileInt(data,"numRows",static_cast<int>(feedContainerCount));tileInt(data,"numColumns",sidebarAvailable()?2:1);tileText(data,"FilterTypeA","NEWS_CATEGORY");tileText(data,"PositionOffset","0,0");}
         note({{"event","social_panel_ready"}});panelReady(self,"CM_NEWSSUB",data);return;
     }
     panelReady(self,name,data);
@@ -720,8 +732,8 @@ bool runPreflight(){
         opened=true;CheckCollector output{checkVt,{}};Alias socialPanel{aliasVt,"CM_NEWSSUB"};containerHook(adapter,&socialPanel,&output);
         if(output.rows.size()!=feedContainerCount)throw std::runtime_error("Feed container count does not match the selected content");
         for(unsigned i=0;i<feedContainerCount;++i){auto coordinate=std::to_string(i+1);Alias arg{aliasVt,coordinate.c_str()};void* array=nullptr;tileHook(adapter,&array,&socialPanel,&arg);
-            uintptr_t span[2]{};unsigned kind=0;bool valid=array&&read(reinterpret_cast<uintptr_t>(array)+0x10,&kind,4)&&kind==4&&read(reinterpret_cast<uintptr_t>(array)+0x18,span,16)&&span[1]-span[0]==8*(listFeed?feedPostCount:1);
-            releaseValue(array);if(!valid)throw std::runtime_error("Feed did not supply the expected post count per container");tilesChecked+=listFeed?feedPostCount:1;
+            uintptr_t span[2]{};unsigned kind=0;bool valid=array&&read(reinterpret_cast<uintptr_t>(array)+0x10,&kind,4)&&kind==4&&read(reinterpret_cast<uintptr_t>(array)+0x18,span,16)&&span[1]-span[0]==8*(listFeed?(i==1&&sidebarAvailable()?static_cast<unsigned>(pageFeed->catalog->weeks.at(pageFeed->edition).sidebar.size()):feedPostCount):1);
+            releaseValue(array);if(!valid)throw std::runtime_error("Feed did not supply the expected post count per container");tilesChecked+=listFeed?(i==1&&sidebarAvailable()?0:feedPostCount):1;
         }
         opened=false;preflightRunning=false;bool passed=requested&&preflightReady&&tilesChecked==feedPostCount;
         feedValidated=passed;

@@ -23,8 +23,9 @@ def check():
     errors = []
     for rel in paths:
         path = Path(rel)
-        if (set(x.lower() for x in path.parts) & DENIED_PARTS or
-                path.suffix.lower() in DENIED_SUFFIXES or
+        authored_release_doc = rel.startswith('docs/release/') and path.suffix.lower() == '.md'
+        if ((set(x.lower() for x in path.parts) & DENIED_PARTS and not authored_release_doc) or
+                (path.suffix.lower() in DENIED_SUFFIXES and rel not in {'Packaging/Setup/Assets/Crown.png','Packaging/Setup/Assets/Crown.ico'}) or
                 path.name.lower() in {'private-fixtures.json', 'cot.build-inputs.json',
                                      'ulm-close-games-2026.json', 'review-samples.json'}):
             errors.append({'path': rel, 'reason': 'private/generated input in public source'})

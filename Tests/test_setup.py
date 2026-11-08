@@ -23,7 +23,7 @@ def main():
     (base/'payload.log').write_text(result.stdout+result.stderr);assert result.returncode==0,result.stdout+result.stderr
     result=subprocess.run([str(exe),'--smoke-test',str(root),str(base),str(report)],capture_output=True,text=True,timeout=240)
     (base/'ui.log').write_text(result.stdout+result.stderr);assert result.returncode==0,result.stdout+result.stderr
-    ui=json.loads(report.read_text());assert ui['checks']>=29 and not ui['liveInstall']
+    ui=json.loads(report.read_text());assert ui['checks']>=34 and not ui['liveInstall']
     assert snapshot(root)==before,'GUI install/rollback changed original fixture files'
     result=subprocess.run([str(exe),'--smoke-test',str(base/'not-a-fixture'),str(base),str(base/'rejected.json')],capture_output=True,text=True,timeout=20)
     assert result.returncode!=0 and not (base/'not-a-fixture').exists(),'unsafe fixture accepted'
@@ -36,6 +36,7 @@ def main():
     for item in layouts:
         assert item['width']<=item['workingWidth']-32 and item['height']<=item['workingHeight']-32
         assert item['footerVisible'] and item['updateActionsVisible'] and item['allModulesReachable']
+        assert item['fontScale']==item['scale'],'layout did not scale fonts with controls'
         for page in ['install','updates','backups','activity']:
             image=layout/f"setup-{page}-{item['suffix']}.png";data=image.read_bytes();assert data[:8]==b'\x89PNG\r\n\x1a\n'
             dimensions[image.name]=struct.unpack('>II',data[16:24]);assert dimensions[image.name]==(item['width'],item['height'])

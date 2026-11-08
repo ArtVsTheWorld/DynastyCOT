@@ -1,3 +1,4 @@
+import {weeklyBudget,budgetEventOrder,enforceWeeklyBudget,protectedNews} from './weekly_budget.mjs';
 import {programExpectations} from './season_context.mjs';
 import {playerReferenceQualifier,publicPosition} from './player_references.mjs';
 import {heismanContext} from './heisman_context.mjs';
@@ -25,22 +26,34 @@ const ranked=n=>Number.isInteger(n)&&n>0&&n<=25;
 const numeric=x=>Number.isFinite(x);
 const editorialKeys=new Set(['family','voice','persona','analystPersona','importance','huge','programDisparity','eventFocus','focusTier','focusTeams']);
 function unchangedPublishedFacts(old,current){if(old===null||typeof old!=='object')return old===current;if(!current||typeof current!=='object')return false;return Object.entries(old).every(([k,v])=>editorialKeys.has(k)||unchangedPublishedFacts(v,current[k]));}
+// New selection/budget policies do not retire an existing publication. Keep its
+// original account/text only while its captured facts and actual parent survive.
+export function preserveSameWeekStories(stories,events,sameWeek){
+ if(!sameWeek)return stories;
+ const current=new Map(events.map(e=>[e.id,e])),prior=new Map((sameWeek.events??[]).map(e=>[e.id,e])),eligible=new Map();
+ for(const p of sameWeek.stories??[]){const old=prior.get(p.eventId),now=current.get(p.eventId);if(old&&now&&unchangedPublishedFacts(old.facts,now.facts))eligible.set(p.id,p);}
+ const retained=new Map();let changed=true;
+ while(changed){changed=false;for(const p of eligible.values())if(!retained.has(p.id)&&(!p.replyTo||retained.has(p.replyTo))){retained.set(p.id,p);changed=true;}}
+ const result=stories.map(p=>retained.get(p.id)??p),ids=new Set(result.map(p=>p.id));for(const p of retained.values())if(!ids.has(p.id)){result.push(p);ids.add(p.id);}return result;
+}
 export function renderStories(s,events,options={}){
  if(options.sameWeek){const priorEvents=new Set((options.sameWeek.events??[]).map(e=>e.id));events=events.filter(e=>priorEvents.has(e.id)||!e.facts.opinion&&!e.facts.calendarKey&&e.category!=='recruit-film');}
- const initial=renderPass(s,events,options),views=scopeViews(initial.stories,{phase:s.season.CurrentWeekType}),byId=new Map(initial.stories.map(p=>[p.id,p])),visible=new Set();
+ const finish=stories=>enforceWeeklyBudget(preserveSameWeekStories(stories,events,options.sameWeek),events,new Set(options.sameWeek?.stories?.map(p=>p.id)??[]));
+ const initial=renderPass(s,events,options),views=scopeViews(initial.stories,{phase:s.season.CurrentWeekType,userTeamIndex:s.userTeamIndex}),byId=new Map(initial.stories.map(p=>[p.id,p])),visible=new Set();
  for(const [view,cap] of [['all:default',30],['team',25],['conference',60],['national',100]])for(const id of (views[view]??[]).slice(0,cap))visible.add(id);
- if(!visible.size)return initial;
+ if(!visible.size)return {...initial,stories:finish(initial.stories)};
  // Hidden CPU candidates must not exhaust wording before the user sees it.
  // Refine only the small visible event set, then keep every other stored card.
  const eventOrder=new Map();for(const id of visible){const event=byId.get(id)?.eventId;if(event&&!eventOrder.has(event))eventOrder.set(event,eventOrder.size);}
  const selected=events.filter(e=>eventOrder.has(e.id)).sort((a,b)=>eventOrder.get(a.id)-eventOrder.get(b.id));
  const refined=renderPass(s,selected,{...options,authors:initial.authors,visibleIds:visible}),replacement=new Map(refined.stories.filter(p=>visible.has(p.id)).map(p=>[p.id,p]));
- return {...initial,authors:refined.authors,stories:initial.stories.map(p=>replacement.get(p.id)??p)};
+ return {...initial,authors:refined.authors,stories:finish(initial.stories.map(p=>replacement.get(p.id)??p))};
 }
 function renderPass(s,events,{authors={},history=[],sameWeek=null,onTemplates=null,visibleIds=null}={}){
  if(!pack.enabled)return {stories:[],authors};
  const qualify=playerReferenceQualifier(s.players,{staffNames:s.teams.flatMap(t=>[t.headCoach?.name,t.offensiveCoordinator?.name,t.defensiveCoordinator?.name]).filter(Boolean)});
  const coverage=nationalCoverage(s),registry=authorRegistry(authors),teams=new Map(s.teams.filter(t=>t.id!==255).map(t=>[t.id,t])),players=new Map(s.players.map(p=>[p.id,p])),games=new Map(s.games.map(g=>[g.id,g]));
+ const budget=weeklyBudget();
  const stories=[],byId=new Map(),reactionGames=new Set(),welcomedRecruits=new Set(),sameStories=new Map((sameWeek?.stories??[]).map(p=>[p.id,p])),publishedEvents=new Map((sameWeek?.events??[]).map(e=>[e.id,e])),reactionAccounts=new Map(),reactionTopics=new Map(),replyCounts=new Map();
  const edition=`${s.leagueId}/${s.season.CurrentSeasonYear}/${s.season.CurrentWeekType}/${s.season.CurrentWeek}`,usedBodies=new Set(),publication={leagueId:s.leagueId,userTeamIndex:s.userTeamIndex,season:s.season.CurrentSeasonYear,phase:s.season.CurrentWeekType,week:s.season.CurrentWeek};
  const usage=templateHistory(history,publication,s.season.CurrentWeek);
@@ -54,6 +67,7 @@ function renderPass(s,events,{authors={},history=[],sameWeek=null,onTemplates=nu
   if(!team&&['official','fan'].includes(role)||['player','recruit'].includes(role)&&!player)return null;
   const parent=replyTo?byId.get(replyTo):null;if(replyTo&&(!parent||!(important&&e.category==='upsets')&&!publishReply(s,e.id+':'+suffix,e.id.startsWith('portal-opening:')?parent.canonicalTopic??replyTo:replyTo)))return null;
   ({role,persona}=editorialAssignment(s,e,family,role,team,persona,coverage));
+  if(!budget.allows(e,role,{reply:!!replyTo,published:sameStories.has(e.id+':'+suffix)}))return null;
   const publishedAccount=sameStories.get(e.id+':'+suffix);if(publishedAccount){role=publishedAccount.voice;const desk=analystPersona(publishedAccount.author);if(role==='analyst'&&desk>=0)persona=desk;}
   const account=registry.get(s,role,team,player,persona),id=e.id+':'+suffix;
   const style=['player','recruit'].includes(role)?personalVoice(account,player):null;
@@ -87,7 +101,7 @@ function renderPass(s,events,{authors={},history=[],sameWeek=null,onTemplates=nu
   if(reaction&&!important&&((reactionAccounts.get(accountKey)??0)>=pack.publicationPolicy.reactionPostsPerAccount||(topic&&(reactionTopics.get(topic)??0)>=pack.publicationPolicy.reactionsPerGameTeam)))return null;
   if(parent&&(replyCounts.get(parent.id)??0)>=pack.publicationPolicy.maximumRepliesPerParent)return null;
   const p={id,eventId:e.id,category:e.category,templateFamily:family,voice:role,author:account.author,handle:account.handle,...chosen,...(voiceTemplateId?{rawBody}:{}),voiceTemplateId,renderKey,stamp:parent?'Reply':stampFor(e.category),...avatarFor(role,team,player,persona),likes:likesFor(s,id,role,team,e,sameStories.get(id),engagement),priority,scopes:parent?parent.scopes:e.scopes,teamIds:e.teamIds,playerId:['player','recruit'].includes(role)?player.id:e.playerId,eventWeek:e.eventWeek,thread:e.thread,curated:curated!==false&&parent?.curated!==false,primaryScope:e.primaryScope,contentRevision:CONTENT_REVISION,...(e.facts.eventFocus?{eventFocus:e.facts.eventFocus,focusTier:e.facts.focusTier,focusTeams:e.facts.focusTeams}:{}),newsCycle:e.newsCycle??null};
-  p.canonicalTopic=canonicalTopic(e);
+  p.userRelevant=!!(s.recruitInterests?.includes(e.playerId)||parent?.userRelevant);p.canonicalTopic=canonicalTopic(e);p.budgetProtected=!parent&&protectedNews(e,role);
   // Verified honors and primary commitment/signing announcements remain in
   // the browsable edition when flavor budgets are full. This does not expand
   // native view caps or create additional posts/reactions.
@@ -110,7 +124,7 @@ function renderPass(s,events,{authors={},history=[],sameWeek=null,onTemplates=nu
   p.varietyTopic=varietyTopic;p.authorVoice=voice;
   const published=preservePublished||oldStory?.renderKey===renderKey?oldStory:p;
   rememberVariety(usage.memory,published.variety,visibleIds?visibleIds.has(published.id)?1:0:published.scopes?.length?1:0,varietyTopic);
-  stories.push(published);usedBodies.add(published.body);byId.set(published.id,published);return published;
+  budget.record(e,{reply:!!replyTo});stories.push(published);usedBodies.add(published.body);byId.set(published.id,published);return published;
  }
  function performanceLine(stats){
   const parts=[];
@@ -126,7 +140,7 @@ function renderPass(s,events,{authors={},history=[],sameWeek=null,onTemplates=nu
  function perfContext(e){const f=e.facts,g=games.get(f.gameId),p=players.get(e.playerId);if(!p||!final(g))return null;const t=teams.get(e.teamIds[0]);if(!t)return null;
   const win=g.homeScore===g.awayScore?null:g.homeScore>g.awayScore?g.home:g.away,opponent=t.id===g.home?g.awayName??teams.get(g.away)?.name:g.homeName??teams.get(g.home)?.name;
   return {...teamValues(t),...f,opponent,statLine:performanceLine(f.stats),win:win===t.id,resultLine:win===null?'The game finished tied.':win===t.id?'A team win to go with it.':'The individual numbers came in a team loss.'};}
- for(const e of events){if(e.category==='offers'&&!publishOffer(s,e))continue;const f=e.facts,t=teams.get(e.teamIds[0]),v={...teamValues(t),...f,giveawayLabel:e.facts.giveaways===1?'giveaway':'giveaways'};
+ for(const e of budgetEventOrder(events)){if(e.category==='offers'&&!publishOffer(s,e))continue;const f=e.facts,t=teams.get(e.teamIds[0]),v={...teamValues(t),...f,giveawayLabel:e.facts.giveaways===1?'giveaway':'giveaways'};
   if(f.family){const role=f.voice??(e.category==='analytics'?'analyst':'beat'),p=players.get(e.playerId),values={...v,...f,...(p&&t?{playerHandle:registry.get(s,'player',t,p).handle}:{})};if(f.tagPlayerId){const tagged=players.get(f.tagPlayerId);if(tagged)values.tagHandle=registry.get(s,tagged.team===255?'recruit':'player',teams.get(tagged.team)??t,tagged).handle;}const parent=add(e,f.family,values,{role,player:['player','recruit'].includes(role)?p:null,persona:f.persona??(role==='analyst'?1:0),important:f.seasonEnding===true});if(parent&&p&&f.signed&&(e.category==='signings'||f.family==='postseason.signed')&&!welcomedRecruits.has(p.id)){welcomedRecruits.add(p.id);add(e,'cycle.team-welcome',{...values,tagHandle:registry.get(s,'recruit',t,p).handle},{role:'official',suffix:'signed-welcome',priority:e.priority+1});}if(parent&&f.buzzReply&&teams.has(f.replyTeam))add(e,'buzz.pick-reply',{...values,school:teams.get(f.replyTeam).name},{role:'fan',team:teams.get(f.replyTeam),suffix:'pick-reply',replyTo:parent.id,priority:e.priority-1});if(parent&&Number.isInteger(f.rivalReplyTeam)){const other=teams.get(f.rivalReplyTeam);if(other)add(e,'late.fan-reply',{...values,school:other.name,opponent:t?.name},{role:'fan',team:other,suffix:'rival-reply',replyTo:parent.id,priority:e.priority-1});}if(parent&&f.debate&&t)add(e,'preseason.debate.fan',{...values,analystHandle:parent.handle},{role:'fan',team:t,suffix:'reply',replyTo:parent.id,priority:e.priority-1});continue;}
   if(e.category==='results'){
    const g=games.get(f.gameId);if(!final(g))continue;

@@ -24,7 +24,7 @@ def main():
         path=ROOT/f'Build/{name}-verification.json'
         if not path.exists():raise ValueError(f'Missing {name} verification')
         doc=json.loads(path.read_text())
-        if doc.get('version')!=version or doc.get('liveInstall') or doc.get('baselineOnly'):raise ValueError(f'{name} checks do not prove the current candidate in isolation')
+        if doc.get('version')!=version or doc.get('liveInstall') or doc.get('baselineOnly') or name=='updater' and (doc.get('candidateOnly') or not doc.get('crossVersion')):raise ValueError(f'{name} checks do not prove the current candidate in isolation')
         evidence[name]=select(doc,fields)
         if name=='setup':
             evidence[name]['layoutScaleCaptures']=[x for x in doc.get('scaling',[]) if type(x) is int and 50<=x<=400]

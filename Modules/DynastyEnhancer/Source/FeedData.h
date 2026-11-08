@@ -74,7 +74,8 @@ inline int postHeight(std::string_view body){
 inline constexpr std::array<const char*,4> scopeKeys={"all","national","conference","team"};
 inline constexpr std::array<const char*,4> scopeLabels={"For You","National","Conference","My Team"};
 struct Scope {std::string key,label;};
-struct Edition {std::string key,label,conference,phase="RegularSeason";int season=0,week=0;std::map<std::string,FeedPost> stories;std::map<std::string,std::vector<std::string>> views;};
+struct SidebarCard {std::string title;std::vector<std::string> lines;};
+struct Edition {std::vector<SidebarCard> sidebar;std::string key,label,conference,phase="RegularSeason";int season=0,week=0;std::map<std::string,FeedPost> stories;std::map<std::string,std::vector<std::string>> views;};
 struct Catalog {std::vector<Edition> weeks;size_t active=0;std::vector<Scope> scopes;};
 struct Feed {std::vector<FeedPost> posts;std::string key="runtime-waiting",label="Social Media";std::shared_ptr<const Catalog> catalog;size_t edition=0;unsigned scope=0,type=0;size_t total=0,page=0,pages=1;};
 inline const std::vector<Scope>& scopesFor(const Catalog& c){static const std::vector<Scope> legacy={{"all","For You"},{"national","National"},{"conference","Conference"},{"team","My Team"}};return c.scopes.empty()?legacy:c.scopes;}
@@ -107,36 +108,20 @@ inline std::shared_ptr<const Feed> selectFeed(std::shared_ptr<const Catalog> cat
     const auto& e=catalog->weeks.at(week);auto f=std::make_shared<Feed>();f->catalog=catalog;f->edition=week;f->scope=scope;f->type=type;f->key=e.key;f->page=page;
     f->label="Social Media";if(type)f->label+=" - "+std::string(typeLabels[type]);
     const auto& option=scopesFor(*catalog).at(scope);const auto limit=scopeLimit(option.key);
-    const auto broad=e.views.find(option.key=="all"&&e.views.count("all:expanded")?"all:expanded":option.key);
+    const auto broad=e.views.find(option.key=="all"?(e.views.count("all:expanded")?"all:expanded":e.views.count("all:default")?"all:default":"all"):option.key);
     std::vector<std::string> candidates=broad==e.views.end()?std::vector<std::string>{}:feedCandidates(e,broad->second,type),first;
-    const auto requiredView=e.views.find(option.key+":required");std::set<std::string> required;
-    if(!type&&requiredView!=e.views.end())required.insert(requiredView->second.begin(),requiredView->second.end());
-    if(option.key=="all"&&!type){
-        const auto defaultView=e.views.find(e.views.count("all:default")?"all:default":"all");
-        if(defaultView!=e.views.end())for(const auto& id:feedCandidates(e,defaultView->second,0))if(first.size()<limit||required.count(id))first.push_back(id);
-    }else for(const auto& id:candidates)if(first.size()<limit||!type&&(required.count(id)||(option.key.rfind("team",0)==0&&e.stories.at(id).draftPick>0)))first.push_back(id);
-    // Required commitments/draft picks retain their existing first-page
-    // exception. Remaining candidates are accessible through native week rows.
-    std::set<std::string> seen(first.begin(),first.end());std::vector<std::string> rest;
-    for(const auto& id:candidates)if(!seen.count(id))rest.push_back(id);
-    f->total=first.size()+rest.size();std::vector<std::vector<std::string>> pages{first};
-    std::set<std::string> onPage;std::vector<std::string> next;
-    for(const auto& id:rest){
-        const auto& post=e.stories.at(id);std::vector<std::string> ancestors;auto parent=post.replyTo;
-        while(!parent.empty()&&!onPage.count(parent)&&e.stories.count(parent)&&ancestors.size()<16){ancestors.insert(ancestors.begin(),parent);parent=e.stories.at(parent).replyTo;}
-        if(next.size()+ancestors.size()+1>limit){pages.push_back(std::move(next));next.clear();onPage.clear();ancestors.clear();parent=post.replyTo;while(!parent.empty()&&e.stories.count(parent)&&ancestors.size()<16){ancestors.insert(ancestors.begin(),parent);parent=e.stories.at(parent).replyTo;}}
-        for(const auto& ancestor:ancestors)if(onPage.insert(ancestor).second)next.push_back(ancestor);if(onPage.insert(id).second)next.push_back(id);
-    }
-    if(!next.empty())pages.push_back(std::move(next));f->pages=pages.size();
-    if(page>=f->pages)throw std::runtime_error("Invalid Social Media page");
-    for(const auto& id:pages[page])f->posts.push_back(e.stories.at(id));
+    // One continuous native list per edition. Generation owns the team budget;
+    // scope/category selection must not silently hide eligible stories.
+    (void)limit;(void)page;f->page=0;f->pages=1;f->total=candidates.size();
+    if(candidates.size()>32768)throw std::runtime_error("Social Media edition exceeds the verified native list limit");
+    for(const auto& id:candidates)f->posts.push_back(e.stories.at(id));
     if(f->posts.empty())f->posts.push_back({"Beyond the Field","@DynastyEnhancer","No "+option.label+(type?" "+std::string(typeLabels[type]):"")+" stories match this weekly edition. Broader scopes and other categories can contain different news.","News",79,598});
     return f;
 }
 struct EditionChoice {size_t edition=0,page=0;std::string label;};
 inline std::vector<EditionChoice> editionChoices(std::shared_ptr<const Catalog> catalog,size_t selected,unsigned scope,unsigned type,size_t currentPage=0){
-    std::vector<EditionChoice> choices;const auto pages=selectFeed(catalog,selected,scope,type)->pages;
-    for(size_t i=0;i<catalog->weeks.size();++i){const auto& label=catalog->weeks[i].label;choices.push_back({i,0,label});if(i==selected)for(size_t page=(std::max)(size_t{1},currentPage?currentPage-1:size_t{1});page<pages&&page<=currentPage+1;++page)choices.push_back({i,page,label+" - More "+std::to_string(page+1)+"/"+std::to_string(pages)});}
+    (void)selected;(void)scope;(void)type;(void)currentPage;std::vector<EditionChoice> choices;
+    for(size_t i=0;i<catalog->weeks.size();++i)choices.push_back({i,0,catalog->weeks[i].label});
     return choices;
 }
 inline std::shared_ptr<const Feed> decodeFeed(const nlohmann::json& j){
@@ -148,6 +133,9 @@ inline std::shared_ptr<const Feed> decodeFeed(const nlohmann::json& j){
         e.label=e.phase=="PreSeason"?"Preseason, "+std::to_string(e.season):e.phase=="RegularSeason"?"Week "+std::to_string(e.week)+", "+std::to_string(e.season):e.phase+" - Week "+std::to_string(e.week)+", "+std::to_string(e.season);
         if(w.contains("publicationLabel"))e.label=w.at("publicationLabel").get<std::string>();
         if(w.value("reconstructed",false))e.label+=" (recovered)";
+        if(w.contains("sidebar"))for(const auto& card:w.at("sidebar")){
+            SidebarCard item;item.title=card.at("title").get<std::string>();item.lines=card.at("lines").get<std::vector<std::string>>();e.sidebar.push_back(std::move(item));if(e.sidebar.size()==3)break;
+        }
         for(const auto& p:w.at("stories")){
             const auto stamp=storyLabel(p);
             FeedPost post{p.at("author").get<std::string>(),p.at("handle").get<std::string>(),p.at("body").get<std::string>(),stamp,p.at("imageLibrary").get<int>(),p.at("imageValue").get<int>()};post.category=p.value("category",std::string());post.voice=p.value("voice",std::string());post.replyTo=p.value("replyTo",std::string());post.likes=p.value("likes",-1);post.uniformTeamLogo=p.value("uniformTeamLogo",-1);post.transaction=p.value("transaction",false);post.draftPick=p.value("draftPick",-1);post.draftRound=p.value("draftRound",0);post.bodyHeight=postHeight(post.body);post.displayAuthor=post.author+" ("+post.handle+")";post.displayLikes=post.likes>=0?compactCount(post.likes)+" likes":std::string();e.stories.emplace(p.at("id").get<std::string>(),std::move(post));

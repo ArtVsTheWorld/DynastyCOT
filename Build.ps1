@@ -22,7 +22,7 @@ foreach($name in $selected){
    'DynastyEnhancer' {
     & (Join-Path $root 'Tools/Refresh-PracticeContract.ps1')
     if($LASTEXITCODE -ne 0){throw 'Practice compatibility contract failed'}
-    & './Source/build.ps1' -NativeName ('DynastyEnhancerNative-cot-'+$buildId)
+    & './Source/build.ps1' -NativeName ('DynastyEnhancerNative-cot-'+$buildId) -ListFeed
     if($LASTEXITCODE -ne 0){throw 'Enhancer native build failed'}
     & './Source/build-recruiting-fog.ps1' -Name ('DynastyEnhancerRecruitFog-p'+$buildId) -RecruitNotesUi -PlayerFogPerf
     if($LASTEXITCODE -ne 0){throw 'Enhancer Fog build failed'}

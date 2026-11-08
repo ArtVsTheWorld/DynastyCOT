@@ -1,3 +1,4 @@
+import {editionSidebar} from './edition_sidebar.mjs';
 import {discoveryViews} from './social_discovery.mjs';
 import {visibleEdition,comparePublication,publicationLabel} from './publication_timeline.mjs';
 import {bodyKey,deduplicateConversations} from './conversation_topics.mjs';
@@ -77,10 +78,14 @@ export function curate(stories,limit=30,context={}){
  return conversationOrder(selected);
 }
 export function scopeViews(stories,context={}){
- const visible=conversationOrder(stories),all=curate(visible,30,context);
- const national=visible.filter(p=>p.scopes.includes('national'));
- const expanded=conversationOrder(visible.filter(p=>p.scopes.length));
- return {all:all.map(p=>p.id),'all:required':visible.filter(p=>p.guaranteedUserDraft).map(p=>p.id),'all:default':conversationOrder([...new Map([...visible.filter(p=>p.guaranteedUserDraft),...all].map(p=>[p.id,p])).values()]).map(p=>p.id),'all:expanded':expanded.map(p=>p.id),national:national.map(p=>p.id),conference:conversationOrder(visible.filter(p=>p.scopes.includes('conference'))).map(p=>p.id),'team:required':visible.filter(p=>p.scopes.includes('team')&&(p.coverageExempt||p.voice==='nflDraft')).map(p=>p.id),team:conversationOrder(visible.filter(p=>p.scopes.includes('team'))).map(p=>p.id)};
+ const visible=conversationOrder(stories.filter(p=>p.scopes?.length));
+ const local=visible.filter(p=>p.scopes.includes('team')||p.userRelevant||context.userTeamIndex===undefined&&p.scopes.includes('relevant'));
+ // Pipeline/state overlap alone is discovery context, not an unlimited personal subscription.
+ const localIds=new Set(local.map(p=>p.id));
+ const nationalPool=visible.filter(p=>!localIds.has(p.id)&&(p.scopes.includes('national')||p.scopes.includes('relevant')));
+ const nationalMix=curate(nationalPool,20,context);
+ const all=conversationOrder([...local,...nationalMix]);
+ return {all:all.map(p=>p.id),'all:required':local.map(p=>p.id),'all:default':all.map(p=>p.id),'all:expanded':all.map(p=>p.id),national:conversationOrder(stories).map(p=>p.id),conference:conversationOrder(visible.filter(p=>p.scopes.includes('conference'))).map(p=>p.id),'team:required':local.map(p=>p.id),team:conversationOrder(visible.filter(p=>p.scopes.includes('team'))).map(p=>p.id)};
 }
 
 export function publishWeek(feed){
@@ -98,6 +103,6 @@ export function buildCatalog(active,history=[]){
     const old=byWeek.get(f.key);if(!old||f===active||(f.sourceModifiedMs??0)>(old.sourceModifiedMs??0))byWeek.set(f.key,f);
   }
   const displayKeys=['id','author','handle','body','stamp','category','voice','replyTo','imageLibrary','imageValue','uniformTeamLogo','likes','transaction','draftPick','draftRound','publication'];
-  const weeks=[...byWeek.values()].sort(comparePublication).map(f=>({publicationLabel:publicationLabel(f),...Object.fromEntries(['format','engineVersion','key','leagueId','userTeamIndex','season','phase','week','conference','publication','reconstructed'].map(k=>[k,f[k]])),stories:f.stories.map(p=>Object.fromEntries(displayKeys.filter(k=>p[k]!==undefined).map(k=>[k,p[k]]))),views:{...f.views,'all:expanded':conversationOrder(f.stories.filter(p=>p.scopes?.length)).map(p=>p.id)}}));
+  const weeks=[...byWeek.values()].sort(comparePublication).map(f=>({publicationLabel:publicationLabel(f),...Object.fromEntries(['format','engineVersion','key','leagueId','userTeamIndex','season','phase','week','conference','publication','reconstructed'].map(k=>[k,f[k]])),stories:f.stories.map(p=>Object.fromEntries(displayKeys.filter(k=>p[k]!==undefined).map(k=>[k,p[k]]))),sidebar:editionSidebar(f),views:{...scopeViews(f.stories,f),...(f.scopeOptions?discoveryViews(conversationOrder(f.stories),f.scopeOptions):{})}}));
   return {...active,catalogVersion:2,activeWeekKey:active.key,weeks};
 }

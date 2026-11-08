@@ -151,12 +151,12 @@
           "Modules/DynastyEnhancer/Source/LiveTables.h:206",
           "Modules/DynastyEnhancer/Source/LiveTables.h:213",
           "Modules/DynastyEnhancer/Source/LiveTables.h:217",
-          "Modules/DynastyEnhancer/Source/NativeSocialMedia.cpp:120",
-          "Modules/DynastyEnhancer/Source/NativeSocialMedia.cpp:146",
-          "Modules/DynastyEnhancer/Source/NativeSocialMedia.cpp:155",
-          "Modules/DynastyEnhancer/Source/NativeSocialMedia.cpp:323",
-          "Modules/DynastyEnhancer/Source/NativeSocialMedia.cpp:336",
-          "Modules/DynastyEnhancer/Source/NativeSocialMedia.cpp:344"
+          "Modules/DynastyEnhancer/Source/NativeSocialMedia.cpp:122",
+          "Modules/DynastyEnhancer/Source/NativeSocialMedia.cpp:148",
+          "Modules/DynastyEnhancer/Source/NativeSocialMedia.cpp:157",
+          "Modules/DynastyEnhancer/Source/NativeSocialMedia.cpp:325",
+          "Modules/DynastyEnhancer/Source/NativeSocialMedia.cpp:338",
+          "Modules/DynastyEnhancer/Source/NativeSocialMedia.cpp:346"
         ],
         "0x1fe840": [
           "Modules/DynastyEnhancer/Source/EnhancementOptions.h:48",
@@ -172,9 +172,9 @@
           "Modules/DynastyEnhancer/Source/EnhancementOptions.h:46"
         ],
         "0x800000": [
-          "Modules/DynastyEnhancer/Source/NativeSocialMedia.cpp:324",
-          "Modules/DynastyEnhancer/Source/NativeSocialMedia.cpp:324",
-          "Modules/DynastyEnhancer/Source/NativeSocialMedia.cpp:325"
+          "Modules/DynastyEnhancer/Source/NativeSocialMedia.cpp:326",
+          "Modules/DynastyEnhancer/Source/NativeSocialMedia.cpp:326",
+          "Modules/DynastyEnhancer/Source/NativeSocialMedia.cpp:327"
         ],
         "0xa8d943": [
           "Modules/DynastyEnhancer/Source/EnhancementOptions.h:48",
@@ -211,7 +211,7 @@
         ],
         "0x25a3e60": [
           "Modules/DynastyEnhancer/Source/CurrentBindings.h:12",
-          "Modules/DynastyEnhancer/Source/NativeSocialMedia.cpp:437",
+          "Modules/DynastyEnhancer/Source/NativeSocialMedia.cpp:439",
           "Modules/DynastyEnhancer/Source/PlayerAbilityProbe.cpp:35",
           "Modules/DynastyEnhancer/Source/RecruitingFog.cpp:259",
           "Modules/DynastyEnhancer/Source/RecruitingFog.cpp:495",
@@ -226,11 +226,11 @@
         ],
         "0x2b075c0": [
           "Modules/DynastyEnhancer/Source/CurrentBindings.h:20",
-          "Modules/DynastyEnhancer/Source/NativeSocialMedia.cpp:438"
+          "Modules/DynastyEnhancer/Source/NativeSocialMedia.cpp:440"
         ],
         "0x2b07670": [
           "Modules/DynastyEnhancer/Source/CurrentBindings.h:21",
-          "Modules/DynastyEnhancer/Source/NativeSocialMedia.cpp:439"
+          "Modules/DynastyEnhancer/Source/NativeSocialMedia.cpp:441"
         ],
         "0x2bf6720": [
           "Modules/DynastyEnhancer/Source/RecruitingFog.cpp:594",
@@ -258,13 +258,13 @@
         ],
         "0x3f07c50": [
           "Modules/DynastyEnhancer/Source/CurrentBindings.h:11",
-          "Modules/DynastyEnhancer/Source/NativeSocialMedia.cpp:419"
+          "Modules/DynastyEnhancer/Source/NativeSocialMedia.cpp:421"
         ],
         "0x3f0a1d0": [
           "Modules/DynastyEnhancer/Source/CurrentBindings.h:16",
-          "Modules/DynastyEnhancer/Source/NativeSocialMedia.cpp:441",
-          "Modules/DynastyEnhancer/Source/NativeSocialMedia.cpp:535",
-          "Modules/DynastyEnhancer/Source/NativeSocialMedia.cpp:715"
+          "Modules/DynastyEnhancer/Source/NativeSocialMedia.cpp:443",
+          "Modules/DynastyEnhancer/Source/NativeSocialMedia.cpp:546",
+          "Modules/DynastyEnhancer/Source/NativeSocialMedia.cpp:727"
         ],
         "0x78ef740": [
           "Modules/DynastyEnhancer/Source/RecruitingFog.cpp:141",
@@ -323,43 +323,43 @@
         ],
         "0x7a19370": [
           "Modules/DynastyEnhancer/Source/CurrentBindings.h:6",
-          "Modules/DynastyEnhancer/Source/NativeSocialMedia.cpp:744",
-          "Modules/DynastyEnhancer/Source/NativeSocialMedia.cpp:766"
+          "Modules/DynastyEnhancer/Source/NativeSocialMedia.cpp:756",
+          "Modules/DynastyEnhancer/Source/NativeSocialMedia.cpp:778"
         ],
         "0x7a1af50": [
           "Modules/DynastyEnhancer/Source/CurrentBindings.h:7",
-          "Modules/DynastyEnhancer/Source/NativeSocialMedia.cpp:738",
-          "Modules/DynastyEnhancer/Source/NativeSocialMedia.cpp:763"
+          "Modules/DynastyEnhancer/Source/NativeSocialMedia.cpp:750",
+          "Modules/DynastyEnhancer/Source/NativeSocialMedia.cpp:775"
         ],
         "0x7a1b4c0": [
           "Modules/DynastyEnhancer/Source/CurrentBindings.h:8",
-          "Modules/DynastyEnhancer/Source/NativeSocialMedia.cpp:739",
-          "Modules/DynastyEnhancer/Source/NativeSocialMedia.cpp:763"
+          "Modules/DynastyEnhancer/Source/NativeSocialMedia.cpp:751",
+          "Modules/DynastyEnhancer/Source/NativeSocialMedia.cpp:775"
         ],
         "0x7a1c8e0": [
           "Modules/DynastyEnhancer/Source/CurrentBindings.h:9",
-          "Modules/DynastyEnhancer/Source/NativeSocialMedia.cpp:740",
-          "Modules/DynastyEnhancer/Source/NativeSocialMedia.cpp:763"
+          "Modules/DynastyEnhancer/Source/NativeSocialMedia.cpp:752",
+          "Modules/DynastyEnhancer/Source/NativeSocialMedia.cpp:775"
         ],
         "0x7a27f10": [
           "Modules/DynastyEnhancer/Source/CurrentBindings.h:15",
-          "Modules/DynastyEnhancer/Source/NativeSocialMedia.cpp:743",
-          "Modules/DynastyEnhancer/Source/NativeSocialMedia.cpp:765"
+          "Modules/DynastyEnhancer/Source/NativeSocialMedia.cpp:755",
+          "Modules/DynastyEnhancer/Source/NativeSocialMedia.cpp:777"
         ],
         "0x7a2cca0": [
           "Modules/DynastyEnhancer/Source/CurrentBindings.h:10",
-          "Modules/DynastyEnhancer/Source/NativeSocialMedia.cpp:741",
-          "Modules/DynastyEnhancer/Source/NativeSocialMedia.cpp:763"
+          "Modules/DynastyEnhancer/Source/NativeSocialMedia.cpp:753",
+          "Modules/DynastyEnhancer/Source/NativeSocialMedia.cpp:775"
         ],
         "0x7a2cdd0": [
           "Modules/DynastyEnhancer/Source/CurrentBindings.h:14",
-          "Modules/DynastyEnhancer/Source/NativeSocialMedia.cpp:742",
-          "Modules/DynastyEnhancer/Source/NativeSocialMedia.cpp:764"
+          "Modules/DynastyEnhancer/Source/NativeSocialMedia.cpp:754",
+          "Modules/DynastyEnhancer/Source/NativeSocialMedia.cpp:776"
         ],
         "0x7a2def0": [
           "Modules/DynastyEnhancer/Source/CurrentBindings.h:5",
-          "Modules/DynastyEnhancer/Source/NativeSocialMedia.cpp:745",
-          "Modules/DynastyEnhancer/Source/NativeSocialMedia.cpp:767"
+          "Modules/DynastyEnhancer/Source/NativeSocialMedia.cpp:757",
+          "Modules/DynastyEnhancer/Source/NativeSocialMedia.cpp:779"
         ],
         "0x7a88c90": [
           "Modules/DynastyEnhancer/Source/RecruitingFog.cpp:141"
@@ -383,8 +383,8 @@
         ],
         "0x7c34e10": [
           "Modules/DynastyEnhancer/Source/CurrentBindings.h:4",
-          "Modules/DynastyEnhancer/Source/NativeSocialMedia.cpp:737",
-          "Modules/DynastyEnhancer/Source/NativeSocialMedia.cpp:762"
+          "Modules/DynastyEnhancer/Source/NativeSocialMedia.cpp:749",
+          "Modules/DynastyEnhancer/Source/NativeSocialMedia.cpp:774"
         ],
         "0x7c34e40": [
           "Modules/DynastyEnhancer/Source/RecruitingFog.cpp:754",
@@ -413,27 +413,27 @@
         ],
         "0x8ae99d0": [
           "Modules/DynastyEnhancer/Source/CurrentBindings.h:22",
-          "Modules/DynastyEnhancer/Source/NativeSocialMedia.cpp:535"
+          "Modules/DynastyEnhancer/Source/NativeSocialMedia.cpp:546"
         ],
         "0x8aeb1f0": [
           "Modules/DynastyEnhancer/Source/CurrentBindings.h:18",
-          "Modules/DynastyEnhancer/Source/NativeSocialMedia.cpp:707"
+          "Modules/DynastyEnhancer/Source/NativeSocialMedia.cpp:719"
         ],
         "0x8aeba90": [
           "Modules/DynastyEnhancer/Source/NativeMapValue.h:7"
         ],
         "0x8aec980": [
           "Modules/DynastyEnhancer/Source/CurrentBindings.h:17",
-          "Modules/DynastyEnhancer/Source/NativeSocialMedia.cpp:441",
-          "Modules/DynastyEnhancer/Source/NativeSocialMedia.cpp:716"
+          "Modules/DynastyEnhancer/Source/NativeSocialMedia.cpp:443",
+          "Modules/DynastyEnhancer/Source/NativeSocialMedia.cpp:728"
         ],
         "0x8aed560": [
           "Modules/DynastyEnhancer/Source/CurrentBindings.h:19",
-          "Modules/DynastyEnhancer/Source/NativeSocialMedia.cpp:445"
+          "Modules/DynastyEnhancer/Source/NativeSocialMedia.cpp:447"
         ],
         "0x8aed930": [
           "Modules/DynastyEnhancer/Source/CurrentBindings.h:23",
-          "Modules/DynastyEnhancer/Source/NativeSocialMedia.cpp:540"
+          "Modules/DynastyEnhancer/Source/NativeSocialMedia.cpp:551"
         ],
         "0x91363e0": [
           "Modules/DynastyEnhancer/Source/RecruitingFog.cpp:381",
@@ -523,8 +523,8 @@
           "Modules/DynastyEnhancer/Source/PlayerRimeProbe.cpp:56"
         ],
         "0xb575928": [
-          "Modules/DynastyEnhancer/Source/NativeSocialMedia.cpp:419",
-          "Modules/DynastyEnhancer/Source/NativeSocialMedia.cpp:578"
+          "Modules/DynastyEnhancer/Source/NativeSocialMedia.cpp:421",
+          "Modules/DynastyEnhancer/Source/NativeSocialMedia.cpp:590"
         ],
         "0xbaa78b8": [
           "Modules/DynastyEnhancer/Source/RecruitingFog.cpp:141",
@@ -574,16 +574,16 @@
           "Modules/DynastyEnhancer/Source/RecruitingFog.cpp:146"
         ],
         "0xbac63a8": [
-          "Modules/DynastyEnhancer/Source/NativeSocialMedia.cpp:738",
-          "Modules/DynastyEnhancer/Source/NativeSocialMedia.cpp:739",
-          "Modules/DynastyEnhancer/Source/NativeSocialMedia.cpp:742",
-          "Modules/DynastyEnhancer/Source/NativeSocialMedia.cpp:743",
-          "Modules/DynastyEnhancer/Source/NativeSocialMedia.cpp:744",
-          "Modules/DynastyEnhancer/Source/NativeSocialMedia.cpp:745"
+          "Modules/DynastyEnhancer/Source/NativeSocialMedia.cpp:750",
+          "Modules/DynastyEnhancer/Source/NativeSocialMedia.cpp:751",
+          "Modules/DynastyEnhancer/Source/NativeSocialMedia.cpp:754",
+          "Modules/DynastyEnhancer/Source/NativeSocialMedia.cpp:755",
+          "Modules/DynastyEnhancer/Source/NativeSocialMedia.cpp:756",
+          "Modules/DynastyEnhancer/Source/NativeSocialMedia.cpp:757"
         ],
         "0xbac8c40": [
-          "Modules/DynastyEnhancer/Source/NativeSocialMedia.cpp:740",
-          "Modules/DynastyEnhancer/Source/NativeSocialMedia.cpp:741"
+          "Modules/DynastyEnhancer/Source/NativeSocialMedia.cpp:752",
+          "Modules/DynastyEnhancer/Source/NativeSocialMedia.cpp:753"
         ],
         "0xbacd668": [
           "Modules/DynastyEnhancer/Source/RecruitingFog.cpp:132",
@@ -597,7 +597,7 @@
         ],
         "0xbc42fe8": [
           "Modules/DynastyEnhancer/Source/HubStatsTrace.cpp:29",
-          "Modules/DynastyEnhancer/Source/NativeSocialMedia.cpp:737",
+          "Modules/DynastyEnhancer/Source/NativeSocialMedia.cpp:749",
           "Modules/DynastyEnhancer/Source/PlayerDepthProbe.cpp:34",
           "Modules/DynastyEnhancer/Source/PlayerDepthProbe.cpp:59",
           "Modules/DynastyEnhancer/Source/PlayerUiPreview.cpp:22",
@@ -694,7 +694,7 @@
         "0xf55c998": [
           "Modules/DynastyEnhancer/Source/EnhancementCreationScope.h:25",
           "Modules/DynastyEnhancer/Source/EnhancementCreationScope.h:29",
-          "Modules/DynastyEnhancer/Source/NativeSocialMedia.cpp:51",
+          "Modules/DynastyEnhancer/Source/NativeSocialMedia.cpp:53",
           "Modules/DynastyEnhancer/Source/RecruitingFog.cpp:293",
           "Modules/DynastyEnhancer/Source/RecruitingFog.cpp:793"
         ],
@@ -703,7 +703,7 @@
           "Modules/DynastyEnhancer/Source/LiveTables.h:67"
         ],
         "0xfa5a290": [
-          "Modules/DynastyEnhancer/Source/NativeSocialMedia.cpp:714"
+          "Modules/DynastyEnhancer/Source/NativeSocialMedia.cpp:726"
         ],
         "0xfa632f0": [
           "Modules/DynastyEnhancer/Source/HubStatsTrace.cpp:115",
@@ -712,7 +712,7 @@
         "0x11ffe000": [
           "Modules/DynastyEnhancer/Source/HubTab.h:21",
           "Modules/DynastyEnhancer/Source/HubTab.h:30",
-          "Modules/DynastyEnhancer/Source/NativeSocialMedia.cpp:627"
+          "Modules/DynastyEnhancer/Source/NativeSocialMedia.cpp:639"
         ],
         "0x12345678": [
           "Modules/DynastyEnhancer/Source/RecruitNotesUiRuntime.h:32",
@@ -747,22 +747,22 @@
         },
         {
           "source": "Modules/DynastyEnhancer/Source/NativeSocialMedia.cpp",
-          "line": 86,
+          "line": 88,
           "expression": "bool replace(void** slot,void* expected,void* desired) noexcept {DWORD old=0,unused=0;if(!VirtualProtect(slot,8,PAGE_READWRITE,&old))return false;void* before=InterlockedCompareExchangePointer(reinterpret_cast<PVOID volatile*>(slot),desired,expected);VirtualProtect(slot,8,old,&unused);return before==expected;}"
         },
         {
           "source": "Modules/DynastyEnhancer/Source/NativeSocialMedia.cpp",
-          "line": 747,
+          "line": 759,
           "expression": "void stop(){disabled=true;opened=false;if(uiReady){configureNewsPolish(false);configureNewsDropdowns(false);configureNewsScroll(false);configureNewsFlow(false);alignNewsFrame(false);}for(auto& b:bindings)if(b.installed)replace(reinterpret_cast<void**>(base+b.vt+b.offset),b.hook,reinterpret_cast<void*>(base+b.rva));}"
         },
         {
           "source": "Modules/DynastyEnhancer/Source/NativeSocialMedia.cpp",
-          "line": 760,
+          "line": 772,
           "expression": "for(const auto& g:socialGates){unsigned char bytes[32]{};if(!read(base+g.rva,bytes,32))throw std::runtime_error(\"Unreadable game code\");if(memcmp(bytes,g.bytes,32))cotcompat::practice::normalize(base,g.rva,bytes,g.bytes,32,read);if(memcmp(bytes,g.bytes,32))throw std::runtime_error(\"Unsupported game code at \"+std::to_string(g.rva));}"
         },
         {
           "source": "Modules/DynastyEnhancer/Source/NativeSocialMedia.cpp",
-          "line": 769,
+          "line": 781,
           "expression": "for(auto& b:bindings){if(!replace(reinterpret_cast<void**>(base+b.vt+b.offset),reinterpret_cast<void*>(base+b.rva),b.hook))throw std::runtime_error(\"UI hook ownership changed during activation\");b.installed=true;}"
         },
         {
@@ -5460,8 +5460,8 @@
     "Modules/DynastyEnhancer/Source/EnhancementOptions.h": "7546a6d58d62ad719e5a1fe630ea4a60c81d476cd8e5263448aed5386716ef13",
     "Modules/DynastyEnhancer/Source/EnhancementOptionsRuntime.h": "563e5c55b8771937d9dbd611d687b8e04ea75b4e81bcb6f43fb2dbd3641f0799",
     "Modules/DynastyEnhancer/Source/EnhancementSettingsMenu.h": "2b5963baaa16af91ea397dbc873415a8f8e3990be39fd5f38abfe6776bc32b99",
-    "Modules/DynastyEnhancer/Source/FeedData.h": "1f0dd63f83e2a240d190811de1668c5fb156e3876a2016d68c57c2d75cebb1c9",
-    "Modules/DynastyEnhancer/Source/FeedRefresh.h": "ea46b1fa37e9620ec92856511b417aaefe672bdc08bd447296a2b26d1f48915e",
+    "Modules/DynastyEnhancer/Source/FeedData.h": "edf40222221784adee2071d7f2320a8aa494b2a0fd6dd0b8553eb215102cb6b8",
+    "Modules/DynastyEnhancer/Source/FeedRefresh.h": "226453065c23a1328911266f082478c90832f9765fc9a0080e81f2b3b8e9f058",
     "Modules/DynastyEnhancer/Source/FogGapUiPrograms.h": "9fa4c4d504d9bd3e02d139ad6b1284ea64ffea73136ea31f1b3085065da645cd",
     "Modules/DynastyEnhancer/Source/HubStatsTrace.cpp": "6409647326a60f32159db0b8467a6f3ef21144d4a276e4c0ce0ddeb1387fb9c6",
     "Modules/DynastyEnhancer/Source/HubStatsTraceCatalog.h": "211e9200981bc0924350484f7a1f0308b5b73c54ee1431d7585344cb5488cbba",
@@ -5472,7 +5472,7 @@
     "Modules/DynastyEnhancer/Source/MmcPlugin.cs": "15a7e61afdde14f0a0fcef8ce9f08a343ba899aff05987ef397b33912fb6c02b",
     "Modules/DynastyEnhancer/Source/MmcRecruitingPlugin.cs": "e95f189100e1e5af2e2136f642a156183d265eff4067026a7cc337f68b95cbac",
     "Modules/DynastyEnhancer/Source/NativeMapValue.h": "04c62fc519a340e1c798a213253deec81b3c6ba88f3ead5e8778f88280c77a5a",
-    "Modules/DynastyEnhancer/Source/NativeSocialMedia.cpp": "b294ca695aeffada5ab9acd9fee2c9510d745f372170ce5f3cf7c6c151299e7a",
+    "Modules/DynastyEnhancer/Source/NativeSocialMedia.cpp": "270e246620bb2280c29023e6881fe42b910ece125ec7b9347dde723b29eeb77f",
     "Modules/DynastyEnhancer/Source/NewsAssetDiscovery.h": "a998cc7ac6bfe8b1ede5a57e5d878dbc5cee303fcafdabdf24c470277ca88817",
     "Modules/DynastyEnhancer/Source/NewsDiscovery.h": "823af4b71268517350f66d7db9cf4f57e9c9fd9fb22585d9971787e6f737b356",
     "Modules/DynastyEnhancer/Source/NewsDropdowns.h": "48940da3fd1ae1419f809b502b3e1e04dfc668fffe4cf8bd333d8acafddd4ba0",

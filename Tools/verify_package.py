@@ -24,6 +24,14 @@ def verify(stage):
 def main():
     sdk=Path(sys.argv[1]).resolve();meta=json.loads((ROOT/'Build/current-package.json').read_text());stage=Path(meta['stage'])
     doc=verify(stage)
+    runtime_sources=0
+    for item in doc['files']:
+        rel=item['path'];source=None
+        if rel.startswith('COT-Runtime/DynastyEnhancer/Tools/') and rel.endswith('.mjs'):source=ROOT/'Modules/DynastyEnhancer/Tools'/Path(rel).name
+        elif rel.startswith('COT-Runtime/DynastyEnhancer/Content/Runtime/') and rel.endswith('.json'):source=ROOT/'Modules/DynastyEnhancer/Content/Runtime'/Path(rel).name
+        if source is not None:
+            assert hash_file(source)==item['sha256'],'Rebuild package after runtime source change: '+str(source)
+            runtime_sources+=1
     fixture=ROOT/'Build'/('PackageCheck-'+datetime.datetime.now(datetime.timezone.utc).strftime('%Y%m%dT%H%M%S%f'))
     shutil.copytree(stage,fixture)
     compiler=Path(r'C:\Windows\Microsoft.NET\Framework64\v4.0.30319\csc.exe');exe=fixture.parent/(fixture.name+'.exe')
@@ -47,7 +55,7 @@ def main():
     else:raise AssertionError('Package verifier accepted traversal')
     manifest.write_text(saved);verify(fixture)
     result=dict(atUtc=datetime.datetime.now(datetime.timezone.utc).isoformat(),stage=str(stage),
-        manifestSha256=hash_file(stage/'package-manifest.json'),coreChecks=106,files=len(doc['files']),singleMmcEntry=True,hostChecks='passed',tamperRejection=True,pathRejection=True,
+        manifestSha256=hash_file(stage/'package-manifest.json'),coreChecks=106,files=len(doc['files']),runtimeSourceChecks=runtime_sources,singleMmcEntry=True,hostChecks='passed',tamperRejection=True,pathRejection=True,
         liveGameAccess=False,installerChecks='pending')
     (ROOT/'Build/package-verification.json').write_text(json.dumps(result,indent=2)+'\n')
     print('PASS: staged package manifest, actual host, helpers, resources, tamper and traversal. No installation or game access.')

@@ -6,7 +6,7 @@ test('editorial order ignores likes, keeps replies adjacent and is deterministic
  const pool=[{...story('low','team',999),likes:20},{...story('high','national',1),likes:900},{...story('middle','conference'),likes:300},{...story('reply','team'),likes:15,replyTo:'high'},{...story('tie','national'),likes:300}];
  assert.deepEqual(conversationOrder(pool).map(p=>p.id),['low','middle','tie','high','reply']);
  assert.deepEqual(curate(pool).map(p=>p.id),['low','middle','tie','high','reply']);assert.deepEqual(conversationOrder(pool.map(p=>({...p,likes:20000-(p.likes??0)}))).map(p=>p.id),conversationOrder(pool).map(p=>p.id));
- assert.deepEqual(scopeViews(pool).national,['tie','high']);
+ assert.deepEqual(scopeViews(pool).national,['low','middle','tie','high','reply']);
 });
 test('curated mix favors the user team at 40/27/33 when strong distinct candidates are available',()=>{
   const pool=['national','conference','team'].flatMap(scope=>Array.from({length:20},(_,i)=>story(scope+i,scope,100-i)));
@@ -22,10 +22,10 @@ test('dedicated views retain all qualifying stories and permit overlap',()=>{
   const v=scopeViews(pool);assert.equal(v.national.length,41);assert.ok(v.all.length<pool.length);
   for(const k of ['national','conference','team'])assert.ok(v[k].includes('both'));assert.equal(v.all.filter(id=>id==='both').length,1);
 });
-test('combined feed limits repeated topics while scope views retain their detail',()=>{
+test('complete local feed retains previously published context and dedicated detail',()=>{
   const pool=Array.from({length:10},(_,i)=>({...story('offer'+i,'team',99,'offers'),thread:'offers:1'}));
-  const v=scopeViews(pool);assert.equal(v.team.length,10);assert.equal(v.all.length,1);
-  const old={...story('old-board','team'),curated:false};assert.ok(!scopeViews([old]).all.length);assert.deepEqual(scopeViews([old]).team,['old-board']);
+  const v=scopeViews(pool);assert.equal(v.team.length,10);assert.equal(v.all.length,10);
+  const old={...story('old-board','team'),curated:false};assert.deepEqual(scopeViews([old]).all,[old.id]);assert.deepEqual(scopeViews([old]).team,['old-board']);
 });
 const edition=(week)=>publishWeek({engineVersion:2,leagueId:1,userTeamIndex:1,season:2027,phase:'RegularSeason',week,key:`1/2027/RegularSeason/${week}`,sourceModifiedMs:week,stories:[story('result','team')]});
 test('publication week groups recaps and current news into one edition',()=>{
@@ -60,5 +60,5 @@ test('publication picker labels hide internal phase names and respect native off
 
 test('For You keeps every user draft signing beyond its normal curated limit',()=>{
  const posts=Array.from({length:36},(_,i)=>({...story('pick'+i,'team'),voice:'nflDraft',category:'draft',teamIds:[1],draftPick:i+1}));
- const f=publishWeek({...edition(8),stories:posts});assert.equal(f.views.all.length,30);assert.equal(f.views['all:required'].length,36);assert.equal(f.views['all:default'].length,36);
+ const f=publishWeek({...edition(8),stories:posts});assert.equal(f.views.all.length,36);assert.equal(f.views['all:required'].length,36);assert.equal(f.views['all:default'].length,36);
 });

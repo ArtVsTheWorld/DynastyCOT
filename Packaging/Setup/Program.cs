@@ -38,6 +38,8 @@ namespace DynastyCOT.Setup {
   }
   private static int Smoke(Fixture fixture,string report){
    int checks=0;Action<bool,string> check=(ok,name)=>{if(!ok)throw new Exception(name);checks++;};
+   using(var stream=typeof(Program).Assembly.GetManifestResourceStream("DynastyCOT.Crown.ico"))using(var icon=new System.Drawing.Icon(stream))check(icon.Width>0,"Windows crown icon is missing or invalid");
+   using(var stream=typeof(Program).Assembly.GetManifestResourceStream("DynastyCOT.Crown.png"))using(var image=System.Drawing.Image.FromStream(stream))check(image.Width==image.Height&&image.Width>=256,"crown branding resource is missing or invalid");
    string outside=Path.Combine(fixture.Parent,"outside");bool rejected=false;
    try{InstallerEngine.Resolve(fixture.Root,"../outside");}catch(IOException){rejected=true;}check(rejected,"unsafe extraction accepted");
    check(InstallerEngine.Quote("MMC's $folder; & end")=="'MMC''s $folder; & end'","PowerShell literal quoting changed");
@@ -46,8 +48,11 @@ namespace DynastyCOT.Setup {
    Directory.CreateDirectory(manager);File.WriteAllText(Path.Combine(parent,"MMCModManager.exe"),"outer launcher fixture");File.WriteAllText(Path.Combine(manager,"MMCModManager.exe"),"manager fixture");
    check(InstallerEngine.ValidateRoot(parent)==manager,"outer MMC launcher was selected instead of Mod Manager");
    check(InstallerEngine.FindMmc(parent)==manager,"Mod Manager discovery failed");
+   check(MmcLocator.FromExe(Path.Combine(manager,"MMCModManager.exe"))==manager,"exe picker did not resolve manager folder");
+   check(MmcLocator.Candidates(new[]{parent,manager})==manager,"duplicate auto-locate candidates were not merged");
+   rejected=false;try{MmcLocator.FromExe(Path.Combine(manager,"MMC.exe"));}catch(IOException){rejected=true;}check(rejected,"picker accepted wrong executable");
    string second=Path.Combine(parent,"MMC_ModManager_v1.2.0.0");Directory.CreateDirectory(second);File.WriteAllText(Path.Combine(second,"MMCModManager.exe"),"second manager fixture");
-   rejected=false;try{InstallerEngine.ValidateRoot(parent);}catch(IOException){rejected=true;}check(rejected&&InstallerEngine.FindMmc(parent)==null,"multiple versions were guessed");
+   rejected=false;try{InstallerEngine.ValidateRoot(parent);}catch(IOException){rejected=true;}check(rejected&&InstallerEngine.FindMmc(parent)==null&&MmcLocator.Candidates(new[]{manager,second})==null,"multiple versions were guessed");
    using(var form=new SetupForm(fixture))using(var poll=new System.Windows.Forms.Timer{Interval=50}){
     form.ShowInTaskbar=false;form.WindowState=FormWindowState.Minimized;
     Exception failure=null;int phase=0;var deadline=Stopwatch.StartNew();

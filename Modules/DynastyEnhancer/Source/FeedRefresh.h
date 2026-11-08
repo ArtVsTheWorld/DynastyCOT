@@ -50,7 +50,7 @@ inline Json readJson(const fs::path& path){
 inline int phaseIndex(const std::string& phase){const std::array<const char*,7> phases={"PreSeason","RegularSeason","BowlSeason1","BowlSeason2","BowlSeason3","NationalChampionship","OffSeason"};for(size_t i=0;i<phases.size();++i)if(phase==phases[i])return static_cast<int>(i);return -1;}
 inline bool publicationAtOrBefore(const std::string& phase,int week,const std::string& activePhase,int activeWeek){const int p=phaseIndex(phase),a=phaseIndex(activePhase);return p>=0&&a>=0&&(p<a||(p==a&&week<=activeWeek));}
 // The stored candidate pool includes every CPU program and replies. Native
-// widgets are separately capped by scope/type selection in FeedData.h.
+// widgets use one continuous native list per edition and scope.
 inline constexpr size_t maximumEditionStories=32768;
 inline void validate(const Json& j,const Json& config){
     if(j.at("format")!=1||j.at("engineVersion")!=2||!j.at("sourceUnchanged").get<bool>()||j.at("leagueId")!=config.at("leagueId")||j.at("userTeamIndex")!=config.at("userTeamIndex"))throw std::runtime_error("Feed identity or version mismatch");
@@ -62,6 +62,7 @@ inline void validate(const Json& j,const Json& config){
       if(w.at("leagueId")!=j.at("leagueId")||w.at("userTeamIndex")!=j.at("userTeamIndex")||w.at("season")!=j.at("season")||!publicationAtOrBefore(w.at("phase").get<std::string>(),w.at("week").get<int>(),j.at("phase").get<std::string>(),j.at("week").get<int>())||(j.value("catalogVersion",1)<2&&w.at("phase")!=j.at("phase")))throw std::runtime_error("Catalog contains another Dynasty or future publication week");
       const auto key=w.at("key").get<std::string>();if(!keys.insert(key).second)throw std::runtime_error("Duplicate publication week");if(key==j.at("activeWeekKey").get<std::string>())active=true;
       const auto& posts=w.at("stories");if(!posts.is_array())throw std::runtime_error("Weekly stories must be an array");if(posts.size()>maximumEditionStories)throw std::runtime_error("Weekly story count "+std::to_string(posts.size())+" exceeds catalogue limit "+std::to_string(maximumEditionStories));
+      if(w.contains("sidebar")){const auto& cards=w.at("sidebar");if(!cards.is_array()||cards.size()>3)throw std::runtime_error("Invalid sidebar cards");for(const auto& c:cards){const auto title=c.at("title").get<std::string>();const auto& lines=c.at("lines");if(title.empty()||title.size()>40||!lines.is_array()||lines.empty()||lines.size()>3)throw std::runtime_error("Invalid sidebar layout");for(const auto& line:lines)if(!line.is_string()||line.get_ref<const std::string&>().empty()||line.get_ref<const std::string&>().size()>256)throw std::runtime_error("Invalid sidebar text");}}
       std::set<std::string> ids;std::set<int> draftPicks;
       for(const auto& p:posts){
         if(p.at("publication").at("key")!=w.at("key")||p.at("publication").at("week")!=w.at("week"))throw std::runtime_error("Story publication week mismatch");
@@ -72,7 +73,7 @@ inline void validate(const Json& j,const Json& config){
         if(p.at("imageLibrary").get<int>()<0||p.at("imageValue").get<int>()<0)throw std::runtime_error("Invalid feed avatar");
       }
       if(!w.at("views").is_object()||w.at("views").size()>516)throw std::runtime_error("Invalid scope views");
-      for(const auto& [scope,view]:w.at("views").items()){if(!view.is_array()||view.size()>(scope=="all"?30u:maximumEditionStories))throw std::runtime_error("Scope candidate count exceeds its catalogue limit");
+      for(const auto& [scope,view]:w.at("views").items()){if(!view.is_array()||view.size()>maximumEditionStories)throw std::runtime_error("Scope candidate count exceeds its catalogue limit");
         std::set<std::string> seen;for(const auto& id:view){const auto v=id.get<std::string>();if(!ids.count(v)||!seen.insert(v).second)throw std::runtime_error("Invalid or duplicate scope story reference");}
       }
     }

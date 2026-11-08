@@ -78,8 +78,13 @@
     },
     {
       "path": "Modules/DynastyEnhancer/Source/FeedData.h",
-      "sha256": "1f0dd63f83e2a240d190811de1668c5fb156e3876a2016d68c57c2d75cebb1c9",
-      "reason": "Retain prior COT integration; 0.1.6 Beyond the Field: bounded content/selection/voices, native paging, persistent modeled recruit records, supported calendar/draft reference, exact AIO Notes/colors and numeric-preserving money redraw adapters."
+      "sha256": "edf40222221784adee2071d7f2320a8aa494b2a0fd6dd0b8553eb215102cb6b8",
+      "reason": "0.1.7: source-level weekly routine budget, complete continuous scope lists, concise native sidebar and header presentation."
+    },
+    {
+      "path": "Modules/DynastyEnhancer/Source/FeedRefresh.h",
+      "sha256": "226453065c23a1328911266f082478c90832f9765fc9a0080e81f2b3b8e9f058",
+      "reason": "0.1.7: protect major news within routine budget; native continuous weekly views, bounded sidebar metadata and scope validation."
     },
     {
       "path": "Modules/DynastyEnhancer/Source/FogGapUiPrograms.h",
@@ -103,8 +108,8 @@
     },
     {
       "path": "Modules/DynastyEnhancer/Source/NativeSocialMedia.cpp",
-      "sha256": "b294ca695aeffada5ab9acd9fee2c9510d745f372170ce5f3cf7c6c151299e7a",
-      "reason": "Retain prior COT integration; 0.1.6 Beyond the Field: bounded content/selection/voices, native paging, persistent modeled recruit records, supported calendar/draft reference, exact AIO Notes/colors and numeric-preserving money redraw adapters."
+      "sha256": "270e246620bb2280c29023e6881fe42b910ece125ec7b9347dde723b29eeb77f",
+      "reason": "0.1.7: protect major news within routine budget; native continuous weekly views, bounded sidebar metadata and scope validation."
     },
     {
       "path": "Modules/DynastyEnhancer/Source/PlayerBlueprintUiPrograms.h",
@@ -178,8 +183,8 @@
     },
     {
       "path": "Modules/DynastyEnhancer/Tests/NativeSocialMediaTests.cpp",
-      "sha256": "2923a4ad9e56bcab27fd5963a7c77579b2c2cd9f36b127c9cd1f7f22d0fe1949",
-      "reason": "Retain prior COT native-feed checks; 0.1.6 bounded category/scope paging with all 224 native draft reports reachable, safe C++17 page ownership and current Beyond the Field status branding."
+      "sha256": "b6748e92b8d9a58ebc1758a5acb8721619f44cba0e41e37258d2799e590e275b",
+      "reason": "0.1.7: protect major news within routine budget; native continuous weekly views, bounded sidebar metadata and scope validation."
     },
     {
       "path": "Modules/DynastyEnhancer/Tests/RecruitingFogTests.cpp",
@@ -195,6 +200,11 @@
       "path": "Modules/DynastyEnhancer/Tests/aio_currency_ui_test.py",
       "sha256": "4e65a56038e982d78b3caefcce71555a1e33c2195191d9b0112aa07661f48895",
       "reason": "COT 0.1.3: independent Weekly Advance adapters with exact loader-pointer normalization, creation-page per-Dynasty options, requested defaults and fitted dollar prefixes"
+    },
+    {
+      "path": "Modules/DynastyEnhancer/Tests/conversations.test.mjs",
+      "sha256": "7991d0eb59654dadc37f2a059e3e0e3f98204482dfea32c3c09ae315bcfa2030",
+      "reason": "0.1.7: source-level weekly routine budget, complete continuous scope lists, concise native sidebar and header presentation."
     },
     {
       "path": "Modules/DynastyEnhancer/Tests/currency_budget_ui_test.py",
@@ -232,6 +242,11 @@
       "reason": "COT 0.1.3: independent Weekly Advance adapters with exact loader-pointer normalization, creation-page per-Dynasty options, requested defaults and fitted dollar prefixes"
     },
     {
+      "path": "Modules/DynastyEnhancer/Tests/editorial_selection.test.mjs",
+      "sha256": "a4a1c572075fb149a9f11fd1b1483589521cd3354fb739ef189440f67971476b",
+      "reason": "0.1.7: source-level weekly routine budget, complete continuous scope lists, concise native sidebar and header presentation."
+    },
+    {
       "path": "Modules/DynastyEnhancer/Tests/enhancement_grade_scales_test.py",
       "sha256": "1dfb36bf96f187cd3d2a4d4779b4f00abb7f730205a868bd148852e51d352bd2",
       "reason": "COT 0.1.5 feedback: native focus colors, exact AIO shared overview; separate visitor demand/tickets, deficit bed, scoring audio priority and recorded-TD inset recovery. Workspace only."
@@ -242,6 +257,11 @@
       "reason": "Retain prior COT integration; 0.1.6 Beyond the Field: bounded content/selection/voices, native paging, persistent modeled recruit records, supported calendar/draft reference, exact AIO Notes/colors and numeric-preserving money redraw adapters."
     },
     {
+      "path": "Modules/DynastyEnhancer/Tests/feed_selection.test.mjs",
+      "sha256": "bdb04f27ce12a3b4d7a9e1d05152e88ef2156a557001dada9c800b5a0737fb9b",
+      "reason": "0.1.7: verify complete local views and fifteen-root allowance with protected major coverage."
+    },
+    {
       "path": "Modules/DynastyEnhancer/Tests/fog_gap_ui_test.py",
       "sha256": "635d4398af9c764921452ddb17c84bcf859f0f0318d66149a94f83f856fac3aa",
       "reason": "COT 0.1.5 feedback: native focus colors, exact AIO shared overview; separate visitor demand/tickets, deficit bed, scoring audio priority and recorded-TD inset recovery. Workspace only."
@@ -250,6 +270,26 @@
       "path": "Modules/DynastyEnhancer/Tests/independent_grade_modes_test.py",
       "sha256": "d56877b48326d3913096e140a36b18fe95a819201a1f41e085a63bb24a1f34cc",
       "reason": "COT 0.1.5 feedback: native focus colors, exact AIO shared overview; separate visitor demand/tickets, deficit bed, scoring audio priority and recorded-TD inset recovery. Workspace only."
+    },
+    {
+      "path": "Modules/DynastyEnhancer/Tests/news_cycles.test.mjs",
+      "sha256": "3c3099799f95e761151c9903f54324367cea2fba42d5b5db87791e1ea6ecd217",
+      "reason": "0.1.7: source-level weekly routine budget, complete continuous scope lists, concise native sidebar and header presentation."
+    },
+    {
+      "path": "Modules/DynastyEnhancer/Tests/offseason_discourse.test.mjs",
+      "sha256": "8bffc1c8d4ccb0d11f2a028b174494dc6fb27c29968df874b2326ea437734e14",
+      "reason": "0.1.7: source-level weekly routine budget, complete continuous scope lists, concise native sidebar and header presentation."
+    },
+    {
+      "path": "Modules/DynastyEnhancer/Tests/portal_draft.test.mjs",
+      "sha256": "4e3710cb1540a81856c22d4ff3bc3e265a77f915b8ec8c2ecd0ddc72585d452d",
+      "reason": "0.1.7: source-level weekly routine budget, complete continuous scope lists, concise native sidebar and header presentation."
+    },
+    {
+      "path": "Modules/DynastyEnhancer/Tests/publication_policy.test.mjs",
+      "sha256": "a0cd1a4e2624004a932c9f4145ec60c73f23566e7e065d45ebba41118a350e01",
+      "reason": "0.1.7: source-level weekly routine budget, complete continuous scope lists, concise native sidebar and header presentation."
     },
     {
       "path": "Modules/DynastyEnhancer/Tests/runtime_archive.test.mjs",
@@ -265,6 +305,11 @@
       "path": "Modules/DynastyEnhancer/Tests/social_discovery.test.mjs",
       "sha256": "7bc78e27832620b4e17cc7710cc7995a5a56bfd14d25ca2998941bd53cf406af",
       "reason": "Retain prior COT integration; 0.1.6 Beyond the Field: bounded content/selection/voices, native paging, persistent modeled recruit records, supported calendar/draft reference, exact AIO Notes/colors and numeric-preserving money redraw adapters."
+    },
+    {
+      "path": "Modules/DynastyEnhancer/Tests/transactions_editorial.test.mjs",
+      "sha256": "90f4a8622ca2527721d356315a0aa9f8ba6218331f896cb813310bdc3624a019",
+      "reason": "0.1.7: verify complete local views and fifteen-root allowance with protected major coverage."
     },
     {
       "path": "Modules/DynastyEnhancer/Tools/account_presentation.mjs",
@@ -313,13 +358,13 @@
     },
     {
       "path": "Modules/DynastyEnhancer/Tools/feed_engine.mjs",
-      "sha256": "8ce097fe674c999a0cea1016bbd616ea52d08b07bd247082a25c53ff6f448ef8",
-      "reason": "Mark newly generated recruit-star account presentation current so archive reloads remain byte-stable"
+      "sha256": "dc21bb97ce4789606ee29e529ba6b9985989c91636180ed4404431fab712a791",
+      "reason": "0.1.7: source-level weekly routine budget, complete continuous scope lists, concise native sidebar and header presentation."
     },
     {
       "path": "Modules/DynastyEnhancer/Tools/feed_selection.mjs",
-      "sha256": "7b267f5a295281a0bdec019b37f52311a22bc4b04aae4303833fe572fe08f718",
-      "reason": "Retain prior COT integration; 0.1.6 Beyond the Field: bounded content/selection/voices, native paging, persistent modeled recruit records, supported calendar/draft reference, exact AIO Notes/colors and numeric-preserving money redraw adapters."
+      "sha256": "365b03adb8ae54bd8e85f584429449e1f6ba4cf05f86ee97145b36021b509e98",
+      "reason": "0.1.7: preserve published news with a fifteen-root routine budget and complete user/board coverage; broader pipeline chatter joins the bounded mix."
     },
     {
       "path": "Modules/DynastyEnhancer/Tools/history_store.mjs",
@@ -373,8 +418,8 @@
     },
     {
       "path": "Modules/DynastyEnhancer/Tools/story_renderer.mjs",
-      "sha256": "753985be536750dc8c8e6fe6a4c5027b0b189b10f8c9dc1f45e0052d51b4be2f",
-      "reason": "Retain prior COT story rendering; 0.1.6 finite contextual voices/content with stable published objects and no new casual/holiday/recruit-film additions to already observed editions."
+      "sha256": "1277c32b5b68dff6fa099fd4c7e51bddd7b884d32bce6abd067923e7be0c811c",
+      "reason": "0.1.7: preserve published news with a fifteen-root routine budget and complete user/board coverage; broader pipeline chatter joins the bounded mix."
     },
     {
       "path": "Modules/DynastyEnhancer/Tools/story_templates.mjs",
@@ -388,8 +433,8 @@
     },
     {
       "path": "Modules/DynastyEnhancer/Tools/weekly_coverage.mjs",
-      "sha256": "160f2d4486243648551f70aaf54bfbb4321bebdbec7e874d4c3fa3432c061fa3",
-      "reason": "COT 0.1.4: fact-gated perspectives, persistent author voices, four-edition structural memory, compact archive signatures, frozen published wording and required news retention without larger native view caps."
+      "sha256": "170b57c429c0c85eb63a25fa017577da6bb2a74f310b3a19bb27a1b28af5c212",
+      "reason": "0.1.7: source-level weekly routine budget, complete continuous scope lists, concise native sidebar and header presentation."
     },
     {
       "path": "Modules/DynastyEnhancer/Tools/world_events.mjs",

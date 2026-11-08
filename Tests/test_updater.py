@@ -12,15 +12,17 @@ ROOT=Path(__file__).resolve().parents[1]
 def sha(b):return hashlib.sha256(b).hexdigest()
 
 def main():
-    parser=argparse.ArgumentParser();parser.add_argument('--baseline',action='store_true');parser.add_argument('--published',metavar='EXACT_VERSION',help='Read anonymous GitHub; all installation writes stay in an isolated marked fixture');args=parser.parse_args()
+    parser=argparse.ArgumentParser();parser.add_argument('--candidate-only',action='store_true',help='Exercise current payload only; does not prove cross-version rollback');parser.add_argument('--baseline',action='store_true');parser.add_argument('--published',metavar='EXACT_VERSION',help='Read anonymous GitHub; all installation writes stay in an isolated marked fixture');args=parser.parse_args()
     meta=json.loads((ROOT/'Build/current-package.json').read_text())
     archive=Path(meta['archive'])
     if args.baseline:archive=ROOT/'Release/DynastyCOT-0.1.5-private.zip'
     version=json.loads(zipfile.ZipFile(archive).read('package-manifest.json'))['version']
-    older=ROOT/'Release/DynastyCOT-0.1.5-private.zip'
+    older=ROOT/'Release/DynastyCOT-0.1.6-private.zip'
+    if not older.exists():older=ROOT/'Release/DynastyCOT-0.1.5-private.zip'
     # An older published ZIP is retained locally for the cross-version fixture.
     # Fresh checkouts without it use current twice; the report states that limit.
     if not older.exists():older=archive
+    if args.candidate_only:older=archive
     oldversion=json.loads(zipfile.ZipFile(older).read('package-manifest.json'))['version']
     base=ROOT/'Build'/('UpdaterChecks-'+datetime.datetime.now(datetime.timezone.utc).strftime('%Y%m%dT%H%M%S%f'));base.mkdir()
     fixture=base/"MMC's updater & fixture";fixture.mkdir();(fixture/'.cot-fixture').write_text('isolated');(fixture/'MMCModManager.exe').write_text('fixture marker, never executed');(fixture/'Plugins').mkdir();(fixture/'Plugins/OtherOverhaul.dll').write_text('unrelated overhaul')
@@ -92,8 +94,8 @@ def main():
         command=[str(exe),'--published',str(fixture),str(base),args.published] if args.published else [str(exe),str(fixture),str(base),str(config)]
         result=subprocess.run(command,capture_output=True,text=True,timeout=300)
         (base/'checks.log').write_text(result.stdout+result.stderr);assert result.returncode==0,result.stdout+result.stderr
-        report=json.loads((base/'result.json').read_text());report.update(baselineOnly=args.baseline,crossVersion=version!=oldversion,requests=len(requests),fixtureRoot=str(base),archiveSha256=sha(payload),failureCases=failures)
-        (ROOT/('Build/updater-published-verification.json' if args.published else 'Build/updater-verification.json')).write_text(json.dumps(report,indent=2)+'\n')
+        report=json.loads((base/'result.json').read_text());report.update(baselineOnly=args.baseline,candidateOnly=args.candidate_only,crossVersion=version!=oldversion,requests=len(requests),fixtureRoot=str(base),archiveSha256=sha(payload),failureCases=failures)
+        (ROOT/('Build/updater-candidate-only-verification.json' if args.candidate_only else 'Build/updater-published-verification.json' if args.published else 'Build/updater-verification.json')).write_text(json.dumps(report,indent=2)+'\n')
         print(result.stdout.strip());print('Version',version,'older',oldversion,'requests',len(requests),'baselineOnly',args.baseline)
     finally:server.shutdown();server.server_close()
 if __name__=='__main__':main()

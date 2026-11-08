@@ -25,7 +25,7 @@ test('curated replies retain their real parent, stay together, and count toward 
 });
 test('orphan and cyclic replies cannot appear in any scope, while roots retain full dedicated coverage',()=>{
  const p=root('parent',{scopes:['national']}),child=root('child',{replyTo:'parent',scopes:['team']}),orphan=root('orphan',{replyTo:'missing'}),cycle=[root('a',{replyTo:'b'}),root('b',{replyTo:'a'})];
- const views=scopeViews([p,child,orphan,...cycle]);assert.deepEqual(views.team,[]);assert.deepEqual(views.national,['parent']);assert.deepEqual(conversationOrder(cycle),[]);
+ const views=scopeViews([p,child,orphan,...cycle]);assert.deepEqual(views.team,[]);assert.deepEqual(views.national,['parent','child']);assert.deepEqual(conversationOrder(cycle),[]);
 });
 test('one account cannot dominate All Posts and caps do not silently remove dedicated facts',()=>{
  const pool=Array.from({length:20},(_,i)=>root('p'+i,{handle:'@same',category:'category'+i}));assert.equal(curate(pool).length,3);assert.equal(scopeViews(pool).team.length,20);
