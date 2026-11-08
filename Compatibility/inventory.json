@@ -430,11 +430,11 @@
         "0x78edb60": [
           "Modules/DynastyEnhancer/Source/AnalyticsGates.h:9",
           "Modules/DynastyEnhancer/Source/AnalyticsNative.h:246",
-          "Modules/DynastyEnhancer/Source/AnalyticsNative.h:271"
+          "Modules/DynastyEnhancer/Source/AnalyticsNative.h:275"
         ],
         "0x78ef740": [
           "Modules/DynastyEnhancer/Source/AnalyticsGates.h:10",
-          "Modules/DynastyEnhancer/Source/AnalyticsNative.h:271",
+          "Modules/DynastyEnhancer/Source/AnalyticsNative.h:275",
           "Modules/DynastyEnhancer/Source/RecruitingFog.cpp:145",
           "Modules/DynastyEnhancer/Source/RecruitListProbe.cpp:60",
           "Modules/DynastyEnhancer/Source/RecruitListProbe.cpp:63",
@@ -446,7 +446,7 @@
         "0x78f0a50": [
           "Modules/DynastyEnhancer/Source/AnalyticsGates.h:11",
           "Modules/DynastyEnhancer/Source/AnalyticsNative.h:247",
-          "Modules/DynastyEnhancer/Source/AnalyticsNative.h:275"
+          "Modules/DynastyEnhancer/Source/AnalyticsNative.h:279"
         ],
         "0x793d8c0": [
           "Modules/DynastyEnhancer/Source/RecruitingFog.cpp:149"
@@ -454,7 +454,7 @@
         "0x79411c0": [
           "Modules/DynastyEnhancer/Source/AnalyticsGates.h:12",
           "Modules/DynastyEnhancer/Source/AnalyticsNative.h:248",
-          "Modules/DynastyEnhancer/Source/AnalyticsNative.h:275"
+          "Modules/DynastyEnhancer/Source/AnalyticsNative.h:279"
         ],
         "0x79414b0": [
           "Modules/DynastyEnhancer/Source/RecruitingFog.cpp:169"
@@ -542,26 +542,26 @@
         "0x7a88a60": [
           "Modules/DynastyEnhancer/Source/AnalyticsGates.h:13",
           "Modules/DynastyEnhancer/Source/AnalyticsNative.h:256",
-          "Modules/DynastyEnhancer/Source/AnalyticsNative.h:272"
+          "Modules/DynastyEnhancer/Source/AnalyticsNative.h:276"
         ],
         "0x7a88b70": [
           "Modules/DynastyEnhancer/Source/AnalyticsGates.h:14",
           "Modules/DynastyEnhancer/Source/AnalyticsNative.h:255",
-          "Modules/DynastyEnhancer/Source/AnalyticsNative.h:272"
+          "Modules/DynastyEnhancer/Source/AnalyticsNative.h:276"
         ],
         "0x7a88bd0": [
           "Modules/DynastyEnhancer/Source/AnalyticsGates.h:15",
           "Modules/DynastyEnhancer/Source/AnalyticsNative.h:254",
-          "Modules/DynastyEnhancer/Source/AnalyticsNative.h:271"
+          "Modules/DynastyEnhancer/Source/AnalyticsNative.h:275"
         ],
         "0x7a88c90": [
           "Modules/DynastyEnhancer/Source/AnalyticsGates.h:16",
-          "Modules/DynastyEnhancer/Source/AnalyticsNative.h:271",
+          "Modules/DynastyEnhancer/Source/AnalyticsNative.h:275",
           "Modules/DynastyEnhancer/Source/RecruitingFog.cpp:145"
         ],
         "0x7a88cd0": [
           "Modules/DynastyEnhancer/Source/AnalyticsGates.h:17",
-          "Modules/DynastyEnhancer/Source/AnalyticsNative.h:271",
+          "Modules/DynastyEnhancer/Source/AnalyticsNative.h:275",
           "Modules/DynastyEnhancer/Source/RecruitingFog.cpp:136",
           "Modules/DynastyEnhancer/Source/RecruitListProbe.cpp:60",
           "Modules/DynastyEnhancer/Source/RecruitListProbe.cpp:63",
@@ -570,19 +570,19 @@
         "0x7a88e90": [
           "Modules/DynastyEnhancer/Source/AnalyticsGates.h:18",
           "Modules/DynastyEnhancer/Source/AnalyticsNative.h:257",
-          "Modules/DynastyEnhancer/Source/AnalyticsNative.h:272"
+          "Modules/DynastyEnhancer/Source/AnalyticsNative.h:276"
         ],
         "0x7a89180": [
           "Modules/DynastyEnhancer/Source/AnalyticsGates.h:19",
           "Modules/DynastyEnhancer/Source/AnalyticsNative.h:250",
-          "Modules/DynastyEnhancer/Source/AnalyticsNative.h:271",
+          "Modules/DynastyEnhancer/Source/AnalyticsNative.h:275",
           "Modules/DynastyEnhancer/Source/RecruitingFog.cpp:136",
           "Modules/DynastyEnhancer/Source/RecruitListProbe.cpp:42"
         ],
         "0x7a892d0": [
           "Modules/DynastyEnhancer/Source/AnalyticsGates.h:20",
           "Modules/DynastyEnhancer/Source/AnalyticsNative.h:251",
-          "Modules/DynastyEnhancer/Source/AnalyticsNative.h:273"
+          "Modules/DynastyEnhancer/Source/AnalyticsNative.h:277"
         ],
         "0x7a89420": [
           "Modules/DynastyEnhancer/Source/RosterViewProbe.cpp:14"
@@ -590,27 +590,27 @@
         "0x7a896a0": [
           "Modules/DynastyEnhancer/Source/AnalyticsGates.h:21",
           "Modules/DynastyEnhancer/Source/AnalyticsNative.h:258",
-          "Modules/DynastyEnhancer/Source/AnalyticsNative.h:272"
+          "Modules/DynastyEnhancer/Source/AnalyticsNative.h:276"
         ],
         "0x7a89770": [
           "Modules/DynastyEnhancer/Source/AnalyticsGates.h:22",
           "Modules/DynastyEnhancer/Source/AnalyticsNative.h:259",
-          "Modules/DynastyEnhancer/Source/AnalyticsNative.h:272"
+          "Modules/DynastyEnhancer/Source/AnalyticsNative.h:276"
         ],
         "0x7a89880": [
           "Modules/DynastyEnhancer/Source/AnalyticsGates.h:23",
           "Modules/DynastyEnhancer/Source/AnalyticsNative.h:252",
-          "Modules/DynastyEnhancer/Source/AnalyticsNative.h:273"
+          "Modules/DynastyEnhancer/Source/AnalyticsNative.h:277"
         ],
         "0x7a899d0": [
           "Modules/DynastyEnhancer/Source/AnalyticsGates.h:24",
           "Modules/DynastyEnhancer/Source/AnalyticsNative.h:253",
-          "Modules/DynastyEnhancer/Source/AnalyticsNative.h:273"
+          "Modules/DynastyEnhancer/Source/AnalyticsNative.h:277"
         ],
         "0x7a89b50": [
           "Modules/DynastyEnhancer/Source/AnalyticsGates.h:25",
           "Modules/DynastyEnhancer/Source/AnalyticsNative.h:249",
-          "Modules/DynastyEnhancer/Source/AnalyticsNative.h:271"
+          "Modules/DynastyEnhancer/Source/AnalyticsNative.h:275"
         ],
         "0x7c21220": [
           "Modules/DynastyEnhancer/Source/PlayerDepthProbe.cpp:47",
@@ -645,15 +645,15 @@
         ],
         "0x8076180": [
           "Modules/DynastyEnhancer/Source/AnalyticsGates.h:26",
-          "Modules/DynastyEnhancer/Source/AnalyticsNative.h:274"
+          "Modules/DynastyEnhancer/Source/AnalyticsNative.h:278"
         ],
         "0x8076300": [
           "Modules/DynastyEnhancer/Source/AnalyticsGates.h:27",
-          "Modules/DynastyEnhancer/Source/AnalyticsNative.h:274"
+          "Modules/DynastyEnhancer/Source/AnalyticsNative.h:278"
         ],
         "0x8079e70": [
           "Modules/DynastyEnhancer/Source/AnalyticsGates.h:28",
-          "Modules/DynastyEnhancer/Source/AnalyticsNative.h:274"
+          "Modules/DynastyEnhancer/Source/AnalyticsNative.h:278"
         ],
         "0x8459ff0": [
           "Modules/DynastyEnhancer/Source/EnhancementCreationScope.h:19"
@@ -1003,12 +1003,17 @@
         },
         {
           "source": "Modules/DynastyEnhancer/Source/AnalyticsNative.h",
-          "line": 274,
+          "line": 268,
+          "expression": "if(memcmp(bytes,gate.bytes,32))::cotcompat::practice::normalize(b,gate.rva,bytes,gate.bytes,32,query);"
+        },
+        {
+          "source": "Modules/DynastyEnhancer/Source/AnalyticsNative.h",
+          "line": 278,
           "expression": "encodePrefix=reinterpret_cast<Encode>(b+0x8076300);encodeValue=reinterpret_cast<Encode>(b+0x8076180);encodeSuffix=reinterpret_cast<Encode>(b+0x8079e70);"
         },
         {
           "source": "Modules/DynastyEnhancer/Source/AnalyticsNative.h",
-          "line": 276,
+          "line": 280,
           "expression": "try{for(auto& x:bindings){if(!replace(reinterpret_cast<void*>(b+x.rva),x.hook,x.vt,x.offset))throw std::runtime_error(\"Native analytics ownership changed\");x.slot=reinterpret_cast<void**>(b+x.vt+x.offset);}}"
         },
         {
@@ -5838,7 +5843,7 @@
     "Modules/DynastyEnhancer/Source/AnalyticsGates.h": "d898a3f0e58805091379d5d0911c1051dcfcbab09429163407ed6e1c3c5d40b2",
     "Modules/DynastyEnhancer/Source/AnalyticsMenuBridge.h": "7a27ec8729341a8d08daffbacda4467df3d4697a585c43f669f35e6304280e19",
     "Modules/DynastyEnhancer/Source/AnalyticsModel.h": "7871fd9173e0b76945fb302e0ecce9b0fcc8999104c71311837a5060ac9ba474",
-    "Modules/DynastyEnhancer/Source/AnalyticsNative.h": "d6ce44259258f98181f1e2281c563bc8c5a1c71346bb1f3e0b6b1a52ae42559f",
+    "Modules/DynastyEnhancer/Source/AnalyticsNative.h": "e79a706969ac12a00ae4c47952505d7314f9b3b9823ce4077c5b894842b64e53",
     "Modules/DynastyEnhancer/Source/AnalyticsPage.h": "c16b4298fff43a19c56527f562621518b33614ad0e507e8ed82426505c9a1aa6",
     "Modules/DynastyEnhancer/Source/AnalyticsRuntime.h": "29b97be54b77ea7770a7bfdfb6571202af5d2b893385fcc689d4fb63287b3021",
     "Modules/DynastyEnhancer/Source/CurrencyBudgetUiPrograms.h": "9c0b98ebb22f60931b3154721f460d2d553f83aec0d1c6f875cb24debf21fb11",

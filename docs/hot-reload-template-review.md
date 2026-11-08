@@ -30,4 +30,4 @@ Pursue a separate, opt-in development prototype only after the current candidate
 
 Require an explicit reload action, exact same-process Dynasty eligibility, verified payloads, compatible state schemas, a safe hub/menu exit, complete worker joins and a successful ownership/retention audit. Reject unknown owners and restart-required changes. Test add/remove/change hooks, in-flight callbacks, long-running originals, shutdown/init failure, stale external callbacks, interrupted copies, untrusted hashes, multiple modules and Dynasty switching in an isolated harness before any game trial.
 
-The useful promise is **some compatible handler changes and new supported hooks without another relaunch after initial adoption**. It cannot promise that every COT change can reload live. COT 0.1.9 does not include this prototype.
+The useful promise is **some compatible handler changes and new supported hooks without another relaunch after initial adoption**. It cannot promise that every COT change can reload live. COT 0.1.10 does not include this prototype.

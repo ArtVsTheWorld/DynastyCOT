@@ -9,6 +9,8 @@
 #include <iostream>
 #include <chrono>
 #include <fstream>
+#include "../../../Compatibility/PracticeTextSetter.generated.h"
+#include "../../../Build/Compatibility/PracticeContractFixtures.h"
 #include "../Source/AnalyticsCapture.h"
 #include "../Source/AnalyticsBridge.h"
 using Json=nlohmann::json;
@@ -83,6 +85,19 @@ int main(int argc,char** argv){using namespace fixture;using namespace fixture::
   auto query=[&](uintptr_t at,void* out,size_t n){auto found=nativeBytes.find(at);if(found==nativeBytes.end()||found->second.size()!=n)return false;memcpy(out,found->second.data(),n);return true;};validateContract(image,query);check(true,"Pristine native contract rejected");
   for(auto& [at,bytes]:nativeBytes)for(size_t offset=0;offset<bytes.size();++offset){bytes[offset]^=1;bool refused=false;try{validateContract(image,query);}catch(...){refused=true;}check(refused,"Changed instruction or foreign slot passed Analytics gates");bytes[offset]^=1;}
   rejected=false;try{validateContract(image,[](uintptr_t,void*,size_t){return false;});}catch(...){rejected=true;}check(rejected,"Unreadable native code passed Analytics gates");
+  // Exercise the same independently emitted helper fixtures used by the
+  // existing COT contract checks. No game process, allocations or writes.
+  for(unsigned variant=0;variant<4;++variant){
+    const uintptr_t relocated=image+((variant&1)?0x10000000:0),code=0x300000000ull;std::map<uintptr_t,std::vector<unsigned char>> memory;
+    for(const auto& gate:analyticsGates)memory[relocated+gate.rva]={gate.bytes,gate.bytes+32};
+    for(const auto& binding:bindings){uintptr_t pointer=relocated+binding.rva;auto& bytes=memory[relocated+binding.vt+binding.offset];bytes.resize(8);memcpy(bytes.data(),&pointer,8);}
+    auto entry=[&](uintptr_t rva,uintptr_t target,size_t size){auto& bytes=memory[relocated+rva];if(bytes.size()<size)bytes.resize(size);std::fill(bytes.begin(),bytes.begin()+size,static_cast<unsigned char>(0x90));bytes[0]=0xff;bytes[1]=0x25;bytes[2]=bytes[3]=bytes[4]=bytes[5]=0;memcpy(bytes.data()+6,&target,8);};
+    entry(cotcompat::practice::site0,code,cotcompat::practice::original0.size());entry(cotcompat::practice::site13,code+13*1024,cotcompat::practice::original13.size());entry(cotcompat::practice::site14,code+14*1024,cotcompat::practice::original14.size());
+    memory[code]={fixture0[variant].begin(),fixture0[variant].end()};memory[code+13*1024]={fixture13[variant].begin(),fixture13[variant].end()};memory[code+14*1024]={fixture14[variant].begin(),fixture14[variant].end()};
+    auto readFixture=[&](uintptr_t at,void* out,size_t size){auto found=memory.upper_bound(at);if(found==memory.begin())return false;--found;if(at-found->first>found->second.size()||size>found->second.size()-(at-found->first))return false;memcpy(out,found->second.data()+at-found->first,size);return true;};
+    const auto original=memory;validateContract(relocated,readFixture);check(true,"Exact known Practice text hook blocked Analytics");check(memory==original,"Analytics normalization changed helper/native memory");
+    memory[code+14*1024][20]^=1;bool refused=false;try{validateContract(relocated,readFixture);}catch(...){refused=true;}check(refused,"A changed/foreign Practice body passed Analytics validation");
+  }
   check(inflight==0,"UI callbacks leaked ownership drain counts");
   if(argc==2){std::ifstream file(argv[1]);Json captured;file>>captured;const auto before=captured;auto start=std::chrono::steady_clock::now();auto dataset=analytics::live::dataset(captured);auto snapshot=prepareSnapshot(dataset);const auto end=std::chrono::steady_clock::now();check(captured==before,"Real read-only fixture changed");size_t graded=0;for(const auto& row:dataset.at("rows"))if(row.at("analytics").at("grade").is_number())++graded;check(graded>0,"Actual Dynasty fixture has no graded rows");std::cout<<"Actual native adapter: "<<dataset.at("roster").size()<<" roster, "<<dataset.at("rows").size()<<" game records, "<<graded<<" grades, "<<dataset.at("issues").size()<<" rejected linkages; prepare="<<std::chrono::duration<double,std::milli>(end-start).count()<<" ms (offline fixture, not live menu).\n";}
   std::cout<<"PASS: "<<checks<<" analytics integration checks; no game hooks installed.\n";return 0;

@@ -11,7 +11,7 @@ Small additions to offline Dynasty, packaged as one MMC plugin with four indepen
 
 This project publishes **test prereleases**. The `-private` version suffix is retained from the development package format; the repository and its authorized prerelease downloads are public. Passing automated checks does not establish live-game or overhaul compatibility. See [live acceptance](LIVE-ACCEPTANCE.md) and the release's compatibility notes before testing.
 
-The local [0.1.9 candidate](docs/release/0.1.9-private.md) adds native Player Analytics, bounds National to 250 importance-selected cards and restores compact numbering. [Hot reload remains an audit/recommendation](docs/hot-reload-template-review.md), with no prototype included.
+The local [0.1.10 candidate](docs/release/0.1.10-private.md) adds native Player Analytics, bounds National to 250 importance-selected cards and restores compact numbering. [Hot reload remains an audit/recommendation](docs/hot-reload-template-review.md), with no prototype included.
 
 The 0.1.8 Social Media rendering fix remains in place; the unsupported list/sidebar replacement stays disabled.
 

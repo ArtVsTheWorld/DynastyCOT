@@ -263,7 +263,11 @@ bool stop(){
     return ok;
 }
 template<class Read>void validateContract(uintptr_t b,Read query){
-    for(const auto& gate:analyticsGates){unsigned char bytes[32]{};if(!query(b+gate.rva,bytes,32)||memcmp(bytes,gate.bytes,32))throw std::runtime_error("Unsupported native analytics helper");}
+    for(const auto& gate:analyticsGates){
+        unsigned char bytes[32]{};if(!query(b+gate.rva,bytes,32))throw std::runtime_error("Unreadable native analytics helper");
+        if(memcmp(bytes,gate.bytes,32))::cotcompat::practice::normalize(b,gate.rva,bytes,gate.bytes,32,query);
+        if(memcmp(bytes,gate.bytes,32))throw std::runtime_error("Unsupported native analytics helper");
+    }
     for(const auto& binding:bindings){uintptr_t value=0;if(!query(b+binding.vt+binding.offset,&value,8)||value!=b+binding.rva)throw std::runtime_error("Native analytics slot is already owned or unsupported");}
 }
 void install(uintptr_t b){

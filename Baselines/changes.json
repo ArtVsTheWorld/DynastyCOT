@@ -43,8 +43,8 @@
     },
     {
       "path": "Modules/DynastyEnhancer/Source/AnalyticsNative.h",
-      "sha256": "d6ce44259258f98181f1e2281c563bc8c5a1c71346bb1f3e0b6b1a52ae42559f",
-      "reason": "National 250-card native selection and compact counters; integrate production Analytics through existing COT hook owners and active Dynasty capture"
+      "sha256": "e79a706969ac12a00ae4c47952505d7314f9b3b9823ce4077c5b894842b64e53",
+      "reason": "Reuse the exact existing Practice text-hook attestation in Analytics without relaxing any foreign-owner/fingerprint gates"
     },
     {
       "path": "Modules/DynastyEnhancer/Source/AnalyticsPage.h",
