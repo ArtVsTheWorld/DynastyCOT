@@ -16,7 +16,7 @@ test('one bounded editorial expansion: 120 primary alternatives and 30 targeted 
  for(const [f,ts] of Object.entries(pack.families).slice(0,20)){assert.equal(ts.length,6,f);assert.equal(new Set(ts.map(t=>templateFeatures(t).structure)).size,6,f);}
  assert.equal(new Set(Object.values(pack.families).flat().map(t=>t.id)).size,150);
  for(const patch of pack.overrides){assert.equal(templates.get(patch.id).f,patch.family);assert.equal(templates.get(patch.id).t.body,socialDisplayText(patch.body));assert.ok(patch.originalBody);}
- assert.equal(NATIONAL_CARD_LIMIT,250);
+ assert.equal(NATIONAL_CARD_LIMIT,300);
 });
 test('reviewed copy corrects opponent attribution, complete result sentences and timing',()=>{
  for(const t of contentPack.families['beat.performance']){assert.ok(!t.body.includes('{playerName} ({opponent})'));assert.ok(!/\{resultLine\}\s+vs\./.test(t.body));}
@@ -39,14 +39,14 @@ test('proposal does not overwrite authored personality/style metadata or strong 
  assert.ok(pack.families['reply.fan.upset'].some(t=>/annoying|personality/.test(t.body)));
 });
 test('minimal context excludes unsupported angles, while long values get complete short facts',()=>{
- let options=[];const p=chooseTemplate('narrative.game',{winner:'WMU',loser:'Michigan',score:'31–26'},'minimal',{onCandidates:x=>options=x.candidates});assert.ok(p);assert.ok(!options.some(t=>t.id==='narrative.game.editorial011.2'||t.id==='narrative.game.editorial011.4'));
+ let options=[];const p=chooseTemplate('narrative.game',{winner:'WMU',loser:'Michigan',score:'31â€“26'},'minimal',{onCandidates:x=>options=x.candidates});assert.ok(p);assert.ok(!options.some(t=>t.id==='narrative.game.editorial011.2'||t.id==='narrative.game.editorial011.4'));
  const values={school:'Northwestern Metropolitan University of the Great Lakes',playerName:'Christopher Alexander Montgomery-Washington III',opponent:'Southwestern Polytechnic Institute of Technology',shortStatLine:'219 passing yards and 3 TD',statLine:'219 passing yards and 3 TD, 111 rushing yards and 2 TD',resultLine:'The individual numbers came in a team loss.',total:'$22.4M',first:'offensive line',firstMoney:'$7.2M',firstShare:32,second:'defensive line',secondMoney:'$5M',secondShare:22,ypa:7.3,ypg:290,tdpg:2.1,intpg:0.7,share:55,givepg:1.2,lostpg:0.5,rate:2.3,sackpg:2.8,frpg:0.4,takepg:1.1};
  for(const f of ['beat.performance','context.passing','context.ball-security','context.disruption','context.nil']){const chosen=chooseTemplate(f,values,'long');assert.ok(chosen,f);assert.ok([...chosen.body].length<=280&&Buffer.byteLength(chosen.body)<=512);assert.ok(!/undefined|null|\.\s+vs\./.test(chosen.body));}
 });
 test('WMU upset voices take different positions and replies engage with parent facts',()=>{
  const {snapshot,events}=upsetFixture(),rendered=renderStories(snapshot,events),posts=rendered.stories;
  assert.equal(posts.length,5);assert.deepEqual(new Set(posts.map(p=>p.templateFamily)),new Set(['world.upset','reply.fan.upset','reply.fan.upset-loss','context.upset-expectation','context.upset-rival']));
- const map=new Map(posts.map(p=>[p.id,p]));for(const p of posts){assert.ok([...p.body].length<=280&&Buffer.byteLength(p.body)<=512);assert.ok(!/interview|injury|source says|overtime|last.second/i.test(p.body));if(p.replyTo){const parent=map.get(p.replyTo);assert.ok(parent);assert.ok(['W. Michigan','Michigan','31–26'].some(f=>p.body.includes(f)&&parent.body.includes(f)));}}
+ const map=new Map(posts.map(p=>[p.id,p]));for(const p of posts){assert.ok([...p.body].length<=280&&Buffer.byteLength(p.body)<=512);assert.ok(!/interview|injury|source says|overtime|last.second/i.test(p.body));if(p.replyTo){const parent=map.get(p.replyTo);assert.ok(parent);assert.ok(['W. Michigan','Michigan','31â€“26'].some(f=>p.body.includes(f)&&parent.body.includes(f)));}}
  assert.equal(posts.find(p=>p.templateFamily==='reply.fan.upset-loss').teamIds.includes(49),true);
  assert.ok(new Set(posts.map(p=>p.body)).size===5);
 });
@@ -61,14 +61,14 @@ test('upgrading copy preserves every published card and stable refresh identitie
 test('supplemental facts stay bounded, orphan-free and marked when recruit games are mod-generated',()=>{
  for(const row of supplementalEditions()){
   const {snapshot:s,events}=row,unchanged=JSON.stringify(s),rendered=renderStories(s,events),feed=publishWeek({key:'test',season:2026,phase:row.phase,week:row.week,userTeamIndex:s.userTeamIndex,stories:rendered.stories,events});assert.equal(JSON.stringify(s),unchanged);
-  assert.ok(feed.stories.length);assert.ok(nativeViewPosts(feed,'national').length<=250);
+  assert.ok(feed.stories.length);assert.ok(nativeViewPosts(feed,'national').length<=300);
   for(const p of feed.stories){assert.ok([...p.body].length<=280&&Buffer.byteLength(p.body)<=512);if(p.category==='recruit-film'){assert.equal(p.stamp,'COT HS Game');assert.equal(p.recordSource,'mod-modeled-hs');}}
  }
 });
 test('visibility memory tracks the entire selected National window past retired cap 100',()=>{
- const stories=Array.from({length:300},(_,i)=>({id:String(i),category:'results',voice:'beat',priority:i,handle:'@'+i,templateId:'test'+i,variety:{structure:'unique '+i,opening:'open '+i,ending:'end '+i,angle:null}}));
+ const stories=Array.from({length:350},(_,i)=>({id:String(i),category:'results',voice:'beat',priority:i,handle:'@'+i,templateId:'test'+i,variety:{structure:'unique '+i,opening:'open '+i,ending:'end '+i,angle:null}}));
  const history=[{leagueId:1,userTeamIndex:1,season:2026,phase:'RegularSeason',week:1,stories,views:{national:stories.map(p=>p.id),team:[],conference:[],all:[]}}];
- const usage=templateHistory(history,{leagueId:1,userTeamIndex:1,season:2026,phase:'RegularSeason',week:2});assert.equal(usage.memory.forms.size,250);assert.ok(usage.memory.forms.has('unique 299'));assert.ok(!usage.memory.forms.has('unique 0'));
+ const usage=templateHistory(history,{leagueId:1,userTeamIndex:1,season:2026,phase:'RegularSeason',week:2});assert.equal(usage.memory.forms.size,300);assert.ok(usage.memory.forms.has('unique 349'));assert.ok(!usage.memory.forms.has('unique 0'));
 });
 test('cached near-shape comparisons still read increasing weights and newly added shapes',()=>{
  const m=varietyMemory(),a={body:'The whole team is ready to face {opponent} this week.'},b={body:'The whole team is ready to face {school} this week again.'};

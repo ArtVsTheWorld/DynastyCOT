@@ -360,6 +360,13 @@ int main(int argc,char** argv){using namespace fixture;using namespace fixture::
   check(grade.at("modelVersion")==analytics::ModelVersion&&grade.at("cohortSamples")==1,"Native adapter did not use the sparse position model");
   auto summary=analytics::live::socialSummary(raw);check(summary["modelVersion"]==analytics::ModelVersion&&summary["leagueId"]==result["leagueId"]&&summary["weekly"][0]["grade"]==grade["grade"],"Social grade differs from its native weekly menu source");
   check(summary["seasonRows"][0]["grade"]==analytics::teamPage(result,14,0,analytics::SeasonWeek,"Season")["rows"][0]["grade"],"Social season grade differs from the native Season menu");
+  auto corroborated=raw;corroborated["records"]["5:0"]["v"]["SeasonStats"]="10:0";
+  corroborated["records"]["10:0"]={{"key","10:0"},{"type","SeasonStats[]"},{"capacity",150},{"v",{{"Member0","11:0"}}}};
+  corroborated["records"]["11:0"]={{"key","11:0"},{"type","SeasonOffensiveStats"},{"capacity",150},{"v",{{"SEAS_YEAR",0},{"DOWNSPLAYED",60},{"YEARBYYEARTEAMINDEX",14}}}};
+  auto verifiedCoverage=analytics::live::socialSummary(corroborated).at("coverage");
+  check(verifiedCoverage.at("scheduleComplete")==true&&std::find(verifiedCoverage.at("positions").begin(),verifiedCoverage.at("positions").end(),"QB")!=verifiedCoverage.at("positions").end(),"Reconciled participation cannot enter PFF rankings");
+  corroborated["records"]["11:0"]["v"]["DOWNSPLAYED"]=61;auto incompleteCoverage=analytics::live::socialSummary(corroborated).at("coverage");
+  check(std::find(incompleteCoverage.at("positions").begin(),incompleteCoverage.at("positions").end(),"QB")==incompleteCoverage.at("positions").end(),"Missing game-cache participation can create a false PFF leader");
   auto changed=raw;changed["records"]["5:0"]["v"]["OverallRating"]=10;changed["records"]["5:0"]["v"]["TraitDevelopment"]="Normal";changed["records"]["7:0"]["v"]["GAMERATING"]=0;
   check(analytics::live::dataset(changed)["rows"][0]["analytics"]==grade,"Hidden/native ratings influence production grade");
   changed=raw;changed["records"]["7:0"]["v"].erase("PASSINTS");check(analytics::live::dataset(changed)["rows"][0]["analytics"]["grade"].is_null(),"Missing stats were fabricated");

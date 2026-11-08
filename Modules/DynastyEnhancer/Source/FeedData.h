@@ -104,7 +104,7 @@ inline std::vector<std::string> feedCandidates(const Edition& e,const std::vecto
     std::function<void(const std::string&,bool)> append=[&](const auto& id,bool whole){if(!visited.insert(id).second)return;const auto& p=e.stories.at(id);whole=whole||matchesType(p,type);if(!whole&&!included.count(id))return;result.push_back(id);for(const auto& child:children[id])append(child,whole);};
     for(const auto& id:roots)append(id,false);return result;
 }
-inline constexpr size_t nationalCardLimit=250;
+inline constexpr size_t nationalCardLimit=300;
 // The game creates a real native widget for each returned card. Rank after
 // category matching, retain actual ancestry and reserve the official draft.
 inline std::vector<std::string> nationalSelection(const Edition& e,const std::vector<std::string>& candidates,unsigned type){

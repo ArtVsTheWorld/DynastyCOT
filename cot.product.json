@@ -2,7 +2,7 @@
   "name": "DynastyCOT",
   "title": "DYNASTY COT by Ace",
   "author": "Ace",
-  "version": "0.1.14-private",
+  "version": "0.1.15-private",
   "stage": "public-test-prerelease",
   "installable": true,
   "modules": [

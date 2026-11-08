@@ -1,3 +1,4 @@
+import {pffRankings} from './pff_rankings.mjs';
 // Consume the exact native menu model, never a second approximation of it.
 const finite=x=>typeof x==='number'&&Number.isFinite(x);
 const sample=(r,season)=>finite(r.grade)&&r.grade>=0&&r.grade<=100&&finite(r.snaps)&&(['K','P'].includes(r.group)?r.opportunities>=(season?8:2):r.snaps>=(season?200:20))&&(!season||r.gradedGames>=3);
@@ -36,6 +37,10 @@ export function pffEvents(s,previous=null){
   selected.push({id:`pff:${kind}:${row.player}`,category:'analytics',facts:values,options:{team:row.team,player:row.player,national,priority:row.team===s.userTeamIndex?88:81,eventWeek:s.season.CurrentWeek}});usedTeams.add(row.team);usedPlayers.add(row.player);
  };
  const sort=(a,b)=>b.grade-a.grade||b.snaps-a.snaps||a.player.localeCompare(b.player);
+ for(const event of pffRankings(s,a,old)){
+  const board=event.facts.family==='pff.position-top-three',related=[event.options.team,...event.options.relatedTeams];if(selected.length>=4||!board&&related.some(t=>usedTeams.has(t)))continue;
+  selected.push(event);if(!board)related.forEach(t=>usedTeams.add(t));if(event.options.player)usedPlayers.add(event.options.player);
+ }
  const own=season.filter(r=>r.team===s.userTeamIndex&&changed(r)).sort(sort),movement=own.find(r=>{const p=oldRows.get(r.player);return comparable(p,r)&&r.gradedGames>p.gradedGames&&Math.abs(r.grade-p.grade)>=3;});
  const ownWeekly=weekly.filter(r=>r.team===s.userTeamIndex).sort(sort)[0];
  if(movement)choose(movement,'movement');

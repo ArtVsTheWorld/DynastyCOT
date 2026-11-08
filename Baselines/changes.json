@@ -103,8 +103,8 @@
     },
     {
       "path": "Modules/DynastyEnhancer/Source/FeedData.h",
-      "sha256": "a3182268feecdce288674caefc5f5c41973bc56732bf1282eb318c166076e062",
-      "reason": "RC013 native Analytics roster-card/action/return, delayed week visibility, safe filter transitions, isolated full-card fog adapters, glyph repair, installer footer and winning visitor departures"
+      "sha256": "55bd2348186f2865a53c7afebf25e8888eb6971ce3dc4c26285268b4a42540fa",
+      "reason": "0.1.15: reviewed PFF editorial pack, verified position boards and weekly grade honors; National Social capacity 300"
     },
     {
       "path": "Modules/DynastyEnhancer/Source/FeedRefresh.h",
@@ -223,8 +223,8 @@
     },
     {
       "path": "Modules/DynastyEnhancer/Tests/NativeSocialMediaTests.cpp",
-      "sha256": "363449c67a1ec27aa137e5e744d08b0b0920e1913939e92b34b3b8bd745d41db",
-      "reason": "RC013 native Analytics roster-card/action/return, delayed week visibility, safe filter transitions, isolated full-card fog adapters, glyph repair, installer footer and winning visitor departures"
+      "sha256": "2ed208bdeec0290438475d6ec3eb3a51c02a3174481d67a98692f69db9a0dab9",
+      "reason": "0.1.15: reviewed PFF editorial pack, verified position boards and weekly grade honors; National Social capacity 300"
     },
     {
       "path": "Modules/DynastyEnhancer/Tests/RecruitingFogTests.cpp",
@@ -352,6 +352,11 @@
       "reason": "Bounded editorial candidate: reviewed proposal, native-window repetition memory and equivalent cached comparisons; stable publications and guards"
     },
     {
+      "path": "Modules/DynastyEnhancer/Tests/template_performance.test.mjs",
+      "sha256": "425e7b69718be73b7714f87fbd38bc3141a5288526c249e6b85203874fc1206b",
+      "reason": "0.1.15: reviewed PFF editorial pack, verified position boards and weekly grade honors; National Social capacity 300"
+    },
+    {
       "path": "Modules/DynastyEnhancer/Tests/transactions_editorial.test.mjs",
       "sha256": "90f4a8622ca2527721d356315a0aa9f8ba6218331f896cb813310bdc3624a019",
       "reason": "0.1.7: verify complete local views and fifteen-root allowance with protected major coverage."
@@ -398,8 +403,8 @@
     },
     {
       "path": "Modules/DynastyEnhancer/Tools/editorial_policy.mjs",
-      "sha256": "ee15729162377a7acbb588f4f05c84cad8235d1a058ba7c65c16bd63816bd363",
-      "reason": "0.1.14: released native production and position-relative grades with prestige uncertainty; same-model optional PFF publications and preserved history"
+      "sha256": "c2540b5520bad97d123a0f7d913f06a431af344a6c6d8191009f2c6e3d45dd5a",
+      "reason": "0.1.15: reviewed PFF editorial pack, verified position boards and weekly grade honors; National Social capacity 300"
     },
     {
       "path": "Modules/DynastyEnhancer/Tools/feed_engine.mjs",
@@ -428,8 +433,8 @@
     },
     {
       "path": "Modules/DynastyEnhancer/Tools/normalize_dynasty.mjs",
-      "sha256": "92f116f0c0e931fa8081393042746dfbaf4b62bc5ee755f3a6d42cc7c01a9d0d",
-      "reason": "Retain prior COT integration; 0.1.6 Beyond the Field: bounded content/selection/voices, native paging, persistent modeled recruit records, supported calendar/draft reference, exact AIO Notes/colors and numeric-preserving money redraw adapters."
+      "sha256": "9ec7fdc6c50b64c5790da9509df205bea13e31cd797351360182766c5a21be69",
+      "reason": "0.1.15: reviewed PFF editorial pack, verified position boards and weekly grade honors; National Social capacity 300"
     },
     {
       "path": "Modules/DynastyEnhancer/Tools/prose_cleanup.mjs",

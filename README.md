@@ -11,7 +11,7 @@ Small additions to offline Dynasty, packaged as one MMC plugin with four indepen
 
 This project publishes **test prereleases**. The `-private` version suffix is retained from the development package format; the repository and its authorized prerelease downloads are public. Passing automated checks does not establish live-game or overhaul compatibility. See [live acceptance](LIVE-ACCEPTANCE.md) and the release's compatibility notes before testing.
 
-The local, unpublished [0.1.14 candidate](docs/release/0.1.14-private.md) rebalances Player Analytics using released native production, adds prestige-based grading uncertainty and introduces the PFF Social account. See the [actual-sim audit and grading limits](docs/player-analytics-0.1.14.md). Analytics remains team-only; Social's National view keeps its 250-card limit. [Hot reload remains an audit/recommendation](docs/hot-reload-template-review.md), with no prototype included.
+The local, unpublished [0.1.15 candidate](docs/release/0.1.15-private.md) incorporates the reviewed PFF copy, qualified position Top 3 boards and weekly player/unit honors. Social's National view holds up to 300 cards. See the [PFF integration checks](docs/pff-editorial-0.1.15.md) and [actual-sim grading audit](docs/player-analytics-0.1.14.md). Analytics remains team-only. [Hot reload remains an audit/recommendation](docs/hot-reload-template-review.md), with no prototype included.
 
 The 0.1.8 Social Media rendering fix remains in place; the unsupported list/sidebar replacement stays disabled.
 

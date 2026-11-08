@@ -73,10 +73,10 @@ test('twelve editions never borrow generic positive player reactions for PFF low
   assert.ok(posts.length);assert.ok(posts.every(p=>p.author==='PFF'&&!p.replyTo));
  }
 });
-test('all 32 PFF variants render with explicit units and native character/byte limits, including long names',()=>{
+test('all 48 revised PFF variants render with explicit units and native character/byte limits, including long names',()=>{
  for(const family of ['pff.weekly','pff.season-spotlight','pff.season-watch','pff.movement'])for(const long of [false,true]){
   const values={playerName:long?'Alexanderson Longlastname-Suffix III':'Jake Jones',school:long?'Western Metropolitan State University':'Test',position:'LT',grade:'89.4',previousGrade:'84.2',direction:'up',gradedGames:12,sampleLabel:'1200 recorded snaps',weekLabel:'BowlSeason1 Week 17'};
-  let candidates;assert.ok(chooseTemplate(family,values,'limits',{voice:'evidence',onCandidates:x=>candidates=x.candidates}));assert.equal(candidates.length,8);
+  let candidates;assert.ok(chooseTemplate(family,values,'limits',{voice:'evidence',onCandidates:x=>candidates=x.candidates}));assert.equal(candidates.length,12);
   for(const c of candidates){assert.ok([...c.body].length<=280&&Buffer.byteLength(c.body,'utf8')<=512);assert.ok(!/[{}\uFFFD]/u.test(c.body));}
  }
 });

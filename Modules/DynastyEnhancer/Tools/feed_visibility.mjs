@@ -1,6 +1,6 @@
 // Mirrors FeedData.h's native selection contract. No generation budgets or
 // stored posts are changed. Native parity is checked by NativeFeedViewChecks.
-export const NATIONAL_CARD_LIMIT=250;
+export const NATIONAL_CARD_LIMIT=300;
 export function matchesNativeType(p,type=0){
  switch(type){
  case 0:return true;

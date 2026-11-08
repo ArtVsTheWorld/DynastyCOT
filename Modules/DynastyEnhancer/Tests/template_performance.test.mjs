@@ -32,7 +32,10 @@ test('compact copy is a fallback until richer copy has been used recently',()=>{
 });
 
 test('every configured story family has at least eight distinct authored choices',()=>{
- for(const [family,lines] of Object.entries(contentPack.families))assert.ok(new Set(lines.map(t=>t.body)).size>=8,family);
+ // The five structured PFF boards/honors use the user's three-form proposal.
+ // Their strict factual schemas are tested separately; do not pad them to eight.
+ const structured=new Set(['pff.position-top-three','pff.offensive-player-of-week','pff.defensive-player-of-week','pff.offense-of-week','pff.defense-of-week']);
+ for(const [family,lines] of Object.entries(contentPack.families))assert.ok(new Set(lines.map(t=>t.body)).size>=(structured.has(family)?3:8),family);
  assert.ok(new Set(Object.values(contentPack.families).flat().map(t=>t.body)).size>=5000);
 });
 test('a prospect watch with an explicit national rank does not repeat the same rank detail',async()=>{

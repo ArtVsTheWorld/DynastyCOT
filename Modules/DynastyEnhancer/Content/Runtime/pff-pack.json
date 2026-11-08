@@ -1,10 +1,10 @@
 {
-  "revision": "pff-production-v1",
+  "revision": "pff-editorial-v2",
   "families": {
     "pff.weekly": [
       {
         "id": "pff.weekly.1",
-        "body": "{playerName}, {school}: {grade} in our stat-based {weekLabel} grades. {sampleLabel}.",
+        "body": "{weekLabel} grades: {school}'s {playerName} checks in at {grade}. Workload: {sampleLabel}.",
         "voices": [
           "evidence"
         ]
@@ -18,42 +18,70 @@
       },
       {
         "id": "pff.weekly.3",
-        "body": "Our {weekLabel} board: {playerName} earns a {grade} production grade for {school}.",
+        "body": "Strong {weekLabel} grade for {school}'s {playerName}: {grade}.",
         "voices": [
           "evidence"
         ]
       },
       {
         "id": "pff.weekly.4",
-        "body": "{grade} for {playerName} in {weekLabel}. The stat-based snapshot covers {sampleLabel} with {school}.",
+        "body": "{playerName} ({school}) gets a {grade} for {weekLabel}, across {sampleLabel}.",
         "voices": [
           "evidence"
         ]
       },
       {
         "id": "pff.weekly.5",
-        "body": "{school} had a standout on the stat sheet: {playerName}, {grade} in our {weekLabel} grades.",
+        "body": "One to notice from {school}: {playerName}, graded {grade} for {weekLabel}.",
         "voices": [
           "evidence"
         ]
       },
       {
         "id": "pff.weekly.6",
-        "body": "{playerName}: {grade}. A {weekLabel} production-grade spotlight from {school}.",
+        "body": "For {school}'s {playerName}, {weekLabel} brought a {grade}.",
         "voices": [
           "evidence"
         ]
       },
       {
         "id": "pff.weekly.7",
-        "body": "{school} {position} {playerName} lands at {grade}. The {weekLabel} sample: {sampleLabel}.",
+        "body": "{weekLabel} | {school} {position} {playerName} | Grade {grade} | {sampleLabel}",
         "voices": [
           "evidence"
         ]
       },
       {
         "id": "pff.weekly.8",
-        "body": "A strong entry on the {weekLabel} production board: {playerName} ({school}), {grade}.",
+        "body": "{playerName} of {school} makes our {weekLabel} spotlight with a {grade}.",
+        "voices": [
+          "evidence"
+        ]
+      },
+      {
+        "id": "pff.weekly.9",
+        "body": "{weekLabel}: {school} {position} {playerName}: {grade}.",
+        "voices": [
+          "evidence"
+        ]
+      },
+      {
+        "id": "pff.weekly.10",
+        "body": "{playerName} grades at {grade} for {school} in {weekLabel}. The workload: {sampleLabel}.",
+        "voices": [
+          "evidence"
+        ]
+      },
+      {
+        "id": "pff.weekly.11",
+        "body": "From {weekLabel}: {playerName} ({school}), {grade} over {sampleLabel}.",
+        "voices": [
+          "evidence"
+        ]
+      },
+      {
+        "id": "pff.weekly.12",
+        "body": "A {weekLabel} grade worth flagging: {school} {position} {playerName} at {grade}.",
         "voices": [
           "evidence"
         ]
@@ -62,7 +90,7 @@
     "pff.season-spotlight": [
       {
         "id": "pff.season-spotlight.1",
-        "body": "{playerName} checks in at {grade} in our season production grades. {gradedGames} graded games for {school}.",
+        "body": "{school}'s {playerName} carries a {grade} season grade through {gradedGames} graded games.",
         "voices": [
           "evidence"
         ]
@@ -83,35 +111,63 @@
       },
       {
         "id": "pff.season-spotlight.4",
-        "body": "{grade} on the season board for {playerName}. {sampleLabel} for {school}; this is a stat-based estimate.",
+        "body": "{playerName} ({school}): season grade {grade}. Workload: {sampleLabel}.",
         "voices": [
           "evidence"
         ]
       },
       {
         "id": "pff.season-spotlight.5",
-        "body": "Season production snapshot: {playerName} has a {grade} grade across {gradedGames} graded games.",
+        "body": "After {gradedGames} graded games, {playerName}'s season grade sits at {grade}.",
         "voices": [
           "evidence"
         ]
       },
       {
         "id": "pff.season-spotlight.6",
-        "body": "{school} on our season board: {playerName}, {grade}. The sample covers {sampleLabel}.",
+        "body": "On the {school} season sheet: {playerName}, {grade}, with {sampleLabel}.",
         "voices": [
           "evidence"
         ]
       },
       {
         "id": "pff.season-spotlight.7",
-        "body": "Putting the sample beside the grade: {sampleLabel}, {grade}, {playerName} of {school}.",
+        "body": "{sampleLabel} behind the {grade} season grade for {school}'s {playerName}.",
         "voices": [
           "evidence"
         ]
       },
       {
         "id": "pff.season-spotlight.8",
-        "body": "{position} spotlight | {playerName}, {school} | {grade} season production grade.",
+        "body": "{position} | {playerName} ({school}) | Season grade: {grade}",
+        "voices": [
+          "evidence"
+        ]
+      },
+      {
+        "id": "pff.season-spotlight.9",
+        "body": "Season grade card: {playerName} ({school}), {grade}.",
+        "voices": [
+          "evidence"
+        ]
+      },
+      {
+        "id": "pff.season-spotlight.10",
+        "body": "{school} {position} {playerName} | Grade {grade} | {sampleLabel}",
+        "voices": [
+          "evidence"
+        ]
+      },
+      {
+        "id": "pff.season-spotlight.11",
+        "body": "The current season mark for {school}'s {playerName} is {grade}.",
+        "voices": [
+          "evidence"
+        ]
+      },
+      {
+        "id": "pff.season-spotlight.12",
+        "body": "Season grade: {grade}. {playerName}, {school}, {gradedGames} graded games.",
         "voices": [
           "evidence"
         ]
@@ -120,35 +176,35 @@
     "pff.season-watch": [
       {
         "id": "pff.season-watch.1",
-        "body": "{playerName} sits at {grade} in our season production grades for {school}. {gradedGames} graded games in the sample.",
+        "body": "A low season grade for {school}'s {playerName}: {grade} through {gradedGames} graded games.",
         "voices": [
           "evidence"
         ]
       },
       {
         "id": "pff.season-watch.2",
-        "body": "A lower mark on the season board: {school} {position} {playerName}, {grade}. This is recorded production, not a film verdict.",
+        "body": "A season grade that warrants scrutiny: {school} {position} {playerName}, {grade}.",
         "voices": [
           "evidence"
         ]
       },
       {
         "id": "pff.season-watch.3",
-        "body": "{school} grade watch: {playerName}, {grade} through {gradedGames} graded games. There is room for that number to move.",
+        "body": "Grade watch at {school}: {playerName} is at {grade} through {gradedGames} graded games.",
         "voices": [
           "evidence"
         ]
       },
       {
         "id": "pff.season-watch.4",
-        "body": "{playerName}: {grade} over {sampleLabel}. The stat-based season estimate is below the position-group middle.",
+        "body": "{playerName}: {grade} over {sampleLabel}. Not a season mark to celebrate.",
         "voices": [
           "evidence"
         ]
       },
       {
         "id": "pff.season-watch.5",
-        "body": "Checking the lower end of the season board: {playerName} has a {grade} production grade for {school}.",
+        "body": "A tough number on the {school} grade sheet: {playerName}, {grade}.",
         "voices": [
           "evidence"
         ]
@@ -162,14 +218,42 @@
       },
       {
         "id": "pff.season-watch.7",
-        "body": "{school} {position} {playerName}: {grade} through {gradedGames} graded games. That is the lower end of this production model.",
+        "body": "{school} {position} {playerName} sits at {grade} through {gradedGames} graded games.",
         "voices": [
           "evidence"
         ]
       },
       {
         "id": "pff.season-watch.8",
-        "body": "The sample is {sampleLabel}; the grade is {grade}. {playerName} ({school}) is on our season watch list.",
+        "body": "The workload is {sampleLabel}. The season grade: {grade} for {school}'s {playerName}.",
+        "voices": [
+          "evidence"
+        ]
+      },
+      {
+        "id": "pff.season-watch.9",
+        "body": "Under the microscope: {school}'s {playerName}, with a {grade} season grade.",
+        "voices": [
+          "evidence"
+        ]
+      },
+      {
+        "id": "pff.season-watch.10",
+        "body": "For {school}'s {playerName}, a {grade} after {gradedGames} graded games. That's on the low side.",
+        "voices": [
+          "evidence"
+        ]
+      },
+      {
+        "id": "pff.season-watch.11",
+        "body": "At {position} for {school}, {playerName}'s season mark is {grade}. One to question.",
+        "voices": [
+          "evidence"
+        ]
+      },
+      {
+        "id": "pff.season-watch.12",
+        "body": "{sampleLabel} behind this grade for {playerName}: {grade}. Not a flattering mark.",
         "voices": [
           "evidence"
         ]
@@ -178,7 +262,7 @@
     "pff.movement": [
       {
         "id": "pff.movement.1",
-        "body": "{playerName}'s season production grade moves {direction}: {previousGrade} to {grade}. {gradedGames} graded games for {school} now.",
+        "body": "{school}'s {playerName} moves {direction} from {previousGrade} to {grade} in season grading, through {gradedGames} graded games.",
         "voices": [
           "evidence"
         ]
@@ -192,42 +276,185 @@
       },
       {
         "id": "pff.movement.3",
-        "body": "An updated season number for {playerName}: {grade}, from {previousGrade}. The sample now covers {sampleLabel}.",
+        "body": "{playerName}'s season grade is now {grade}, previously {previousGrade}. Current workload: {sampleLabel}.",
         "voices": [
           "evidence"
         ]
       },
       {
         "id": "pff.movement.4",
-        "body": "{playerName} is trending {direction} on our stat-based season board: {previousGrade} to {grade} for {school}.",
+        "body": "Grade movement for {school}'s {playerName}: {direction} from {previousGrade} to {grade}.",
         "voices": [
           "evidence"
         ]
       },
       {
         "id": "pff.movement.5",
-        "body": "{gradedGames} graded games into the sample, {playerName}'s season mark is {grade}. Previous recorded estimate: {previousGrade}.",
+        "body": "After {gradedGames} graded games, {playerName} sits at {grade}. The previous grade was {previousGrade}.",
         "voices": [
           "evidence"
         ]
       },
       {
         "id": "pff.movement.6",
-        "body": "{previousGrade} to {grade} for {school} {position} {playerName}. A new season-grade snapshot, with more game data included.",
+        "body": "Season grade update: {school} {position} {playerName}: {previousGrade} to {grade}.",
         "voices": [
           "evidence"
         ]
       },
       {
         "id": "pff.movement.7",
-        "body": "{previousGrade} before; {grade} now. {playerName} of {school} moves {direction} as the recorded season sample grows.",
+        "body": "From {previousGrade} to {grade}: that's a move {direction} for {school}'s {playerName}.",
         "voices": [
           "evidence"
         ]
       },
       {
         "id": "pff.movement.8",
-        "body": "Tracking {school} {position} {playerName}: the season estimate is {direction} to {grade}, from {previousGrade}.",
+        "body": "{school} {position} {playerName}: season grade {direction} to {grade} from {previousGrade}.",
+        "voices": [
+          "evidence"
+        ]
+      },
+      {
+        "id": "pff.movement.9",
+        "body": "New season grade for {playerName} ({school}): {grade}, {direction} from {previousGrade}.",
+        "voices": [
+          "evidence"
+        ]
+      },
+      {
+        "id": "pff.movement.10",
+        "body": "{playerName} was at {previousGrade}; the season grade is now {grade}. Current workload: {sampleLabel}.",
+        "voices": [
+          "evidence"
+        ]
+      },
+      {
+        "id": "pff.movement.11",
+        "body": "{school} {position} {playerName}: {previousGrade} before, {grade} now. The season mark moves {direction}.",
+        "voices": [
+          "evidence"
+        ]
+      },
+      {
+        "id": "pff.movement.12",
+        "body": "Grade update for {school}'s {playerName}. Previous: {previousGrade}. Current: {grade}. Movement: {direction}.",
+        "voices": [
+          "evidence"
+        ]
+      }
+    ],
+    "pff.position-top-three": [
+      {
+        "id": "pff.position-top-three.1",
+        "body": "Season grades at {position} through {weekLabel}. Top three:\n{topThree}",
+        "voices": [
+          "evidence"
+        ]
+      },
+      {
+        "id": "pff.position-top-three.2",
+        "body": "The {position} top three by season grade through {weekLabel}:\n{topThree}",
+        "voices": [
+          "evidence"
+        ]
+      },
+      {
+        "id": "pff.position-top-three.3",
+        "body": "Three names leading the {position} grade board through {weekLabel}:\n{topThree}",
+        "voices": [
+          "evidence"
+        ]
+      }
+    ],
+    "pff.offensive-player-of-week": [
+      {
+        "id": "pff.offensive-player-of-week.1",
+        "body": "Offensive Player of the Week: {school} {position} {playerName}. Grade: {grade} for {weekLabel}.",
+        "voices": [
+          "evidence"
+        ]
+      },
+      {
+        "id": "pff.offensive-player-of-week.2",
+        "body": "Our top offensive grade for {weekLabel} belongs to {playerName} ({school}): {grade}.",
+        "voices": [
+          "evidence"
+        ]
+      },
+      {
+        "id": "pff.offensive-player-of-week.3",
+        "body": "{weekLabel} offensive honors: {playerName}, {school}. A {grade} grade across {sampleLabel}.",
+        "voices": [
+          "evidence"
+        ]
+      }
+    ],
+    "pff.defensive-player-of-week": [
+      {
+        "id": "pff.defensive-player-of-week.1",
+        "body": "Defensive Player of the Week: {playerName} of {school}. {grade} in {weekLabel}.",
+        "voices": [
+          "evidence"
+        ]
+      },
+      {
+        "id": "pff.defensive-player-of-week.2",
+        "body": "The top defensive grade from {weekLabel}: {school} {position} {playerName}, {grade}.",
+        "voices": [
+          "evidence"
+        ]
+      },
+      {
+        "id": "pff.defensive-player-of-week.3",
+        "body": "Defensive honors for {weekLabel} go to {playerName} ({school}). Grade: {grade} over {sampleLabel}.",
+        "voices": [
+          "evidence"
+        ]
+      }
+    ],
+    "pff.offense-of-week": [
+      {
+        "id": "pff.offense-of-week.1",
+        "body": "Offense of the Week: {school}. Team grade: {teamGrade} for {weekLabel}.",
+        "voices": [
+          "evidence"
+        ]
+      },
+      {
+        "id": "pff.offense-of-week.2",
+        "body": "The highest team-offense grade in {weekLabel}: {school}, {teamGrade}.",
+        "voices": [
+          "evidence"
+        ]
+      },
+      {
+        "id": "pff.offense-of-week.3",
+        "body": "{school} takes our {weekLabel} offensive honors with a {teamGrade} team grade.",
+        "voices": [
+          "evidence"
+        ]
+      }
+    ],
+    "pff.defense-of-week": [
+      {
+        "id": "pff.defense-of-week.1",
+        "body": "Defense of the Week: {school}. Team grade: {teamGrade} for {weekLabel}.",
+        "voices": [
+          "evidence"
+        ]
+      },
+      {
+        "id": "pff.defense-of-week.2",
+        "body": "{school} leads the {weekLabel} team-defense grades at {teamGrade}.",
+        "voices": [
+          "evidence"
+        ]
+      },
+      {
+        "id": "pff.defense-of-week.3",
+        "body": "Our {weekLabel} defensive honors go to {school}, with a {teamGrade} team grade.",
         "voices": [
           "evidence"
         ]
