@@ -1,0 +1,3 @@
+# Baseline and release provenance hash exact source bytes. Do not normalize
+# imported line endings on commit/checkout according to a user's Git setting.
+* -text

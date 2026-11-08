@@ -1,0 +1,31 @@
+# Update 3 candidate 1.99
+
+Candidate only; not installed or published. The public Update 3 version is planned as **2.0.0** after the user's test games and resulting fixes.
+
+## Approved cleanup
+
+**One big-game identity.** A regular-season marquee game means two Top25 teams, a rivalry with either side Top25, or a rivalry with both Top50. Playoff/conference championship identity stays special. Turnout/arrival classification, lineup/audio identity, attendance importance, automatic regular-season patience, halftime permanent-conversion exclusion and packed context premiums now use that shared tag. Weak rivalries retain their separate turnout appeal without big-game admission. Each effect still checks its own density, score, down, clock and ownership. The automatic reduced profile retains positive blowout pressure; it is not immunity from departures. Dedicated postseason rank/weather profiles, floors and rates remain in place. The narrower elite-pair energy bonus and exceptional-opening requirements remain intentional additional conditions, not alternate definitions of a big game.
+
+**Reputation plus media opinion.** Settled-demand support is atmosphere35/prestige25/tradition20/brand10/conference5/AP5. Atmosphere uses the actual school grade; ToughestPlacesRank is not counted again. Prestige is the native 0-10 half-star value. The poll input is `Team.MediaPoll_CurrentRank` (native field158/0x9e), separately captured from general TeamRank. The supplied snapshot contains the complete media order1-138. This component uses that cohort-normalized order; unknown/unranked values contribute zero, while an unreadable field or invalid required inputs preserve EA turnout. General rankings still drive existing opponent appeal, matchup and upset rules. Regression fixtures deliberately give AP and general rank different values. Numeric comparison tools require the actual AP column rather than substituting general rank.
+
+The empirical demand curve is unchanged: the annual capacity table controls output quantiles, while the approved weights change school ordering along it. They are design choices rather than fitted causal coefficients. Weather/season/matchup modifiers, the 80%-of-peak regular kickoff cap, postseason native peak and saved/simulated attendance ownership retain their existing policies. New peak inputs apply to fresh launches; a Midgame Save restores its saved crowd plan.
+
+**Native HFA camera coherence.** The presentation update publishes the same crowd/context decision used by DGA: eligible pre-snap venue/situation, or earned live/result context. An active DGA camera cue is not required. A known unqualified ordinary crowd above50% no longer bypasses that admission through the native HFA camera channel. Fresh match/epoch/timing proof bounds the decision. Stale or unknown context falls back to the legacy density safeguard rather than acting on another scene's permission. Pause/replay clears context. The existing first-event/pre-row filter, compatible-view handling and latest native tier restoration are retained. Only the HFA camera event changes; gameplay HFA, composure, play art and Pulse meter remain native. Cannon remains independent. The advanced minimum-fullness setting can make admission stricter; its explicit zero opt-out is preserved. Soundscape must remain enabled for this filter.
+
+## Verification
+
+- Full automatic native/managed build and regression suites passed, including828 full-game production attendance simulations across23 scenarios, three venue sizes, four quarter lengths and three observation cadences.
+- Cleanup regressions cover rank boundaries, weak/unknown rivalry guards, shared classification consumers, sparse-density rejection, separate prestige/AP weights and missing-poll handling.
+- Native-camera policy tests cover night/critical/earned admission, camera off, simulation, stale/unknown/mismatched worlds and the advanced floor/opt-out. The production first-event/pre-row runtime is also exercised with context suppression at60% fullness.
+- Existing replay/resume, caps/floors, ownership, audio/motion handoff, departure timing and native ABI/reference-cleanup tests remain part of the full build.
+- Eight Python catalog/compatibility tests and isolated MMC host ABI/resources/extraction/storage/logging verification passed. Help revision46 refreshes the native-camera description without resetting user values; regression checks preserve the zero opt-out, custom audio/gain thresholds, personal notes and reset marker, and verify idempotence. Build logs and staged SHA256/commit are recorded in BUILD-INFO.json.
+- The subsequently supplied DYNASTY-DGA183 save was parsed read-only. Its138 FBS teams and892 saved regular-season fixtures produced2676 controlled day/night/weather launch cases. The accompanying team list averages the881 true-home fixtures, excluding neutral games, and labels the frozen grades/polls/records, clear-weather brackets and unknown venue variation. It is a projection rather than observed attendance.
+
+These are offline/code/isolated-host checks. They do not establish visible camera output, audible cheer output, native replay selection on every route, or changed-count seating acceptance in a newly installed build. No game/MMC/INI/save/history installation or live memory modification is part of this pass.
+
+## First user tests
+
+1. Fresh ordinary lower-demand daytime Dynasty launch. Confirm runtime1.99.0, turnout application and the prestige/AP entries. Check sound-only plays while crowd fullness exceeds50% but remains below the layered gate; note any brief camera motion.
+2. Qualified rivalry with one Top25 side or both Top50. Verify opening eligibility, retained crowd patience and normal halftime returns. Weak rivals should have no big-game shortcut. Night admission and custom-quarter timing should retain their existing behavior.
+3. A full or otherwise qualified venue. Check that native HFA can still move the camera between DGA cues, that snaps/reactions hand off, and pause/replay restores correctly. Physical cannon remains an independent exception.
+4. Continue the representative rain/severe-arrival, neutral, postgame carry, manual/Slow Sim, Midgame Save and postseason checks in [the current checklist](../DIAGNOSTICS.md). Record clock, side, down, result and observed output; requests alone are not proof.

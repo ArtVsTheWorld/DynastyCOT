@@ -1,0 +1,487 @@
+{
+  "purpose": "Independent coverage discovery, not a game-wide completion claim",
+  "nativeResponseBindings": [
+    {
+      "vtableRva": "0xbab1b28",
+      "slot": "0x228",
+      "nativeRva": "0x7955fc0",
+      "prefix32": "405553565741554156488d6c24c84881ec38010000488b0564c813064833c448",
+      "schema": "TopAttributes",
+      "liveVerified": false
+    },
+    {
+      "vtableRva": "0xbab0e60",
+      "slot": "0xc0",
+      "nativeRva": "0x793d8c0",
+      "prefix32": "48895c240855565741564157488d6c24c94881ec900000004c8bf24c8bf9e8ed",
+      "schema": "Comparison",
+      "liveVerified": false
+    },
+    {
+      "vtableRva": "0xbac4e50",
+      "slot": "0xb8",
+      "nativeRva": "0x7a0f320",
+      "prefix32": "405557415441564157488d6c24c94881ec00010000488b05043508064833c448",
+      "schema": "PlaycallSubstitution",
+      "liveVerified": false
+    },
+    {
+      "vtableRva": "0xbab5778",
+      "slot": "0xd0",
+      "nativeRva": "0x796ee90",
+      "prefix32": "48894c24085553565741554157488d6c24d14881ecf8000000498bd84c8bfa48",
+      "schema": "RosterNIL",
+      "liveVerified": false
+    },
+    {
+      "vtableRva": "0xc74ed78",
+      "slot": "0x28",
+      "nativeRva": "0xa0b6110",
+      "prefix32": "48895c24085556574154415541564157488dac2420faffff4881ec2007000048",
+      "schema": "ContextPlayer",
+      "liveVerified": false
+    },
+    {
+      "vtableRva": "0xbab5b70",
+      "slot": "0x40",
+      "nativeRva": "0x7975c70",
+      "prefix32": "488bc448894808554156488d68b84881ec38010000488958e84c8bf2488970e0",
+      "schema": "RosterNIL",
+      "liveVerified": false
+    },
+    {
+      "vtableRva": "0xc7522c8",
+      "slot": "0x38",
+      "nativeRva": "0xa0ddfe0",
+      "prefix32": "405553574156488d6c24c14881ec88000000498bd8488bfa4c8bf1e8d0c1e2f9",
+      "schema": "RosterNIL",
+      "liveVerified": false
+    },
+    {
+      "vtableRva": "0xc74fd70",
+      "slot": "0x58",
+      "nativeRva": "0xa0c03f0",
+      "prefix32": "4c8944241848894c2408555357415441554156488d6c24d14881ecd80000004d",
+      "schema": "RosterNIL",
+      "liveVerified": false
+    },
+    {
+      "vtableRva": "0xc751ea0",
+      "slot": "0x58",
+      "nativeRva": "0xa0da9c0",
+      "prefix32": "488bc448894808554157488d68b84881ec38010000488958e84c8bfa488970e0",
+      "schema": "RosterNIL",
+      "liveVerified": false
+    },
+    {
+      "vtableRva": "0xc753aa0",
+      "slot": "0x38",
+      "nativeRva": "0xa0f2e20",
+      "prefix32": "48894c2408555356574154415541564157488d6c24f84881ec08010000498bf0",
+      "schema": "RosterNIL",
+      "liveVerified": false
+    },
+    {
+      "vtableRva": "0xc754328",
+      "slot": "0x38",
+      "nativeRva": "0xa0f9fb0",
+      "prefix32": "488bc448894808554156488d68a14881ecc8000000488958e84c8bf2488970e0",
+      "schema": "RosterNIL",
+      "liveVerified": false
+    }
+  ],
+  "sharedRosterManagement": {
+    "vtableRva": "0xbab18c0",
+    "slot": "0x50",
+    "nativeRva": "0x79472b0",
+    "sourceUse": "Roster / Training Results / Position Changes player details",
+    "policy": "overall plus fully-revealed attribute values only; no numeric progression-model changes"
+  },
+  "confirmedBoundaries": {
+    "teamRatings": "Depth chart TeamOverall getter 0xbab5b70+0x58 ->0x7976db0 left untouched",
+    "formationSubs": "0xbae5820+0x558 ->0x7b8a210 produces IDs/positions, not rating fields; no hook",
+    "sharedProgression": "GetPlayerData.Overall remains numeric; separate DEOverallGrade field and renderer labels",
+    "comparisons": "PlayerA/B.RecordList[].Overall is a player rating; StatLine remains numeric."
+  },
+  "remainingDiscovery": [
+    {
+      "surface": "Prospect List sidebar",
+      "existingOwner": "PlayingTimeSurface::ProspectEntry; do not double-hook",
+      "native": "0xc752560+0x40 ->0xa0e0cc0",
+      "fields": [
+        "attributesSubpanelInfo[].ratingEnum",
+        "isFullyScouted",
+        "ratingValue",
+        "maxRatingValue"
+      ],
+      "need": "live unknown/partial/full sentinel capture; no root scouting percentage, so do not infer visibility from hidden data"
+    },
+    {
+      "surface": "All lifecycle tables",
+      "need": "Column schemas beyond shared player-detail maps; no access by advancing is authorized"
+    },
+    {
+      "surface": "In-game/pregame overlays",
+      "need": "UI navigation and leak audit without playing/simming/altering Dynasty"
+    }
+  ],
+  "cardValidation": {
+    "p38Live": "Colored skill-group labels work; individual attributes and main overall still numeric",
+    "p39BuiltCorrections": [
+      "Exact-frame accessor attachment",
+      "Strict normalized nested callback metadata hash, with semantic bytes unchanged",
+      "Nine player-card/panel adapters"
+    ],
+    "p40Prepared": "Adds three player-only hub preview adapters and removes profiling atomic writes after sample cap"
+  },
+  "privateEvidenceExcludedFromDistribution": true,
+  "coachCameraOverlay": {
+    "implemented": true,
+    "liveVerified": false,
+    "renderer": "art_screen.playcall.main.PlayerRatingsPanel.Draw",
+    "asset": "common/ui/node_ig/scriptpod.ast",
+    "header": "0x37fe8",
+    "body": "0x38018",
+    "argc": 0,
+    "registers": 7,
+    "flags": 25,
+    "size": 674,
+    "fnv": "a570b1afb77c6507",
+    "fields": [
+      "overallrating",
+      "awareness",
+      "speed",
+      "acceleration",
+      "agility",
+      "strength"
+    ],
+    "need": "Live safe access; preserve x/y, jersey and ordinary stats. No native collector hook used.",
+    "preparedAdapter": "Included in active p51 as separate node_ig bank. Offline101-boundary/preservation tests pass; no live gameplay verification.",
+    "nativeCollector": "Saved PE globalfa60810+448 resolves empty base implementation7ba1690; do not hook. Renderer-only method avoids assumptions about the actual gameplay collector."
+  },
+  "depthChartGrid": {
+    "nativeCapture": "Development-only bounded column collector; Build/roster-view-probe.jsonl",
+    "form": 0,
+    "prefix": [
+      "",
+      "POS",
+      "#",
+      "RS",
+      "Name",
+      "Year",
+      "POS",
+      "OVR",
+      "NIL",
+      "MOR"
+    ],
+    "ratingIds": "7 and known attribute columns10..63",
+    "preserved": "Depth2, RS3, Name4, Year5, position1/6, NIL8, morale9, intValue and sorting",
+    "implemented": "p46 live verified QB and C tables; other positions/far-right/reentry pending"
+  },
+  "abilityDescriptions": {
+    "native": "0xbab1b28+0xa0 ->0x794d200",
+    "abi": "void* (self,void** out,bool IsMentals)",
+    "fields": [
+      "Description",
+      "UpgradeDescription"
+    ],
+    "liveObserved": "Bronze Requires:84PassBlockPower(75Currently); parser preview showsB/C, costs/eligibility remain native.",
+    "bounds": "4096chars,128ability records; defaultotherUIstrings remain128",
+    "renderer": "Plain TextFieldGeneric; no HTML tags injected",
+    "remaining": "Other-position/localized wording and separate ability-tooltip row collector"
+  },
+  "awardsDiscovery": {
+    "table": "0xc7502f8",
+    "slots": {
+      "0x58": "0xa0c5180 AnnualAwardsPlayerInfo",
+      "0x60": "0xa0c71f0 HeismanAwardsPlayerInfo",
+      "0x68": "0xa0c63b0 AwardsPlayerInfo"
+    },
+    "fields": "Root object overall; attributesSubpanelInfo[].ratingValue only if isFullyScouted true. No recursive conversion.",
+    "implemented": "Included in active p50; per-surface live verification pending.",
+    "caution": "AnnualAwards requires explicit native Boolean isCoach=false; coach/missing/invalid discriminator pass through.",
+    "abi": "void* (self,void** out,void* opaqueKey); one native invocation"
+  },
+  "editPlayerDiscovery": {
+    "native": "UcmCreatePlayerFlow globalfa53818 / vtbab74e0; GetAllAttributes slot1b0 ->798f7a0",
+    "abi": "self,void**out",
+    "fields": "Grouped AttributeName/Id/Min/Max/Value are editable model fields. Do not modify getter. Actual Dynasty renderer needs live capture.",
+    "implemented": false,
+    "status": "Excluded by explicit user instruction. Leave numeric; no adapter implemented.",
+    "liveObserved": "Read-only Edit Player Ratings shows numeric values; exited without edits. Actual renderer GenericSlider/settings path differs from older AttributeSlider. Probe stopped0."
+  },
+  "recruitingTypeAudit": {
+    "finding": "Existing HaveSlider false setter address2bf6720 emits unsigned-byte numeric value, not actual native Boolean wrapper2b07670. Baseline behavior user-verified; no change made during player-fog preview.",
+    "remaining": "Add native type-consistency test before independently changing this established path."
+  },
+  "mySchoolPlayerRisk": {
+    "asset": "node_cfm/recruitinghub/corenode",
+    "definition": "0x2a380",
+    "size": 596,
+    "argc": 0,
+    "registers": 4,
+    "flags": 25,
+    "fnv64": "26c26cc3e3bfac83",
+    "field": "ExtraInfo.OVR -> mcOVR TextFieldGeneric",
+    "preserve": "RiskValue, risk percentage, position/name, source OVR, header labels",
+    "status": "p48 built; offline and independent review passed; live pending"
+  },
+  "redshirtsGrid": {
+    "form": 0,
+    "count": 61,
+    "prefix": [
+      "RS",
+      "Name",
+      "POS",
+      "Year",
+      "OVR",
+      "NIL",
+      "GP"
+    ],
+    "ratingIds": "4 and7..59",
+    "trailingIdentity": "60 Last Name",
+    "status": "p50 clean PID31340 live All table and panel verified; focused filters/far-right/reentry still pending",
+    "preserved": "RS/name/POS/year/NIL/games played/last name/intValue/sort"
+  },
+  "injuryGrid": {
+    "form": 0,
+    "headers": [
+      "",
+      "POS",
+      "Name",
+      "POS",
+      "OVR",
+      "Injury",
+      "Length",
+      "IR",
+      "Return",
+      "Status"
+    ],
+    "ratingIds": [
+      4
+    ],
+    "status": "p50 clean PID31340 live two-player FIU table verified: bothOVR C, duration2/33 and status preserved.",
+    "preserved": "Injury/length/status/return data, position/name/intValue/sort"
+  },
+  "injurySidebar": {
+    "native": "baa78b8+80 ->78efa70",
+    "abi": "void* (self,void** out,void* opaqueKey)",
+    "prefix32": "488bc45557488d68884881ec68010000488958e8488bfa488970e04c8960d84c",
+    "liveGate": "Target address and full32-byte prefix verified in PID30084 before candidate activation",
+    "fields": "overall and fully-revealed attributesSubpanelInfo.ratingValue only",
+    "preserved": "injuryName, injuryStatus, injuryLength, risk, age, season stats",
+    "status": "p50 live KyleMcNeal and ShamirSterlin selection bothC yellow, native jersey/class/measurements unchanged."
+  },
+  "prospectPreviewCapture": {
+    "tool": "Development-only RecruitPreviewProbe.cpp / Build/DynastyEnhancerRecruitPreviewProbe-p3.dll",
+    "status": "p3 loaded in p51PID20872, bounded real responses captured; explicit stop result0. User confirms attributes not visible in Prospect List; no release conversion added for unexposed fields.",
+    "bounds": "Eight native responses or five minutes; depth3/array32; descends only attributesSubpanelInfo, other containers left untraversed",
+    "ownership": "p51 parent module + native32-byte GetEntryInfo gate; one native call, lifecycle mutex/CAS restoration; response unchanged",
+    "manual": "No further Prospect List attribute request; user confirms unavailable. Scouting remains visible ratings surface and is handled by existing reveal/range conversion.",
+    "observed": "LukeCallen561120980 nativebounds66..96,92..92,70..100,79..79 etc while nativeisFullyScouted=true onall. Audige561122930 andHaack561122500 returned0/0 withsameflag. Thusflagalonecannotprovevisibility."
+  },
+  "legacyHubInjuryWidget": {
+    "status": "Asset-only discovery; no implementation or live verification",
+    "class": "art_control.panel.career.PlayerInjuryListItem",
+    "root": "30d30",
+    "drawHeader": "31598",
+    "drawBody": "315c8",
+    "argc": 0,
+    "registers": 4,
+    "flags": 25,
+    "size": 315,
+    "fnv": "7b0efb4dda13f53e",
+    "path": "ExtraInfo.OverallText to TextFieldGeneric mcOverall.SetLabel",
+    "guard": "Do not transform OverallText globally: newer injury panels use injury text; standings/stats/schedules reuse it for ordinary numbers. Consider class-specific numeric-only suffix only if live observed."
+  },
+  "hubPreviewRoutes": {
+    "playerCompare": "SCREEN_INFO_PANEL_PLAYER_COMPARE registered to InfoPanelPlayerCompare. _SetPlayerOvrParams called twice by Init.",
+    "playersToWatch": "Current Init has no call to _GetOvrParams and pool lacks player OVR children. Helper may be dormant; verify actual visible pane, do not demand unused helper attachment.",
+    "route": "mainhub.PanelMenu._OnDelayedServiceTileFocusChanged calls HubInfoPanelsService.TriggerPanelSwitch with selected tile HubPanelType and TabIndex. Focus current game/action tile and cycle stock info panes.",
+    "inference": "Pregame game tile is best-supported comparison target because pane contains date/weather and player passing/rushing stats; actual tile mapping is native and remains unverified."
+  },
+  "abilityTooltipCollector": {
+    "native": "bab5778+a8 ->796e160",
+    "abi": "void(self,int abilityId,collector*)",
+    "prefix32": "4c8bdc4881ec18010000488b05cf4612064833c448898424e0000000488b8920",
+    "wrapper": "79d6930 obtains integer argument, invokes virtuala8 and sends row collector",
+    "fields": "display string and value integer;8264820 builds data rows, further live capture needed before deciding rating semantics.",
+    "status": "Read-only static disassembly from existing private snapshot; no hook or model changes.",
+    "warning": "Do not treat all numeric value fields as ratings without observed display semantics.",
+    "probe": "Source/PlayerTooltipProbe.cpp / Build/DynastyEnhancerPlayerTooltipProbe-p2.dll; six responses or5min; no release conversion, not loaded or packaged.",
+    "preserved": "Exact typed3 call with native arguments; wrapper forwards all primitive fields unchanged, numeric value remains native. CAS only own slot; queue worker logging.",
+    "remaining": "Independent probe review passed; real ability-tooltip row observation still pending before any label conversion."
+  },
+  "formationSubsDiscovery": {
+    "asset": "Private current formationsubs.ast, GUID1bd56600-dc3e-94c9-057c-8ee550404bec",
+    "model": "node_cfm/corenode root21988 _ApplyDataFormat imports native PlayerOvr into ExtraInfo.Ovr. Model remains numeric.",
+    "surfaceMethods": [
+      {
+        "method": "FormSubModuleTile._UpdatePlayer",
+        "header": "3e70",
+        "body": "3ea0",
+        "argc": 1,
+        "regs": 7,
+        "flags": 41,
+        "size": 348,
+        "hash": "18d00aa7087bbb23",
+        "path": "mcOvrData RatingValueItem.SetValue(ExtraInfo.Ovr)"
+      },
+      {
+        "method": "FormSubListItem.Draw",
+        "header": "8af0",
+        "body": "8b20",
+        "argc": 0,
+        "regs": 4,
+        "flags": 25,
+        "size": 120,
+        "hash": "36c9d322b6943faf",
+        "path": "direct mcTxt2 label from ExtraInfo.Ovr"
+      },
+      {
+        "method": "FormSubPlayerTile.Draw",
+        "header": "5740",
+        "body": "5770",
+        "argc": 0,
+        "regs": 21,
+        "flags": 25,
+        "size": 1126,
+        "hash": "d9c74e57cf9721c9",
+        "path": "own Ovr label, attribute RatingValue records, lower PlayerInfo/PlayerModule branch"
+      }
+    ],
+    "warning": "Legacy PlayerSerial branch mcPlayerInfo is PlayerInfo containing shared OVRItem; existing RatingValueItem suffix does not cover it. Do not globally convert OVRItem because team ratings use it.",
+    "status": "p51 initial live formation module/list grades verified in cleanPID20872; detail/editing/defense/reentry still pending, no substitutions made.",
+    "detailFix": "p55 source: parent DEFormationPlayerRatings marker, guardedPlayerModule.Draw numericbadge repaint after nativeSetValue; forwarded marker to mcInfoSlotAttributes, fullyrevealed numeric slots only. Numericoverall/ratingValue remainsunchanged. Native-order regressionfixture added; live fixverificationpending."
+  },
+  "statPlayerSidebars": {
+    "abi": "void*(self,void**out,opaqueKey)",
+    "schema": "RosterNIL: lower overall and fully revealed attributes only; all stats/identity/compensation untouched",
+    "bindings": [
+      {
+        "name": "Career",
+        "table": "bab1408",
+        "slot": "48",
+        "rva": "79414b0",
+        "prefix32": "40555356574154415541564157488d6c24e14881ece80000004d8bf0488bf24c"
+      },
+      {
+        "name": "Season",
+        "table": "bab1408",
+        "slot": "50",
+        "rva": "7941e00",
+        "prefix32": "40555356574154415541564157488d6c24e14881ece80000004d8bf0488bfa4c"
+      },
+      {
+        "name": "BoxScore",
+        "table": "bab5958",
+        "slot": "68",
+        "rva": "79734e0",
+        "prefix32": "488bc448894808554156488d68a14881ecb8000000488958e84c8bf2488970e0"
+      }
+    ],
+    "status": "Allthree targets/full32-byteprefixes verified read-only in livePID20872. Sourceimplemented; not active.",
+    "routes": "Roster player card More/Stats or Stats&Records Career/Season; completed-game Schedule ->BoxScore/playerstats. Do not play/advance a game."
+  },
+  "nilRosterRows": {
+    "status": "p54built/tested/reviewed, notloaded/liveverified",
+    "asset": "Evidence/PlayerFog/rosternilrowitem.ast (private, notpackaged)",
+    "draw": "1a90/665/argc0/regs6/flags25/hash14ceac0385098e7d",
+    "unfocus": "1fc0/104/argc1/regs2/flags41/hashd0acdf397686b473",
+    "schema": "ExtraInfo.Ovr ->directmcOvr TextFieldGeneric; originalmodel remainsnumeric; no GetRosterNILPlayerList hook",
+    "preserved": "CurrentNIL/NILValue/OfferMin/OfferMax/RiskOfTransfer/PlayerKey/identity and selectednativecontrast"
+  },
+  "inGamePlaycallLabels": {
+    "status": "p62 clean-session Personnel Group Key Players verified; other conditional substitution/coach-camera renderers pending actual access",
+    "asset": "common/ui/node_ig/scriptpod.ast",
+    "methods": [
+      "KeyPlayerItem.Draw",
+      "PlaycallButton.Draw",
+      "PlayerNameButton.Draw",
+      "DepthChartPanelListItem.Draw"
+    ],
+    "preservation": "Label-only; numeric ExtraInfo/source ratings, jersey numbers, depth slot/year, counts, yards, percentages, selection foreground and visibility remain native. Exact fingerprints and fixed register frames verified.",
+    "coverageLimit": "Personnel Group label was user-observed; exact card/panel activation must be verified live before claiming coverage."
+  },
+  "playcallInfoPanelFamily": {
+    "status": "All35 current panel assets decoded read-only with0errors. p69 source correction prepared for six explicit rating methods across five assets; live check pending.",
+    "observed": "p68 user confirms pre-snap Subs fixed; new screenshot IndividualPositionStats RB/FB RATINGS shows McNeil89ACC/85COD/85SPD. Native mode2 is the rating path;0manual/1statistics preserved.",
+    "adapters": [
+      "IndividualPositionStats._UpdatePanelData defF00 bodyF30 argc1 regs8 flags41 size568 FNVAAFCF14B1496DDDD: final mode r7, selected entries r3, value ->mcStat0..2",
+      "PlayerVsPlayer._UpdatePanelData def1048 body1078 argc1 regs15 flags41 size820 FNV567EA0C435169D4E: mode r14, selected entries r3, leftNum/rightNum ->mcNumLeft/Right0..2 after native arrow logic",
+      "ImpactPlayerDepth._InitializeComponents defBF0 bodyC20 argc1 regs11 flags41 size601 FNV259CAE7688E485F8: sorted rating array r4, value ->mcValue0..2",
+      "TeamPositionGroups._AddPosGroupItems def10E0 body1110 argc1 regs34 flags41 size612 FNV0CEFFD054D66A3FC: fresh provider row ExtraInfo.OverallText",
+      "TeamPositionGroups._AddPosGroupKeyStatItems def1380 body13B0 argc1 regs10 flags41 size668 FNV458D0B14010C332D: fresh provider row ExtraInfo.ConferenceText only, OverallText is a real key statistic",
+      "Trench._PopulateData def14F0 body1520 argc1 regs28 flags41 size1368 FNV28CE9EBE211C65E5: both fresh providers ExtraInfo.OverallText only, weight averages unchanged"
+    ],
+    "exclusions": "ConferenceRankings.Ovr is season W-L, SignedRecruits.OverallText is nationalrank/StadiumText stars and interest100/1, ImpactPlayerTraits abilitytiers, ImpactPlayer/PlayerSelfComparison generic stats/time/ratios. No blanket numeric conversion.",
+    "runtime": "Five separate asset banks appended to existing common prepare/attach/stop/perf loops (20 player banks); exact native frames retained, source/order/arrow/style data unchanged, no added native hooks or polling.",
+    "privateEvidence": "Evidence/PlayerFog/PlaycallPanels/audit.json and current-legacy-index.json; common/ui/fb_node_ig/corenode.ast producer evidence in node-ig-core.ast; not distributed"
+  },
+  "playcallKickerRange": {
+    "status": "User screenshot confirms ACC/PWR64 numeric in Kicker Range panel; p68 correction built in source, live check pending.",
+    "asset": "common/ui/art_screen/playcall/panel/kickerrange.ast",
+    "class": "art_screen.playcall.panel.KickerRange",
+    "methods": {
+      "_InitializeComponents": "definition11F0/body1220 argc1 regs13 flags41 size679 FNV73D8E5A514962C4A",
+      "_SetRange": "definition14D0/body1500 argc2 regs7 flags41 size381 FNVB737A3A22902C70B"
+    },
+    "scope": "Exact mcAccStat/mcPowStat RatingValueItem imports; numeric stats0/1 and widget.value preserved, private marker enables existing label-only Draw grades/colors. Target/distance stats2/3, yard lines, position/player labels and range geometry remain native.",
+    "runtime": "Separate playerKickerUi bank14, 15-bank array: native Runtime validates all methods against the same asset. Both native fixed frames unchanged; suffix uses registers0/1/2..6. No native hooks or polling added by this panel fix.",
+    "distinction": "The provided screenshot is the playcall Kicker Range panel; it does not test the independent native broadcast TextVariable callback."
+  },
+  "broadcastPresentations": {
+    "status": "Full p66 built/reviewed/packaged; isolated p67 active beside p64, scene output not yet verified.",
+    "audit": "704 IBX archive entries parsed,1350 definitions including aggregate copies,41 unique player-rating templates,239 direct Format0 rating cells and31 exact AGLP columns. No non-direct or non-default rating expressions found.",
+    "families": ["Kicker and kick-returner graphics", "Pregame/runout/QB trot", "Freshman debuts and player bios", "Position/star-player comparisons", "Matchups to watch", "Legacy QB spotlights"],
+    "nativeBoundary": "Football SystemMuse TextVariable vtBC82C08.slot40 ->7D79160; full437B FNV45E37A1D2780BCBF. Original called once with unmodified numeric input, only self+28 rendered string cache changes.",
+    "semanticGate": "Exact TextVariable and direct GameQueryVariable vtBC82AE8, descriptor+8 tableAGLP, descriptor+C explicit31attribute-column whitelist, Format0 and integral0..100. Team/statistical QB rating and unrelated queries excluded.",
+    "lifetime": "Same native allocator service and Value string ctor91363E0/assign9136580/dtor91364F0; temporary ownsone ref, cacheassignment retains, temporary destroyedonce. Query/evaluator/model remain numeric.",
+    "performance": "One native callback slot; bounded local SEH reads, no RPM/syscalls/process discovery; no reader or extra UI definitions in isolated preview. Only matching rating fields allocate replacement text; logs capped8.",
+    "liveEvidence": "PID25304 exact native body/helper/slot gate reads pass and isolated preview active event confirmed; visual scene check remains pending.",
+    "privateEvidence": "Evidence/PlayerFog/Presentations/rating-audit.json and p66-live-gates.json; not packaged",
+    "publicReport": "docs/player-fog-presentations.md"
+  },
+  "preSnapSubstitution": {
+    "status": "Observed numeric OVR leak in live pre-snap Subs panel; p65 source correction prepared, live verification pending.",
+    "asset": "common/ui/node_ig/scriptpod.ast",
+    "class": "art_control.list.listItem.preplayHints.WearTearSubListItem",
+    "method": "Draw",
+    "definitionOffset": "0x228e0",
+    "nativeFrame": "argc0, registers4, flags25, body1108, fnv739f1094c4fcab06",
+    "source": "mData.ExtraInfo.Overall from PreplayHint._SetExtraInfoForSubToggle/GetWearAndTearAppliedOVR",
+    "display": "mcOverall.SetLabel",
+    "preservation": "Suffix changes only visible OVR label; native adjusted numeric OVR, base rating, position/player toggle, injury impacts, status slider, captain/composure and focus foreground remain unchanged. Existing IG bank and exact fixed frame, no new hook or background work."
+  },
+  "pauseDepthChart": {
+    "status": "p64 live verified: user QB/HB/far-right checks and actual screenshot confirm table letters/colors, native black selection and numeric slots preserved.",
+    "asset": "common/ui/node_com/scriptpod.ast",
+    "screenAsset": "madden/screens/roster/madden_scrdepthchartselectplayer/madden_scrdepthchartselectplayer.ast",
+    "provider": "madden.provider.Cafe2SpreadsheetProvider",
+    "scope": "mSpreadsheetId == Player - DepthChart Slotted plus full initial Slot/Player/POS/OVR/Year header gate and known rating headers",
+    "methods": {
+      "GetColumnDefinitions": "0x107490",
+      "GetRowData": "0x107278",
+      "Cafe2SpecialColoringProvider.GetCellColor": "0x107c88"
+    },
+    "preservation": "Only fresh returned cell display changes. Native rating/trend, underlying model, sorting, slots, years, filters and native highlight colors preserved. Header mask cached per provider, no new native hook or process discovery.",
+    "research": "Frontend and generic native column probes saw no calls; each stopped0/inflight0. Bounded script trace stopped0/inflight0. Actual legacy screen asset identifies Cafe2 provider.",
+    "attachmentCorrection": "Source colorLengthHook previously handled only cardUiBanks/notesUi, while legacy/modern grid banks ran only on invocation setup. p63 adds exact-frame guards and per-method path logs to both routes.",
+    "liveHeaderEvidence": {
+      "columns": 59,
+      "prefix": [
+        "Slot",
+        "Player",
+        "Pos",
+        "Ovr",
+        "Year"
+      ],
+      "knownAttributes": 54,
+      "maskBefore": "undefined",
+      "rootCause": "Only OVR was accepted; native font visually uppercases Ovr",
+      "nativeRoute": "F550000\u2192adapterManager+20 tree exact mPath\u2192node+8 native spreadsheet\u2192+8 provider B4B6B00; header getter37BEA50 reads provider+18 descriptor, +10array, +18ushort count, stride38 headerptr+18",
+      "privateEvidence": "Evidence/PlayerFog/p63-depth-native-columns.json; not distributed"
+    },
+    "probeNotes": "ScriptFunction2 Setup actualthis comes from currentVMreg1 AFTERnativeSetup, including nullr9 lexical fallback; r8 isprototype, r9canbenull. NativeGetMember uses AptValueString+10hex StringRef, not Function2 poolslot. Probes validate both nativefieldnames and stop/drain; no model/UIdefinition writes."
+  }
+}

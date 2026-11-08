@@ -1,0 +1,54 @@
+{
+  "name": "DynastyCOT",
+  "title": "DYNASTY COT by Ace",
+  "author": "Ace",
+  "version": "0.1.6-private",
+  "stage": "public-test-prerelease",
+  "installable": true,
+  "modules": [
+    {
+      "id": "DynastyEnhancer",
+      "sourceCandidate": "options-p98",
+      "settingsMigration": "fresh-defaults",
+      "preserveHistory": true,
+      "displayName": "Beyond the Field",
+      "description": "A livelier Dynasty feed, scouting fog, grades and clearer money displays."
+    },
+    {
+      "id": "GamedayAtmosphere",
+      "sourceCandidate": "2.1.9-private-update4",
+      "preserveSettings": true,
+      "preserveHistory": true,
+      "displayName": "Gameday Atmosphere",
+      "description": "Crowds that arrive, react and travel with the matchup."
+    },
+    {
+      "id": "ExtraDynastySettings",
+      "sourceCandidate": "0.2.10",
+      "clockScope": "dynasty",
+      "defaultOffensiveClock": "on",
+      "defaultDefensiveSeconds": 15,
+      "displayName": "Extra Settings",
+      "description": "More offline Dynasty controls, including clocks saved for each Dynasty."
+    },
+    {
+      "id": "DrivePractice",
+      "sourceCandidate": "0.8.21",
+      "defaultPracticeMode": "native",
+      "displayName": "Expanded Practice",
+      "description": "Practice full drives or scrimmages from the normal practice menu."
+    }
+  ],
+  "pending": [
+    "Live gameplay and save/load acceptance",
+    "Exact overhaul/version compatibility acceptance"
+  ],
+  "liveAcceptance": "pending",
+  "published": false,
+  "distribution": {
+    "repository": "ArtVsTheWorld/DynastyCOT",
+    "visibility": "public",
+    "prerelease": true,
+    "compatibilityNotes": "Public test prerelease; not a stable release. Offline Dynasty only. AIO 1.4.1 + TeamBuilder patch has targeted adapters; exact game/overhaul combinations still require live acceptance. Keep a backup and an older installer. Updates are optional."
+  }
+}

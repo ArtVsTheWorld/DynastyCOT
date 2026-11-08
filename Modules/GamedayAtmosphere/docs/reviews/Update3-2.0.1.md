@@ -1,0 +1,7 @@
+# Update3 / 2.0.1 sparse audio adjustment
+
+The user found the sparse-crowd audio cut too strong. At the smallest mapped venue (6,060 positions), 30% fullness previously gave Beds/Chants -9.5 dB, or about 33.5% native signal. The revised anchor halves the missing signal: (1 + previous gain) / 2, approximately 66.7% before quarter-dB quantization, producing -3.5 dB / 66.8% in production.
+
+Apply this change to all negative gains at both sparse listening anchors; retain positive individual-detail gain. Softening the 50% anchor too prevents the bed/reaction curve from dipping as arrivals increase fullness. Existing size-relative crossover and smoothstep interpolation spread the adjustment consistently across venues. The below-anchor logarithmic tail remains, including the -60 dB floor and explicit zero-crowd mute. Native balance at the crossover, denser boosts, the exact largest packed +30% cap, eligibility/shakes, and attendance remain unchanged.
+
+The model regression independently checks signal-domain halving within the quarter-dB tolerance, monotonic Beds/Reactions across five venue sizes, chant parity, zero mute, invalid fallback and the exact +30% cap. Full build and isolated MMC-host results are recorded in staged BUILD-INFO. This tuning still needs an installed-build listen; numbers describe signal gain, not perceived loudness. The separate individual-detail routing uncertainty remains unresolved.

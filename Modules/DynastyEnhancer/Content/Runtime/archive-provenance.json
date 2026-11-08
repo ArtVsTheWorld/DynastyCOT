@@ -1,0 +1,66 @@
+{
+  "format": 1,
+  "description": "Authored occasional archive references; opinions are not new Dynasty events. All referenced events precede 2026.",
+  "references": [
+    {
+      "key": "boise",
+      "source": "https://collegefootballplayoff.com/sports/2021/9/7/bcs-history",
+      "verifiedFact": "Boise State beat Oklahoma 43–42 in the 2007 Fiesta Bowl"
+    },
+    {
+      "key": "texas",
+      "source": "https://collegefootballplayoff.com/sports/2021/9/7/bcs-history",
+      "verifiedFact": "Texas beat USC 41–38 in the 2006 Rose Bowl"
+    },
+    {
+      "key": "ohio",
+      "source": "https://collegefootballplayoff.com/sports/2021/9/7/bcs-history",
+      "verifiedFact": "Ohio State beat Miami31–24 in two overtimes in2003FiestaBowl"
+    },
+    {
+      "key": "nebraska",
+      "source": "https://espnpressroom.com/press-release/espn-celebrates-college-footballs-150th-birthday-by-unveiling-sports-150-greatest-games-amplifying-season-long-cfb150-initiative/",
+      "verifiedFact": "Nebraska beat Oklahoma35–31 onNovember25,1971"
+    },
+    {
+      "key": "miami",
+      "source": "https://espnpressroom.com/press-release/espn-celebrates-college-footballs-150th-birthday-by-unveiling-sports-150-greatest-games-amplifying-season-long-cfb150-initiative/",
+      "verifiedFact": "Miami beat Nebraska31–30 in1984OrangeBowl"
+    },
+    {
+      "key": "bc",
+      "source": "https://espnpressroom.com/press-release/espn-celebrates-college-footballs-150th-birthday-by-unveiling-sports-150-greatest-games-amplifying-season-long-cfb150-initiative/",
+      "verifiedFact": "BostonCollege beat Miami47–45 onNovember23,1984"
+    },
+    {
+      "key": "lsu",
+      "source": "https://lsusports.net/news/2020/01/13/lsu-football-national-championship-game-recap",
+      "verifiedFact": "LSU won2019nationaltitle42–25 overClemson onJanuary13,2020"
+    },
+    {
+      "key": "georgia",
+      "source": "https://georgiadogs.com/news/2022/1/10/football-bulldogs-capture-national-title-with-33-18-win-over-alabama",
+      "verifiedFact": "Georgia beat Alabama33–18 for2021seasonnationaltitle January10,2022"
+    },
+    {
+      "key": "tennessee",
+      "source": "https://utsports.com/news/2018/8/14/football-1998-season-story-needs-title",
+      "verifiedFact": "Tennessee beat FloridaState23–16 January4,1999 tocomplete1998title season"
+    },
+    {
+      "key": "appstate",
+      "source": "https://broncosports.com/news/2025/9/24/football-the-power-of-victory",
+      "verifiedFact": "AppalachianState beat Michigan34–32 in2007"
+    },
+    {
+      "key": "cal",
+      "source": "https://espnpressroom.com/press-release/the-band-is-on-the-field-espn-e60-relives-memorable-cal-stanford-play-on-40th-anniversary/",
+      "verifiedFact": "Cal usedfive laterals onwinning kickoffreturn vsStanford in1982"
+    },
+    {
+      "key": "ringo",
+      "source": "https://collegefootballplayoff.com/sports/2022/1/20/ncg-recap-2022",
+      "verifiedFact": "KeleeRingo returnedinterception79yards in2022titlegame"
+    }
+  ]
+}

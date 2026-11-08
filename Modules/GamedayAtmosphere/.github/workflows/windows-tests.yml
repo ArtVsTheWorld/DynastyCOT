@@ -1,0 +1,35 @@
+name: Windows build and tests
+on:
+  push:
+    branches: [main]
+  pull_request:
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  native:
+    runs-on: windows-2022
+    timeout-minutes: 30
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
+      - name: Build native runtime and run regression suites
+        shell: pwsh
+        run: |
+          $ErrorActionPreference = 'Stop'
+          & .\Source\Build.ps1 -Automatic *>&1 | Tee-Object -FilePath build-tests.log
+          if ($LASTEXITCODE -ne 0) { exit $LASTEXITCODE }
+      - name: Check SDK discovery
+        shell: pwsh
+        run: .\Tests\BuildToolsTests.ps1
+      - name: Test the offline inspection tool
+        shell: pwsh
+        run: python -m unittest discover -s Tests -p 'test_*.py'
+      - name: Save the test log
+        if: always()
+        uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9 # v7.0.2
+        with:
+          name: windows-test-log
+          path: build-tests.log
+          retention-days: 14

@@ -1,0 +1,106 @@
+{
+  "task": "Complete ULM cycle review, severe menu performance fixes, content correctness and major variety expansion",
+  "directHubTab": "Paused at user request; keep Team shortcut",
+  "frozenCorpus": "Backups/completed-ulm-review.json",
+  "stages": [
+    {
+      "id": 1,
+      "name": "Rollover verification and corpus preservation",
+      "status": "complete",
+      "evidence": "Preseason 2029 published; 15 ULM training facts; Manupuna departure; 22 checksum-verified files"
+    },
+    {
+      "id": 2,
+      "name": "Background change detection",
+      "status": "v101 live idle reader: 0.885% of one core; zero redundant refreshes. Late-season and unsaved recruiting validation remain.",
+      "gates": [
+        "Avoid repeated full decode when unchanged",
+        "Retain identity/stage/consistency guards",
+        "Detect midweek changes without saves",
+        "Benchmark live data and reject stale/failed probes"
+      ]
+    },
+    {
+      "id": 3,
+      "name": "Archive handling",
+      "status": "Immutable archives implemented; exact replay and migration of 106 editions / 163741 posts verified.",
+      "gates": [
+        "Reduce full-season JSON read/rewrite",
+        "Preserve immutable wording and existing archives",
+        "Test reload, rewind and year rollover",
+        "Benchmark frozen full-season corpus"
+      ]
+    },
+    {
+      "id": 4,
+      "name": "Dropdown discovery",
+      "status": "Execution-based dropdown discovery passes v98/v100 controls and v101 fresh-launch entry; 0 ms request preparation observed.",
+      "gates": [
+        "Remove process-wide UI-thread scans",
+        "Validate cached ownership/generation",
+        "Preserve stock menus and controller behavior",
+        "Measure entry latency"
+      ]
+    },
+    {
+      "id": 5,
+      "name": "Correctness and contextual review",
+      "status": "371 Node tests and native checks pass; corrected live Week 9 feed and full controls confirmed on v100."
+    },
+    {
+      "id": 6,
+      "name": "Thousands of natural variants",
+      "status": "Complete: 5704 distinct representative-usable wordings, 561 families, 601 minimal paths and 472 recorded paths; minimum eight eligible choices per root path.",
+      "targets": {
+        "usableVariants": 5000,
+        "minimumEligibleVariantsPerPath": 8
+      },
+      "gates": [
+        "Coverage measured after slot/personality/condition filtering",
+        "Distinct voices and syntax",
+        "No filler that invents facts",
+        "Full-corpus duplicate/context audit"
+      ]
+    },
+    {
+      "id": 7,
+      "name": "Package, live verification and success report",
+      "status": "Complete: v101 built, installed, automatically loaded and live feed entry confirmed; source pushed. Subsequent full-season/midweek validation is tracked separately."
+    }
+  ],
+  "contentRequirements": [
+    "National news during Players Leaving",
+    "Suppress NIL compensation drops to zero; use $4000 per Dynasty point everywhere",
+    "Capitalize sentence starts",
+    "CanDuel publishes gambling lines without fictional/model disclaimers",
+    "Analysts have distinct evidence-based projection models",
+    "NFL team/position-aware synthetic draft destinations; avoid implausible early duplicate QB picks",
+    "20-30 NFL Draft undrafted signing posts using eligible graduated near-draft/exceptional-stat players",
+    "Team views require direct team involvement, not merely conference membership",
+    "10-25 stories per team across all voices",
+    "Returning portal player: beat report and smug fans, no official commitment announcement; stronger positive reaction for exceptional player",
+    "Natural position and HS/JUCO context only when useful; avoid repeated name/handle/position",
+    "Encouraged departure without verified destination: FCS continuation flavor without inventing a named destination",
+    "Thorough bugs/context/repetition audit and new contextual opportunity report",
+    "Verified signings, draft picks and major roster changes may exceed 25; cap routine coverage",
+    "User approved fewer than 10 stories on genuinely quiet weeks; never force filler"
+  ],
+  "reporting": "Report offline results separately from live verification after each stage",
+  "postgameRecovery": {
+    "build": "v102",
+    "status": "v102 installed and live postgame feed published in the same session without save/reload; Luke Callen offer visible in feed data. User entry check pending.",
+    "rootCause": "Postgame replaces child context; scanning fallback repeatedly exhausts its bound and readiness blocks navigation",
+    "gates": [
+      "Current owned child takes precedence over stale valid cached child",
+      "Changing/foreign ownership fails closed",
+      "Read-only unsaved offer and game completion reach the live edition",
+      "No raised search bounds or game-data writes"
+    ]
+  },
+  "postgameUiRecovery": {
+    "build": "v103",
+    "status": "v103 installed and clean-launch Week 2 feed, all filters/categories, scrolling and Back user-confirmed. Next postgame asset-reacquisition check remains.",
+    "dataCapture": "Week 2 and recruiting change already published by v102; this is a separate UI lifetime/navigation gate failure",
+    "verification": "Full bundle readiness, stale cache, replacement cache, unreadable memory and no bytecode writes during readiness checks"
+  }
+}

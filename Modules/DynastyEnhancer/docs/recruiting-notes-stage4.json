@@ -1,0 +1,92 @@
+{
+  "stage": 4,
+  "feature": "Native recruit Notes profile tab",
+  "status": "Native Notes prototype verified live in p18. Text placement, tab spacing, selected-recruit notes, Scouting restoration, Back and Recruiting reentry all passed.",
+  "branch": "research/recruiting-fog",
+  "userPreference": "Broad hints immediately; more detail with scouting",
+  "placement": [
+    "Overview",
+    "Recruiting",
+    "Scouting",
+    "Notes"
+  ],
+  "content": {
+    "initial": "Public archetype/position profile plus a film focus; no hidden attribute value is consulted",
+    "progression": "Qualitative observations begin after initial scouting; additional encouraging signs can appear as scouting progresses",
+    "certainty": "Uses only the already-revealed values or range bounds in the native ScoutingAttributes response. Broad unresolved ranges do not become invented strengths or weaknesses.",
+    "unknown": "Unscouted and malformed observations do not generate detailed claims",
+    "stability": "Deterministic identity seed from native recruit identity; unchanged scouting data produces unchanged notes",
+    "unchanged": [
+      "Actual ratings",
+      "Scouting hours/progress/cost",
+      "Recruiting eligibility",
+      "Native abilities/mentals/development visibility",
+      "Save data"
+    ],
+    "scope": "Early prototype uses football observations rather than fabricated exact high-school statistics, academic scores or championship claims. More narrative background/wording variety can be added after the native tab works."
+  },
+  "nativeUi": {
+    "implementation": "A fourth profile metadata row gets its own native screen-layer key while reusing the existing Scouting subscreen as a read-only presentation donor. Its original controls are hidden for Notes and restored for normal Scouting.",
+    "input": "Notes and Scouting share the donor state. The category callback avoids locking input for a no-op state transition. The scout action and scout-button focus updates are guarded while Notes is selected.",
+    "refresh": "Recruit selection and active-recruit updates rebuild the selected Notes body's native text label",
+    "methods": 8,
+    "ownership": "Fingerprint-gated native invocation-setup hook. Matches method metadata, then verifies all eight complete method bodies in the loaded APT stream before redirecting only the live receiver. No cached object addresses or memory scans are used.",
+    "sharedHooks": "Does not replace Social Media’s script-body accessor hook or alter the Dynasty hub. The invocation-setup hook forwards all five native arguments and the return value unchanged.",
+    "unloading": "Clean game restart required once the Notes UI candidate is installed, because native script clones can retain its definitions and DLL-backed literals",
+    "lifetime": "Recruiting unloads its script objects and source asset on exit. Each new source generation is verified on entry; retained definitions preserve that generation’s native parameters and constant pool. At most 16 asset generations per process.",
+    "layout": "Stage-coordinate text stays anchored to saved native widget positions; unused native divider lines are hidden in Notes and restored in Scouting. The initial Scouting tab label reserves its longest percentage width before Notes is laid out.",
+    "binding": "GetActiveRecruit returns a RecordId. Notes resolves it through the native GetTeamRecruitList response with ArrayUtil.Search before reading DENotesBody."
+  },
+  "checksPassed": [
+    "Broad notes do not change when unrevealed observation values change",
+    "Luke's revealed arm strength and intermediate-placement observations produce qualitative text",
+    "No numerical rating appears in note text",
+    "Unresolved ranges, invalid progress and hidden sentinels stay non-specific",
+    "Deterministic notes across repeated reads and all position groups",
+    "Offline execution of fourth-tab metadata, same-state input-lock handling, rendering, recruit changes and Scouting restoration",
+    "Native script header/body copy gates and preservation of the constant pool",
+    "Prior Scouting and Playing Time checks remain passing",
+    "Live probe captured all eight method owners; confirmed they are released/recycled on leaving Recruiting",
+    "All-method validation rejects a changed method before changing any receiver",
+    "Fresh receivers reuse verified definitions; reused source allocations with changed pools receive fresh headers",
+    "Invocation hook forwards the fifth stack argument and return value correctly",
+    "Offline native RecordId-to-response lookup, correct recruit selection and no stale notes when the ID is missing",
+    "Offline text placement stays relative to saved native anchors; original positions and divider visibility restore",
+    "Live p18 clean launch and corrected tab/text alignment confirmed by user",
+    "Live 0%-scouted HB displays selected-recruit archetype/background notes without numerical ratings",
+    "User verified Luke’s detailed arm-strength notes",
+    "User verified returning to Scouting restores letters/ranges and 40% progress",
+    "User verified leaving and reopening Recruiting preserves Notes and Back behavior"
+  ],
+  "liveState": {
+    "active": "p18 verified Notes prototype",
+    "tabEntry": "User confirmed corrected Notes text and tab spacing",
+    "visualInspection": "Dylan Reid, HB, 0% scouting: his East/West Playmaker profile and broad film notes appear inside the native panel. No numeric ratings or fallback gathering text. Native Scouting percentage and Notes labels no longer overlap.",
+    "pending": [],
+    "regressionChecks": "User confirmed Luke’s arm-strength notes, native Scouting letters/ranges with 40% progress, Back, and leaving/reopening Recruiting all work."
+  },
+  "backups": "EPUPSZN manual save, EPUPSZN autosave and PROFILE-COLLEGE copied under ignored Backups with matching SHA-256 checksums",
+  "source": [
+    "Source/RecruitNotes.h",
+    "Source/RecruitNotesUiRuntime.h",
+    "Source/RecruitNotesUiPrograms.h",
+    "Tools/build_recruit_notes_ui.py",
+    "Tools/inspect_recruit_notes_runtime.py",
+    "Tests/recruit_notes_ui_test.py"
+  ],
+  "build": "Source/build-recruiting-fog.ps1 -Name DynastyEnhancerRecruitFog-pNN -RecruitNotesUi",
+  "probeBuild": "Source/build-recruiting-fog.ps1 -Name DynastyEnhancerRecruitFog-pNN -RecruitNotesProbe",
+  "limits": [
+    "Not integrated into automatic MMC loading; the separate DLL is loaded per session",
+    "Prototype prose variety remains limited; richer narrative notes are follow-up work",
+    "Up to 16 verified profile-asset generations per process; a clean restart is required to unload Notes"
+  ],
+  "verifiedDate": "2026-11-04",
+  "artifact": {
+    "path": "Build/DynastyEnhancerRecruitFog-p18.dll",
+    "bytes": 526336,
+    "sha256": "7aa26077029e299b0c2ee7197114d590e3774334b41424900229b1267b808718",
+    "implementationCommit": "52d36ef",
+    "automaticMmcLoading": false
+  }
+}

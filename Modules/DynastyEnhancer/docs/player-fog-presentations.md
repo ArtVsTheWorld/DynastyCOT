@@ -1,0 +1,224 @@
+# Broadcast player-rating audit
+
+The installed broadcast archive was parsed offline: **704 entries**, containing
+1,350 definitions including aggregate copies. After deduplication, **41 templates
+contain 239 player-rating cells**, using **31 attribute columns**. All those cells
+are direct player queries with the default text format. Private extracted assets
+and full reports remain under ignored `Evidence/PlayerFog/Presentations`.
+
+| Presentation family | Rating fields found | Verification |
+|---|---|---|
+| Broadcast kicker graphic | Overall, kick power, kick accuracy | Static definition; visual output pending |
+| Kick-returner graphic | Overall, speed, agility | Static definition |
+| Pregame/runout/QB trot | Overall and position-specific attributes | Static definitions |
+| Freshman debuts and player bios | Overall, speed, ball skills and other position attributes | Static definitions |
+| Position/star-player comparisons | QB, RB, WR, TE, DE, MLB and safety attributes | Static definitions |
+| Matchups to watch | Receiver/coverage, RB/LB, WR/LB and edge/QB comparisons | Static definitions |
+| Legacy spotlight variants | QB overall, throw power/accuracy | Static definitions; presence does not establish use in current Dynasty |
+
+## Separate playcall Kicker Range panel
+
+The later screenshot identifies `art_screen.playcall.panel.KickerRange`, which
+is separate from the broadcast definitions above. Its circular ACC/PWR badges
+import `art_control.group.RatingValueItem`. p68 adds a dedicated asset bank for
+the panel's initialization and range-refresh methods. Only `mcAccStat` and
+`mcPowStat` are marked for the existing grade-label renderer; their numeric
+`WidgetData.value` stays unchanged. Target line, distance remaining, yard
+markers, player identity and range geometry remain native.
+
+The panel's native 13- and 7-register frames are retained. Tests cover grade
+boundaries, unknown/absent widgets, grade-color repaint and untouched distances
+and geometry. A clean-session visual check remains pending.
+
+## Broadcast implementation boundary
+
+Football SystemMuse's `TextVariable` formatter converts an evaluated expression
+into a **separate rendered string**. The candidate changes only that rendered
+string, after native formatting. It does not change query results, ratings,
+expression evaluation, comparisons or gameplay.
+
+Conversion requires all of these:
+
+- Exact native football `TextVariable` and direct `GameQueryVariable` classes.
+- Exact player table `AGLP` and one of the 31 verified attribute columns.
+- Default text format and a whole numeric rating in 0–100.
+- A valid native rendered string cache and allocator.
+
+Ordinary game/season/career statistics, statistical QB rating, team ratings,
+jerseys, unknown values, nonnumeric text and other expressions retain native
+formatting. Surrounding text such as “OVERALL RATING - ” is a separate text
+variable and stays intact.
+
+Startup validates the complete formatter body, exact vtable ownership, query
+loader/evaluator layout and native string helper fingerprints. The callback uses
+bounded local reads; it performs no process scans or background discovery.
+Temporary strings use the game's constructor, reference-counted assignment and
+destructor. The native formatter still receives its original input exactly once.
+
+## Evidence and limits
+
+- Offline tests cover all 31 columns × 101 ratings × three native numeric kinds,
+  invalid/unknown values, non-player/statistic fields, foreign expression types,
+  disabled forwarding and temporary-string lifetime.
+- The live process's formatter body, vtable slots and helper code match the
+  verified native fingerprints.
+- Scene execution and visual output still require a live check. The static audit
+  identifies definitions and supported fields; it does not claim that every
+  legacy template can appear, or that arbitrary replacement assets use this path.
+- Full p68 package includes the pre-snap substitution and playcall Kicker Range
+  fixes. Isolated p67 tests
+  only the presentation callback alongside p64; it has no reader, menu hooks or
+  copied UI definitions and is not the automatic-loading package.
+
+Repeat the offline audit with `python Tools/audit_player_presentations.py`.
+
+## Playcall info-panel family audit
+
+The current `Presentation_Common` collector was read separately from the older
+research index. All **35 playcall panel assets** were extracted read-only and
+decoded without errors. In particular, `TeamPositionGroups` has a newer asset
+GUID than the historical index; the current collector resolves it correctly.
+The private catalog is `Evidence/PlayerFog/PlaycallPanels/audit.json`.
+
+| Panel | Treatment in p69 |
+|---|---|
+| IndividualPositionStats, including the pictured RB/FB Ratings | Grade the three final labels only when the native panel mode is Ratings (2) |
+| PlayerVsPlayer | Grade up to three attribute pairs only in Ratings mode, after native comparisons and arrows are calculated |
+| ImpactPlayerDepth | Grade its three explicit attribute labels after native selection and ordering |
+| TeamPositionGroups | Grade each fresh row's player OVR display cell |
+| TeamPositionGroups key-stat variant | Grade `ConferenceText`, where this layout puts player OVR; preserve `OverallText`, which contains the ordinary key statistic |
+| Trench | Grade player OVR display cells in both lists; preserve weight averages |
+| ConferenceRankings | Preserve: even the field called `Ovr` contains a season record here |
+| SignedRecruits | Preserve: national rank, star rating and interest visualization |
+| ImpactPlayerTraits | Preserve ability names, descriptions and tiers |
+| ImpactPlayer / PlayerSelfComparison | Preserve generic statistics and comparisons; no confirmed rating-only path |
+
+The new panel adapters keep native fonts and comparison foregrounds. This also
+prevents grade colors from leaking into ordinary statistics when a cached panel
+changes modes. Numeric input arrays, rating ordering, comparison arrows, player
+IDs, jerseys, years, weight and ordinary statistics remain unchanged. Separate
+asset banks use the original register frames and the existing attachment path;
+no new native hook or background discovery is added.
+
+Pre-snap Subs passed the user's p68 check. In p69 the user reports other panels
+they encountered show grades, but The Trench still shows numeric player OVRs.
+The Trench adapter attached successfully (bank 19, method 0). Kicker Range still
+needs an explicit natural-scene check; the 35-asset audit is static evidence,
+not a claim that every panel has appeared in the current game.
+
+## Bound list refresh correction (p70)
+
+The native Trench method binds its left/right providers before the appended
+adapter executes. p69 assigned `row.ExtraInfo.OverallText` directly, which bypasses
+the provider's change notification. `InfoPanelListItem.Draw` refreshes that label
+only when its label invalidation flag is set. Updating the backing dictionary
+therefore does not ensure an already-bound renderer repaints.
+
+p70 uses the verified native `UpdateProperty(index, propertyName, value)` path
+for the one player OVR cell. Its notification flows through `VirtualItemAdapter`,
+which copies the renderer's ExtraInfo, changes the named property and calls
+`SetExtraInfo`. Other fields and nested style/function references are preserved.
+The same correction applies to the two TeamPositionGroups layouts, whose OVR
+cells are `OverallText` and `ConferenceText` respectively. The latter layout's
+ordinary key statistic in `OverallText` remains numeric.
+
+These exact player OVR cells also accept canonical integer strings `"0"` through
+`"100"`. No arbitrary numeric coercion is used: padded, signed, decimal, percentage,
+unit-bearing and sentinel strings are rejected. Existing letter labels are
+no-ops. This guards a possible source representation; the temporary row probe
+captured no matching rows, so it did not establish the live Trench value type.
+Both probe hooks were stopped successfully.
+
+Regression tests model a bound renderer with its own cached ExtraInfo and require
+the native field-specific notification to update its visible label. They cover
+all 101 numeric and canonical-string ratings, both unequal Trench lists, repeat
+visits, unknowns, source IDs, native style/function identity and numeric weight
+averages. Original fixed register frames are retained; no new production hook,
+background scan or per-frame polling is added. The user subsequently confirmed
+The Trench fix in p70. The installed recruiting runtime checksum matches the
+verified p70 DLL. This closes that specific display leak; Kicker Range and any
+unseen presentation scenes retain their separate verification status.
+
+## Kicker Range numeric-text correction (p71)
+
+The p70 live screenshot still shows ACC64/PWR64, despite both Kicker Range
+methods attaching. A bounded read-only capture of the actual badge objects
+confirms that both `mData.value` fields contain the **string** `"64"`, not a
+number. Their text children also display `"64"`, and the private rating marker
+is absent. The old numeric-only guard exits before marking these widgets.
+
+p71 opts in only these two badges to strict canonical integer-text conversion,
+while preserving the original `mData.value`. The marker is installed before
+checking value/child readiness so deferred initialization can finish normally.
+Initial paint, marked `RatingValueItem.Draw`, and a new privately gated
+`RatingValueItem.SetValue` suffix all use the same parser. SetValue needs its
+own suffix because its native body directly resets the child label. Its original
+four-register frame is retained. Other shared team/stat badges keep their
+existing behavior, and ordinary field distances, range geometry, labels and
+circle colors remain native.
+
+Tests include all 101 numeric and canonical-string ratings, missing/deferred
+children, native value updates, style-reset redraws, reused kicker widgets,
+unknown/formatted values, marker exclusions and unchanged numeric source data.
+The existing Trench tests pass after moving their identical parser into the
+shared builder. No new production native hook or background work is introduced.
+Native tests, all 11 UI suites, independent review and MMC packaging pass.
+The diagnostic probes are stopped; final p71 Kicker Range visual confirmation
+remains pending.
+
+## Separate Rime lineup and Game Changers reports
+
+The user later reported numeric player OVRs in the opening offensive-line
+lineup and Game Changers. These are **not** the playcall Trench panel or direct
+Muse player-rating queries. The lineup banner supplies player IDs to a Rime
+screen; its reusable `PlayerInfoDisplay` widget reads `PROP_OVERALLRATING` from
+a player datasource and converts that integer with `IntToFormattedString`.
+Jersey numbers use a separate converter. Game Changers corresponds to
+`CFB_Dynamic_Duo`, with two analogous OVR connections. Their nearby yards,
+catches and touchdown counts are ordinary statistics.
+
+The read-only asset audit resolved these exact native graphs and identified
+the integer formatter's handlers and native string lifetime. However, no live
+entity was captured before the user left the game, so the association between
+a live converter and its owning rating connection is not yet verified. The
+temporary observer was stopped successfully. p72 includes **no** Rime formatter
+replacement and no Flags-only or blanket numeric conversion. These two reported
+broadcast leaks remain open; the existing direct-Muse formatter coverage does
+not imply coverage of Rime datasource labels.
+
+## Pause Injury Report attributes (p72)
+
+The in-game Injury Report uses a legacy adapter that calls
+`GetRelevantSkillsFromPlayer`. The shared player module normalizes its
+`skillLabel`/`skillValue` records into six attribute slots. This bypasses the
+modern Injury response conversion: the reported screenshot had a graded Overall
+badge but numeric values in all six tiles.
+
+p72 marks the module only from that exact screen's selection/refresh method.
+The parent passes a private injury marker to its attribute slots, which convert
+only fully revealed values. This path's native `roster` flag defaults to false,
+so it is not used as a guard. Source skill values, Overall, player identity,
+injury status and recovery text remain untouched. Unknown values and unrelated
+shared modules retain their existing behavior. One additional asset bank uses
+the existing script dispatch, retention and stop guards; no native hook or
+background search is added.
+
+Numeric/text six-attribute fixtures, changed players, native `roster=false`,
+hidden values and unmarked modules pass alongside the card, Formation and full
+native/UI suites. The combined p72 package includes the p71 Kicker Range change.
+Both new fixes still require visual confirmation after installation.
+
+## Lightning Combination follow-up (options-p96)
+
+The user reported numeric OVR72 for both players in the Lightning Combination
+banner. This belongs to the same separate Dynamic Duo family as Game Changers;
+its passing/receiving statistics are not player ratings. A development-only,
+four-minute pass-through observer captured 58 integer formatter instances in
+the running game. None established a verified live association with the OVR
+connection. It restored both observed vtable slots and drained all in-flight
+callbacks (stop result 0). It did not change source values or displayed text.
+
+The package therefore retains this as an open leak, alongside opening lineups.
+The production build does not contain that observer or a generic numeric
+formatter replacement. The five-scale/player-team separation work does not
+close this independent Rime presentation gap.

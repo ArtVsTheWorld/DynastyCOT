@@ -1,0 +1,49 @@
+{
+  "releases": [
+    {
+      "name": "Release",
+      "workingVersion": "1.20.1",
+      "tag": "v1.20.1",
+      "asset": "DynamicGamedayAtmosphere-Release.zip",
+      "sha256": "214a7e5a47d33c07f52dd79b9ad4ddd180cfd3763763779382c06b379e800dc7",
+      "notes": "docs/releases/Release.md",
+      "latest": false
+    },
+    {
+      "name": "Update 1",
+      "workingVersion": "1.26.1",
+      "tag": "v1.26.1",
+      "asset": "DynamicGamedayAtmosphere-Update1.zip",
+      "sha256": "1f0118d362411e3e6cc7df55d014495e4b6b89a779836e0abd3831b402386b89",
+      "notes": "docs/releases/Update1.md",
+      "latest": false
+    },
+    {
+      "name": "Update 2",
+      "workingVersion": "1.54.0",
+      "tag": "v1.54.0",
+      "asset": "DynamicGamedayAtmosphere-Update2.zip",
+      "sha256": "919ff8002db4f918130a2975d1c1af31d7c2253468a0f96ae60205d98578b0cb",
+      "notes": "docs/releases/Update2.md",
+      "latest": false
+    },
+    {
+      "name": "Update 3",
+      "workingVersion": "2.0.21",
+      "tag": "v2.0.21",
+      "asset": "DynamicGamedayAtmosphere-Update3.zip",
+      "sha256": "7fc730bb20530922df8c55130dba3b0c486b26e47acd314b34e2f038326f99d7",
+      "notes": "docs/releases/Update3.md",
+      "latest": false
+    },
+    {
+      "name": "Update 3 Hotfix",
+      "workingVersion": "2.0.35",
+      "tag": "v2.0.35",
+      "asset": "DynamicGamedayAtmosphere-Update3Hotfix.zip",
+      "sha256": "c57c3eea0b25158d7100aa9644341b635d59ca67855b75452a7f10381a0272ac",
+      "notes": "docs/releases/Update3Hotfix.md",
+      "latest": true
+    }
+  ]
+}

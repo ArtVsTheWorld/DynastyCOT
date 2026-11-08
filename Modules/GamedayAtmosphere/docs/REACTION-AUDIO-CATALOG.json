@@ -1,0 +1,325 @@
+{
+  "version": "2.0.8",
+  "audition_date": "2026-10-30",
+  "evidence": "User listening reports in isolated native reaction auditions; native queue/voice registration alone is not proof of audible output.",
+  "tested_selectors": 84,
+  "audible_selectors": 80,
+  "untested_size_code": 0,
+  "notes": [
+    "Selectors may share recordings;80 does not mean80 unique audio files.",
+    "Ascending selectors within a family were heard as longer/more intense.",
+    "Negative big-hit13..15 and negative catch23 remain excluded.",
+    "Native CATCH_POG label is shown here as Catch +."
+  ],
+  "families": [
+    {
+      "family": 0,
+      "name": "Ballcarrier action +",
+      "audible_ids": [
+        1,
+        2,
+        3
+      ],
+      "excluded_ids": [],
+      "use": "Verified skill moves"
+    },
+    {
+      "family": 1,
+      "name": "Ballcarrier action –",
+      "audible_ids": [
+        5,
+        6,
+        7
+      ],
+      "excluded_ids": [],
+      "use": "Away skill counterpart"
+    },
+    {
+      "family": 2,
+      "name": "Big hit +",
+      "audible_ids": [
+        9,
+        10,
+        11
+      ],
+      "excluded_ids": [],
+      "use": "Truck / hit-stick; failed negative big-hit family is not used"
+    },
+    {
+      "family": 3,
+      "name": "Big hit –",
+      "audible_ids": [],
+      "excluded_ids": [
+        13,
+        14,
+        15
+      ],
+      "use": "Excluded: not audible"
+    },
+    {
+      "family": 4,
+      "name": "Catch +",
+      "audible_ids": [
+        17,
+        18,
+        19
+      ],
+      "excluded_ids": [],
+      "use": "Verified long catch/completion"
+    },
+    {
+      "family": 5,
+      "name": "Catch –",
+      "audible_ids": [
+        21,
+        22
+      ],
+      "excluded_ids": [
+        23
+      ],
+      "use": "Deep visitor catch / home missed catch"
+    },
+    {
+      "family": 6,
+      "name": "Field goal +",
+      "audible_ids": [
+        25,
+        26,
+        27
+      ],
+      "excluded_ids": [],
+      "use": "Existing made / opponent missed kick"
+    },
+    {
+      "family": 7,
+      "name": "Field goal –",
+      "audible_ids": [
+        29,
+        30,
+        31
+      ],
+      "excluded_ids": [],
+      "use": "Existing home missed / away made kick"
+    },
+    {
+      "family": 8,
+      "name": "Fumble/takeaway +",
+      "audible_ids": [
+        33,
+        34,
+        35
+      ],
+      "excluded_ids": [],
+      "use": "Forced fumble, defensive recovery; takeaway variety"
+    },
+    {
+      "family": 9,
+      "name": "Fumble/takeaway –",
+      "audible_ids": [
+        37,
+        38,
+        39
+      ],
+      "excluded_ids": [],
+      "use": "Home lost fumble / away defensive recovery"
+    },
+    {
+      "family": 10,
+      "name": "Incompletion +",
+      "audible_ids": [
+        41,
+        42,
+        43
+      ],
+      "excluded_ids": [],
+      "use": "Breakup / defensive stop"
+    },
+    {
+      "family": 11,
+      "name": "Incompletion –",
+      "audible_ids": [
+        45,
+        46,
+        47
+      ],
+      "excluded_ids": [],
+      "use": "Failed conversion / away defensive stop"
+    },
+    {
+      "family": 12,
+      "name": "Interception +",
+      "audible_ids": [
+        49,
+        50,
+        51
+      ],
+      "excluded_ids": [],
+      "use": "Interception; alternates with takeaway family"
+    },
+    {
+      "family": 13,
+      "name": "Interception –",
+      "audible_ids": [
+        53,
+        54,
+        55
+      ],
+      "excluded_ids": [],
+      "use": "Home interception"
+    },
+    {
+      "family": 14,
+      "name": "Sack +",
+      "audible_ids": [
+        57,
+        58,
+        59
+      ],
+      "excluded_ids": [],
+      "use": "Verified sack"
+    },
+    {
+      "family": 15,
+      "name": "Sack –",
+      "audible_ids": [
+        61,
+        62,
+        63
+      ],
+      "excluded_ids": [],
+      "use": "Away defensive sack"
+    },
+    {
+      "family": 16,
+      "name": "Receiving touchdown +",
+      "audible_ids": [
+        65,
+        66,
+        67
+      ],
+      "excluded_ids": [],
+      "use": "Verified passing touchdown"
+    },
+    {
+      "family": 17,
+      "name": "Receiving touchdown –",
+      "audible_ids": [
+        69,
+        70,
+        71
+      ],
+      "excluded_ids": [],
+      "use": "Away passing touchdown"
+    },
+    {
+      "family": 18,
+      "name": "Rushing touchdown +",
+      "audible_ids": [
+        73,
+        74,
+        75
+      ],
+      "excluded_ids": [],
+      "use": "Verified rushing touchdown"
+    },
+    {
+      "family": 19,
+      "name": "Rushing touchdown –",
+      "audible_ids": [
+        77,
+        78,
+        79
+      ],
+      "excluded_ids": [],
+      "use": "Away rushing touchdown"
+    },
+    {
+      "family": 20,
+      "name": "Yardage gain +",
+      "audible_ids": [
+        81,
+        82,
+        83
+      ],
+      "excluded_ids": [],
+      "use": "Run, scramble, catch-and-run and return gain"
+    },
+    {
+      "family": 21,
+      "name": "Yardage gain –",
+      "audible_ids": [
+        85,
+        86,
+        87
+      ],
+      "excluded_ids": [],
+      "use": "Away gain counterpart"
+    },
+    {
+      "family": 22,
+      "name": "Generic cheer",
+      "audible_ids": [
+        89,
+        90,
+        91
+      ],
+      "excluded_ids": [],
+      "use": "Existing result and lineup variety"
+    },
+    {
+      "family": 23,
+      "name": "Disappointment / aww",
+      "audible_ids": [
+        93,
+        94,
+        95
+      ],
+      "excluded_ids": [],
+      "use": "Existing home letdowns / fallback"
+    },
+    {
+      "family": 24,
+      "name": "Surprise / oh-ooh",
+      "audible_ids": [
+        97,
+        98,
+        99
+      ],
+      "excluded_ids": [],
+      "use": "Existing confirmed breakup / knockout variety; neutral emotional character"
+    },
+    {
+      "family": 25,
+      "name": "Boo",
+      "audible_ids": [
+        101,
+        102,
+        103
+      ],
+      "excluded_ids": [],
+      "use": "Existing away live showboat"
+    },
+    {
+      "family": 26,
+      "name": "Applause-labelled cheer",
+      "audible_ids": [
+        105,
+        106,
+        107
+      ],
+      "excluded_ids": [],
+      "use": "Existing generic/result/lineup variety; heard as cheers"
+    },
+    {
+      "family": 27,
+      "name": "Anticipation",
+      "audible_ids": [
+        109,
+        110,
+        111
+      ],
+      "excluded_ids": [],
+      "use": "Existing special lineup-cheer opportunity"
+    }
+  ]
+}

@@ -1,0 +1,41 @@
+"""Check the staged/public source boundary without opening private directories."""
+from pathlib import Path
+import json
+import re
+import subprocess
+import sys
+
+ROOT = Path(__file__).resolve().parents[1]
+DENIED_PARTS = {'build', 'evidence', 'release', 'research', 'captures', 'saves',
+                'runtimehistory', 'recruitresumehistory', 'dynastyenhancementsettings',
+                'node_modules', '.git', 'private'}
+DENIED_SUFFIXES = {'.dll', '.exe', '.pdb', '.obj', '.ast', '.raw', '.bin', '.sav',
+                   '.fbmod', '.fbproject', '.zip', '.htm', '.html', '.png', '.jpg'}
+SECRET = re.compile(rb'(?:gh[pousr]_[A-Za-z0-9]{30,}|github_pat_[A-Za-z0-9_]{40,}|'
+                    rb'-----BEGIN (?:RSA |EC |OPENSSH )?PRIVATE KEY-----)')
+
+
+def check():
+    # Include staged files and new nonignored source. This also works on a clone.
+    listed = subprocess.check_output(
+        ['git', 'ls-files', '--cached', '--others', '--exclude-standard', '-z'], cwd=ROOT)
+    paths = sorted(set(p.decode('utf-8') for p in listed.split(b'\0') if p))
+    errors = []
+    for rel in paths:
+        path = Path(rel)
+        if (set(x.lower() for x in path.parts) & DENIED_PARTS or
+                path.suffix.lower() in DENIED_SUFFIXES or
+                path.name.lower() in {'private-fixtures.json', 'cot.build-inputs.json',
+                                     'ulm-close-games-2026.json', 'review-samples.json'}):
+            errors.append({'path': rel, 'reason': 'private/generated input in public source'})
+            continue
+        data = (ROOT / path).read_bytes()
+        if SECRET.search(data):
+            errors.append({'path': rel, 'reason': 'credential/private-key pattern'})
+    result = {'files': len(paths), 'errors': errors}
+    print(json.dumps(result, indent=2))
+    return bool(errors)
+
+
+if __name__ == '__main__':
+    sys.exit(check())

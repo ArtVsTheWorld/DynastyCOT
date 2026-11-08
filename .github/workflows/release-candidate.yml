@@ -1,0 +1,79 @@
+# Manual only. No pull-request code executes on the prepared private-input runner.
+name: Build test candidate
+on:
+  workflow_dispatch:
+    inputs:
+      build:
+        description: Build on the prepared Windows COT runner
+        type: boolean
+        default: false
+      publish:
+        description: Publish this source-built candidate as a prerelease
+        type: boolean
+        default: false
+permissions:
+  contents: read
+jobs:
+  source-boundary:
+    runs-on: windows-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+      - name: Check public source boundary
+        shell: pwsh
+        run: python Tools/check_public_source.py
+      - name: Validate dispatch
+        shell: pwsh
+        env:
+          BUILD: ${{ inputs.build }}
+          PUBLISH: ${{ inputs.publish }}
+        run: |
+          if ($env:PUBLISH -eq 'true' -and $env:BUILD -ne 'true') { throw 'Publishing requires a source build in this run' }
+  candidate:
+    if: inputs.build
+    needs: source-boundary
+    runs-on: [self-hosted, Windows, X64, cot-release]
+    environment: cot-prerelease
+    permissions:
+      contents: write
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+          clean: false
+      - name: Validate prepared local inputs and version
+        shell: pwsh
+        run: |
+          if (!$env:COT_MMC_ROOT) { throw 'Set COT_MMC_ROOT on this access-controlled runner; SDKs are not downloaded or committed' }
+          $product=Get-Content cot.product.json -Raw | ConvertFrom-Json
+          if (!$product.distribution.prerelease) { throw 'This workflow only publishes test prereleases' }
+          python Tools/check_public_source.py
+          if ($LASTEXITCODE) { throw 'Public source audit failed' }
+      - name: Source build and isolated verification
+        shell: pwsh
+        run: |
+          ./Build.ps1 -MmcRoot $env:COT_MMC_ROOT -Package
+          if ($LASTEXITCODE) { throw 'Candidate checks failed' }
+          python Tools/create_release_evidence.py
+          if ($LASTEXITCODE) { throw 'Release evidence export failed' }
+      - name: Publish exact source-built candidate when explicitly requested
+        if: inputs.publish
+        shell: pwsh
+        env:
+          GH_TOKEN: ${{ github.token }}
+          GH_REPO: ArtVsTheWorld/DynastyCOT
+        run: |
+          $product=Get-Content cot.product.json -Raw | ConvertFrom-Json
+          $version=$product.version
+          $assets=@("Release/DynastyCOT-$version.zip","Release/DynastyCOT-Setup-$version.exe","Release/cot-update.json","Release/SHA256SUMS-$version.txt","Release/release-evidence-$version.json","Release/release-notes-$version.md")
+          foreach ($asset in $assets) { if (!(Test-Path -LiteralPath $asset -PathType Leaf)) { throw "Missing verified asset: $asset" } }
+          gh release create "v$version" @assets --target $env:GITHUB_SHA --title "Dynasty COT $version (test candidate)" --notes-file "docs/release/$version.md" --prerelease --latest=false
+          if ($LASTEXITCODE) { throw 'Release creation/upload failed; inspect GitHub state before retrying' }
+      - name: Verify anonymous published path in isolated fixture
+        if: inputs.publish
+        shell: pwsh
+        run: |
+          $version=(Get-Content cot.product.json -Raw | ConvertFrom-Json).version
+          python Tests/test_updater.py --published $version
+          if ($LASTEXITCODE) { throw 'Published discovery/download/fixture install/rollback failed; candidate requires investigation' }

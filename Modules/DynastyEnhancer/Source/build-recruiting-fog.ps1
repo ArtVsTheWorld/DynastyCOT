@@ -1,0 +1,97 @@
+param([Parameter(Mandatory=$true)][ValidatePattern('^DynastyEnhancerRecruitFog-p[0-9]+$')][string]$Name,[switch]$RecruitNotesProbe,[switch]$RecruitNotesUi,[switch]$PlayerFogPreview,[switch]$PlayerFogColors,[switch]$PlayerFogPerf,[switch]$PresentationPreview)
+$ErrorActionPreference='Stop'
+$fogRoot=Split-Path -Parent $PSScriptRoot
+$fogOut=Join-Path $fogRoot 'Build'
+New-Item -ItemType Directory -Path $fogOut -Force | Out-Null
+if(Test-Path -LiteralPath (Join-Path $fogOut ($Name+'.dll'))){throw 'Choose a fresh pNN name. Existing prototype DLLs may be pinned in the game and must not be overwritten.'}
+$fogVs=& 'C:/Program Files (x86)/Microsoft Visual Studio/Installer/vswhere.exe' -latest -products '*' -requires Microsoft.VisualStudio.Component.VC.Tools.x86.x64 -property installationPath
+if(-not $fogVs){throw 'MSVC x64 tools are required'}
+$fogTool=Get-ChildItem -LiteralPath (Join-Path $fogVs 'VC/Tools/MSVC') -Directory | Sort-Object Name -Descending | Select-Object -First 1
+$fogKits='C:/Program Files (x86)/Windows Kits/10'
+$fogSdk=Get-ChildItem -LiteralPath (Join-Path $fogKits 'Include') -Directory | Sort-Object Name -Descending | Select-Object -First 1
+$fogCl=Join-Path $fogTool.FullName 'bin/Hostx64/x64/cl.exe'
+$fogInc=@(('/I'+(Join-Path $fogTool.FullName 'include')),('/I'+(Join-Path $fogSdk.FullName 'ucrt')),('/I'+(Join-Path $fogSdk.FullName 'shared')),('/I'+(Join-Path $fogSdk.FullName 'um')))
+$fogLib=@(('/LIBPATH:'+(Join-Path $fogTool.FullName 'lib/x64')),('/LIBPATH:'+(Join-Path $fogKits ('Lib/'+$fogSdk.Name+'/ucrt/x64'))),('/LIBPATH:'+(Join-Path $fogKits ('Lib/'+$fogSdk.Name+'/um/x64'))))
+$fogFlags=@('/nologo','/O2','/MT','/W4','/WX','/EHsc','/std:c++17','/utf-8')+$fogInc
+if($RecruitNotesProbe -and $RecruitNotesUi){throw 'Choose either the pass-through probe or Notes UI candidate'}
+if($RecruitNotesProbe){$fogFlags+='/DRECRUIT_NOTES_PROBE'}
+if($RecruitNotesUi){$fogFlags+='/DRECRUIT_NOTES_UI'}
+if($PlayerFogPreview){if(-not $RecruitNotesUi){throw 'Preview requires the shared UI implementation'};$fogFlags+='/DPLAYER_FOG_PREVIEW'}
+if($PlayerFogColors){if(-not $RecruitNotesUi){throw 'Player colors require UI support'};$fogFlags+='/DPLAYER_FOG_COLORS'}
+if($PlayerFogPerf){if(-not $RecruitNotesUi){throw 'Player profiling requires UI support'};$fogFlags+='/DPLAYER_FOG_PERF'}
+if($PresentationPreview){if(-not $RecruitNotesUi -or $PlayerFogPreview -or $RecruitNotesProbe){throw 'Presentation-only preview requires UI support and no other preview/probe mode'};$fogFlags+='/DPLAYER_PRESENTATION_PREVIEW'}
+if($RecruitNotesUi){
+ & python (Join-Path $fogRoot 'Tests/rc016_native_ui_test.py')
+ if($LASTEXITCODE -ne 0){throw 'RC016 AIO Notes, redraw/edit and monetary layout checks failed'}
+ & python (Join-Path $fogRoot 'Tests/aio_source_relocation_test.py')
+ if($LASTEXITCODE -ne 0){throw 'Exact AIO source relocation checks failed'}
+ & python (Join-Path $fogRoot 'Tests/aio_currency_ui_test.py')
+ if($LASTEXITCODE -ne 0){throw 'AIO currency compatibility checks failed'}
+ & python (Join-Path $fogRoot 'Tests/currency_topbar_ui_test.py')
+ if($LASTEXITCODE -ne 0){throw 'Dynasty topbar dollar checks failed'}
+ & python (Join-Path $fogRoot 'Tests/currency_recruiting_ui_test.py')
+ if($LASTEXITCODE -ne 0){throw 'Recruiting currency display checks failed'}
+ & python (Join-Path $fogRoot 'Tests/currency_recruitdetail_ui_test.py')
+ if($LASTEXITCODE -ne 0){throw 'Recruiting scholarship detail currency checks failed'}
+ & python (Join-Path $fogRoot 'Tests/currency_recruiteditor_ui_test.py')
+ if($LASTEXITCODE -ne 0){throw 'Recruiting scholarship editor currency checks failed'}
+ & python (Join-Path $fogRoot 'Tests/currency_budget_ui_test.py')
+ if($LASTEXITCODE -ne 0){throw 'Budget and offer currency display checks failed'}
+ & python (Join-Path $fogRoot 'Tests/draft_ovr_ui_test.py')
+ if($LASTEXITCODE -ne 0){throw 'Stock Draft Results OVR presentation checks failed'}
+ & python (Join-Path $fogRoot 'Tests/fog_gap_ui_test.py')
+ if($LASTEXITCODE -ne 0){throw 'Reported rating gap checks failed'}
+ & python (Join-Path $fogRoot 'Tests/currency_ui_test.py')
+ if($LASTEXITCODE -ne 0){throw 'Dollar presentation checks failed'}
+ & python (Join-Path $fogRoot 'Tests/currency_slot_layout_test.py')
+ if($LASTEXITCODE -ne 0){throw 'Class and NIL layout checks failed'}
+ & python (Join-Path $fogRoot 'Tests/enhancement_native_settings_test.py')
+ if($LASTEXITCODE -ne 0){throw 'Native Dynasty settings callback checks failed'}
+ & python (Join-Path $fogRoot 'Tests/enhancement_grade_scales_test.py')
+ if($LASTEXITCODE -ne 0){throw 'Configurable grade scale/color checks failed'}
+ & python (Join-Path $fogRoot 'Tests/independent_grade_modes_test.py')
+ if($LASTEXITCODE -ne 0){throw 'Independent player/team and Blind grade checks failed'}
+ & python (Join-Path $fogRoot 'Tools/build_lower_division_schools.py')
+ if($LASTEXITCODE -ne 0){throw 'College school catalog validation failed'}
+ & python (Join-Path $fogRoot 'Tools/build_recruit_notes_prose.py')
+ if($LASTEXITCODE -ne 0){throw 'Notes prose validation failed'}
+ & python (Join-Path $fogRoot 'Tests/recruit_notes_ui_test.py')
+ if($LASTEXITCODE -ne 0){throw 'Notes UI bytecode checks failed'}
+ & python (Join-Path $fogRoot 'Tests/player_fog_ui_test.py')
+ if($LASTEXITCODE -ne 0){throw 'Player UI bytecode checks failed'}
+ & python (Join-Path $fogRoot 'Tests/player_card_ui_test.py')
+ if($LASTEXITCODE -ne 0){throw 'Player card label checks failed'}
+ & python (Join-Path $fogRoot 'Tests/player_hub_ui_test.py')
+ if($LASTEXITCODE -ne 0){throw 'Player hub preview checks failed'}
+ & python (Join-Path $fogRoot 'Tests/player_ingame_ui_test.py')
+ if($LASTEXITCODE -ne 0){throw 'In-game player renderer checks failed'}
+ & python (Join-Path $fogRoot 'Tests/player_playcall_ui_test.py')
+ if($LASTEXITCODE -ne 0){throw 'Playcall info-panel checks failed'}
+ & python (Join-Path $fogRoot 'Tests/player_recruit_ui_test.py')
+ if($LASTEXITCODE -ne 0){throw 'Recruiting player-risk renderer checks failed'}
+ & python (Join-Path $fogRoot 'Tests/player_formation_ui_test.py')
+ if($LASTEXITCODE -ne 0){throw 'Formation Subs player renderer checks failed'}
+ & python (Join-Path $fogRoot 'Tests/player_nil_ui_test.py')
+ if($LASTEXITCODE -ne 0){throw 'NIL roster player renderer checks failed'}
+ & python (Join-Path $fogRoot 'Tests/player_blueprint_ui_test.py')
+ if($LASTEXITCODE -ne 0){throw 'Blueprint player renderer checks failed'}
+ & python (Join-Path $fogRoot 'Tests/player_practice_ui_test.py')
+ if($LASTEXITCODE -ne 0){throw 'Practice Plans player renderer checks failed'}
+}
+Push-Location $fogOut
+try{
+ & $fogCl @fogFlags (Join-Path $fogRoot 'Tests/RecruitingFogTests.cpp') /Fe:RecruitingFogTests.exe /link @fogLib /INCREMENTAL:NO
+ if($LASTEXITCODE -ne 0){throw 'Recruiting Fog test build failed'}
+ & .\RecruitingFogTests.exe
+ if($LASTEXITCODE -ne 0){throw 'Recruiting Fog checks failed'}
+ if($RecruitNotesUi){
+ & $fogCl @fogFlags (Join-Path $fogRoot 'Tests/UiDispatchTests.cpp') /Fe:UiDispatchTests.exe /link @fogLib /INCREMENTAL:NO
+ if($LASTEXITCODE -ne 0){throw 'Native UI dispatch test build failed'}
+ & .\UiDispatchTests.exe
+ if($LASTEXITCODE -ne 0){throw 'Native UI dispatch checks failed'}
+ }
+ & $fogCl @fogFlags /LD (Join-Path $PSScriptRoot 'RecruitingFog.cpp') ('/Fe:'+$Name+'.dll') /link @fogLib /INCREMENTAL:NO
+ if($LASTEXITCODE -ne 0){throw 'Recruiting Fog runtime build failed'}
+ & $fogCl @fogFlags (Join-Path $PSScriptRoot 'LoadRuntime.cpp') /Fe:LoadDynastyEnhancer.exe /link @fogLib /INCREMENTAL:NO
+ if($LASTEXITCODE -ne 0){throw 'Recruiting Fog loader build failed'}
+}finally{Pop-Location}

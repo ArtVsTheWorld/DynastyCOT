@@ -1,0 +1,48 @@
+{
+  "format": 1,
+  "version": "v69 Week1 capacity and 20-percent scholarship publication",
+  "nativeSha256": "5e3a8e738ee33c54155af5f09ef63bbb378bd2d92c84b7247c2dd499eec85172",
+  "adapterSha256": "e9319a6c212af8d41b165cc7bdbe8d1a9e7a61a105f82aaaf00dedfa5b6bd56a",
+  "zipSha256": "4cea5d73e1d375447a35aac27cb8a2ec685db3022e80e02a42cc0ed7252491cc",
+  "nodeTestsPassed": 116,
+  "nativeTestsPassed": true,
+  "adapterSmokePassed": true,
+  "catalogueLimitPerEdition": 32768,
+  "fileLimitMiB": 128,
+  "nativeRegressionCandidates": 9300,
+  "nativeOverLimitRejectionTested": true,
+  "oldWeek1Catalogue": {
+    "stories": 9029,
+    "nativeDecoderPassed": true
+  },
+  "newWeek1Catalogue": {
+    "stories": 2413,
+    "forYou": 30,
+    "observedOfferEvents": 4089,
+    "publishedOfferParents": 857,
+    "offerPercentage": 20.95866960136953,
+    "nativeDecoderPassed": true,
+    "cacheMatchesGeneratedEdition": true,
+    "priorEditionsUnchanged": true
+  },
+  "publicationPolicyVersion": 1,
+  "cpuUserSameChance": true,
+  "livePending": [
+    "Fresh v69 MMC/game cold launch"
+  ],
+  "adapterInstalledForNextMmcStartup": true,
+  "preparingFilterGuardTested": true,
+  "installedAdapterSmokePassed": true,
+  "liveWeek1Published": {
+    "gamePid": 16048,
+    "week": 1,
+    "stories": 2413,
+    "forYou": 30,
+    "saveRequired": false
+  },
+  "liveUserConfirmed": [
+    "Preparing message cleared and Week1 feed displays",
+    "RT defaults to Week1 and retains Preseason and Week0",
+    "Scrolling and Back work"
+  ]
+}

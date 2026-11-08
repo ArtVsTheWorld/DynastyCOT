@@ -1,0 +1,41 @@
+# Active-Dynasty feed candidate
+
+## Runtime access
+
+`LiveTables.h` follows the current career session pointer and its active runtime table context. It gates the supported session/context/table vtables, bounds every process-memory read, decodes packed integers/enums/strings/references and reference arrays, and checks captured table blocks again before accepting a snapshot. Free-list rows are excluded. Runtime references are translated through the context's serial remapping and table catalog. No game methods, field setters, record-retain functions, save APIs, or simulation effects are called.
+
+The observer samples on a background thread using `ReadProcessMemory`. It copies native data rather than keeping game-owned records alive. The career flow must be active and not advancing. Two matching full captures are required before generation; the session/league/season/week/stage identity is checked again after generation. A context or edition change invalidates the prior pending UI feed. The page uses an immutable snapshot until reopened.
+
+Bindings are specific to the inspected game executable. This is a development DLL loaded into an already-running Dynasty, not a packaged universal release.
+
+## Publication and midweek news
+
+The shared normalizer consumes either the native record adapter or the diagnostic save adapter. `runtime_lifecycle.mjs` stores history by league, controlled team, season, and phase. Its weekly editions use the publication week, include prior-week recaps and current-week developments, and retain deterministic story IDs. For You remains curated; dedicated scopes retain their full qualifying stories.
+
+Offers and commitments use observed differences. Native scholarship status `New` means a current-week offer and is included alongside carried status `Offered`; moving from `New` to `Offered` does not create a second event. The first live offer test exposed that filtering only `Offered` omitted all three new user offers; the adapter and regression coverage now include both states. Initial offers seed a baseline quietly; midweek discoveries become current-week stories and survive repeated observations without duplicates. Existing commitment-week evidence is retained. Injury status updates and midweek recoveries use observed injury episodes and the game's injury metadata. Completed current-week games replace their upcoming previews and use current-week wording for player performances.
+
+Loading an earlier week drops future editions from the active history branch. Replaying to a later week generates from its newly observed facts. Same-week rollback prunes offer and commitment events absent from the active state. Poll and Heisman posts reflect the latest authoritative state; this candidate does not keep an event-by-event timeline of every intermediate poll or injury transition. It observes only while loaded; it cannot reconstruct exact midweek events that happened before observation.
+
+Generated JSON/history are mod-owned caches. Reading or writing them never requires saving the Dynasty. The external save parser and schema are only needed for diagnostic comparisons.
+
+## Verification
+
+- The native reader captured 119,646 records from the active Week 8 Dynasty with read-only process rights.
+- Team facts, game/stat facts consumed by templates, Heisman entries, recruiting commitments, and offers were compared with the save reader. All 122 generated stories matched in body, category, and avatar selection. Runtime can contain additional unused/unaffiliated player rows; raw record dumps are not expected to match save serialization byte-for-byte.
+- 29 Node tests cover content/curation and runtime lifecycle, including week rollover, an unsaved offer and commitment, current-week game completion, midweek recovery, deduplication, earlier-week rollback/replay, and cross-identity isolation.
+- Native UI/build tests pass with the active reader included.
+- The user verified the live Week 8 feed, USC recap, both dropdowns, and scrolling. The user also verified all three midweek scholarship offers in My Team after the `New` status fix; the combined feed intentionally retained only one. No manual save was requested, though the game autosaved during recruiting. Runtime generation uses memory rather than the save file. The subsequent Week 8 → Week 9 advance passed without reloading the DLL: the observer rejected the advancing stage, published the new edition once state settled, and the native page defaulted to Week 9. All 153 generated stories matched the diagnostic save reader in body, category, and avatar choice. Week 8 results appeared in publication Week 9, while the three offer posts stayed in Week 8 without repeating. The week catalog retained ascending [7, 8, 9] order.
+
+Active-Dynasty switching, an actual older-save restore/replay, offseason phase transitions, and a cold game launch remain additional in-game validation cases; fixtures cover identity and rollback behavior.
+
+## Remaining limits
+
+The observer uses stable state rather than a native completion-event hook. Its nominal three-second sampling and second-capture requirement introduce a short update delay. A save restore with identical observable facts is indistinguishable from the same timeline; changes are reconciled from the facts that remain present. Depth-chart/NIL/transfer stories, postseason phase archives, and the 1.0 analytics/fog integrations remain future work. The world-news expansion now implements broader analysis, native weekly awards and observed record/recruiting changes; see [world-news-coverage.md](world-news-coverage.md).
+
+## World-news reader expansion
+
+The current capture includes player season-stat references, all published current-season player game-stat records, weekly awards, school/conference/FBS record tables, native prestige and coordinator references. Season stats must match the active year and team. Native sack totals reconcile whole sacks plus half sacks; raw whole-sack counters alone can differ from game sums.
+
+A same-session Dynasty reload exposed the shared database at the career pointer rather than its active child. The reader now resolves the unique supported child with that exact parent relationship, caches the validated child and rechecks it at capture completion. Its first lookup has separate scan/time bounds; regular captures retain their original bounds. In-game Week 9 publication succeeded through this path after a reload. This does not silently accept an unsupported context or switch to a save reader.
+
+The inspected Week 9 expansion capture has 150,462 raw records, 6,631 players with current-season stats, 45,740 published player game-stat rows, 216 native weekly-award entries across observed weeks and 2,682 native record entries. Current-week generated news remains filtered to the appropriate published events. Rare record/flip/collision conditions are covered with fixtures and need real events for live confirmation.

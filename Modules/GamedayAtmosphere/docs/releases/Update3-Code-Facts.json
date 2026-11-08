@@ -1,0 +1,31 @@
+{
+  "runtime_version": "2.0.21",
+  "menu": {"total": 38, "sections": {"Attendance": 12, "Broadcast": 14, "Soundscape": 12}},
+  "reactions": {"usable_selectors": 80, "usable_families": 27, "excluded_selectors": [13,14,15,23]},
+  "support_weights_percent": {"stadium_atmosphere": 35, "team_prestige": 25, "program_tradition": 20, "brand_exposure": 10, "conference_prestige": 5, "ap_rank": 5},
+  "showcase_rivalries": [
+    {"event": 4, "name": "Iron Bowl", "peak_percent": 100, "kickoff_low": 70, "kickoff_high": 80},
+    {"event": 14, "name": "Army-Navy", "peak_percent": 100, "kickoff_low": 90, "kickoff_high": 95},
+    {"event": 54, "name": "Florida-Georgia", "peak_percent": 100, "kickoff_low": 70, "kickoff_high": 80},
+    {"event": 58, "name": "Florida State-Miami", "peak_percent": 100, "kickoff_low": 70, "kickoff_high": 80},
+    {"event": 95, "name": "Michigan-Ohio State", "peak_percent": 100, "kickoff_low": 85, "kickoff_high": 95},
+    {"event": 116, "name": "Notre Dame-USC", "peak_percent": 100, "kickoff_low": 70, "kickoff_high": 80},
+    {"event": 119, "name": "Oklahoma-Texas", "peak_percent": 100, "kickoff_low": 80, "kickoff_high": 90},
+    {"event": 139, "name": "UCLA-USC", "peak_percent": 100, "kickoff_low": 70, "kickoff_high": 80}
+  ],
+  "audio_examples": [
+    {"mapped_seats": 6060, "fullness_percent": 0, "vanilla_crossover_percent": 70, "background_signal_percent": 0, "reaction_signal_percent": 0, "individual_signal_percent": 0},
+    {"mapped_seats": 6060, "fullness_percent": 25, "vanilla_crossover_percent": 70, "background_signal_percent": 50, "reaction_signal_percent": 62.5, "individual_signal_percent": 95.8},
+    {"mapped_seats": 6060, "fullness_percent": 30, "vanilla_crossover_percent": 70, "background_signal_percent": 53.9, "reaction_signal_percent": 65.5, "individual_signal_percent": 96.2},
+    {"mapped_seats": 6060, "fullness_percent": 70, "vanilla_crossover_percent": 70, "background_signal_percent": 100, "reaction_signal_percent": 100, "individual_signal_percent": 100},
+    {"mapped_seats": 6060, "fullness_percent": 100, "vanilla_crossover_percent": 70, "background_signal_percent": 115, "reaction_signal_percent": 115, "individual_signal_percent": 115},
+    {"mapped_seats": 61888, "fullness_percent": 0, "vanilla_crossover_percent": 30, "background_signal_percent": 0, "reaction_signal_percent": 0, "individual_signal_percent": 0},
+    {"mapped_seats": 61888, "fullness_percent": 25, "vanilla_crossover_percent": 30, "background_signal_percent": 92.9, "reaction_signal_percent": 94.7, "individual_signal_percent": 99.4},
+    {"mapped_seats": 61888, "fullness_percent": 30, "vanilla_crossover_percent": 30, "background_signal_percent": 100, "reaction_signal_percent": 100, "individual_signal_percent": 100},
+    {"mapped_seats": 61888, "fullness_percent": 70, "vanilla_crossover_percent": 30, "background_signal_percent": 118.2, "reaction_signal_percent": 118.2, "individual_signal_percent": 118.2},
+    {"mapped_seats": 61888, "fullness_percent": 100, "vanilla_crossover_percent": 30, "background_signal_percent": 158.4893, "reaction_signal_percent": 130, "individual_signal_percent": 130}
+  ],
+  "shake_curve": [{"occupied": 6060, "multiplier": 0.8}, {"occupied": 15000, "multiplier": 0.8720606}, {"occupied": 30000, "multiplier": 0.9929677}, {"occupied": 50000, "multiplier": 1.154177}, {"occupied": 61888, "multiplier": 1.25}],
+  "closeup_half_scale": 0.6372803,
+  "gain_thresholds_yards": {"run_buildup_start": 11, "run_buildup_peak": 15, "default_run_cheer": 15, "default_air_catch": 20, "kickoff_start": 25, "kickoff_peak": 35, "punt_start": 30, "punt_peak": 40}
+}

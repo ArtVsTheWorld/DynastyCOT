@@ -1,0 +1,389 @@
+{
+  "format": 1,
+  "status": "approved-direction",
+  "approvedForRuntime": false,
+  "tone": "Grounded college-football Twitter, with distinct voices, occasional slang, and selective humor.",
+  "scope": "Approved editorial direction. Runtime variants are in Content/Runtime/first-pack.json; these guide/review files are not loaded as templates.",
+  "freshStart": {
+    "legacyTweetWording": "retired",
+    "originalThreeCards": "removed",
+    "existingRuntimeTemplates": "removed from this branch",
+    "approvedRuntimeTemplates": 180,
+    "historicalBaselineTag": "prototype-active-dynasty-v47",
+    "publishedArchives": "not rewritten",
+    "atResetApprovedRuntimeTemplates": 0
+  },
+  "writingRules": [
+    "Begin from a specific football event or reaction. Avoid interchangeable motivational filler.",
+    "Use ordinary football language. Never mention numerical ability values, game UI, progression currencies, or hidden simulation fields in a post.",
+    "Box-score statistics, scores, records, poll places, and recruiting rankings are ordinary sports facts and remain usable.",
+    "Media and fan accounts are fictional and retain stable identities. Player and recruit accounts belong to the relevant in-Dynasty person.",
+    "Occasional slang, lowercase, or repeated punctuation can distinguish an author. Do not apply them to everyone.",
+    "Humor belongs mostly to fans and entertainer personalities. A serious injury is not a joke trigger.",
+    "Avoid invented accusations, personal abuse, and alleged insider sourcing. Rivalry banter should concern football.",
+    "Vary length by author and event. Official team posts are usually short, punchy captions with enough opponent/score/player context to work without a graphic. Analysts and reporters can explain more. No global minimum, no two-sentence rule, and no padding to reach a target; 280 English-text characters is the maximum.",
+    "Use team nicknames naturally, especially in school accounts and fan reactions. Use verified team hashtags occasionally, usually one, rather than appending tags to every post.",
+    "Give school context whenever an analyst names a player: a school-name possessive, a clear nickname-plus-position construction, or an unambiguous school hashtag.",
+    "Reference current coaches occasionally by name, resolved from the Dynasty team coach reference. Do not substitute a real-world coach name that may be wrong in this save.",
+    "Core names, scores, statistics, recruiting states, and coach/team associations are data-backed. The user-requested recruiting phone call and everyday personal reactions may be authored as plausible worldbuilding; they are not native interaction logs.",
+    "Never invent a consequential promise, commitment, medical clearance, comeback, or transfer decision. Do not fabricate an actual analyst quote when writing a fan reply.",
+    "Player posts normally share positive developments, thank fans or teammates, or offer limited post-win rivalry banter. Silence after a loss is preferable to routine public self-blame. Do not make media-trained players volunteer criticism of their own performance.",
+    "Unpredictable players may occasionally depart from the normal player posting policy through explicitly reviewed variants. This is an exception, not a default public apology after every loss.",
+    "Fan accounts are the expressive outlet: occasional melodrama, rivalry shit talk, arguments with analysts, and positive or negative commentary on named players and coaches. Keep statistical claims grounded while allowing clear opinions and emotional exaggeration.",
+    "Occasional profanity is acceptable for fans. Do not spread it automatically to players, recruits, reporters, or official accounts.",
+    "Generate player/recruit handles from names, initials, nicknames, underscores, occasional periods, and stable numbers. Position is never part of the handle-generation input. Persist an author handle across posts, position changes, and recruiting-to-roster transitions.",
+    "Native tweet-body emoji testing failed: tested symbols and emojis render missing-glyph boxes. Use plain-text runtime variants and ASCII -> in place of decorative arrows.",
+    "Nickname grammar must fit the team. Use a neutral construction when singular/plural agreement is uncertain rather than guessing from the spelling.",
+    "Players and recruits should sound like people posting on their phones, not coaches at a podium. Vary punctuation and casing; use occasional contractions or current slang only where natural to that recurring author. Fans can be much messier. Do not make every voice say the same trendy phrase."
+  ],
+  "personalityPolicy": {
+    "nativeField": "Player.Personality",
+    "verifiedFrom": "Local schema and read-only live Player metadata; all five values were present in active rosters.",
+    "nativeValueMap": {
+      "0": "Leader",
+      "1": "Intense",
+      "2": "Entertainer",
+      "3": "TeamPlayer",
+      "4": "Unpredictable"
+    },
+    "invalidValues": [
+      "Invalid_",
+      "First_",
+      "Last_",
+      "UserAvailableCount_",
+      "NPCAvailableCount_"
+    ],
+    "precedence": [
+      "native personality",
+      "secondary position influence",
+      "event-appropriate emotion",
+      "persistent individual punctuation and vocabulary preferences"
+    ],
+    "positionRule": "Position is a soft editorial influence, never a personality assignment. A restrained receiver and an expressive quarterback must remain possible.",
+    "unknownRule": "Use a neutral, consistent voice when the field is missing or invalid. Do not claim a personality has been detected.",
+    "unpredictableRule": "The native Unpredictable category permits a wider approved range. Keep recurring author habits stable; do not reroll a different character every post.",
+    "faithLanguage": "Optional, persistent authored style assigned independently of native personality or position. Review 03 faith wording was approved with the other directions. It is fictional character flavor, not detected personal belief.",
+    "profiles": {
+      "Leader": {
+        "emphasis": [
+          "positive team leadership",
+          "shared goals",
+          "measured confidence",
+          "fan and teammate appreciation"
+        ],
+        "avoid": [
+          "long captain speeches",
+          "assuming the player is a captain",
+          "routine public self-blame after games"
+        ]
+      },
+      "Intense": {
+        "emphasis": [
+          "competitive pride",
+          "short emphatic phrasing within a fuller post when useful",
+          "post-win energy without default self-criticism"
+        ],
+        "avoid": [
+          "constant anger",
+          "invented disputes with coaches or teammates"
+        ]
+      },
+      "Entertainer": {
+        "emphasis": [
+          "playful confidence",
+          "audience awareness",
+          "occasional light humor"
+        ],
+        "avoid": [
+          "a punchline in every post",
+          "copying a real athlete catchphrase"
+        ]
+      },
+      "TeamPlayer": {
+        "emphasis": [
+          "credit to teammates",
+          "collective pride",
+          "specific unit appreciation when appropriate"
+        ],
+        "avoid": [
+          "identical gratitude in every post",
+          "assuming playing time or a starting role",
+          "sounding like a coach explaining the box score"
+        ]
+      },
+      "Unpredictable": {
+        "emphasis": [
+          "a wider expressive range",
+          "consistent individual habits",
+          "rare, explicitly reviewed departures from normal media-trained posting behavior"
+        ],
+        "avoid": [
+          "random mood changes",
+          "equating the label with misconduct"
+        ]
+      }
+    },
+    "positionInfluences": {
+      "QB": "Usually restrained, positive, and media-aware. Thank fans and teammates; do not equate leadership with public admissions of fault. Native personality still leads.",
+      "WR/CB": "Expressive confidence is an available secondary flavor, not a requirement and not stronger than native personality.",
+      "OL/DL": "Unit pride or compact directness can be appropriate; do not assume every lineman is quiet.",
+      "HB/RB/TE/FB": "Balanced confidence and team credit; native personality chooses the emphasis.",
+      "K/P": "Understatement or occasional dry humor is available; do not manufacture pressure situations.",
+      "recruits": "Use their native personality and position when present, with recruiting-stage-appropriate certainty. Never describe a soft commitment as signed or enrolled."
+    },
+    "importantDistinction": "These are proposed writing choices for the mod. The game enum is verified; the prose associations and position influences are editorial choices.",
+    "positionGroups": {
+      "QB": [
+        "QB"
+      ],
+      "WR/CB": [
+        "WR",
+        "CB"
+      ],
+      "OL": [
+        "LT",
+        "LG",
+        "C",
+        "RG",
+        "RT"
+      ],
+      "DL": [
+        "LE",
+        "RE",
+        "DT"
+      ],
+      "HB/RB/TE/FB": [
+        "HB",
+        "RB",
+        "TE",
+        "FB"
+      ],
+      "K/P": [
+        "K",
+        "P"
+      ]
+    }
+  },
+  "voices": [
+    {
+      "id": "official",
+      "label": "Official team",
+      "purpose": "Celebrate and inform with the program voice.",
+      "style": [
+        "short and punchy",
+        "caption energy with actual football context",
+        "selective capitals or line breaks",
+        "native nickname and occasional school hashtag"
+      ],
+      "avoid": [
+        "reporter speculation",
+        "insider recruiting claims",
+        "disparaging players",
+        "turning every result into a paragraph of appreciation"
+      ],
+      "identity": "School-specific display name and a clearly fictional school account handle; native team logo."
+    },
+    {
+      "id": "beat",
+      "label": "Beat reporter",
+      "purpose": "Give specific program context without sounding like a press release.",
+      "style": [
+        "factual first sentence",
+        "restrained interpretation",
+        "plain language"
+      ],
+      "avoid": [
+        "fabricated sources",
+        "unsupported tactical explanations",
+        "identical wire copy"
+      ],
+      "identity": "Persistent fictional reporter associated with a program."
+    },
+    {
+      "id": "analyst",
+      "label": "National / conference analyst",
+      "purpose": "Explain meaningful computed football context and what it may imply.",
+      "style": [
+        "specific measured insight",
+        "sample size and denominator where relevant",
+        "supported interpretation",
+        "school context for every named player"
+      ],
+      "avoid": [
+        "claiming current rankings were kickoff rankings",
+        "unearned postseason certainty",
+        "generic questions in place of analysis",
+        "unsupported national ranks",
+        "averaging game percentages without weighting",
+        "season-first claims from incomplete history"
+      ],
+      "identity": "Persistent fictional media account; simulated-line posts use a distinct fictional model account."
+    },
+    {
+      "id": "recruit",
+      "label": "Recruit",
+      "purpose": "React to an actual offer or announce an actual commitment.",
+      "style": [
+        "brief",
+        "age-appropriate",
+        "personality-led",
+        "vary confidence and gratitude",
+        "natural phone-post punctuation, occasional casual language"
+      ],
+      "avoid": [
+        "making every recruit religious",
+        "implied enrollment",
+        "treating authored phone-call flavor as native contact telemetry"
+      ],
+      "identity": "Recruit name, stable generated handle, native portrait where supported or team-logo fallback."
+    },
+    {
+      "id": "player",
+      "label": "Player",
+      "purpose": "React to a real team or individual development in the player own voice.",
+      "style": [
+        "personality-led",
+        "media-aware",
+        "positive updates and appreciation",
+        "occasional restrained post-win rivalry talk",
+        "natural casing and punctuation; occasional slang"
+      ],
+      "avoid": [
+        "assuming starter status",
+        "announcing a medical return solely from an injury flag",
+        "game-system language",
+        "default loss posts",
+        "public self-blame as routine leadership",
+        "coach-speak",
+        "turning every celebration into a stat recap"
+      ],
+      "identity": "Player name and stable generated handle; use supported native imagery."
+    },
+    {
+      "id": "fan",
+      "label": "Fan",
+      "purpose": "Supply the fun, emotion, arguments, and uneven perspective of a real fan conversation.",
+      "style": [
+        "strongly biased",
+        "occasionally dramatic",
+        "sharp rivalry banter",
+        "disagreement with analysts",
+        "specific player and coach praise or criticism",
+        "occasional profanity",
+        "uneven punctuation and occasional slang, not constant catchphrases"
+      ],
+      "avoid": [
+        "invented off-field allegations",
+        "fake analyst quotations",
+        "personal abuse unrelated to football",
+        "turning every fan into the same meme account"
+      ],
+      "identity": "Fictional school-linked fan accounts with stable attitudes and handles."
+    }
+  ],
+  "reviewInstructions": [
+    "Refer to a post by its ID when giving feedback.",
+    "Judge voice, naturalness, intensity, and how much humor feels right.",
+    "Most cases are independent alternatives; the marked analyst/fan pair demonstrates a connected conversation.",
+    "All thirty drafts are new. No draft is enabled in the game."
+  ],
+  "revision": 3,
+  "lengthPolicy": {
+    "maximumEnglishCharacters": 280,
+    "sentenceLimit": null,
+    "shortPosts": "Welcome, especially official team captions and player reactions. Do not pad with generic motivation or an extra thank-you sentence.",
+    "overflow": "Drop optional hashtags or flavor clauses, or choose a shorter approved variant. Preserve names and factual values; never truncate a post mid-word.",
+    "nativeUI": "Adaptive card heights support the first English-text pack. Runtime bodies must fit both 280 Unicode code points and the native 512-byte text budget; overflow variants are omitted.",
+    "softVoiceRanges": {
+      "official": [
+        25,
+        110
+      ],
+      "beat": [
+        100,
+        260
+      ],
+      "analyst": [
+        120,
+        280
+      ],
+      "recruit": [
+        35,
+        220
+      ],
+      "player": [
+        30,
+        200
+      ],
+      "fan": [
+        35,
+        260
+      ]
+    },
+    "rangeMeaning": "Editorial guidance, not eligibility limits or target quotas. Short and long exceptions are allowed within 280 characters when the event earns them."
+  },
+  "teamIdentityPolicy": {
+    "nicknameField": "Team.NickName",
+    "alternateNicknameField": "Team.NickNameAlt",
+    "hashtagFields": [
+      "Team.Hashtag1",
+      "Team.Hashtag2"
+    ],
+    "coachReference": "Team.HeadCoach -> Coach.FirstName / Coach.LastName",
+    "fallback": "Omit unavailable tags or coach mentions and use the school name when a nickname is absent; never invent a replacement brand or stale coach name."
+  },
+  "handlePolicy": {
+    "positionSuffixes": false,
+    "styles": [
+      "first name + last name",
+      "name with underscores or an occasional period",
+      "initials + surname",
+      "shortened name or nickname",
+      "name/initials with a stable number"
+    ],
+    "characterSet": "Fictional in-game handles; requested occasional periods are an aesthetic option, not a claim of real-platform registration.",
+    "numbers": "Use a known jersey number when appropriate; otherwise a persistent generated suffix. Recruiting numbers must not pretend to be an assigned college jersey.",
+    "stability": "One persisted handle per author identity; never regenerate on reopen, week advance, or position change.",
+    "collisions": "Resolve once with a short stable suffix without exposing internal record identifiers."
+  },
+  "fanConversationPolicy": {
+    "analystReplies": "Only reference a real published mod-authored opinion. Keep the parent available or make the reaction self-contained without a false quote.",
+    "positiveAndNegative": "Both may target named players and coaches when grounded in actual football events. Criticism is opinion; allegations of crimes or private misconduct are excluded.",
+    "drama": "Emotional exaggeration and football trash talk are permitted; literal scores/statistics remain correct.",
+    "replies": "Every reply references a real generated parent and uses its persistent handle. All Posts selects complete conversation blocks; dedicated views hide orphan replies and keep parents with their replies."
+  },
+  "analystAnalyticsPolicy": {
+    "standard": "Lead with a calculated football insight, then a supported interpretation. Merely repeating a ranking or asking a generic question is not enough.",
+    "initialMeasures": [
+      "rushing yards per game and corroborated FBS rank",
+      "weighted third-down conversion rate with sample size",
+      "red-zone touchdown rate, separated from field goals",
+      "season turnover margin",
+      "Heisman movement joined to recent player production",
+      "season-wide largest winning margin, only with complete result coverage; not a fixed-point trigger"
+    ],
+    "rushingRank": "Use current-season yards per game, not raw total yards. Validate current-first season totals against published scorecard W/L/T or a matching live record. Complete corroborated game caches are an alternative. State ties accurately and require full eligible-field metric coverage for a national rank.",
+    "thirdDownRate": "Sum conversions and attempts across completed games, then divide. Show sample games. Zero attempts is unavailable, not 0%. Use at least three games for broad performance criticism.",
+    "coverage": "Missing games, caches, invalid counters, unresolved membership, or incomplete history suppress the affected claim. Never silently turn partial data into a national ranking.",
+    "interpretation": "Opinion may evaluate sustainability or implications, but do not claim a stat caused a poll/voting change or manufacture tactical details that were not measured.",
+    "playerContext": "Every named analyst player must have clear school context, and production must be linked to that player and the correct game.",
+    "sampleData": "The review examples contain fictional values with explicit metric evidence. They are not claims about the active save.",
+    "dataReadiness": "Read-only capture verifies nickname, hashtag, coach, personality, publication, quarter-score and red-zone fields. Published scorecard W/L/T and native current-season totals reconcile the eligible 138-team field in the inspected snapshot. Some separate team-record counters lag; corroboration uses published results. Future snapshots still pass coverage checks; audit details are in analyst-opportunities.json.",
+    "superlatives": "Derive comparisons from actual distributions, not a hardcoded example threshold. A unique season-largest claim needs full result coverage; ties suppress a unique leader. Historical records need actual historical evidence, not one observed season.",
+    "publication": "Native final scores may be cached before games are published. HasBeenPublished=false excludes those results and stats from public news; never leak simulated upcoming scores."
+  },
+  "emojiPolicy": {
+    "nativeSupport": "tested-missing-glyphs",
+    "enabled": false,
+    "verifiedBuild": "DynastyEnhancer-v48-emoji-probe",
+    "observed": "Native body font renders ASCII, accented Latin and ordinary punctuation; tested BMP symbols and supplementary emoji render missing-glyph boxes.",
+    "tested": [
+      "star/check/arrow/heart/smile",
+      "football/fire/trophy/clap/raised hands/eyes",
+      "variation selectors/skin tones/flag/ZWJ family"
+    ],
+    "fallback": "Plain text. Do not silently substitute boxes or strip names."
+  },
+  "publicationPolicy": "Two-week per-account template cooldown preference; least-recent fallback when all eligible variants are cooling down. Same-week selections and conversation admission order persist. All Posts limits account frequency and voice repetition; optional reactions have per-account, game/team and parent limits.",
+  "portraitPolicy": "Use verified nonblank native portrait IDs for players/recruits, including generated players. Respect PortraitForceSilhouette; use the team logo when the native portrait is unavailable. The availability file contains numeric ID ranges only."
+}

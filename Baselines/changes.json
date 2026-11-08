@@ -1,0 +1,610 @@
+{
+  "format": 1,
+  "changes": [
+    {
+      "path": "Modules/DrivePractice/.gitattributes",
+      "sha256": "5924ea8f0d6ec05dfbb5f14cc9934384e696f5f28da2df1f782e18bbd1a8a790",
+      "reason": "COT release integration preserves exact source bytes across public Git clones; disable inherited line-ending normalization so baseline/fingerprint provenance hashes remain reproducible."
+    },
+    {
+      "path": "Modules/DrivePractice/Plugin/AssemblyInfo.cs",
+      "sha256": "f9e70bf453593ece2d52d44c5bcf2ce9dface34aa75f5ff7cb935235f071b264",
+      "reason": "Retain prior native practice and exact helper/ownership contracts; 0.1.6 user-facing Expanded Practice branding, original UTF-8 source encoding retained, internal IDs/paths unchanged."
+    },
+    {
+      "path": "Modules/DrivePractice/Plugin/Diagnostics.cs",
+      "sha256": "1592418e0704b4a7cdae85e5684f27163153fe354f84eacb71ff8dcf4e6872fb",
+      "reason": "Retain prior native practice and exact helper/ownership contracts; 0.1.6 user-facing Expanded Practice branding, original UTF-8 source encoding retained, internal IDs/paths unchanged."
+    },
+    {
+      "path": "Modules/DrivePractice/Plugin/NativeRuntime.cs",
+      "sha256": "4a197d5440d3e64d16b698d489bde65db51027a8e3ae743dd5037974a68d24b4",
+      "reason": "COT hub clock scope, fresh practice picker and recruit star account presentation"
+    },
+    {
+      "path": "Modules/DrivePractice/Plugin/PracticeAction.cs",
+      "sha256": "9a0f6b562b013b34918a630b781bd71a6de681cb1c7132cc633ea3ad64e8d922",
+      "reason": "Retain prior native practice and exact helper/ownership contracts; 0.1.6 user-facing Expanded Practice branding, original UTF-8 source encoding retained, internal IDs/paths unchanged."
+    },
+    {
+      "path": "Modules/DrivePractice/Tools/test_hooks.py",
+      "sha256": "574c218dc013fa35492c197b8df34521a3cf13486847a9f3c54ea1371bc4d005",
+      "reason": "COT hub clock scope, fresh practice picker and recruit star account presentation"
+    },
+    {
+      "path": "Modules/DynastyEnhancer/Source/AioCurrencyUiPrograms.h",
+      "sha256": "d150e81fc16107880e60b98bbe8b0361d5685b2ebe9bbada82f82fff678a17c5",
+      "reason": "Retain prior COT integration; 0.1.6 Beyond the Field: bounded content/selection/voices, native paging, persistent modeled recruit records, supported calendar/draft reference, exact AIO Notes/colors and numeric-preserving money redraw adapters."
+    },
+    {
+      "path": "Modules/DynastyEnhancer/Source/CurrencyBudgetUiPrograms.h",
+      "sha256": "9c0b98ebb22f60931b3154721f460d2d553f83aec0d1c6f875cb24debf21fb11",
+      "reason": "COT 0.1.3: independent Weekly Advance adapters with exact loader-pointer normalization, creation-page per-Dynasty options, requested defaults and fitted dollar prefixes"
+    },
+    {
+      "path": "Modules/DynastyEnhancer/Source/CurrencyDisplay.h",
+      "sha256": "1374555dd8791b2faebcf225159ba96f523621171c50ba75f1fc997a517944c8",
+      "reason": "COT 0.1.3: independent Weekly Advance adapters with exact loader-pointer normalization, creation-page per-Dynasty options, requested defaults and fitted dollar prefixes"
+    },
+    {
+      "path": "Modules/DynastyEnhancer/Source/CurrencyRecruitDetailUiPrograms.h",
+      "sha256": "29e846582f4ba12aff409e14e06701da9ce1c48c2fcdb9cbc55a7cc3c224715a",
+      "reason": "COT 0.1.3: independent Weekly Advance adapters with exact loader-pointer normalization, creation-page per-Dynasty options, requested defaults and fitted dollar prefixes"
+    },
+    {
+      "path": "Modules/DynastyEnhancer/Source/CurrencyRecruitEditorUiPrograms.h",
+      "sha256": "24f97eccb0d11f2eab3e0ae0ceb82e1fe35b9a497e62d5a31d7f557f1d8dad3f",
+      "reason": "Retain prior COT integration; 0.1.6 Beyond the Field: bounded content/selection/voices, native paging, persistent modeled recruit records, supported calendar/draft reference, exact AIO Notes/colors and numeric-preserving money redraw adapters."
+    },
+    {
+      "path": "Modules/DynastyEnhancer/Source/CurrencyTopbarUiPrograms.h",
+      "sha256": "e1e8bd6ead8ed407aec0dcd68628304e7c5fb0c897523dd45c6f9af527202441",
+      "reason": "COT 0.1.3: independent Weekly Advance adapters with exact loader-pointer normalization, creation-page per-Dynasty options, requested defaults and fitted dollar prefixes"
+    },
+    {
+      "path": "Modules/DynastyEnhancer/Source/CurrencyUiPrograms.h",
+      "sha256": "0bbda3eb1f9a3708cfe8026f9d6ed74cfa3f0cf4c94fc535e5fdf9f90ec687b7",
+      "reason": "Retain prior COT integration; 0.1.6 Beyond the Field: bounded content/selection/voices, native paging, persistent modeled recruit records, supported calendar/draft reference, exact AIO Notes/colors and numeric-preserving money redraw adapters."
+    },
+    {
+      "path": "Modules/DynastyEnhancer/Source/EnhancementOptions.h",
+      "sha256": "7546a6d58d62ad719e5a1fe630ea4a60c81d476cd8e5263448aed5386716ef13",
+      "reason": "COT 0.1.3: independent Weekly Advance adapters with exact loader-pointer normalization, creation-page per-Dynasty options, requested defaults and fitted dollar prefixes"
+    },
+    {
+      "path": "Modules/DynastyEnhancer/Source/EnhancementOptionsRuntime.h",
+      "sha256": "563e5c55b8771937d9dbd611d687b8e04ea75b4e81bcb6f43fb2dbd3641f0799",
+      "reason": "COT 0.1.3: independent Weekly Advance adapters with exact loader-pointer normalization, creation-page per-Dynasty options, requested defaults and fitted dollar prefixes"
+    },
+    {
+      "path": "Modules/DynastyEnhancer/Source/FeedData.h",
+      "sha256": "1f0dd63f83e2a240d190811de1668c5fb156e3876a2016d68c57c2d75cebb1c9",
+      "reason": "Retain prior COT integration; 0.1.6 Beyond the Field: bounded content/selection/voices, native paging, persistent modeled recruit records, supported calendar/draft reference, exact AIO Notes/colors and numeric-preserving money redraw adapters."
+    },
+    {
+      "path": "Modules/DynastyEnhancer/Source/FogGapUiPrograms.h",
+      "sha256": "9fa4c4d504d9bd3e02d139ad6b1284ea64ffea73136ea31f1b3085065da645cd",
+      "reason": "COT 0.1.5 feedback: native focus colors, exact AIO shared overview; separate visitor demand/tickets, deficit bed, scoring audio priority and recorded-TD inset recovery. Workspace only."
+    },
+    {
+      "path": "Modules/DynastyEnhancer/Source/LiveTables.h",
+      "sha256": "baf2aea3278d669e1fe37489b5b85f440ca69f7d52bac4faaedfd1ab2f9cf154",
+      "reason": "Retain prior COT integration; 0.1.6 Beyond the Field: bounded content/selection/voices, native paging, persistent modeled recruit records, supported calendar/draft reference, exact AIO Notes/colors and numeric-preserving money redraw adapters."
+    },
+    {
+      "path": "Modules/DynastyEnhancer/Source/MmcPlugin.cs",
+      "sha256": "15a7e61afdde14f0a0fcef8ce9f08a343ba899aff05987ef397b33912fb6c02b",
+      "reason": "Retain prior COT integration; 0.1.6 Beyond the Field: bounded content/selection/voices, native paging, persistent modeled recruit records, supported calendar/draft reference, exact AIO Notes/colors and numeric-preserving money redraw adapters."
+    },
+    {
+      "path": "Modules/DynastyEnhancer/Source/MmcRecruitingPlugin.cs",
+      "sha256": "e95f189100e1e5af2e2136f642a156183d265eff4067026a7cc337f68b95cbac",
+      "reason": "Retain prior COT integration; 0.1.6 Beyond the Field: bounded content/selection/voices, native paging, persistent modeled recruit records, supported calendar/draft reference, exact AIO Notes/colors and numeric-preserving money redraw adapters."
+    },
+    {
+      "path": "Modules/DynastyEnhancer/Source/NativeSocialMedia.cpp",
+      "sha256": "b294ca695aeffada5ab9acd9fee2c9510d745f372170ce5f3cf7c6c151299e7a",
+      "reason": "Retain prior COT integration; 0.1.6 Beyond the Field: bounded content/selection/voices, native paging, persistent modeled recruit records, supported calendar/draft reference, exact AIO Notes/colors and numeric-preserving money redraw adapters."
+    },
+    {
+      "path": "Modules/DynastyEnhancer/Source/PlayerBlueprintUiPrograms.h",
+      "sha256": "5362ce75736bfc2043dc900f909b2fc94f43d0aad48298a557c982035842c2bd",
+      "reason": "COT 0.1.5 feedback: native focus colors, exact AIO shared overview; separate visitor demand/tickets, deficit bed, scoring audio priority and recorded-TD inset recovery. Workspace only."
+    },
+    {
+      "path": "Modules/DynastyEnhancer/Source/PlayerCardUiPrograms.h",
+      "sha256": "3dd8abc2b9bdc084593850a82f783f0816b7b28bddea6eb6717e1d2c4caa181d",
+      "reason": "COT 0.1.5 feedback: native focus colors, exact AIO shared overview; separate visitor demand/tickets, deficit bed, scoring audio priority and recorded-TD inset recovery. Workspace only."
+    },
+    {
+      "path": "Modules/DynastyEnhancer/Source/PlayerFormationUiPrograms.h",
+      "sha256": "1acae065be71a488fb8190f9a2044e24fa5fabb0db3e01391c9c6489fce2dba6",
+      "reason": "COT 0.1.5 feedback: native focus colors, exact AIO shared overview; separate visitor demand/tickets, deficit bed, scoring audio priority and recorded-TD inset recovery. Workspace only."
+    },
+    {
+      "path": "Modules/DynastyEnhancer/Source/PlayerHubUiPrograms.h",
+      "sha256": "80f95c36b569ffca567ca5420f4cf9e4487f4c5b5312962750b30903f53b09f1",
+      "reason": "COT 0.1.5 feedback: native focus colors, exact AIO shared overview; separate visitor demand/tickets, deficit bed, scoring audio priority and recorded-TD inset recovery. Workspace only."
+    },
+    {
+      "path": "Modules/DynastyEnhancer/Source/PlayerInGameUiPrograms.h",
+      "sha256": "a68c4bf12f7c3c8c864efcf11d0d609654f80c47fc622eaf84e82d0544eb2595",
+      "reason": "COT 0.1.5 feedback: native focus colors, exact AIO shared overview; separate visitor demand/tickets, deficit bed, scoring audio priority and recorded-TD inset recovery. Workspace only."
+    },
+    {
+      "path": "Modules/DynastyEnhancer/Source/PlayerNilUiPrograms.h",
+      "sha256": "915566f8c7bcab7b65aa759ad89e947fc90411ea620ae67d60449254574051df",
+      "reason": "COT 0.1.5 feedback: native focus colors, exact AIO shared overview; separate visitor demand/tickets, deficit bed, scoring audio priority and recorded-TD inset recovery. Workspace only."
+    },
+    {
+      "path": "Modules/DynastyEnhancer/Source/PlayerPracticeUiPrograms.h",
+      "sha256": "ffe4dc024326d0b38b62885d8aecba8083e92b5f8cb39efc2635193abcc5dec5",
+      "reason": "COT 0.1.5 feedback: native focus colors, exact AIO shared overview; separate visitor demand/tickets, deficit bed, scoring audio priority and recorded-TD inset recovery. Workspace only."
+    },
+    {
+      "path": "Modules/DynastyEnhancer/Source/PlayerRecruitUiPrograms.h",
+      "sha256": "6f1b0de6ae4516a3a27cc77dea15cd887b6e98856cd4487a315be066ee247291",
+      "reason": "COT 0.1.5 feedback: native focus colors, exact AIO shared overview; separate visitor demand/tickets, deficit bed, scoring audio priority and recorded-TD inset recovery. Workspace only."
+    },
+    {
+      "path": "Modules/DynastyEnhancer/Source/RecruitNotesUiPrograms.h",
+      "sha256": "5e7016a50b51d660c0acb2391844f95ff5aecf2d172caaa5aa0442c804a777b0",
+      "reason": "COT feedback: strict AIO loader relocations, compact constrained NIL labels and Highest NIL grade display; current audible shake pairing and state travel fallback"
+    },
+    {
+      "path": "Modules/DynastyEnhancer/Source/RecruitNotesUiRuntime.h",
+      "sha256": "4be23761a818c38cd7da15dd3aba09bf8c9e50fe433be32f00fe7304ce8f02eb",
+      "reason": "COT 0.1.4: factual social perspectives, persistent voices, four-edition structure memory, required news retention and frozen publication wording; compact archive metadata and native UI performance; motion-driven sound companions and mixed visitor sections with strong-host travel resistance. Workspace only."
+    },
+    {
+      "path": "Modules/DynastyEnhancer/Source/RecruitingFog.cpp",
+      "sha256": "4d286db3de347fc0ba4e97b174666d80c9b44c91604d4b570e081d7be3a54260",
+      "reason": "Retain prior COT integration; 0.1.6 Beyond the Field: bounded content/selection/voices, native paging, persistent modeled recruit records, supported calendar/draft reference, exact AIO Notes/colors and numeric-preserving money redraw adapters."
+    },
+    {
+      "path": "Modules/DynastyEnhancer/Source/build-recruiting-fog.ps1",
+      "sha256": "501ffae7ad7fbdc49c851aaf8387222b3f24d41b93ac79ca462fa81641d0c9de",
+      "reason": "Retain prior COT integration; 0.1.6 Beyond the Field: bounded content/selection/voices, native paging, persistent modeled recruit records, supported calendar/draft reference, exact AIO Notes/colors and numeric-preserving money redraw adapters."
+    },
+    {
+      "path": "Modules/DynastyEnhancer/Tests/CurrencyDisplayTests.h",
+      "sha256": "427fa6876fa7eebaef8a3875d6aa854362ac76a4cdf7dec82e4361ca4fb30224",
+      "reason": "COT 0.1.3: independent Weekly Advance adapters with exact loader-pointer normalization, creation-page per-Dynasty options, requested defaults and fitted dollar prefixes"
+    },
+    {
+      "path": "Modules/DynastyEnhancer/Tests/EnhancementOptionsTests.h",
+      "sha256": "4082d96cfa1a87774b88ff49ed93c60507974255c8d866027c7bfd0aea4bd392",
+      "reason": "COT 0.1.3: independent Weekly Advance adapters with exact loader-pointer normalization, creation-page per-Dynasty options, requested defaults and fitted dollar prefixes"
+    },
+    {
+      "path": "Modules/DynastyEnhancer/Tests/NativeSocialMediaTests.cpp",
+      "sha256": "2923a4ad9e56bcab27fd5963a7c77579b2c2cd9f36b127c9cd1f7f22d0fe1949",
+      "reason": "Retain prior COT native-feed checks; 0.1.6 bounded category/scope paging with all 224 native draft reports reachable, safe C++17 page ownership and current Beyond the Field status branding."
+    },
+    {
+      "path": "Modules/DynastyEnhancer/Tests/RecruitingFogTests.cpp",
+      "sha256": "71c4e9c99bc555adafcb52f28ea46e2bc00477f6bbfb0eb89d4e98deae8396b6",
+      "reason": "COT 0.1.3: independently validate Weekly Advance and neighboring screens without relaxing native body/header checks"
+    },
+    {
+      "path": "Modules/DynastyEnhancer/Tests/account_refresh.test.mjs",
+      "sha256": "ddc43bea8c0f962442b097fc6b40e0bc7f7216e359ac38226b22a253e40a559c",
+      "reason": "Retain prior COT integration; 0.1.6 Beyond the Field: bounded content/selection/voices, native paging, persistent modeled recruit records, supported calendar/draft reference, exact AIO Notes/colors and numeric-preserving money redraw adapters."
+    },
+    {
+      "path": "Modules/DynastyEnhancer/Tests/aio_currency_ui_test.py",
+      "sha256": "4e65a56038e982d78b3caefcce71555a1e33c2195191d9b0112aa07661f48895",
+      "reason": "COT 0.1.3: independent Weekly Advance adapters with exact loader-pointer normalization, creation-page per-Dynasty options, requested defaults and fitted dollar prefixes"
+    },
+    {
+      "path": "Modules/DynastyEnhancer/Tests/currency_budget_ui_test.py",
+      "sha256": "b1ae723d4cdaf3cb5adfcb41538b1f33f530a0c486d60f6907adb7afa58ea4e8",
+      "reason": "COT 0.1.3: independent Weekly Advance adapters with exact loader-pointer normalization, creation-page per-Dynasty options, requested defaults and fitted dollar prefixes"
+    },
+    {
+      "path": "Modules/DynastyEnhancer/Tests/currency_recruitdetail_ui_test.py",
+      "sha256": "e5df78a5028629a233380f9c98d5668eea471ccdb51a1a9364ae2161d8eecb1b",
+      "reason": "COT 0.1.3: independent Weekly Advance adapters with exact loader-pointer normalization, creation-page per-Dynasty options, requested defaults and fitted dollar prefixes"
+    },
+    {
+      "path": "Modules/DynastyEnhancer/Tests/currency_recruiteditor_ui_test.py",
+      "sha256": "473a138adccb52de1058972dbaa9c3f2510d7e27d64f26c96eb754012be6f770",
+      "reason": "COT 0.1.3: independent Weekly Advance adapters with exact loader-pointer normalization, creation-page per-Dynasty options, requested defaults and fitted dollar prefixes"
+    },
+    {
+      "path": "Modules/DynastyEnhancer/Tests/currency_recruiting_ui_test.py",
+      "sha256": "be131aebcc921583b131c28c8feb1cfbcac5646b510406277d6cb700f9337b95",
+      "reason": "COT 0.1.3: independent Weekly Advance adapters with exact loader-pointer normalization, creation-page per-Dynasty options, requested defaults and fitted dollar prefixes"
+    },
+    {
+      "path": "Modules/DynastyEnhancer/Tests/currency_slot_layout_test.py",
+      "sha256": "d42d361d78b844805dd8968c549c7b024d461d2391e90cf8b52a52f438c9a2b3",
+      "reason": "COT 0.1.3: independent Weekly Advance adapters with exact loader-pointer normalization, creation-page per-Dynasty options, requested defaults and fitted dollar prefixes"
+    },
+    {
+      "path": "Modules/DynastyEnhancer/Tests/currency_topbar_ui_test.py",
+      "sha256": "1e4fceb4b44658a5af1ee4b1e4c8e9ae70a6deb86be04f89f0eb92d634ce94ad",
+      "reason": "COT 0.1.3: independent Weekly Advance adapters with exact loader-pointer normalization, creation-page per-Dynasty options, requested defaults and fitted dollar prefixes"
+    },
+    {
+      "path": "Modules/DynastyEnhancer/Tests/currency_ui_test.py",
+      "sha256": "9a3e7f4c080ce1723098f88e436ff450482a50a0e71168f6542473b426a6edbe",
+      "reason": "COT 0.1.3: independent Weekly Advance adapters with exact loader-pointer normalization, creation-page per-Dynasty options, requested defaults and fitted dollar prefixes"
+    },
+    {
+      "path": "Modules/DynastyEnhancer/Tests/enhancement_grade_scales_test.py",
+      "sha256": "1dfb36bf96f187cd3d2a4d4779b4f00abb7f730205a868bd148852e51d352bd2",
+      "reason": "COT 0.1.5 feedback: native focus colors, exact AIO shared overview; separate visitor demand/tickets, deficit bed, scoring audio priority and recorded-TD inset recovery. Workspace only."
+    },
+    {
+      "path": "Modules/DynastyEnhancer/Tests/feed_engine.test.mjs",
+      "sha256": "c6d309cfabc49ed352deb178de0e3a47355a269862a52d071ed3414e7d994831",
+      "reason": "Retain prior COT integration; 0.1.6 Beyond the Field: bounded content/selection/voices, native paging, persistent modeled recruit records, supported calendar/draft reference, exact AIO Notes/colors and numeric-preserving money redraw adapters."
+    },
+    {
+      "path": "Modules/DynastyEnhancer/Tests/fog_gap_ui_test.py",
+      "sha256": "635d4398af9c764921452ddb17c84bcf859f0f0318d66149a94f83f856fac3aa",
+      "reason": "COT 0.1.5 feedback: native focus colors, exact AIO shared overview; separate visitor demand/tickets, deficit bed, scoring audio priority and recorded-TD inset recovery. Workspace only."
+    },
+    {
+      "path": "Modules/DynastyEnhancer/Tests/independent_grade_modes_test.py",
+      "sha256": "d56877b48326d3913096e140a36b18fe95a819201a1f41e085a63bb24a1f34cc",
+      "reason": "COT 0.1.5 feedback: native focus colors, exact AIO shared overview; separate visitor demand/tickets, deficit bed, scoring audio priority and recorded-TD inset recovery. Workspace only."
+    },
+    {
+      "path": "Modules/DynastyEnhancer/Tests/runtime_archive.test.mjs",
+      "sha256": "01041548a955d5b4f39672ed12092152970ec2cff6bf92e7c418479455d3a307",
+      "reason": "COT 0.1.4: factual social perspectives, persistent voices, four-edition structure memory, required news retention and frozen publication wording; compact archive metadata and native UI performance; motion-driven sound companions and mixed visitor sections with strong-host travel resistance. Workspace only."
+    },
+    {
+      "path": "Modules/DynastyEnhancer/Tests/season_launch.test.mjs",
+      "sha256": "253d8961bfca9bbb2e460ccb038bb5c81b27ba0d7ee5d361a64294b586258350",
+      "reason": "COT hub clock scope, fresh practice picker and recruit star account presentation"
+    },
+    {
+      "path": "Modules/DynastyEnhancer/Tests/social_discovery.test.mjs",
+      "sha256": "7bc78e27832620b4e17cc7710cc7995a5a56bfd14d25ca2998941bd53cf406af",
+      "reason": "Retain prior COT integration; 0.1.6 Beyond the Field: bounded content/selection/voices, native paging, persistent modeled recruit records, supported calendar/draft reference, exact AIO Notes/colors and numeric-preserving money redraw adapters."
+    },
+    {
+      "path": "Modules/DynastyEnhancer/Tools/account_presentation.mjs",
+      "sha256": "e84412eebf4f9c362648d3e9e190d838ea95613dc21e858c2c3a643ea4d17996",
+      "reason": "COT hub clock scope, fresh practice picker and recruit star account presentation"
+    },
+    {
+      "path": "Modules/DynastyEnhancer/Tools/build_aio_currency_ui.py",
+      "sha256": "17d4b384b64064bdd8ff60ecc46a8548d00a9203626dc257421df9a5d10e8cf1",
+      "reason": "Retain prior COT integration; 0.1.6 Beyond the Field: bounded content/selection/voices, native paging, persistent modeled recruit records, supported calendar/draft reference, exact AIO Notes/colors and numeric-preserving money redraw adapters."
+    },
+    {
+      "path": "Modules/DynastyEnhancer/Tools/build_currency_recruiteditor_ui.py",
+      "sha256": "18e69338c9ad998ec3903a0c5a6204e8af9126170bf8dec3e3dbc2229588395e",
+      "reason": "Retain prior COT integration; 0.1.6 Beyond the Field: bounded content/selection/voices, native paging, persistent modeled recruit records, supported calendar/draft reference, exact AIO Notes/colors and numeric-preserving money redraw adapters."
+    },
+    {
+      "path": "Modules/DynastyEnhancer/Tools/build_currency_ui.py",
+      "sha256": "64c206980b0fc3b65e2cfca02f28e71d90456a19a0e3dc297623d761d4cfe702",
+      "reason": "Retain prior COT integration; 0.1.6 Beyond the Field: bounded content/selection/voices, native paging, persistent modeled recruit records, supported calendar/draft reference, exact AIO Notes/colors and numeric-preserving money redraw adapters."
+    },
+    {
+      "path": "Modules/DynastyEnhancer/Tools/build_fog_gap_ui.py",
+      "sha256": "52cf66523b2fbc07dae9e3efe3144e7e3fdcc5c3625bec03b40c432d49e6d957",
+      "reason": "COT 0.1.5 feedback: native focus colors, exact AIO shared overview; separate visitor demand/tickets, deficit bed, scoring audio priority and recorded-TD inset recovery. Workspace only."
+    },
+    {
+      "path": "Modules/DynastyEnhancer/Tools/build_player_card_ui.py",
+      "sha256": "4b6069d76ae652cfd0cb9e686e111d02867cfd9e91b0d9615a9ffc09381590e7",
+      "reason": "COT 0.1.5 feedback: native focus colors, exact AIO shared overview; separate visitor demand/tickets, deficit bed, scoring audio priority and recorded-TD inset recovery. Workspace only."
+    },
+    {
+      "path": "Modules/DynastyEnhancer/Tools/build_recruit_notes_ui.py",
+      "sha256": "8ab0390fe942a76195475ff59955ce49304cd0edc4490ec9160505134ac26e6d",
+      "reason": "COT feedback: strict AIO loader relocations, compact constrained NIL labels and Highest NIL grade display; current audible shake pairing and state travel fallback"
+    },
+    {
+      "path": "Modules/DynastyEnhancer/Tools/draft_results.mjs",
+      "sha256": "f077ccec8e57b52e5c49d93fb6eed79ae440d9d1563829f18bdc5c907b23b0c9",
+      "reason": "Retain prior COT integration; 0.1.6 Beyond the Field: bounded content/selection/voices, native paging, persistent modeled recruit records, supported calendar/draft reference, exact AIO Notes/colors and numeric-preserving money redraw adapters."
+    },
+    {
+      "path": "Modules/DynastyEnhancer/Tools/editorial_policy.mjs",
+      "sha256": "61826314b0ed1f028879b2ab3e7f39be904fc184bb70773945ac4b9421807fe7",
+      "reason": "Retain prior COT integration; 0.1.6 Beyond the Field: bounded content/selection/voices, native paging, persistent modeled recruit records, supported calendar/draft reference, exact AIO Notes/colors and numeric-preserving money redraw adapters."
+    },
+    {
+      "path": "Modules/DynastyEnhancer/Tools/feed_engine.mjs",
+      "sha256": "8ce097fe674c999a0cea1016bbd616ea52d08b07bd247082a25c53ff6f448ef8",
+      "reason": "Mark newly generated recruit-star account presentation current so archive reloads remain byte-stable"
+    },
+    {
+      "path": "Modules/DynastyEnhancer/Tools/feed_selection.mjs",
+      "sha256": "7b267f5a295281a0bdec019b37f52311a22bc4b04aae4303833fe572fe08f718",
+      "reason": "Retain prior COT integration; 0.1.6 Beyond the Field: bounded content/selection/voices, native paging, persistent modeled recruit records, supported calendar/draft reference, exact AIO Notes/colors and numeric-preserving money redraw adapters."
+    },
+    {
+      "path": "Modules/DynastyEnhancer/Tools/history_store.mjs",
+      "sha256": "990a52941bfa8dbeeab7c45d7a67419ce6e1dba9f82aacdb340eeaaec7ab353d",
+      "reason": "Retain prior COT immutable publication history; 0.1.6 atomic scoped recruit-game sidecar preserves new records across older writers that omit unknown index fields, without rewriting old feed blobs."
+    },
+    {
+      "path": "Modules/DynastyEnhancer/Tools/national_editorial.mjs",
+      "sha256": "b38f9f03a4e416d05b4068a85d5c4147e475c748ff6768eeffbef5ad89cc10a7",
+      "reason": "COT 0.1.4: factual social perspectives, persistent voices, four-edition structure memory, required news retention and frozen publication wording; compact archive metadata and native UI performance; motion-driven sound companions and mixed visitor sections with strong-host travel resistance. Workspace only."
+    },
+    {
+      "path": "Modules/DynastyEnhancer/Tools/normalize_dynasty.mjs",
+      "sha256": "92f116f0c0e931fa8081393042746dfbaf4b62bc5ee755f3a6d42cc7c01a9d0d",
+      "reason": "Retain prior COT integration; 0.1.6 Beyond the Field: bounded content/selection/voices, native paging, persistent modeled recruit records, supported calendar/draft reference, exact AIO Notes/colors and numeric-preserving money redraw adapters."
+    },
+    {
+      "path": "Modules/DynastyEnhancer/Tools/runtime_archive.mjs",
+      "sha256": "b3ff534903ce9459acae1d520612dcdc78d708703b3b1014d35be98105102c36",
+      "reason": "COT 0.1.4: factual social perspectives, persistent voices, four-edition structure memory, required news retention and frozen publication wording; compact archive metadata and native UI performance; motion-driven sound companions and mixed visitor sections with strong-host travel resistance. Workspace only."
+    },
+    {
+      "path": "Modules/DynastyEnhancer/Tools/runtime_lifecycle.mjs",
+      "sha256": "335809238e69348a113c0ab0c3aa8ba44ab5124421f2f08e6a25f1f9ca562202",
+      "reason": "Retain prior COT integration; 0.1.6 Beyond the Field: bounded content/selection/voices, native paging, persistent modeled recruit records, supported calendar/draft reference, exact AIO Notes/colors and numeric-preserving money redraw adapters."
+    },
+    {
+      "path": "Modules/DynastyEnhancer/Tools/social_discovery.mjs",
+      "sha256": "e142691c1b258304522f04d6e6821e3ce0db71a8a527f99f335a4781db85268d",
+      "reason": "Retain prior COT integration; 0.1.6 Beyond the Field: bounded content/selection/voices, native paging, persistent modeled recruit records, supported calendar/draft reference, exact AIO Notes/colors and numeric-preserving money redraw adapters."
+    },
+    {
+      "path": "Modules/DynastyEnhancer/Tools/story_authors.mjs",
+      "sha256": "702c22c6e603331c6f50845ee90a205a587ee2f2cd8e322ace580ea013e4b607",
+      "reason": "COT 0.1.4: factual social perspectives, persistent voices, four-edition structure memory, required news retention and frozen publication wording; compact archive metadata and native UI performance; motion-driven sound companions and mixed visitor sections with strong-host travel resistance. Workspace only."
+    },
+    {
+      "path": "Modules/DynastyEnhancer/Tools/story_conversations.mjs",
+      "sha256": "522a3a7f8a7a375678ceed62e250590384e0f0230bc875e8d02655eb3e4611a4",
+      "reason": "Retain prior COT integration; 0.1.6 Beyond the Field: bounded content/selection/voices, native paging, persistent modeled recruit records, supported calendar/draft reference, exact AIO Notes/colors and numeric-preserving money redraw adapters."
+    },
+    {
+      "path": "Modules/DynastyEnhancer/Tools/story_engagement.mjs",
+      "sha256": "50528c857444900b539d6548e1d8c85d399b3fadbddf3e1e22171583bd64ddb9",
+      "reason": "COT 0.1.4: factual social perspectives, persistent voices, four-edition structure memory, required news retention and frozen publication wording; compact archive metadata and native UI performance; motion-driven sound companions and mixed visitor sections with strong-host travel resistance. Workspace only."
+    },
+    {
+      "path": "Modules/DynastyEnhancer/Tools/story_events.mjs",
+      "sha256": "0e60f033c481ec09221824324d5c634a0a9b0d65a4bcb3fd1d07051979a85404",
+      "reason": "Retain prior COT integration; 0.1.6 Beyond the Field: bounded content/selection/voices, native paging, persistent modeled recruit records, supported calendar/draft reference, exact AIO Notes/colors and numeric-preserving money redraw adapters."
+    },
+    {
+      "path": "Modules/DynastyEnhancer/Tools/story_renderer.mjs",
+      "sha256": "753985be536750dc8c8e6fe6a4c5027b0b189b10f8c9dc1f45e0052d51b4be2f",
+      "reason": "Retain prior COT story rendering; 0.1.6 finite contextual voices/content with stable published objects and no new casual/holiday/recruit-film additions to already observed editions."
+    },
+    {
+      "path": "Modules/DynastyEnhancer/Tools/story_templates.mjs",
+      "sha256": "a4d230aae1e5c0cac8099bdcc0288c3cfbe055f078b64487de06c69dc901d24e",
+      "reason": "Retain prior COT integration; 0.1.6 Beyond the Field: bounded content/selection/voices, native paging, persistent modeled recruit records, supported calendar/draft reference, exact AIO Notes/colors and numeric-preserving money redraw adapters."
+    },
+    {
+      "path": "Modules/DynastyEnhancer/Tools/voice_style.mjs",
+      "sha256": "ccd375ea1171ba5249085cecb28be842d1feb0c2f43d4fc2b4861b8dc743aeb3",
+      "reason": "COT 0.1.4: factual social perspectives, persistent voices, four-edition structure memory, required news retention and frozen publication wording; compact archive metadata and native UI performance; motion-driven sound companions and mixed visitor sections with strong-host travel resistance. Workspace only."
+    },
+    {
+      "path": "Modules/DynastyEnhancer/Tools/weekly_coverage.mjs",
+      "sha256": "160f2d4486243648551f70aaf54bfbb4321bebdbec7e874d4c3fa3432c061fa3",
+      "reason": "COT 0.1.4: fact-gated perspectives, persistent author voices, four-edition structural memory, compact archive signatures, frozen published wording and required news retention without larger native view caps."
+    },
+    {
+      "path": "Modules/DynastyEnhancer/Tools/world_events.mjs",
+      "sha256": "cec5aa2c4d7b441431320789d626d1d6941209a85f91437bfcc5c2306c715784",
+      "reason": "Retain prior COT integration; 0.1.6 Beyond the Field: bounded content/selection/voices, native paging, persistent modeled recruit records, supported calendar/draft reference, exact AIO Notes/colors and numeric-preserving money redraw adapters."
+    },
+    {
+      "path": "Modules/ExtraDynastySettings/.gitattributes",
+      "sha256": "5924ea8f0d6ec05dfbb5f14cc9934384e696f5f28da2df1f782e18bbd1a8a790",
+      "reason": "COT release integration preserves exact source bytes across public Git clones; disable inherited line-ending normalization so baseline/fingerprint provenance hashes remain reproducible."
+    },
+    {
+      "path": "Modules/ExtraDynastySettings/Plugin/AssemblyInfo.cs",
+      "sha256": "3ccc7597aa9954055cf6c61c1d735d80a6dc90d3da71a0f2cadee04a4b683032",
+      "reason": "Retain prior per-Dynasty clocks and compatibility IDs; 0.1.6 user-facing Extra Settings branding only."
+    },
+    {
+      "path": "Modules/ExtraDynastySettings/Plugin/CombinedClockRuntime.cs",
+      "sha256": "ae7e6ef01e5aed42450f0ffdccab9a6c086225595dd96b4d3c432d65ac3dfc4c",
+      "reason": "Per-Dynasty clocks with explicit unknown-identity passthrough and practice exclusion"
+    },
+    {
+      "path": "Modules/ExtraDynastySettings/Plugin/CombinedSettingsAction.cs",
+      "sha256": "c8ce7a559fc8ca8fadab28ac3597a2222eaf86f782435a8fe41f20c8b79982a5",
+      "reason": "Retain prior per-Dynasty clocks and compatibility IDs; 0.1.6 user-facing Extra Settings branding only."
+    },
+    {
+      "path": "Modules/ExtraDynastySettings/Plugin/DefensivePlayClock.cs",
+      "sha256": "477df2cef3048e4883891a996428e8c45b86da6672910d3a5988889b6de2cefd",
+      "reason": "Per-Dynasty clocks with explicit unknown-identity passthrough and practice exclusion"
+    },
+    {
+      "path": "Modules/ExtraDynastySettings/Plugin/PersistenceHelper.cs",
+      "sha256": "e665387f7ccd3cda8017501e9ea25f0641081ee50ce505e2a091056eb43032ec",
+      "reason": "COT per-Dynasty clock table, native reads/writes and detached persistence"
+    },
+    {
+      "path": "Modules/ExtraDynastySettings/Plugin/build.ps1",
+      "sha256": "05b0bba8d63226652165b930a20065410b5a5d7ce3d895b88caa73a73128b252",
+      "reason": "COT per-Dynasty clock table, native reads/writes and detached persistence"
+    },
+    {
+      "path": "Modules/ExtraDynastySettings/Shared/Clock/DynastyPlayClockAction.cs",
+      "sha256": "de77bfb783d4cd59d990438d3609359855eb971df4ab7cd9e9599b478e8d0c10",
+      "reason": "COT hub clock scope, fresh practice picker and recruit star account presentation"
+    },
+    {
+      "path": "Modules/ExtraDynastySettings/Shared/Clock/ExtendedClock.cs",
+      "sha256": "17bfbae0dcd8778c0f85f03522c70cec1826dae4538ff0f33eb04bbe9fabea00",
+      "reason": "COT per-Dynasty clock table, native reads/writes and detached persistence"
+    },
+    {
+      "path": "Modules/ExtraDynastySettings/Tools/ClockMigrationChecks.cs",
+      "sha256": "e6f1d16ef6afb6ed9bf72764673475cba5bf46e2c6e7f652099f3aa4bb6c9e71",
+      "reason": "Adapt inherited fixtures to per-Dynasty clocks and enlarged native data"
+    },
+    {
+      "path": "Modules/ExtraDynastySettings/Tools/GameSettingsMenuChecks.cs",
+      "sha256": "6715546d2ad88ecd69e6529a145a45726ce093616381e91e7ff71d3895ec9b63",
+      "reason": "COT hub clock scope, fresh practice picker and recruit star account presentation"
+    },
+    {
+      "path": "Modules/ExtraDynastySettings/Tools/LaunchChecks.cs",
+      "sha256": "60c2ed11ca16df9ac134b366f1162f8950cc4e7f717b65abcdd49bfcc401e3b4",
+      "reason": "Verify detached persistence ownership and absence of global clock writes"
+    },
+    {
+      "path": "Modules/GamedayAtmosphere/.gitattributes",
+      "sha256": "5924ea8f0d6ec05dfbb5f14cc9934384e696f5f28da2df1f782e18bbd1a8a790",
+      "reason": "COT release integration preserves exact source bytes across public Git clones; disable inherited line-ending normalization so baseline/fingerprint provenance hashes remain reproducible."
+    },
+    {
+      "path": "Modules/GamedayAtmosphere/README.md",
+      "sha256": "d13d750ac74aad9c030aeb7401113bece136ff67a91b76ef86c2f45be63c50f5",
+      "reason": "Retain prior COT integration; 0.1.6 Gameday Atmosphere branding and appended stable-ID visitor-strength control, new-plan-only odds preference with existing native/neutral/protected/history gates retained."
+    },
+    {
+      "path": "Modules/GamedayAtmosphere/Source/AwayCrowd.h",
+      "sha256": "ddf7dd7f932d1a21d9f1a7cf1c330f10a71351238f88506a87c83191616b73ce",
+      "reason": "Retain prior COT integration; 0.1.6 Gameday Atmosphere branding and appended stable-ID visitor-strength control, new-plan-only odds preference with existing native/neutral/protected/history gates retained."
+    },
+    {
+      "path": "Modules/GamedayAtmosphere/Source/BackgroundRoar.h",
+      "sha256": "064e789e6faf1e0777220dca43b35acf648983b40be821727eef5cdc9aa10055",
+      "reason": "COT 0.1.5 feedback: native focus colors, exact AIO shared overview; separate visitor demand/tickets, deficit bed, scoring audio priority and recorded-TD inset recovery. Workspace only."
+    },
+    {
+      "path": "Modules/GamedayAtmosphere/Source/Build.ps1",
+      "sha256": "82241e3992572142a4b0e3a124c19ccbc2c61ce68a386b34fbf2c9cfc1795e90",
+      "reason": "Retain prior COT integration; 0.1.6 Gameday Atmosphere branding and appended stable-ID visitor-strength control, new-plan-only odds preference with existing native/neutral/protected/history gates retained."
+    },
+    {
+      "path": "Modules/GamedayAtmosphere/Source/DgaDiagnostics.cs",
+      "sha256": "8f5812429f3eb15fbd1792cec6f03aed768f09edc01a69935f91f16f6730a645",
+      "reason": "Retain prior COT integration; 0.1.6 Gameday Atmosphere branding and appended stable-ID visitor-strength control, new-plan-only odds preference with existing native/neutral/protected/history gates retained."
+    },
+    {
+      "path": "Modules/GamedayAtmosphere/Source/DynamicGamedayAtmosphere.ini",
+      "sha256": "2824d25ab34f8b99557e539d9c73dc93151630248a7791e29df3d35c37c03b02",
+      "reason": "Retain prior COT integration; 0.1.6 Gameday Atmosphere branding and appended stable-ID visitor-strength control, new-plan-only odds preference with existing native/neutral/protected/history gates retained."
+    },
+    {
+      "path": "Modules/GamedayAtmosphere/Source/MajorReplay.h",
+      "sha256": "ad5c74c6979f0d0903155fae6e10097487bd6321138480a40f336c12c8f581f4",
+      "reason": "COT 0.1.5 feedback: native focus colors, exact AIO shared overview; separate visitor demand/tickets, deficit bed, scoring audio priority and recorded-TD inset recovery. Workspace only."
+    },
+    {
+      "path": "Modules/GamedayAtmosphere/Source/MmcPlugin.cs",
+      "sha256": "898a25339e458601683dcf6dc89b28af27debec11205a9c63692adf887ccd761",
+      "reason": "Retain prior COT integration; 0.1.6 Gameday Atmosphere branding and appended stable-ID visitor-strength control, new-plan-only odds preference with existing native/neutral/protected/history gates retained."
+    },
+    {
+      "path": "Modules/GamedayAtmosphere/Source/MotionSoundPairing.h",
+      "sha256": "8485cd251cd656dbb959636fc5749a364cbda5e9b2ee053325a2f0ad6c259f0b",
+      "reason": "Require currently audible crowd sound, retaining exact play/world ownership"
+    },
+    {
+      "path": "Modules/GamedayAtmosphere/Source/NativeRuntime.cpp",
+      "sha256": "65e1b73ea7477e99d5ad7e1b7cedd7f98f080d55c84fa8022185d5325815642c",
+      "reason": "Retain prior COT integration; 0.1.6 Gameday Atmosphere branding and appended stable-ID visitor-strength control, new-plan-only odds preference with existing native/neutral/protected/history gates retained."
+    },
+    {
+      "path": "Modules/GamedayAtmosphere/Source/NativeSettingsMenu.h",
+      "sha256": "9d0abe94a018b64e45f5bb983b9390b94a080e4df68be3ed14059340321c311f",
+      "reason": "Retain prior COT integration; 0.1.6 Gameday Atmosphere branding and appended stable-ID visitor-strength control, new-plan-only odds preference with existing native/neutral/protected/history gates retained."
+    },
+    {
+      "path": "Modules/GamedayAtmosphere/Source/NativeStartingAttendance.h",
+      "sha256": "d03499204a89db37a30e8a4adeed519bb14abb54c33fb9f2276599792a2dcefe",
+      "reason": "COT feedback: strict AIO loader relocations, compact constrained NIL labels and Highest NIL grade display; current audible shake pairing and state travel fallback"
+    },
+    {
+      "path": "Modules/GamedayAtmosphere/Source/Product.json",
+      "sha256": "7fe4a05c77c6626011dcc628c8120a359bc08da93c4310952eeb76facf4df61c",
+      "reason": "Retain prior COT integration; 0.1.6 Gameday Atmosphere branding and appended stable-ID visitor-strength control, new-plan-only odds preference with existing native/neutral/protected/history gates retained."
+    },
+    {
+      "path": "Modules/GamedayAtmosphere/Source/ReactionAudioRuntime.h",
+      "sha256": "4d0c2af5179d7ebc26aeb34b20f7e156bc5f32f6c989ad58005af9ca59ef8f04",
+      "reason": "COT 0.1.5 feedback: native focus colors, exact AIO shared overview; separate visitor demand/tickets, deficit bed, scoring audio priority and recorded-TD inset recovery. Workspace only."
+    },
+    {
+      "path": "Modules/GamedayAtmosphere/Source/SettingsMenu.h",
+      "sha256": "44f8ab039102aa0f09bdf8552e70aae3a532446d446e69b188cbbfef5c43aa88",
+      "reason": "Retain prior COT integration; 0.1.6 Gameday Atmosphere branding and appended stable-ID visitor-strength control, new-plan-only odds preference with existing native/neutral/protected/history gates retained."
+    },
+    {
+      "path": "Modules/GamedayAtmosphere/Source/SettingsMenuOptions.inc",
+      "sha256": "bf7043a599e607637c8d25283b7000e01a5a4472d1206c2279b7b7127cba4524",
+      "reason": "Retain prior COT integration; 0.1.6 Gameday Atmosphere branding and appended stable-ID visitor-strength control, new-plan-only odds preference with existing native/neutral/protected/history gates retained."
+    },
+    {
+      "path": "Modules/GamedayAtmosphere/Source/StartingAttendance.h",
+      "sha256": "9feb6aa505a5a12325d2e395b1b0f07f65dfed5fe7dafcf3ef00ae10db64bc2b",
+      "reason": "COT feedback: strict AIO loader relocations, compact constrained NIL labels and Highest NIL grade display; current audible shake pairing and state travel fallback"
+    },
+    {
+      "path": "Modules/GamedayAtmosphere/Source/StatusReport.h",
+      "sha256": "6dc465246167de9b67008a871112f673fff3713e46bd75c1f45dab7206f62678",
+      "reason": "Retain prior COT integration; 0.1.6 Gameday Atmosphere branding and appended stable-ID visitor-strength control, new-plan-only odds preference with existing native/neutral/protected/history gates retained."
+    },
+    {
+      "path": "Modules/GamedayAtmosphere/Tests/AwayCrowdTests.cpp",
+      "sha256": "9673bab7ad0e20382737cb446c0dbc63325dda367189ed82fed6ffee20e53fb4",
+      "reason": "COT feedback: strict AIO loader relocations, compact constrained NIL labels and Highest NIL grade display; current audible shake pairing and state travel fallback"
+    },
+    {
+      "path": "Modules/GamedayAtmosphere/Tests/ConfigurationOptions.inc",
+      "sha256": "49790fa5b73200cd70e84e8c3ee8d6e6d8fd9c70a9f580da650280313047f570",
+      "reason": "Retain prior COT integration; 0.1.6 Gameday Atmosphere branding and appended stable-ID visitor-strength control, new-plan-only odds preference with existing native/neutral/protected/history gates retained."
+    },
+    {
+      "path": "Modules/GamedayAtmosphere/Tests/HostChecks.cs",
+      "sha256": "12be68f44f3bc4476704d1d9e945ce322ae122e6919724cf588982da69ddf43b",
+      "reason": "Retain prior COT integration; 0.1.6 Gameday Atmosphere branding and appended stable-ID visitor-strength control, new-plan-only odds preference with existing native/neutral/protected/history gates retained."
+    },
+    {
+      "path": "Modules/GamedayAtmosphere/Tests/MajorReplayTests.cpp",
+      "sha256": "abc31a77f3ca7fca828a2b17aed3270ac472356ab7d4d2bcda81e79a3b0ad253",
+      "reason": "COT 0.1.5 feedback: native focus colors, exact AIO shared overview; separate visitor demand/tickets, deficit bed, scoring audio priority and recorded-TD inset recovery. Workspace only."
+    },
+    {
+      "path": "Modules/GamedayAtmosphere/Tests/MotionSoundCoverageTests.cpp",
+      "sha256": "cb34b61aee1165bc1422b5b3d09970707b9dd96e74ddb3d8844bce792ab4100f",
+      "reason": "COT feedback: strict AIO loader relocations, compact constrained NIL labels and Highest NIL grade display; current audible shake pairing and state travel fallback"
+    },
+    {
+      "path": "Modules/GamedayAtmosphere/Tests/NativeStartingAttendanceTests.cpp",
+      "sha256": "c4e241d41eb19858f1d06d66e6db1b005b8d9324205f130fbd1be504e4344f05",
+      "reason": "COT feedback: strict AIO loader relocations, compact constrained NIL labels and Highest NIL grade display; current audible shake pairing and state travel fallback"
+    },
+    {
+      "path": "Modules/GamedayAtmosphere/Tests/ReactionRuntimeTests.cpp",
+      "sha256": "f3f8b945764249e8f80ecd70f0adc7706025167c1d6288283373bc05370d4396",
+      "reason": "COT 0.1.5 feedback: native focus colors, exact AIO shared overview; separate visitor demand/tickets, deficit bed, scoring audio priority and recorded-TD inset recovery. Workspace only."
+    },
+    {
+      "path": "Modules/GamedayAtmosphere/Tests/SeatRuntimeTests.cpp",
+      "sha256": "dded3bc39851c3b0660fb6ffd38a9c4c9a9a42bcd8c55dd88314813d61c73c8d",
+      "reason": "COT 0.1.4: factual social perspectives, persistent voices, four-edition structure memory, required news retention and frozen publication wording; compact archive metadata and native UI performance; motion-driven sound companions and mixed visitor sections with strong-host travel resistance. Workspace only."
+    },
+    {
+      "path": "Modules/GamedayAtmosphere/Tests/SettingsMenuTests.cpp",
+      "sha256": "d13f7a45f126f01465f6c3649b9cd34d9a135e0351375f32b7d72019b35ea737",
+      "reason": "Retain prior COT integration; 0.1.6 Gameday Atmosphere branding and appended stable-ID visitor-strength control, new-plan-only odds preference with existing native/neutral/protected/history gates retained."
+    },
+    {
+      "path": "Modules/GamedayAtmosphere/Tests/Tuning2020Tests.cpp",
+      "sha256": "03feff897d45222967d3ea6d0e28eca1b6833f6e92b5e28ca60ae66d1cf9f504",
+      "reason": "COT 0.1.5 feedback: native focus colors, exact AIO shared overview; separate visitor demand/tickets, deficit bed, scoring audio priority and recorded-TD inset recovery. Workspace only."
+    },
+    {
+      "path": "Modules/GamedayAtmosphere/Tests/test_settings_menu_catalog.py",
+      "sha256": "bef11af665968cd0f4c4aca2b4bb0ed67a977022243f709a8770606e9ae0c7cd",
+      "reason": "Retain prior COT integration; 0.1.6 Gameday Atmosphere branding and appended stable-ID visitor-strength control, new-plan-only odds preference with existing native/neutral/protected/history gates retained."
+    }
+  ]
+}

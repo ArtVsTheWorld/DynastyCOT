@@ -1,0 +1,52 @@
+{
+  "liveAcceptance": "Not performed",
+  "purpose": "Frozen source inputs; not an installable COT release",
+  "format": 1,
+  "createdUtc": "2026-11-07T03:58:53.0296852Z",
+  "modules": [
+    {
+      "id": "DynastyEnhancer",
+      "sourceRoot": "C:\\Apps\\CFB 27\\MMC\\DynastyEnhancer",
+      "candidate": "options-p98",
+      "files": 466,
+      "installedReference": {
+        "name": "DynastyEnhancer.dll",
+        "version": "0.1.105.0",
+        "sha256": "35436d08ba9291cad98ec97348b16b944931a375497c615c298e7da971ef94e4"
+      }
+    },
+    {
+      "id": "GamedayAtmosphere",
+      "sourceRoot": "C:\\Apps\\CFB 27\\Working\\DynamicGamedayAtmosphere",
+      "candidate": "2.1.9-private-update4",
+      "files": 404,
+      "installedReference": {
+        "name": "DynamicGamedayAtmosphere.dll",
+        "version": "2.1.8.0",
+        "sha256": "0a04bce2aafc9ca7e6513baa6b288f7d8e4133dce34007bb73858a8521a0cd33"
+      }
+    },
+    {
+      "id": "ExtraDynastySettings",
+      "sourceRoot": "C:\\Apps\\CFB 27\\Working\\Teambuilder Import Plugin\\GitHub\\offline-dynasty-settings",
+      "candidate": "0.2.10",
+      "files": 58,
+      "installedReference": {
+        "name": "OfflineDynastySettings.dll",
+        "version": "0.2.9.0",
+        "sha256": "79aa4453d0a0a8bbf809a1df62b64e3596cfaeab78bb523a814bf07038d4289d"
+      }
+    },
+    {
+      "id": "DrivePractice",
+      "sourceRoot": "C:\\Apps\\CFB 27\\Working\\Teambuilder Import Plugin\\GitHub\\drive-based-practice",
+      "candidate": "0.8.21",
+      "files": 50,
+      "installedReference": {
+        "name": "SituationalPractice.dll",
+        "version": "0.8.20.0",
+        "sha256": "bd1614d6f8e666836e90335415207e46261f864c3f15bd02d1893eaca7f1bcbf"
+      }
+    }
+  ]
+}

@@ -1,0 +1,362 @@
+[
+  {
+    "oldSection": "Attendance",
+    "oldKey": "2020ModeEnabled",
+    "section": "Dynamic Gameday Attendance",
+    "key": "2020ModeEnabled"
+  },
+  {
+    "oldSection": "Attendance",
+    "oldKey": "Enabled",
+    "section": "Dynamic Gameday Attendance",
+    "key": "Enabled"
+  },
+  {
+    "oldSection": "Attendance",
+    "oldKey": "Profile",
+    "section": "Dynamic Gameday Attendance",
+    "key": "Profile"
+  },
+  {
+    "oldSection": "Retention",
+    "oldKey": "FormulaStrength",
+    "section": "Dynamic Gameday Attendance",
+    "key": "FormulaStrength"
+  },
+  {
+    "oldSection": "Retention",
+    "oldKey": "MaximumDeparturePerQuarter",
+    "section": "Dynamic Gameday Attendance",
+    "key": "MaximumDeparturePerQuarter"
+  },
+  {
+    "oldSection": "Retention",
+    "oldKey": "MaximumDeparturePerTransition",
+    "section": "Dynamic Gameday Attendance",
+    "key": "MaximumDeparturePerTransition"
+  },
+  {
+    "oldSection": "Retention",
+    "oldKey": "ComebackOriginalDeficit",
+    "section": "Dynamic Gameday Attendance",
+    "key": "ComebackOriginalDeficit"
+  },
+  {
+    "oldSection": "Retention",
+    "oldKey": "ComebackPointsRecovered",
+    "section": "Dynamic Gameday Attendance",
+    "key": "ComebackPointsRecovered"
+  },
+  {
+    "oldSection": "Retention",
+    "oldKey": "ComebackDeteriorationSeconds",
+    "section": "Dynamic Gameday Attendance",
+    "key": "ComebackDeteriorationSeconds"
+  },
+  {
+    "oldSection": "Retention",
+    "oldKey": "TwoMinuteWarning",
+    "section": "Dynamic Gameday Attendance",
+    "key": "TwoMinuteWarning"
+  },
+  {
+    "oldSection": "Retention",
+    "oldKey": "LateScoreExtra",
+    "section": "Dynamic Gameday Attendance",
+    "key": "LateScoreExtra"
+  },
+  {
+    "oldSection": "Atmosphere",
+    "oldKey": "Enabled",
+    "section": "Dynamic Gameday Soundscape",
+    "key": "LayeredAtmosphereEnabled"
+  },
+  {
+    "oldSection": "Atmosphere",
+    "oldKey": "OpeningAtmosphere",
+    "section": "Dynamic Gameday Soundscape",
+    "key": "OpeningAtmosphere"
+  },
+  {
+    "oldSection": "Atmosphere",
+    "oldKey": "WinningEruptions",
+    "section": "Dynamic Gameday Soundscape",
+    "key": "WinningEruptions"
+  },
+  {
+    "oldSection": "Atmosphere",
+    "oldKey": "OvertimeAtmosphere",
+    "section": "Dynamic Gameday Soundscape",
+    "key": "OvertimeAtmosphere"
+  },
+  {
+    "oldSection": "Atmosphere",
+    "oldKey": "SkillMoveReactions",
+    "section": "Dynamic Gameday Soundscape",
+    "key": "SkillMoveReactions"
+  },
+  {
+    "oldSection": "Atmosphere",
+    "oldKey": "StaggeredMajorCheers",
+    "section": "Dynamic Gameday Soundscape",
+    "key": "StaggeredMajorCheers"
+  },
+  {
+    "oldSection": "Atmosphere",
+    "oldKey": "PackedBigGameReactions",
+    "section": "Dynamic Gameday Soundscape",
+    "key": "PackedBigGameReactions"
+  },
+  {
+    "oldSection": "Atmosphere",
+    "oldKey": "PlayCallAtmosphere",
+    "section": "Dynamic Gameday Soundscape",
+    "key": "PlayCallAtmosphere"
+  },
+  {
+    "oldSection": "Atmosphere",
+    "oldKey": "BigGameMinimumFullnessPercent",
+    "section": "Dynamic Gameday Soundscape",
+    "key": "BigGameMinimumFullnessPercent"
+  },
+  {
+    "oldSection": "Atmosphere",
+    "oldKey": "PackedHouseBuildup",
+    "section": "Dynamic Gameday Soundscape",
+    "key": "PackedHouseBuildup"
+  },
+  {
+    "oldSection": "Atmosphere",
+    "oldKey": "DriveEscalation",
+    "section": "Dynamic Gameday Soundscape",
+    "key": "DriveEscalation"
+  },
+  {
+    "oldSection": "Atmosphere",
+    "oldKey": "ChantMaximumBoostPercent",
+    "section": "Dynamic Gameday Soundscape",
+    "key": "ChantMaximumBoostPercent"
+  },
+  {
+    "oldSection": "Atmosphere",
+    "oldKey": "NativeShakeMinimumFullnessPercent",
+    "section": "Dynamic Gameday Broadcast",
+    "key": "NativeShakeMinimumFullnessPercent"
+  },
+  {
+    "oldSection": "Atmosphere",
+    "oldKey": "CameraShake",
+    "section": "Dynamic Gameday Broadcast",
+    "key": "CameraShake"
+  },
+  {
+    "oldSection": "Atmosphere",
+    "oldKey": "OrdinaryShakeStrengthPercent",
+    "section": "Dynamic Gameday Broadcast",
+    "key": "OrdinaryShakeStrengthPercent"
+  },
+  {
+    "oldSection": "Atmosphere",
+    "oldKey": "CriticalShakeStrengthPercent",
+    "section": "Dynamic Gameday Broadcast",
+    "key": "CriticalShakeStrengthPercent"
+  },
+  {
+    "oldSection": "Atmosphere",
+    "oldKey": "TouchdownShakeStrengthPercent",
+    "section": "Dynamic Gameday Broadcast",
+    "key": "TouchdownShakeStrengthPercent"
+  },
+  {
+    "oldSection": "Atmosphere",
+    "oldKey": "EruptionShakeStrengthPercent",
+    "section": "Dynamic Gameday Broadcast",
+    "key": "EruptionShakeStrengthPercent"
+  },
+  {
+    "oldSection": "Atmosphere",
+    "oldKey": "TouchdownShakeImpactPercent",
+    "section": "Dynamic Gameday Broadcast",
+    "key": "TouchdownShakeImpactPercent"
+  },
+  {
+    "oldSection": "Atmosphere",
+    "oldKey": "EruptionShakeImpactPercent",
+    "section": "Dynamic Gameday Broadcast",
+    "key": "EruptionShakeImpactPercent"
+  },
+  {
+    "oldSection": "Atmosphere",
+    "oldKey": "TouchdownShakeDurationSeconds",
+    "section": "Dynamic Gameday Broadcast",
+    "key": "TouchdownShakeDurationSeconds"
+  },
+  {
+    "oldSection": "Atmosphere",
+    "oldKey": "EruptionShakeDurationSeconds",
+    "section": "Dynamic Gameday Broadcast",
+    "key": "EruptionShakeDurationSeconds"
+  },
+  {
+    "oldSection": "Atmosphere",
+    "oldKey": "MaximumBoostPercent",
+    "section": "Dynamic Gameday Soundscape",
+    "key": "MaximumBoostPercent"
+  },
+  {
+    "oldSection": "Atmosphere",
+    "oldKey": "HighLeverageBoostPercent",
+    "section": "Dynamic Gameday Soundscape",
+    "key": "HighLeverageBoostPercent"
+  },
+  {
+    "oldSection": "Atmosphere",
+    "oldKey": "EruptionBoostPercent",
+    "section": "Dynamic Gameday Soundscape",
+    "key": "EruptionBoostPercent"
+  },
+  {
+    "oldSection": "Arrivals",
+    "oldKey": "Enabled",
+    "section": "Dynamic Gameday Attendance",
+    "key": "ArrivalsEnabled"
+  },
+  {
+    "oldSection": "Arrivals",
+    "oldKey": "StartPercent",
+    "section": "Dynamic Gameday Attendance",
+    "key": "StartPercent"
+  },
+  {
+    "oldSection": "Arrivals",
+    "oldKey": "LateSchoolStartPercent",
+    "section": "Dynamic Gameday Attendance",
+    "key": "LateSchoolStartPercent"
+  },
+  {
+    "oldSection": "Arrivals",
+    "oldKey": "ModerateStartPercent",
+    "section": "Dynamic Gameday Attendance",
+    "key": "ModerateStartPercent"
+  },
+  {
+    "oldSection": "Arrivals",
+    "oldKey": "FinishPercentOfQuarter",
+    "section": "Dynamic Gameday Attendance",
+    "key": "FinishPercentOfQuarter"
+  },
+  {
+    "oldSection": "Arrivals",
+    "oldKey": "LateSchoolFinishPercentOfQuarter",
+    "section": "Dynamic Gameday Attendance",
+    "key": "LateSchoolFinishPercentOfQuarter"
+  },
+  {
+    "oldSection": "Arrivals",
+    "oldKey": "ModerateFinishPercentOfQuarter",
+    "section": "Dynamic Gameday Attendance",
+    "key": "ModerateFinishPercentOfQuarter"
+  },
+  {
+    "oldSection": "Arrivals",
+    "oldKey": "HalftimeSeatBreakStrength",
+    "section": "Dynamic Gameday Attendance",
+    "key": "HalftimeSeatBreakStrength"
+  },
+  {
+    "oldSection": "Arrivals",
+    "oldKey": "BigGameBonus",
+    "section": "Dynamic Gameday Attendance",
+    "key": "BigGameBonus"
+  },
+  {
+    "oldSection": "Arrivals",
+    "oldKey": "BadWeatherPenalty",
+    "section": "Dynamic Gameday Attendance",
+    "key": "BadWeatherPenalty"
+  },
+  {
+    "oldSection": "Arrivals",
+    "oldKey": "PlayoffStartPercent",
+    "section": "Dynamic Gameday Attendance",
+    "key": "PlayoffStartPercent"
+  },
+  {
+    "oldSection": "Arrivals",
+    "oldKey": "ChampionshipStartPercent",
+    "section": "Dynamic Gameday Attendance",
+    "key": "ChampionshipStartPercent"
+  },
+  {
+    "oldSection": "Arrivals",
+    "oldKey": "FcsOpponentPenalty",
+    "section": "Dynamic Gameday Attendance",
+    "key": "FcsOpponentPenalty"
+  },
+  {
+    "oldSection": "Audio",
+    "oldKey": "Enabled",
+    "section": "Dynamic Gameday Soundscape",
+    "key": "Enabled"
+  },
+  {
+    "oldSection": "Audio",
+    "oldKey": "ReductionStartPercent",
+    "section": "Dynamic Gameday Soundscape",
+    "key": "ReductionStartPercent"
+  },
+  {
+    "oldSection": "Audio",
+    "oldKey": "NativeQuietingStrengthPercent",
+    "section": "Dynamic Gameday Soundscape",
+    "key": "NativeQuietingStrengthPercent"
+  },
+  {
+    "oldSection": "Audio",
+    "oldKey": "CrowdVolumeReductionPercent",
+    "section": "Dynamic Gameday Soundscape",
+    "key": "CrowdVolumeReductionPercent"
+  },
+  {
+    "oldSection": "Audio",
+    "oldKey": "MaximumReductionPercent",
+    "section": "Dynamic Gameday Soundscape",
+    "key": "MaximumReductionPercent"
+  },
+  {
+    "oldSection": "Replays",
+    "oldKey": "Enabled",
+    "section": "Dynamic Gameday Broadcast",
+    "key": "ExtraReplaysEnabled"
+  },
+  {
+    "oldSection": "Replays",
+    "oldKey": "InsetAfterRoutinePlays",
+    "section": "Dynamic Gameday Broadcast",
+    "key": "InsetAfterRoutinePlays"
+  },
+  {
+    "oldSection": "Replays",
+    "oldKey": "FullScreenBigPlays",
+    "section": "Dynamic Gameday Broadcast",
+    "key": "FullScreenBigPlays"
+  },
+  {
+    "oldSection": "Replays",
+    "oldKey": "FullScreenMinimumYards",
+    "section": "Dynamic Gameday Broadcast",
+    "key": "FullScreenMinimumYards"
+  },
+  {
+    "oldSection": "Replays",
+    "oldKey": "DefensiveHighlights",
+    "section": "Dynamic Gameday Broadcast",
+    "key": "DefensiveHighlights"
+  },
+  {
+    "oldSection": "Attendance",
+    "oldKey": "AttendanceProfile",
+    "section": "Dynamic Gameday Attendance",
+    "key": "AttendanceProfile"
+  }
+]

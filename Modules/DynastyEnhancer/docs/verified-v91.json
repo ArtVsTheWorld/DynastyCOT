@@ -1,0 +1,161 @@
+{
+  "build": "v91",
+  "installed": true,
+  "nodeTests": {
+    "pass": 313,
+    "fail": 0
+  },
+  "nativeBuild": true,
+  "nativeUnitChecks": true,
+  "actualCatalogScopesValidated": true,
+  "mmcPayloadChecks": true,
+  "backup": {
+    "saveFiles": 29,
+    "historyFiles": 20,
+    "checksumsVerified": true
+  },
+  "actualReplay": {
+    "phase": "PreSeason",
+    "season": 2027,
+    "stories": 1231,
+    "curatedPosts": 30,
+    "departuresPublished": [
+      "Bryson Kimbrough",
+      "Trevor Tyson"
+    ],
+    "trainingPublished": [
+      "Dalen Huston",
+      "Marcellus Jackson"
+    ],
+    "conferenceMovesPublished": [
+      "UNLV: MW to Pac-12",
+      "Charlotte: American to Independent"
+    ],
+    "kimbroughDestination": "Utah",
+    "tysonDestination": null
+  },
+  "liveChecksRemaining": [],
+  "sha256": {
+    "DynastyEnhancerNative-v91.dll": "fef7e6f01bbb47967b2741f51e29f1ffde9e294b96d25a9f1ea06686df8988c7",
+    "DynastyEnhancer.dll": "fdf3908b1cbe2826d583833d7714dff9c69c870cb4ee253cfb4920b37b20e544",
+    "DynastyEnhancer-v91-MMC.zip": "b88d5e5c44d6db01b47480f3ffd00ad25c790d829e75cbcfb3786b97cd5f4eb4"
+  },
+  "livePublication": {
+    "pid": 32348,
+    "season": 2027,
+    "phase": "PreSeason",
+    "stories": 1231,
+    "allSixTargetsPublished": true
+  },
+  "liveReload": {
+    "userReopenedFeed": true,
+    "newNativeContextObserved": true,
+    "edition": "PreSeason 2027",
+    "stories": 1231,
+    "storyIdsBodiesLikesTemplatesAndRepliesIdentical": true,
+    "scopeViewsIdentical": true,
+    "feedRepublishedAndAdopted": true
+  },
+  "multiweekSimulation": {
+    "bulkPreseasonToSecondSigningDay": "Crashed with v91 active and again with no Enhancer module loaded",
+    "sameGameFaultRva": "0x7bfb10e",
+    "rootCause": "Not established; other-mod versus game/save/multiweek-flow cause remains unisolated",
+    "steppedControl": {
+      "enhancerAbsent": true,
+      "season": 2027,
+      "endOfSeasonRecap": true,
+      "playersLeaving": true,
+      "draftResults": true,
+      "manualCheckpointsBackedUpAndVerified": true
+    },
+    "resumed": {
+      "nativePid": 17704,
+      "phase": "OffSeason",
+      "week": 2,
+      "stage": 3,
+      "storiesPublished": 2411,
+      "ledgerYear": 2027,
+      "baselineRosterPlayers": 9310,
+      "source": "active runtime; no save recovery"
+    }
+  },
+  "automaticOffseason2027": {
+    "signingDay": {
+      "year": 2027,
+      "phase": "OffSeason",
+      "week": 6,
+      "stage": 7,
+      "source": "automatic active-runtime observation; no save recovery",
+      "baselinePlayers": 7002,
+      "ulmPlayers": 38,
+      "allAttributesMatch": true,
+      "stories": 2852,
+      "backup": "C:\\Apps\\CFB 27\\MMC\\DynastyEnhancer-Preseason\\Backups\\ULM-Signing2027-auto-20261103T141118Z"
+    },
+    "remaining": [],
+    "trainingResults": {
+      "year": 2027,
+      "stage": 8,
+      "week": 7,
+      "source": "automatic runtime; no save recovery",
+      "signingBaselineUnchanged": true,
+      "allRecordedGainsMatchNativeData": true,
+      "qualifyingLeaguePlayers": 2634,
+      "qualifyingUlmPlayers": 15,
+      "rosterSnapshot": 7002,
+      "backup": "C:\\Apps\\CFB 27\\MMC\\DynastyEnhancer-Preseason\\Backups\\ULM-Training2027-auto-20261103T141422Z"
+    },
+    "finalStage": {
+      "year": 2027,
+      "stage": 9,
+      "source": "automatic live runtime; no save recovery",
+      "departures": [
+        "Sergey Fitch",
+        "Styles Kennedy"
+      ],
+      "conferenceMoves": [
+        {
+          "team": "James Madison",
+          "from": "Sun Belt",
+          "to": "ACC"
+        },
+        {
+          "team": "Kennesaw St.",
+          "from": "CUSA",
+          "to": "Sun Belt"
+        }
+      ],
+      "kennesawDivision": "East; verified by a separate read-only native diagnostic",
+      "divisionNamesInProductionStoryModel": false,
+      "trainingEvidencePreserved": 2634,
+      "backup": "C:\\Apps\\CFB 27\\MMC\\DynastyEnhancer-Preseason\\Backups\\ULM-Final2027-auto-20261103T142126Z"
+    },
+    "preseason": {
+      "season": 2028,
+      "phase": "PreSeason",
+      "sourceCycle": 2027,
+      "source": "automatic runtime capture; no milestone recovery",
+      "stories": 1231,
+      "carryoverPosts": 364,
+      "allExpectedStoriesPublished": true,
+      "fitchDestination": "Missouri State",
+      "kennedyDestination": null,
+      "ulmTrainingReports": [
+        "Joe Bazley",
+        "Stephen Evans"
+      ],
+      "backup": "C:\\Apps\\CFB 27\\MMC\\DynastyEnhancer-Preseason\\Backups\\ULM-Preseason2028-auto-20261103T142451Z"
+    },
+    "reload": {
+      "season": 2028,
+      "phase": "PreSeason",
+      "stories": 1231,
+      "storyIdsTextAuthorsLikesTemplatesRepliesAndAvatarsIdentical": true,
+      "scopeViewsIdentical": true,
+      "freshPublicationAndAdoptionConfirmed": true,
+      "userConfirmedControls": true,
+      "automaticCaptureNoMilestoneRecovery": true
+    },
+    "status": "Verified automatic signing baseline, hidden-stage capture, next-preseason publication and reload"
+  }
+}

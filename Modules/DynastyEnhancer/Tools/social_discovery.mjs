@@ -1,0 +1,39 @@
+// Scope identity comes from native records; labels and memberships can change.
+const alphabetical=(a,b)=>a.label.localeCompare(b.label,'en',{sensitivity:'base'})||a.key.localeCompare(b.key);
+export function scopeCatalog(s){
+ const teams=[...new Map(s.teams.filter(t=>t.id!==255&&t.name).map(t=>[t.id,t])).values()];
+ const conferences=(s.conferences??[]).filter(c=>c.name&&c.teams.some(id=>teams.some(t=>t.id===id))).map(c=>({key:'conference:'+c.id,label:c.name,kind:'conference',teamIds:[...new Set(c.teams.filter(id=>id!==255))]})).sort(alphabetical);
+ return [{key:'all',label:'For You',kind:'personalized'},{key:'national',label:'National',kind:'national'},...conferences,...teams.map(t=>({key:'team:'+t.id,label:t.name,kind:'team',teamIds:[t.id]})).sort(alphabetical)];
+}
+export function discoveryViews(stories,options){
+ // stories already use parent-first conversation order; children inherit the root scope.
+ return Object.fromEntries(options.filter(o=>o.teamIds).flatMap(o=>{const pool=stories.filter(p=>(o.kind!=='team'||p.primaryScope!=='conference')&&p.teamIds?.some(id=>o.teamIds.includes(id)));return [[o.key,pool.map(p=>p.id)],...(o.kind==='team'?[[o.key+':required',pool.filter(p=>p.coverageExempt||p.voice==='nflDraft').map(p=>p.id)]]:[])];}));
+}
+export const CATEGORY_FILTERS=[
+ {key:'all',label:'All Types'},
+ {key:'recruiting',label:'Recruiting',categories:['recruiting','offers','signings'],voices:['recruit']},
+ {key:'recaps',label:'Recaps',categories:['results','team-stats','player-stats','upsets','streaks','matchup-recap','season-end']},
+ {key:'upcoming',label:'Upcoming',categories:['schedule','watch','lines','preseason','matchup-preview','offseason']},
+ {key:'rankings',label:'Rankings & Awards',categories:['polls','heisman','cfp','awards','records','history','championship','bowls']},
+ {key:'analyst',label:'Analysts',voices:['analyst','model']},
+ {key:'beat',label:'Beat Reporters',voices:['beat']},
+ {key:'official',label:'Official Accounts',voices:['official','cfp','nflDraft']},
+ {key:'player',label:'Players',voices:['player']},
+ {key:'injuries',label:'Injuries',categories:['injuries']},
+ {key:'fan',label:'Fans',voices:['fan']},
+ {key:'transactions',label:'Transactions',categories:['coaching','transactions','nil','transfer','signings']}
+];
+export function filterConversations(stories,key='all'){
+ const f=CATEGORY_FILTERS.find(x=>x.key===key);if(!f)throw Error('Unknown category filter');
+ const accepted=new Set(),result=[],lookup=new Map(stories.map(p=>[p.id,p]));
+ const match=p=>key==='all'||(key==='transactions'?(p.transaction||f.categories.includes(p.category)&&['analyst','beat'].includes(p.voice)):f.categories?.includes(p.category)||f.voices?.includes(p.voice));
+ // A matching reply must remain discoverable with the actual parent as
+ // context. Parent matches retain their whole conversation as before.
+ for(const p of stories)if(match(p)){let ancestor=p,seen=new Set();while(ancestor&&!seen.has(ancestor.id)){seen.add(ancestor.id);accepted.add(ancestor.id);ancestor=lookup.get(ancestor.replyTo);}}
+ const full=new Set();for(const p of stories){if(match(p)||p.replyTo&&full.has(p.replyTo))full.add(p.id);if(accepted.has(p.id)||full.has(p.id))result.push(p);}
+ if(key==='transactions'&&result.some(p=>p.draftPick>0)){
+  const blocks=[],byId=new Map();for(const p of result){if(p.replyTo&&byId.has(p.replyTo)){const block=byId.get(p.replyTo);block.push(p);byId.set(p.id,block);}else{const block=[p];blocks.push(block);byId.set(p.id,block);}}
+  blocks.sort((a,b)=>a[0].draftPick>0&&b[0].draftPick>0?a[0].draftPick-b[0].draftPick:a[0].draftPick>0?-1:b[0].draftPick>0?1:0);return blocks.flat();
+ }
+ return result;
+}

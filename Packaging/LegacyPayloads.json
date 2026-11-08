@@ -1,0 +1,690 @@
+{
+  "format": 1,
+  "files": [
+    {
+      "path": "COT-Runtime/DynastyEnhancer/DynastyEnhancerNative-v103.dll",
+      "module": "DynastyEnhancer",
+      "sha256": "98eb6be284633711dc1ad06a57d1e703f86ff7bc278cc86d5886db522199d07d"
+    },
+    {
+      "path": "COT-Runtime/DynastyEnhancer/DynastyEnhancerRecruitFog-v1.dll",
+      "module": "DynastyEnhancer",
+      "sha256": "51df5783db8b83ea8a069720ba87c7f3af75eafc632a7161d8090c01209d733b"
+    },
+    {
+      "path": "COT-Runtime/DynastyEnhancer/LoadDynastyEnhancer.exe",
+      "module": "DynastyEnhancer",
+      "sha256": "276ca4ba85d8d133ef6cabd50d8d2edb22f1571961d56bf1469ee011162a93ef"
+    },
+    {
+      "path": "COT-Runtime/DynastyEnhancer/Tools/account_presentation.mjs",
+      "module": "DynastyEnhancer",
+      "sha256": "370510726783d2e9dacac19c8da9a9ab8f3c85be08a6890c4e2704dfe07920c0"
+    },
+    {
+      "path": "COT-Runtime/DynastyEnhancer/Tools/advanced_analytics.mjs",
+      "module": "DynastyEnhancer",
+      "sha256": "5516246b53989a28f64ba4ec598e0a93cb23fed10511ac14710e5b7e64492883"
+    },
+    {
+      "path": "COT-Runtime/DynastyEnhancer/Tools/audit_editorial.mjs",
+      "module": "DynastyEnhancer",
+      "sha256": "6849a39006b510c782425e1a066abb1a288efc349f3baf513f36bdfdc820bcff"
+    },
+    {
+      "path": "COT-Runtime/DynastyEnhancer/Tools/audit_template_paths.mjs",
+      "module": "DynastyEnhancer",
+      "sha256": "88099fc887ebd944e0e3c56ff81ba3b85c864ac0279ae43146bf2e5552b4df0e"
+    },
+    {
+      "path": "COT-Runtime/DynastyEnhancer/Tools/audit_world_news.mjs",
+      "module": "DynastyEnhancer",
+      "sha256": "980bea0ac7353b651f9b9b0c96ca74d75b9eb45786657ee13cb2b53ba6eae964"
+    },
+    {
+      "path": "COT-Runtime/DynastyEnhancer/Tools/backfill_week.mjs",
+      "module": "DynastyEnhancer",
+      "sha256": "7de81af73e469d950439c2328e5618a1d69178056c6807ee604c82da0147d0f9"
+    },
+    {
+      "path": "COT-Runtime/DynastyEnhancer/Tools/benchmark_templates.mjs",
+      "module": "DynastyEnhancer",
+      "sha256": "c7e9f21f19b1d2c049d69931f9bf66d2ad087d41212fa507764a1b3d96e52db1"
+    },
+    {
+      "path": "COT-Runtime/DynastyEnhancer/Tools/betting_model.mjs",
+      "module": "DynastyEnhancer",
+      "sha256": "3543ba8867d71f930009e1bb75ff2c7f50d0df712c2d3865914f1ebd011998b1"
+    },
+    {
+      "path": "COT-Runtime/DynastyEnhancer/Tools/box_score_stories.mjs",
+      "module": "DynastyEnhancer",
+      "sha256": "2416b75ef64d7a8d9d68685e22b806980c274aa4a1401300515caab9baf32470"
+    },
+    {
+      "path": "COT-Runtime/DynastyEnhancer/Tools/clean_language.mjs",
+      "module": "DynastyEnhancer",
+      "sha256": "6db1143f8bcb2698534a74f8dc336d0e17376f6cf1fd2e670d95f5077fb0c3e8"
+    },
+    {
+      "path": "COT-Runtime/DynastyEnhancer/Tools/conference_context.mjs",
+      "module": "DynastyEnhancer",
+      "sha256": "d825391efeb317430e910abee120da5d86391920ae5ccef778e089b159bea44b"
+    },
+    {
+      "path": "COT-Runtime/DynastyEnhancer/Tools/context_analytics.mjs",
+      "module": "DynastyEnhancer",
+      "sha256": "782536176fad1bb7f911704349ef80efec2df9562ab6b5bdc85a65f1f98531d4"
+    },
+    {
+      "path": "COT-Runtime/DynastyEnhancer/Tools/conversation_topics.mjs",
+      "module": "DynastyEnhancer",
+      "sha256": "ac2740049cae20d098cdabe8e92e7623d573ada5898aad6646c908ad2d6674f8"
+    },
+    {
+      "path": "COT-Runtime/DynastyEnhancer/Tools/correct_waiting_archive.mjs",
+      "module": "DynastyEnhancer",
+      "sha256": "2065f65cc068f06db380807c257ee056c00d332dc73332347c1eb1b1b64bddad"
+    },
+    {
+      "path": "COT-Runtime/DynastyEnhancer/Tools/deep_analytics.mjs",
+      "module": "DynastyEnhancer",
+      "sha256": "34dbc97dd573cf53317277e0c022bccf5d7c311b0eefccff1db34ac3d6ec4466"
+    },
+    {
+      "path": "COT-Runtime/DynastyEnhancer/Tools/draft_discourse.mjs",
+      "module": "DynastyEnhancer",
+      "sha256": "bec27e98df19fc40086789bd2ca9e1c16f8690559576e75e7e24272d178049af"
+    },
+    {
+      "path": "COT-Runtime/DynastyEnhancer/Tools/draft_results.mjs",
+      "module": "DynastyEnhancer",
+      "sha256": "86197a1242c1788e3f2ee3139ab297086d0f6b188a1d461bd168ec316290f8f5"
+    },
+    {
+      "path": "COT-Runtime/DynastyEnhancer/Tools/editorial_policy.mjs",
+      "module": "DynastyEnhancer",
+      "sha256": "f45361b855638d40b1b719073f866d05cf4fc144548bb02b690745474cf074c9"
+    },
+    {
+      "path": "COT-Runtime/DynastyEnhancer/Tools/export_draft_results.mjs",
+      "module": "DynastyEnhancer",
+      "sha256": "14d0348afe1c840ea1823f95fd4196e140fe5e6998e73a46be5fc988815e8082"
+    },
+    {
+      "path": "COT-Runtime/DynastyEnhancer/Tools/export_emoji_probe.mjs",
+      "module": "DynastyEnhancer",
+      "sha256": "1bf475c6abdcc528689a2f20338b2b0d79b429b25cfc1773a75ab73515e3245e"
+    },
+    {
+      "path": "COT-Runtime/DynastyEnhancer/Tools/export_feed.mjs",
+      "module": "DynastyEnhancer",
+      "sha256": "85f464e8594a0e70b245b7144d5b709608d2796b81fa5d9aeca7d4c6d9dcc75a"
+    },
+    {
+      "path": "COT-Runtime/DynastyEnhancer/Tools/export_runtime.mjs",
+      "module": "DynastyEnhancer",
+      "sha256": "b8c43cb94453d02888857d8d2b1f8d91b93f18a7db348b296643fb32fd21b724"
+    },
+    {
+      "path": "COT-Runtime/DynastyEnhancer/Tools/fan_events.mjs",
+      "module": "DynastyEnhancer",
+      "sha256": "8abe0ff11c0ef305aaade6e1156a45820e0a89363f83f81bfe3702007aff5b2a"
+    },
+    {
+      "path": "COT-Runtime/DynastyEnhancer/Tools/feed_engine.mjs",
+      "module": "DynastyEnhancer",
+      "sha256": "5379aea03de338dee3163f6784120dc0c43783a6a1e4deaf0be9bf40db6dcde1"
+    },
+    {
+      "path": "COT-Runtime/DynastyEnhancer/Tools/feed_selection.mjs",
+      "module": "DynastyEnhancer",
+      "sha256": "80d885256c2e598c5a8f04ba3c478763378c4911c7c1bc293c1453fbaa717855"
+    },
+    {
+      "path": "COT-Runtime/DynastyEnhancer/Tools/football_context.mjs",
+      "module": "DynastyEnhancer",
+      "sha256": "d1ab123f3c7e8af0597a276f85af5c83b505c4b0ec5b739714c8422effa65b41"
+    },
+    {
+      "path": "COT-Runtime/DynastyEnhancer/Tools/heisman_context.mjs",
+      "module": "DynastyEnhancer",
+      "sha256": "dd11f14023328046dbf53e7c4f2be98aa4e0cad70ab09985d2e3b0865aa05fe9"
+    },
+    {
+      "path": "COT-Runtime/DynastyEnhancer/Tools/history_milestones.mjs",
+      "module": "DynastyEnhancer",
+      "sha256": "c60a8c2ccfa313665a8f70aeb6ca2777a6484679f2b39ca30654b7c8ca8c688d"
+    },
+    {
+      "path": "COT-Runtime/DynastyEnhancer/Tools/history_store.mjs",
+      "module": "DynastyEnhancer",
+      "sha256": "160eda6c8b6d74f7dabe53d39dc213584de25f74645b6b02478935b602354450"
+    },
+    {
+      "path": "COT-Runtime/DynastyEnhancer/Tools/injury_timetables.mjs",
+      "module": "DynastyEnhancer",
+      "sha256": "04252c6de2b7e675bbf1ade6990a380b46a20c69c74cd0d7556ccf5b0ce99d66"
+    },
+    {
+      "path": "COT-Runtime/DynastyEnhancer/Tools/inspect_runtime.mjs",
+      "module": "DynastyEnhancer",
+      "sha256": "1e1454ac25f6a8840d3051a39cd018bcf1de9c257827113d239d3a3110207910"
+    },
+    {
+      "path": "COT-Runtime/DynastyEnhancer/Tools/late_season_events.mjs",
+      "module": "DynastyEnhancer",
+      "sha256": "09815958e128051eefd87a1591adef291a2d8c09d88b0019b07d2ef5b43c91cb"
+    },
+    {
+      "path": "COT-Runtime/DynastyEnhancer/Tools/matchup_events.mjs",
+      "module": "DynastyEnhancer",
+      "sha256": "9911e95e5a246c8bab8996c589c49f1e6db2697064cc5d9a88651887a21cee4f"
+    },
+    {
+      "path": "COT-Runtime/DynastyEnhancer/Tools/merge_runtime_history.mjs",
+      "module": "DynastyEnhancer",
+      "sha256": "a651a3871b3dc8e852dfca22b1070a54b1a34f032be30cd8f3c3e82140b33942"
+    },
+    {
+      "path": "COT-Runtime/DynastyEnhancer/Tools/national_editorial.mjs",
+      "module": "DynastyEnhancer",
+      "sha256": "a162bf53c622a8a8f2cce507ef7811cdcfdf09652912679acc355093c558c4d3"
+    },
+    {
+      "path": "COT-Runtime/DynastyEnhancer/Tools/news_cycles.mjs",
+      "module": "DynastyEnhancer",
+      "sha256": "bc8783aa4658eead9daf792f492a6a6f8c0b319de3c9d26b3fa402894f876f81"
+    },
+    {
+      "path": "COT-Runtime/DynastyEnhancer/Tools/normalize_dynasty.mjs",
+      "module": "DynastyEnhancer",
+      "sha256": "ea1eb85655b009d1c84190e9f2d1be54d45383149d068e361eaff5e8adc5178f"
+    },
+    {
+      "path": "COT-Runtime/DynastyEnhancer/Tools/offseason_carry_events.mjs",
+      "module": "DynastyEnhancer",
+      "sha256": "574cff9a547414d582b2eef90ea3592cac12da5b30f4200f6dfc40f4e1755b5e"
+    },
+    {
+      "path": "COT-Runtime/DynastyEnhancer/Tools/offseason_ledger.mjs",
+      "module": "DynastyEnhancer",
+      "sha256": "486aba19685565f2d591c8d9076f617e8be4337721950f0719a54e21e229eb88"
+    },
+    {
+      "path": "COT-Runtime/DynastyEnhancer/Tools/offseason_ledger_store.mjs",
+      "module": "DynastyEnhancer",
+      "sha256": "02af9bb0014333c137ceb4a672fbf048c2add1cb903434c06dd6ea916918cbba"
+    },
+    {
+      "path": "COT-Runtime/DynastyEnhancer/Tools/offseason_recruiting.mjs",
+      "module": "DynastyEnhancer",
+      "sha256": "e8db68ebe8991500ac3db66666a4d4c41dcc6d14573d5da0a096055f572f8089"
+    },
+    {
+      "path": "COT-Runtime/DynastyEnhancer/Tools/player_references.mjs",
+      "module": "DynastyEnhancer",
+      "sha256": "db05bd5ff3a042a48ea37b3697f2d604aafb114b3e98b19248dae0dfab70c564"
+    },
+    {
+      "path": "COT-Runtime/DynastyEnhancer/Tools/players_leaving_events.mjs",
+      "module": "DynastyEnhancer",
+      "sha256": "a75dd8c953e31f57b486bb832e83685d643136e84f51d12f4b90e6d701301edf"
+    },
+    {
+      "path": "COT-Runtime/DynastyEnhancer/Tools/playoff_events.mjs",
+      "module": "DynastyEnhancer",
+      "sha256": "f4d8658438c558253ab1a67724501b5b6119701bba461455e65cca134b17301b"
+    },
+    {
+      "path": "COT-Runtime/DynastyEnhancer/Tools/postseason_buzz.mjs",
+      "module": "DynastyEnhancer",
+      "sha256": "901c45f7980303b3c9fc3fc4518483482c73457b8af7ab4160f5b9e1189b4033"
+    },
+    {
+      "path": "COT-Runtime/DynastyEnhancer/Tools/postseason_events.mjs",
+      "module": "DynastyEnhancer",
+      "sha256": "1b563999951392a5b9c728636cf56ebd8bdae744ba3f8f9ad05702964143b7b3"
+    },
+    {
+      "path": "COT-Runtime/DynastyEnhancer/Tools/postseason_timing.mjs",
+      "module": "DynastyEnhancer",
+      "sha256": "335f225cf0cc2e76006944dc908b128dff1986aa17ec179c59e6aae268236658"
+    },
+    {
+      "path": "COT-Runtime/DynastyEnhancer/Tools/preseason_events.mjs",
+      "module": "DynastyEnhancer",
+      "sha256": "592a4a92f1b42f1e27245f934176cc92cc60a14ebe67af55f3097b554e81b6df"
+    },
+    {
+      "path": "COT-Runtime/DynastyEnhancer/Tools/prose_cleanup.mjs",
+      "module": "DynastyEnhancer",
+      "sha256": "d93fe9c1f84e1f783d852217bfab187c42835c1e3c0c5dee1be3a93d04aad103"
+    },
+    {
+      "path": "COT-Runtime/DynastyEnhancer/Tools/public_polls.mjs",
+      "module": "DynastyEnhancer",
+      "sha256": "8fe2715349ce7f36f71117277473b9a2e3787fa3a6a22ea779c6ceaf3122397e"
+    },
+    {
+      "path": "COT-Runtime/DynastyEnhancer/Tools/publication_policy.mjs",
+      "module": "DynastyEnhancer",
+      "sha256": "8647238c9dee5ee7ae5ed89d3fcc1880a89cd15a63861f62e23726af0e930e8e"
+    },
+    {
+      "path": "COT-Runtime/DynastyEnhancer/Tools/publication_timeline.mjs",
+      "module": "DynastyEnhancer",
+      "sha256": "c332029bfd688311d25c479367c732ddf711ab6a768300f0eb5edb132a0f85bd"
+    },
+    {
+      "path": "COT-Runtime/DynastyEnhancer/Tools/read_dynasty.mjs",
+      "module": "DynastyEnhancer",
+      "sha256": "1280a4e92b2f48a2ca474e8762c4035b9db29df6a1bab0791f199004cfb9feff"
+    },
+    {
+      "path": "COT-Runtime/DynastyEnhancer/Tools/read_runtime.mjs",
+      "module": "DynastyEnhancer",
+      "sha256": "37f5df479df9e156bdac00bc43a8edffa03795f303fd5cceb9504f46ae4f3a5c"
+    },
+    {
+      "path": "COT-Runtime/DynastyEnhancer/Tools/recover_weeks.mjs",
+      "module": "DynastyEnhancer",
+      "sha256": "d9337b88001eea82e813a879945913933179ab2dd2776a049407e4320b94e530"
+    },
+    {
+      "path": "COT-Runtime/DynastyEnhancer/Tools/recruit_context.mjs",
+      "module": "DynastyEnhancer",
+      "sha256": "84f5f21206ffa98787454f50185db601f359f0cafbcdf06644a5d3f68b042a7a"
+    },
+    {
+      "path": "COT-Runtime/DynastyEnhancer/Tools/recruit_ranks.mjs",
+      "module": "DynastyEnhancer",
+      "sha256": "5736aa2fdfda1c892fecc2e2675153baf0aab24c2cfb755d5db283c1ad16330a"
+    },
+    {
+      "path": "COT-Runtime/DynastyEnhancer/Tools/recruit_resume_data.mjs",
+      "module": "DynastyEnhancer",
+      "sha256": "176d60692b78efdabf2a3b7400a3cf97d468cf1a3b1e765bab24dd9b3c4ea15f"
+    },
+    {
+      "path": "COT-Runtime/DynastyEnhancer/Tools/render_voice_review.mjs",
+      "module": "DynastyEnhancer",
+      "sha256": "20c8ebe9601e60effb16606f7d04324bc45905e3d2b1920518bbcc09a47911f0"
+    },
+    {
+      "path": "COT-Runtime/DynastyEnhancer/Tools/repair_recruiting_archive.mjs",
+      "module": "DynastyEnhancer",
+      "sha256": "f2426ff4fc341a14ee5134dc44e52fd962a0c20d4e7327ebc9641ae4bf4570b1"
+    },
+    {
+      "path": "COT-Runtime/DynastyEnhancer/Tools/resume_runtime.mjs",
+      "module": "DynastyEnhancer",
+      "sha256": "c1e4f4e3385a67bfacec5495b3ae652c0121975e3918959eda38cbb0a1c6d79a"
+    },
+    {
+      "path": "COT-Runtime/DynastyEnhancer/Tools/review_completed_corpus.mjs",
+      "module": "DynastyEnhancer",
+      "sha256": "33b107376df758841a26d2a5dd4c137092f82c8da37338985aab28a30579aa18"
+    },
+    {
+      "path": "COT-Runtime/DynastyEnhancer/Tools/review_recruit_resumes.mjs",
+      "module": "DynastyEnhancer",
+      "sha256": "3cc5767f78a6ffa15038b18b459b3576bbff36882e627cb511a8569790629d22"
+    },
+    {
+      "path": "COT-Runtime/DynastyEnhancer/Tools/runtime_archive.mjs",
+      "module": "DynastyEnhancer",
+      "sha256": "74285695693034ff36412999b4647af2c1b5c64b1d1379ecfd5fd65c4f0b32f6"
+    },
+    {
+      "path": "COT-Runtime/DynastyEnhancer/Tools/runtime_lifecycle.mjs",
+      "module": "DynastyEnhancer",
+      "sha256": "e414a31facd6f072c4b8fbaafca9297646eaf46be3550ba9a669015e12384a17"
+    },
+    {
+      "path": "COT-Runtime/DynastyEnhancer/Tools/season_context.mjs",
+      "module": "DynastyEnhancer",
+      "sha256": "29c3f710b3b1d267fe18745b952ff92b7ae0c785a4c6db5adab6e58b835b97cf"
+    },
+    {
+      "path": "COT-Runtime/DynastyEnhancer/Tools/season_ending_events.mjs",
+      "module": "DynastyEnhancer",
+      "sha256": "68faeb9efa4ff2c54a2e7edf70faa23ffae381f4adb07784709cfb7320695967"
+    },
+    {
+      "path": "COT-Runtime/DynastyEnhancer/Tools/season_launch_events.mjs",
+      "module": "DynastyEnhancer",
+      "sha256": "46d77ebb748cfd1074660a982376ab1173a1bd637cc84435512c9513573c4105"
+    },
+    {
+      "path": "COT-Runtime/DynastyEnhancer/Tools/season_review_events.mjs",
+      "module": "DynastyEnhancer",
+      "sha256": "119a015934468342c1f7159287b1e9b91835347365a524005a21720882a7d6af"
+    },
+    {
+      "path": "COT-Runtime/DynastyEnhancer/Tools/season_storylines.mjs",
+      "module": "DynastyEnhancer",
+      "sha256": "6a846b7b4d0162aa4db8c109578f15031ab68aec426cfebcdfe6608121fe6a06"
+    },
+    {
+      "path": "COT-Runtime/DynastyEnhancer/Tools/social_discovery.mjs",
+      "module": "DynastyEnhancer",
+      "sha256": "a7fdf17d05af0a32e7d5d4159965a9236d028e02b4292b80046e7f2d4ba34fa2"
+    },
+    {
+      "path": "COT-Runtime/DynastyEnhancer/Tools/story_authors.mjs",
+      "module": "DynastyEnhancer",
+      "sha256": "5da53553e48614ee83ed6c3bd851640f9fd434e86f112c34ad3c87ba5b41bc63"
+    },
+    {
+      "path": "COT-Runtime/DynastyEnhancer/Tools/story_avatars.mjs",
+      "module": "DynastyEnhancer",
+      "sha256": "d98cecd63cc1436f098299f536002345bfacdf32b53111967f563601c689ef61"
+    },
+    {
+      "path": "COT-Runtime/DynastyEnhancer/Tools/story_conversations.mjs",
+      "module": "DynastyEnhancer",
+      "sha256": "6238dfdf43b561c2e5cfa03c314024c661c2242c3e212a35b5042c03793baff8"
+    },
+    {
+      "path": "COT-Runtime/DynastyEnhancer/Tools/story_engagement.mjs",
+      "module": "DynastyEnhancer",
+      "sha256": "1bef261c26763633ec215d8c4c509b6d4eab0b03a994f51b1b9ff05e87c5edc0"
+    },
+    {
+      "path": "COT-Runtime/DynastyEnhancer/Tools/story_events.mjs",
+      "module": "DynastyEnhancer",
+      "sha256": "64aca8b09108c1e24775087fb0956bb339ab4999a2c2302109819f3191b100e9"
+    },
+    {
+      "path": "COT-Runtime/DynastyEnhancer/Tools/story_renderer.mjs",
+      "module": "DynastyEnhancer",
+      "sha256": "c1a5598363f57f0a7563fda85b5ccc760e61b6b6deb3aacda8b0faebb6dc24b1"
+    },
+    {
+      "path": "COT-Runtime/DynastyEnhancer/Tools/story_templates.mjs",
+      "module": "DynastyEnhancer",
+      "sha256": "bfcc67b58b6aee1176156ea6e2b00801c2878fe27dd89b6a918c5ce81f7b487c"
+    },
+    {
+      "path": "COT-Runtime/DynastyEnhancer/Tools/team_analytics.mjs",
+      "module": "DynastyEnhancer",
+      "sha256": "d16fd2a9599acbd551134a3953f1ff1650972dd56c94cb32bcfcfac6bb43168f"
+    },
+    {
+      "path": "COT-Runtime/DynastyEnhancer/Tools/training_profile.mjs",
+      "module": "DynastyEnhancer",
+      "sha256": "5497572d081312e474ba33fb2d9a5f4a8cc1a597f770d81c0e40d35c8af4839b"
+    },
+    {
+      "path": "COT-Runtime/DynastyEnhancer/Tools/transaction_events.mjs",
+      "module": "DynastyEnhancer",
+      "sha256": "d448f862720ac10d64a5c9946296bcf7ba474e066cec4cd587dde44b069712d1"
+    },
+    {
+      "path": "COT-Runtime/DynastyEnhancer/Tools/verify_rollover.mjs",
+      "module": "DynastyEnhancer",
+      "sha256": "4cd3432d7f6c86872d64a5d796e9040e9de3014c08c274034ece7b46819ffe4a"
+    },
+    {
+      "path": "COT-Runtime/DynastyEnhancer/Tools/voice_style.mjs",
+      "module": "DynastyEnhancer",
+      "sha256": "fe64af44201e9b076d852e42ad05912fa5898cafedf742d4c48dfe359edbfb62"
+    },
+    {
+      "path": "COT-Runtime/DynastyEnhancer/Tools/weekly_coverage.mjs",
+      "module": "DynastyEnhancer",
+      "sha256": "3634a74686aedd6ac181f865ead1ec15b3cdbace930edabe1a017497217b48b9"
+    },
+    {
+      "path": "COT-Runtime/DynastyEnhancer/Tools/world_events.mjs",
+      "module": "DynastyEnhancer",
+      "sha256": "2708c031fed13c5983c7b1e0cb1ada5ba7908be5eb4b32e2bf5dd46ca2982046"
+    },
+    {
+      "path": "COT-Runtime/DynastyEnhancer/Content/Runtime/account-refresh-pack.json",
+      "module": "DynastyEnhancer",
+      "sha256": "62676753939b8b0dc83ac9ad61d164840d1f7fc128036b5967ff037b0bbdd3d8"
+    },
+    {
+      "path": "COT-Runtime/DynastyEnhancer/Content/Runtime/analysis-pack.json",
+      "module": "DynastyEnhancer",
+      "sha256": "29db5b444e9d96b597f5689d24e0d8513abb7ed7ae8829d4dc46674bec33107f"
+    },
+    {
+      "path": "COT-Runtime/DynastyEnhancer/Content/Runtime/analytics-variety-pack.json",
+      "module": "DynastyEnhancer",
+      "sha256": "790597b3318f9e70dfc816af3118563853298c7657d638d609f538b3d5b01214"
+    },
+    {
+      "path": "COT-Runtime/DynastyEnhancer/Content/Runtime/buzz-variety-pack.json",
+      "module": "DynastyEnhancer",
+      "sha256": "c17c46c2477e35bdf012a4b99caae05ee6b8f30425b8ec8daff9e91bc4a987fc"
+    },
+    {
+      "path": "COT-Runtime/DynastyEnhancer/Content/Runtime/compact-variety-pack.json",
+      "module": "DynastyEnhancer",
+      "sha256": "c8e952f4aa187f75fd1d6b9c3a9b3a48d8b5b0f88ce0eb89cf849980fe0cecfa"
+    },
+    {
+      "path": "COT-Runtime/DynastyEnhancer/Content/Runtime/context-pack.json",
+      "module": "DynastyEnhancer",
+      "sha256": "808460142ae43d95afe68d8003336a98722f61564cc737f89171df5e1f010eeb"
+    },
+    {
+      "path": "COT-Runtime/DynastyEnhancer/Content/Runtime/cycle-pack.json",
+      "module": "DynastyEnhancer",
+      "sha256": "f2afd7cfb1655664f8631abc441a0d21c9480f94f46fd4825957a6cef0b161ed"
+    },
+    {
+      "path": "COT-Runtime/DynastyEnhancer/Content/Runtime/cycle-variety-pack.json",
+      "module": "DynastyEnhancer",
+      "sha256": "b526ccb629b526fe4478d9cf4a8eab097a543c4e8f42914334a3fba9edffa9f8"
+    },
+    {
+      "path": "COT-Runtime/DynastyEnhancer/Content/Runtime/editorial-variety-pack.json",
+      "module": "DynastyEnhancer",
+      "sha256": "d80666b24110334e05ec84a685a27e3da864c70e931ed25528980c238ec92ddf"
+    },
+    {
+      "path": "COT-Runtime/DynastyEnhancer/Content/Runtime/event-variety-pack.json",
+      "module": "DynastyEnhancer",
+      "sha256": "cc5824b51598c48426a0ed4b1e7805a456802c70301389fea42df36cbcc7fa3a"
+    },
+    {
+      "path": "COT-Runtime/DynastyEnhancer/Content/Runtime/fan-variety-pack.json",
+      "module": "DynastyEnhancer",
+      "sha256": "c0b0b054b8b2d8d27c36c045359be2248013e3fcf993c6f810675f8e88380da7"
+    },
+    {
+      "path": "COT-Runtime/DynastyEnhancer/Content/Runtime/final-cycle-variety-pack.json",
+      "module": "DynastyEnhancer",
+      "sha256": "58d7042d63a0012ff5a73b4ada8c64d6717717d53d8fd6d7a14df9ea461e2424"
+    },
+    {
+      "path": "COT-Runtime/DynastyEnhancer/Content/Runtime/first-pack.json",
+      "module": "DynastyEnhancer",
+      "sha256": "a1427894fc2e1b0e58304bc8e90dc534e6e179830d5d169257b04c319f5aa766"
+    },
+    {
+      "path": "COT-Runtime/DynastyEnhancer/Content/Runtime/history-analysis-pack.json",
+      "module": "DynastyEnhancer",
+      "sha256": "1f9f859fd3575b14bb8c749036128fbe88575febed0accf7f935571a0f1723c1"
+    },
+    {
+      "path": "COT-Runtime/DynastyEnhancer/Content/Runtime/matchup-season-pack.json",
+      "module": "DynastyEnhancer",
+      "sha256": "90119315fe107f522e6654816a0ef3918064e56f62142bdc0df93efea1f9a3a1"
+    },
+    {
+      "path": "COT-Runtime/DynastyEnhancer/Content/Runtime/matchup-variety-pack.json",
+      "module": "DynastyEnhancer",
+      "sha256": "fdb9ff9784354287290fa7b5d018b940a190b68d0c2b8f0943e4ba3c4dccbbfc"
+    },
+    {
+      "path": "COT-Runtime/DynastyEnhancer/Content/Runtime/national-account-avatars.json",
+      "module": "DynastyEnhancer",
+      "sha256": "8a1b80a483616260ba63b47156882597f82701037a3fe3fae1d08af27625fb0a"
+    },
+    {
+      "path": "COT-Runtime/DynastyEnhancer/Content/Runtime/nfl-teams.json",
+      "module": "DynastyEnhancer",
+      "sha256": "82e119285a08a37439cf06e22723705006cad2ff0b65ddab7dedf6c76a90983d"
+    },
+    {
+      "path": "COT-Runtime/DynastyEnhancer/Content/Runtime/offseason-carryover-pack.json",
+      "module": "DynastyEnhancer",
+      "sha256": "769a106b4c30ac787d31bbfe80e447e10531b109e26267f229a496014b730346"
+    },
+    {
+      "path": "COT-Runtime/DynastyEnhancer/Content/Runtime/offseason-discourse-pack.json",
+      "module": "DynastyEnhancer",
+      "sha256": "5feb4d61d82631745ec0ab37ec2b5cde1c4f8cab52c3542487f3e0dd211668b4"
+    },
+    {
+      "path": "COT-Runtime/DynastyEnhancer/Content/Runtime/opening-variety-pack.json",
+      "module": "DynastyEnhancer",
+      "sha256": "7e13d7cee1d686b70dca8e2d3a8971030665ca389c549771d013238b7ea06e02"
+    },
+    {
+      "path": "COT-Runtime/DynastyEnhancer/Content/Runtime/playoff-desk-pack.json",
+      "module": "DynastyEnhancer",
+      "sha256": "f8587d11cd06907bc09243c349adc5930df56d2051d47f651cf2985e477d3f0f"
+    },
+    {
+      "path": "COT-Runtime/DynastyEnhancer/Content/Runtime/portal-draft-pack.json",
+      "module": "DynastyEnhancer",
+      "sha256": "558c47867b77316405d318c5311b2e5b2241a6718f177074b597b3c3516c7471"
+    },
+    {
+      "path": "COT-Runtime/DynastyEnhancer/Content/Runtime/portrait-ranges.json",
+      "module": "DynastyEnhancer",
+      "sha256": "0ded1178e7d11071b6a6b7f0c8b1cb14a04a6465af322a24d5e38ef85b461e0c"
+    },
+    {
+      "path": "COT-Runtime/DynastyEnhancer/Content/Runtime/postseason-pack.json",
+      "module": "DynastyEnhancer",
+      "sha256": "23e5a7795f472099db30f00a2a59629c4bd52cd94a6479dbe19b344b3769eb18"
+    },
+    {
+      "path": "COT-Runtime/DynastyEnhancer/Content/Runtime/preseason-pack.json",
+      "module": "DynastyEnhancer",
+      "sha256": "1926a3b5557f58937f51a086d04fcea3986317f98c4e416a794a647f0b57c26a"
+    },
+    {
+      "path": "COT-Runtime/DynastyEnhancer/Content/Runtime/race-variety-pack.json",
+      "module": "DynastyEnhancer",
+      "sha256": "68657bc40402d24a133ee413e8c6a9102ac2176907029d3dfcad3e5644ccee5c"
+    },
+    {
+      "path": "COT-Runtime/DynastyEnhancer/Content/Runtime/reaction-variety-pack.json",
+      "module": "DynastyEnhancer",
+      "sha256": "6216de70655c4fe096be37037341b2f3a53cc06fe5fe86a46594fb5da69c018c"
+    },
+    {
+      "path": "COT-Runtime/DynastyEnhancer/Content/Runtime/recruiting-variety-pack.json",
+      "module": "DynastyEnhancer",
+      "sha256": "05fa7fe4b9b5766fd1a65ced12135189639cf3e207737ecaadf933d04e8c747b"
+    },
+    {
+      "path": "COT-Runtime/DynastyEnhancer/Content/Runtime/reporter-variety-pack.json",
+      "module": "DynastyEnhancer",
+      "sha256": "fa5e83c13378a32dd60585dd5a446496c603299a754429fdf07aed3439ee18ff"
+    },
+    {
+      "path": "COT-Runtime/DynastyEnhancer/Content/Runtime/retrospective-variety-pack.json",
+      "module": "DynastyEnhancer",
+      "sha256": "e6884c115de16f8f8ca6d782cb2ead9b7863f3d78cd599ec5c2d7419f53091f8"
+    },
+    {
+      "path": "COT-Runtime/DynastyEnhancer/Content/Runtime/review-corrections-pack.json",
+      "module": "DynastyEnhancer",
+      "sha256": "ec5b9e206b8cb3c34e921c444eba6271098f48d90d48f5000f0820327a71587c"
+    },
+    {
+      "path": "COT-Runtime/DynastyEnhancer/Content/Runtime/season-launch-pack.json",
+      "module": "DynastyEnhancer",
+      "sha256": "8058d81d13ad62ed105bc14ebe824ec1b4b94a7af5c5e5323af9c89378348126"
+    },
+    {
+      "path": "COT-Runtime/DynastyEnhancer/Content/Runtime/season-review-pack.json",
+      "module": "DynastyEnhancer",
+      "sha256": "eec52e97353f4ed2f99cc7fec613a1834846d73573b6228657a76ae1f80260e7"
+    },
+    {
+      "path": "COT-Runtime/DynastyEnhancer/Content/Runtime/team-logo-variants.json",
+      "module": "DynastyEnhancer",
+      "sha256": "1b91178509a196fab64abc34ea09933d486242abe6ee7ec10a94f405eeca66eb"
+    },
+    {
+      "path": "COT-Runtime/DynastyEnhancer/Content/Runtime/transactions-pack.json",
+      "module": "DynastyEnhancer",
+      "sha256": "028d6ba7773b1c5e249ef72f4851aca751cb3936633525db5ec105d03325e52e"
+    },
+    {
+      "path": "COT-Runtime/DynastyEnhancer/Content/Runtime/voice-variety-pack.json",
+      "module": "DynastyEnhancer",
+      "sha256": "b89870fc4f2a28bab862905246c329d31fc5c944cce726ac4890168091e8994b"
+    },
+    {
+      "path": "COT-Runtime/DynastyEnhancer/dynasty-enhancer.json",
+      "module": "DynastyEnhancer",
+      "sha256": "a0b88bb6eae2d48dcf5b0cb79cb891d0a287bdc0eb47b793801fd42b1cae6c86"
+    },
+    {
+      "path": "COT-Runtime/Shared/node.exe",
+      "module": "DynastyEnhancer",
+      "sha256": "9a4eb5f1c29c6a2e93852ead46b999e284a6a5ca8bab4d4e241d587d025a52de"
+    },
+    {
+      "path": "LICENSES/Node-v24.18.0.txt",
+      "module": "Core",
+      "sha256": "148eacf7863ef4329224a29398623077200a27194aa075569faf4a0a85566ca5"
+    },
+    {
+      "path": "LICENSES/Aces-CFB-Toolkit-MIT.txt",
+      "module": "Core",
+      "sha256": "3e3d3545f4473d06a364d3a7777e70a7e31d638e0604fe052ea393a50de1b0b5"
+    },
+    {
+      "path": "LICENSES/nlohmann-json-MIT.txt",
+      "module": "Core",
+      "sha256": "61e08da79c44061654015ce6b0c4061c23ee1dd18237fbf09e9bfda3c0ea2831"
+    },
+    {
+      "path": "Plugins/OfflineDynastySettings/OfflineDynastySettings.Persistence.exe",
+      "module": "ExtraDynastySettings",
+      "sha256": "1bd1159b30ce45ae64276cf1dce90483421f48c95b614618bc068e67cb9d1235"
+    },
+    {
+      "path": "Plugins/SituationalPractice/SituationalPractice.Runtime.exe",
+      "module": "DrivePractice",
+      "sha256": "34819b831804360cef64fbf0eb79905dfb97bb966d4320631e551e44b559ca4b"
+    },
+    {
+      "path": "Plugins/SituationalPractice/SituationalPractice.Runtime.pdb",
+      "module": "DrivePractice",
+      "sha256": "bd020ea23a9c063532a227774b8d72c19fdb7c51b61aeac0d79542737950af2e"
+    },
+    {
+      "path": "Plugins/DynastyCOT.dll",
+      "module": "Core",
+      "sha256": "b96a73d2dd6f5e59ea9b8f89dad04f14c8d7162a0b37f1be46e1e35d99fffadf"
+    },
+    {
+      "path": "DGA-Runtime/Runtime-2.1.9/DynamicGamedayAtmosphereNative-2.1.9.dll",
+      "module": "GamedayAtmosphere",
+      "sha256": "547004f2c54152be1a59992c39eb1ee221cf63bc21d1a20465675199590cd6b1"
+    },
+    {
+      "path": "DGA-Runtime/Runtime-2.1.9/DgaDiagnostics.exe",
+      "module": "GamedayAtmosphere",
+      "sha256": "85c7a912f3c2a5816e71f78c022fcff446048be19f5b8f30aa964933dddb372b"
+    },
+    {
+      "path": "Plugins/DynastyCOT.dll",
+      "module": "Core",
+      "sha256": "380d1e5be7dfcd8c08ccf3107b18b18b38fdefca45f34aa971aadfce2eeb19a9"
+    }
+  ]
+}

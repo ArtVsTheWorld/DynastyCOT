@@ -1,0 +1,36 @@
+/Build/
+/Evidence/
+/Release/
+/private/
+**/Build/
+**/Evidence/
+**/Release/
+**/__pycache__/
+**/*.pyc
+**/*.obj
+**/*.pdb
+**/*.dll
+**/*.exe
+**/RuntimeHistory/
+**/RecruitResumeHistory/
+**/DynastyEnhancementSettings/
+
+/baseline-*.log
+/Modules/PlayerAnalytics/
+/Modules/AbilityColors/
+/Baselines/private-fixtures.json
+
+# Local build provenance and private/native UI generation inputs.
+/cot.build-inputs.json
+**/Research/
+**/captures/
+**/saves/
+**/*.ast
+**/*.raw
+**/*.fbmod
+**/*.fbproject
+**/*.sav
+
+# Private editorial/reconstructed research fixtures; keep authored adapters.
+/Modules/DynastyEnhancer/Tests/Fixtures/ulm-close-games-2026.json
+/Modules/DynastyEnhancer/Content/Editorial/review-samples.json

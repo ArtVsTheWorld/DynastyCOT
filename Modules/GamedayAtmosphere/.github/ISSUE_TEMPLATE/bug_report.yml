@@ -1,0 +1,33 @@
+name: Bug report
+description: Report a problem with Dynamic Gameday Atmosphere
+body:
+  - type: input
+    id: versions
+    attributes:
+      label: Plugin build, game version and MMC version
+      placeholder: Update 2 / 1.54.0, game build, MMC version
+    validations:
+      required: true
+  - type: input
+    id: game
+    attributes:
+      label: Matchup, stadium and mode
+      description: Include the home team, score, quarter and clock when relevant.
+    validations:
+      required: true
+  - type: textarea
+    id: problem
+    attributes:
+      label: What happened?
+      description: What did you expect, what happened instead, and how can it be repeated?
+    validations:
+      required: true
+  - type: textarea
+    id: plugins
+    attributes:
+      label: Other plugins enabled
+  - type: textarea
+    id: logs
+    attributes:
+      label: Settings, status and logs
+      description: Attach the INI, status.txt, main log and launcher.log from Plugins/DynamicGamedayAtmosphere/Logs. Mention whether MMC/game were restarted after updating. Screenshots or a short clip can help.
