@@ -5,6 +5,28 @@
 #include <vector>
 namespace analytics {
 inline constexpr int NationalTeam=-1,SeasonWeek=-1;
+inline constexpr unsigned NationalRowLimit=400;
+// Availability follows captured season/stage progress, never game completion alone.
+// Unknown stages fail closed rather than revealing unfinished weekly grades.
+inline int stageOrder(const std::string& type){
+    if(type=="PreSeason"||type=="Preseason")return 0;
+    if(type=="RegularSeason")return 1;
+    if(type=="PostSeason"||type=="Postseason"||type=="BowlSeason"||type=="Playoffs")return 2;
+    if(type=="BowlSeason1")return 3;
+    if(type=="BowlSeason2")return 4;
+    if(type=="BowlSeason3")return 5;
+    if(type=="NationalChampionship")return 6;
+    if(type=="OffSeason"||type=="Offseason")return 7;
+    return -1;
+}
+inline bool releasedWeek(const Json& data,int year,int week,const std::string& type){
+    if(!data.contains("season"))return true; // Offline datasets without a clock retain their explicit inputs.
+    const auto& now=data.at("season");const int currentYear=now.at("CurrentYear").get<int>();
+    if(year!=currentYear)return year<currentYear;
+    const int stage=stageOrder(type),currentStage=stageOrder(now.at("CurrentWeekType").get<std::string>());
+    if(stage<0||currentStage<0)return false;
+    return stage<currentStage||(stage==currentStage&&week<now.at("CurrentWeek").get<int>());
+}
 inline bool fcsTeam(const Json& team){return team.value("isFcs",team.value("name",std::string()).rfind("FCS ",0)==0);}
 inline std::string classification(double grade){
     if(grade>=90)return "Elite";
@@ -61,8 +83,10 @@ inline Json teamPage(const Json& data,int teamIndex,int year,int week,const std:
     std::map<int,std::string> names;
     for(const auto& t:data.at("teams"))if(!fcsTeam(t)&&t.at("index")!=255)names[t.at("index").get<int>()]=t.at("name").get<std::string>();
     auto included=[&](int team){return names.count(team)&&(national||team==teamIndex);};
+    const bool available=season||releasedWeek(data,year,week,weekType);
+    if(!available)result["status"]="Available next week";
     bool scheduled=false,finalized=false;
-    if(!season)for(const auto& g:data.at("games")){
+    if(!season&&available)for(const auto& g:data.at("games")){
         if(g.at("SeasonYear")!=year||g.at("SeasonWeek")!=week||g.at("SeasonWeekType")!=weekType)continue;
         if(!included(g.value("homeTeamIndex",-2))&&!included(g.value("awayTeamIndex",-2)))continue;
         scheduled=true;auto status=g.at("GameStatus").get<std::string>();finalized|=status=="HomeWon"||status=="AwayWon"||status=="Tied";
@@ -80,6 +104,7 @@ inline Json teamPage(const Json& data,int teamIndex,int year,int week,const std:
     for(const auto& row:data.at("rows")){
         int team=row.at("teamIndex").get<int>();
         if(!included(team)||row.at("year")!=year)continue;
+        if(!releasedWeek(data,row.at("year").get<int>(),row.at("week").get<int>(),row.at("weekType").get<std::string>()))continue;
         if(season){if(row.at("weekType")=="PreSeason"||row.at("weekType")=="Preseason")continue;}
         else if(row.at("week")!=week||row.at("weekType")!=weekType)continue;
         if(!compatible(group(row.at("position").get<std::string>()),row.at("statType").get<std::string>()))continue;
@@ -108,6 +133,10 @@ inline Json teamPage(const Json& data,int teamIndex,int year,int week,const std:
         row["classification"]=row.at("grade").is_number()?classification(row.at("grade").get<double>()):"N/A";
         result["rows"].push_back(std::move(row));
     }
-    sortPage(result,5,true);return result;
+    // Fix National eligibility by PFF grade before any user column sorting.
+    // Every native page path calls this builder; team rosters remain complete.
+    sortPage(result,5,true);
+    if(national&&result["rows"].size()>NationalRowLimit){auto& rows=result["rows"];rows.erase(rows.begin()+NationalRowLimit,rows.end());}
+    return result;
 }
 }

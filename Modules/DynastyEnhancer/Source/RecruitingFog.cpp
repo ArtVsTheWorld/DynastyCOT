@@ -26,6 +26,7 @@
 #endif
 #if defined(RECRUIT_NOTES_UI)
 #include "RecruitNotesUiRuntime.h"
+#include "AnalyticsActionsUiPrograms.h"
 #include "RecruitResumeRuntime.h"
 #include "RecruitClassGrid.h"
 #include "PlayerRatingGrid.h"
@@ -74,6 +75,8 @@ static_assert(sizeof(detailSurfaces)/sizeof(detailSurfaces[0])==detailCount);
 std::atomic<bool> disabled{false};std::atomic<unsigned> inflight{0},calls{0};bool installed=false;
 std::mutex queueMutex;std::deque<Json> pending;
 #if defined(RECRUIT_NOTES_UI)
+namespace nativeanalytics {extern std::atomic<bool> opened,cardReturnPending;bool resumeCard();bool available();}
+notesui::Runtime analyticsMainUi(analyticsactions::hubMainPrograms()),analyticsCurrentUi(analyticsactions::currentMainPrograms()),analyticsCleanupUi(analyticsactions::hubCleanupPrograms()),analyticsCurrentCleanupUi(analyticsactions::currentCleanupPrograms()),analyticsHintsUi(analyticsactions::hubHintsPrograms()),analyticsCurrentHintsUi(analyticsactions::currentHintsPrograms());
 notesui::Runtime notesUi;
 notesui::Runtime playerUi(playerui::programs());
 notesui::Runtime modernPlayerUi(playerui::modernPrograms());
@@ -81,6 +84,9 @@ notesui::Runtime playerControlUi(playercardui::controlPrograms());
 notesui::Runtime playerCardUi(playercardui::cardPrograms());
 notesui::Runtime playerTemplateUi(playercardui::templatePrograms());
 notesui::Runtime playerSkillUi(playercardui::skillPrograms());
+// An overhaul team-summary change must not disable full-card Ratings adapters.
+notesui::Runtime playerTeamModuleUi(playercardui::teamModulePrograms());
+notesui::Runtime analyticsRefreshUi(analyticsactions::hubRefreshPrograms()),analyticsCurrentRefreshUi(analyticsactions::currentRefreshPrograms());
 notesui::Runtime playerHubUi(playerhubui::programs());
 notesui::Runtime playerSliderUi(playercardui::sliderPrograms());
 notesui::Runtime playerInGameUi(playeringameui::programs());
@@ -113,8 +119,13 @@ notesui::Runtime gapAioTopPlayersUi(gapui::aioTopPlayersPrograms());
 notesui::Runtime draftOvrStrategyUi(draftovrui::strategyPrograms()),draftOvrRowsUi(draftovrui::rowPrograms());
 notesui::Runtime aioCurrency0(aiocurrencyui::group0()),aioCurrency1(aiocurrencyui::group1()),aioCurrency2(aiocurrencyui::group2()),aioCurrency3(aiocurrencyui::group3());
 notesui::Runtime aioNotesUi(aiorecruitnotesui::programs());
-const std::array<notesui::Runtime*,46> cardUiBanks={&playerControlUi,&playerCardUi,&playerTemplateUi,&playerSkillUi,&playerHubUi,&playerSliderUi,&playerInGameUi,&playerRecruitUi,&playerFormationUi,&playerLegacyOvrUi,&playerNilUi,&playerBlueprintUi,&playerPracticeUi,&playerNilEmbeddedUi,&playerKickerUi,&playerIndividualPanelUi,&playerComparisonPanelUi,&playerImpactPanelUi,&playerLineupPanelUi,&playerTrenchPanelUi,&playerInjuryScreenUi,&currencyIconUi,&currencySlotUi,&currencyCellUi,&gapCoreUi,&gapHubUi,&gapRecruitUi,&gapTeamSelectUi,&draftOvrStrategyUi,&draftOvrRowsUi,&currencyTopbarUi,&currencyRecruitingUi,&currencyBudgetUi,&currencyAnimationUi,&currencyBudgetArtUi,&currencyRecruitDetailUi,&currencyRecruitEditorUi,&aioCurrency0,&aioCurrency1,&aioCurrency2,&aioCurrency3,&playerBlueprintAioUi,&gapWeeklyUi,&gapTopPlayersUi,&gapAioTopPlayersUi,&aioNotesUi};
+notesui::Runtime analyticsRowUi(analyticsactions::hubRowPrograms()),analyticsCurrentRowUi(analyticsactions::currentRowPrograms());
+const std::array<notesui::Runtime*,57> cardUiBanks={&playerControlUi,&playerCardUi,&playerTemplateUi,&playerSkillUi,&playerHubUi,&playerSliderUi,&playerInGameUi,&playerRecruitUi,&playerFormationUi,&playerLegacyOvrUi,&playerNilUi,&playerBlueprintUi,&playerPracticeUi,&playerNilEmbeddedUi,&playerKickerUi,&playerIndividualPanelUi,&playerComparisonPanelUi,&playerImpactPanelUi,&playerLineupPanelUi,&playerTrenchPanelUi,&playerInjuryScreenUi,&currencyIconUi,&currencySlotUi,&currencyCellUi,&gapCoreUi,&gapHubUi,&gapRecruitUi,&gapTeamSelectUi,&draftOvrStrategyUi,&draftOvrRowsUi,&currencyTopbarUi,&currencyRecruitingUi,&currencyBudgetUi,&currencyAnimationUi,&currencyBudgetArtUi,&currencyRecruitDetailUi,&currencyRecruitEditorUi,&aioCurrency0,&aioCurrency1,&aioCurrency2,&aioCurrency3,&playerBlueprintAioUi,&gapWeeklyUi,&gapTopPlayersUi,&gapAioTopPlayersUi,&aioNotesUi,&analyticsMainUi,&analyticsCurrentUi,&analyticsCleanupUi,&analyticsCurrentCleanupUi,&analyticsHintsUi,&playerTeamModuleUi,&analyticsRefreshUi,&analyticsCurrentRefreshUi,&analyticsCurrentHintsUi,&analyticsRowUi,&analyticsCurrentRowUi};
 bool cardBankEnabled(size_t bank){const auto selected=enhancements::options();const auto* runtime=cardUiBanks[bank];
+    if(runtime==&analyticsMainUi||runtime==&analyticsCurrentUi)return nativeanalytics::opened;
+    if(runtime==&analyticsRowUi||runtime==&analyticsCurrentRowUi)return true;
+    if(runtime==&analyticsRefreshUi||runtime==&analyticsCurrentRefreshUi)return true;
+    if(runtime==&analyticsCleanupUi||runtime==&analyticsCurrentCleanupUi||runtime==&analyticsHintsUi||runtime==&analyticsCurrentHintsUi)return true;
     if(runtime==&aioNotesUi)return true;
     if(runtime==&aioCurrency0||runtime==&aioCurrency1||runtime==&aioCurrency2||runtime==&aioCurrency3)return true;
     if(runtime==&gapRecruitUi)return selected.recruiting;
@@ -500,7 +511,10 @@ void __fastcall gridCloseHook(void* source,int form){
 }
 void* __fastcall rosterPlayerHook(void* source,void** out,void* argument){
     CallGuard guard;void* result=nullptr;
-    if(!nativeanalytics::playerCard(out,argument,result))result=originalRosterPlayer(source,out,argument);
+    const auto command=nativeanalytics::argument(argument);
+    if((command=="COT_LEAVE_VIEW"||command=="COT_RETURN_SELECTION"||command.rfind("COT_SELECT:",0)==0||command.rfind("COT_CARD:",0)==0)&&nativeanalytics::playerCard(out,argument,result))return result;
+    nativeanalytics::ensurePreview(source,argument);
+    result=originalRosterPlayer(source,out,argument);
     if(!disabled&&(enhancements::options().roster||enhancements::options().colors)&&out&&*out){
         UiResponse view(read);
         const auto changed=playerfog::convert(view,reinterpret_cast<uintptr_t>(*out),playerfog::Surface::RosterNIL,[&](uintptr_t at,const char* key,const char* text){reinterpret_cast<void(__fastcall*)(void*,const char*,const char*)>(base+0x25a3e60)(reinterpret_cast<void*>(at),key,text);});
@@ -517,7 +531,10 @@ template<size_t Index>void* __fastcall playerResponseHook(void* source,void** ou
 }
 const DetailGetter playerHooks[]={playerResponseHook<0>,playerResponseHook<1>,playerResponseHook<2>,playerResponseHook<3>,playerResponseHook<4>,playerResponseHook<5>,playerResponseHook<6>,playerResponseHook<7>,playerResponseHook<8>,playerResponseHook<9>,playerResponseHook<10>};
 template<size_t Index>void* __fastcall keyedPlayerResponseHook(void* source,void** out,void* key){
-    CallGuard guard;auto* result=keyedPlayerOriginal[Index](source,out,key);
+    CallGuard guard;void* result=nullptr;
+    // Analytics uses native Roster responses; ordinary Stats getters retain
+    // their native DTOs and keys, without synthetic side-card substitution.
+    result=keyedPlayerOriginal[Index](source,out,key);
     if(!disabled&&(enhancements::options().roster||enhancements::options().colors)&&out&&*out){UiResponse view(read);
         const auto changed=playerfog::convert(view,reinterpret_cast<uintptr_t>(*out),keyedPlayerBindings[Index].surface,[&](uintptr_t at,const char* field,const char* text){reinterpret_cast<void(__fastcall*)(void*,const char*,const char*)>(base+0x25a3e60)(reinterpret_cast<void*>(at),field,text);});
         if(keyedPlayerCalls[Index].fetch_add(1)<3)note({{"event","player_fog_keyed_response"},{"surface",Index},{"changed",changed}});
@@ -548,6 +565,14 @@ uintptr_t __fastcall notesSetupHook(void* object,void* saved,uintptr_t receiver,
     if(!disabled&&playerControlUi.prepared){
     const auto liveDefinition=*reinterpret_cast<const uintptr_t*>(static_cast<const unsigned char*>(object)+0x58);
     const auto* liveHeader=reinterpret_cast<const unsigned char*>(liveDefinition);
+    // Native Back can recreate Roster directly, without a navigation request.
+    // Admit only the fingerprinted Roster constructor before it rebuilds columns.
+    if(nativeanalytics::cardReturnPending&&nativeanalytics::available())for(auto* bank:{&analyticsMainUi,&analyticsCurrentUi}){
+        if(!bank->acceptsFrame(liveHeader))continue;
+        try{const auto selected=enhancements::options();const auto index=bank->beforeInvoke(object,read,false,true,unsigned(selected.scale),selected.colors,selected.roster,selected.team,selected.dollars,unsigned(selected.teamScale));
+            if(index==0||bank->ownsInvocation(object,0,read)){nativeanalytics::resumeCard();break;}}
+        catch(const std::exception& error){note({{"event","analytics_return_frame_refused"},{"reason",error.what()}});}
+    }
     static const notesui::FrameDispatch<cardUiBanks.size()> cardDispatch(cardUiBanks);
     const auto candidates=cardDispatch.candidates(liveHeader);
     for(size_t bank=0;bank<cardUiBanks.size();++bank)if((candidates&(uint64_t{1}<<bank))&&!cardUiFailed[bank])try{

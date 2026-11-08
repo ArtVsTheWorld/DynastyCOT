@@ -58,6 +58,8 @@ namespace DynastyCOT.Setup {
     Exception failure=null;int phase=0;var deadline=Stopwatch.StartNew();
     form.Shown+=(s,e)=>{
      try{
+      bool brandImage=false;Action<Control> inspect=null;inspect=control=>{if(control is PictureBox)brandImage=true;foreach(Control child in control.Controls)inspect(child);};inspect(form);
+      check(!brandImage,"large branding image remains inside the window");check(form.Icon!=null&&form.Icon.Width>0,"Windows application icon was removed");
       var initial=form.Selection();check(!initial["DrivePractice"],"existing module choices not loaded");
       form.SetModule(0,true);form.SetModule(1,false);form.SetModule(2,true);form.SetModule(3,true);
       form.ClickInstall();check(form.Busy,"install button did not start worker");phase=1;poll.Start();

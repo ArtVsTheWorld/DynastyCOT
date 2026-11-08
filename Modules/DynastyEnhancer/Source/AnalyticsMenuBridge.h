@@ -22,7 +22,7 @@ const cotanalytics::Api* resolve(){
     auto get=reinterpret_cast<cotanalytics::GetApi>(GetProcAddress(handle,"DynastyCotAnalyticsApi"));if(!get)return nullptr;
     const auto* value=get();HMODULE owner=nullptr;
     if(!value||!GetModuleHandleExW(GET_MODULE_HANDLE_EX_FLAG_FROM_ADDRESS|GET_MODULE_HANDLE_EX_FLAG_UNCHANGED_REFCOUNT,reinterpret_cast<LPCWSTR>(value),&owner)||owner!=handle||!cotanalytics::compatible(*value))return nullptr;
-    for(auto address:{reinterpret_cast<uintptr_t>(value->supported),reinterpret_cast<uintptr_t>(value->available),reinterpret_cast<uintptr_t>(value->open),reinterpret_cast<uintptr_t>(value->request),reinterpret_cast<uintptr_t>(value->leave)})
+    for(auto address:{reinterpret_cast<uintptr_t>(value->supported),reinterpret_cast<uintptr_t>(value->available),reinterpret_cast<uintptr_t>(value->open),reinterpret_cast<uintptr_t>(value->request),reinterpret_cast<uintptr_t>(value->leave),reinterpret_cast<uintptr_t>(value->resumeCard)})
         if(!address||!GetModuleHandleExW(GET_MODULE_HANDLE_EX_FLAG_FROM_ADDRESS|GET_MODULE_HANDLE_EX_FLAG_UNCHANGED_REFCOUNT,reinterpret_cast<LPCWSTR>(address),&owner)||owner!=handle)return nullptr;
     // The host already verifies each DLL's manifest hash before loading it.
     // Only the exact sibling from this build may service the shared UI.

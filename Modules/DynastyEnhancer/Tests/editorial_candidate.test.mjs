@@ -3,6 +3,7 @@ import assert from 'node:assert/strict';
 import fs from 'node:fs';
 import {chooseTemplate,contentPack,templateHistory} from '../Tools/story_templates.mjs';
 import {renderStories} from '../Tools/story_renderer.mjs';
+import {socialDisplayText} from '../Tools/prose_cleanup.mjs';
 import {publishWeek} from '../Tools/feed_selection.mjs';
 import {nativeViewPosts,NATIONAL_CARD_LIMIT} from '../Tools/feed_visibility.mjs';
 import {templateFeatures,varietyMemory,rememberVariety,globalNearUse} from '../Tools/story_variety.mjs';
@@ -14,7 +15,7 @@ test('one bounded editorial expansion: 120 primary alternatives and 30 targeted 
  assert.equal(Object.values(pack.families).flat().length,150);assert.equal(Object.keys(pack.families).length,30);
  for(const [f,ts] of Object.entries(pack.families).slice(0,20)){assert.equal(ts.length,6,f);assert.equal(new Set(ts.map(t=>templateFeatures(t).structure)).size,6,f);}
  assert.equal(new Set(Object.values(pack.families).flat().map(t=>t.id)).size,150);
- for(const patch of pack.overrides){assert.equal(templates.get(patch.id).f,patch.family);assert.equal(templates.get(patch.id).t.body,patch.body);assert.ok(patch.originalBody);}
+ for(const patch of pack.overrides){assert.equal(templates.get(patch.id).f,patch.family);assert.equal(templates.get(patch.id).t.body,socialDisplayText(patch.body));assert.ok(patch.originalBody);}
  assert.equal(NATIONAL_CARD_LIMIT,250);
 });
 test('reviewed copy corrects opponent attribution, complete result sentences and timing',()=>{

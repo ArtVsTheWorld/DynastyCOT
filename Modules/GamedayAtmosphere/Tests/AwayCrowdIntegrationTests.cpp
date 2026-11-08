@@ -23,6 +23,19 @@ int main(){
      loss.restore(800,200,150,0,.95f,.2f);assert(loss.home==650&&loss.away==40);
      loss.restore(800,200,150,0,-1,-1);assert(loss.home==0&&loss.away==0);
      loss.restore(800,200,150,0,NAN,.2f);assert(loss.home==0&&loss.away==0);}
+    // Oklahoma at SMU style blowout: visitors thin visibly, more slowly than
+    // losing hosts. Small/large travelling sections share the same total budget.
+    for(uint64_t away:{800u,2000u,5000u}){
+        const uint64_t home=20000-away;visitors::Losses early,late,neutral;
+        early.advance(home,away,20,0,42,2);
+        late=early;late.advance(home,away,70,0,42,4);
+        neutral.advance(home,away,70,0,42,4,0,0,true);
+        assert(late.home+late.away==14000&&late.away>early.away);
+        assert(double(late.away)/away>.10&&double(late.away)/away<double(late.home)/home);
+        assert(late.away>neutral.away); // Existing neutral-site weighting retained.
+        auto saved=late;late.advance(home,away,70,42,0,4);
+        assert(late.home==saved.home&&late.away==saved.away);
+    }
     std::vector<unsigned char> raw(1024*10);
     for(unsigned i=0;i<1024;++i){raw[i*10]=i%5==0?1:0;raw[i*10+6]=i<16?static_cast<unsigned char>(1+i%8):i<116?9:0;}
     raw[116*10+6]=10;

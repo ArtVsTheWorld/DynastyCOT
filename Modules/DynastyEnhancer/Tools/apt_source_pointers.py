@@ -5,7 +5,7 @@ normalize to their exact source RVA, with or without the asset base.
 """
 import struct
 
-def source_pointers(apt,offset,size):
+def source_pointers(apt,offset,size,nested_definitions=None):
  data=apt.data;start=offset+48;end=start+size;result=[]
  align=lambda n:(n+7)&~7
  def pointer(at):
@@ -24,7 +24,21 @@ def source_pointers(apt,offset,size):
    p=align(p);n=struct.unpack_from('<I',data,p)[0]
    if n>=20000:raise ValueError('Invalid constant array')
    p=align(p+4);pointer(p);p+=8
-  elif op in (0x8e,0x9b):raise ValueError('Nested definition requires explicit metadata')
+  elif op in (0x8e,0x9b):
+   if nested_definitions is None:raise ValueError('Nested definition requires explicit metadata')
+   p=align(p)
+   name,args,regs,flags,params,n=struct.unpack_from('<QIHHQI',data,p)
+   pool_count=struct.unpack_from('<I',data,p+32)[0];pool=struct.unpack_from('<Q',data,p+40)[0]
+   empty=pool_count==0 and pool==0
+   if name>=len(data) or params>=len(data) or args>64 or regs>64 or flags not in (25,41,42) or p+48+n>end or not(empty or (pool_count==0x98765432 and pool==0x12345678)):
+    raise ValueError('Unsupported nested source definition')
+   nested_definitions.append((p-start,name,params,empty))
+   # Decode every child instruction too, adjusting its typed pointer offsets
+   # into the enclosing body. No untyped byte-pattern relocation is allowed.
+   children=[]
+   result.extend((p+48-start+at,value) for at,value in source_pointers(apt,p,n,children))
+   nested_definitions.extend((p+48-start+at,name_,params_,empty_) for at,name_,params_,empty_ in children)
+   p+=48+n
   elif op==0x8f:p=align(align(p)+16)+8
   elif op==0x94:p=align(p)+8
   elif op in (0x77,0xb4,0xb7):p+=4

@@ -2,7 +2,11 @@
 #include <iostream>
 #include <map>
 #include <set>
+#include "SocialTextTests.h"
 namespace fixture {
+unsigned resumeChecks=0,leaveChecks=0;bool resumeAllowed=false;
+bool resumeCardFixture(){++resumeChecks;return resumeAllowed;}
+void leaveAnalyticsFixture(){++leaveChecks;}
 struct Collector {void** vt;std::map<unsigned,Json> rows;};
 void __fastcall b(Collector* c,unsigned r,const char* k,bool v){c->rows[r][k]=v;}
 void __fastcall i(Collector* c,unsigned r,const char* k,int v){c->rows[r][k]=v;}
@@ -37,6 +41,7 @@ void require(bool result,const char* detail){if(!result)throw std::runtime_error
 int main(int argc,char** argv){
     using namespace fixture;
     try {
+        socialtexttests::run();
         {
             require(analyticsmenu::sibling(L"C:/COT Runtime/DynastyEnhancerNative-v103.dll").filename()==L"DynastyEnhancerRecruitFog-v1.dll","Packaged stable filenames do not resolve the Analytics owner");
             require(analyticsmenu::sibling(L"C:/COT Runtime/DynastyEnhancerNative-cot-123.dll").filename()==L"DynastyEnhancerRecruitFog-p123.dll"&&analyticsmenu::sibling(L"C:/Other.dll").empty(),"Development or foreign module names resolved incorrectly");
@@ -46,11 +51,15 @@ int main(int argc,char** argv){
             for(unsigned n=0;n<8;++n)require(out.rows[n>=5?n+1:n]["tileCoords"]==std::to_string(n>=5?n+2:n+1),"Analytics replaced an existing native tile");
             out.rows.clear();proxy.captured[7]["tileCoords"]="foreign-coordinate";require(!analyticsmenu::append(proxy)&&out.rows.empty(),"Analytics changed an unrecognized/overhaul grid");
             const auto oldApi=analyticsmenu::api;const auto oldAdmitted=analyticsmenu::admitted;auto oldNav=navRequest;navRequest=originalNav;
-            const cotanalytics::Api preparing{sizeof(cotanalytics::Api),cotanalytics::abi,cotanalytics::buildId,[]{return true;},[]{return false;},[]{return false;},[]{},[]{}};
+            const cotanalytics::Api preparing{sizeof(cotanalytics::Api),cotanalytics::abi,cotanalytics::buildId,[]{return true;},[]{return false;},[]{return false;},[]{},[]{},[]{return false;}};
             analyticsmenu::api=&preparing;analyticsmenu::admitted=true;navRequestHook(nullptr,0,"PLAYER_ANALYTICS",nullptr);require(navForwardName=="DO_NOTHING","A preparing Analytics table opened a blank donor page");
-            const cotanalytics::Api ready{sizeof(cotanalytics::Api),cotanalytics::abi,cotanalytics::buildId,[]{return true;},[]{return true;},[]{return true;},[]{},[]{}};
+            const cotanalytics::Api ready{sizeof(cotanalytics::Api),cotanalytics::abi,cotanalytics::buildId,[]{return true;},[]{return true;},[]{return true;},[]{},[]{},[]{return false;}};
             require(cotanalytics::buildId?cotanalytics::compatible(ready):!cotanalytics::compatible(ready),"Analytics must accept matched COT identities and reject unversioned standalone builds");auto wrong=ready;wrong.build^=1;require(!cotanalytics::compatible(wrong),"Mixed native builds passed the Analytics sibling gate");wrong=ready;wrong.version++;require(!cotanalytics::compatible(wrong),"Unknown Analytics ABI was accepted");
-            analyticsmenu::api=&ready;enhancements::currentOptions=38;navRequestHook(nullptr,0,"PLAYER_ANALYTICS",nullptr);require(navForwardName=="SEASON_STATS","Social Off also disabled Player Analytics native navigation");enhancements::currentOptions=39;
+            analyticsmenu::api=&ready;enhancements::currentOptions=38;navRequestHook(nullptr,0,"PLAYER_ANALYTICS",nullptr);require(navForwardName=="ROSTER","Social Off also disabled Player Analytics native navigation");enhancements::currentOptions=39;
+            auto returning=ready;returning.resumeCard=resumeCardFixture;returning.leave=leaveAnalyticsFixture;analyticsmenu::api=&returning;
+            resumeAllowed=true;navRequestHook(nullptr,0,"ROSTER",nullptr);require(resumeChecks==1&&leaveChecks==0&&navForwardName=="ROSTER","Native card return discarded the Analytics session");
+            resumeAllowed=false;navRequestHook(nullptr,0,"ROSTER",nullptr);require(resumeChecks==2&&leaveChecks==1,"Ordinary Roster inherited Analytics state");
+            navRequestHook(nullptr,0,"OTHER_NATIVE_PAGE",nullptr);require(resumeChecks==2&&leaveChecks==2,"Unrelated navigation retained the Analytics session");
             analyticsmenu::api=oldApi;analyticsmenu::admitted=oldAdmitted;navRequest=oldNav;opened=false;navForwardCalls=0;
         }
         {

@@ -39,7 +39,11 @@ inline Json dataset(const Json& raw){
     auto teamName=[](const Json& v){for(const char* key:{"DisplayName","LongName","TEAM_PREFIX_NAME","ShortName"})if(v.contains(key)&&v.at(key).is_string()&&!v.at(key).get_ref<const std::string&>().empty())return v.at(key).get<std::string>();return std::string();};
     for(const auto& record:records)if(record.at("type")=="Team"&&record.at("capacity").get<int>()>1){
         const auto& v=record.at("v");const auto index=v.at("TeamIndex").get<int>();auto name=teamName(v);if(name.empty()||index==255)continue;
-        out["teams"].push_back({{"key",record.at("key")},{"index",index},{"name",name},{"isFcs",fcs.count(record.at("key").get<std::string>())!=0||name.rfind("FCS ",0)==0},{"isUserManaged",index==owner},{"logoId",v.value("TEAM_LOGO",0)},{"primaryColor",color(v,"TEAM_BACKGROUNDCOLORR","TEAM_BACKGROUNDCOLORG","TEAM_BACKGROUNDCOLORB")},{"secondaryColor",color(v,"TEAM_BACKGROUNDCOLORR2","TEAM_BACKGROUNDCOLORG2","TEAM_BACKGROUNDCOLORB2")}});
+        Json nativeNames=Json::array();std::set<std::string> seenNames;
+        for(const char* key:{"DisplayName","LongName","TEAM_PREFIX_NAME","ShortName"})if(v.contains(key)&&v.at(key).is_string()){
+            auto alias=v.at(key).get<std::string>();if(!alias.empty()&&seenNames.insert(alias).second)nativeNames.push_back(std::move(alias));
+        }
+        out["teams"].push_back({{"key",record.at("key")},{"index",index},{"name",name},{"nativeNames",std::move(nativeNames)},{"isFcs",fcs.count(record.at("key").get<std::string>())!=0||name.rfind("FCS ",0)==0},{"isUserManaged",index==owner},{"logoId",v.value("TEAM_LOGO",0)},{"primaryColor",color(v,"TEAM_BACKGROUNDCOLORR","TEAM_BACKGROUNDCOLORG","TEAM_BACKGROUNDCOLORB")},{"secondaryColor",color(v,"TEAM_BACKGROUNDCOLORR2","TEAM_BACKGROUNDCOLORG2","TEAM_BACKGROUNDCOLORB2")}});
     }
     auto gameInfo=[&](const Json& record)->Json{
         const auto& v=record.at("v");if(v.value("IsPractice",true))return nullptr;auto home=values(v.value("HomeTeam",Json()),"Team"),away=values(v.value("AwayTeam",Json()),"Team");if(!home||!away)return nullptr;

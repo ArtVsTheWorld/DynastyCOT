@@ -15,7 +15,7 @@ import {publishOffer,publishReply} from './publication_policy.mjs';
 import {canonicalTopic} from './conversation_topics.mjs';
 import {personalVoice,finishPersonalText,accountVoice} from './voice_style.mjs';
 import {rememberVariety} from './story_variety.mjs';
-import {capitalizeSentences} from './prose_cleanup.mjs';
+import {capitalizeSentences,socialDisplayText} from './prose_cleanup.mjs';
 import {conferenceGrammar} from './conference_language.mjs';
 import {scopeViews} from './feed_selection.mjs';
 import {nativeViewIds} from './feed_visibility.mjs';
@@ -80,7 +80,7 @@ function renderPass(s,events,{authors={},history=[],sameWeek=null,onTemplates=nu
     const p=players.get(e.playerId),ref=p&&publicPosition(p.position)+' '+p.name;
     if(ref&&body.includes(ref)&&!body.toLowerCase().includes((filled.prospectType+ref).toLowerCase()))body=body.replace(ref,filled.prospectType+ref);
     if(['analyst','beat','official'].includes(role)&&filled.recruitKind==='transfer'&&filled.formerSchool&&!body.includes(filled.formerSchool))body+=' Previously at '+filled.formerSchool+'.';
-   }body=conferenceGrammar(body.replace(/\b(Jr|Sr|St)\.\.(?=\s|$)/g,'$1.'));return capitalizeSentences(style?finishPersonalText(body,style):body);
+   }body=socialDisplayText(conferenceGrammar(body.replace(/\b(Jr|Sr|St)\.\.(?=\s|$)/g,'$1.')));return capitalizeSentences(style?finishPersonalText(body,style):body);
   };
   const renderKey=createHash('sha256').update(JSON.stringify({family,values:filled,handle:account.handle,style})).digest('hex');
   const oldStory=sameStories.get(id),baseOld=oldStory?.rawBody?{...oldStory,body:oldStory.rawBody}:oldStory,oldEvent=publishedEvents.get(e.id),preservePublished=oldStory&&oldEvent&&unchangedPublishedFacts(oldEvent.facts,e.facts);
@@ -98,7 +98,7 @@ function renderPass(s,events,{authors={},history=[],sameWeek=null,onTemplates=nu
   let chosen=chooseTemplate(family,contextual,edition+'|'+id+'|'+account.handle,{handle:account.handle,week:s.season.CurrentWeek,history,sameStory:baseOld,renderKey,transformBody,style,voice,topic:varietyTopic,avoidBodies:usedBodies,publication,onCandidates:onTemplates,usage});if(!chosen)return null;
   let voiceTemplateId=null;const rawBody=cleanLanguage(chosen.body);
   if(oldStory?.voiceTemplateId&&role==='analyst'&&[2,3,5].includes(persona)&&!family.startsWith('playoff.')&&!family.startsWith('buzz.')&&!family.startsWith('review.')&&!family.startsWith('draft-talk.')&&!family.startsWith('roster.')){const negative=values.verdict==='negative'||values.negative===true||values.metric==='turnoverMargin'&&values.margin<0||values.metric==='thirdDownConversionRate'&&values.rate<=.3||values.metric==='redZoneTouchdownRate'&&values.rate<=.45||/third_low|red_low|turnover_minus/.test(family);const positive=values.verdict==='positive'||!values.verdict&&(e.category==='awards'||/third_high|red_high|turnover_plus/.test(family));const voiceFamily='desk.'+({2:'marcus',3:'tina',5:'chris'})[persona]+(negative?'.negative':positive?'.positive':'.neutral');const voiced=negative||positive?chooseTemplate(voiceFamily,{...filled,analysisText:rawBody},edition+'|'+id,{handle:account.handle,week:s.season.CurrentWeek,history,sameStory:oldStory?.voiceTemplateId?{...oldStory,templateId:oldStory.voiceTemplateId}:null,renderKey,transformBody,publication,usage,onCandidates:onTemplates}):null;if(voiced){voiceTemplateId=voiced.templateId;chosen={...chosen,body:voiced.body};}}
-  chosen={...chosen,body:capitalizeSentences(cleanLanguage(chosen.body))};
+  chosen={...chosen,body:capitalizeSentences(socialDisplayText(cleanLanguage(chosen.body)))};
   const reaction=['player','fan'].includes(role),accountKey=account.handle.toLowerCase(),topic=e.facts.gameId?e.facts.gameId+':'+team?.id:null;
   if(reaction&&!important&&((reactionAccounts.get(accountKey)??0)>=pack.publicationPolicy.reactionPostsPerAccount||(topic&&(reactionTopics.get(topic)??0)>=pack.publicationPolicy.reactionsPerGameTeam)))return null;
   if(parent&&(replyCounts.get(parent.id)??0)>=pack.publicationPolicy.maximumRepliesPerParent)return null;

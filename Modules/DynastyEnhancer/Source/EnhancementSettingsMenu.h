@@ -27,7 +27,7 @@ inline void __fastcall real(Collector* s,unsigned r,const char* k,float v){forwa
 inline void __fastcall text(Collector* s,unsigned r,const char* k,const char* v){forward(s,r,k,std::string(v?v:""));}
 inline void* collectorTable[]={nullptr,reinterpret_cast<void*>(reserve),nullptr,reinterpret_cast<void*>(boolean),reinterpret_cast<void*>(integer),reinterpret_cast<void*>(real),reinterpret_cast<void*>(text)};
 inline void append(void* out,unsigned row,Options selected,bool interactive){
-    put(out,row,"label","DYNASTY ENHANCEMENTS",6);put(out,row,"key",firstKey-1,4);
+    put(out,row,"label","Beyond the Field",6);put(out,row,"key",firstKey-1,4);
     put(out,row,"linkage","madden.ultimatecareer.component.ListCategoryHeader",6);++row;
     constexpr const char* names[]={"Social Media Feed","Recruiting Fog","Roster Fog","Team Fog","Player Grade Scale","Team Grade Scale","Rating Colors","Dollar Values"};
     constexpr const char* descriptions[]={

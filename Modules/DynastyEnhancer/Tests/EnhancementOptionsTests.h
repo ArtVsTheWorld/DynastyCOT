@@ -46,7 +46,7 @@ inline void run(){
     Output output{outputTable,{}};output.rows[9]={{"label","Existing Commissioner Settings"},{"foreign",123}};
     menu::append(&output,10,selected,true);
     require(output.rows[9]["foreign"]==123&&output.rows.size()==10,"Enhancement section overwrote existing or foreign rows");
-    require(output.rows[10]["label"]=="DYNASTY ENHANCEMENTS"&&output.rows[17]["label"]=="Rating Colors"&&output.rows[15]["label"]=="Player Grade Scale"&&output.rows[16]["label"]=="Team Grade Scale","Enhancement row ordering differs");
+    require(output.rows[10]["label"]=="Beyond the Field"&&output.rows[17]["label"]=="Rating Colors"&&output.rows[15]["label"]=="Player Grade Scale"&&output.rows[16]["label"]=="Team Grade Scale","Beyond the Field row ordering differs");
     require(output.rows[15]["numItems"]==5&&output.rows[16]["numItems"]==5&&output.rows[15]["isDefault"]==3&&output.rows[17]["isDefault"]==0&&output.rows[18]["label"]=="Dollar Values"&&output.rows[18]["isDefault"]==0,"Option choices/defaults differ");
     {
         // Native, Offline Dynasty Settings and AIO-shaped sections. Deliberately
@@ -65,7 +65,7 @@ inline void run(){
         require(reordered.rows.empty(),"Buffered provider leaked partial rows before section placement");
         require(menu::emit(sink,selected,true)==4,"Enhancements were not inserted after the Commissioner section");
         require(reordered.reserved==20&&reordered.rows.size()==20,"Settings insertion lost rows or reservation capacity");
-        require(reordered.rows[4]["label"]=="DYNASTY ENHANCEMENTS"&&reordered.rows[7]["label"]=="Roster Fog"&&reordered.rows[8]["label"]=="Team Fog"&&reordered.rows[11]["label"]=="Rating Colors"&&reordered.rows[12]["label"]=="Dollar Values"&&reordered.rows[13]["label"]=="Game Settings"&&reordered.rows[16]["label"]=="Team Settings"&&reordered.rows[18]["label"]=="Playoff Customization","Foreign section order changed or native Team Settings stayed above Enhancements");
+        require(reordered.rows[4]["label"]=="Beyond the Field"&&reordered.rows[7]["label"]=="Roster Fog"&&reordered.rows[8]["label"]=="Team Fog"&&reordered.rows[11]["label"]=="Rating Colors"&&reordered.rows[12]["label"]=="Dollar Values"&&reordered.rows[13]["label"]=="Game Settings"&&reordered.rows[16]["label"]=="Team Settings"&&reordered.rows[18]["label"]=="Playoff Customization","Foreign section order changed or native Team Settings stayed above Beyond the Field");
         for(const unsigned row:{1,2,3,5,6,8,10}){
             const auto mapped=row+(row>=4?9:0);
             require(reordered.rows[mapped]["key"]==900+int(row)&&reordered.rows[mapped]["label"]=="Row "+std::to_string(row)&&reordered.rows[mapped]["isInteractive"]==(row!=6)&&reordered.rows[mapped]["step"]==0.5f,"Provider row values, types or setting keys were altered by insertion");
@@ -73,7 +73,7 @@ inline void run(){
         require(reordered.rows[13]["description"]=="Other mod section","Late write to a header was lost");
         Output fallback{outputTable,{}};menu::Collector unknown{menu::collectorTable,&fallback,0,0,{}};
         menu::integer(&unknown,0,"key",88);menu::text(&unknown,0,"label","Unknown section");menu::text(&unknown,0,"linkage","madden.ultimatecareer.component.ListCategoryHeader");
-        require(menu::emit(unknown,selected,true)==1&&fallback.rows[0]["key"]==88&&fallback.rows[1]["label"]=="DYNASTY ENHANCEMENTS","Unknown provider section was displaced");
+        require(menu::emit(unknown,selected,true)==1&&fallback.rows[0]["key"]==88&&fallback.rows[1]["label"]=="Beyond the Field","Unknown provider section was displaced");
         Output empty{outputTable,{}};menu::Collector inactive{menu::collectorTable,&empty,0,0,{}};
         menu::emit(inactive,selected,true);require(empty.rows.empty(),"An inactive settings list acquired a section");
     }

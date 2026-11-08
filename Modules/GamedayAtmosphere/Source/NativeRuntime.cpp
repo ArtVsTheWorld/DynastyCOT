@@ -1442,7 +1442,7 @@ void prepareLegacyVisitorLossesLocked(int historical,int arriving){
             base.exits.restore(g.home,g.away,g.homeProtected,g.awayProtected,h,a);
             base.exitsSeeded=true;
         }
-        base.exits.advance(g.home,g.away,activeLoss.load(),shownScore0.load(),shownScore1.load(),shownQuarter.load(),g.homeProtected,g.awayProtected);
+        base.exits.advance(g.home,g.away,activeLoss.load(),shownScore0.load(),shownScore1.load(),shownQuarter.load(),g.homeProtected,g.awayProtected,shownNeutral.load());
         base.homeGone=static_cast<unsigned>(base.exits.home);base.awayGone=static_cast<unsigned>(base.exits.away);
         base.homeAbsent=static_cast<unsigned>((g.home-g.homeProtected)*static_cast<unsigned>((std::clamp)(arriving,0,100))/100);
         base.awayAbsent=static_cast<unsigned>((g.away-g.awayProtected)*static_cast<unsigned>((std::clamp)(arriving,0,100))/100);
@@ -1491,7 +1491,7 @@ void prepareVisitorLosses(){
             sharedFanExits.restore(totals.home,totals.away,totals.homeProtected,totals.awayProtected,h,a);
         }
         sharedFanBasis=totals;
-        sharedFanExits.advance(totals.home,totals.away,activeLoss.load(),shownScore0.load(),shownScore1.load(),shownQuarter.load(),totals.homeProtected,totals.awayProtected);
+        sharedFanExits.advance(totals.home,totals.away,activeLoss.load(),shownScore0.load(),shownScore1.load(),shownQuarter.load(),totals.homeProtected,totals.awayProtected,shownNeutral.load());
         exits=sharedFanExits;
     }
     const auto plan=attendance::fanbudget::build(layouts,{exits.home,exits.away},missing);

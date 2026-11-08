@@ -29,8 +29,8 @@ inline uint64_t sourceBodyHash(const Program& p,const std::array<unsigned char,4
         const auto at=nested.offset;const auto name=field<uintptr_t>(original.data(),at),params=field<uintptr_t>(original.data(),at+16);
         const auto poolCount=field<unsigned>(original.data(),at+32);const auto pool=field<uintptr_t>(original.data(),at+40);
         if((name!=nested.name&&(!asset||name!=asset+nested.name))||(params!=nested.params&&(!asset||params!=asset+nested.params)))throw std::runtime_error("Nested player UI pointer relocation is unsupported");
-        if(!((poolCount==0x98765432u&&pool==0x12345678u)||(poolCount==field<unsigned>(h.data(),32)&&pool==field<uintptr_t>(h.data(),40))))throw std::runtime_error("Nested player UI pool differs from its enclosing class");
-        const unsigned sourceCount=0x98765432u;const uintptr_t sourcePool=0x12345678u;
+        const unsigned sourceCount=nested.emptyPool?0:0x98765432u;const uintptr_t sourcePool=nested.emptyPool?0:0x12345678u;
+        if(!((poolCount==sourceCount&&pool==sourcePool)||(poolCount==field<unsigned>(h.data(),32)&&pool==field<uintptr_t>(h.data(),40))))throw std::runtime_error("Nested player UI pool differs from its enclosing class");
         memcpy(normalized.data()+at,&nested.name,8);memcpy(normalized.data()+at+16,&nested.params,8);
         memcpy(normalized.data()+at+32,&sourceCount,4);memcpy(normalized.data()+at+40,&sourcePool,8);
     }
@@ -80,6 +80,14 @@ public:
             const bool owned=field<unsigned>(h,24)==p.code.size()&&field<unsigned short>(h,12)==p.newRegisters;
             if((!fixedFrame||p.newRegisters==p.registers)&&(native||owned)&&field<unsigned>(h,8)==p.argc&&field<unsigned short>(h,14)==p.flags)return true;
         }
+        return false;
+    }
+    // Rare navigation restoration: recognize only definitions this bank owns.
+    // Shape matches alone never authorize a screen-state change.
+    template<class Read>bool ownsInvocation(void* object,unsigned index,Read read){
+        uintptr_t definition=0;if(index>=code.size()||!read(reinterpret_cast<uintptr_t>(object)+0x58,&definition,8))return false;
+        std::lock_guard<std::mutex> guard(bankMutex);
+        for(const auto& bank:banks)for(const auto& variant:bank.definitions.at(index).variants)if(variant.second==definition)return true;
         return false;
     }
     template<class Read>int beforeInvoke(void* object,Read read,bool fixedFrame=false,bool enabled=true,unsigned scale=0,bool colors=true,bool fog=true,bool team=true,bool dollars=false,unsigned teamScale=UINT32_MAX){

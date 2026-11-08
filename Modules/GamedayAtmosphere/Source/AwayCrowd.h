@@ -211,7 +211,7 @@ struct Losses {
         home=(std::min)(originalHome-protectedHome,static_cast<uint64_t>(std::llround(originalHome*homeFraction)));
         away=(std::min)(originalAway-protectedAway,static_cast<uint64_t>(std::llround(originalAway*awayFraction)));
     }
-    void advance(uint64_t homeOriginal,uint64_t awayOriginal,int percent,int homeScore,int awayScore,int quarter,uint64_t homeProtected=0,uint64_t awayProtected=0){
+    void advance(uint64_t homeOriginal,uint64_t awayOriginal,int percent,int homeScore,int awayScore,int quarter,uint64_t homeProtected=0,uint64_t awayProtected=0,bool neutral=false){
         uint64_t total=homeOriginal+awayOriginal;
         if(!total||home>homeOriginal||away>awayOriginal)return;
         if(homeProtected>homeOriginal||awayProtected>awayOriginal)return;
@@ -223,6 +223,14 @@ struct Losses {
         double leverage=.4+.6*(std::clamp)(quarter,1,4)/4.;
         double pressure=(std::clamp)((awayScore-homeScore)/14.*leverage,-2.5,2.5);
         double hw=std::exp(pressure),aw=std::exp(-pressure),low=0,high=1;
+        // A winning visiting section still has traffic departures. Previously
+        // exponential score weighting could make its exit rate 148x slower.
+        // Ease the imbalance progressively; keep the shared attendance budget,
+        // protected groups, neutral crowds and recorded history unchanged.
+        if(!neutral&&awayScore>homeScore){
+            const double late=(std::clamp)((quarter-1)/3.,0.,1.);
+            hw=(std::min)(hw,3.);aw=(std::max)(aw,.20+.35*late);
+        }
         auto take=[&](double scale){return h*(std::min)(1.,scale*hw)+a*(std::min)(1.,scale*aw);};
         while(take(high)<increment)high*=2;
         for(unsigned i=0;i<48;++i){double mid=(low+high)*.5;if(take(mid)<increment)low=mid;else high=mid;}

@@ -1,4 +1,5 @@
 import fs from 'node:fs';
+import {socialDisplayText} from './prose_cleanup.mjs';
 import {comparePublication} from './publication_timeline.mjs';
 import {nativeViewIds} from './feed_visibility.mjs';
 import {templateFeatures,varietyMemory,rememberVariety,repetitionCost,structuralNeighbors,nearUse,globalNearUse} from './story_variety.mjs';
@@ -89,6 +90,9 @@ const originalTemplates=new Map(Object.entries(contentPack.families).flatMap(([f
 for(const patch of refresh.overrides){const old=originalTemplates.get(patch.id);if(!old||old.family!==patch.family||old.t.body!==patch.originalBody)throw Error('Stale editorial patch '+patch.id);old.t.body=patch.body;}
 for(const [family,lines] of Object.entries(refresh.families)){if(!contentPack.families[family])throw Error('Unknown editorial family '+family);contentPack.families[family].push(...lines);}
 contentPack.revision=refresh.revision;
+// Apply after the exact originalBody checks above. Editing the source packs
+// or normalizing first would weaken those reviewed editorial patch guards.
+for(const variants of Object.values(contentPack.families))for(const template of variants)template.body=socialDisplayText(template.body);
 const slots=/\{([A-Za-z][A-Za-z0-9]*)\}/g,ids=new Set(),slotCache=new WeakMap();
 for(const variants of Object.values(contentPack.families))for(const t of variants){
  if(!t.id||ids.has(t.id)||typeof t.body!=='string'||/[\uFFFD\u{1F000}-\u{1FAFF}\u2600-\u27BF]/u.test(t.body))throw Error('Invalid runtime template '+t.id);ids.add(t.id);

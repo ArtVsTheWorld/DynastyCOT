@@ -669,7 +669,7 @@ void* infoVt[]={reinterpret_cast<void*>(unmapped),reinterpret_cast<void*>(infoBo
 bool runPreflight();
 const char* socialDestination(){return socialEnabled()&&uiReady&&feedReady()&&newsLayoutUsable()&&ensureNewsModel()?"NEWS":"DO_NOTHING";}
 void __fastcall navInfoHook(void* self,void* arg,void* out){Guard guard;auto name=argument(arg);if(!disabled&&name=="PLAYER_ANALYTICS"){
-    auto bridge=analyticsmenu::resolve();const bool ready=analyticsmenu::admitted&&bridge&&bridge->available();Alias alias{aliasVt,ready?"SEASON_STATS":"DO_NOTHING"};navInfo(self,&alias,out);if(ready)objectText(out,"Id","PLAYER_ANALYTICS");return;}
+    auto bridge=analyticsmenu::resolve();const bool ready=analyticsmenu::admitted&&bridge&&bridge->available();Alias alias{aliasVt,ready?"ROSTER":"DO_NOTHING"};navInfo(self,&alias,out);if(ready)objectText(out,"Id","PLAYER_ANALYTICS");return;}
     if(!disabled&&name=="NEWS_MENU"){const auto destination=socialDestination();Alias alias{aliasVt,destination};InfoProxy proxy{infoVt,out};navInfo(self,&alias,&proxy);if(strcmp(destination,"NEWS")==0)objectText(out,"Id","NEWS_MENU");}else navInfo(self,arg,out);
 #ifdef SOCIAL_PREFLIGHT_ONLY
     if(!disabled&&uiReady&&name=="HEISMAN_WATCH"&&!preflightAttempted.exchange(true))runPreflight();
@@ -677,8 +677,8 @@ void __fastcall navInfoHook(void* self,void* arg,void* out){Guard guard;auto nam
 }
 void __fastcall navRequestHook(void* self,unsigned user,const char* name,void* params){Guard guard;const auto began=GetTickCount64();
     auto bridge=analyticsmenu::resolve();const bool analyticsRequested=!disabled&&name&&strcmp(name,"PLAYER_ANALYTICS")==0;
-    if(analyticsRequested)name=analyticsmenu::admitted&&bridge&&bridge->open()?"SEASON_STATS":"DO_NOTHING";
-    else if(bridge)bridge->leave();
+    if(analyticsRequested)name=analyticsmenu::admitted&&bridge&&bridge->open()?"ROSTER":"DO_NOTHING";
+    else if(bridge&&!(name&&strcmp(name,"ROSTER")==0&&bridge->resumeCard()))bridge->leave();
     bool selected=!disabled&&name&&strcmp(name,"NEWS_MENU")==0;
     auto cancel=[&](const char* reason){note({{"event","news_navigation_cancelled"},{"reason",reason},{"destination","DO_NOTHING"}});navRequest(self,user,"DO_NOTHING",params);};
     // The native caller has already begun a navigation transaction. Silently

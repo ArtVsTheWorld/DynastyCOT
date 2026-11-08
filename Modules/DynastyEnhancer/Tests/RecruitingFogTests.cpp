@@ -108,11 +108,27 @@ int main(){try{
 #if defined(RECRUIT_NOTES_UI)
     {
         using namespace recruitingfog::runtime;
-        const auto saved=originalRosterPlayer;const auto savedOptions=enhancements::currentOptions.load();
-        enhancements::currentOptions=0;originalRosterPlayer=cardFallback;
-        analyticscardtests::run(require,[](void** out,void* argument,void*& result){const auto before=cardFallbacks;result=rosterPlayerHook(nullptr,out,argument);return cardFallbacks==before;});
-        originalRosterPlayer=saved;enhancements::currentOptions=savedOptions;
-        std::cout<<"Passed: Analytics cards through the sole Fog-owned roster callback, native output ABI, portraits/identity after National sorting, stale/missing/scope/disabled/allocation rejection and native fallback.\n";
+        const auto saved=keyedPlayerOriginal[5];const auto savedOptions=enhancements::currentOptions.load();
+        enhancements::currentOptions=0;keyedPlayerOriginal[5]=cardFallback;
+        analyticscardtests::run(require,[](void** out,void* argument,void*& result){return nativeanalytics::playerCard(out,argument,result);});
+        keyedPlayerOriginal[5]=saved;enhancements::currentOptions=savedOptions;
+        // The full native roster card must never be replaced by the smaller Analytics cache.
+        const auto savedRoster=originalRosterPlayer;const auto previousOptions=enhancements::currentOptions.load();const auto previousOpened=nativeanalytics::opened.load();
+        enhancements::currentOptions=0;nativeanalytics::opened=true;originalRosterPlayer=cardFallback;
+        void* rosterOutput=nullptr;const auto beforeFallbacks=cardFallbacks;
+        rosterPlayerHook(nullptr,&rosterOutput,nullptr);
+        require(cardFallbacks==beforeFallbacks+1&&analyticscardtests::output.at("nativeFallback")==true,"Analytics replaced the full native roster response with its cached card");
+        for(const char* text:{"", "native-player", "COT_CARD:bad", "COT_RETURN_SELECTION", "COT_LEAVE_VIEW"}){
+            nativeanalytics::AliasArgument argument{nativeanalytics::aliasVtable,text};const auto before=cardFallbacks;
+            rosterPlayerHook(nullptr,&rosterOutput,&argument);
+            const bool reserved=std::string(text).rfind("COT_",0)==0;
+            require(cardFallbacks==before+(reserved?0:1),"Roster private command leaked or native card was intercepted");
+        }
+        keyedPlayerOriginal[5]=cardFallback;const auto beforeStats=cardFallbacks;
+        keyedPlayerResponseHook<5>(nullptr,&rosterOutput,nullptr);
+        require(cardFallbacks==beforeStats+1,"Roster Analytics intercepted an ordinary Stats DTO");keyedPlayerOriginal[5]=saved;
+        originalRosterPlayer=savedRoster;nativeanalytics::opened=previousOpened;enhancements::currentOptions=previousOptions;
+        std::cout<<"Passed: native Roster cards preserved, private command dispatch stays in its sole Fog-owned callback, ordinary Stats DTO unchanged.\n";
     }
 #endif
 #if defined(RECRUIT_NOTES_UI)
@@ -240,6 +256,14 @@ int main(){try{
         callback[55]^=1;rejected=false;try{makeDefinition(nested,h,callback,0x100000);}catch(const std::exception&){rejected=true;}require(rejected,"Changed callback instruction escaped the full body gate");
         callback[55]^=1;callback[40]^=1;rejected=false;try{sourceBodyHash(nested,h,callback,0x100000);}catch(const std::exception&){rejected=true;}require(rejected,"Foreign nested pool accepted");callback[40]^=1;callback[0]^=1;
         rejected=false;try{sourceBodyHash(nested,h,callback,0x100000);}catch(const std::exception&){rejected=true;}require(rejected,"Unknown nested pointer relocation accepted");
+        callback[0]^=1;memset(callback.data()+32,0,4);memset(callback.data()+40,0,8);
+        auto emptyNested=nested;emptyNested.nestedDefinitions[0].emptyPool=true;
+        auto emptySource=callback;memcpy(emptySource.data(),&name,8);memcpy(emptySource.data()+16,&params,8);emptyNested.hash=bodyHash(emptySource);
+        require(sourceBodyHash(emptyNested,h,callback,0x100000)==emptyNested.hash,"Explicit empty nested source pool was rejected");
+        memcpy(callback.data()+32,&liveCount,4);memcpy(callback.data()+40,&livePool,8);
+        require(sourceBodyHash(emptyNested,h,callback,0x100000)==emptyNested.hash,"Explicit empty pool did not admit its exact enclosing native pool");
+        callback[40]^=1;rejected=false;try{sourceBodyHash(emptyNested,h,callback,0x100000);}catch(const std::exception&){rejected=true;}
+        require(rejected,"Explicit empty nested pool admitted foreign loader metadata");
         put(24,unsigned(4));
         const std::vector<OwnedDefinition> definitions={{0x10000,0x20000},{0x30000,0x40000}};
         PVOID volatile location=reinterpret_cast<void*>(0x30000);
@@ -270,7 +294,10 @@ int main(){try{
         unsigned poolReads=0;const auto coalescedRead=[&](uintptr_t at,void* out,size_t size){if(at==poolAddress&&size==40)++poolReads;return runtime::read(at,out,size);};
         require(live.beforeInvoke(object.data(),coalescedRead)==0&&object[11]!=assetBase+p.offset&&live.ownerCount()==1,"Notes failed to attach to a newly-created live script");
         require(poolReads==1,"One source generation reread its identical shared constant pool");
+        require(live.ownsInvocation(object.data(),0,runtime::read)&&!live.ownsInvocation(object.data(),1,runtime::read)&&!live.ownsInvocation(object.data(),2,runtime::read),"Screen restoration accepted a different/unowned UI method");
+        require(!live.ownsInvocation(nullptr,0,runtime::read),"Unreadable UI invocation was trusted for screen restoration");
         const auto owned=object[11];object[11]=assetBase+p.offset;
+        require(!live.ownsInvocation(object.data(),0,runtime::read),"An original/foreign definition was treated as owned UI code");
         require(live.beforeInvoke(object.data(),runtime::read,true)==-1&&object[11]==assetBase+p.offset,"Late color hook changed a method requiring more registers");
         auto fixed=p;fixed.newRegisters=fixed.registers;Runtime safe({fixed});safe.prepare();
         require(safe.beforeInvoke(object.data(),runtime::read,true)==0,"Frame-preserving method was rejected by late gate");

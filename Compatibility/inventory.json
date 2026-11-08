@@ -146,6 +146,12 @@
         },
         {
           "source": "Modules/DynastyEnhancer/Source/AnalyticsGates.h",
+          "rva": "0x8076540",
+          "length": 32,
+          "sha256": "ebcde227a08ecc9857a46ce3c1be33cf753b2157ee0d2a622d09cc559189598d"
+        },
+        {
+          "source": "Modules/DynastyEnhancer/Source/AnalyticsGates.h",
           "rva": "0x25a3e60",
           "length": 32,
           "sha256": "3c581cc32bb745b34c00107fa592121b3fef47c10f3d87ac10e161a606c7bb3e"
@@ -254,6 +260,12 @@
         },
         {
           "source": "Modules/DynastyEnhancer/Source/AnalyticsGates.h",
+          "rva": "0x7a89420",
+          "length": 32,
+          "sha256": "4133a56dc45a0f7a3e5278b3d9132659303c91e9aa99b9143121c4a6a5bcd581"
+        },
+        {
+          "source": "Modules/DynastyEnhancer/Source/AnalyticsGates.h",
           "rva": "0x7a896a0",
           "length": 32,
           "sha256": "0dbfc7cf62d7643c8f1ddc876a1ee541f99d92e5df04848bacee4d12234a6335"
@@ -290,15 +302,39 @@
         },
         {
           "source": "Modules/DynastyEnhancer/Source/AnalyticsGates.h",
-          "rva": "0x8076300",
+          "rva": "0x80764a0",
           "length": 32,
-          "sha256": "97af784358aa9c8c50e4f8a9d1c286af5fe1f140fd323bf179b4389a6a0eb583"
+          "sha256": "e669b8db2110299a63167b450e0ac3ab85e9b6e3314b387348fef15f911ab436"
         },
         {
           "source": "Modules/DynastyEnhancer/Source/AnalyticsGates.h",
           "rva": "0x8079e70",
           "length": 32,
           "sha256": "c16aee4cd5b1f770c72438003a634808aa6cc9d599da13e1258f5881b2a06e27"
+        },
+        {
+          "source": "Modules/DynastyEnhancer/Source/AnalyticsGates.h",
+          "rva": "0x822c030",
+          "length": 32,
+          "sha256": "252b4bb9cf289d2ba722f6bc45582aa333955499b67eb353800d070a96e249ec"
+        },
+        {
+          "source": "Modules/DynastyEnhancer/Source/AnalyticsGates.h",
+          "rva": "0x381b250",
+          "length": 32,
+          "sha256": "e8777ce1d0d2e3f2cffec5f7775d8aaa529ba228fe17d91ae6c6e2231f436b3c"
+        },
+        {
+          "source": "Modules/DynastyEnhancer/Source/AnalyticsGates.h",
+          "rva": "0x3832bb0",
+          "length": 32,
+          "sha256": "8cef84598e0700b228ed7f84f9378fa75155c13683c04df42eca72fe4833159c"
+        },
+        {
+          "source": "Modules/DynastyEnhancer/Source/AnalyticsGates.h",
+          "rva": "0x3832bd0",
+          "length": 32,
+          "sha256": "99b4f518e97947abec8c0820e19d4970b7b8318be94a24eeb974b2d530f4503e"
         }
       ],
       "references": {
@@ -366,48 +402,58 @@
           "Modules/DynastyEnhancer/Source/NewsAssetDiscovery.h:16"
         ],
         "0x25a3e60": [
-          "Modules/DynastyEnhancer/Source/AnalyticsGates.h:4",
-          "Modules/DynastyEnhancer/Source/AnalyticsNative.h:300",
+          "Modules/DynastyEnhancer/Source/AnalyticsGates.h:6",
+          "Modules/DynastyEnhancer/Source/AnalyticsNative.h:557",
           "Modules/DynastyEnhancer/Source/CurrentBindings.h:12",
           "Modules/DynastyEnhancer/Source/NativeSocialMedia.cpp:442",
           "Modules/DynastyEnhancer/Source/PlayerAbilityProbe.cpp:35",
-          "Modules/DynastyEnhancer/Source/RecruitingFog.cpp:263",
-          "Modules/DynastyEnhancer/Source/RecruitingFog.cpp:506",
-          "Modules/DynastyEnhancer/Source/RecruitingFog.cpp:514",
-          "Modules/DynastyEnhancer/Source/RecruitingFog.cpp:522",
-          "Modules/DynastyEnhancer/Source/RecruitingFog.cpp:531",
-          "Modules/DynastyEnhancer/Source/RecruitingFog.cpp:581",
-          "Modules/DynastyEnhancer/Source/RecruitingFog.cpp:604",
-          "Modules/DynastyEnhancer/Source/RecruitingFog.cpp:609",
-          "Modules/DynastyEnhancer/Source/RecruitingFog.cpp:614",
+          "Modules/DynastyEnhancer/Source/RecruitingFog.cpp:274",
+          "Modules/DynastyEnhancer/Source/RecruitingFog.cpp:520",
+          "Modules/DynastyEnhancer/Source/RecruitingFog.cpp:528",
+          "Modules/DynastyEnhancer/Source/RecruitingFog.cpp:539",
+          "Modules/DynastyEnhancer/Source/RecruitingFog.cpp:548",
+          "Modules/DynastyEnhancer/Source/RecruitingFog.cpp:606",
+          "Modules/DynastyEnhancer/Source/RecruitingFog.cpp:629",
+          "Modules/DynastyEnhancer/Source/RecruitingFog.cpp:634",
+          "Modules/DynastyEnhancer/Source/RecruitingFog.cpp:639",
           "Modules/DynastyEnhancer/Source/RecruitingUiGates.h:4"
         ],
         "0x2b075c0": [
-          "Modules/DynastyEnhancer/Source/AnalyticsGates.h:5",
-          "Modules/DynastyEnhancer/Source/AnalyticsNative.h:300",
+          "Modules/DynastyEnhancer/Source/AnalyticsGates.h:7",
+          "Modules/DynastyEnhancer/Source/AnalyticsNative.h:557",
           "Modules/DynastyEnhancer/Source/CurrentBindings.h:20",
           "Modules/DynastyEnhancer/Source/NativeSocialMedia.cpp:443"
         ],
         "0x2b07670": [
-          "Modules/DynastyEnhancer/Source/AnalyticsGates.h:6",
-          "Modules/DynastyEnhancer/Source/AnalyticsNative.h:300",
+          "Modules/DynastyEnhancer/Source/AnalyticsGates.h:8",
+          "Modules/DynastyEnhancer/Source/AnalyticsNative.h:557",
           "Modules/DynastyEnhancer/Source/CurrentBindings.h:21",
           "Modules/DynastyEnhancer/Source/NativeSocialMedia.cpp:444"
         ],
         "0x2bf6720": [
-          "Modules/DynastyEnhancer/Source/RecruitingFog.cpp:605",
-          "Modules/DynastyEnhancer/Source/RecruitingFog.cpp:615",
+          "Modules/DynastyEnhancer/Source/RecruitingFog.cpp:630",
+          "Modules/DynastyEnhancer/Source/RecruitingFog.cpp:640",
           "Modules/DynastyEnhancer/Source/RecruitingUiGates.h:5"
         ],
         "0x2bf67d0": [
-          "Modules/DynastyEnhancer/Source/RecruitingFog.cpp:264",
+          "Modules/DynastyEnhancer/Source/RecruitingFog.cpp:275",
           "Modules/DynastyEnhancer/Source/RecruitingUiGates.h:6"
         ],
         "0x376f6d0": [
-          "Modules/DynastyEnhancer/Source/AnalyticsGates.h:7",
-          "Modules/DynastyEnhancer/Source/AnalyticsNative.h:298",
-          "Modules/DynastyEnhancer/Source/RecruitingFog.cpp:136",
+          "Modules/DynastyEnhancer/Source/AnalyticsGates.h:9",
+          "Modules/DynastyEnhancer/Source/AnalyticsNative.h:554",
+          "Modules/DynastyEnhancer/Source/RecruitingFog.cpp:147",
           "Modules/DynastyEnhancer/Source/RecruitListProbe.cpp:45"
+        ],
+        "0x381b250": [
+          "Modules/DynastyEnhancer/Source/AnalyticsGates.h:34",
+          "Modules/DynastyEnhancer/Source/AnalyticsNative.h:469"
+        ],
+        "0x3832bb0": [
+          "Modules/DynastyEnhancer/Source/AnalyticsGates.h:35"
+        ],
+        "0x3832bd0": [
+          "Modules/DynastyEnhancer/Source/AnalyticsGates.h:36"
         ],
         "0x3abb5e0": [
           "Modules/DynastyEnhancer/Source/PlayerRimeProbe.cpp:56",
@@ -421,76 +467,76 @@
           "Modules/DynastyEnhancer/Source/CurrentBindings.h:13"
         ],
         "0x3f07c50": [
-          "Modules/DynastyEnhancer/Source/AnalyticsGates.h:8",
-          "Modules/DynastyEnhancer/Source/AnalyticsNative.h:13",
+          "Modules/DynastyEnhancer/Source/AnalyticsGates.h:10",
+          "Modules/DynastyEnhancer/Source/AnalyticsNative.h:14",
           "Modules/DynastyEnhancer/Source/CurrentBindings.h:11",
           "Modules/DynastyEnhancer/Source/NativeSocialMedia.cpp:424"
         ],
         "0x3f0a1d0": [
-          "Modules/DynastyEnhancer/Source/AnalyticsGates.h:12",
-          "Modules/DynastyEnhancer/Source/AnalyticsNative.h:299",
+          "Modules/DynastyEnhancer/Source/AnalyticsGates.h:14",
+          "Modules/DynastyEnhancer/Source/AnalyticsNative.h:556",
           "Modules/DynastyEnhancer/Source/CurrentBindings.h:16",
           "Modules/DynastyEnhancer/Source/NativeSocialMedia.cpp:446",
           "Modules/DynastyEnhancer/Source/NativeSocialMedia.cpp:551",
           "Modules/DynastyEnhancer/Source/NativeSocialMedia.cpp:739"
         ],
         "0x78edb60": [
-          "Modules/DynastyEnhancer/Source/AnalyticsGates.h:9",
-          "Modules/DynastyEnhancer/Source/AnalyticsNative.h:266",
-          "Modules/DynastyEnhancer/Source/AnalyticsNative.h:294"
+          "Modules/DynastyEnhancer/Source/AnalyticsGates.h:11",
+          "Modules/DynastyEnhancer/Source/AnalyticsNative.h:521",
+          "Modules/DynastyEnhancer/Source/AnalyticsNative.h:550"
         ],
         "0x78ef740": [
-          "Modules/DynastyEnhancer/Source/AnalyticsGates.h:10",
-          "Modules/DynastyEnhancer/Source/AnalyticsNative.h:294",
-          "Modules/DynastyEnhancer/Source/RecruitingFog.cpp:145",
+          "Modules/DynastyEnhancer/Source/AnalyticsGates.h:12",
+          "Modules/DynastyEnhancer/Source/AnalyticsNative.h:550",
+          "Modules/DynastyEnhancer/Source/RecruitingFog.cpp:156",
           "Modules/DynastyEnhancer/Source/RecruitListProbe.cpp:60",
           "Modules/DynastyEnhancer/Source/RecruitListProbe.cpp:63",
           "Modules/DynastyEnhancer/Source/RecruitListProbe.cpp:63"
         ],
         "0x78efa70": [
-          "Modules/DynastyEnhancer/Source/RecruitingFog.cpp:168"
+          "Modules/DynastyEnhancer/Source/RecruitingFog.cpp:179"
         ],
         "0x78f0a50": [
-          "Modules/DynastyEnhancer/Source/AnalyticsGates.h:11",
-          "Modules/DynastyEnhancer/Source/AnalyticsNative.h:267",
-          "Modules/DynastyEnhancer/Source/AnalyticsNative.h:298"
+          "Modules/DynastyEnhancer/Source/AnalyticsGates.h:13",
+          "Modules/DynastyEnhancer/Source/AnalyticsNative.h:522",
+          "Modules/DynastyEnhancer/Source/AnalyticsNative.h:554"
         ],
         "0x793d8c0": [
-          "Modules/DynastyEnhancer/Source/RecruitingFog.cpp:149"
+          "Modules/DynastyEnhancer/Source/RecruitingFog.cpp:160"
         ],
         "0x79414b0": [
-          "Modules/DynastyEnhancer/Source/RecruitingFog.cpp:169"
+          "Modules/DynastyEnhancer/Source/RecruitingFog.cpp:180"
         ],
         "0x7941e00": [
-          "Modules/DynastyEnhancer/Source/RecruitingFog.cpp:170"
+          "Modules/DynastyEnhancer/Source/RecruitingFog.cpp:181"
         ],
         "0x79472b0": [
-          "Modules/DynastyEnhancer/Source/RecruitingFog.cpp:145"
+          "Modules/DynastyEnhancer/Source/RecruitingFog.cpp:156"
         ],
         "0x794ba00": [
-          "Modules/DynastyEnhancer/Source/RecruitingFog.cpp:177"
+          "Modules/DynastyEnhancer/Source/RecruitingFog.cpp:188"
         ],
         "0x794d200": [
           "Modules/DynastyEnhancer/Source/PlayerAbilityProbe.cpp:52",
-          "Modules/DynastyEnhancer/Source/RecruitingFog.cpp:182"
+          "Modules/DynastyEnhancer/Source/RecruitingFog.cpp:193"
         ],
         "0x7951580": [
-          "Modules/DynastyEnhancer/Source/RecruitingFog.cpp:178"
+          "Modules/DynastyEnhancer/Source/RecruitingFog.cpp:189"
         ],
         "0x7955fc0": [
-          "Modules/DynastyEnhancer/Source/RecruitingFog.cpp:148"
+          "Modules/DynastyEnhancer/Source/RecruitingFog.cpp:159"
         ],
         "0x796e160": [
           "Modules/DynastyEnhancer/Source/PlayerTooltipProbe.cpp:20"
         ],
         "0x796ee90": [
-          "Modules/DynastyEnhancer/Source/RecruitingFog.cpp:151"
+          "Modules/DynastyEnhancer/Source/RecruitingFog.cpp:162"
         ],
         "0x79734e0": [
-          "Modules/DynastyEnhancer/Source/RecruitingFog.cpp:171"
+          "Modules/DynastyEnhancer/Source/RecruitingFog.cpp:182"
         ],
         "0x7975c70": [
-          "Modules/DynastyEnhancer/Source/RecruitingFog.cpp:153"
+          "Modules/DynastyEnhancer/Source/RecruitingFog.cpp:164"
         ],
         "0x7998c00": [
           "Modules/DynastyEnhancer/Source/EnhancementSettingsMenu.h:10"
@@ -499,7 +545,7 @@
           "Modules/DynastyEnhancer/Source/EnhancementSettingsMenu.h:10"
         ],
         "0x7a0f320": [
-          "Modules/DynastyEnhancer/Source/RecruitingFog.cpp:150"
+          "Modules/DynastyEnhancer/Source/RecruitingFog.cpp:161"
         ],
         "0x7a19370": [
           "Modules/DynastyEnhancer/Source/CurrentBindings.h:6",
@@ -542,77 +588,83 @@
           "Modules/DynastyEnhancer/Source/NativeSocialMedia.cpp:791"
         ],
         "0x7a88a60": [
-          "Modules/DynastyEnhancer/Source/AnalyticsGates.h:14",
-          "Modules/DynastyEnhancer/Source/AnalyticsNative.h:275",
-          "Modules/DynastyEnhancer/Source/AnalyticsNative.h:295"
+          "Modules/DynastyEnhancer/Source/AnalyticsGates.h:16",
+          "Modules/DynastyEnhancer/Source/AnalyticsNative.h:530",
+          "Modules/DynastyEnhancer/Source/AnalyticsNative.h:551"
         ],
         "0x7a88b70": [
-          "Modules/DynastyEnhancer/Source/AnalyticsGates.h:15",
-          "Modules/DynastyEnhancer/Source/AnalyticsNative.h:274",
-          "Modules/DynastyEnhancer/Source/AnalyticsNative.h:295"
+          "Modules/DynastyEnhancer/Source/AnalyticsGates.h:17",
+          "Modules/DynastyEnhancer/Source/AnalyticsNative.h:529",
+          "Modules/DynastyEnhancer/Source/AnalyticsNative.h:551"
         ],
         "0x7a88bd0": [
-          "Modules/DynastyEnhancer/Source/AnalyticsGates.h:16",
-          "Modules/DynastyEnhancer/Source/AnalyticsNative.h:273",
-          "Modules/DynastyEnhancer/Source/AnalyticsNative.h:294"
+          "Modules/DynastyEnhancer/Source/AnalyticsGates.h:18",
+          "Modules/DynastyEnhancer/Source/AnalyticsNative.h:528",
+          "Modules/DynastyEnhancer/Source/AnalyticsNative.h:550"
         ],
         "0x7a88c90": [
-          "Modules/DynastyEnhancer/Source/AnalyticsGates.h:17",
-          "Modules/DynastyEnhancer/Source/AnalyticsNative.h:294",
-          "Modules/DynastyEnhancer/Source/RecruitingFog.cpp:145"
+          "Modules/DynastyEnhancer/Source/AnalyticsGates.h:19",
+          "Modules/DynastyEnhancer/Source/AnalyticsNative.h:550",
+          "Modules/DynastyEnhancer/Source/RecruitingFog.cpp:156"
         ],
         "0x7a88cd0": [
-          "Modules/DynastyEnhancer/Source/AnalyticsGates.h:18",
-          "Modules/DynastyEnhancer/Source/AnalyticsNative.h:294",
-          "Modules/DynastyEnhancer/Source/RecruitingFog.cpp:136",
+          "Modules/DynastyEnhancer/Source/AnalyticsGates.h:20",
+          "Modules/DynastyEnhancer/Source/AnalyticsNative.h:550",
+          "Modules/DynastyEnhancer/Source/RecruitingFog.cpp:147",
           "Modules/DynastyEnhancer/Source/RecruitListProbe.cpp:60",
           "Modules/DynastyEnhancer/Source/RecruitListProbe.cpp:63",
           "Modules/DynastyEnhancer/Source/RecruitListProbe.cpp:63"
         ],
         "0x7a88e90": [
-          "Modules/DynastyEnhancer/Source/AnalyticsGates.h:19",
-          "Modules/DynastyEnhancer/Source/AnalyticsNative.h:276",
-          "Modules/DynastyEnhancer/Source/AnalyticsNative.h:295"
+          "Modules/DynastyEnhancer/Source/AnalyticsGates.h:21",
+          "Modules/DynastyEnhancer/Source/AnalyticsNative.h:531",
+          "Modules/DynastyEnhancer/Source/AnalyticsNative.h:551"
         ],
         "0x7a89180": [
-          "Modules/DynastyEnhancer/Source/AnalyticsGates.h:20",
-          "Modules/DynastyEnhancer/Source/AnalyticsNative.h:269",
-          "Modules/DynastyEnhancer/Source/AnalyticsNative.h:294",
-          "Modules/DynastyEnhancer/Source/RecruitingFog.cpp:136",
+          "Modules/DynastyEnhancer/Source/AnalyticsGates.h:22",
+          "Modules/DynastyEnhancer/Source/AnalyticsNative.h:524",
+          "Modules/DynastyEnhancer/Source/AnalyticsNative.h:550",
+          "Modules/DynastyEnhancer/Source/RecruitingFog.cpp:147",
           "Modules/DynastyEnhancer/Source/RecruitListProbe.cpp:42"
         ],
         "0x7a892d0": [
-          "Modules/DynastyEnhancer/Source/AnalyticsGates.h:21",
-          "Modules/DynastyEnhancer/Source/AnalyticsNative.h:270",
-          "Modules/DynastyEnhancer/Source/AnalyticsNative.h:296"
+          "Modules/DynastyEnhancer/Source/AnalyticsGates.h:23",
+          "Modules/DynastyEnhancer/Source/AnalyticsNative.h:525",
+          "Modules/DynastyEnhancer/Source/AnalyticsNative.h:552"
         ],
         "0x7a89420": [
+          "Modules/DynastyEnhancer/Source/AnalyticsGates.h:24",
+          "Modules/DynastyEnhancer/Source/AnalyticsNative.h:534",
+          "Modules/DynastyEnhancer/Source/AnalyticsNative.h:550",
           "Modules/DynastyEnhancer/Source/RosterViewProbe.cpp:14"
         ],
         "0x7a896a0": [
-          "Modules/DynastyEnhancer/Source/AnalyticsGates.h:22",
-          "Modules/DynastyEnhancer/Source/AnalyticsNative.h:277",
-          "Modules/DynastyEnhancer/Source/AnalyticsNative.h:295"
+          "Modules/DynastyEnhancer/Source/AnalyticsGates.h:25",
+          "Modules/DynastyEnhancer/Source/AnalyticsNative.h:532",
+          "Modules/DynastyEnhancer/Source/AnalyticsNative.h:551"
         ],
         "0x7a89770": [
-          "Modules/DynastyEnhancer/Source/AnalyticsGates.h:23",
-          "Modules/DynastyEnhancer/Source/AnalyticsNative.h:278",
-          "Modules/DynastyEnhancer/Source/AnalyticsNative.h:295"
+          "Modules/DynastyEnhancer/Source/AnalyticsGates.h:26",
+          "Modules/DynastyEnhancer/Source/AnalyticsNative.h:533",
+          "Modules/DynastyEnhancer/Source/AnalyticsNative.h:551"
         ],
         "0x7a89880": [
-          "Modules/DynastyEnhancer/Source/AnalyticsGates.h:24",
-          "Modules/DynastyEnhancer/Source/AnalyticsNative.h:271",
-          "Modules/DynastyEnhancer/Source/AnalyticsNative.h:296"
+          "Modules/DynastyEnhancer/Source/AnalyticsGates.h:27",
+          "Modules/DynastyEnhancer/Source/AnalyticsNative.h:526",
+          "Modules/DynastyEnhancer/Source/AnalyticsNative.h:552"
         ],
         "0x7a899d0": [
-          "Modules/DynastyEnhancer/Source/AnalyticsGates.h:25",
-          "Modules/DynastyEnhancer/Source/AnalyticsNative.h:272",
-          "Modules/DynastyEnhancer/Source/AnalyticsNative.h:296"
+          "Modules/DynastyEnhancer/Source/AnalyticsGates.h:28",
+          "Modules/DynastyEnhancer/Source/AnalyticsNative.h:527",
+          "Modules/DynastyEnhancer/Source/AnalyticsNative.h:552"
         ],
         "0x7a89b50": [
-          "Modules/DynastyEnhancer/Source/AnalyticsGates.h:26",
-          "Modules/DynastyEnhancer/Source/AnalyticsNative.h:268",
-          "Modules/DynastyEnhancer/Source/AnalyticsNative.h:294"
+          "Modules/DynastyEnhancer/Source/AnalyticsGates.h:29",
+          "Modules/DynastyEnhancer/Source/AnalyticsNative.h:523",
+          "Modules/DynastyEnhancer/Source/AnalyticsNative.h:550"
+        ],
+        "0x7ab0230": [
+          "Modules/DynastyEnhancer/Source/AnalyticsNative.h:453"
         ],
         "0x7c21220": [
           "Modules/DynastyEnhancer/Source/PlayerDepthProbe.cpp:47",
@@ -624,38 +676,45 @@
           "Modules/DynastyEnhancer/Source/NativeSocialMedia.cpp:786"
         ],
         "0x7c34e40": [
-          "Modules/DynastyEnhancer/Source/RecruitingFog.cpp:769",
-          "Modules/DynastyEnhancer/Source/RecruitingFog.cpp:784"
+          "Modules/DynastyEnhancer/Source/RecruitingFog.cpp:794",
+          "Modules/DynastyEnhancer/Source/RecruitingFog.cpp:809"
         ],
         "0x7c36850": [
-          "Modules/DynastyEnhancer/Source/RecruitingFog.cpp:201"
+          "Modules/DynastyEnhancer/Source/RecruitingFog.cpp:212"
         ],
         "0x7d78cb0": [
-          "Modules/DynastyEnhancer/Source/RecruitingFog.cpp:392",
-          "Modules/DynastyEnhancer/Source/RecruitingFog.cpp:400"
+          "Modules/DynastyEnhancer/Source/RecruitingFog.cpp:403",
+          "Modules/DynastyEnhancer/Source/RecruitingFog.cpp:411"
         ],
         "0x7d79160": [
           "Modules/DynastyEnhancer/Source/PlayerPresentationPolicy.h:12"
         ],
         "0x7d7b560": [
-          "Modules/DynastyEnhancer/Source/RecruitingFog.cpp:393",
-          "Modules/DynastyEnhancer/Source/RecruitingFog.cpp:401"
+          "Modules/DynastyEnhancer/Source/RecruitingFog.cpp:404",
+          "Modules/DynastyEnhancer/Source/RecruitingFog.cpp:412"
         ],
         "0x7d966b0": [
-          "Modules/DynastyEnhancer/Source/RecruitingFog.cpp:391",
-          "Modules/DynastyEnhancer/Source/RecruitingFog.cpp:415"
+          "Modules/DynastyEnhancer/Source/RecruitingFog.cpp:402",
+          "Modules/DynastyEnhancer/Source/RecruitingFog.cpp:426"
         ],
         "0x8076180": [
-          "Modules/DynastyEnhancer/Source/AnalyticsGates.h:27",
-          "Modules/DynastyEnhancer/Source/AnalyticsNative.h:297"
+          "Modules/DynastyEnhancer/Source/AnalyticsGates.h:30",
+          "Modules/DynastyEnhancer/Source/AnalyticsNative.h:553"
         ],
-        "0x8076300": [
-          "Modules/DynastyEnhancer/Source/AnalyticsGates.h:28",
-          "Modules/DynastyEnhancer/Source/AnalyticsNative.h:297"
+        "0x80764a0": [
+          "Modules/DynastyEnhancer/Source/AnalyticsGates.h:3",
+          "Modules/DynastyEnhancer/Source/AnalyticsGates.h:31"
+        ],
+        "0x8076540": [
+          "Modules/DynastyEnhancer/Source/AnalyticsGates.h:5"
         ],
         "0x8079e70": [
-          "Modules/DynastyEnhancer/Source/AnalyticsGates.h:29",
-          "Modules/DynastyEnhancer/Source/AnalyticsNative.h:297"
+          "Modules/DynastyEnhancer/Source/AnalyticsGates.h:32",
+          "Modules/DynastyEnhancer/Source/AnalyticsNative.h:553"
+        ],
+        "0x822c030": [
+          "Modules/DynastyEnhancer/Source/AnalyticsGates.h:33",
+          "Modules/DynastyEnhancer/Source/AnalyticsNative.h:555"
         ],
         "0x8459ff0": [
           "Modules/DynastyEnhancer/Source/EnhancementCreationScope.h:19"
@@ -672,8 +731,8 @@
           "Modules/DynastyEnhancer/Source/NativeMapValue.h:7"
         ],
         "0x8aec980": [
-          "Modules/DynastyEnhancer/Source/AnalyticsGates.h:13",
-          "Modules/DynastyEnhancer/Source/AnalyticsNative.h:299",
+          "Modules/DynastyEnhancer/Source/AnalyticsGates.h:15",
+          "Modules/DynastyEnhancer/Source/AnalyticsNative.h:556",
           "Modules/DynastyEnhancer/Source/CurrentBindings.h:17",
           "Modules/DynastyEnhancer/Source/NativeSocialMedia.cpp:446",
           "Modules/DynastyEnhancer/Source/NativeSocialMedia.cpp:740"
@@ -687,40 +746,40 @@
           "Modules/DynastyEnhancer/Source/NativeSocialMedia.cpp:556"
         ],
         "0x91363e0": [
-          "Modules/DynastyEnhancer/Source/RecruitingFog.cpp:388",
-          "Modules/DynastyEnhancer/Source/RecruitingFog.cpp:412"
+          "Modules/DynastyEnhancer/Source/RecruitingFog.cpp:399",
+          "Modules/DynastyEnhancer/Source/RecruitingFog.cpp:423"
         ],
         "0x91364f0": [
-          "Modules/DynastyEnhancer/Source/RecruitingFog.cpp:390",
-          "Modules/DynastyEnhancer/Source/RecruitingFog.cpp:414"
+          "Modules/DynastyEnhancer/Source/RecruitingFog.cpp:401",
+          "Modules/DynastyEnhancer/Source/RecruitingFog.cpp:425"
         ],
         "0x9136580": [
-          "Modules/DynastyEnhancer/Source/RecruitingFog.cpp:389",
-          "Modules/DynastyEnhancer/Source/RecruitingFog.cpp:413"
+          "Modules/DynastyEnhancer/Source/RecruitingFog.cpp:400",
+          "Modules/DynastyEnhancer/Source/RecruitingFog.cpp:424"
         ],
         "0xa0b6110": [
-          "Modules/DynastyEnhancer/Source/RecruitingFog.cpp:152"
+          "Modules/DynastyEnhancer/Source/RecruitingFog.cpp:163"
         ],
         "0xa0c03f0": [
-          "Modules/DynastyEnhancer/Source/RecruitingFog.cpp:155"
-        ],
-        "0xa0c5180": [
-          "Modules/DynastyEnhancer/Source/RecruitingFog.cpp:165"
-        ],
-        "0xa0c63b0": [
-          "Modules/DynastyEnhancer/Source/RecruitingFog.cpp:167"
-        ],
-        "0xa0c71f0": [
           "Modules/DynastyEnhancer/Source/RecruitingFog.cpp:166"
         ],
+        "0xa0c5180": [
+          "Modules/DynastyEnhancer/Source/RecruitingFog.cpp:176"
+        ],
+        "0xa0c63b0": [
+          "Modules/DynastyEnhancer/Source/RecruitingFog.cpp:178"
+        ],
+        "0xa0c71f0": [
+          "Modules/DynastyEnhancer/Source/RecruitingFog.cpp:177"
+        ],
         "0xa0da9c0": [
-          "Modules/DynastyEnhancer/Source/RecruitingFog.cpp:156"
+          "Modules/DynastyEnhancer/Source/RecruitingFog.cpp:167"
         ],
         "0xa0db8e0": [
           "Modules/DynastyEnhancer/Source/DraftResultsBinding.h:9"
         ],
         "0xa0ddfe0": [
-          "Modules/DynastyEnhancer/Source/RecruitingFog.cpp:154"
+          "Modules/DynastyEnhancer/Source/RecruitingFog.cpp:165"
         ],
         "0xa0e0cc0": [
           "Modules/DynastyEnhancer/Source/PlayingTimeGates.h:12",
@@ -738,7 +797,7 @@
           "Modules/DynastyEnhancer/Source/PlayingTimeGates.h:7"
         ],
         "0xa0e91a0": [
-          "Modules/DynastyEnhancer/Source/RecruitingFog.cpp:204"
+          "Modules/DynastyEnhancer/Source/RecruitingFog.cpp:215"
         ],
         "0xa0ec820": [
           "Modules/DynastyEnhancer/Source/PlayingTimeGates.h:9"
@@ -747,10 +806,10 @@
           "Modules/DynastyEnhancer/Source/PlayingTimeGates.h:10"
         ],
         "0xa0f2e20": [
-          "Modules/DynastyEnhancer/Source/RecruitingFog.cpp:157"
+          "Modules/DynastyEnhancer/Source/RecruitingFog.cpp:168"
         ],
         "0xa0f9fb0": [
-          "Modules/DynastyEnhancer/Source/RecruitingFog.cpp:158"
+          "Modules/DynastyEnhancer/Source/RecruitingFog.cpp:169"
         ],
         "0xa102940": [
           "Modules/DynastyEnhancer/Source/PlayingTimeGates.h:11"
@@ -759,7 +818,7 @@
           "Modules/DynastyEnhancer/Source/PlayingTimeGates.h:6"
         ],
         "0xa3b6000": [
-          "Modules/DynastyEnhancer/Source/RecruitingFog.cpp:372"
+          "Modules/DynastyEnhancer/Source/RecruitingFog.cpp:383"
         ],
         "0xb4dbb18": [
           "Modules/DynastyEnhancer/Source/LiveTables.h:52"
@@ -774,15 +833,15 @@
           "Modules/DynastyEnhancer/Source/PlayerRimeProbe.cpp:56"
         ],
         "0xb575928": [
-          "Modules/DynastyEnhancer/Source/AnalyticsNative.h:13",
+          "Modules/DynastyEnhancer/Source/AnalyticsNative.h:14",
           "Modules/DynastyEnhancer/Source/NativeSocialMedia.cpp:424",
           "Modules/DynastyEnhancer/Source/NativeSocialMedia.cpp:596"
         ],
         "0xbaa78b8": [
-          "Modules/DynastyEnhancer/Source/AnalyticsNative.h:266",
-          "Modules/DynastyEnhancer/Source/AnalyticsNative.h:267",
-          "Modules/DynastyEnhancer/Source/RecruitingFog.cpp:145",
-          "Modules/DynastyEnhancer/Source/RecruitingFog.cpp:168",
+          "Modules/DynastyEnhancer/Source/AnalyticsNative.h:521",
+          "Modules/DynastyEnhancer/Source/AnalyticsNative.h:522",
+          "Modules/DynastyEnhancer/Source/RecruitingFog.cpp:156",
+          "Modules/DynastyEnhancer/Source/RecruitingFog.cpp:179",
           "Modules/DynastyEnhancer/Source/RecruitListProbe.cpp:57",
           "Modules/DynastyEnhancer/Source/RecruitListProbe.cpp:63",
           "Modules/DynastyEnhancer/Source/RecruitListProbe.cpp:65"
@@ -792,40 +851,41 @@
           "Modules/DynastyEnhancer/Source/LiveTables.h:68"
         ],
         "0xbab0e60": [
-          "Modules/DynastyEnhancer/Source/RecruitingFog.cpp:149"
+          "Modules/DynastyEnhancer/Source/RecruitingFog.cpp:160"
         ],
         "0xbab1408": [
-          "Modules/DynastyEnhancer/Source/RecruitingFog.cpp:169",
-          "Modules/DynastyEnhancer/Source/RecruitingFog.cpp:170"
+          "Modules/DynastyEnhancer/Source/RecruitingFog.cpp:180",
+          "Modules/DynastyEnhancer/Source/RecruitingFog.cpp:181"
         ],
         "0xbab18c0": [
-          "Modules/DynastyEnhancer/Source/RecruitingFog.cpp:145"
+          "Modules/DynastyEnhancer/Source/AnalyticsNative.h:467",
+          "Modules/DynastyEnhancer/Source/RecruitingFog.cpp:156"
         ],
         "0xbab1b28": [
           "Modules/DynastyEnhancer/Source/PlayerAbilityProbe.cpp:46",
           "Modules/DynastyEnhancer/Source/PlayerAbilityProbe.cpp:51",
-          "Modules/DynastyEnhancer/Source/RecruitingFog.cpp:148",
-          "Modules/DynastyEnhancer/Source/RecruitingFog.cpp:182",
-          "Modules/DynastyEnhancer/Source/RecruitingFog.cpp:647",
-          "Modules/DynastyEnhancer/Source/RecruitingFog.cpp:665",
-          "Modules/DynastyEnhancer/Source/RecruitingFog.cpp:698"
+          "Modules/DynastyEnhancer/Source/RecruitingFog.cpp:159",
+          "Modules/DynastyEnhancer/Source/RecruitingFog.cpp:193",
+          "Modules/DynastyEnhancer/Source/RecruitingFog.cpp:672",
+          "Modules/DynastyEnhancer/Source/RecruitingFog.cpp:690",
+          "Modules/DynastyEnhancer/Source/RecruitingFog.cpp:723"
         ],
         "0xbab5778": [
           "Modules/DynastyEnhancer/Source/PlayerTooltipProbe.cpp:20",
-          "Modules/DynastyEnhancer/Source/RecruitingFog.cpp:151"
+          "Modules/DynastyEnhancer/Source/RecruitingFog.cpp:162"
         ],
         "0xbab5958": [
-          "Modules/DynastyEnhancer/Source/RecruitingFog.cpp:171"
+          "Modules/DynastyEnhancer/Source/RecruitingFog.cpp:182"
         ],
         "0xbab5b70": [
-          "Modules/DynastyEnhancer/Source/RecruitingFog.cpp:153"
+          "Modules/DynastyEnhancer/Source/RecruitingFog.cpp:164"
         ],
         "0xbab9a08": [
           "Modules/DynastyEnhancer/Source/EnhancementCreationScope.h:13",
           "Modules/DynastyEnhancer/Source/EnhancementSettingsMenu.h:9"
         ],
         "0xbac4e50": [
-          "Modules/DynastyEnhancer/Source/RecruitingFog.cpp:150"
+          "Modules/DynastyEnhancer/Source/RecruitingFog.cpp:161"
         ],
         "0xbac63a8": [
           "Modules/DynastyEnhancer/Source/NativeSocialMedia.cpp:762",
@@ -840,18 +900,21 @@
           "Modules/DynastyEnhancer/Source/NativeSocialMedia.cpp:765"
         ],
         "0xbacd668": [
-          "Modules/DynastyEnhancer/Source/AnalyticsNative.h:268",
-          "Modules/DynastyEnhancer/Source/AnalyticsNative.h:269",
-          "Modules/DynastyEnhancer/Source/AnalyticsNative.h:270",
-          "Modules/DynastyEnhancer/Source/AnalyticsNative.h:271",
-          "Modules/DynastyEnhancer/Source/AnalyticsNative.h:272",
-          "Modules/DynastyEnhancer/Source/AnalyticsNative.h:273",
-          "Modules/DynastyEnhancer/Source/AnalyticsNative.h:274",
-          "Modules/DynastyEnhancer/Source/AnalyticsNative.h:275",
-          "Modules/DynastyEnhancer/Source/AnalyticsNative.h:276",
-          "Modules/DynastyEnhancer/Source/AnalyticsNative.h:277",
-          "Modules/DynastyEnhancer/Source/AnalyticsNative.h:278",
-          "Modules/DynastyEnhancer/Source/RecruitingFog.cpp:136",
+          "Modules/DynastyEnhancer/Source/AnalyticsNative.h:45",
+          "Modules/DynastyEnhancer/Source/AnalyticsNative.h:500",
+          "Modules/DynastyEnhancer/Source/AnalyticsNative.h:523",
+          "Modules/DynastyEnhancer/Source/AnalyticsNative.h:524",
+          "Modules/DynastyEnhancer/Source/AnalyticsNative.h:525",
+          "Modules/DynastyEnhancer/Source/AnalyticsNative.h:526",
+          "Modules/DynastyEnhancer/Source/AnalyticsNative.h:527",
+          "Modules/DynastyEnhancer/Source/AnalyticsNative.h:528",
+          "Modules/DynastyEnhancer/Source/AnalyticsNative.h:529",
+          "Modules/DynastyEnhancer/Source/AnalyticsNative.h:530",
+          "Modules/DynastyEnhancer/Source/AnalyticsNative.h:531",
+          "Modules/DynastyEnhancer/Source/AnalyticsNative.h:532",
+          "Modules/DynastyEnhancer/Source/AnalyticsNative.h:533",
+          "Modules/DynastyEnhancer/Source/AnalyticsNative.h:534",
+          "Modules/DynastyEnhancer/Source/RecruitingFog.cpp:147",
           "Modules/DynastyEnhancer/Source/RecruitListProbe.cpp:57",
           "Modules/DynastyEnhancer/Source/RecruitListProbe.cpp:63",
           "Modules/DynastyEnhancer/Source/RecruitListProbe.cpp:65",
@@ -868,11 +931,11 @@
           "Modules/DynastyEnhancer/Source/PlayerUiPreview.cpp:22",
           "Modules/DynastyEnhancer/Source/PlayerUiPreview.cpp:32",
           "Modules/DynastyEnhancer/Source/PlayerUiTrace.cpp:20",
-          "Modules/DynastyEnhancer/Source/RecruitingFog.cpp:201",
-          "Modules/DynastyEnhancer/Source/RecruitingFog.cpp:708",
-          "Modules/DynastyEnhancer/Source/RecruitingFog.cpp:784",
-          "Modules/DynastyEnhancer/Source/RecruitingFog.cpp:785",
-          "Modules/DynastyEnhancer/Source/RecruitingFog.cpp:819"
+          "Modules/DynastyEnhancer/Source/RecruitingFog.cpp:212",
+          "Modules/DynastyEnhancer/Source/RecruitingFog.cpp:733",
+          "Modules/DynastyEnhancer/Source/RecruitingFog.cpp:809",
+          "Modules/DynastyEnhancer/Source/RecruitingFog.cpp:810",
+          "Modules/DynastyEnhancer/Source/RecruitingFog.cpp:844"
         ],
         "0xbc82ae8": [
           "Modules/DynastyEnhancer/Source/PlayerPresentationPolicy.h:11"
@@ -910,23 +973,29 @@
         "0xbd7d2b8": [
           "Modules/DynastyEnhancer/Source/EnhancementCreationScope.h:18"
         ],
+        "0xbd872e0": [
+          "Modules/DynastyEnhancer/Source/AnalyticsNative.h:468"
+        ],
+        "0xbd873b0": [
+          "Modules/DynastyEnhancer/Source/AnalyticsNative.h:469"
+        ],
         "0xc74ed78": [
-          "Modules/DynastyEnhancer/Source/RecruitingFog.cpp:152"
+          "Modules/DynastyEnhancer/Source/RecruitingFog.cpp:163"
         ],
         "0xc74fd70": [
-          "Modules/DynastyEnhancer/Source/RecruitingFog.cpp:155"
+          "Modules/DynastyEnhancer/Source/RecruitingFog.cpp:166"
         ],
         "0xc7502f8": [
-          "Modules/DynastyEnhancer/Source/RecruitingFog.cpp:165",
-          "Modules/DynastyEnhancer/Source/RecruitingFog.cpp:166",
-          "Modules/DynastyEnhancer/Source/RecruitingFog.cpp:167"
+          "Modules/DynastyEnhancer/Source/RecruitingFog.cpp:176",
+          "Modules/DynastyEnhancer/Source/RecruitingFog.cpp:177",
+          "Modules/DynastyEnhancer/Source/RecruitingFog.cpp:178"
         ],
         "0xc751ea0": [
           "Modules/DynastyEnhancer/Source/DraftResultsBinding.h:7",
-          "Modules/DynastyEnhancer/Source/RecruitingFog.cpp:156"
+          "Modules/DynastyEnhancer/Source/RecruitingFog.cpp:167"
         ],
         "0xc7522c8": [
-          "Modules/DynastyEnhancer/Source/RecruitingFog.cpp:154"
+          "Modules/DynastyEnhancer/Source/RecruitingFog.cpp:165"
         ],
         "0xc752560": [
           "Modules/DynastyEnhancer/Source/PlayingTimeGates.h:12",
@@ -941,13 +1010,13 @@
           "Modules/DynastyEnhancer/Source/PlayingTimeGates.h:8",
           "Modules/DynastyEnhancer/Source/PlayingTimeGates.h:9",
           "Modules/DynastyEnhancer/Source/PlayingTimeGates.h:10",
-          "Modules/DynastyEnhancer/Source/RecruitingFog.cpp:204"
+          "Modules/DynastyEnhancer/Source/RecruitingFog.cpp:215"
         ],
         "0xc753aa0": [
-          "Modules/DynastyEnhancer/Source/RecruitingFog.cpp:157"
+          "Modules/DynastyEnhancer/Source/RecruitingFog.cpp:168"
         ],
         "0xc754328": [
-          "Modules/DynastyEnhancer/Source/RecruitingFog.cpp:158"
+          "Modules/DynastyEnhancer/Source/RecruitingFog.cpp:169"
         ],
         "0xc754b08": [
           "Modules/DynastyEnhancer/Source/PlayingTimeGates.h:6",
@@ -958,12 +1027,12 @@
         ],
         "0xf55c998": [
           "Modules/DynastyEnhancer/Source/AnalyticsRuntime.h:14",
-          "Modules/DynastyEnhancer/Source/AnalyticsRuntime.h:40",
+          "Modules/DynastyEnhancer/Source/AnalyticsRuntime.h:48",
           "Modules/DynastyEnhancer/Source/EnhancementCreationScope.h:25",
           "Modules/DynastyEnhancer/Source/EnhancementCreationScope.h:29",
           "Modules/DynastyEnhancer/Source/NativeSocialMedia.cpp:56",
-          "Modules/DynastyEnhancer/Source/RecruitingFog.cpp:300",
-          "Modules/DynastyEnhancer/Source/RecruitingFog.cpp:810"
+          "Modules/DynastyEnhancer/Source/RecruitingFog.cpp:311",
+          "Modules/DynastyEnhancer/Source/RecruitingFog.cpp:835"
         ],
         "0xfa519b8": [
           "Modules/DynastyEnhancer/Source/EnhancementCreationScope.h:15",
@@ -982,39 +1051,43 @@
           "Modules/DynastyEnhancer/Source/NativeSocialMedia.cpp:645"
         ],
         "0x12345678": [
-          "Modules/DynastyEnhancer/Source/RecruitNotesUiRuntime.h:32",
-          "Modules/DynastyEnhancer/Source/RecruitNotesUiRuntime.h:33"
+          "Modules/DynastyEnhancer/Source/RecruitNotesUiRuntime.h:32"
         ]
       },
       "contractSourceLines": [
         {
+          "source": "Modules/DynastyEnhancer/Source/AnalyticsGates.h",
+          "line": 3,
+          "expression": "inline constexpr uintptr_t analyticsPrefixRva=0x80764a0;"
+        },
+        {
           "source": "Modules/DynastyEnhancer/Source/AnalyticsNative.h",
-          "line": 63,
+          "line": 93,
           "expression": "Encode encodePrefix=nullptr,encodeValue=nullptr,encodeSuffix=nullptr;"
         },
         {
           "source": "Modules/DynastyEnhancer/Source/AnalyticsNative.h",
-          "line": 183,
+          "line": 224,
           "expression": "encodePrefix(255,&destination,&written);"
         },
         {
           "source": "Modules/DynastyEnhancer/Source/AnalyticsNative.h",
-          "line": 281,
+          "line": 537,
           "expression": "for(auto& x:bindings)if(x.slot){if(replace(x.hook,reinterpret_cast<void*>(base+x.rva),x.vt,x.offset))x.slot=nullptr;else ok=false;}"
         },
         {
           "source": "Modules/DynastyEnhancer/Source/AnalyticsNative.h",
-          "line": 287,
+          "line": 543,
           "expression": "if(memcmp(bytes,gate.bytes,32))::cotcompat::practice::normalize(b,gate.rva,bytes,gate.bytes,32,query);"
         },
         {
           "source": "Modules/DynastyEnhancer/Source/AnalyticsNative.h",
-          "line": 297,
-          "expression": "encodePrefix=reinterpret_cast<Encode>(b+0x8076300);encodeValue=reinterpret_cast<Encode>(b+0x8076180);encodeSuffix=reinterpret_cast<Encode>(b+0x8079e70);"
+          "line": 553,
+          "expression": "encodePrefix=reinterpret_cast<Encode>(b+analyticsPrefixRva);encodeValue=reinterpret_cast<Encode>(b+0x8076180);encodeSuffix=reinterpret_cast<Encode>(b+0x8079e70);"
         },
         {
           "source": "Modules/DynastyEnhancer/Source/AnalyticsNative.h",
-          "line": 301,
+          "line": 558,
           "expression": "try{for(auto& x:bindings){if(!replace(reinterpret_cast<void*>(b+x.rva),x.hook,x.vt,x.offset))throw std::runtime_error(\"Native analytics ownership changed\");x.slot=reinterpret_cast<void**>(b+x.vt+x.offset);}}"
         },
         {
@@ -1104,272 +1177,272 @@
         },
         {
           "source": "Modules/DynastyEnhancer/Source/RecruitingFog.cpp",
-          "line": 183,
+          "line": 194,
           "expression": "constexpr std::array<unsigned char,32> abilitiesPrefix={0x44,0x88,0x44,0x24,0x18,0x48,0x89,0x54,0x24,0x10,0x48,0x89,0x4c,0x24,0x08,0x55,0x53,0x56,0x41,0x54,0x41,0x56,0x41,0x57,0x48,0x8d,0x6c,0x24,0x88,0x48,0x81,0xec};"
         },
         {
           "source": "Modules/DynastyEnhancer/Source/RecruitingFog.cpp",
-          "line": 202,
+          "line": 213,
           "expression": "constexpr std::array<unsigned char,24> scriptSetupPrefix={0x48,0x89,0x5c,0x24,0x10,0x48,0x89,0x6c,0x24,0x18,0x48,0x89,0x74,0x24,0x20,0x57,0x41,0x56,0x41,0x57,0x48,0x83,0xec,0x20};"
         },
         {
           "source": "Modules/DynastyEnhancer/Source/RecruitingFog.cpp",
-          "line": 228,
+          "line": 239,
           "expression": "bool replace(void* expected,void* wanted,uintptr_t table=vtableRva,uintptr_t offset=slot){"
         },
         {
           "source": "Modules/DynastyEnhancer/Source/RecruitingFog.cpp",
-          "line": 332,
+          "line": 343,
           "expression": "constexpr unsigned char listPrefix[]={0x40,0x53,0x41,0x56,0x48,0x83,0xec,0x58,0x48,0x8b,0x81,0x18,0x04,0,0,0x4c,0x8b,0xf2,0x48,0x8b,0xd9};"
         },
         {
           "source": "Modules/DynastyEnhancer/Source/RecruitingFog.cpp",
-          "line": 333,
+          "line": 344,
           "expression": "constexpr unsigned char writerPrefix[]={0x4c,0x8b,0xdc,0x55,0x41,0x54,0x41,0x56,0x49,0x8d,0xab,0xf8,0xfe,0xff,0xff,0x48,0x81,0xec,0xf0,0x01,0,0};"
         },
         {
           "source": "Modules/DynastyEnhancer/Source/RecruitingFog.cpp",
-          "line": 335,
+          "line": 346,
           "expression": "if(!read(base+enhancements::menu::listRva,bytes.data(),sizeof(listPrefix))||memcmp(bytes.data(),listPrefix,sizeof(listPrefix)))"
         },
         {
           "source": "Modules/DynastyEnhancer/Source/RecruitingFog.cpp",
-          "line": 337,
+          "line": 348,
           "expression": "if(!read(base+enhancements::menu::writerRva,bytes.data(),sizeof(writerPrefix))||memcmp(bytes.data(),writerPrefix,sizeof(writerPrefix)))"
         },
         {
           "source": "Modules/DynastyEnhancer/Source/RecruitingFog.cpp",
-          "line": 345,
+          "line": 356,
           "expression": "if(!replace(reinterpret_cast<void*>(settingsList),reinterpret_cast<void*>(enhancementListHook),enhancements::menu::tableRva,enhancements::menu::listSlot))throw std::runtime_error(\"Dynasty settings list ownership changed\");settingsListInstalled=true;"
         },
         {
           "source": "Modules/DynastyEnhancer/Source/RecruitingFog.cpp",
-          "line": 346,
+          "line": 357,
           "expression": "if(!replace(reinterpret_cast<void*>(settingsWriter),reinterpret_cast<void*>(enhancementWriterHook),enhancements::menu::tableRva,enhancements::menu::writerSlot))throw std::runtime_error(\"Dynasty settings writer ownership changed\");settingsWriterInstalled=true;"
         },
         {
           "source": "Modules/DynastyEnhancer/Source/RecruitingFog.cpp",
-          "line": 416,
+          "line": 427,
           "expression": "if(!replace(reinterpret_cast<void*>(originalPresentationFormat),reinterpret_cast<void*>(presentationFormatHook),presentation::textTable,presentation::formatSlot))"
         },
         {
           "source": "Modules/DynastyEnhancer/Source/RecruitingFog.cpp",
-          "line": 651,
+          "line": 676,
           "expression": "if(!read(base+abilitiesTable+abilitiesSlot,&currentAbilities,8)||currentAbilities!=base+abilitiesRva||!read(currentAbilities,actualAbilities.data(),actualAbilities.size())||actualAbilities!=abilitiesPrefix)throw std::runtime_error(\"Unsupported or owned player ability description provider\");"
         },
         {
           "source": "Modules/DynastyEnhancer/Source/RecruitingFog.cpp",
-          "line": 658,
+          "line": 683,
           "expression": "if(!replace(reinterpret_cast<void*>(originalRosterColumns),reinterpret_cast<void*>(rosterColumnsHook),rosterColumnsTable,0x70))throw std::runtime_error(\"Roster columns ownership changed\");rosterColumnsInstalled=true;"
         },
         {
           "source": "Modules/DynastyEnhancer/Source/RecruitingFog.cpp",
-          "line": 659,
+          "line": 684,
           "expression": "if(!replace(reinterpret_cast<void*>(originalGridClose),reinterpret_cast<void*>(gridCloseHook),classTableRva,0x60))throw std::runtime_error(\"Roster close ownership changed\");gridCloseInstalled=true;"
         },
         {
           "source": "Modules/DynastyEnhancer/Source/RecruitingFog.cpp",
-          "line": 660,
+          "line": 685,
           "expression": "if(!replace(reinterpret_cast<void*>(originalRosterPlayer),reinterpret_cast<void*>(rosterPlayerHook),rosterPlayerTable,0x50))throw std::runtime_error(\"Roster player ownership changed\");rosterPlayerInstalled=true;"
         },
         {
           "source": "Modules/DynastyEnhancer/Source/RecruitingFog.cpp",
-          "line": 662,
+          "line": 687,
           "expression": "if(!replace(reinterpret_cast<void*>(playerOriginal[i]),reinterpret_cast<void*>(playerHooks[i]),binding.table,binding.slot))throw std::runtime_error(\"Player response ownership changed\");playerInstalled[i]=true;"
         },
         {
           "source": "Modules/DynastyEnhancer/Source/RecruitingFog.cpp",
-          "line": 665,
+          "line": 690,
           "expression": "if(!replace(reinterpret_cast<void*>(mapOriginal[i]),reinterpret_cast<void*>(mapHooks[i]),0xbab1b28,binding.slot))throw std::runtime_error(\"Card map ownership changed\");mapInstalled[i]=true;"
         },
         {
           "source": "Modules/DynastyEnhancer/Source/RecruitingFog.cpp",
-          "line": 668,
+          "line": 693,
           "expression": "if(!replace(reinterpret_cast<void*>(originalAbilities),reinterpret_cast<void*>(playerAbilitiesHook),abilitiesTable,abilitiesSlot))throw std::runtime_error(\"Player abilities ownership changed\");abilitiesInstalled=true;"
         },
         {
           "source": "Modules/DynastyEnhancer/Source/RecruitingFog.cpp",
-          "line": 670,
+          "line": 695,
           "expression": "if(!replace(reinterpret_cast<void*>(keyedPlayerOriginal[i]),reinterpret_cast<void*>(keyedPlayerHooks[i]),binding.table,binding.slot))throw std::runtime_error(\"Keyed player response ownership changed\");keyedPlayerInstalled[i]=true;"
         },
         {
           "source": "Modules/DynastyEnhancer/Source/RecruitingFog.cpp",
-          "line": 691,
+          "line": 716,
           "expression": "if(settingsListInstalled){if(replace(reinterpret_cast<void*>(enhancementListHook),reinterpret_cast<void*>(settingsList),enhancements::menu::tableRva,enhancements::menu::listSlot))settingsListInstalled=false;else ownershipFailed=true;}"
         },
         {
           "source": "Modules/DynastyEnhancer/Source/RecruitingFog.cpp",
-          "line": 692,
+          "line": 717,
           "expression": "if(settingsWriterInstalled){if(replace(reinterpret_cast<void*>(enhancementWriterHook),reinterpret_cast<void*>(settingsWriter),enhancements::menu::tableRva,enhancements::menu::writerSlot))settingsWriterInstalled=false;else ownershipFailed=true;}"
         },
         {
           "source": "Modules/DynastyEnhancer/Source/RecruitingFog.cpp",
-          "line": 695,
+          "line": 720,
           "expression": "if(presentationInstalled){if(replace(reinterpret_cast<void*>(presentationFormatHook),reinterpret_cast<void*>(originalPresentationFormat),presentation::textTable,presentation::formatSlot))presentationInstalled=false;else ownershipFailed=true;}"
         },
         {
           "source": "Modules/DynastyEnhancer/Source/RecruitingFog.cpp",
-          "line": 696,
+          "line": 721,
           "expression": "for(size_t i=0;i<keyedPlayerOriginal.size();++i)if(keyedPlayerInstalled[i]){const auto& binding=keyedPlayerBindings[i];if(replace(reinterpret_cast<void*>(keyedPlayerHooks[i]),reinterpret_cast<void*>(keyedPlayerOriginal[i]),binding.table,binding.slot))keyedPlayerInstalled[i]=false;else ownershipFailed=true;}"
         },
         {
           "source": "Modules/DynastyEnhancer/Source/RecruitingFog.cpp",
-          "line": 697,
+          "line": 722,
           "expression": "if(abilitiesInstalled){if(replace(reinterpret_cast<void*>(playerAbilitiesHook),reinterpret_cast<void*>(originalAbilities),abilitiesTable,abilitiesSlot))abilitiesInstalled=false;else ownershipFailed=true;}"
         },
         {
           "source": "Modules/DynastyEnhancer/Source/RecruitingFog.cpp",
-          "line": 698,
+          "line": 723,
           "expression": "for(size_t i=0;i<mapOriginal.size();++i)if(mapInstalled[i]){const auto& binding=mapBindings[i];if(replace(reinterpret_cast<void*>(mapHooks[i]),reinterpret_cast<void*>(mapOriginal[i]),0xbab1b28,binding.slot))mapInstalled[i]=false;else ownershipFailed=true;}"
         },
         {
           "source": "Modules/DynastyEnhancer/Source/RecruitingFog.cpp",
-          "line": 699,
+          "line": 724,
           "expression": "for(size_t i=0;i<playerOriginal.size();++i)if(playerInstalled[i]){const auto& binding=playerBindings[i];if(replace(reinterpret_cast<void*>(playerHooks[i]),reinterpret_cast<void*>(playerOriginal[i]),binding.table,binding.slot))playerInstalled[i]=false;else ownershipFailed=true;}"
         },
         {
           "source": "Modules/DynastyEnhancer/Source/RecruitingFog.cpp",
-          "line": 700,
+          "line": 725,
           "expression": "if(rosterPlayerInstalled){if(replace(reinterpret_cast<void*>(rosterPlayerHook),reinterpret_cast<void*>(originalRosterPlayer),rosterPlayerTable,0x50))rosterPlayerInstalled=false;else ownershipFailed=true;}"
         },
         {
           "source": "Modules/DynastyEnhancer/Source/RecruitingFog.cpp",
-          "line": 701,
+          "line": 726,
           "expression": "if(gridCloseInstalled){if(replace(reinterpret_cast<void*>(gridCloseHook),reinterpret_cast<void*>(originalGridClose),classTableRva,0x60))gridCloseInstalled=false;else ownershipFailed=true;}"
         },
         {
           "source": "Modules/DynastyEnhancer/Source/RecruitingFog.cpp",
-          "line": 702,
+          "line": 727,
           "expression": "if(rosterColumnsInstalled){if(replace(reinterpret_cast<void*>(rosterColumnsHook),reinterpret_cast<void*>(originalRosterColumns),rosterColumnsTable,0x70))rosterColumnsInstalled=false;else ownershipFailed=true;}"
         },
         {
           "source": "Modules/DynastyEnhancer/Source/RecruitingFog.cpp",
-          "line": 703,
+          "line": 728,
           "expression": "if(classRowsInstalled){if(replace(reinterpret_cast<void*>(classRowsHook),reinterpret_cast<void*>(originalClassRows),classTableRva,0x68))classRowsInstalled=false;else ownershipFailed=true;}"
         },
         {
           "source": "Modules/DynastyEnhancer/Source/RecruitingFog.cpp",
-          "line": 704,
+          "line": 729,
           "expression": "if(colorLengthInstalled){if(replace(reinterpret_cast<void*>(colorLengthHook),reinterpret_cast<void*>(originalColorLength),scriptTableRva,0xb0))colorLengthInstalled=false;else ownershipFailed=true;}"
         },
         {
           "source": "Modules/DynastyEnhancer/Source/RecruitingFog.cpp",
-          "line": 705,
+          "line": 730,
           "expression": "if(notesSetupInstalled){if(replace(reinterpret_cast<void*>(notesSetupHook),reinterpret_cast<void*>(originalScriptSetup),scriptTableRva,scriptSetupSlot))notesSetupInstalled=false;else ownershipFailed=true;}"
         },
         {
           "source": "Modules/DynastyEnhancer/Source/RecruitingFog.cpp",
-          "line": 708,
+          "line": 733,
           "expression": "if(notesProbeInstalled){if(replace(reinterpret_cast<void*>(notesLengthHook),reinterpret_cast<void*>(originalScriptLength),0xbc42fe8,0xb0))notesProbeInstalled=false;else ownershipFailed=true;}"
         },
         {
           "source": "Modules/DynastyEnhancer/Source/RecruitingFog.cpp",
-          "line": 710,
+          "line": 735,
           "expression": "for(size_t i=0;i<detailCount;++i)if(detailInstalled[i]){const auto& gate=playingTimeGates[i];if(replace(reinterpret_cast<void*>(hooks[i]),reinterpret_cast<void*>(detailOriginal[i]),gate.vtable,gate.slot))detailInstalled[i]=false;else ownershipFailed=true;}"
         },
         {
           "source": "Modules/DynastyEnhancer/Source/RecruitingFog.cpp",
-          "line": 711,
+          "line": 736,
           "expression": "if(installed){if(!replace(reinterpret_cast<void*>(getterHook),reinterpret_cast<void*>(original)))return 2;installed=false;}"
         },
         {
           "source": "Modules/DynastyEnhancer/Source/RecruitingFog.cpp",
-          "line": 739,
+          "line": 764,
           "expression": "if(!replace(reinterpret_cast<void*>(originalClassRows),reinterpret_cast<void*>(classRowsHook),classTableRva,0x68))throw std::runtime_error(\"Shared row owner changed\");classRowsInstalled=true;"
         },
         {
           "source": "Modules/DynastyEnhancer/Source/RecruitingFog.cpp",
-          "line": 743,
+          "line": 768,
           "expression": "if(!replace(reinterpret_cast<void*>(originalScriptSetup),reinterpret_cast<void*>(notesSetupHook),scriptTableRva,scriptSetupSlot))throw std::runtime_error(\"Script invocation owner changed\");notesSetupInstalled=true;"
         },
         {
           "source": "Modules/DynastyEnhancer/Source/RecruitingFog.cpp",
-          "line": 756,
+          "line": 781,
           "expression": "for(const auto& gate:recruitingUiGates){if(!read(base+gate.rva,actual.data(),actual.size()))throw std::runtime_error(\"Unreadable UI-value setter\");if(actual!=gate.bytes)cotcompat::practice::normalize(base,gate.rva,actual.data(),gate.bytes.data(),actual.size(),read);if(actual!=gate.bytes)throw std::runtime_error(\"Unsupported UI-value setter fingerprint\");}"
         },
         {
           "source": "Modules/DynastyEnhancer/Source/RecruitingFog.cpp",
-          "line": 761,
+          "line": 786,
           "expression": "if(!replace(reinterpret_cast<void*>(original),reinterpret_cast<void*>(getterHook)))throw std::runtime_error(\"Recruiting getter ownership changed\");installed=true;"
         },
         {
           "source": "Modules/DynastyEnhancer/Source/RecruitingFog.cpp",
-          "line": 762,
+          "line": 787,
           "expression": "for(size_t i=0;i<detailCount;++i){const auto& gate=playingTimeGates[i];detailOriginal[i]=reinterpret_cast<DetailGetter>(base+gate.rva);if(!replace(reinterpret_cast<void*>(detailOriginal[i]),reinterpret_cast<void*>(hooks[i]),gate.vtable,gate.slot))throw std::runtime_error(\"Playing-time getter ownership changed\");detailInstalled[i]=true;}"
         },
         {
           "source": "Modules/DynastyEnhancer/Source/RecruitingFog.cpp",
-          "line": 764,
+          "line": 789,
           "expression": "if(!read(base+scriptSetupRva,actual.data(),scriptSetupPrefix.size())||memcmp(actual.data(),scriptSetupPrefix.data(),scriptSetupPrefix.size())||!read(base+scriptTableRva+scriptSetupSlot,&current,8)||current!=base+scriptSetupRva)throw std::runtime_error(\"Unsupported or already-owned script invocation setup\");"
         },
         {
           "source": "Modules/DynastyEnhancer/Source/RecruitingFog.cpp",
-          "line": 766,
+          "line": 791,
           "expression": "if(!replace(reinterpret_cast<void*>(originalScriptSetup),reinterpret_cast<void*>(notesSetupHook),scriptTableRva,scriptSetupSlot))throw std::runtime_error(\"Notes invocation setup ownership changed\");"
         },
         {
           "source": "Modules/DynastyEnhancer/Source/RecruitingFog.cpp",
-          "line": 768,
+          "line": 793,
           "expression": "constexpr unsigned char colorLengthPrefix[]={0x48,0x8b,0x41,0x58,0x8b,0x40,0x18,0xc3};"
         },
         {
           "source": "Modules/DynastyEnhancer/Source/RecruitingFog.cpp",
-          "line": 769,
+          "line": 794,
           "expression": "if(!read(base+scriptTableRva+0xb0,&current,8)||current!=base+0x7c34e40||!read(current,actual.data(),sizeof(colorLengthPrefix))||memcmp(actual.data(),colorLengthPrefix,sizeof(colorLengthPrefix)))throw std::runtime_error(\"Unsupported or already-owned color focus accessor\");"
         },
         {
           "source": "Modules/DynastyEnhancer/Source/RecruitingFog.cpp",
-          "line": 771,
+          "line": 796,
           "expression": "if(!replace(reinterpret_cast<void*>(originalColorLength),reinterpret_cast<void*>(colorLengthHook),scriptTableRva,0xb0))throw std::runtime_error(\"Color focus accessor ownership changed\");colorLengthInstalled=true;"
         },
         {
           "source": "Modules/DynastyEnhancer/Source/RecruitingFog.cpp",
-          "line": 772,
+          "line": 797,
           "expression": "constexpr unsigned char classRowsPrefix[]={0x40,0x53,0x55,0x56,0x41,0x56,0x41,0x57,0x48,0x81,0xec,0x70,0x01,0,0,0x48,0x8b,0x05,0x5a,0x9b,0,0x06,0x48,0x33,0xc4,0x48,0x89,0x84,0x24,0x60,0x01,0};"
         },
         {
           "source": "Modules/DynastyEnhancer/Source/RecruitingFog.cpp",
-          "line": 773,
+          "line": 798,
           "expression": "constexpr unsigned char classKeyPrefix[]={0x48,0x89,0x5c,0x24,0x08,0x48,0x89,0x74,0x24,0x20,0x57,0x48,0x81,0xec,0x70,0x01,0,0};"
         },
         {
           "source": "Modules/DynastyEnhancer/Source/RecruitingFog.cpp",
-          "line": 774,
+          "line": 799,
           "expression": "constexpr unsigned char classParsePrefix[]={0x48,0x89,0x5c,0x24,0x08,0x57,0x48,0x83,0xec,0x20,0x48,0x8b,0xf9};"
         },
         {
           "source": "Modules/DynastyEnhancer/Source/RecruitingFog.cpp",
-          "line": 775,
+          "line": 800,
           "expression": "if(!read(base+classRowsRva,actual.data(),sizeof(classRowsPrefix))||memcmp(actual.data(),classRowsPrefix,sizeof(classRowsPrefix))||!read(base+classKeyRva,actual.data(),sizeof(classKeyPrefix))||memcmp(actual.data(),classKeyPrefix,sizeof(classKeyPrefix))||!read(base+classParseRva,actual.data(),sizeof(classParsePrefix))||memcmp(actual.data(),classParsePrefix,sizeof(classParsePrefix))||!read(base+classTableRva+0x78,&current,8)||current!=base+classKeyRva||!read(base+classTableRva+0x68,&current,8)||current!=base+classRowsRva)throw std::runtime_error(\"Unsupported or already-owned recruit Class grid provider\");"
         },
         {
           "source": "Modules/DynastyEnhancer/Source/RecruitingFog.cpp",
-          "line": 777,
+          "line": 802,
           "expression": "if(!replace(reinterpret_cast<void*>(originalClassRows),reinterpret_cast<void*>(classRowsHook),classTableRva,0x68))throw std::runtime_error(\"Class grid provider ownership changed\");classRowsInstalled=true;"
         },
         {
           "source": "Modules/DynastyEnhancer/Source/RecruitingFog.cpp",
-          "line": 783,
+          "line": 808,
           "expression": "constexpr unsigned char lengthPrefix[]={0x48,0x8b,0x41,0x58,0x8b,0x40,0x18,0xc3};"
         },
         {
           "source": "Modules/DynastyEnhancer/Source/RecruitingFog.cpp",
-          "line": 784,
+          "line": 809,
           "expression": "if(!read(base+0xbc42fe8+0xb0,&current,8)||current!=base+0x7c34e40||!read(current,actual.data(),sizeof(lengthPrefix))||memcmp(actual.data(),lengthPrefix,sizeof(lengthPrefix)))throw std::runtime_error(\"Unsupported script length accessor; Notes probe stopped\");"
         },
         {
           "source": "Modules/DynastyEnhancer/Source/RecruitingFog.cpp",
-          "line": 785,
+          "line": 810,
           "expression": "originalScriptLength=reinterpret_cast<ScriptLength>(current);if(!replace(reinterpret_cast<void*>(originalScriptLength),reinterpret_cast<void*>(notesLengthHook),0xbc42fe8,0xb0))throw std::runtime_error(\"Script length accessor ownership changed\");notesProbeInstalled=true;"
         },
         {
           "source": "Modules/DynastyEnhancer/Source/RecruitingFog.cpp",
-          "line": 805,
+          "line": 830,
           "expression": "// Offline Dynasty Settings persistence, normalized unsigned."
         },
         {
           "source": "Modules/DynastyEnhancer/Source/RecruitingFog.cpp",
-          "line": 819,
+          "line": 844,
           "expression": "if(replace(reinterpret_cast<void*>(notesLengthHook),reinterpret_cast<void*>(originalScriptLength),0xbc42fe8,0xb0))notesProbeInstalled=false;}"
         },
         {
@@ -5826,20 +5899,28 @@
       "length": 8,
       "kind": "Analytics dedicated vtable slot",
       "native": "0x7a89770"
+    },
+    {
+      "module": "DynastyEnhancer",
+      "rva": "0xbacd6f0",
+      "length": 8,
+      "kind": "Analytics dedicated vtable slot",
+      "native": "0x7a89420"
     }
   ],
   "sourceHashes": {
     "Modules/DynastyEnhancer/Source/AioCurrencyUiPrograms.h": "d150e81fc16107880e60b98bbe8b0361d5685b2ebe9bbada82f82fff678a17c5",
     "Modules/DynastyEnhancer/Source/AioRecruitNotesUiPrograms.h": "9788097ab4b1a1fb8cc69584d801dd82e923ae168d0c54b3aa7e088d91a4754a",
-    "Modules/DynastyEnhancer/Source/AnalyticsBridge.h": "323149ec3575ffe9efb46019cd50fbff32052d4d6b5259fc6c86563d09669172",
+    "Modules/DynastyEnhancer/Source/AnalyticsActionsUiPrograms.h": "57aa036c2d68675ffd9eeb9ca063014071a8e69a3fe59aeec48a58b9e1714141",
+    "Modules/DynastyEnhancer/Source/AnalyticsBridge.h": "e61761b216d80051c73d218dc9e46c76309a21d3e1694ea0fbd6ffdec41021c8",
     "Modules/DynastyEnhancer/Source/AnalyticsCalibration.h": "748feba465876bd21cfc06978dbe9905c2c9260c633837a6fbebdfc0cea02192",
-    "Modules/DynastyEnhancer/Source/AnalyticsCapture.h": "f3b142ab287cb2574da0e3dcb6424905a14662167ace7ce935bfacdf74974b3a",
-    "Modules/DynastyEnhancer/Source/AnalyticsGates.h": "b86a4710e01c00794fb53fbde2eda9bad7ff3a0a671406f9582b7cbd20f5238b",
-    "Modules/DynastyEnhancer/Source/AnalyticsMenuBridge.h": "7a27ec8729341a8d08daffbacda4467df3d4697a585c43f669f35e6304280e19",
+    "Modules/DynastyEnhancer/Source/AnalyticsCapture.h": "09254cf9feb40ba08656e319f9cc0ed50fe92f0efae9ba80972e9c22ff60117b",
+    "Modules/DynastyEnhancer/Source/AnalyticsGates.h": "f852203147f9808ce04403ddc619cc6e4611e641f140c3c69a3417f8f3a4ac68",
+    "Modules/DynastyEnhancer/Source/AnalyticsMenuBridge.h": "2bdeeea6cc0a0a82ef3a7d74d44b8ff884f42842c9c3ca87fbe03fb08200b6d0",
     "Modules/DynastyEnhancer/Source/AnalyticsModel.h": "7871fd9173e0b76945fb302e0ecce9b0fcc8999104c71311837a5060ac9ba474",
-    "Modules/DynastyEnhancer/Source/AnalyticsNative.h": "9e8d894dc87215f4d10ccade1ec0051b09ee1922d8e5c63a8e5bd9947fdf6f2c",
-    "Modules/DynastyEnhancer/Source/AnalyticsPage.h": "c16b4298fff43a19c56527f562621518b33614ad0e507e8ed82426505c9a1aa6",
-    "Modules/DynastyEnhancer/Source/AnalyticsRuntime.h": "29b97be54b77ea7770a7bfdfb6571202af5d2b893385fcc689d4fb63287b3021",
+    "Modules/DynastyEnhancer/Source/AnalyticsNative.h": "37a437bca91b591898b5a3c92632a711b9b4f0da68a88c3f55e51eabfed9c3d7",
+    "Modules/DynastyEnhancer/Source/AnalyticsPage.h": "b573f9309ed618b8aa40f6127c97f1f8afdda54464e23668f22c8b5cbc5d9c85",
+    "Modules/DynastyEnhancer/Source/AnalyticsRuntime.h": "17577d913604e8dc062806384ed6c7ed5d6f7af82b63db3d42bf6b5597665d06",
     "Modules/DynastyEnhancer/Source/CurrencyBudgetUiPrograms.h": "9c0b98ebb22f60931b3154721f460d2d553f83aec0d1c6f875cb24debf21fb11",
     "Modules/DynastyEnhancer/Source/CurrencyDisplay.h": "1374555dd8791b2faebcf225159ba96f523621171c50ba75f1fc997a517944c8",
     "Modules/DynastyEnhancer/Source/CurrencyRecruitDetailUiPrograms.h": "29e846582f4ba12aff409e14e06701da9ce1c48c2fcdb9cbc55a7cc3c224715a",
@@ -5856,8 +5937,8 @@
     "Modules/DynastyEnhancer/Source/EnhancementCreationScope.h": "c6316586dec588e384b543f821d53830006e56ebc09b55ffb8be83901727fcac",
     "Modules/DynastyEnhancer/Source/EnhancementOptions.h": "7546a6d58d62ad719e5a1fe630ea4a60c81d476cd8e5263448aed5386716ef13",
     "Modules/DynastyEnhancer/Source/EnhancementOptionsRuntime.h": "563e5c55b8771937d9dbd611d687b8e04ea75b4e81bcb6f43fb2dbd3641f0799",
-    "Modules/DynastyEnhancer/Source/EnhancementSettingsMenu.h": "db68fbb2fca78950a68075a8788a93be158fc215d52fe6b573cd0165a8cd67bb",
-    "Modules/DynastyEnhancer/Source/FeedData.h": "bcf156f90f8938303f40f018e98641739b7b3e49ec442cbc49e60d967754d8b6",
+    "Modules/DynastyEnhancer/Source/EnhancementSettingsMenu.h": "4f2440bdae8d5c60fa6b7d64f694fa9641b6ae2450b9f9cb7e34feace04659b4",
+    "Modules/DynastyEnhancer/Source/FeedData.h": "a3182268feecdce288674caefc5f5c41973bc56732bf1282eb318c166076e062",
     "Modules/DynastyEnhancer/Source/FeedRefresh.h": "04074bdf6f59d6dfe0cb8f7ebb62e7dadbcf5670851b97bcf5f8edb88f555090",
     "Modules/DynastyEnhancer/Source/FogGapUiPrograms.h": "9fa4c4d504d9bd3e02d139ad6b1284ea64ffea73136ea31f1b3085065da645cd",
     "Modules/DynastyEnhancer/Source/HubStatsTrace.cpp": "6409647326a60f32159db0b8467a6f3ef21144d4a276e4c0ce0ddeb1387fb9c6",
@@ -5869,7 +5950,7 @@
     "Modules/DynastyEnhancer/Source/MmcPlugin.cs": "15a7e61afdde14f0a0fcef8ce9f08a343ba899aff05987ef397b33912fb6c02b",
     "Modules/DynastyEnhancer/Source/MmcRecruitingPlugin.cs": "e95f189100e1e5af2e2136f642a156183d265eff4067026a7cc337f68b95cbac",
     "Modules/DynastyEnhancer/Source/NativeMapValue.h": "04c62fc519a340e1c798a213253deec81b3c6ba88f3ead5e8778f88280c77a5a",
-    "Modules/DynastyEnhancer/Source/NativeSocialMedia.cpp": "8f4793a7c08fc30b744288d241f6234976b1bacdef8530c7d9b025c03bc2bfe7",
+    "Modules/DynastyEnhancer/Source/NativeSocialMedia.cpp": "74a496a0d2b438d37f9da2874c61ae37b4d33c57b0f713fb7c880cbc71a14443",
     "Modules/DynastyEnhancer/Source/NewsAssetDiscovery.h": "a998cc7ac6bfe8b1ede5a57e5d878dbc5cee303fcafdabdf24c470277ca88817",
     "Modules/DynastyEnhancer/Source/NewsDiscovery.h": "823af4b71268517350f66d7db9cf4f57e9c9fd9fb22585d9971787e6f737b356",
     "Modules/DynastyEnhancer/Source/NewsDropdowns.h": "48940da3fd1ae1419f809b502b3e1e04dfc668fffe4cf8bd333d8acafddd4ba0",
@@ -5885,7 +5966,7 @@
     "Modules/DynastyEnhancer/Source/PlayerAbilityPreview.cpp": "2f5204c5f8dfed804eb61fae893e3d5a7fb43f83119f5189a59254ca3e971f1e",
     "Modules/DynastyEnhancer/Source/PlayerAbilityProbe.cpp": "0d6948c45222d3fe5ca034804e4762eab74ae1f5d98a321e497b1837860a56da",
     "Modules/DynastyEnhancer/Source/PlayerBlueprintUiPrograms.h": "5362ce75736bfc2043dc900f909b2fc94f43d0aad48298a557c982035842c2bd",
-    "Modules/DynastyEnhancer/Source/PlayerCardUiPrograms.h": "3dd8abc2b9bdc084593850a82f783f0816b7b28bddea6eb6717e1d2c4caa181d",
+    "Modules/DynastyEnhancer/Source/PlayerCardUiPrograms.h": "854019d5cb0d4d4fed9d3c6da8052b6ec1e5d59032d078605381c9a5f4360363",
     "Modules/DynastyEnhancer/Source/PlayerDepthProbe.cpp": "20e376163f7cba9aa468e5a2c8e9f5ada20905f2636b4e4c0393e110f7dd61df",
     "Modules/DynastyEnhancer/Source/PlayerFogPerformance.h": "64b482faa0079b4863ced3d71279390f08c6fdb872c4357c9532170468e5ef82",
     "Modules/DynastyEnhancer/Source/PlayerFogUiPrograms.h": "7ba37febd012aa3d1464140bbce117879379dd23c97fa4018e591197eee3598d",
@@ -5909,15 +5990,15 @@
     "Modules/DynastyEnhancer/Source/RecruitClassGrid.h": "deae8d761b0a365a6db9913df56d1eea373ef94ad1a7a0fddff965a677e02aeb",
     "Modules/DynastyEnhancer/Source/RecruitCollegeBackground.h": "c37215f7ab42cc8aebd7523d7ccdc1a060a99d7e19c29c84a3daab639d43ca38",
     "Modules/DynastyEnhancer/Source/RecruitCollegeSchools.h": "42d47657ed0b7f1206ec536ae65e605356ba87919eee3e954ae464bd1704b470",
-    "Modules/DynastyEnhancer/Source/RecruitingFog.cpp": "168e8cf4786ba94272067af37adf27b20ded931c8afa2622da89d956c56984c0",
+    "Modules/DynastyEnhancer/Source/RecruitingFog.cpp": "46579c1bd933746fa6055c96177f4c9988cb78b65dbaeb6384682473fa29238d",
     "Modules/DynastyEnhancer/Source/RecruitingGradePolicy.h": "0d47ebc11bf70646604f9b14ea15bfb51575d467dbe00f2d19130ea29ad2a900",
     "Modules/DynastyEnhancer/Source/RecruitingUiGates.h": "fa04f9dac21c6177fce3973e4522a07afc42c33779c230f627a0b3b9f0cb099e",
     "Modules/DynastyEnhancer/Source/RecruitingUiResponse.h": "0b0e401c383a9a6cfb03fd2e4cc2f1693ea80c7fdcccb56d63315863ac338ba5",
     "Modules/DynastyEnhancer/Source/RecruitListProbe.cpp": "11965bc0f7835cebc3d567dc4342cbd21a77920309456fde1f31c53ad1e42a68",
     "Modules/DynastyEnhancer/Source/RecruitNotes.h": "04972f056264398601cb8f1ef990bcfc05ca710df222dfaf1f61f82b1cf7cbf6",
     "Modules/DynastyEnhancer/Source/RecruitNotesProse.h": "68c7ced767b3bf6d3570e6643230a1f078a115d6dc5462efbd7a4e7052289a91",
-    "Modules/DynastyEnhancer/Source/RecruitNotesUiPrograms.h": "5e7016a50b51d660c0acb2391844f95ff5aecf2d172caaa5aa0442c804a777b0",
-    "Modules/DynastyEnhancer/Source/RecruitNotesUiRuntime.h": "4be23761a818c38cd7da15dd3aba09bf8c9e50fe433be32f00fe7304ce8f02eb",
+    "Modules/DynastyEnhancer/Source/RecruitNotesUiPrograms.h": "f9bdb0448d909452be6ac8f2f2565875ce3f35d14e570ea3f3ba38fb5fb9a418",
+    "Modules/DynastyEnhancer/Source/RecruitNotesUiRuntime.h": "15963e10c546015c1dd6bec6496797b0cad80d36bf1b3c4f7fb02370d1761b95",
     "Modules/DynastyEnhancer/Source/RecruitPreviewProbe.cpp": "0a51b00cc88c20f938c5ae860416f8e1326fa83cf152dd40fe37962208aafd50",
     "Modules/DynastyEnhancer/Source/RecruitResume.h": "e69ffd50e178fdd3f62daebf7cff189320cb8b5cb49df9e4b90e3c618638d610",
     "Modules/DynastyEnhancer/Source/RecruitResumeAudit.cpp": "9daa3abe397d2a22eb6ea55c0a07c6eed1935c985df190fe213ea0047e52ef57",
@@ -5931,6 +6012,7 @@
     "Modules/DynastyEnhancer/Source/RecruitTransferStats.h": "18addefa67b7becd27d97fe8a8757b362038131674cf87df45c10c55ff35427d",
     "Modules/DynastyEnhancer/Source/RosterViewProbe.cpp": "ccad4274f7fe60f7c0039576914bee7985c27694b7f39936fdbbf53de6904856",
     "Modules/DynastyEnhancer/Source/RuntimeFeed.h": "bd90bcd176363a24b701a278067517a3a8979b63a3ce2394b6e3bd1dbdfa48eb",
+    "Modules/DynastyEnhancer/Source/SocialText.h": "928e26665006d73abf9e575cad3a8d454420ae2e0a6d170e2d7e7e56c746efd0",
     "Modules/DynastyEnhancer/Source/Startup.h": "de5819a907989f822aa97f5c1ec6df18ca5bb720a26e87ab0c525ddc5826c18b",
     "Modules/GamedayAtmosphere/Source/ArrivalRules.h": "18fbcf72332363678989715c596f062dc066e5fbad3fb82fc210cecbf0213456",
     "Modules/GamedayAtmosphere/Source/AtmosphereMix.h": "cbec39c794a17e92b1e2e5f8328a1fef49b5a96ff446ebf00e69734d99fce384",
@@ -5946,7 +6028,7 @@
     "Modules/GamedayAtmosphere/Source/AudioIntent.h": "3637f4cb106f4352fa6fade8b1af32bd1c459f1feeb835b394b9de3cad507879",
     "Modules/GamedayAtmosphere/Source/AudioLevels.h": "178a31091a03fda6d86915ee5b8816edc052e4ca6a57827547afaaf1034bfb91",
     "Modules/GamedayAtmosphere/Source/AwayAppearance.h": "2be2ec84804cd055213070893e0a706bea515e126400d7a6ebb959d6fe19c73c",
-    "Modules/GamedayAtmosphere/Source/AwayCrowd.h": "ddf7dd7f932d1a21d9f1a7cf1c330f10a71351238f88506a87c83191616b73ce",
+    "Modules/GamedayAtmosphere/Source/AwayCrowd.h": "1bd9c35196fce3aa89098cfbe0e181434270119a5289c8f54360d521be585ba7",
     "Modules/GamedayAtmosphere/Source/AwayCrowdAudio.h": "e292c3992562f4db964e918a74b6a5f8974e7ba5214a60718b4e3159d49ada26",
     "Modules/GamedayAtmosphere/Source/AwaySoundReactions.h": "abb13176b784116e2c924d88643c9f67dce1b29f69b159f5d16a7457b98ece3e",
     "Modules/GamedayAtmosphere/Source/BackgroundRoar.h": "064e789e6faf1e0777220dca43b35acf648983b40be821727eef5cdc9aa10055",
@@ -6017,7 +6099,7 @@
     "Modules/GamedayAtmosphere/Source/NativePlayCall.h": "f7770ed5e184961c5c7c0352d7cdfec14f168fb44cbab4daabd0c9ee22e575fb",
     "Modules/GamedayAtmosphere/Source/NativeReactionTrace.h": "e1c30555f8ee3dbafdf3e350664528dcbefb9f613033a0bd66421f5e7a89cdad",
     "Modules/GamedayAtmosphere/Source/NativeRead.h": "73a8d015f49c43564ff7ed4ecdca1f881c7a0765cf69d1e093fa22a1b4975534",
-    "Modules/GamedayAtmosphere/Source/NativeRuntime.cpp": "65e1b73ea7477e99d5ad7e1b7cedd7f98f080d55c84fa8022185d5325815642c",
+    "Modules/GamedayAtmosphere/Source/NativeRuntime.cpp": "4db9e7304ba28f3c381591322cd1004bc52f18da8874d9adbc684eca2d0cf8c6",
     "Modules/GamedayAtmosphere/Source/NativeSackFacts.h": "38648e7f68f4dc57ae51a3fcbcddaafeb0c52599d52eb84688e9348e16cfe2ff",
     "Modules/GamedayAtmosphere/Source/NativeSettingsMenu.h": "9d0abe94a018b64e45f5bb983b9390b94a080e4df68be3ed14059340321c311f",
     "Modules/GamedayAtmosphere/Source/NativeSkillSignals.h": "28efa131bfd1f02f4fec21afb33572ff48cd036005a532c80063d978ef783ab3",

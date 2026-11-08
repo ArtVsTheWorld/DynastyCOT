@@ -21,10 +21,18 @@ void request(){
     auto now=GetTickCount64(),after=requestAfter.load();if(now<after||!requestAfter.compare_exchange_strong(after,now+1000))return;
     snapshotReady=false;captureRequested=true;
 }
-void leave(){opened=false;source=-1;sourceTypes.fill(0);}
+void leave(){opened=false;clearCardReturn();clearNativeFilters();clearPreview();source=-1;sourceTypes.fill(0);}
+bool resumeCard(){
+    if(!cardReturnPending.exchange(false))return false;
+    if(!available()){clearCardReturn();clearNativeFilters();clearPreview();return false;}
+    clearPreview();std::lock_guard<std::mutex> lock(viewMutex);
+    if(!cardReturnReference){cardSelectionRestorePending=false;return false;}
+    cardSelectionRestorePending=true;
+    source=-1;sourceTypes.fill(0);nativeTeamKeys.clear();nativeWeekDefault.clear();opened=true;return true;
+}
 bool open(){
-    CallGuard cotCall;if(!available())return false;
-    try{adoptSnapshot();if(!currentProfile()||data.value("leagueId",Json())!=Json(snapshotLeague.load()))return false;startOnUserTeam();source=-1;sourceTypes.fill(0);nativeTeamDefault.clear();nativeWeekDefault.clear();opened=true;return true;}
+    CallGuard cotCall;clearCardReturn();clearNativeFilters();clearPreview();if(!available())return false;
+    try{adoptSnapshot();if(!currentProfile()||data.value("leagueId",Json())!=Json(snapshotLeague.load()))return false;startOnUserTeam();source=-1;sourceTypes.fill(0);opened=true;return true;}
     catch(const std::exception& error){leave();snapshotReady=false;note({{"event","native_analytics_open_deferred"},{"reason",error.what()}});return false;}
 }
 void tick(){
@@ -47,5 +55,5 @@ void tick(){
         // A later menu request retries. No stale save or other Dynasty fallback.
     }
 }
-const cotanalytics::Api api={sizeof(cotanalytics::Api),cotanalytics::abi,cotanalytics::buildId,supported,available,open,request,leave};
+const cotanalytics::Api api={sizeof(cotanalytics::Api),cotanalytics::abi,cotanalytics::buildId,supported,available,open,request,leave,resumeCard};
 }

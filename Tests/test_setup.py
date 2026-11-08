@@ -37,6 +37,8 @@ def main():
         assert item['width']<=item['workingWidth']-32 and item['height']<=item['workingHeight']-32
         assert item['footerVisible'] and item['updateActionsVisible'] and item['allModulesReachable']
         assert item['fontScale']==item['scale'],'layout did not scale fonts with controls'
+        assert item['footerParentContainment'] and item['footerTextFits'],'footer buttons are clipped by their parent or text bounds'
+        assert not item['inAppBrandImage'] and item['windowIconRetained'],'in-app image/icon regression'
         for page in ['install','updates','backups','activity']:
             image=layout/f"setup-{page}-{item['suffix']}.png";data=image.read_bytes();assert data[:8]==b'\x89PNG\r\n\x1a\n'
             dimensions[image.name]=struct.unpack('>II',data[16:24]);assert dimensions[image.name]==(item['width'],item['height'])
@@ -44,7 +46,7 @@ def main():
     assert snapshot(root)==before,'layout capture changed fixture files'
     report_data=dict(version=meta['version'],exe=str(exe),setupSha256=sha(exe),payloadSha256=meta['payloadSha256'],
         uiChecks=ui['checks'],payloadVerified=True,fixtureRoundTrip=True,unsafeFixtureRejected=True,
-        boundedWorkingAreas=[1080,1152],footerAndUpdateActionsVisible=True,allModulesReachable=True,layoutCaptures=dimensions,layoutDirectory=str(layout),scaling=[100,125,150],visualReview='Separate manual review of captures required',quoteAndSpacePaths=True,selectedAndFullUninstall=True,managerFolderDetection=True,fixtureRoot=str(base),liveInstall=False,sourceHashes=meta['sources'])
+        boundedWorkingAreas=[1080,1152],footerAndUpdateActionsVisible=True,footerParentContainment=True,footerTextFits=True,inAppBrandImage=False,windowIconRetained=True,allModulesReachable=True,layoutCaptures=dimensions,layoutDirectory=str(layout),scaling=[100,125,150],visualReview='Separate manual review of captures required',quoteAndSpacePaths=True,selectedAndFullUninstall=True,managerFolderDetection=True,fixtureRoot=str(base),liveInstall=False,sourceHashes=meta['sources'])
     (ROOT/'Build/setup-verification.json').write_text(json.dumps(report_data,indent=2)+'\n')
     (ROOT/'Release/setup-verification.json').write_text(json.dumps(report_data,indent=2)+'\n')
     print('PASS: single-file setup payload,',ui['checks'],'real GUI/engine checks, selected/all uninstall and rollback, Mod Manager detection, quoted paths and unsafe fixture rejection. No live installation.')

@@ -7,6 +7,7 @@
 #include <algorithm>
 #include <string_view>
 #include "FeedRefresh.h"
+#include "SocialText.h"
 namespace social {
 struct FeedPost {std::string author,handle,body,stamp;int imageLibrary=79,imageValue=598;std::string category,voice,replyTo;bool transaction=false;int likes=-1,uniformTeamLogo=-1,draftPick=-1,draftRound=0;int bodyHeight=0;double priority=0;bool important=false;std::string displayAuthor,displayLikes,displayStamp;FeedPost(std::string a,std::string h,std::string b,std::string s,int l=79,int v=598):author(std::move(a)),handle(std::move(h)),body(std::move(b)),stamp(std::move(s)),imageLibrary(l),imageValue(v){displayAuthor=author+" ("+handle+")";};};
 inline std::string compactCount(int value){
@@ -166,7 +167,7 @@ inline std::shared_ptr<const Feed> decodeFeed(const nlohmann::json& j){
         }
         for(const auto& p:w.at("stories")){
             const auto stamp=storyLabel(p);
-            FeedPost post{p.at("author").get<std::string>(),p.at("handle").get<std::string>(),p.at("body").get<std::string>(),stamp,p.at("imageLibrary").get<int>(),p.at("imageValue").get<int>()};post.category=p.value("category",std::string());post.voice=p.value("voice",std::string());post.replyTo=p.value("replyTo",std::string());post.likes=p.value("likes",-1);post.uniformTeamLogo=p.value("uniformTeamLogo",-1);post.transaction=p.value("transaction",false);post.draftPick=p.value("draftPick",-1);post.draftRound=p.value("draftRound",0);post.priority=p.value("priority",0.0);post.important=p.value("essentialNews",false)||p.value("coverageExempt",false)||p.value("budgetProtected",false);post.bodyHeight=postHeight(post.body);post.displayAuthor=post.author+" ("+post.handle+")";post.displayLikes=post.likes>=0?compactCount(post.likes)+" likes":std::string();e.stories.emplace(p.at("id").get<std::string>(),std::move(post));
+            FeedPost post{p.at("author").get<std::string>(),p.at("handle").get<std::string>(),socialDisplayText(p.at("body").get_ref<const std::string&>()),stamp,p.at("imageLibrary").get<int>(),p.at("imageValue").get<int>()};post.category=p.value("category",std::string());post.voice=p.value("voice",std::string());post.replyTo=p.value("replyTo",std::string());post.likes=p.value("likes",-1);post.uniformTeamLogo=p.value("uniformTeamLogo",-1);post.transaction=p.value("transaction",false);post.draftPick=p.value("draftPick",-1);post.draftRound=p.value("draftRound",0);post.priority=p.value("priority",0.0);post.important=p.value("essentialNews",false)||p.value("coverageExempt",false)||p.value("budgetProtected",false);post.bodyHeight=postHeight(post.body);post.displayAuthor=post.author+" ("+post.handle+")";post.displayLikes=post.likes>=0?compactCount(post.likes)+" likes":std::string();e.stories.emplace(p.at("id").get<std::string>(),std::move(post));
         }
         for(const auto& [key,view]:w.at("views").items())e.views[key]=view.get<std::vector<std::string>>();
         catalog->weeks.push_back(std::move(e));

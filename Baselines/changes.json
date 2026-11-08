@@ -43,13 +43,13 @@
     },
     {
       "path": "Modules/DynastyEnhancer/Source/AnalyticsNative.h",
-      "sha256": "9e8d894dc87215f4d10ccade1ec0051b09ee1922d8e5c63a8e5bd9947fdf6f2c",
-      "reason": "Correct Analytics player-card dispatch via Fog-owned getter, exact native map factories and bounded identity diagnostics; preserve grades, scope and native fallback"
+      "sha256": "37a437bca91b591898b5a3c92632a711b9b4f0da68a88c3f55e51eabfed9c3d7",
+      "reason": "RC013 native Analytics roster-card/action/return, delayed week visibility, safe filter transitions, isolated full-card fog adapters, glyph repair, installer footer and winning visitor departures"
     },
     {
       "path": "Modules/DynastyEnhancer/Source/AnalyticsPage.h",
-      "sha256": "c16b4298fff43a19c56527f562621518b33614ad0e507e8ed82426505c9a1aa6",
-      "reason": "National 250-card native selection and compact counters; integrate production Analytics through existing COT hook owners and active Dynasty capture"
+      "sha256": "b573f9309ed618b8aa40f6127c97f1f8afdda54464e23668f22c8b5cbc5d9c85",
+      "reason": "RC013 native Analytics roster-card/action/return, delayed week visibility, safe filter transitions, isolated full-card fog adapters, glyph repair, installer footer and winning visitor departures"
     },
     {
       "path": "Modules/DynastyEnhancer/Source/CurrencyBudgetUiPrograms.h",
@@ -93,13 +93,13 @@
     },
     {
       "path": "Modules/DynastyEnhancer/Source/EnhancementSettingsMenu.h",
-      "sha256": "db68fbb2fca78950a68075a8788a93be158fc215d52fe6b573cd0165a8cd67bb",
-      "reason": "Bounded editorial candidate: reviewed proposal, native-window repetition memory and equivalent cached comparisons; stable publications and guards"
+      "sha256": "4f2440bdae8d5c60fa6b7d64f694fa9641b6ae2450b9f9cb7e34feace04659b4",
+      "reason": "RC013 native Analytics roster-card/action/return, delayed week visibility, safe filter transitions, isolated full-card fog adapters, glyph repair, installer footer and winning visitor departures"
     },
     {
       "path": "Modules/DynastyEnhancer/Source/FeedData.h",
-      "sha256": "bcf156f90f8938303f40f018e98641739b7b3e49ec442cbc49e60d967754d8b6",
-      "reason": "Bounded editorial candidate: reviewed proposal, native-window repetition memory and equivalent cached comparisons; stable publications and guards"
+      "sha256": "a3182268feecdce288674caefc5f5c41973bc56732bf1282eb318c166076e062",
+      "reason": "RC013 native Analytics roster-card/action/return, delayed week visibility, safe filter transitions, isolated full-card fog adapters, glyph repair, installer footer and winning visitor departures"
     },
     {
       "path": "Modules/DynastyEnhancer/Source/FeedRefresh.h",
@@ -128,8 +128,8 @@
     },
     {
       "path": "Modules/DynastyEnhancer/Source/NativeSocialMedia.cpp",
-      "sha256": "8f4793a7c08fc30b744288d241f6234976b1bacdef8530c7d9b025c03bc2bfe7",
-      "reason": "National 250-card native selection and compact counters; integrate production Analytics through existing COT hook owners and active Dynasty capture"
+      "sha256": "74a496a0d2b438d37f9da2874c61ae37b4d33c57b0f713fb7c880cbc71a14443",
+      "reason": "RC013 native Analytics roster-card/action/return, delayed week visibility, safe filter transitions, isolated full-card fog adapters, glyph repair, installer footer and winning visitor departures"
     },
     {
       "path": "Modules/DynastyEnhancer/Source/PlayerBlueprintUiPrograms.h",
@@ -138,8 +138,8 @@
     },
     {
       "path": "Modules/DynastyEnhancer/Source/PlayerCardUiPrograms.h",
-      "sha256": "3dd8abc2b9bdc084593850a82f783f0816b7b28bddea6eb6717e1d2c4caa181d",
-      "reason": "COT 0.1.5 feedback: native focus colors, exact AIO shared overview; separate visitor demand/tickets, deficit bed, scoring audio priority and recorded-TD inset recovery. Workspace only."
+      "sha256": "854019d5cb0d4d4fed9d3c6da8052b6ec1e5d59032d078605381c9a5f4360363",
+      "reason": "RC013 native Analytics roster-card/action/return, delayed week visibility, safe filter transitions, isolated full-card fog adapters, glyph repair, installer footer and winning visitor departures"
     },
     {
       "path": "Modules/DynastyEnhancer/Source/PlayerFormationUiPrograms.h",
@@ -173,23 +173,23 @@
     },
     {
       "path": "Modules/DynastyEnhancer/Source/RecruitNotesUiPrograms.h",
-      "sha256": "5e7016a50b51d660c0acb2391844f95ff5aecf2d172caaa5aa0442c804a777b0",
-      "reason": "COT feedback: strict AIO loader relocations, compact constrained NIL labels and Highest NIL grade display; current audible shake pairing and state travel fallback"
+      "sha256": "f9bdb0448d909452be6ac8f2f2565875ce3f35d14e570ea3f3ba38fb5fb9a418",
+      "reason": "RC013 native Analytics roster-card/action/return, delayed week visibility, safe filter transitions, isolated full-card fog adapters, glyph repair, installer footer and winning visitor departures"
     },
     {
       "path": "Modules/DynastyEnhancer/Source/RecruitNotesUiRuntime.h",
-      "sha256": "4be23761a818c38cd7da15dd3aba09bf8c9e50fe433be32f00fe7304ce8f02eb",
-      "reason": "COT 0.1.4: factual social perspectives, persistent voices, four-edition structure memory, required news retention and frozen publication wording; compact archive metadata and native UI performance; motion-driven sound companions and mixed visitor sections with strong-host travel resistance. Workspace only."
+      "sha256": "15963e10c546015c1dd6bec6496797b0cad80d36bf1b3c4f7fb02370d1761b95",
+      "reason": "RC013 native Analytics roster-card/action/return, delayed week visibility, safe filter transitions, isolated full-card fog adapters, glyph repair, installer footer and winning visitor departures"
     },
     {
       "path": "Modules/DynastyEnhancer/Source/RecruitingFog.cpp",
-      "sha256": "168e8cf4786ba94272067af37adf27b20ded931c8afa2622da89d956c56984c0",
-      "reason": "Correct Analytics player-card dispatch via Fog-owned getter, exact native map factories and bounded identity diagnostics; preserve grades, scope and native fallback"
+      "sha256": "46579c1bd933746fa6055c96177f4c9988cb78b65dbaeb6384682473fa29238d",
+      "reason": "RC013 native Analytics roster-card/action/return, delayed week visibility, safe filter transitions, isolated full-card fog adapters, glyph repair, installer footer and winning visitor departures"
     },
     {
       "path": "Modules/DynastyEnhancer/Source/build-recruiting-fog.ps1",
-      "sha256": "24dac09be31c399e3e5b2170ded2bb944289969a052ce9c326605226d87b5ecf",
-      "reason": "Compile a shared native build ID and verify stable packaged Analytics sibling names without changing hook ownership"
+      "sha256": "7824eef3372f7fd0c5235755c88392ec384666d0da7e9073629f8fcd909f4dda",
+      "reason": "RC013 native Analytics roster-card/action/return, delayed week visibility, safe filter transitions, isolated full-card fog adapters, glyph repair, installer footer and winning visitor departures"
     },
     {
       "path": "Modules/DynastyEnhancer/Source/build.ps1",
@@ -203,18 +203,18 @@
     },
     {
       "path": "Modules/DynastyEnhancer/Tests/EnhancementOptionsTests.h",
-      "sha256": "4082d96cfa1a87774b88ff49ed93c60507974255c8d866027c7bfd0aea4bd392",
-      "reason": "COT 0.1.3: independent Weekly Advance adapters with exact loader-pointer normalization, creation-page per-Dynasty options, requested defaults and fitted dollar prefixes"
+      "sha256": "00614369419b7018b2e52c21324ee3a8a9910fdc74f453366b62fdda294aa871",
+      "reason": "RC013 native Analytics roster-card/action/return, delayed week visibility, safe filter transitions, isolated full-card fog adapters, glyph repair, installer footer and winning visitor departures"
     },
     {
       "path": "Modules/DynastyEnhancer/Tests/NativeSocialMediaTests.cpp",
-      "sha256": "8a2bdc6990d4ce7ba5c3d502842925ad0f3d3f8c2954d9d584d62b395e424086",
-      "reason": "Verify both same-build COT Analytics admission and fail-closed unversioned standalone import builds"
+      "sha256": "363449c67a1ec27aa137e5e744d08b0b0920e1913939e92b34b3b8bd745d41db",
+      "reason": "RC013 native Analytics roster-card/action/return, delayed week visibility, safe filter transitions, isolated full-card fog adapters, glyph repair, installer footer and winning visitor departures"
     },
     {
       "path": "Modules/DynastyEnhancer/Tests/RecruitingFogTests.cpp",
-      "sha256": "7a10bed684dad7688bbbfee20c3aaa36bb858b96cde7f3189b5c01c464eb9358",
-      "reason": "Correct Analytics player-card dispatch via Fog-owned getter, exact native map factories and bounded identity diagnostics; preserve grades, scope and native fallback"
+      "sha256": "0b369bbdb8f64454e8ab07e1f4f414422b548f926a1c7ad63c43a74750efb5e8",
+      "reason": "RC013 native Analytics roster-card/action/return, delayed week visibility, safe filter transitions, isolated full-card fog adapters, glyph repair, installer footer and winning visitor departures"
     },
     {
       "path": "Modules/DynastyEnhancer/Tests/account_refresh.test.mjs",
@@ -368,13 +368,13 @@
     },
     {
       "path": "Modules/DynastyEnhancer/Tools/build_player_card_ui.py",
-      "sha256": "4b6069d76ae652cfd0cb9e686e111d02867cfd9e91b0d9615a9ffc09381590e7",
-      "reason": "COT 0.1.5 feedback: native focus colors, exact AIO shared overview; separate visitor demand/tickets, deficit bed, scoring audio priority and recorded-TD inset recovery. Workspace only."
+      "sha256": "ad02e5566a74169911f20c90a409ea27e51c2daf753d6c597d90a7e610ab9e80",
+      "reason": "RC013 native Analytics roster-card/action/return, delayed week visibility, safe filter transitions, isolated full-card fog adapters, glyph repair, installer footer and winning visitor departures"
     },
     {
       "path": "Modules/DynastyEnhancer/Tools/build_recruit_notes_ui.py",
-      "sha256": "8ab0390fe942a76195475ff59955ce49304cd0edc4490ec9160505134ac26e6d",
-      "reason": "COT feedback: strict AIO loader relocations, compact constrained NIL labels and Highest NIL grade display; current audible shake pairing and state travel fallback"
+      "sha256": "3ecdc39080e07e77ca51608f0e4c38b660e318717d4be7b6ebfe4c903968baf0",
+      "reason": "RC013 native Analytics roster-card/action/return, delayed week visibility, safe filter transitions, isolated full-card fog adapters, glyph repair, installer footer and winning visitor departures"
     },
     {
       "path": "Modules/DynastyEnhancer/Tools/draft_results.mjs",
@@ -410,6 +410,11 @@
       "path": "Modules/DynastyEnhancer/Tools/normalize_dynasty.mjs",
       "sha256": "92f116f0c0e931fa8081393042746dfbaf4b62bc5ee755f3a6d42cc7c01a9d0d",
       "reason": "Retain prior COT integration; 0.1.6 Beyond the Field: bounded content/selection/voices, native paging, persistent modeled recruit records, supported calendar/draft reference, exact AIO Notes/colors and numeric-preserving money redraw adapters."
+    },
+    {
+      "path": "Modules/DynastyEnhancer/Tools/prose_cleanup.mjs",
+      "sha256": "045d119ce725c59456878cddb627f13760b4dc10c5869391c45e88cfc7f8a969",
+      "reason": "RC013 native Analytics roster-card/action/return, delayed week visibility, safe filter transitions, isolated full-card fog adapters, glyph repair, installer footer and winning visitor departures"
     },
     {
       "path": "Modules/DynastyEnhancer/Tools/runtime_archive.mjs",
@@ -448,13 +453,13 @@
     },
     {
       "path": "Modules/DynastyEnhancer/Tools/story_renderer.mjs",
-      "sha256": "2a43e76a56ff08c893e8e4e3c88fcec462248ddff25fc8395daf4bae7050559d",
-      "reason": "Bounded editorial candidate: reviewed proposal, native-window repetition memory and equivalent cached comparisons; stable publications and guards"
+      "sha256": "5ecc101d508225c7b6f37bad70532980b21eb43b03d3c3fdcbcd3f54c0b7e994",
+      "reason": "RC013 native Analytics roster-card/action/return, delayed week visibility, safe filter transitions, isolated full-card fog adapters, glyph repair, installer footer and winning visitor departures"
     },
     {
       "path": "Modules/DynastyEnhancer/Tools/story_templates.mjs",
-      "sha256": "709c19e4ccc468440b12cb17735330c90e43cad1d5bec7dcb04951bc7b8dad09",
-      "reason": "Bounded editorial candidate: reviewed proposal, native-window repetition memory and equivalent cached comparisons; stable publications and guards"
+      "sha256": "f5b60346b5193d94bd2a49279b8bdc74736293464ec262c17b2fdba8f346d86f",
+      "reason": "RC013 native Analytics roster-card/action/return, delayed week visibility, safe filter transitions, isolated full-card fog adapters, glyph repair, installer footer and winning visitor departures"
     },
     {
       "path": "Modules/DynastyEnhancer/Tools/voice_style.mjs",
@@ -543,8 +548,8 @@
     },
     {
       "path": "Modules/GamedayAtmosphere/Source/AwayCrowd.h",
-      "sha256": "ddf7dd7f932d1a21d9f1a7cf1c330f10a71351238f88506a87c83191616b73ce",
-      "reason": "Retain prior COT integration; 0.1.6 Gameday Atmosphere branding and appended stable-ID visitor-strength control, new-plan-only odds preference with existing native/neutral/protected/history gates retained."
+      "sha256": "1bd9c35196fce3aa89098cfbe0e181434270119a5289c8f54360d521be585ba7",
+      "reason": "RC013 native Analytics roster-card/action/return, delayed week visibility, safe filter transitions, isolated full-card fog adapters, glyph repair, installer footer and winning visitor departures"
     },
     {
       "path": "Modules/GamedayAtmosphere/Source/BackgroundRoar.h",
@@ -583,8 +588,8 @@
     },
     {
       "path": "Modules/GamedayAtmosphere/Source/NativeRuntime.cpp",
-      "sha256": "65e1b73ea7477e99d5ad7e1b7cedd7f98f080d55c84fa8022185d5325815642c",
-      "reason": "Retain prior COT integration; 0.1.6 Gameday Atmosphere branding and appended stable-ID visitor-strength control, new-plan-only odds preference with existing native/neutral/protected/history gates retained."
+      "sha256": "4db9e7304ba28f3c381591322cd1004bc52f18da8874d9adbc684eca2d0cf8c6",
+      "reason": "RC013 native Analytics roster-card/action/return, delayed week visibility, safe filter transitions, isolated full-card fog adapters, glyph repair, installer footer and winning visitor departures"
     },
     {
       "path": "Modules/GamedayAtmosphere/Source/NativeSettingsMenu.h",
@@ -625,6 +630,11 @@
       "path": "Modules/GamedayAtmosphere/Source/StatusReport.h",
       "sha256": "6dc465246167de9b67008a871112f673fff3713e46bd75c1f45dab7206f62678",
       "reason": "Retain prior COT integration; 0.1.6 Gameday Atmosphere branding and appended stable-ID visitor-strength control, new-plan-only odds preference with existing native/neutral/protected/history gates retained."
+    },
+    {
+      "path": "Modules/GamedayAtmosphere/Tests/AwayCrowdIntegrationTests.cpp",
+      "sha256": "f09f092be7688f97a3a87f7797c9aacf3f2c86230115033eddcaafdf1fcfffb0",
+      "reason": "RC013 native Analytics roster-card/action/return, delayed week visibility, safe filter transitions, isolated full-card fog adapters, glyph repair, installer footer and winning visitor departures"
     },
     {
       "path": "Modules/GamedayAtmosphere/Tests/AwayCrowdTests.cpp",

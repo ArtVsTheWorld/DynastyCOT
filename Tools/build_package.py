@@ -143,7 +143,7 @@ def main():
     entries.append(dict(module='Core',path='Templates/owned-payloads.json',sha256=digest(ownership)))
     manifest=dict(format=1,product='DynastyCOT',version=product['version'],nodeVersion=node_version,
         createdUtc=stamp,files=[e for e in entries if not e['path'].startswith('resource:')],
-        embedded=[e for e in entries if e['path'].startswith('resource:')],liveAcceptance='pending',socialRenderMode=inputs['socialRenderMode'],analyticsBridge=dict(abi=1,buildId=analytics_build),
+        embedded=[e for e in entries if e['path'].startswith('resource:')],liveAcceptance='pending',socialRenderMode=inputs['socialRenderMode'],analyticsBridge=dict(abi=2,buildId=analytics_build),
         nativeInputs={key:dict(path=path,sha256=digest(ROOT/path)) for key,path in [('social',a.social_native),('fog',a.fog_native)]},
         sourceInputs={str(Path(f).relative_to(ROOT)):digest(Path(f)) for f in sources if Path(f).is_relative_to(ROOT)})
     (stage/'package-manifest.json').write_text(json.dumps(manifest,indent=2)+'\n')

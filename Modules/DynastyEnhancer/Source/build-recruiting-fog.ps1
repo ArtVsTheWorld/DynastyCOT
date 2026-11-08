@@ -24,6 +24,10 @@ if($PresentationPreview){if(-not $RecruitNotesUi -or $PlayerFogPreview -or $Recr
 if($RecruitNotesUi){
  & python (Join-Path $fogRoot 'Tests/rc016_native_ui_test.py')
  if($LASTEXITCODE -ne 0){throw 'RC016 AIO Notes, redraw/edit and monetary layout checks failed'}
+ & python (Join-Path $fogRoot 'Tests/analytics_actions_ui_test.py')
+ if($LASTEXITCODE -ne 0){throw 'Analytics native action UI checks failed'}
+ & python (Join-Path $fogRoot 'Tests/apt_source_pointers_test.py')
+ if($LASTEXITCODE -ne 0){throw 'Typed nested UI relocation checks failed'}
  & python (Join-Path $fogRoot 'Tests/aio_source_relocation_test.py')
  if($LASTEXITCODE -ne 0){throw 'Exact AIO source relocation checks failed'}
  & python (Join-Path $fogRoot 'Tests/aio_currency_ui_test.py')

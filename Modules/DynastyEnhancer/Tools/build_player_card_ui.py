@@ -527,7 +527,8 @@ SPECS={
     'skillPrograms': ('C:/Apps/CFB 27/MMC/PlayerAnalytics/Research/assets/common/ui/node_cfm/corenode.ast', [
         (0x54C20,4,3,42,240,0x1A7E5A93BC79FFE4,9,group_suffix,None),
         (0x54E20,2,6,41,100,0x3C700A570F7C0AA9,11,level_suffix,None),
-        (0x54EC0,1,8,41,164,0xC40A11F67BBBC449,10,subskills_suffix,None),
+        (0x54EC0,1,8,41,164,0xC40A11F67BBBC449,10,subskills_suffix,None)]),
+    'teamModulePrograms': ('C:/Apps/CFB 27/MMC/PlayerAnalytics/Research/assets/common/ui/node_cfm/corenode.ast', [
         (0x728D0,0,5,25,2002,0xD6E51594B47DB8CD,5,team_module_suffix,None)])}
 
 
