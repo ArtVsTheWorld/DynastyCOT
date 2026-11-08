@@ -8,6 +8,7 @@ import {renderStories,CONTENT_REVISION} from './story_renderer.mjs';
 import {PUBLICATION_POLICY_VERSION} from './publication_policy.mjs';
 import {freshEditorialEvents,EDITORIAL_POLICY_VERSION} from './editorial_policy.mjs';
 import {deduplicateConversations} from './conversation_topics.mjs';
+import {freezePublishedPff} from './pff_events.mjs';
 export {detectEvents,weekKey};
 export const ENGINE_VERSION=2;
 export function trackOffers(s,sameWeek=null,previous=null,earlier=null){
@@ -24,7 +25,7 @@ export function trackOffers(s,sameWeek=null,previous=null,earlier=null){
 }
 export function buildFeed(s,previous=null,options={}){
   const publication={key:weekKey(s),leagueId:s.leagueId,userTeamIndex:s.userTeamIndex,season:s.season.CurrentSeasonYear,phase:s.season.CurrentWeekType,week:s.season.CurrentWeek};
-  const events=freshEditorialEvents(detectEvents(s,previous),publication,options.history??[]),key=weekKey(s);
+  const events=freezePublishedPff(freshEditorialEvents(detectEvents(s,previous),publication,options.history??[]),s,options.sameWeek),key=weekKey(s);
   const rendered=renderStories(s,events,{authors:options.authors??{},history:options.history??[],sameWeek:options.sameWeek??null,onTemplates:options.onTemplates??null});
   options.onAuthors?.(rendered.authors);
   return publishWeek({format:1,engineVersion:ENGINE_VERSION,key,leagueId:s.leagueId,userTeamIndex:s.userTeamIndex,

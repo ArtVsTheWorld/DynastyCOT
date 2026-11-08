@@ -1,6 +1,7 @@
 #pragma once
 #include "LiveTables.h"
 #include "FeedRefresh.h"
+#include "AnalyticsSummary.h"
 namespace dynasty::live {
 inline uint64_t fingerprint(std::string_view text){uint64_t value=14695981039346656037ull;for(unsigned char c:text){value^=c;value*=1099511628211ull;}return value;}
 inline void validateRuntimeIdentity(const Json& feed,const Json& status){
@@ -68,6 +69,8 @@ public:
             }
             if(cancelled())return {};
             const auto input=folder/L"runtime-raw.json",output=folder/L"runtime-export.json";
+            try{raw["playerAnalytics"]=analytics::live::socialSummary(raw);}
+            catch(const std::exception& error){report({{"event","player_analytics_unavailable"},{"reason",error.what()}});}
             social::refresh::writeAtomic(folder/L"runtime-raw.json.tmp",input,raw);
             social::refresh::Settings settings{{},node,exporter,input};
             const auto generationBegan=GetTickCount64();

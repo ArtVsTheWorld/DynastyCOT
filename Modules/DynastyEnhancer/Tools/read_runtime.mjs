@@ -12,6 +12,8 @@ export async function readRuntime(raw){
   const flow=(await records('FranchiseServer_CareerFlow'))[0]?.v;
   if(!flow?.IsStageActive||flow.IsStageAdvancing)throw Error('Dynasty stage is inactive or advancing');
   const snapshot=await normalizeDynasty({records,resolve,array,arraySlots},{source:'runtime',sha256:'0'.repeat(64),sourceKind:'runtime'});
+  const analytics=raw.playerAnalytics;
+  if(analytics?.format===1&&analytics.leagueId===snapshot.leagueId&&analytics.year===snapshot.season.CurrentYear&&analytics.season===snapshot.season.CurrentSeasonYear&&typeof analytics.modelVersion==='string'&&Array.isArray(analytics.weekly)&&Array.isArray(analytics.seasonRows))snapshot.playerAnalytics=analytics;
   snapshot.source=`runtime:${snapshot.leagueId}:${snapshot.userTeamIndex}`;
   // Content hash excludes pointers, schema internals, and unconsumed game fields.
   snapshot.sha256=createHash('sha256').update(JSON.stringify({...snapshot,sha256:undefined})).digest('hex');

@@ -32,24 +32,29 @@
       "reason": "COT hub clock scope, fresh practice picker and recruit star account presentation"
     },
     {
+      "path": "Modules/DynastyEnhancer/Content/Runtime/national-account-avatars.json",
+      "sha256": "094e2cbc3e147be44f01bd9fc86ed17ad013d81f0522c933c8f07e1573334c8e",
+      "reason": "0.1.14: released native production and position-relative grades with prestige uncertainty; same-model optional PFF publications and preserved history"
+    },
+    {
       "path": "Modules/DynastyEnhancer/Source/AioCurrencyUiPrograms.h",
       "sha256": "d150e81fc16107880e60b98bbe8b0361d5685b2ebe9bbada82f82fff678a17c5",
       "reason": "Retain prior COT integration; 0.1.6 Beyond the Field: bounded content/selection/voices, native paging, persistent modeled recruit records, supported calendar/draft reference, exact AIO Notes/colors and numeric-preserving money redraw adapters."
     },
     {
       "path": "Modules/DynastyEnhancer/Source/AnalyticsModel.h",
-      "sha256": "7871fd9173e0b76945fb302e0ecce9b0fcc8999104c71311837a5060ac9ba474",
-      "reason": "National 250-card native selection and compact counters; integrate production Analytics through existing COT hook owners and active Dynasty capture"
+      "sha256": "dfbca339f2d0dd407f98c7a36bf6d55a7461cda58939fa4f5a24ae2501404cca",
+      "reason": "0.1.14: released native production and position-relative grades with prestige uncertainty; same-model optional PFF publications and preserved history"
     },
     {
       "path": "Modules/DynastyEnhancer/Source/AnalyticsNative.h",
-      "sha256": "37a437bca91b591898b5a3c92632a711b9b4f0da68a88c3f55e51eabfed9c3d7",
-      "reason": "RC013 native Analytics roster-card/action/return, delayed week visibility, safe filter transitions, isolated full-card fog adapters, glyph repair, installer footer and winning visitor departures"
+      "sha256": "e3dd5a4468e8ac99d04f01ea47584861ffa71d0180fbc19fd74548bae7145789",
+      "reason": "0.1.14: released native production and position-relative grades with prestige uncertainty; same-model optional PFF publications and preserved history"
     },
     {
       "path": "Modules/DynastyEnhancer/Source/AnalyticsPage.h",
-      "sha256": "b573f9309ed618b8aa40f6127c97f1f8afdda54464e23668f22c8b5cbc5d9c85",
-      "reason": "RC013 native Analytics roster-card/action/return, delayed week visibility, safe filter transitions, isolated full-card fog adapters, glyph repair, installer footer and winning visitor departures"
+      "sha256": "d39e971760c74af313baeda5bc18a8f8db5034f782d577211cd4bc067104e1f4",
+      "reason": "0.1.14: released native production and position-relative grades with prestige uncertainty; same-model optional PFF publications and preserved history"
     },
     {
       "path": "Modules/DynastyEnhancer/Source/CurrencyBudgetUiPrograms.h",
@@ -113,8 +118,8 @@
     },
     {
       "path": "Modules/DynastyEnhancer/Source/LiveTables.h",
-      "sha256": "baf2aea3278d669e1fe37489b5b85f440ca69f7d52bac4faaedfd1ab2f9cf154",
-      "reason": "Retain prior COT integration; 0.1.6 Beyond the Field: bounded content/selection/voices, native paging, persistent modeled recruit records, supported calendar/draft reference, exact AIO Notes/colors and numeric-preserving money redraw adapters."
+      "sha256": "bc8d4784022da4714d9eec4fe8535a58bbdf44dcac8d1d3ad482341cdcf8c37d",
+      "reason": "0.1.14: released native production and position-relative grades with prestige uncertainty; same-model optional PFF publications and preserved history"
     },
     {
       "path": "Modules/DynastyEnhancer/Source/MmcPlugin.cs",
@@ -187,9 +192,19 @@
       "reason": "RC013 native Analytics roster-card/action/return, delayed week visibility, safe filter transitions, isolated full-card fog adapters, glyph repair, installer footer and winning visitor departures"
     },
     {
+      "path": "Modules/DynastyEnhancer/Source/RuntimeFeed.h",
+      "sha256": "5e8b122fd1f72951f1b0eebfba971bd204ba97a89b4e81e0aa5673c120cdb037",
+      "reason": "0.1.14: released native production and position-relative grades with prestige uncertainty; same-model optional PFF publications and preserved history"
+    },
+    {
+      "path": "Modules/DynastyEnhancer/Source/analytics-baselines.json",
+      "sha256": "bb23abd0cbc23dd695fbaccbb3c484dccddd3ca84c2144705738b4e374f1c4c3",
+      "reason": "0.1.14: released native production and position-relative grades with prestige uncertainty; same-model optional PFF publications and preserved history"
+    },
+    {
       "path": "Modules/DynastyEnhancer/Source/build-recruiting-fog.ps1",
-      "sha256": "7824eef3372f7fd0c5235755c88392ec384666d0da7e9073629f8fcd909f4dda",
-      "reason": "RC013 native Analytics roster-card/action/return, delayed week visibility, safe filter transitions, isolated full-card fog adapters, glyph repair, installer footer and winning visitor departures"
+      "sha256": "95c4f614501f39e27c334e4e3b06dc30094988f77f0226b6f2131b9545acaf61",
+      "reason": "0.1.14: released native production and position-relative grades with prestige uncertainty; same-model optional PFF publications and preserved history"
     },
     {
       "path": "Modules/DynastyEnhancer/Source/build.ps1",
@@ -383,13 +398,13 @@
     },
     {
       "path": "Modules/DynastyEnhancer/Tools/editorial_policy.mjs",
-      "sha256": "61826314b0ed1f028879b2ab3e7f39be904fc184bb70773945ac4b9421807fe7",
-      "reason": "Retain prior COT integration; 0.1.6 Beyond the Field: bounded content/selection/voices, native paging, persistent modeled recruit records, supported calendar/draft reference, exact AIO Notes/colors and numeric-preserving money redraw adapters."
+      "sha256": "ee15729162377a7acbb588f4f05c84cad8235d1a058ba7c65c16bd63816bd363",
+      "reason": "0.1.14: released native production and position-relative grades with prestige uncertainty; same-model optional PFF publications and preserved history"
     },
     {
       "path": "Modules/DynastyEnhancer/Tools/feed_engine.mjs",
-      "sha256": "dc21bb97ce4789606ee29e529ba6b9985989c91636180ed4404431fab712a791",
-      "reason": "0.1.7: source-level weekly routine budget, complete continuous scope lists, concise native sidebar and header presentation."
+      "sha256": "bee28c18a12c04d48ae4922016b462b9fc5f67bb130430b66742ff14ec0adce1",
+      "reason": "0.1.14: released native production and position-relative grades with prestige uncertainty; same-model optional PFF publications and preserved history"
     },
     {
       "path": "Modules/DynastyEnhancer/Tools/feed_selection.mjs",
@@ -403,8 +418,13 @@
     },
     {
       "path": "Modules/DynastyEnhancer/Tools/national_editorial.mjs",
-      "sha256": "b38f9f03a4e416d05b4068a85d5c4147e475c748ff6768eeffbef5ad89cc10a7",
-      "reason": "COT 0.1.4: factual social perspectives, persistent voices, four-edition structure memory, required news retention and frozen publication wording; compact archive metadata and native UI performance; motion-driven sound companions and mixed visitor sections with strong-host travel resistance. Workspace only."
+      "sha256": "17250bba392d6362e10fa8dc7fd11a0a7e2faab7b91ae26686a8c5bb2824e7e3",
+      "reason": "0.1.14: released native production and position-relative grades with prestige uncertainty; same-model optional PFF publications and preserved history"
+    },
+    {
+      "path": "Modules/DynastyEnhancer/Tools/news_cycles.mjs",
+      "sha256": "0b8f963936eb1fa195653c0e85eede7b6ff70b62b28c4413b81631f9ece95a03",
+      "reason": "0.1.14: released native production and position-relative grades with prestige uncertainty; same-model optional PFF publications and preserved history"
     },
     {
       "path": "Modules/DynastyEnhancer/Tools/normalize_dynasty.mjs",
@@ -417,14 +437,19 @@
       "reason": "RC013 native Analytics roster-card/action/return, delayed week visibility, safe filter transitions, isolated full-card fog adapters, glyph repair, installer footer and winning visitor departures"
     },
     {
+      "path": "Modules/DynastyEnhancer/Tools/read_runtime.mjs",
+      "sha256": "c0695e64a6e56cb0d9d2c2437fb049a3727328f4683a3fa27341a26a2a9be548",
+      "reason": "0.1.14: released native production and position-relative grades with prestige uncertainty; same-model optional PFF publications and preserved history"
+    },
+    {
       "path": "Modules/DynastyEnhancer/Tools/runtime_archive.mjs",
       "sha256": "b3ff534903ce9459acae1d520612dcdc78d708703b3b1014d35be98105102c36",
       "reason": "COT 0.1.4: factual social perspectives, persistent voices, four-edition structure memory, required news retention and frozen publication wording; compact archive metadata and native UI performance; motion-driven sound companions and mixed visitor sections with strong-host travel resistance. Workspace only."
     },
     {
       "path": "Modules/DynastyEnhancer/Tools/runtime_lifecycle.mjs",
-      "sha256": "335809238e69348a113c0ab0c3aa8ba44ab5124421f2f08e6a25f1f9ca562202",
-      "reason": "Retain prior COT integration; 0.1.6 Beyond the Field: bounded content/selection/voices, native paging, persistent modeled recruit records, supported calendar/draft reference, exact AIO Notes/colors and numeric-preserving money redraw adapters."
+      "sha256": "6eebef8b1b2367bc9d53745eb0aa22d404035a30afb3b87ebd8951e5a6dd4dcc",
+      "reason": "0.1.14: released native production and position-relative grades with prestige uncertainty; same-model optional PFF publications and preserved history"
     },
     {
       "path": "Modules/DynastyEnhancer/Tools/social_discovery.mjs",
@@ -433,13 +458,13 @@
     },
     {
       "path": "Modules/DynastyEnhancer/Tools/story_authors.mjs",
-      "sha256": "702c22c6e603331c6f50845ee90a205a587ee2f2cd8e322ace580ea013e4b607",
-      "reason": "COT 0.1.4: factual social perspectives, persistent voices, four-edition structure memory, required news retention and frozen publication wording; compact archive metadata and native UI performance; motion-driven sound companions and mixed visitor sections with strong-host travel resistance. Workspace only."
+      "sha256": "1ebf87256e480854f239e80a027b990e8aa0b3ccde810f893012649637e53ee6",
+      "reason": "0.1.14: released native production and position-relative grades with prestige uncertainty; same-model optional PFF publications and preserved history"
     },
     {
       "path": "Modules/DynastyEnhancer/Tools/story_conversations.mjs",
-      "sha256": "522a3a7f8a7a375678ceed62e250590384e0f0230bc875e8d02655eb3e4611a4",
-      "reason": "Retain prior COT integration; 0.1.6 Beyond the Field: bounded content/selection/voices, native paging, persistent modeled recruit records, supported calendar/draft reference, exact AIO Notes/colors and numeric-preserving money redraw adapters."
+      "sha256": "5aaa229a61273d7b574df53c55a431627faf2ba49d61a7a2437b618f30fdd28c",
+      "reason": "0.1.14: released native production and position-relative grades with prestige uncertainty; same-model optional PFF publications and preserved history"
     },
     {
       "path": "Modules/DynastyEnhancer/Tools/story_engagement.mjs",
@@ -448,8 +473,8 @@
     },
     {
       "path": "Modules/DynastyEnhancer/Tools/story_events.mjs",
-      "sha256": "0e60f033c481ec09221824324d5c634a0a9b0d65a4bcb3fd1d07051979a85404",
-      "reason": "Retain prior COT integration; 0.1.6 Beyond the Field: bounded content/selection/voices, native paging, persistent modeled recruit records, supported calendar/draft reference, exact AIO Notes/colors and numeric-preserving money redraw adapters."
+      "sha256": "5550802440802513c9127471b522320d0be3435054a235db19f2cc12cbec2a6f",
+      "reason": "0.1.14: released native production and position-relative grades with prestige uncertainty; same-model optional PFF publications and preserved history"
     },
     {
       "path": "Modules/DynastyEnhancer/Tools/story_renderer.mjs",
@@ -458,13 +483,13 @@
     },
     {
       "path": "Modules/DynastyEnhancer/Tools/story_templates.mjs",
-      "sha256": "f5b60346b5193d94bd2a49279b8bdc74736293464ec262c17b2fdba8f346d86f",
-      "reason": "RC013 native Analytics roster-card/action/return, delayed week visibility, safe filter transitions, isolated full-card fog adapters, glyph repair, installer footer and winning visitor departures"
+      "sha256": "e2feae213d0785238abed2b0b6af1bd8e5f214284fae1f6fcc62a771281657f5",
+      "reason": "0.1.14: released native production and position-relative grades with prestige uncertainty; same-model optional PFF publications and preserved history"
     },
     {
       "path": "Modules/DynastyEnhancer/Tools/voice_style.mjs",
-      "sha256": "ccd375ea1171ba5249085cecb28be842d1feb0c2f43d4fc2b4861b8dc743aeb3",
-      "reason": "COT 0.1.4: factual social perspectives, persistent voices, four-edition structure memory, required news retention and frozen publication wording; compact archive metadata and native UI performance; motion-driven sound companions and mixed visitor sections with strong-host travel resistance. Workspace only."
+      "sha256": "0cc737ce8b16fe9f1df9e483d4a840b4fba9e908c1249551871012c8f30645b8",
+      "reason": "0.1.14: released native production and position-relative grades with prestige uncertainty; same-model optional PFF publications and preserved history"
     },
     {
       "path": "Modules/DynastyEnhancer/Tools/weekly_coverage.mjs",

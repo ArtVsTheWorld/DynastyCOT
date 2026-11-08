@@ -75,7 +75,8 @@ inline void sortPage(Json& page,int column,bool descending){
         return an==bn?a.at("playerKey").get<std::string>()<b.at("playerKey").get<std::string>():an<bn;
     });
 }
-// National includes eligible FBS rosters; Season averages graded games, never N/A entries.
+// The native UI is team-only. National is retained for bounded offline checks.
+// Current native datasets cache grades of accumulated released production.
 inline Json teamPage(const Json& data,int teamIndex,int year,int week,const std::string& weekType){
     const bool national=teamIndex==NationalTeam,season=week==SeasonWeek;
     Json result={{"title","Player Analytics"},{"teamIndex",teamIndex},{"year",year},{"week",week},
@@ -101,7 +102,10 @@ inline Json teamPage(const Json& data,int teamIndex,int year,int week,const std:
     }
     struct Average{double sum=0;int count=0,snaps=0;std::set<std::string> games,snapGames;};
     std::map<std::string,Average> averages;
+    const bool cachedSeason=season&&data.value("analyticsModelVersion",std::string())==ModelVersion&&data.contains("seasonAnalytics")&&data.value("analyticsClock",Json())==data.value("season",Json());
+    if(cachedSeason)for(const auto& row:data.at("seasonAnalytics"))if(row.at("year")==year&&included(row.at("teamIndex").get<int>()))table[row.at("playerKey").get<std::string>()]=row;
     for(const auto& row:data.at("rows")){
+        if(cachedSeason)break;
         int team=row.at("teamIndex").get<int>();
         if(!included(team)||row.at("year")!=year)continue;
         if(!releasedWeek(data,row.at("year").get<int>(),row.at("week").get<int>(),row.at("weekType").get<std::string>()))continue;
@@ -140,3 +144,4 @@ inline Json teamPage(const Json& data,int teamIndex,int year,int week,const std:
     return result;
 }
 }
+#include "AnalyticsDistribution.h"

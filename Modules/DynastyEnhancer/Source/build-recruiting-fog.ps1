@@ -85,6 +85,10 @@ if($RecruitNotesUi){
 }
 Push-Location $fogOut
 try{
+ & $fogCl @fogFlags (Join-Path $fogRoot 'Tests/AnalyticsModelTests.cpp') /Fe:AnalyticsModelTests.exe /link @fogLib /INCREMENTAL:NO
+ if($LASTEXITCODE -ne 0){throw 'Analytics model test build failed'}
+ & .\AnalyticsModelTests.exe
+ if($LASTEXITCODE -ne 0){throw 'Analytics model checks failed'}
  & $fogCl @fogFlags (Join-Path $fogRoot 'Tests/AnalyticsIntegrationTests.cpp') /Fe:AnalyticsIntegrationTests.exe /link @fogLib /INCREMENTAL:NO
  if($LASTEXITCODE -ne 0){throw 'Analytics integration test build failed'}
  & .\AnalyticsIntegrationTests.exe

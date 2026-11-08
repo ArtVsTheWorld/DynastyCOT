@@ -11,7 +11,7 @@ inline std::set<std::string> fields(const std::string& name){
     if(name=="Franchise")return {"LeagueID","FCSTeams"};
     if(name=="FranchiseServer_CareerFlow")return {"IsStageActive","IsStageAdvancing"};
     if(name=="FranchiseUser")return {"AdminLevel","IsRetired","Team"};
-    if(name=="Team")return {"TeamIndex","DisplayName","LongName","TEAM_PREFIX_NAME","ShortName","TEAM_LOGO","TEAM_BACKGROUNDCOLORR","TEAM_BACKGROUNDCOLORG","TEAM_BACKGROUNDCOLORB","TEAM_BACKGROUNDCOLORR2","TEAM_BACKGROUNDCOLORG2","TEAM_BACKGROUNDCOLORB2"};
+    if(name=="Team")return {"TeamIndex","TeamPrestige","DisplayName","LongName","TEAM_PREFIX_NAME","ShortName","TEAM_LOGO","TEAM_BACKGROUNDCOLORR","TEAM_BACKGROUNDCOLORG","TEAM_BACKGROUNDCOLORB","TEAM_BACKGROUNDCOLORR2","TEAM_BACKGROUNDCOLORG2","TEAM_BACKGROUNDCOLORB2"};
     if(name=="Player")return {"FirstName","LastName","Position","TeamIndex","PLYR_PORTRAIT","OverallRating","JerseyNum","Height","Weight","SchoolYear","PLYR_HANDEDNESS","PLYR_HOME_STATE","PLYR_HOME_TOWN","InjuryStatus","RedshirtStatus","GameStats","PresentationId"};
     if(name=="SeasonGame")return {"IsPractice","SeasonYear","SeasonWeek","SeasonWeekType","GameStatus","HomeTeam","AwayTeam"};
     if(name.find("[]")!=std::string::npos||name.rfind("Game",0)==0)return {};
@@ -50,6 +50,7 @@ inline Json dataset(const Json& raw){
         Json result=v;result["key"]=record.at("key");result["homeTeamIndex"]=home->at("TeamIndex");result["awayTeamIndex"]=away->at("TeamIndex");return result;
     };
     for(const auto& record:records)if(record.at("type")=="SeasonGame"){auto game=gameInfo(record);if(!game.is_null())out["games"].push_back(std::move(game));}
+    std::map<int,double> prestige;for(const auto& record:records)if(record.at("type")=="Team"){const auto& t=record.at("v");if(t.value("TeamPrestige",0)>0&&t.value("TeamPrestige",0)<=10)prestige[t.at("TeamIndex").get<int>()]=t.at("TeamPrestige").get<double>()/2.;}
     const auto config=calibration();
     for(const auto& record:records)if(record.at("type")=="Player"&&record.at("capacity").get<int>()>1){
         const auto& p=record.at("v");const auto key=record.at("key").get<std::string>();auto name=p.value("FirstName",std::string())+" "+p.value("LastName",std::string());auto position=p.value("Position",std::string());int index=p.value("TeamIndex",255);
@@ -77,10 +78,11 @@ inline Json dataset(const Json& raw){
                 // GAMERATING, development traits and presentation metadata.
                 Json measures=Json::object();for(const auto& [field,value]:s.items())if(value.is_number()&&field!="GAMERATING")measures[field]=value;
                 Json row={{"playerKey",key},{"name",name},{"position",position},{"teamIndex",team->at("TeamIndex")},{"teamName",teamName(*team)},{"gameKey",g->at("key")},{"year",game.at("SeasonYear")},{"week",game.at("SeasonWeek")},{"weekType",game.at("SeasonWeekType")},{"gameStatus",game.at("GameStatus")},{"statType",type},{"statKey",stat.at("key")},{"stats",std::move(measures)}};
+                if(prestige.count(team->at("TeamIndex").get<int>()))row["prestigeStars"]=prestige.at(team->at("TeamIndex").get<int>());
                 row["analytics"]=grade(row,config,Json(league).dump());out["rows"].push_back(std::move(row));
             }catch(const std::exception& error){out["issues"].push_back({{"playerKey",key},{"error",error.what()}});}
         }
     }
-    if(owner<0||owner==255)throw std::runtime_error("Active Dynasty has no eligible user team");return out;
+    if(owner<0||owner==255)throw std::runtime_error("Active Dynasty has no eligible user team");calibrateDataset(out,config);return out;
 }
 }

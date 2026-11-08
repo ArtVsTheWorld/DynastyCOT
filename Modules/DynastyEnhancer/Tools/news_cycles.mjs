@@ -39,6 +39,7 @@ export function applyNewsCycle(s,events){
  const cycle=newsCycle(s),ended=seasonEndings(s),focus=focusFixtures(s),byId=new Map(s.games.map(g=>[g.id,g]));
  const liveCategories=new Set(['analytics','standings','streaks','watch','polls','heisman','conference-talk']);
  return events.filter(e=>{
+  if(e.facts.family?.startsWith('pff.'))return cycle.key!=='offseason';
   if(cycle.key==='offseason'&&liveCategories.has(e.category))return false;
   if(cycle.key==='postseason'&&e.category==='analytics'&&!e.facts.gameId)return false;
   if(!e.teamIds.some(id=>ended.has(id)))return true;

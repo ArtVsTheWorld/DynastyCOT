@@ -78,7 +78,7 @@ inline std::set<std::string> wanted(const std::string& name){
     return resumeCaptureFields(name);
 #else
     if(name=="SeasonInfo")return {"CurrentOffseasonStage","NumberOffseasonAdvances","OffseasonNumStages","CurrentWeek","CurrentSeasonYear","CurrentYear","CurrentWeekType","CurrentStage","RegularSeasonWeekConferenceChampionship","IsAnnualAwardPeriodActive","IsSigningPeriodActive","IsDraftRecapPeriodActive","IsTransferPortalNewlyAvailable","IsTransferSignPeriodActive","IsStaffHiringCreateOfferPeriodActive","IsStaffHiringEvaluateOfferPeriodActive"};
-    if(name=="Franchise")return {"LeagueID","Transfers"};
+    if(name=="Franchise")return {"LeagueID","Transfers","FCSTeams"};
     if(name=="FranchiseServer_CareerFlow")return {"IsStageAdvancing","IsStageActive"};
     if(name=="OffseasonStageTypeEnumTableEntry")return {"Value","ShortName","LongName","Description"};
     if(name=="FranchiseUser")return {"Team","UserEntity","IsRetired","AdminLevel"};

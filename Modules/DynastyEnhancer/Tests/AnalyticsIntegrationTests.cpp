@@ -11,7 +11,7 @@
 #include <fstream>
 #include "../../../Compatibility/PracticeTextSetter.generated.h"
 #include "../../../Build/Compatibility/PracticeContractFixtures.h"
-#include "../Source/AnalyticsCapture.h"
+#include "../Source/AnalyticsSummary.h"
 #include "../Source/AnalyticsBridge.h"
 using Json=nlohmann::json;
 namespace fixture {
@@ -357,7 +357,9 @@ int main(int argc,char** argv){using namespace fixture;using namespace fixture::
   check(result["leagueId"]==4294967295u&&result["userTeamIndex"]==14,"Unsigned LeagueID/user team mapping changed");
   check(result["rows"].size()==1&&result["issues"].empty(),"Repeated stat references duplicated games");check(result["teams"][2]["isFcs"]==true,"Native FCSTeams references were ignored");
   const auto grade=result["rows"][0]["analytics"];check(grade["grade"].is_number(),"Verified completed QB performance is not graded");check(!result["rows"][0]["stats"].contains("GAMERATING"),"Native GAMERATING entered grading input");
-  auto direct=analytics::grade(result["rows"][0],analytics::calibration(),Json(4294967295u).dump());check(direct==grade,"Native adapter changed the frozen standalone grade model");
+  check(grade.at("modelVersion")==analytics::ModelVersion&&grade.at("cohortSamples")==1,"Native adapter did not use the sparse position model");
+  auto summary=analytics::live::socialSummary(raw);check(summary["modelVersion"]==analytics::ModelVersion&&summary["leagueId"]==result["leagueId"]&&summary["weekly"][0]["grade"]==grade["grade"],"Social grade differs from its native weekly menu source");
+  check(summary["seasonRows"][0]["grade"]==analytics::teamPage(result,14,0,analytics::SeasonWeek,"Season")["rows"][0]["grade"],"Social season grade differs from the native Season menu");
   auto changed=raw;changed["records"]["5:0"]["v"]["OverallRating"]=10;changed["records"]["5:0"]["v"]["TraitDevelopment"]="Normal";changed["records"]["7:0"]["v"]["GAMERATING"]=0;
   check(analytics::live::dataset(changed)["rows"][0]["analytics"]==grade,"Hidden/native ratings influence production grade");
   changed=raw;changed["records"]["7:0"]["v"].erase("PASSINTS");check(analytics::live::dataset(changed)["rows"][0]["analytics"]["grade"].is_null(),"Missing stats were fabricated");

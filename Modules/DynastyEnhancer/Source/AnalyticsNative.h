@@ -160,7 +160,7 @@ void __fastcall columnHook(void* object,void* out,int id){CallGuard cotCall;
     if(disabled||!opened||id!=0){columns(object,out,id);return;}
     const char* names[]={"FilterKey","Stat","Name","POS","SNAPS","PFF GRADE","CLASSIFICATION","TEAM"};
     const int widths[]={0,0,300,100,140,170,250,220};
-    for(unsigned i=0;i<8;++i){textField(out,i,"display",names[i]);textField(out,i,"hintText",i==5?"Production grade; Season averages graded games":names[i]);set(out,i,"isHidden",i<2,3);set(out,i,"isStatic",false,3);set(out,i,"pixelWidth",widths[i],4);set(out,i,"formatType",0,4);}
+    for(unsigned i=0;i<8;++i){textField(out,i,"display",names[i]);textField(out,i,"hintText",i==5?"Position-based estimate; completed games only":names[i]);set(out,i,"isHidden",i<2,3);set(out,i,"isStatic",false,3);set(out,i,"pixelWidth",widths[i],4);set(out,i,"formatType",0,4);}
     note({{"event","native_analytics_columns"},{"count",8}});
 }
 void __fastcall sourceColumnHook(void* object,void* out,int id){CallGuard cotCall;

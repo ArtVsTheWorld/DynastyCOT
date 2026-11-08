@@ -1,0 +1,237 @@
+{
+  "revision": "pff-production-v1",
+  "families": {
+    "pff.weekly": [
+      {
+        "id": "pff.weekly.1",
+        "body": "{playerName}, {school}: {grade} in our stat-based {weekLabel} grades. {sampleLabel}.",
+        "voices": [
+          "evidence"
+        ]
+      },
+      {
+        "id": "pff.weekly.2",
+        "body": "{weekLabel} grade spotlight: {school} {position} {playerName}. {grade} across {sampleLabel}.",
+        "voices": [
+          "evidence"
+        ]
+      },
+      {
+        "id": "pff.weekly.3",
+        "body": "Our {weekLabel} board: {playerName} earns a {grade} production grade for {school}.",
+        "voices": [
+          "evidence"
+        ]
+      },
+      {
+        "id": "pff.weekly.4",
+        "body": "{grade} for {playerName} in {weekLabel}. The stat-based snapshot covers {sampleLabel} with {school}.",
+        "voices": [
+          "evidence"
+        ]
+      },
+      {
+        "id": "pff.weekly.5",
+        "body": "{school} had a standout on the stat sheet: {playerName}, {grade} in our {weekLabel} grades.",
+        "voices": [
+          "evidence"
+        ]
+      },
+      {
+        "id": "pff.weekly.6",
+        "body": "{playerName}: {grade}. A {weekLabel} production-grade spotlight from {school}.",
+        "voices": [
+          "evidence"
+        ]
+      },
+      {
+        "id": "pff.weekly.7",
+        "body": "{school} {position} {playerName} lands at {grade}. The {weekLabel} sample: {sampleLabel}.",
+        "voices": [
+          "evidence"
+        ]
+      },
+      {
+        "id": "pff.weekly.8",
+        "body": "A strong entry on the {weekLabel} production board: {playerName} ({school}), {grade}.",
+        "voices": [
+          "evidence"
+        ]
+      }
+    ],
+    "pff.season-spotlight": [
+      {
+        "id": "pff.season-spotlight.1",
+        "body": "{playerName} checks in at {grade} in our season production grades. {gradedGames} graded games for {school}.",
+        "voices": [
+          "evidence"
+        ]
+      },
+      {
+        "id": "pff.season-spotlight.2",
+        "body": "{school} {position} {playerName}: season grade {grade}, built from {sampleLabel}.",
+        "voices": [
+          "evidence"
+        ]
+      },
+      {
+        "id": "pff.season-spotlight.3",
+        "body": "Season-grade spotlight: {playerName}, {school}. {grade} through {gradedGames} graded games.",
+        "voices": [
+          "evidence"
+        ]
+      },
+      {
+        "id": "pff.season-spotlight.4",
+        "body": "{grade} on the season board for {playerName}. {sampleLabel} for {school}; this is a stat-based estimate.",
+        "voices": [
+          "evidence"
+        ]
+      },
+      {
+        "id": "pff.season-spotlight.5",
+        "body": "Season production snapshot: {playerName} has a {grade} grade across {gradedGames} graded games.",
+        "voices": [
+          "evidence"
+        ]
+      },
+      {
+        "id": "pff.season-spotlight.6",
+        "body": "{school} on our season board: {playerName}, {grade}. The sample covers {sampleLabel}.",
+        "voices": [
+          "evidence"
+        ]
+      },
+      {
+        "id": "pff.season-spotlight.7",
+        "body": "Putting the sample beside the grade: {sampleLabel}, {grade}, {playerName} of {school}.",
+        "voices": [
+          "evidence"
+        ]
+      },
+      {
+        "id": "pff.season-spotlight.8",
+        "body": "{position} spotlight | {playerName}, {school} | {grade} season production grade.",
+        "voices": [
+          "evidence"
+        ]
+      }
+    ],
+    "pff.season-watch": [
+      {
+        "id": "pff.season-watch.1",
+        "body": "{playerName} sits at {grade} in our season production grades for {school}. {gradedGames} graded games in the sample.",
+        "voices": [
+          "evidence"
+        ]
+      },
+      {
+        "id": "pff.season-watch.2",
+        "body": "A lower mark on the season board: {school} {position} {playerName}, {grade}. This is recorded production, not a film verdict.",
+        "voices": [
+          "evidence"
+        ]
+      },
+      {
+        "id": "pff.season-watch.3",
+        "body": "{school} grade watch: {playerName}, {grade} through {gradedGames} graded games. There is room for that number to move.",
+        "voices": [
+          "evidence"
+        ]
+      },
+      {
+        "id": "pff.season-watch.4",
+        "body": "{playerName}: {grade} over {sampleLabel}. The stat-based season estimate is below the position-group middle.",
+        "voices": [
+          "evidence"
+        ]
+      },
+      {
+        "id": "pff.season-watch.5",
+        "body": "Checking the lower end of the season board: {playerName} has a {grade} production grade for {school}.",
+        "voices": [
+          "evidence"
+        ]
+      },
+      {
+        "id": "pff.season-watch.6",
+        "body": "{grade} is the current season mark for {school} {position} {playerName}, based on {sampleLabel}.",
+        "voices": [
+          "evidence"
+        ]
+      },
+      {
+        "id": "pff.season-watch.7",
+        "body": "{school} {position} {playerName}: {grade} through {gradedGames} graded games. That is the lower end of this production model.",
+        "voices": [
+          "evidence"
+        ]
+      },
+      {
+        "id": "pff.season-watch.8",
+        "body": "The sample is {sampleLabel}; the grade is {grade}. {playerName} ({school}) is on our season watch list.",
+        "voices": [
+          "evidence"
+        ]
+      }
+    ],
+    "pff.movement": [
+      {
+        "id": "pff.movement.1",
+        "body": "{playerName}'s season production grade moves {direction}: {previousGrade} to {grade}. {gradedGames} graded games for {school} now.",
+        "voices": [
+          "evidence"
+        ]
+      },
+      {
+        "id": "pff.movement.2",
+        "body": "{school} grade update: {playerName}, {previousGrade} to {grade}. The season sample has grown to {gradedGames} graded games.",
+        "voices": [
+          "evidence"
+        ]
+      },
+      {
+        "id": "pff.movement.3",
+        "body": "An updated season number for {playerName}: {grade}, from {previousGrade}. The sample now covers {sampleLabel}.",
+        "voices": [
+          "evidence"
+        ]
+      },
+      {
+        "id": "pff.movement.4",
+        "body": "{playerName} is trending {direction} on our stat-based season board: {previousGrade} to {grade} for {school}.",
+        "voices": [
+          "evidence"
+        ]
+      },
+      {
+        "id": "pff.movement.5",
+        "body": "{gradedGames} graded games into the sample, {playerName}'s season mark is {grade}. Previous recorded estimate: {previousGrade}.",
+        "voices": [
+          "evidence"
+        ]
+      },
+      {
+        "id": "pff.movement.6",
+        "body": "{previousGrade} to {grade} for {school} {position} {playerName}. A new season-grade snapshot, with more game data included.",
+        "voices": [
+          "evidence"
+        ]
+      },
+      {
+        "id": "pff.movement.7",
+        "body": "{previousGrade} before; {grade} now. {playerName} of {school} moves {direction} as the recorded season sample grows.",
+        "voices": [
+          "evidence"
+        ]
+      },
+      {
+        "id": "pff.movement.8",
+        "body": "Tracking {school} {position} {playerName}: the season estimate is {direction} to {grade}, from {previousGrade}.",
+        "voices": [
+          "evidence"
+        ]
+      }
+    ]
+  }
+}

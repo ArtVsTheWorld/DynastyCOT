@@ -8,7 +8,7 @@
 
 namespace analytics {
 using Json=nlohmann::json;
-inline constexpr const char* ModelVersion="0.1.0-research";
+inline constexpr const char* ModelVersion="0.2.0-production";
 inline double stat(const Json& s,const char* name) {
     if(!s.contains(name)||!s.at(name).is_number())throw std::runtime_error(std::string("Missing stat: ")+name);
     const double v=s.at(name).get<double>();
@@ -45,7 +45,9 @@ inline double points(const Json& s,const std::string& g) {
         12*v("RECEIVETDS")-14*v("RUSHFUMBLES")-4*v("RECEIVEDROPS");
     if(g=="WR"||g=="TE")return .65*v("RECEIVEYARDS")+2*v("RECEIVECATCHES")+
         14*v("RECEIVETDS")-6*v("RECEIVEDROPS")+.5*v("RUSHYARDS")+12*v("RUSHTDS")-14*v("RUSHFUMBLES");
-    if(g=="OL")return 5*v("OLINEPANCAKES")-16*v("OLINESACKSALLOWED");
+    // Pancakes exist, but simulated games record them too sparsely to make
+    // them the only way an offensive lineman can earn a positive grade.
+    if(g=="OL")return -16*v("OLINESACKSALLOWED");
     if(g=="DL"||g=="LB"||g=="CB"||g=="S")return
         (g=="DL"?2.:g=="LB"?2.4:1.8)*v("DEFTACKLES")+.8*v("ASSDEFTACKLES")+
         4*v("DEFTACKLESFORLOSS")+10*v("DLINESACKS")+5*v("DLINEHALFSACK")+
@@ -86,7 +88,8 @@ inline Json grade(const Json& row,const Json& config,const std::string& league) 
     if(status!="HomeWon"&&status!="AwayWon"&&status!="Tied"){out["reason"]="Game not finalized";return out;}
     try {
         const auto& s=row.at("stats");double snaps=stat(s,"DOWNSPLAYED");out["snaps"]=snaps;
-        if(snaps<=0||snaps>1000){out["reason"]="No valid snaps";return out;}
+        const bool season=row.value("weekType",std::string())=="Season";
+        if(snaps<=0||snaps>(season?20000:1000)){out["reason"]="No valid snaps";return out;}
         if(g=="K"&&stat(s,"KICKFGATTEMPTS")+stat(s,"KICKEPATTEMPTS")==0){out["reason"]="No kicking attempts";return out;}
         if(g=="P"&&stat(s,"PUNTATTEMPTS")==0){out["reason"]="No punts";return out;}
         const auto& b=config.at("baselines").at(g);
@@ -94,20 +97,22 @@ inline Json grade(const Json& row,const Json& config,const std::string& league) 
         double amplitude=config.at("variation").get<double>();
         if(!std::isfinite(sd)||sd<=0||!std::isfinite(k)||k<0||!std::isfinite(amplitude)||amplitude<0||amplitude>5)
             throw std::runtime_error("Invalid model configuration");
-        double rate=points(s,g)/snaps;
+        double opportunities=g=="K"?stat(s,"KICKFGATTEMPTS")+stat(s,"KICKEPATTEMPTS"):g=="P"?stat(s,"PUNTATTEMPTS"):snaps;
+        double rate=g=="OL"?-100*(stat(s,"OLINESACKSALLOWED")+.5)/(snaps+60):points(s,g)/opportunities;
+        if(g=="CB"||g=="S")rate-=.8*stat(s,"CTHALLOWED")/snaps;
         double maxZ=config.at("maxStandardScore").get<double>();
         if(!std::isfinite(maxZ)||maxZ<=0||maxZ>10)throw std::runtime_error("Invalid standard score bound");
         double z=std::clamp((rate-b.at("mean").get<double>())/sd,-maxZ,maxZ);
-        double reliability=snaps/(snaps+k);
+        double reliability=opportunities/(opportunities+k);
         std::string seed=std::string(ModelVersion)+"|"+league+"|"+row.at("playerKey").get<std::string>()+"|"+
             row.at("year").dump()+"|"+row.at("weekType").get<std::string>()+"|"+row.at("week").dump()+"|"+row.at("gameKey").get<std::string>();
         double variation=noise(seed,amplitude);
-        double raw=60+12*(reliability*z-b.at("centerCorrection").get<double>())+variation;
+        double raw=68+12*(reliability*z-b.at("centerCorrection").get<double>())+variation;
         if(!std::isfinite(raw))throw std::runtime_error("Invalid computed grade");
         double value=std::round(std::clamp(raw,0.,100.)*10)/10;
         out.update({{"grade",value},{"category",category(value)},{"status","Graded"},
-          {"lowSample",snaps<(g=="K"||g=="P"?5:20)},{"productionRate",rate},
-          {"reliability",reliability},{"variation",variation},{"limitedModel",g=="OL"||g=="CB"||g=="S"}});
+          {"lowSample",opportunities<(g=="K"||g=="P"?2:20)},{"productionRate",rate},
+          {"reliability",reliability},{"variation",variation},{"opportunities",opportunities},{"limitedModel",g=="OL"||g=="CB"||g=="S"}});
     }catch(const std::exception& e){out["reason"]=e.what();}
     return out;
 }

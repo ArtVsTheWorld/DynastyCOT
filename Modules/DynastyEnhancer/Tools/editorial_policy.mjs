@@ -12,7 +12,8 @@ export function validEditorialContext(e){
 export function editorialTopic(e){
  const f=e.facts??{},family=f.family??'',team=e.teamIds?.[0]??f.school,person=e.playerId??f.playerName;
  let key,state;
- if(e.category==='holiday'&&f.calendarKey){key=['calendar',f.calendarKey,f.calendarDate??'rivalry'];state=true;}
+ if(family.startsWith('pff.')){key=[family,team,person];state=[f.grade,f.snaps,f.gradedGames,f.sourceWeek,f.sourceWeekType,f.modelVersion];}
+ else if(e.category==='holiday'&&f.calendarKey){key=['calendar',f.calendarKey,f.calendarDate??'rivalry'];state=true;}
  else if(f.archiveReference){key=['archive-reference',f.archiveReference];state=true;}
  else if(family==='cycle.team-reset'||family.startsWith('ending.team.')){key=['season-thanks',team];state=true;}
  else if(family==='ending.expectation-review'){key=['season-expectation-review',team];state=[f.record??null,f.expectationNote??null];}

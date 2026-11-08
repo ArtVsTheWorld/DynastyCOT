@@ -2,6 +2,7 @@ import {hash} from './story_authors.mjs';
 // Stable editorial interests, not per-post punctuation skins. Personal native
 // character rules remain authoritative (including restrained quarterbacks).
 export function accountVoice(account,role,player=null,persona=0){
+ if(role==='analyst'&&persona===6)return 'evidence';
  if(role==='analyst')return ['wire','race','film','evidence','schedule','development'][persona%6];
  const seed=account.styleSeed??hash(account.handle??'');
  if(role==='beat')return ['wire','local','cautious'][seed%3];

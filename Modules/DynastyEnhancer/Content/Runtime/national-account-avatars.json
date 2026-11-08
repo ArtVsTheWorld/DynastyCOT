@@ -30,6 +30,11 @@
       "imageLibrary": 62,
       "imageValue": 236,
       "assetName": "ucp_narrative_malereporter4"
+    },
+    "6": {
+      "imageLibrary": 88,
+      "imageValue": 125,
+      "assetName": "bticl_win64_P_color"
     }
   }
 }

@@ -3,6 +3,7 @@ import {calendarEvents} from './calendar_events.mjs';
 import {casualEvents} from './casual_events.mjs';
 import {recruitGameEvents} from './recruit_game_records.mjs';
 import {seasonStorylines} from './season_storylines.mjs';
+import {pffEvents} from './pff_events.mjs';
 import {hash} from './story_authors.mjs';
 const hashForRecruit=id=>hash(id+'|portal-specialist')%3===0?3:5;
 import {draftEvents} from './draft_results.mjs';
@@ -155,6 +156,6 @@ export function detectEvents(s,previous=null){
   for(const e of preseasonEvents(s,{strengths:modelStrengths}))emit(e.id,e.category,e.facts,e.options);
   for(const e of [...offseasonCarryEvents(s),...seasonStorylines(s)])emit(e.id,e.category,e.facts,e.options);
   for(const e of seasonLaunchEvents(s))emit(e.id,e.category,e.facts,e.options);
-  for(const e of [...casualEvents(s),...recruitGameEvents(s)])emit(e.id,e.category,e.facts,e.options);
+  for(const e of [...casualEvents(s),...recruitGameEvents(s),...pffEvents(s,previous)])emit(e.id,e.category,e.facts,e.options);
   return applyNewsCycle(s,events);
 }
