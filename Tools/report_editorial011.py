@@ -118,7 +118,7 @@ if setup_path.exists() and update_path.exists():
 
 - 425 Node tests pass, including editorial, persistence, filtering, budgets, reply context, dates, grades/currency and Analytics model checks.
 - Native source build passes: 288 native/JavaScript scope/category parity comparisons, 974 Analytics integration assertions, and the existing native Social Media, Fog, currency, grade, settings and ABI checks.
-- Package verification passes: 154 payload files, original 983 imported source inputs unmodified, all 16 module selections, 17 actual host/resource/path checks, nine Analytics binary ABI/build-pair/license checks, and helper/tamper/traversal checks.
+- Package verification passes: 154 payload files, 983 original standalone source files verified unchanged, all 16 module selections, 17 actual host/resource/path checks, nine Analytics binary ABI/build-pair/license checks, and helper/tamper/traversal checks. Deliberate changes to imported COT copies are declared in the baseline ledger.
 - 116 installer cases pass. The versioned single-file installer passes 34 real GUI/engine checks, including bounded layouts/scaling, module selection, uninstall and rollback.
 - 95 updater checks pass for exact 0.1.10 → 0.1.11 discovery/download/install/rollback using isolated fixture endpoints. Corrupt payloads, failure recovery and retained data are covered. This is not a claim of a published GitHub release.
 - 15 release metadata/provenance/privacy checks pass. Public-source boundary scan and source whitespace checks pass. Live installation and publishing remain false.

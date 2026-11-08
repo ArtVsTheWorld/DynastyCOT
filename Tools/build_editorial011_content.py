@@ -257,5 +257,6 @@ pack = {'format':1, 'revision':'cot-0.1.11-editorial-1', 'sourceSha256':proposal
 target = ROOT/'Modules/DynastyEnhancer/Content/Runtime/editorial011-pack.json'
 target.write_text(json.dumps(pack,ensure_ascii=False,indent=2)+'\n',encoding='utf-8')
 summary = {'sourceSha256':pack['sourceSha256'],'proposalEdits':len(decisions),'changedExisting':len(patches),'newVariants':150,'primaryFamilies':list(families)[:20],'decisions':decisions}
+(ROOT/'Build/Editorial011').mkdir(parents=True,exist_ok=True)
 (ROOT/'Build/Editorial011/editorial-decisions.json').write_text(json.dumps(summary,ensure_ascii=False,indent=2),encoding='utf-8')
 print(json.dumps({k:v for k,v in summary.items() if k!='decisions'}))
