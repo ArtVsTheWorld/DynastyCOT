@@ -2,6 +2,7 @@
 const cache=new WeakMap();
 const neighborhoods=new WeakMap(),shingleCache=new Map();
 const phraseCache=new Map();
+const globalNeighbors=new WeakMap();
 function phrasesFor(form){
  if(phraseCache.has(form))return phraseCache.get(form);
  const words=form.split(' '),phrases=[];
@@ -19,8 +20,14 @@ export function varietyMemory(){return {forms:new Map(),openings:new Map(),endin
 // Cross-family near shapes must use the same 70% four-gram rule as review.
 // An inverted phrase index avoids comparing every candidate with every card.
 export function globalNearUse(memory,t){
- const f=templateFeatures(t),hits=new Map();for(const phrase of f.phrases)for(const form of memory.phraseForms.get(phrase)??[])if((memory.forms.get(form)??0)>=.2)hits.set(form,(hits.get(form)??0)+1);
- let weight=memory.forms.get(f.structure)??0;for(const [form,n] of hits)if(form!==f.structure&&n/Math.max(f.phrases.length,phrasesFor(form).length)>=.7)weight+=memory.forms.get(form)??0;return weight;
+ const f=templateFeatures(t);let cache=globalNeighbors.get(memory);if(!cache){cache=new WeakMap();globalNeighbors.set(memory,cache);}let neighbors=cache.get(f);
+ // A pass only adds shapes/increases weights. Reuse structural matches while
+ // its shape set is unchanged, but always read current weights and threshold.
+ if(!neighbors||neighbors.count!==memory.forms.size){
+  const hits=new Map();for(const phrase of f.phrases)for(const form of memory.phraseForms.get(phrase)??[])hits.set(form,(hits.get(form)??0)+1);
+  neighbors={count:memory.forms.size,forms:[...hits].filter(([form,n])=>form!==f.structure&&n/Math.max(f.phrases.length,phrasesFor(form).length)>=.7).map(([form])=>form)};cache.set(f,neighbors);
+ }
+ let weight=memory.forms.get(f.structure)??0;for(const form of neighbors.forms){const value=memory.forms.get(form)??0;if(value>=.2)weight+=value;}return weight;
 }
 function shingles(form){let result=shingleCache.get(form);if(!result){const w=form.split(' ');result=new Set(w.slice(0,-3).map((_,i)=>w.slice(i,i+4).join(' ')));shingleCache.set(form,result);}return result;}
 // Compile structural neighbors once per immutable family. This also catches

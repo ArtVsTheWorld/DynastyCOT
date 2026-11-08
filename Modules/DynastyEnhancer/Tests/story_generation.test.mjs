@@ -13,7 +13,7 @@ const fixture=()=>({format:2,gameYear:27,sourceUnchanged:true,sha256:'a'.repeat(
  performances:[{player:'q',team:1,game:'g',type:'GameOffensiveStats',stats:{RUSHATTEMPTS:20,RUSHYARDS:114,RUSHTDS:2}}],heisman:[],offers:[],commitments:[]});
 const event=(category,facts,extra={})=>({id:'x',category,facts,teamIds:[1],scopes:['team'],priority:90,thread:'x',curated:true,...extra});
 test('real result produces a short program caption and independent positive reaction; no fixture school leaks',()=>{
- const f=buildFeed(fixture());const recap=f.stories.find(p=>p.eventId==='result:g'&&p.voice==='official');assert.ok(recap);assert.ok(recap.body.includes('36'));assert.ok(recap.body.includes('Red Mesa'));assert.ok(recap.body.includes('#AllAboard'));assert.ok([...recap.body].length<130);
+ const f=buildFeed(fixture());const recap=f.stories.find(p=>p.eventId==='result:g'&&p.voice==='official');assert.ok(recap);assert.ok(recap.body.includes('36'));assert.ok(recap.body.includes('Red Mesa'));assert.ok(recap.body.includes('31'));assert.equal(recap.voice,'official');assert.ok([...recap.body].length<130);
  assert.ok(f.stories.some(p=>p.eventId==='result:g'&&['player','fan'].includes(p.voice)));assert.ok(f.stories.every(p=>!p.body.includes('North Valley')));
 });
 test('account identity survives recruit-to-roster, position, name, jersey, week and season changes',()=>{

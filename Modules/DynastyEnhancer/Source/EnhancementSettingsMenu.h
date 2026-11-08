@@ -31,7 +31,7 @@ inline void append(void* out,unsigned row,Options selected,bool interactive){
     put(out,row,"linkage","madden.ultimatecareer.component.ListCategoryHeader",6);++row;
     constexpr const char* names[]={"Social Media Feed","Recruiting Fog","Roster Fog","Team Fog","Player Grade Scale","Team Grade Scale","Rating Colors","Dollar Values"};
     constexpr const char* descriptions[]={
-        "Enable the Social Media feed and its weekly and midweek news. Saved for this Dynasty.",
+        "Weekly Dynasty news and reactions. COT HS Game posts use saved mod-generated recruit results, not native high school records. Saved for this Dynasty.",
         "Replace recruit ratings with grades and hide Playing Time grades. Notes and college background labels remain available when Off.",
         "Replace active-player ratings with grades throughout menus and gameplay. Edit Player ratings remain unchanged.",
         "Replace team Overall, Offense and Defense ratings with the selected grade scale.",

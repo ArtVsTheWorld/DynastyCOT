@@ -18,8 +18,9 @@ import {rememberVariety} from './story_variety.mjs';
 import {capitalizeSentences} from './prose_cleanup.mjs';
 import {conferenceGrammar} from './conference_language.mjs';
 import {scopeViews} from './feed_selection.mjs';
+import {nativeViewIds} from './feed_visibility.mjs';
 export const CONTENT_REVISION=pack.revision;
-export const stampFor=category=>({'draft-discourse':'Draft','draft':'Draft','nil':'NIL',transfer:'Portal Watch','results':'Recap','team-stats':'Recap','player-stats':'Recap',recruiting:'Recruiting',offers:'Recruiting',schedule:'Upcoming',polls:'Rankings',heisman:'Heisman',cfp:'Playoff Watch',injuries:'Injury Report',standings:'Standings',watch:'Spotlight',lines:'Odds',holiday:'Calendar',analytics:'Analysis',upsets:'Upset','matchup-recap':'Matchup Recap','matchup-preview':'Matchup','season-end':'Season Review',coaching:'Coaching',postseason:'Postseason','conference-talk':'Conference Talk',offseason:'Offseason',history:'Milestone',championship:'Title Race',bowls:'Bowl Watch',records:'Record Book',streaks:'Streak',awards:'Award'}[category]??'News');
+export const stampFor=category=>({'recruit-film':'COT HS Game','draft-discourse':'Draft','draft':'Draft','nil':'NIL',transfer:'Portal Watch','results':'Recap','team-stats':'Recap','player-stats':'Recap',recruiting:'Recruiting',offers:'Recruiting',schedule:'Upcoming',polls:'Rankings',heisman:'Heisman',cfp:'Playoff Watch',injuries:'Injury Report',standings:'Standings',watch:'Spotlight',lines:'Odds',holiday:'Calendar',analytics:'Analysis',upsets:'Upset','matchup-recap':'Matchup Recap','matchup-preview':'Matchup','season-end':'Season Review',coaching:'Coaching',postseason:'Postseason','conference-talk':'Conference Talk',offseason:'Offseason',history:'Milestone',championship:'Title Race',bowls:'Bowl Watch',records:'Record Book',streaks:'Streak',awards:'Award'}[category]??'News');
 const personalities=new Set(['Leader','Intense','Entertainer','TeamPlayer','Unpredictable']);
 const final=g=>g&&g.published!==false&&['HomeWon','AwayWon','Tie'].includes(g.status);
 const ranked=n=>Number.isInteger(n)&&n>0&&n<=25;
@@ -39,11 +40,11 @@ export function preserveSameWeekStories(stories,events,sameWeek){
 export function renderStories(s,events,options={}){
  if(options.sameWeek){const priorEvents=new Set((options.sameWeek.events??[]).map(e=>e.id));events=events.filter(e=>priorEvents.has(e.id)||!e.facts.opinion&&!e.facts.calendarKey&&e.category!=='recruit-film');}
  const finish=stories=>enforceWeeklyBudget(preserveSameWeekStories(stories,events,options.sameWeek),events,new Set(options.sameWeek?.stories?.map(p=>p.id)??[]));
- const initial=renderPass(s,events,options),views=scopeViews(initial.stories,{phase:s.season.CurrentWeekType,userTeamIndex:s.userTeamIndex}),byId=new Map(initial.stories.map(p=>[p.id,p])),visible=new Set();
- for(const [view,cap] of [['all:default',30],['team',25],['conference',60],['national',100]])for(const id of (views[view]??[]).slice(0,cap))visible.add(id);
+ const initial=renderPass(s,events,options),budgeted=finish(initial.stories),views=scopeViews(budgeted,{phase:s.season.CurrentWeekType,userTeamIndex:s.userTeamIndex}),byId=new Map(initial.stories.map(p=>[p.id,p])),visible=new Set();
+ for(const view of ['all','team','conference','national'])for(const id of nativeViewIds({stories:budgeted,views},view))visible.add(id);
  if(!visible.size)return {...initial,stories:finish(initial.stories)};
  // Hidden CPU candidates must not exhaust wording before the user sees it.
- // Refine only the small visible event set, then keep every other stored card.
+ // Refine actual displayed events, then keep every other stored card.
  const eventOrder=new Map();for(const id of visible){const event=byId.get(id)?.eventId;if(event&&!eventOrder.has(event))eventOrder.set(event,eventOrder.size);}
  const selected=events.filter(e=>eventOrder.has(e.id)).sort((a,b)=>eventOrder.get(a.id)-eventOrder.get(b.id));
  const refined=renderPass(s,selected,{...options,authors:initial.authors,visibleIds:visible}),replacement=new Map(refined.stories.filter(p=>visible.has(p.id)).map(p=>[p.id,p]));
@@ -91,6 +92,7 @@ function renderPass(s,events,{authors={},history=[],sameWeek=null,onTemplates=nu
   const rankMovement=ranked(values.rank)?values.movement==='up'&&ranked(values.previousRank)&&values.rank<values.previousRank?`Up from No. ${values.previousRank}.`:values.movement==='down'&&ranked(values.previousRank)&&values.rank>values.previousRank?`Down from No. ${values.previousRank}.`:['same','unchanged'].includes(values.movement)?`Unchanged at No. ${values.rank}.`:values.movement==='entry'?'A new Top-25 entry.':null:null;
   const detailSubject=players.get(e.playerId),individualDetail=!!detailSubject&&typeof values.detail==='string'&&!values.detail.startsWith('Giveaways:')&&values.detail.startsWith(detailSubject.name+':');
   const contextual={...filled,roleFan:role==='fan',rolePersonal:['player','recruit'].includes(role),roleAnalyst:role==='analyst',roleLocal:['beat','official'].includes(role),roleBeat:role==='beat',roleOfficial:role==='official',parentDetail:anchor??null,rankMovement,individualDetail,fiveStarKnown:values.stars===5,personalmeasured:style==='measured',personalconversational:style==='conversational',personalexpressive:style==='expressive',rivalPerspective:parent&&e.facts.rivalReplyTeam===team?.id,
+   shortStatLine:typeof filled.statLine==='string'?filled.statLine.split(', ')[0]:null,
    recordContext:team&&Number.isInteger(team.wins)&&Number.isInteger(team.losses)&&team.wins+team.losses>0?`${team.wins}–${team.losses}`:null};
   if(parent&&e.category==='results'&&team){const game=games.get(e.facts.gameId);if(game){contextual.opponent=team.id===game.home?game.awayName:game.homeName;contextual.score=Math.max(game.homeScore,game.awayScore)+'–'+Math.min(game.homeScore,game.awayScore);}}
   let chosen=chooseTemplate(family,contextual,edition+'|'+id+'|'+account.handle,{handle:account.handle,week:s.season.CurrentWeek,history,sameStory:baseOld,renderKey,transformBody,style,voice,topic:varietyTopic,avoidBodies:usedBodies,publication,onCandidates:onTemplates,usage});if(!chosen)return null;
@@ -117,6 +119,7 @@ function renderPass(s,events,{authors={},history=[],sameWeek=null,onTemplates=nu
   if(family==='transactions.position-change')p.coverageExempt=true;
   if(!parent&&['analyst','beat'].includes(role)&&e.category==='coaching')p.coverageExempt=true;
   if(role==='nflDraft'){p.transaction=true;p.draftPick=values.draftPick;p.draftRound=values.draftRound;}
+  if(e.category==='recruit-film'&&e.facts.recordSource==='mod-modeled-hs')p.recordSource='mod-modeled-hs';
   if(['analyst','beat'].includes(role)&&(e.category==='coaching'||e.category==='transactions'||e.category==='nil'||family==='transactions.signed'))p.transaction=true;
   if(parent)p.likes=replyLikesFor(s,id,parent.likes,sameStories.get(id));p.engagementVersion=ENGAGEMENT_VERSION;
   if(parent){p.replyTo=parent.id;replyCounts.set(parent.id,(replyCounts.get(parent.id)??0)+1);}

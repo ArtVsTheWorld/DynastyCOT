@@ -92,9 +92,14 @@
       "reason": "COT 0.1.3: independent Weekly Advance adapters with exact loader-pointer normalization, creation-page per-Dynasty options, requested defaults and fitted dollar prefixes"
     },
     {
+      "path": "Modules/DynastyEnhancer/Source/EnhancementSettingsMenu.h",
+      "sha256": "db68fbb2fca78950a68075a8788a93be158fc215d52fe6b573cd0165a8cd67bb",
+      "reason": "Bounded editorial candidate: reviewed proposal, native-window repetition memory and equivalent cached comparisons; stable publications and guards"
+    },
+    {
       "path": "Modules/DynastyEnhancer/Source/FeedData.h",
-      "sha256": "0621059fca60b46b407db16abc4236b2075e2c883b429c562808a8518be237f9",
-      "reason": "Preserve real fractional priorities while bounding National native widgets and retaining compact counters"
+      "sha256": "bcf156f90f8938303f40f018e98641739b7b3e49ec442cbc49e60d967754d8b6",
+      "reason": "Bounded editorial candidate: reviewed proposal, native-window repetition memory and equivalent cached comparisons; stable publications and guards"
     },
     {
       "path": "Modules/DynastyEnhancer/Source/FeedRefresh.h",
@@ -188,8 +193,8 @@
     },
     {
       "path": "Modules/DynastyEnhancer/Source/build.ps1",
-      "sha256": "59d875bd30f264ac7e97510463549e838ba0ee9aba29c4db4dd3a5231461ef7e",
-      "reason": "Compile a shared native build ID and verify stable packaged Analytics sibling names without changing hook ownership"
+      "sha256": "25604b43a056377d7f16e3175af4853f00729575a97f46d1a96751892930e0e7",
+      "reason": "Bounded editorial candidate: reviewed proposal, native-window repetition memory and equivalent cached comparisons; stable publications and guards"
     },
     {
       "path": "Modules/DynastyEnhancer/Tests/CurrencyDisplayTests.h",
@@ -327,6 +332,11 @@
       "reason": "Retain prior COT integration; 0.1.6 Beyond the Field: bounded content/selection/voices, native paging, persistent modeled recruit records, supported calendar/draft reference, exact AIO Notes/colors and numeric-preserving money redraw adapters."
     },
     {
+      "path": "Modules/DynastyEnhancer/Tests/story_generation.test.mjs",
+      "sha256": "a76165bbb580bad19923958ab9f00c659e385e5a80b044cf4f1d61d23add70f3",
+      "reason": "Bounded editorial candidate: reviewed proposal, native-window repetition memory and equivalent cached comparisons; stable publications and guards"
+    },
+    {
       "path": "Modules/DynastyEnhancer/Tests/transactions_editorial.test.mjs",
       "sha256": "90f4a8622ca2527721d356315a0aa9f8ba6218331f896cb813310bdc3624a019",
       "reason": "0.1.7: verify complete local views and fifteen-root allowance with protected major coverage."
@@ -438,13 +448,13 @@
     },
     {
       "path": "Modules/DynastyEnhancer/Tools/story_renderer.mjs",
-      "sha256": "1277c32b5b68dff6fa099fd4c7e51bddd7b884d32bce6abd067923e7be0c811c",
-      "reason": "0.1.7: preserve published news with a fifteen-root routine budget and complete user/board coverage; broader pipeline chatter joins the bounded mix."
+      "sha256": "2a43e76a56ff08c893e8e4e3c88fcec462248ddff25fc8395daf4bae7050559d",
+      "reason": "Bounded editorial candidate: reviewed proposal, native-window repetition memory and equivalent cached comparisons; stable publications and guards"
     },
     {
       "path": "Modules/DynastyEnhancer/Tools/story_templates.mjs",
-      "sha256": "a4d230aae1e5c0cac8099bdcc0288c3cfbe055f078b64487de06c69dc901d24e",
-      "reason": "Retain prior COT integration; 0.1.6 Beyond the Field: bounded content/selection/voices, native paging, persistent modeled recruit records, supported calendar/draft reference, exact AIO Notes/colors and numeric-preserving money redraw adapters."
+      "sha256": "709c19e4ccc468440b12cb17735330c90e43cad1d5bec7dcb04951bc7b8dad09",
+      "reason": "Bounded editorial candidate: reviewed proposal, native-window repetition memory and equivalent cached comparisons; stable publications and guards"
     },
     {
       "path": "Modules/DynastyEnhancer/Tools/voice_style.mjs",

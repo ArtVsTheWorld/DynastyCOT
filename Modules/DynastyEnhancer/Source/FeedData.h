@@ -49,6 +49,7 @@ inline std::string storyLabel(const nlohmann::json& post){
     if(category=="holiday")return "Calendar";
     if(category=="awards")return "Awards";
     if(category=="nil")return "NIL";
+    if(category=="recruit-film")return "COT HS Game";
     if(category=="transfer")return "Transfers";
     if(category=="depth-chart")return "Roster";
     return "News";

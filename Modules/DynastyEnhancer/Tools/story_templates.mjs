@@ -1,5 +1,6 @@
 import fs from 'node:fs';
 import {comparePublication} from './publication_timeline.mjs';
+import {nativeViewIds} from './feed_visibility.mjs';
 import {templateFeatures,varietyMemory,rememberVariety,repetitionCost,structuralNeighbors,nearUse,globalNearUse} from './story_variety.mjs';
 export const contentPack=JSON.parse(fs.readFileSync(new URL('../Content/Runtime/first-pack.json',import.meta.url),'utf8'));
 const expansion=JSON.parse(fs.readFileSync(new URL('../Content/Runtime/analysis-pack.json',import.meta.url),'utf8'));
@@ -81,23 +82,36 @@ contentPack.revision=beyond.revision;
 // These stock endings add no information to an otherwise factual analysis.
 const emptyEndings=['The whole stat line belongs in the conversation.','Worth keeping alongside the headline numbers.','A profile worth following as the evaluation develops.','A candidate, not a coronation.','A useful unit comparison before kickoff.','That changes the conversation.','It changes the conversation.','That changes the conversation around {school}.'];
 for(const variants of Object.values(contentPack.families))for(const t of variants)for(const ending of emptyEndings)t.body=t.body.replace(ending,'').trim();
+// Reviewed ID patches leave guards, personalities and publication identities in
+// place. Reject a stale proposal rather than silently patching different prose.
+const refresh=JSON.parse(fs.readFileSync(new URL('../Content/Runtime/editorial011-pack.json',import.meta.url),'utf8'));
+const originalTemplates=new Map(Object.entries(contentPack.families).flatMap(([family,ts])=>ts.map(t=>[t.id,{family,t}])));
+for(const patch of refresh.overrides){const old=originalTemplates.get(patch.id);if(!old||old.family!==patch.family||old.t.body!==patch.originalBody)throw Error('Stale editorial patch '+patch.id);old.t.body=patch.body;}
+for(const [family,lines] of Object.entries(refresh.families)){if(!contentPack.families[family])throw Error('Unknown editorial family '+family);contentPack.families[family].push(...lines);}
+contentPack.revision=refresh.revision;
 const slots=/\{([A-Za-z][A-Za-z0-9]*)\}/g,ids=new Set(),slotCache=new WeakMap();
 for(const variants of Object.values(contentPack.families))for(const t of variants){
  if(!t.id||ids.has(t.id)||typeof t.body!=='string'||/[\uFFFD\u{1F000}-\u{1FAFF}\u2600-\u27BF]/u.test(t.body))throw Error('Invalid runtime template '+t.id);ids.add(t.id);
 }
 const historyKey=(publication,week)=>publication?`${publication.leagueId}|${publication.userTeamIndex}|${publication.season}|${publication.phase}|${publication.week}`:`week:${week}`;
 const templateCatalog=new Map(Object.values(contentPack.families).flat().map(t=>[t.id,t]));
+const visibleHistory=new WeakMap();
+function historyWindow(f){
+ // Published edition objects are immutable. Both generation passes reuse this
+ // projection; the weak key releases it when the archive leaves memory.
+ const cached=visibleHistory.get(f);if(cached&&cached.stories===f.stories&&cached.views===f.views&&cached.count===(f.stories?.length??0))return cached.ids;
+ const ids=new Set();for(const view of ['all','team','conference','national'])for(const id of nativeViewIds(f,view))ids.add(id);
+ visibleHistory.set(f,{stories:f.stories,views:f.views,count:f.stories?.length??0,ids});return ids;
+}
 export function templateHistory(history=[],publication=null,week=null){
  const scoped=publication?history.filter(f=>f.season<=publication.season&&f.season>=publication.season-1&&(f.leagueId==null||f.leagueId===publication.leagueId)&&(f.userTeamIndex==null||f.userTeamIndex===publication.userTeamIndex)&&(f.season<publication.season||comparePublication(f,publication)<0)).sort((a,b)=>a.season-b.season||comparePublication(a,b)):history.filter(f=>f.week<week).sort((a,b)=>a.week-b.week);
  const recent=publication?scoped.slice(-contentPack.publicationPolicy.templateCooldownWeeks):scoped.filter(f=>week-f.week<=contentPack.publicationPolicy.templateCooldownWeeks);
  const memoryEditions=contentPack.publicationPolicy.structuralMemoryEditions??4,wording=publication?scoped.slice(-memoryEditions):scoped.filter(f=>week-f.week<=memoryEditions);
  const byHandle=new Map();for(let i=0;i<recent.length;i++)for(const p of recent[i].stories??[]){const used=byHandle.get(p.handle)??new Map();used.set(p.templateId,i);if(p.voiceTemplateId)used.set(p.voiceTemplateId,i);byHandle.set(p.handle,used);}
  const memory=varietyMemory();for(let i=0;i<wording.length;i++){
-  const f=wording[i],visible=new Set();
-  // Weight cards the native default windows can actually show. Retain a
-  // smaller memory of the wider dedicated-category pools instead of letting
-  // invisible CPU cards consume every useful alternative for the user.
-  for(const [view,limit] of [['all:default',30],['all',30],['team',25],['conference',60],['national',100]])for(const id of (f.views?.[view]??[]).slice(0,limit))visible.add(id);
+  const f=wording[i],visible=historyWindow(f);
+  // The native UI now shows complete local scopes and a selected 250-card
+  // National view. Track those actual windows, not the retired 30/100 caps.
   for(const p of f.stories??[]){if(visible.size&&!visible.has(p.id))continue;const prior=p.variety??(templateCatalog.has(p.templateId)?templateFeatures(templateCatalog.get(p.templateId)):null);rememberVariety(memory,prior,(i+1)/wording.length,p.varietyTopic??'');}
  }
  memory.last=null;return {history,key:historyKey(publication,week),byHandle,memory};

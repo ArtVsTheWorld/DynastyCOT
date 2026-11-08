@@ -23,6 +23,12 @@ try {
     if($LASTEXITCODE -ne 0){throw 'Native Social Media tests build failed'}
     & (Join-Path $analyticsOut 'NativeSocialMediaTests.exe')
     if($LASTEXITCODE -ne 0){throw 'Native Social Media checks failed'}
+    & node (Join-Path $analyticsRoot 'Tests/EditorialCandidate/native_fixture.mjs') (Join-Path $analyticsOut 'native-feed-parity.json')
+    if($LASTEXITCODE -ne 0){throw 'Native-view parity fixture failed'}
+    & $analyticsCl @analyticsCommon (Join-Path $analyticsRoot 'Tests/NativeFeedViewChecks.cpp') /Fe:NativeFeedViewChecks.exe /link @analyticsLib /INCREMENTAL:NO
+    if($LASTEXITCODE -ne 0){throw 'Native-view parity build failed'}
+    & (Join-Path $analyticsOut 'NativeFeedViewChecks.exe') (Join-Path $analyticsOut 'native-feed-parity.json')
+    if($LASTEXITCODE -ne 0){throw 'Native-view parity failed'}
     & $analyticsCl @analyticsCommon (Join-Path $PSScriptRoot 'LiveCapture.cpp') /Fe:LiveCapture.exe /link @analyticsLib /INCREMENTAL:NO
     if($LASTEXITCODE -ne 0){throw 'Live reader build failed'}
     & $analyticsCl @analyticsCommon (Join-Path $PSScriptRoot 'LoadRuntime.cpp') /Fe:LoadDynastyEnhancer.exe /link @analyticsLib /INCREMENTAL:NO
