@@ -8,6 +8,10 @@
 #include <fstream>
 #include <mutex>
 #include <set>
+#include <optional>
+#include <tuple>
+#include "AnalyticsCapture.h"
+#include "AnalyticsBridge.h"
 #include "../Vendor/json.hpp"
 #include "RecruitingGradePolicy.h"
 #include "EnhancementSettingsMenu.h"
@@ -290,6 +294,9 @@ Json snapshot(uintptr_t at,unsigned depth=0,bool full=false,size_t rootLimit=2){
     return {{"kind",kind},{"header",header(at)}};
 }
 struct CallGuard{CallGuard(){++inflight;}~CallGuard(){--inflight;}};
+#if defined(RECRUIT_NOTES_UI)
+#include "AnalyticsRuntime.h"
+#endif
 bool enhancementProfileReady(){uint32_t league=0;return read(base+0xf55c998,&league,4)&&league&&league!=UINT32_MAX&&enhancementSettings.availableFor(league);}
 void __fastcall enhancementListHook(void* source,void* target,void* category){
     CallGuard guard;
@@ -464,6 +471,7 @@ std::string classGridLabel(void* source,int form,int row,const char* originalLab
     if(classGridChanges.fetch_add(1)<3)note({{"event","recruit_class_grid_label"},{"record",record},{"label",label}});return label;
 }
 void __fastcall classRowsHook(void* source,void* target,int form,int row,void* columns){
+    if(nativeanalytics::owns(form)){nativeanalytics::rowHook(source,target,form,row,columns);return;}
     playerperf::Sample performance(playerperf::rows);
     const auto gridState=ratingGridState.load();
     if(!disabled&&(enhancements::options().roster||enhancements::options().colors||enhancements::options().dollars)&&form==playerfog::gridStateForm(gridState)){
@@ -475,6 +483,7 @@ void __fastcall classRowsHook(void* source,void* target,int form,int row,void* c
     ClassGridSink sink{classGridTable,target,source,form,row,classGridLabel};originalClassRows(source,&sink,form,row,columns);classGridFlush(&sink);
 }
 void __fastcall rosterColumnsHook(void* source,void* target,int form){
+    if(!disabled&&nativeanalytics::opened&&form==0){nativeanalytics::columnHook(source,target,form);return;}
     playerperf::Sample performance(playerperf::columns);
     CallGuard guard;if(disabled||!(enhancements::options().roster||enhancements::options().colors||enhancements::options().dollars)){ratingGridState=0;originalRosterColumns(source,target,form);return;}
     playerfog::ColumnSink sink{playerfog::columnTable};sink.fields.reserve(768);
@@ -486,6 +495,7 @@ void __fastcall rosterColumnsHook(void* source,void* target,int form){
     if(rosterColumnCalls.fetch_add(1)<3)note({{"event","player_fog_roster_columns"},{"form",form},{"columns",columnCount},{"recognized",recognized},{"schema",int(schema)},{"names",sink.names}});
 }
 void __fastcall gridCloseHook(void* source,int form){
+    if(nativeanalytics::owns(form)){nativeanalytics::closeHook(source,form);return;}
     CallGuard guard;auto state=ratingGridState.load();if(form==playerfog::gridStateForm(state))ratingGridState.compare_exchange_strong(state,0);originalGridClose(source,form);
 }
 void* __fastcall rosterPlayerHook(void* source,void** out,void* argument){
@@ -663,6 +673,7 @@ void installRosterProviders(bool preflightOnly=false){
 #endif
 DWORD stop(){
 #if defined(RECRUIT_NOTES_UI)
+    if(nativeanalytics::opened){note({{"event","analytics_restart_required"},{"reason","Leave Player Analytics before stopping"}});return ERROR_BUSY;}
 #if !defined(PLAYER_FOG_PREVIEW) || defined(PLAYER_FOG_COLORS)
     bool retainedPlayerUi=playerUi.ownerCount()||modernPlayerUi.ownerCount();
     for(const auto* bank:cardUiBanks)retainedPlayerUi=retainedPlayerUi||bank->ownerCount();
@@ -673,6 +684,9 @@ DWORD stop(){
     disabled=true;
     try{enhancementSettings.flush();}catch(const std::exception& error){note({{"event","enhancement_settings_write_failed"},{"reason",error.what()}});}
     bool ownershipFailed=false;
+#if defined(RECRUIT_NOTES_UI)
+    if(!nativeanalytics::stop())ownershipFailed=true;
+#endif
     if(settingsListInstalled){if(replace(reinterpret_cast<void*>(enhancementListHook),reinterpret_cast<void*>(settingsList),enhancements::menu::tableRva,enhancements::menu::listSlot))settingsListInstalled=false;else ownershipFailed=true;}
     if(settingsWriterInstalled){if(replace(reinterpret_cast<void*>(enhancementWriterHook),reinterpret_cast<void*>(settingsWriter),enhancements::menu::tableRva,enhancements::menu::writerSlot))settingsWriterInstalled=false;else ownershipFailed=true;}
 #if defined(RECRUIT_NOTES_UI)
@@ -761,6 +775,7 @@ DWORD WINAPI worker(void*){
         originalClassRows=reinterpret_cast<ClassRows>(current);
         if(!replace(reinterpret_cast<void*>(originalClassRows),reinterpret_cast<void*>(classRowsHook),classTableRva,0x68))throw std::runtime_error("Class grid provider ownership changed");classRowsInstalled=true;
         installRosterProviders();
+        try{nativeanalytics::install(base);}catch(const std::exception& error){note({{"event","native_analytics_unavailable"},{"reason",error.what()}});}
         note({{"event","recruit_notes_ui_prepared"},{"methods",notesUi.methodCount()},{"attachment","live invocation setup"},{"unload","clean restart required after entry"}});
 #endif
 #if defined(RECRUIT_NOTES_PROBE)
@@ -782,6 +797,7 @@ DWORD WINAPI worker(void*){
 #endif
 #if defined(RECRUIT_NOTES_UI)
             static uint64_t nextResumeTick=0;if(GetTickCount64()>=nextResumeTick){nextResumeTick=GetTickCount64()+1000;
+                nativeanalytics::tick();
                 // The verified active-career binding plus native LeagueID is
                 // enough to load options. No recruit/stat capture is required.
                 // This is the same LeagueID used by Franchise and the existing
@@ -806,5 +822,8 @@ DWORD WINAPI worker(void*){
     return 0;
 }
 }
+#if defined(RECRUIT_NOTES_UI)
+extern "C" __declspec(dllexport) const cotanalytics::Api* __cdecl DynastyCotAnalyticsApi(){return &recruitingfog::runtime::nativeanalytics::api;}
+#endif
 extern "C" __declspec(dllexport) DWORD WINAPI DynastyEnhancerStop(void*){return recruitingfog::runtime::stop();}
 BOOL WINAPI DllMain(HMODULE module,DWORD why,LPVOID){if(why==DLL_PROCESS_ATTACH){recruitingfog::runtime::self=module;DisableThreadLibraryCalls(module);auto thread=CreateThread(nullptr,0,recruitingfog::runtime::worker,nullptr,0,nullptr);if(thread)CloseHandle(thread);}return TRUE;}

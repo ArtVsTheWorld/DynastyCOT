@@ -5868,6 +5868,36 @@
       "sha256": "6dc73b7adbfbefd08948142f6a96e63f80880f46bffba2a7a6f960aaa1a8cdb5",
       "module": "GamedayAtmosphere",
       "source": "C:\\Apps\\CFB 27\\Working\\DynamicGamedayAtmosphere\\Source\\DynamicGamedayAtmosphere.ini"
+    },
+    {
+      "module": "DynastyEnhancer",
+      "path": "Modules/DynastyEnhancer/Source/Analytics.NOTICES.txt",
+      "source": "C:\\Apps\\CFB 27\\MMC\\PlayerAnalytics\\Source\\THIRD-PARTY-NOTICES.txt",
+      "sha256": "3346fbfb6e136bd0e9720cf23a8f76a349ac61209ba5cc3d83f6547cdeb0f5b4"
+    },
+    {
+      "module": "DynastyEnhancer",
+      "path": "Modules/DynastyEnhancer/Source/AnalyticsModel.h",
+      "source": "C:\\Apps\\CFB 27\\MMC\\PlayerAnalytics\\Source\\Analytics.h",
+      "sha256": "54a168e823fb101b76ddaf0364e3cddef6b9f8ae8d7913785542b50a0efd6a0c"
+    },
+    {
+      "module": "DynastyEnhancer",
+      "path": "Modules/DynastyEnhancer/Source/AnalyticsNative.h",
+      "source": "C:\\Apps\\CFB 27\\MMC\\PlayerAnalytics\\Source\\NativeAnalytics.h",
+      "sha256": "48d02ccf1abde3d82e21f6a88aac69ae318a485825c676a8739c91d985583b89"
+    },
+    {
+      "module": "DynastyEnhancer",
+      "path": "Modules/DynastyEnhancer/Source/AnalyticsPage.h",
+      "source": "C:\\Apps\\CFB 27\\MMC\\PlayerAnalytics\\Source\\TeamPage.h",
+      "sha256": "88a978f7bfd4977ae8d1a7a7f04cd9b9059dfc265f1d03fc0e6c906040b369bf"
+    },
+    {
+      "module": "DynastyEnhancer",
+      "path": "Modules/DynastyEnhancer/Source/analytics-baselines.json",
+      "source": "C:\\Apps\\CFB 27\\MMC\\PlayerAnalytics\\Source\\baselines.json",
+      "sha256": "f17160d26db925e7866c0edd6e2460948301ee5b062cebf6a7a900e8d5cde413"
     }
   ]
 }

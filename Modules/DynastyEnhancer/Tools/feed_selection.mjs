@@ -102,7 +102,7 @@ export function buildCatalog(active,history=[]){
     if(!f.publication||f.publication.key!==f.key||f.publication.week!==f.week)throw Error('Invalid publication-week archive');
     const old=byWeek.get(f.key);if(!old||f===active||(f.sourceModifiedMs??0)>(old.sourceModifiedMs??0))byWeek.set(f.key,f);
   }
-  const displayKeys=['id','author','handle','body','stamp','category','voice','replyTo','imageLibrary','imageValue','uniformTeamLogo','likes','transaction','draftPick','draftRound','publication'];
+  const displayKeys=['id','author','handle','body','stamp','category','voice','replyTo','imageLibrary','imageValue','uniformTeamLogo','likes','transaction','draftPick','draftRound','publication','priority','essentialNews','coverageExempt','budgetProtected'];
   const weeks=[...byWeek.values()].sort(comparePublication).map(f=>({publicationLabel:publicationLabel(f),...Object.fromEntries(['format','engineVersion','key','leagueId','userTeamIndex','season','phase','week','conference','publication','reconstructed'].map(k=>[k,f[k]])),stories:f.stories.map(p=>Object.fromEntries(displayKeys.filter(k=>p[k]!==undefined).map(k=>[k,p[k]]))),sidebar:editionSidebar(f),views:{...scopeViews(f.stories,f),...(f.scopeOptions?discoveryViews(conversationOrder(f.stories),f.scopeOptions):{})}}));
   return {...active,catalogVersion:2,activeWeekKey:active.key,weeks};
 }

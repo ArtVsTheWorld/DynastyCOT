@@ -8,7 +8,7 @@
 #include <string_view>
 #include "FeedRefresh.h"
 namespace social {
-struct FeedPost {std::string author,handle,body,stamp;int imageLibrary=79,imageValue=598;std::string category,voice,replyTo;bool transaction=false;int likes=-1,uniformTeamLogo=-1,draftPick=-1,draftRound=0;int bodyHeight=0;std::string displayAuthor,displayLikes;FeedPost(std::string a,std::string h,std::string b,std::string s,int l=79,int v=598):author(std::move(a)),handle(std::move(h)),body(std::move(b)),stamp(std::move(s)),imageLibrary(l),imageValue(v){displayAuthor=author+" ("+handle+")";};};
+struct FeedPost {std::string author,handle,body,stamp;int imageLibrary=79,imageValue=598;std::string category,voice,replyTo;bool transaction=false;int likes=-1,uniformTeamLogo=-1,draftPick=-1,draftRound=0;int bodyHeight=0;double priority=0;bool important=false;std::string displayAuthor,displayLikes,displayStamp;FeedPost(std::string a,std::string h,std::string b,std::string s,int l=79,int v=598):author(std::move(a)),handle(std::move(h)),body(std::move(b)),stamp(std::move(s)),imageLibrary(l),imageValue(v){displayAuthor=author+" ("+handle+")";};};
 inline std::string compactCount(int value){
     if(value<1000)return std::to_string(value);
     const int unit=value>=999950?1000000:1000;const auto tenths=(static_cast<long long>(value)*10+unit/2)/unit;
@@ -79,7 +79,6 @@ struct Edition {std::vector<SidebarCard> sidebar;std::string key,label,conferenc
 struct Catalog {std::vector<Edition> weeks;size_t active=0;std::vector<Scope> scopes;};
 struct Feed {std::vector<FeedPost> posts;std::string key="runtime-waiting",label="Social Media";std::shared_ptr<const Catalog> catalog;size_t edition=0;unsigned scope=0,type=0;size_t total=0,page=0,pages=1;};
 inline const std::vector<Scope>& scopesFor(const Catalog& c){static const std::vector<Scope> legacy={{"all","For You"},{"national","National"},{"conference","Conference"},{"team","My Team"}};return c.scopes.empty()?legacy:c.scopes;}
-inline size_t scopeLimit(const std::string& key){return key=="all"?30:key=="national"?100:key=="conference"||key.rfind("conference:",0)==0?60:25;}
 inline constexpr std::array<const char*,12> typeLabels={"All Types","Recruiting","Recaps","Upcoming","Rankings & Awards","Analysts","Beat Reporters","Official Accounts","Players","Injuries","Fans","Transactions"};
 inline bool matchesType(const FeedPost& p,unsigned type){switch(type){case 0:return true;case 1:return p.category=="recruiting"||p.category=="offers"||p.category=="signings"||p.voice=="recruit";case 2:return p.category=="results"||p.category=="team-stats"||p.category=="player-stats"||p.category=="upsets"||p.category=="streaks"||p.category=="matchup-recap"||p.category=="season-end";case 3:return p.category=="schedule"||p.category=="watch"||p.category=="lines"||p.category=="preseason"||p.category=="matchup-preview"||p.category=="offseason";case 4:return p.category=="polls"||p.category=="heisman"||p.category=="cfp"||p.category=="awards"||p.category=="records"||p.category=="history"||p.category=="championship"||p.category=="bowls";case 5:return p.voice=="analyst"||p.voice=="model";case 6:return p.voice=="beat";case 7:return p.voice=="official"||p.voice=="cfp"||p.voice=="nflDraft";case 8:return p.voice=="player";case 9:return p.category=="injuries";case 10:return p.voice=="fan";case 11:return p.transaction||(p.category=="coaching"||p.category=="nil"||p.category=="transactions"||p.category=="transfer"||p.category=="signings")&&(p.voice=="analyst"||p.voice=="beat");default:return false;}}
 // System status is the only fallback; there are no illustrative tweet cards.
@@ -103,18 +102,46 @@ inline std::vector<std::string> feedCandidates(const Edition& e,const std::vecto
     std::function<void(const std::string&,bool)> append=[&](const auto& id,bool whole){if(!visited.insert(id).second)return;const auto& p=e.stories.at(id);whole=whole||matchesType(p,type);if(!whole&&!included.count(id))return;result.push_back(id);for(const auto& child:children[id])append(child,whole);};
     for(const auto& id:roots)append(id,false);return result;
 }
+inline constexpr size_t nationalCardLimit=250;
+// The game creates a real native widget for each returned card. Rank after
+// category matching, retain actual ancestry and reserve the official draft.
+inline std::vector<std::string> nationalSelection(const Edition& e,const std::vector<std::string>& candidates,unsigned type){
+    if(candidates.size()<=nationalCardLimit)return candidates;
+    const std::set<std::string> members(candidates.begin(),candidates.end());
+    struct Thread{std::string root;std::vector<std::string> ids,minimum;size_t order=0;bool draft=false;double score=0;};
+    std::vector<Thread> threads;std::map<std::string,size_t> positions;
+    for(const auto& id:candidates){auto root=id;std::set<std::string> seen;while(members.count(e.stories.at(root).replyTo)&&seen.insert(root).second)root=e.stories.at(root).replyTo;
+        if(!positions.count(root)){positions[root]=threads.size();Thread t;t.root=root;t.order=threads.size();threads.push_back(std::move(t));}threads[positions.at(root)].ids.push_back(id);}
+    for(auto& t:threads){const auto& p=e.stories.at(t.root);t.draft=p.voice=="nflDraft"&&p.draftPick>0&&matchesType(p,type);
+        const bool headline=p.category=="results"||p.category=="upsets"||p.category=="polls"||p.category=="cfp"||p.category=="awards"||p.category=="championship"||p.category=="draft";
+        t.score=(p.important?10000:0)+(headline?1000:0)+p.priority;
+        auto subject=std::find_if(t.ids.begin(),t.ids.end(),[&](const auto& id){return matchesType(e.stories.at(id),type);});
+        if(subject!=t.ids.end()){auto id=*subject;while(members.count(id)){t.minimum.push_back(id);id=e.stories.at(id).replyTo;}std::reverse(t.minimum.begin(),t.minimum.end());}}
+    std::stable_sort(threads.begin(),threads.end(),[](const auto& a,const auto& b){if(a.draft!=b.draft)return a.draft;return a.score!=b.score?a.score>b.score:a.order<b.order;});
+    std::set<std::string> selected,selectedRoots;const auto draftCount=std::count_if(threads.begin(),threads.end(),[](const auto& t){return t.draft;});
+    const auto protectedCount=std::count_if(threads.begin(),threads.end(),[&](const auto& t){return t.draft||e.stories.at(t.root).important;});
+    const size_t rootTarget=(std::min)(nationalCardLimit,(std::max)(size_t(200),static_cast<size_t>((std::max)(draftCount,protectedCount))));
+    auto take=[&](const Thread& t){if(t.minimum.empty()||selectedRoots.count(t.root)||selected.size()+t.minimum.size()>nationalCardLimit)return;selected.insert(t.minimum.begin(),t.minimum.end());selectedRoots.insert(t.root);};
+    for(const auto& t:threads)if(t.draft)take(t);
+    for(const auto& t:threads)if(selectedRoots.size()<rootTarget)take(t);
+    for(const auto& id:candidates){const auto& p=e.stories.at(id);if(selected.size()<nationalCardLimit&&!p.replyTo.empty()&&selected.count(p.replyTo))selected.insert(id);}
+    for(const auto& t:threads)if(selected.size()<nationalCardLimit)take(t);
+    std::vector<std::string> result;for(const auto& id:candidates)if(selected.count(id))result.push_back(id);return result;
+}
 inline std::shared_ptr<const Feed> selectFeed(std::shared_ptr<const Catalog> catalog,size_t week,unsigned scope,unsigned type=0,size_t page=0){
     if(!catalog||week>=catalog->weeks.size()||scope>=scopesFor(*catalog).size()||type>=typeLabels.size())throw std::runtime_error("Invalid single-week feed selection");
     const auto& e=catalog->weeks.at(week);auto f=std::make_shared<Feed>();f->catalog=catalog;f->edition=week;f->scope=scope;f->type=type;f->key=e.key;f->page=page;
     f->label="Social Media";if(type)f->label+=" - "+std::string(typeLabels[type]);
-    const auto& option=scopesFor(*catalog).at(scope);const auto limit=scopeLimit(option.key);
+    const auto& option=scopesFor(*catalog).at(scope);
     const auto broad=e.views.find(option.key=="all"?(e.views.count("all:expanded")?"all:expanded":e.views.count("all:default")?"all:default":"all"):option.key);
-    std::vector<std::string> candidates=broad==e.views.end()?std::vector<std::string>{}:feedCandidates(e,broad->second,type),first;
+    std::vector<std::string> candidates=broad==e.views.end()?std::vector<std::string>{}:feedCandidates(e,broad->second,type);
     // One continuous native list per edition. Generation owns the team budget;
-    // scope/category selection must not silently hide eligible stories.
-    (void)limit;(void)page;f->page=0;f->pages=1;f->total=candidates.size();
+    // National is a bounded importance-ranked display; the stored archive is retained.
+    (void)page;f->page=0;f->pages=1;f->total=candidates.size();
     if(candidates.size()>32768)throw std::runtime_error("Social Media edition exceeds the verified native list limit");
+    if(option.key=="national")candidates=nationalSelection(e,candidates,type);
     for(const auto& id:candidates)f->posts.push_back(e.stories.at(id));
+    for(size_t i=0;i<f->posts.size();++i)f->posts[i].displayStamp=f->posts[i].stamp+" | "+std::to_string(i+1)+"/"+std::to_string(f->posts.size());
     if(f->posts.empty())f->posts.push_back({"Beyond the Field","@DynastyEnhancer","No "+option.label+(type?" "+std::string(typeLabels[type]):"")+" stories match this weekly edition. Broader scopes and other categories can contain different news.","News",79,598});
     return f;
 }
@@ -138,7 +165,7 @@ inline std::shared_ptr<const Feed> decodeFeed(const nlohmann::json& j){
         }
         for(const auto& p:w.at("stories")){
             const auto stamp=storyLabel(p);
-            FeedPost post{p.at("author").get<std::string>(),p.at("handle").get<std::string>(),p.at("body").get<std::string>(),stamp,p.at("imageLibrary").get<int>(),p.at("imageValue").get<int>()};post.category=p.value("category",std::string());post.voice=p.value("voice",std::string());post.replyTo=p.value("replyTo",std::string());post.likes=p.value("likes",-1);post.uniformTeamLogo=p.value("uniformTeamLogo",-1);post.transaction=p.value("transaction",false);post.draftPick=p.value("draftPick",-1);post.draftRound=p.value("draftRound",0);post.bodyHeight=postHeight(post.body);post.displayAuthor=post.author+" ("+post.handle+")";post.displayLikes=post.likes>=0?compactCount(post.likes)+" likes":std::string();e.stories.emplace(p.at("id").get<std::string>(),std::move(post));
+            FeedPost post{p.at("author").get<std::string>(),p.at("handle").get<std::string>(),p.at("body").get<std::string>(),stamp,p.at("imageLibrary").get<int>(),p.at("imageValue").get<int>()};post.category=p.value("category",std::string());post.voice=p.value("voice",std::string());post.replyTo=p.value("replyTo",std::string());post.likes=p.value("likes",-1);post.uniformTeamLogo=p.value("uniformTeamLogo",-1);post.transaction=p.value("transaction",false);post.draftPick=p.value("draftPick",-1);post.draftRound=p.value("draftRound",0);post.priority=p.value("priority",0.0);post.important=p.value("essentialNews",false)||p.value("coverageExempt",false)||p.value("budgetProtected",false);post.bodyHeight=postHeight(post.body);post.displayAuthor=post.author+" ("+post.handle+")";post.displayLikes=post.likes>=0?compactCount(post.likes)+" likes":std::string();e.stories.emplace(p.at("id").get<std::string>(),std::move(post));
         }
         for(const auto& [key,view]:w.at("views").items())e.views[key]=view.get<std::vector<std::string>>();
         catalog->weeks.push_back(std::move(e));

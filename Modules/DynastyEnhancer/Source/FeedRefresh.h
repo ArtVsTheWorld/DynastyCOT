@@ -7,6 +7,7 @@
 #include <vector>
 #include <set>
 #include <array>
+#include <cmath>
 #include "../Vendor/json.hpp"
 namespace social::refresh {
 using Json=nlohmann::json;
@@ -69,6 +70,8 @@ inline void validate(const Json& j,const Json& config){
         if(j.value("catalogVersion",1)>=2&&(p.at("publication").at("phase")!=w.at("phase")||p.at("publication").at("season")!=w.at("season")))throw std::runtime_error("Story publication phase/season mismatch");
         if(!ids.insert(p.at("id").get<std::string>()).second)throw std::runtime_error("Duplicate feed post");
         for(const char* k:{"author","handle","body","stamp"})if(!p.at(k).is_string()||p.at(k).get_ref<const std::string&>().empty()||p.at(k).get_ref<const std::string&>().size()>512)throw std::runtime_error("Invalid feed text");
+        if(p.contains("priority")&&(!p.at("priority").is_number()||!std::isfinite(p.at("priority").get<double>())||std::abs(p.at("priority").get<double>()) > 1000000))throw std::runtime_error("Invalid editorial priority");
+        for(const char* flagKey:{"essentialNews","coverageExempt","budgetProtected"})if(p.contains(flagKey)&&!p.at(flagKey).is_boolean())throw std::runtime_error("Invalid editorial protection flag");
         if(p.contains("draftPick")){const auto pick=p.at("draftPick").get<int>(),round=p.at("draftRound").get<int>();if(p.value("category",std::string())!="draft"||p.value("voice",std::string())!="nflDraft"||!p.value("transaction",false)||pick<1||pick>224||round!=((pick-1)/32+1)||!draftPicks.insert(pick).second)throw std::runtime_error("Invalid or duplicate draft assignment");}
         if(p.at("imageLibrary").get<int>()<0||p.at("imageValue").get<int>()<0)throw std::runtime_error("Invalid feed avatar");
       }

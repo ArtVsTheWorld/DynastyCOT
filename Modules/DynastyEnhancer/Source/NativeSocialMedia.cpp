@@ -14,6 +14,7 @@
 #include <algorithm>
 #include "../Vendor/json.hpp"
 #include "FeedData.h"
+#include "AnalyticsBridge.h"
 #include "CurrentBindings.h"
 #include "NewsLayout.h"
 #include "NewsStyle.h"
@@ -502,8 +503,10 @@ bool appendContainer(ContainerProxy& proxy,const HubEntry& entry=cfbEntry){
     }
     note({{"event","social_hub_donor_missing"},{"panel",entry.panel},{"rows",proxy.captured}});return false;
 }
+#include "AnalyticsMenuBridge.h"
 void __fastcall containerHook(void* self,void* panel,void* out){
     Guard guard;auto name=argument(panel);const bool feedEnabled=socialEnabled();
+    if(analyticsmenu::containersFor(self,panel,out,name))return;
     const auto entry=hubEntry(name);
     if(!disabled&&uiReady&&!preflightRunning&&entry){configureNewsDropdowns(false);configureNewsPolish(false);}
     if(!disabled&&uiReady&&opened&&!preflightRunning&&entry){opened=false;configureNewsScroll(false);configureNewsFlow(false);alignNewsFrame(false);}
@@ -532,7 +535,7 @@ void populatePost(void* tile,unsigned number){
             // AllowFocus controls the card accent separately; DO_NOTHING keeps
             // the posts read-only even though the input route remains enabled.
             tileText(tile,"linkage","art_control.paneltile.NewsStoryTile");tileText(tile,"display",author.c_str());tileInt(tile,"Width",1200);tileInt(tile,"Height",(post.bodyHeight?post.bodyHeight:social::postHeight(post.body))+32);tileBool(tile,"isFocusable",true);tileBool(tile,"isInteractive",true);tileBool(tile,"ForceContainer",listFeed);
-            void* extra=makeObject();tileText(extra,"SubText",post.body.c_str());const auto& stamp=post.stamp;tileText(extra,"DateText",stamp.c_str());const auto likes=post.bodyHeight?post.displayLikes:post.likes>=0?social::compactCount(post.likes)+" likes":std::string();tileText(extra,"TertiaryText",likes.c_str());tileBool(extra,"UseJersey",post.uniformTeamLogo>=0);tileInt(extra,"UniformTeamLogo",post.uniformTeamLogo);tileInt(extra,"AltImageLibrary",92);tileInt(extra,"AltImageValue",post.uniformTeamLogo>=0?post.uniformTeamLogo+1:0);tileText(extra,"AltImageRenderType","SwappableImage");tileInt(extra,"ImageLibrary",post.imageLibrary);tileInt(extra,"ImageValue",post.imageValue);tileText(extra,"ImageRenderType","SwappableImage");tileInt(extra,"VisualStyle",2);tileBool(extra,"UseFrame",false);tileBool(extra,"AllowFocus",selectablePosts);tileBool(extra,"ShowDisableOverlay",false);tileInt(extra,"DisableButtonAlpha",0);tileInt(extra,"FillFocusAlpha",100);tileInt(extra,"FillUnFocusAlpha",100);tileInt(extra,"FillUnfocusAlpha",100);tileBool(extra,"StrokeEnabled",false);tileBool(extra,"SendAsData",true);tileBool(extra,"ImmediateUpdate",true);tileInt(tile,"VisualStyle",2);
+            void* extra=makeObject();tileText(extra,"SubText",post.body.c_str());const auto& stamp=post.displayStamp.empty()?post.stamp:post.displayStamp;tileText(extra,"DateText",stamp.c_str());const auto likes=post.bodyHeight?post.displayLikes:post.likes>=0?social::compactCount(post.likes)+" likes":std::string();tileText(extra,"TertiaryText",likes.c_str());tileBool(extra,"UseJersey",post.uniformTeamLogo>=0);tileInt(extra,"UniformTeamLogo",post.uniformTeamLogo);tileInt(extra,"AltImageLibrary",92);tileInt(extra,"AltImageValue",post.uniformTeamLogo>=0?post.uniformTeamLogo+1:0);tileText(extra,"AltImageRenderType","SwappableImage");tileInt(extra,"ImageLibrary",post.imageLibrary);tileInt(extra,"ImageValue",post.imageValue);tileText(extra,"ImageRenderType","SwappableImage");tileInt(extra,"VisualStyle",2);tileBool(extra,"UseFrame",false);tileBool(extra,"AllowFocus",selectablePosts);tileBool(extra,"ShowDisableOverlay",false);tileInt(extra,"DisableButtonAlpha",0);tileInt(extra,"FillFocusAlpha",100);tileInt(extra,"FillUnFocusAlpha",100);tileInt(extra,"FillUnfocusAlpha",100);tileBool(extra,"StrokeEnabled",false);tileBool(extra,"SendAsData",true);tileBool(extra,"ImmediateUpdate",true);tileInt(tile,"VisualStyle",2);
             objectValue(tile,"ExtraInfo",extra);releaseValue(extra);
             // Per-card logging is intentionally omitted from this hot UI callback.
 }
@@ -554,6 +557,7 @@ void appendArray(void* array,void* value){
 }
 void* __fastcall tileHook(void* self,void** out,void* panel,void* coords){
     Guard guard;const auto p=argument(panel),c=argument(coords);void* result=nullptr;
+    if(analyticsmenu::tilesFor(self,out,panel,p,c,result))return result;
     if constexpr(listFeed){
         if(!disabled&&opened&&p=="CM_NEWSSUB"&&(c=="1"||c=="2"&&sidebarAvailable())&&out){
             void* array=makeArray();if(!array){*out=nullptr;return out;}
@@ -664,12 +668,18 @@ void __fastcall infoString(InfoProxy* p,const char* k,const char* v){infoValue(p
 void* infoVt[]={reinterpret_cast<void*>(unmapped),reinterpret_cast<void*>(infoBool),reinterpret_cast<void*>(infoInt),reinterpret_cast<void*>(infoFloat),reinterpret_cast<void*>(infoString)};
 bool runPreflight();
 const char* socialDestination(){return socialEnabled()&&uiReady&&feedReady()&&newsLayoutUsable()&&ensureNewsModel()?"NEWS":"DO_NOTHING";}
-void __fastcall navInfoHook(void* self,void* arg,void* out){Guard guard;auto name=argument(arg);if(!disabled&&name=="NEWS_MENU"){const auto destination=socialDestination();Alias alias{aliasVt,destination};InfoProxy proxy{infoVt,out};navInfo(self,&alias,&proxy);if(strcmp(destination,"NEWS")==0)objectText(out,"Id","NEWS_MENU");}else navInfo(self,arg,out);
+void __fastcall navInfoHook(void* self,void* arg,void* out){Guard guard;auto name=argument(arg);if(!disabled&&name=="PLAYER_ANALYTICS"){
+    auto bridge=analyticsmenu::resolve();const bool ready=analyticsmenu::admitted&&bridge&&bridge->available();Alias alias{aliasVt,ready?"SEASON_STATS":"DO_NOTHING"};navInfo(self,&alias,out);if(ready)objectText(out,"Id","PLAYER_ANALYTICS");return;}
+    if(!disabled&&name=="NEWS_MENU"){const auto destination=socialDestination();Alias alias{aliasVt,destination};InfoProxy proxy{infoVt,out};navInfo(self,&alias,&proxy);if(strcmp(destination,"NEWS")==0)objectText(out,"Id","NEWS_MENU");}else navInfo(self,arg,out);
 #ifdef SOCIAL_PREFLIGHT_ONLY
     if(!disabled&&uiReady&&name=="HEISMAN_WATCH"&&!preflightAttempted.exchange(true))runPreflight();
 #endif
 }
-void __fastcall navRequestHook(void* self,unsigned user,const char* name,void* params){Guard guard;const auto began=GetTickCount64();bool selected=!disabled&&name&&strcmp(name,"NEWS_MENU")==0;
+void __fastcall navRequestHook(void* self,unsigned user,const char* name,void* params){Guard guard;const auto began=GetTickCount64();
+    auto bridge=analyticsmenu::resolve();const bool analyticsRequested=!disabled&&name&&strcmp(name,"PLAYER_ANALYTICS")==0;
+    if(analyticsRequested)name=analyticsmenu::admitted&&bridge&&bridge->open()?"SEASON_STATS":"DO_NOTHING";
+    else if(bridge)bridge->leave();
+    bool selected=!disabled&&name&&strcmp(name,"NEWS_MENU")==0;
     auto cancel=[&](const char* reason){note({{"event","news_navigation_cancelled"},{"reason",reason},{"destination","DO_NOTHING"}});navRequest(self,user,"DO_NOTHING",params);};
     // The native caller has already begun a navigation transaction. Silently
     // returning leaves it pending, so finish through its genuine inert action.

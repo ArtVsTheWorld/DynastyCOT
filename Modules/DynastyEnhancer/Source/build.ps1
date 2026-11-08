@@ -16,7 +16,7 @@ $analyticsCommon=@('/nologo','/O2','/MT','/W4','/WX','/EHsc','/std:c++17','/utf-
 $analyticsCommon+=('/I'+(Join-Path $analyticsSdk.FullName 'winrt'))
 Push-Location $analyticsOut
 try {
-    $socialDefines=@();if($ScrollTest){$socialDefines+='/DSOCIAL_SCROLL_TEST'};if($Preflight){$socialDefines+='/DSOCIAL_PREFLIGHT_ONLY'};if($ExperimentalFocus){$socialDefines+='/DSOCIAL_EXPERIMENTAL_FOCUS'};if($ReadOnlyFeed){$socialDefines+='/DSOCIAL_READ_ONLY_FEED'};if($DualDropdown){$socialDefines+='/DSOCIAL_DUAL_DROPDOWN'}
+    $socialDefines=@();if($NativeName -match '^DynastyEnhancerNative-cot-([0-9]+)$'){$socialDefines+=('/DCOT_ANALYTICS_BUILD_ID='+$Matches[1]+'ull')};if($ScrollTest){$socialDefines+='/DSOCIAL_SCROLL_TEST'};if($Preflight){$socialDefines+='/DSOCIAL_PREFLIGHT_ONLY'};if($ExperimentalFocus){$socialDefines+='/DSOCIAL_EXPERIMENTAL_FOCUS'};if($ReadOnlyFeed){$socialDefines+='/DSOCIAL_READ_ONLY_FEED'};if($DualDropdown){$socialDefines+='/DSOCIAL_DUAL_DROPDOWN'}
     & $analyticsCl @analyticsCommon @socialDefines /LD (Join-Path $PSScriptRoot 'NativeSocialMedia.cpp') ('/Fe:'+$NativeName+'.dll') /link @analyticsLib /INCREMENTAL:NO
     if($LASTEXITCODE -ne 0){throw 'Native Social Media build failed'}
     & $analyticsCl @analyticsCommon @socialDefines (Join-Path $analyticsRoot 'Tests/NativeSocialMediaTests.cpp') /Fe:NativeSocialMediaTests.exe /link @analyticsLib /INCREMENTAL:NO

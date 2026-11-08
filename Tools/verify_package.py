@@ -25,6 +25,7 @@ def main():
     sdk=Path(sys.argv[1]).resolve();meta=json.loads((ROOT/'Build/current-package.json').read_text());stage=Path(meta['stage'])
     doc=verify(stage)
     assert doc.get('socialRenderMode')=='native-post-containers','Unsupported Social Media rendering mode'
+    subprocess.run([sys.executable,str(ROOT/'Tests/test_analytics_packaging.py'),str(stage)],check=True)
     runtime_sources=0
     for item in doc['files']:
         rel=item['path'];source=None

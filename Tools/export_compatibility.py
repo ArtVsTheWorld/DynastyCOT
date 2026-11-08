@@ -25,7 +25,7 @@ def export():
             spec=importlib.util.spec_from_file_location(name,source);module=importlib.util.module_from_spec(spec);spec.loader.exec_module(module)
             regions=module.layout()['regions']
         if name=='DynastyEnhancer':
-            for file in ['CurrentBindings.h','RecruitingUiGates.h']:
+            for file in ['CurrentBindings.h','RecruitingUiGates.h','AnalyticsGates.h']:
                 p=ROOT/'Modules'/name/'Source'/file
                 for rva,body in re.findall(r'\{(0x[0-9a-fA-F]+),\s*\{([^}]+)\}\}',p.read_text()):
                     data=bytes(int(v,16) for v in re.findall(r'0x([0-9a-fA-F]+)',body))
@@ -38,10 +38,16 @@ def export():
     source=ROOT/'Modules/DynastyEnhancer/Source/NativeSocialMedia.cpp'
     for vt,slot,native in re.findall(r'\{(0x[0-9a-f]+),(0x[0-9a-f]+),(0x[0-9a-f]+),reinterpret_cast<void\*>',source.read_text()):
         spans.append(dict(module='DynastyEnhancer',rva=hex(int(vt,16)+int(slot,16)),length=8,kind='Social vtable slot',native=native))
+    analytics_source=ROOT/'Modules/DynastyEnhancer/Source/AnalyticsNative.h'
+    for vt,slot,native in re.findall(r'\{(0x[0-9a-f]+),(0x[0-9a-f]+),(0x[0-9a-f]+),reinterpret_cast<void\*>',analytics_source.read_text()):
+        spans.append(dict(module='DynastyEnhancer',rva=hex(int(vt,16)+int(slot,16)),length=8,kind='Analytics dedicated vtable slot',native=native))
     return dict(format=1,gameLayout='October 29, 2026 candidate',wholeExeHashGate=False,
         scope='Static source inventory: validation ranges, exact extracted spans, all address references and source contracts. Dynamic UI asset offsets and symbolic patches remain visible in source lines; this is not live compatibility certification.',
         modules=modules,extractedPatchSpans=spans,sourceHashes=inputs,
         sharedContracts=[
+            dict(id='analytics-spreadsheet-dispatch',owners=['DynastyEnhancer'],
+                 policy='Existing Fog owner dispatches Analytics columns/rows/close. Existing Social owner dispatches navigation through a versioned exact-sibling in-process API. No duplicate ownership or arbitrary hook chaining.',
+                 evidence='Modules/DynastyEnhancer/Tests/AnalyticsIntegrationTests.cpp'),
             dict(id='practice-text-setter',rva='0x25a3e60',patchLength=15,validationLength=32,
                  owners=['DrivePractice','DynastyEnhancer'],policy='Exact known Practice entry/code/data contract; normalize local fingerprint buffer only; reject unknown detours',
                  source='Compatibility/PracticeTextSetter.generated.h',evidence='Tests/PracticeContractChecks.cpp'),

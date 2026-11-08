@@ -4,14 +4,16 @@ Small additions to offline Dynasty, packaged as one MMC plugin with four indepen
 
 | Module | What it adds |
 |---|---|
-| Beyond the Field | A livelier social feed, scouting fog, letter grades, rating colors and clearer money displays. |
+| Beyond the Field | Social posts, PFF-style player grades, scouting fog, letter grades, rating colors and clearer money. |
 | Gameday Atmosphere | Crowds that arrive, react and travel with the matchup. |
 | Extra Settings | More offline Dynasty controls, including clocks saved separately for each Dynasty. |
 | Expanded Practice | Full drives and scrimmages from the normal practice menu. |
 
 This project publishes **test prereleases**. The `-private` version suffix is retained from the development package format; the repository and its authorized prerelease downloads are public. Passing automated checks does not establish live-game or overhaul compatibility. See [live acceptance](LIVE-ACCEPTANCE.md) and the release's compatibility notes before testing.
 
-The [0.1.8 Social Media hotfix](docs/verification/0.1.8-private.md) restores post rendering after the blank-page report; its live acceptance remains pending.
+The local [0.1.9 candidate](docs/release/0.1.9-private.md) adds native Player Analytics, bounds National to 250 importance-selected cards and restores compact numbering. [Hot reload remains an audit/recommendation](docs/hot-reload-template-review.md), with no prototype included.
+
+The 0.1.8 Social Media rendering fix remains in place; the unsupported list/sidebar replacement stays disabled.
 
 The local, unpublished [0.1.7 candidate results](docs/verification/0.1.7-private.md) cover the compact installer and weekly feed changes, including remaining acceptance limits.
 

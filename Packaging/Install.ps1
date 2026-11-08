@@ -259,7 +259,12 @@ try{
  $payload+=Json-Payload $receiptPath ([ordered]@{format=1;version=$manifest.version;files=$ownedFiles}) $false
  foreach($file in $payload | Where-Object {$_.path -ne 'Plugins/DynastyCOT.dll'}){Write-Payload $file}
  Fault 'AfterPayload'
- foreach($name in @('DynastyEnhancer.dll','DynamicGamedayAtmosphere.dll','OfflineDynastySettings.dll','SituationalPractice.dll')){
+ $analyticsEnabled=$true
+ $effectiveChoices=if($ModuleChoicesJson){$choices}elseif(Test-Path -LiteralPath $config){(Get-Content -LiteralPath $config -Raw | ConvertFrom-Json).modules}else{$null}
+ if($effectiveChoices -and $effectiveChoices.PSObject.Properties['DynastyEnhancer']){$analyticsEnabled=[bool]$effectiveChoices.DynastyEnhancer}
+ $standaloneLoaders=@('DynastyEnhancer.dll','DynamicGamedayAtmosphere.dll','OfflineDynastySettings.dll','SituationalPractice.dll')
+ if($analyticsEnabled){$standaloneLoaders+='PlayerAnalytics.dll'}
+ foreach($name in $standaloneLoaders){
   $path='Plugins/'+$name;$target=Resolve-Owned $MmcRoot $path
   if(Test-Path -LiteralPath $target -PathType Leaf){
    Record-Target $path $false | Out-Null
@@ -269,7 +274,8 @@ try{
  # Retire only recognized old native payload names, never history or another mod.
  foreach($file in Get-ChildItem -LiteralPath (Join-Path $MmcRoot 'Plugins') -Recurse -File -Filter '*.dll'){
   $relative=$file.FullName.Substring($MmcRoot.Length+1).Replace('\','/')
-  if($relative -match '^Plugins/(DynastyEnhancer/Runtime-[^/]+/|DynamicGamedayAtmosphere/Runtime-[^/]+/)?(DynastyEnhancerNative[^/]*|DynastyEnhancerRecruitFog[^/]*|DynamicGamedayAtmosphereNative[^/]*|DynamicAttendanceNative[^/]*)[.]dll$'){
+  $oldAnalytics=$analyticsEnabled -and $relative -match '^Plugins/(PlayerAnalytics/Runtime-v0[.]1/)?PlayerAnalyticsNative-v0[.]1[.]dll$'
+  if($oldAnalytics -or $relative -match '^Plugins/(DynastyEnhancer/Runtime-[^/]+/|DynamicGamedayAtmosphere/Runtime-[^/]+/)?(DynastyEnhancerNative[^/]*|DynastyEnhancerRecruitFog[^/]*|DynamicGamedayAtmosphereNative[^/]*|DynamicAttendanceNative[^/]*)[.]dll$'){
    Record-Target $relative $false | Out-Null
    Remove-Item -LiteralPath $file.FullName -Force
   }

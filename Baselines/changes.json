@@ -37,6 +37,21 @@
       "reason": "Retain prior COT integration; 0.1.6 Beyond the Field: bounded content/selection/voices, native paging, persistent modeled recruit records, supported calendar/draft reference, exact AIO Notes/colors and numeric-preserving money redraw adapters."
     },
     {
+      "path": "Modules/DynastyEnhancer/Source/AnalyticsModel.h",
+      "sha256": "7871fd9173e0b76945fb302e0ecce9b0fcc8999104c71311837a5060ac9ba474",
+      "reason": "National 250-card native selection and compact counters; integrate production Analytics through existing COT hook owners and active Dynasty capture"
+    },
+    {
+      "path": "Modules/DynastyEnhancer/Source/AnalyticsNative.h",
+      "sha256": "d6ce44259258f98181f1e2281c563bc8c5a1c71346bb1f3e0b6b1a52ae42559f",
+      "reason": "National 250-card native selection and compact counters; integrate production Analytics through existing COT hook owners and active Dynasty capture"
+    },
+    {
+      "path": "Modules/DynastyEnhancer/Source/AnalyticsPage.h",
+      "sha256": "c16b4298fff43a19c56527f562621518b33614ad0e507e8ed82426505c9a1aa6",
+      "reason": "National 250-card native selection and compact counters; integrate production Analytics through existing COT hook owners and active Dynasty capture"
+    },
+    {
       "path": "Modules/DynastyEnhancer/Source/CurrencyBudgetUiPrograms.h",
       "sha256": "9c0b98ebb22f60931b3154721f460d2d553f83aec0d1c6f875cb24debf21fb11",
       "reason": "COT 0.1.3: independent Weekly Advance adapters with exact loader-pointer normalization, creation-page per-Dynasty options, requested defaults and fitted dollar prefixes"
@@ -78,13 +93,13 @@
     },
     {
       "path": "Modules/DynastyEnhancer/Source/FeedData.h",
-      "sha256": "edf40222221784adee2071d7f2320a8aa494b2a0fd6dd0b8553eb215102cb6b8",
-      "reason": "0.1.7: source-level weekly routine budget, complete continuous scope lists, concise native sidebar and header presentation."
+      "sha256": "0621059fca60b46b407db16abc4236b2075e2c883b429c562808a8518be237f9",
+      "reason": "Preserve real fractional priorities while bounding National native widgets and retaining compact counters"
     },
     {
       "path": "Modules/DynastyEnhancer/Source/FeedRefresh.h",
-      "sha256": "226453065c23a1328911266f082478c90832f9765fc9a0080e81f2b3b8e9f058",
-      "reason": "0.1.7: protect major news within routine budget; native continuous weekly views, bounded sidebar metadata and scope validation."
+      "sha256": "04074bdf6f59d6dfe0cb8f7ebb62e7dadbcf5670851b97bcf5f8edb88f555090",
+      "reason": "Preserve real fractional priorities while bounding National native widgets and retaining compact counters"
     },
     {
       "path": "Modules/DynastyEnhancer/Source/FogGapUiPrograms.h",
@@ -108,8 +123,8 @@
     },
     {
       "path": "Modules/DynastyEnhancer/Source/NativeSocialMedia.cpp",
-      "sha256": "ffac0154a9a074e64998c0b30dcde9bac1136e95ffdd4ff027886c147a999272",
-      "reason": "0.1.8 Social Media hotfix: restore native post containers; reject the unverified list build mode; validate real captured feed shape and retain Win32 diagnostics in isolated settings tests."
+      "sha256": "8f4793a7c08fc30b744288d241f6234976b1bacdef8530c7d9b025c03bc2bfe7",
+      "reason": "National 250-card native selection and compact counters; integrate production Analytics through existing COT hook owners and active Dynasty capture"
     },
     {
       "path": "Modules/DynastyEnhancer/Source/PlayerBlueprintUiPrograms.h",
@@ -163,18 +178,18 @@
     },
     {
       "path": "Modules/DynastyEnhancer/Source/RecruitingFog.cpp",
-      "sha256": "4d286db3de347fc0ba4e97b174666d80c9b44c91604d4b570e081d7be3a54260",
-      "reason": "Retain prior COT integration; 0.1.6 Beyond the Field: bounded content/selection/voices, native paging, persistent modeled recruit records, supported calendar/draft reference, exact AIO Notes/colors and numeric-preserving money redraw adapters."
+      "sha256": "2f2a47bf5ffba8cfd05d5bdff97082a0fb8223014e2e3f98ba2f53ae0602e859",
+      "reason": "National 250-card native selection and compact counters; integrate production Analytics through existing COT hook owners and active Dynasty capture"
     },
     {
       "path": "Modules/DynastyEnhancer/Source/build-recruiting-fog.ps1",
-      "sha256": "501ffae7ad7fbdc49c851aaf8387222b3f24d41b93ac79ca462fa81641d0c9de",
-      "reason": "Retain prior COT integration; 0.1.6 Beyond the Field: bounded content/selection/voices, native paging, persistent modeled recruit records, supported calendar/draft reference, exact AIO Notes/colors and numeric-preserving money redraw adapters."
+      "sha256": "24dac09be31c399e3e5b2170ded2bb944289969a052ce9c326605226d87b5ecf",
+      "reason": "Compile a shared native build ID and verify stable packaged Analytics sibling names without changing hook ownership"
     },
     {
       "path": "Modules/DynastyEnhancer/Source/build.ps1",
-      "sha256": "fdd61bcd1a636e2040d05a867c110c911c4fb46155944613653139ccc3afe7fd",
-      "reason": "0.1.8 Social Media hotfix: restore native post containers; reject the unverified list build mode; validate real captured feed shape and retain Win32 diagnostics in isolated settings tests."
+      "sha256": "59d875bd30f264ac7e97510463549e838ba0ee9aba29c4db4dd3a5231461ef7e",
+      "reason": "Compile a shared native build ID and verify stable packaged Analytics sibling names without changing hook ownership"
     },
     {
       "path": "Modules/DynastyEnhancer/Tests/CurrencyDisplayTests.h",
@@ -188,8 +203,8 @@
     },
     {
       "path": "Modules/DynastyEnhancer/Tests/NativeSocialMediaTests.cpp",
-      "sha256": "40b0e22682b4ea07aa5fe52ea6cf08568e0a73057eb63dfb0e7f4dcd10fe69bf",
-      "reason": "0.1.8 Social Media hotfix: restore native post containers; reject the unverified list build mode; validate real captured feed shape and retain Win32 diagnostics in isolated settings tests."
+      "sha256": "8a2bdc6990d4ce7ba5c3d502842925ad0f3d3f8c2954d9d584d62b395e424086",
+      "reason": "Verify both same-build COT Analytics admission and fail-closed unversioned standalone import builds"
     },
     {
       "path": "Modules/DynastyEnhancer/Tests/RecruitingFogTests.cpp",
@@ -368,8 +383,8 @@
     },
     {
       "path": "Modules/DynastyEnhancer/Tools/feed_selection.mjs",
-      "sha256": "365b03adb8ae54bd8e85f584429449e1f6ba4cf05f86ee97145b36021b509e98",
-      "reason": "0.1.7: preserve published news with a fifteen-root routine budget and complete user/board coverage; broader pipeline chatter joins the bounded mix."
+      "sha256": "61d47f51fc160e05ba19d6eef892147045a06035a3824c2ff6cdf515bab4d84c",
+      "reason": "National 250-card native selection and compact counters; integrate production Analytics through existing COT hook owners and active Dynasty capture"
     },
     {
       "path": "Modules/DynastyEnhancer/Tools/history_store.mjs",

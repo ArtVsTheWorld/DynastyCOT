@@ -13,6 +13,7 @@ $fogCl=Join-Path $fogTool.FullName 'bin/Hostx64/x64/cl.exe'
 $fogInc=@(('/I'+(Join-Path $fogTool.FullName 'include')),('/I'+(Join-Path $fogSdk.FullName 'ucrt')),('/I'+(Join-Path $fogSdk.FullName 'shared')),('/I'+(Join-Path $fogSdk.FullName 'um')))
 $fogLib=@(('/LIBPATH:'+(Join-Path $fogTool.FullName 'lib/x64')),('/LIBPATH:'+(Join-Path $fogKits ('Lib/'+$fogSdk.Name+'/ucrt/x64'))),('/LIBPATH:'+(Join-Path $fogKits ('Lib/'+$fogSdk.Name+'/um/x64'))))
 $fogFlags=@('/nologo','/O2','/MT','/W4','/WX','/EHsc','/std:c++17','/utf-8')+$fogInc
+$fogFlags+=('/DCOT_ANALYTICS_BUILD_ID='+$Name.Substring('DynastyEnhancerRecruitFog-p'.Length)+'ull')
 if($RecruitNotesProbe -and $RecruitNotesUi){throw 'Choose either the pass-through probe or Notes UI candidate'}
 if($RecruitNotesProbe){$fogFlags+='/DRECRUIT_NOTES_PROBE'}
 if($RecruitNotesUi){$fogFlags+='/DRECRUIT_NOTES_UI'}
@@ -80,6 +81,10 @@ if($RecruitNotesUi){
 }
 Push-Location $fogOut
 try{
+ & $fogCl @fogFlags (Join-Path $fogRoot 'Tests/AnalyticsIntegrationTests.cpp') /Fe:AnalyticsIntegrationTests.exe /link @fogLib /INCREMENTAL:NO
+ if($LASTEXITCODE -ne 0){throw 'Analytics integration test build failed'}
+ & .\AnalyticsIntegrationTests.exe
+ if($LASTEXITCODE -ne 0){throw 'Analytics integration checks failed'}
  & $fogCl @fogFlags (Join-Path $fogRoot 'Tests/RecruitingFogTests.cpp') /Fe:RecruitingFogTests.exe /link @fogLib /INCREMENTAL:NO
  if($LASTEXITCODE -ne 0){throw 'Recruiting Fog test build failed'}
  & .\RecruitingFogTests.exe

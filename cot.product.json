@@ -2,7 +2,7 @@
   "name": "DynastyCOT",
   "title": "DYNASTY COT by Ace",
   "author": "Ace",
-  "version": "0.1.8-private",
+  "version": "0.1.9-private",
   "stage": "public-test-prerelease",
   "installable": true,
   "modules": [
@@ -12,7 +12,7 @@
       "settingsMigration": "fresh-defaults",
       "preserveHistory": true,
       "displayName": "Beyond the Field",
-      "description": "Social posts, scouting fog, letter grades, rating colors and easy-to-read money."
+      "description": "Social posts, PFF-style player grades, scouting fog, rating colors and clearer money."
     },
     {
       "id": "GamedayAtmosphere",

@@ -67,6 +67,22 @@ for path in ['Plugins/DynamicGamedayAtmosphere/History/audience.txt','Plugins/Of
 installed=snapshot(upgrade);run(upgrade);check(snapshot(upgrade)==installed,'repeat installation changed user files')
 write(upgrade,'COT-Runtime/DynastyEnhancer/RuntimeHistory/101/history.json',b'newer COT history')
 before=snapshot(upgrade);run(upgrade);check(snapshot(upgrade)==before,'update conflicted with or reset newer COT history')
+# Integrated Analytics retires only its established loader/runtime, in the
+# existing transaction. Keep its exported data and unrelated similarly named DLLs.
+root=seed('AnalyticsMigration')
+analytics_paths=['Plugins/PlayerAnalytics.dll','Plugins/PlayerAnalytics/Runtime-v0.1/PlayerAnalyticsNative-v0.1.dll']
+for path in analytics_paths:write(root,path,b'previous standalone Analytics')
+write(root,'Plugins/PlayerAnalytics/Runtime-v0.1/analytics-data.json',b'preserved Analytics data')
+write(root,'Plugins/PlayerAnalytics/Runtime-v0.1/PlayerAnalyticsExperimental.dll',b'unrelated experimental plugin')
+before=snapshot(root);run(root)
+for path in analytics_paths:check(not (root/path).exists(),'standalone Analytics hook owner retained')
+check((root/'Plugins/PlayerAnalytics/Runtime-v0.1/analytics-data.json').read_bytes()==b'preserved Analytics data','Analytics data deleted')
+check((root/'Plugins/PlayerAnalytics/Runtime-v0.1/PlayerAnalyticsExperimental.dll').exists(),'unknown Analytics DLL removed')
+backup=sorted((root/'Plugins/DynastyCOT/Backups').iterdir())[0];run(root,'-Rollback',str(backup));check(snapshot(root)==before,'Analytics migration rollback changed old data/owners')
+root=seed('AnalyticsDisabled');write(root,'Plugins/PlayerAnalytics.dll',b'standalone owner')
+off_choices={'DynastyEnhancer':False,'GamedayAtmosphere':True,'ExtraDynastySettings':True,'DrivePractice':True}
+run(root,'-ModuleChoicesJson',json.dumps(off_choices));check((root/'Plugins/PlayerAnalytics.dll').read_bytes()==b'standalone owner','Beyond the Field Off retired standalone Analytics')
+root=seed('AnalyticsFailure');write(root,'Plugins/PlayerAnalytics.dll',b'standalone owner');before=snapshot(root);run(root,'-FaultAtStage','AfterLegacyDisable',success=False);check(snapshot(root)==before,'failed Analytics migration lost its old loader')
 # Failures at three commit boundaries restore every original managed/data file.
 for fault in ['AfterPayload','AfterLegacyDisable','AfterAdapter']:
  root=seed('Failure-'+fault);before=snapshot(root);run(root,'-FaultAtStage',fault,success=False)

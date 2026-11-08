@@ -6,6 +6,13 @@ ROOT=Path(__file__).resolve().parents[1]
 def digest(p):return hashlib.sha256(p.read_bytes()).hexdigest()
 def clean_adapter(source):
     return re.sub(r'^\[assembly:.*\]\s*\n','',source,flags=re.M)
+
+def analytics_build_id(social,fog):
+    s=re.fullmatch(r'DynastyEnhancerNative-cot-([0-9]+)[.]dll',Path(social).name)
+    f=re.fullmatch(r'DynastyEnhancerRecruitFog-p([0-9]+)[.]dll',Path(fog).name)
+    if not s or not f or s[1]!=f[1] or not 0<int(s[1])<2**64:
+        raise RuntimeError('Analytics requires a matched pair of source-built native payloads')
+    return s[1]
 def main():
     p=argparse.ArgumentParser()
     p.add_argument('--mmc-sdk',required=True)
@@ -19,6 +26,7 @@ def main():
         if digest(ROOT/rel)!=expected:raise RuntimeError('Rebuild native payloads after source change: '+rel)
     a.social_native=a.social_native or inputs['socialNative']
     a.fog_native=a.fog_native or inputs['fogNative']
+    analytics_build=analytics_build_id(a.social_native,a.fog_native)
     product=json.loads((ROOT/'cot.product.json').read_text())
     if not re.fullmatch(r'\d+\.\d+\.\d+-private',product['version']):raise RuntimeError('Expected a private product version')
     for name in ['FrostyCore.dll','FrostySdk.dll']:
@@ -63,6 +71,7 @@ def main():
     copy(node,'COT-Runtime/Shared/node.exe','DynastyEnhancerNews')
     copy(license_file,'LICENSES/Node-'+node_version+'.txt','DynastyEnhancerNews')
     for path in (de/'LICENSES').glob('*.txt'):copy(path,'LICENSES/'+path.name,'DynastyEnhancer')
+    copy(de/'Source/Analytics.NOTICES.txt','LICENSES/PlayerAnalytics-NOTICES.txt','DynastyEnhancer')
     copy(de/'Vendor/json.LICENSE.txt','LICENSES/nlohmann-json-MIT.txt','DynastyEnhancer')
     # Keep the established external-helper data layouts; only native DLLs need to
     # live outside the recursive Plugins scan.
@@ -134,7 +143,7 @@ def main():
     entries.append(dict(module='Core',path='Templates/owned-payloads.json',sha256=digest(ownership)))
     manifest=dict(format=1,product='DynastyCOT',version=product['version'],nodeVersion=node_version,
         createdUtc=stamp,files=[e for e in entries if not e['path'].startswith('resource:')],
-        embedded=[e for e in entries if e['path'].startswith('resource:')],liveAcceptance='pending',socialRenderMode=inputs['socialRenderMode'],
+        embedded=[e for e in entries if e['path'].startswith('resource:')],liveAcceptance='pending',socialRenderMode=inputs['socialRenderMode'],analyticsBridge=dict(abi=1,buildId=analytics_build),
         nativeInputs={key:dict(path=path,sha256=digest(ROOT/path)) for key,path in [('social',a.social_native),('fog',a.fog_native)]},
         sourceInputs={str(Path(f).relative_to(ROOT)):digest(Path(f)) for f in sources if Path(f).is_relative_to(ROOT)})
     (stage/'package-manifest.json').write_text(json.dumps(manifest,indent=2)+'\n')
