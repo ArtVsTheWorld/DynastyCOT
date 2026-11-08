@@ -1,4 +1,14 @@
+#include <iostream>
+#define WIN32_LEAN_AND_MEAN
+#include <windows.h>
+static BOOL WINAPI fixtureMoveFileExW(LPCWSTR from,LPCWSTR to,DWORD flags){
+    const auto result=MoveFileExW(from,to,flags);const auto error=GetLastError();
+    if(!result)std::cerr<<"Offline settings atomic-commit failure: Win32 "<<error<<"\n";
+    SetLastError(error);return result;
+}
+#define MoveFileExW fixtureMoveFileExW
 #include "../Source/RecruitingFog.cpp"
+#undef MoveFileExW
 #include <iostream>
 #include "../Source/RecruitNotes.h"
 #include "../Source/PlayerAbilityDescriptions.h"

@@ -22,7 +22,7 @@ foreach($name in $selected){
    'DynastyEnhancer' {
     & (Join-Path $root 'Tools/Refresh-PracticeContract.ps1')
     if($LASTEXITCODE -ne 0){throw 'Practice compatibility contract failed'}
-    & './Source/build.ps1' -NativeName ('DynastyEnhancerNative-cot-'+$buildId) -ListFeed
+    & './Source/build.ps1' -NativeName ('DynastyEnhancerNative-cot-'+$buildId)
     if($LASTEXITCODE -ne 0){throw 'Enhancer native build failed'}
     & './Source/build-recruiting-fog.ps1' -Name ('DynastyEnhancerRecruitFog-p'+$buildId) -RecruitNotesUi -PlayerFogPerf
     if($LASTEXITCODE -ne 0){throw 'Enhancer Fog build failed'}
@@ -31,7 +31,7 @@ foreach($name in $selected){
      $hashes['Modules/DynastyEnhancer/Source/'+$file.Name]=(Get-FileHash -LiteralPath $file.FullName).Hash.ToLowerInvariant()
     }
     $hashes['Compatibility/PracticeTextSetter.generated.h']=(Get-FileHash -LiteralPath (Join-Path $root 'Compatibility/PracticeTextSetter.generated.h')).Hash.ToLowerInvariant()
-    $inputs=@{socialNative=('Modules/DynastyEnhancer/Build/DynastyEnhancerNative-cot-'+$buildId+'.dll');fogNative=('Modules/DynastyEnhancer/Build/DynastyEnhancerRecruitFog-p'+$buildId+'.dll');sourceHashes=$hashes}
+    $inputs=@{socialNative=('Modules/DynastyEnhancer/Build/DynastyEnhancerNative-cot-'+$buildId+'.dll');fogNative=('Modules/DynastyEnhancer/Build/DynastyEnhancerRecruitFog-p'+$buildId+'.dll');socialRenderMode='native-post-containers';sourceHashes=$hashes}
     [IO.File]::WriteAllText((Join-Path $root 'cot.build-inputs.json'),($inputs|ConvertTo-Json -Depth 5),[Text.UTF8Encoding]::new($false))
    }
    'GamedayAtmosphere' { & './Source/Build.ps1' -Automatic }

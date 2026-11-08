@@ -17,7 +17,8 @@ def main():
     archive=Path(meta['archive'])
     if args.baseline:archive=ROOT/'Release/DynastyCOT-0.1.5-private.zip'
     version=json.loads(zipfile.ZipFile(archive).read('package-manifest.json'))['version']
-    older=ROOT/'Release/DynastyCOT-0.1.6-private.zip'
+    older=ROOT/'Release/DynastyCOT-0.1.7-private.zip'
+    if not older.exists():older=ROOT/'Release/DynastyCOT-0.1.6-private.zip'
     if not older.exists():older=ROOT/'Release/DynastyCOT-0.1.5-private.zip'
     # An older published ZIP is retained locally for the cross-version fixture.
     # Fresh checkouts without it use current twice; the report states that limit.

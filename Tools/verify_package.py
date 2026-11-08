@@ -24,6 +24,7 @@ def verify(stage):
 def main():
     sdk=Path(sys.argv[1]).resolve();meta=json.loads((ROOT/'Build/current-package.json').read_text());stage=Path(meta['stage'])
     doc=verify(stage)
+    assert doc.get('socialRenderMode')=='native-post-containers','Unsupported Social Media rendering mode'
     runtime_sources=0
     for item in doc['files']:
         rel=item['path'];source=None

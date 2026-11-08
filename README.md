@@ -11,6 +11,8 @@ Small additions to offline Dynasty, packaged as one MMC plugin with four indepen
 
 This project publishes **test prereleases**. The `-private` version suffix is retained from the development package format; the repository and its authorized prerelease downloads are public. Passing automated checks does not establish live-game or overhaul compatibility. See [live acceptance](LIVE-ACCEPTANCE.md) and the release's compatibility notes before testing.
 
+The [0.1.8 Social Media hotfix](docs/verification/0.1.8-private.md) restores post rendering after the blank-page report; its live acceptance remains pending.
+
 The local, unpublished [0.1.7 candidate results](docs/verification/0.1.7-private.md) cover the compact installer and weekly feed changes, including remaining acceptance limits.
 
 Read the [candidate verification](RC-VERIFICATION.md), [full-season tweet audit](Modules/DynastyEnhancer/Docs/RC016-REVIEW.md) and [before/after examples](Modules/DynastyEnhancer/Docs/RC016-SAMPLES.md) for what improved and what remains weak.

@@ -108,8 +108,8 @@
     },
     {
       "path": "Modules/DynastyEnhancer/Source/NativeSocialMedia.cpp",
-      "sha256": "270e246620bb2280c29023e6881fe42b910ece125ec7b9347dde723b29eeb77f",
-      "reason": "0.1.7: protect major news within routine budget; native continuous weekly views, bounded sidebar metadata and scope validation."
+      "sha256": "ffac0154a9a074e64998c0b30dcde9bac1136e95ffdd4ff027886c147a999272",
+      "reason": "0.1.8 Social Media hotfix: restore native post containers; reject the unverified list build mode; validate real captured feed shape and retain Win32 diagnostics in isolated settings tests."
     },
     {
       "path": "Modules/DynastyEnhancer/Source/PlayerBlueprintUiPrograms.h",
@@ -172,6 +172,11 @@
       "reason": "Retain prior COT integration; 0.1.6 Beyond the Field: bounded content/selection/voices, native paging, persistent modeled recruit records, supported calendar/draft reference, exact AIO Notes/colors and numeric-preserving money redraw adapters."
     },
     {
+      "path": "Modules/DynastyEnhancer/Source/build.ps1",
+      "sha256": "fdd61bcd1a636e2040d05a867c110c911c4fb46155944613653139ccc3afe7fd",
+      "reason": "0.1.8 Social Media hotfix: restore native post containers; reject the unverified list build mode; validate real captured feed shape and retain Win32 diagnostics in isolated settings tests."
+    },
+    {
       "path": "Modules/DynastyEnhancer/Tests/CurrencyDisplayTests.h",
       "sha256": "427fa6876fa7eebaef8a3875d6aa854362ac76a4cdf7dec82e4361ca4fb30224",
       "reason": "COT 0.1.3: independent Weekly Advance adapters with exact loader-pointer normalization, creation-page per-Dynasty options, requested defaults and fitted dollar prefixes"
@@ -183,13 +188,13 @@
     },
     {
       "path": "Modules/DynastyEnhancer/Tests/NativeSocialMediaTests.cpp",
-      "sha256": "b6748e92b8d9a58ebc1758a5acb8721619f44cba0e41e37258d2799e590e275b",
-      "reason": "0.1.7: protect major news within routine budget; native continuous weekly views, bounded sidebar metadata and scope validation."
+      "sha256": "40b0e22682b4ea07aa5fe52ea6cf08568e0a73057eb63dfb0e7f4dcd10fe69bf",
+      "reason": "0.1.8 Social Media hotfix: restore native post containers; reject the unverified list build mode; validate real captured feed shape and retain Win32 diagnostics in isolated settings tests."
     },
     {
       "path": "Modules/DynastyEnhancer/Tests/RecruitingFogTests.cpp",
-      "sha256": "71c4e9c99bc555adafcb52f28ea46e2bc00477f6bbfb0eb89d4e98deae8396b6",
-      "reason": "COT 0.1.3: independently validate Weekly Advance and neighboring screens without relaxing native body/header checks"
+      "sha256": "66a5904fa9fe5bc3e1f66778a493a69801af42f81c241030c6ec21339de22037",
+      "reason": "0.1.8 Social Media hotfix: restore native post containers; reject the unverified list build mode; validate real captured feed shape and retain Win32 diagnostics in isolated settings tests."
     },
     {
       "path": "Modules/DynastyEnhancer/Tests/account_refresh.test.mjs",

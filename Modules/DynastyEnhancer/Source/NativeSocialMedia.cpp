@@ -38,11 +38,13 @@ unsigned feedPostCount=12;
 #else
 unsigned feedPostCount=1;
 #endif
+// 0.1.7 live regression: the substituted list group produced an empty News
+// screen despite valid feed data. Keep the previously working native tile
+// containers until a real control-instantiation contract is verified.
 #ifdef SOCIAL_LIST_FEED
-constexpr bool listFeed=true;
-#else
-constexpr bool listFeed=false;
+#error Unverified Social Media list groups are disabled; use native post containers.
 #endif
+constexpr bool listFeed=false;
 unsigned feedContainerCount=listFeed?1:feedPostCount;
 std::mutex feedMutex;
 std::shared_ptr<const social::Feed> latestFeed=social::statusFeed(feedPostCount),pageFeed=latestFeed;

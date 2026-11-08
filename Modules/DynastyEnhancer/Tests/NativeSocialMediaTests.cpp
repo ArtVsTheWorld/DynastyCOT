@@ -21,7 +21,7 @@ void __fastcall donorRows(void*,void* panel,void* out){
     lastDonorPanel=argument(panel);
     rowText(out,0,"panelId",lastDonorPanel.c_str());rowText(out,0,"tileCoords",lastDonorPanel=="cm_team"?"3":"5");
     rowSet(out,0,"UseTileDimensions",false,3);rowSet(out,0,"UseFrame",true,3);
-    rowSet(out,0,"Priority",0,4);
+    rowSet(out,0,"Priority",0,4);rowText(out,0,"linkage","");
 }
 unsigned filterForwardCalls=0;
 void __fastcall originalFilter(void*,void* out,void*,void*){++filterForwardCalls;rowText(out,0,"display","Original category");}
@@ -199,7 +199,8 @@ int main(int argc,char** argv){
             require(feed.rows.at(row).at("panelId")=="CM_NEWSSUB","Feed leaked donor panel identity");
             require(feed.rows.at(row).at("UseTileDimensions")==true,"Feed must size from post widgets");
         }
-        if constexpr(listFeed)require(feed.rows.at(0).at("linkage")=="art_control.group.PanelListContainer","List feed must use the native list control");
+        require(!listFeed&&feedContainerCount==feedPostCount,"Production Social Media must use one native container per post");
+        for(const auto& [row,fields]:feed.rows)require(fields.at("linkage")=="","Social Media replaced the working native container factory");
         {opened=false;Collector central{vt,{}};Alias hub{aliasVt,"cm_team"};containerHook(nullptr,&hub,&central);require(central.rows.size()==2&&admittedHubEntries["cm_team"],"Persistent hub did not admit a separate Social Media row");Collector other{vt,{}};Alias untouched{aliasVt,"OTHER_PANEL"};containerHook(nullptr,&untouched,&other);require(other.rows.size()==1&&!admittedHubEntries.count("OTHER_PANEL"),"Unrelated menus received the Social Media shortcut");opened=true;}
         filterData=originalFilter;
         Collector filter{vt,{}};Alias kind{aliasVt,"NEWS_CATEGORY"};filterDataHook(nullptr,&filter,&panel,&kind);
@@ -249,8 +250,8 @@ int main(int argc,char** argv){
                 auto summary=data;summary["weeks"][0]["sidebar"]=Json::array({{{"title","TRENDING"},{"lines",Json::array({"Verified result"})}}});validate(summary,config);
                 const bool savedOpened=opened;opened=true;auto saved=pageFeed;const auto count=feedPostCount,containersCount=feedContainerCount;pageFeed=social::decodeFeed(summary);feedPostCount=static_cast<unsigned>(pageFeed->posts.size());feedContainerCount=containerCount();
                 require(pageFeed->catalog->weeks[0].sidebar.size()==1,"Sidebar summary was lost during native decoding");
-                Collector columns{vt,{}};containerHook(nullptr,&panel,&columns);require(columns.rows.size()==(listFeed?2u:5u),"Sidebar did not receive its own native list");
-                if constexpr(listFeed)require(columns.rows.at(1).at("Width")==520&&columns.rows.at(1).at("PositionOffset")=="1220,0"&&columns.rows.at(0).at("Width")==1200,"Sidebar changed native main-column width or position");
+                Collector columns{vt,{}};containerHook(nullptr,&panel,&columns);require(columns.rows.size()==5&&!sidebarAvailable(),"Retained sidebar metadata must never replace or hide real posts");
+                for(const auto& [row,fields]:columns.rows)require(fields.at("linkage")=="","Summary metadata selected the unsupported list control");
                 pageFeed=saved;feedPostCount=count;feedContainerCount=containersCount;opened=savedOpened;
                 for(auto malformed:{Json::array({{{"title",""},{"lines",Json::array({"ok"})}}}),Json::array({{{"title","TRENDING"},{"lines",Json::array({std::string(257,'x')})}}}),Json::array({{{"title","TRENDING"},{"lines",Json::array({"1","2","3","4"})}}})}){auto invalid=summary;invalid["weeks"][0]["sidebar"]=malformed;bool refused=false;try{validate(invalid,config);}catch(...){refused=true;}require(refused,"Unbounded sidebar text/layout was accepted");}
             }
@@ -485,7 +486,7 @@ int main(int argc,char** argv){
         require(status->posts.size()==1&&status->key=="runtime-waiting","Startup must expose only a system status row");
         require(status->posts[0].author=="Beyond the Field"&&status->posts[0].stamp=="Status","Startup fallback must not masquerade as a social account");
         // An unsupported process must refuse activation before installing slots.
-        if(argc==3){auto config=social::refresh::readJson(argv[1]),data=social::refresh::readJson(argv[2]);social::refresh::validate(data,config);auto decoded=social::decodeFeed(data);require(decoded->catalog&&decoded->posts.size()<=30,"Actual catalog did not decode as a curated single-week feed");for(size_t week=0;week<decoded->catalog->weeks.size();++week)for(unsigned scope=0;scope<social::scopesFor(*decoded->catalog).size();++scope){auto view=social::selectFeed(decoded->catalog,week,scope);require(!view->posts.empty(),"Actual scope has no renderable native row");}std::cout<<"Actual catalog validated: "<<decoded->catalog->weeks.size()<<" publication weeks; every dynamic scope validated.\n";}
+        if(argc==3){auto config=social::refresh::readJson(argv[1]),data=social::refresh::readJson(argv[2]);social::refresh::validate(data,config);auto decoded=social::decodeFeed(data);require(decoded->catalog&&!decoded->posts.empty()&&decoded->posts.size()<=social::refresh::maximumEditionStories,"Actual catalog did not decode as a complete single-week feed");{auto saved=pageFeed;const auto count=feedPostCount,containerTotal=feedContainerCount;const bool wasOpened=opened;const auto originalContainers=containers;pageFeed=decoded;feedPostCount=static_cast<unsigned>(decoded->posts.size());feedContainerCount=containerCount();opened=true;containers=donorRows;Collector actual{vt,{}};Alias actualPanel{aliasVt,"CM_NEWSSUB"};containerHook(nullptr,&actualPanel,&actual);require(actual.rows.size()==decoded->posts.size(),"Captured live feed lost post containers");for(const auto& [row,fields]:actual.rows)require(fields.at("linkage")==""&&fields.at("tileCoords")==std::to_string(row+1),"Captured live feed used an unsupported container or wrong coordinate");pageFeed=saved;feedPostCount=count;feedContainerCount=containerTotal;opened=wasOpened;containers=originalContainers;}for(size_t week=0;week<decoded->catalog->weeks.size();++week)for(unsigned scope=0;scope<social::scopesFor(*decoded->catalog).size();++scope){auto view=social::selectFeed(decoded->catalog,week,scope);require(!view->posts.empty(),"Actual scope has no renderable native row");}std::cout<<"Actual catalog validated: "<<decoded->catalog->weeks.size()<<" publication weeks; every dynamic scope validated.\n";}
         std::cout<<"Passed: filtered CFB identity/order and typed ABI, missing-donor preservation, system-status fallback, "<<feedPostCount<<" posts in "<<feedContainerCount<<" feed containers, coordinate boundaries, scoped native category, exact layout correction/restoration and foreign ownership rejection.\n";
     }catch(const std::exception& e){std::cerr<<e.what()<<'\n';return 1;}
     return 0;

@@ -14,6 +14,7 @@ def main():
     p.add_argument('--fog-native')
     a=p.parse_args();sdk=Path(a.mmc_sdk).resolve();node=Path(a.node).resolve()
     inputs=json.loads((ROOT/'cot.build-inputs.json').read_text())
+    if inputs.get('socialRenderMode')!='native-post-containers':raise RuntimeError('Rebuild with the supported native Social Media post renderer')
     for rel,expected in inputs['sourceHashes'].items():
         if digest(ROOT/rel)!=expected:raise RuntimeError('Rebuild native payloads after source change: '+rel)
     a.social_native=a.social_native or inputs['socialNative']
@@ -133,7 +134,7 @@ def main():
     entries.append(dict(module='Core',path='Templates/owned-payloads.json',sha256=digest(ownership)))
     manifest=dict(format=1,product='DynastyCOT',version=product['version'],nodeVersion=node_version,
         createdUtc=stamp,files=[e for e in entries if not e['path'].startswith('resource:')],
-        embedded=[e for e in entries if e['path'].startswith('resource:')],liveAcceptance='pending',
+        embedded=[e for e in entries if e['path'].startswith('resource:')],liveAcceptance='pending',socialRenderMode=inputs['socialRenderMode'],
         nativeInputs={key:dict(path=path,sha256=digest(ROOT/path)) for key,path in [('social',a.social_native),('fog',a.fog_native)]},
         sourceInputs={str(Path(f).relative_to(ROOT)):digest(Path(f)) for f in sources if Path(f).is_relative_to(ROOT)})
     (stage/'package-manifest.json').write_text(json.dumps(manifest,indent=2)+'\n')
