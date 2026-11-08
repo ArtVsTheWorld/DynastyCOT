@@ -48,10 +48,17 @@ using Close=void(__fastcall*)(void*,int);
 using Info=void(__fastcall*)(void*,void*);
 using NavInfo=void(__fastcall*)(void*,void*,void*);
 using NavRequest=void(__fastcall*)(void*,unsigned,const char*,void*);
-using PlayerInfo=void*(__fastcall*)(void*,void**,void*);
 using DisabledRow=bool(__fastcall*)(void*,int);
-PlayerInfo playerInfo=nullptr;DisabledRow disabledRow=nullptr;
-std::atomic<unsigned> identitySamples{0};
+DisabledRow disabledRow=nullptr;
+using DecodeReference=unsigned(__fastcall*)(void*);
+using CardFactory=void*(__fastcall*)();
+using CardObject=void*(__fastcall*)(void*,void**);
+using CardBool=void(__fastcall*)(void*,const char*,bool);
+using CardInt=void(__fastcall*)(void*,const char*,int);
+using CardText=void(__fastcall*)(void*,const char*,const char*);
+DecodeReference decodeReference=nullptr;CardFactory cardFactory=nullptr;CardObject cardObject=nullptr;
+CardBool cardBool=nullptr;CardInt cardInt=nullptr;CardText cardText=nullptr;
+std::atomic<unsigned> identitySamples{0},cardSamples{0},cardMissSamples{0};
 using Encode=void(__fastcall*)(unsigned,void*,int*);
 Encode encodePrefix=nullptr,encodeValue=nullptr,encodeSuffix=nullptr;
 Columns columns=nullptr;Rows rows=nullptr;Count count=nullptr;Key key=nullptr;Init init=nullptr;Close close=nullptr;Info info=nullptr;NavInfo navInfo=nullptr;NavRequest navRequest=nullptr;
@@ -154,7 +161,7 @@ int rowForReference(unsigned packed){auto found=rowLookup.find(packed);return fo
 int __fastcall rowIndexHook(void* object,int id,void* arg){CallGuard cotCall;
     if(!owns(id))return nativeRowIndex(object,id,arg);
     auto text=argument(arg);struct Buffer{int capacity;char* value;bool allocated;}buffer{static_cast<int>(text.size()+1),text.data(),false};
-    unsigned decoded=reinterpret_cast<unsigned(__fastcall*)(void*)>(reinterpret_cast<uintptr_t>(GetModuleHandleW(nullptr))+0x376f6d0)(&buffer);
+    unsigned decoded=decodeReference(&buffer);
     std::lock_guard<std::mutex> lock(viewMutex);return rowForReference(decoded);
 }
 void __fastcall rowHook(void* object,void* out,int id,int row,void* cols){CallGuard cotCall;
@@ -183,19 +190,32 @@ void __fastcall keyHook(void* object,void* out,int id,int row){CallGuard cotCall
 void __fastcall initHook(void* object,int id,int type,void* initialFilters){CallGuard cotCall;if(opened&&type==27)source=id;init(object,id,type,initialFilters);}
 void __fastcall closeHook(void* object,int id){CallGuard cotCall;close(object,id);if(source==id){source=-1;opened=false;}}
 bool __fastcall disabledRowHook(void* object,int row){CallGuard cotCall;if(disabled||!opened)return disabledRow(object,row);std::lock_guard<std::mutex> lock(viewMutex);return row<0||static_cast<size_t>(row)>=page.at("rows").size();}
-void* __fastcall playerInfoHook(void* object,void** out,void* arg){CallGuard cotCall;
-    void* result=playerInfo(object,out,arg);
-    if(!disabled&&opened&&out&&*out){auto text=argument(arg);struct Buffer{int capacity;char* value;bool allocated;}buffer{static_cast<int>(text.size()+1),text.data(),false};auto b=reinterpret_cast<uintptr_t>(GetModuleHandleW(nullptr));unsigned decoded=reinterpret_cast<unsigned(__fastcall*)(void*)>(b+0x376f6d0)(&buffer);
-        std::lock_guard<std::mutex> lock(viewMutex);auto card=playerCards.find(decoded);if(card!=playerCards.end()){
-            for(const auto& [name,value]:card->second.items()){
-                if(value.is_boolean())reinterpret_cast<void(__fastcall*)(void*,const char*,bool)>(b+0x2b07670)(*out,name.c_str(),value.get<bool>());
-                else if(value.is_number_integer())reinterpret_cast<void(__fastcall*)(void*,const char*,int)>(b+0x2b075c0)(*out,name.c_str(),value.get<int>());
-                else if(value.is_string())reinterpret_cast<void(__fastcall*)(void*,const char*,const char*)>(b+0x25a3e60)(*out,name.c_str(),value.get_ref<const std::string&>().c_str());
-            }
-            note({{"event","native_analytics_portrait"},{"decoded",decoded},{"name",card->second.value("firstName",std::string())+" "+card->second.value("lastName",std::string())}});
-        }
+// Called by the existing Fog-owned roster-card callback, never a second hook.
+// Build a fresh native object for an actual player in this Analytics view. A
+// donor response may contain another player's fields or an empty -1 card.
+bool playerCard(void** out,void* arg,void*& result){
+    if(disabled||!nativeReady||!opened||!out)return false;
+    auto text=argument(arg);if(text.empty()){
+        if(cardMissSamples.fetch_add(1)<8)note({{"event","native_analytics_card_deferred"},{"reason","unsupported or empty native player key"}});
+        return false;
     }
-    return result;
+    struct Buffer{int capacity;char* value;bool allocated;}buffer{static_cast<int>(text.size()+1),text.data(),false};
+    const unsigned decoded=decodeReference(&buffer);
+    std::lock_guard<std::mutex> lock(viewMutex);auto card=playerCards.find(decoded);
+    if(!rowLookup.count(decoded)||card==playerCards.end()){
+        if(cardMissSamples.fetch_add(1)<8)note({{"event","native_analytics_card_deferred"},{"reason","key is not in this Analytics view"},{"reference",decoded}});
+        return false;
+    }
+    auto* factory=cardFactory();if(!factory){*out=nullptr;result=out;return true;}
+    result=cardObject(factory,out);
+    if(!*out)return true; // Preserve native allocation-failure semantics.
+    for(const auto& [name,value]:card->second.items()){
+        if(value.is_boolean())cardBool(*out,name.c_str(),value.get<bool>());
+        else if(value.is_number_integer())cardInt(*out,name.c_str(),value.get<int>());
+        else if(value.is_string())cardText(*out,name.c_str(),value.get_ref<const std::string&>().c_str());
+    }
+    if(cardSamples.fetch_add(1)<16)note({{"event","native_analytics_portrait"},{"decoded",decoded},{"name",card->second.value("firstName",std::string())+" "+card->second.value("lastName",std::string())}});
+    return true;
 }
 void __fastcall syncHook(void* object,int id,int type){CallGuard cotCall;if(opened&&id>=0&&id<64){sourceTypes.at(id)=type;note({{"event","native_analytics_source"},{"id",id},{"type",type}});}syncInit(object,id,type);}
 void __fastcall beginHook(void* object,int id,int type){CallGuard cotCall;if(opened&&id>=0&&id<64){sourceTypes.at(id)=type;note({{"event","native_analytics_begin"},{"id",id},{"type",type}});}beginUpdate(object,id,type);}
@@ -245,7 +265,6 @@ struct Binding{uintptr_t vt,offset,rva;void* hook;void** slot=nullptr;};
 Binding bindings[]={
  {0xbaa78b8,0x38,0x78edb60,reinterpret_cast<void*>(infoHook)},
  {0xbaa78b8,0x98,0x78f0a50,reinterpret_cast<void*>(disabledRowHook)},
- {0xbab13f0,0x50,0x79411c0,reinterpret_cast<void*>(playerInfoHook)},
  {0xbacd668,0xb0,0x7a89b50,reinterpret_cast<void*>(countHook)},
  {0xbacd668,0x78,0x7a89180,reinterpret_cast<void*>(keyHook)},
  {0xbacd668,0x80,0x7a892d0,reinterpret_cast<void*>(rowIndexHook)},
@@ -276,7 +295,9 @@ void install(uintptr_t b){
     syncInit=reinterpret_cast<SyncInit>(b+0x7a88b70);beginUpdate=reinterpret_cast<SyncInit>(b+0x7a88a60);colData=reinterpret_cast<ColData>(b+0x7a88e90);filter=reinterpret_cast<Filter>(b+0x7a896a0);asyncFilter=reinterpret_cast<Filter>(b+0x7a89770);
     nativeSort=reinterpret_cast<Sort>(b+0x7a89880);nativeSortInfo=reinterpret_cast<SortInfo>(b+0x7a899d0);nativeRowIndex=reinterpret_cast<RowIndex>(b+0x7a892d0);
     encodePrefix=reinterpret_cast<Encode>(b+0x8076300);encodeValue=reinterpret_cast<Encode>(b+0x8076180);encodeSuffix=reinterpret_cast<Encode>(b+0x8079e70);
-    playerInfo=reinterpret_cast<PlayerInfo>(b+0x79411c0);disabledRow=reinterpret_cast<DisabledRow>(b+0x78f0a50);
+    disabledRow=reinterpret_cast<DisabledRow>(b+0x78f0a50);decodeReference=reinterpret_cast<DecodeReference>(b+0x376f6d0);
+    cardFactory=reinterpret_cast<CardFactory>(b+0x3f0a1d0);cardObject=reinterpret_cast<CardObject>(b+0x8aec980);
+    cardBool=reinterpret_cast<CardBool>(b+0x2b07670);cardInt=reinterpret_cast<CardInt>(b+0x2b075c0);cardText=reinterpret_cast<CardText>(b+0x25a3e60);
     try{for(auto& x:bindings){if(!replace(reinterpret_cast<void*>(b+x.rva),x.hook,x.vt,x.offset))throw std::runtime_error("Native analytics ownership changed");x.slot=reinterpret_cast<void**>(b+x.vt+x.offset);}}
     catch(...){stop();throw;}
     nativeReady=true;note({{"event","native_analytics_active"},{"sharedHookOwners","existing COT dispatchers"},{"capture","active native Dynasty; on demand"}});

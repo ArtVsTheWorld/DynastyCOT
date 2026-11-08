@@ -21,6 +21,7 @@ bool read(uintptr_t at,void* out,size_t n){SIZE_T got=0;return at>=0x10000&&Read
 void note(Json){}
 bool replace(void*,void*,uintptr_t,uintptr_t){throw std::runtime_error("Tests must not install hooks");}
 #include "../Source/AnalyticsRuntime.h"
+#include "AnalyticsCardChecks.h"
 Json collected;int reserved=0,forwarded=0;std::vector<unsigned> encoded;
 template<class T>void __fastcall accept(void*,unsigned row,const char* key,T value){collected[std::to_string(row)][key]=value;}
 void __fastcall reserve(void*,int n){reserved=n;}
@@ -51,6 +52,10 @@ int main(int argc,char** argv){using namespace fixture;using namespace fixture::
  try{
   std::ifstream calibrationFile(std::filesystem::path(__FILE__).parent_path().parent_path()/"Source/analytics-baselines.json");Json calibration;calibrationFile>>calibration;check(analytics::calibration()==calibration,"Embedded calibration differs from the imported frozen source");
   auto raw=input(),unchanged=raw;auto result=analytics::live::dataset(raw);check(raw==unchanged,"Adapter changed captured records");
+  auto hometown=raw;hometown["records"]["5:0"]["v"]["PLYR_HOME_TOWN"]="Madison";hometown["records"]["5:0"]["v"]["PLYR_HOME_STATE"]="Wisconsin";
+  check(analytics::live::dataset(hometown)["roster"][0]["playerInfo"]["hometown"]=="Madison, Wisconsin","Card hometown discarded native city/state");
+  hometown["records"]["5:0"]["v"]["PLYR_HOME_STATE"]="";check(analytics::live::dataset(hometown)["roster"][0]["playerInfo"]["hometown"]=="Madison","Missing state invented a hometown suffix");
+  hometown["records"]["5:0"]["v"]["Position"]="LE";check(analytics::live::dataset(hometown)["roster"][0]["playerInfo"]["position"]=="LEDG","Card position differs from native Analytics display label");
   check(result["leagueId"]==4294967295u&&result["userTeamIndex"]==14,"Unsigned LeagueID/user team mapping changed");
   check(result["rows"].size()==1&&result["issues"].empty(),"Repeated stat references duplicated games");check(result["teams"][2]["isFcs"]==true,"Native FCSTeams references were ignored");
   const auto grade=result["rows"][0]["analytics"];check(grade["grade"].is_number(),"Verified completed QB performance is not graded");check(!result["rows"][0]["stats"].contains("GAMERATING"),"Native GAMERATING entered grading input");
@@ -66,6 +71,7 @@ int main(int argc,char** argv){using namespace fixture;using namespace fixture::
   check(teams.front().first==analytics::NationalTeam&&teams.size()==3,"National team choices include an FCS team");check(selectedTeam==14&&page["rows"].size()==2,"Native table does not start on user roster");
   check(page["rows"][0]["grade"].is_number()&&page["rows"][1]["grade"].is_null(),"Missing participation does not remain N/A");
   check(playerCards.at((5u<<17))["height"]=="6' 1\""&&playerCards.at((5u<<17))["weight"]==200,"Native card dimensions changed");
+  analyticscardtests::run(check,[](void** out,void* arg,void*& result){return playerCard(out,arg,result);});
   check(recordKey("5:0")=="000A0000","Native player-reference packing changed");bool rejected=false;try{recordKey("5:131072");}catch(...){rejected=true;}check(rejected,"Out-of-range record accepted");
   void* vt[]={nullptr,reinterpret_cast<void*>(reserve),nullptr,reinterpret_cast<void*>(accept<bool>),reinterpret_cast<void*>(accept<int>),reinterpret_cast<void*>(scalar),reinterpret_cast<void*>(accept<const char*>)};struct Target{void** vt;}target{vt};
   collected=Json::object();columnHook(nullptr,&target,0);check(collected.size()==8&&collected["5"]["display"]=="PFF GRADE"&&collected["6"]["display"]=="CLASSIFICATION","Native columns missing production grades/classification");
@@ -78,7 +84,7 @@ int main(int argc,char** argv){using namespace fixture;using namespace fixture::
   doubleStat["rows"][1]["statType"]="GameDefensiveStats";check(analytics::teamPage(doubleStat,14,0,1,"RegularSeason")["rows"].size()==2,"Incompatible position stats entered the weekly grade table");
   auto missingOwner=raw;missingOwner["records"]["4:0"]["v"]["IsRetired"]=true;rejected=false;try{analytics::live::dataset(missingOwner);}catch(...){rejected=true;}check(rejected,"Retired/missing user used a previous Dynasty");
   snapshotReady=true;nativeReady=true;check(!available()&&!open(),"Absent native Dynasty admitted a stale snapshot");leave();check(!opened&&source==-1,"Leaving native Analytics retained source ownership");
-  for(const auto& binding:bindings){check(!(binding.vt==0xbacd668&&(binding.offset==0x68||binding.offset==0x60))&&!(binding.vt==0xbaa78b8&&binding.offset==0x70)&&binding.vt!=0xbac8c40,"Analytics competes with a shared COT hook");}
+  for(const auto& binding:bindings){check(!(binding.vt==0xbacd668&&(binding.offset==0x68||binding.offset==0x60))&&!(binding.vt==0xbaa78b8&&binding.offset==0x70)&&binding.vt!=0xbac8c40&&binding.vt!=0xbab18c0,"Analytics competes with a shared COT hook");check(binding.vt!=0xbab13f0,"Analytics still intercepts the unrelated Dynasty information callback");}
   std::map<uintptr_t,std::vector<unsigned char>> nativeBytes;constexpr uintptr_t image=0x140000000;
   for(const auto& gate:analyticsGates)nativeBytes[image+gate.rva]={gate.bytes,gate.bytes+32};
   for(const auto& binding:bindings){auto address=image+binding.rva;std::vector<unsigned char> bytes(8);memcpy(bytes.data(),&address,8);nativeBytes[image+binding.vt+binding.offset]=bytes;}

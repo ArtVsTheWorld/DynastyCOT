@@ -43,8 +43,8 @@
     },
     {
       "path": "Modules/DynastyEnhancer/Source/AnalyticsNative.h",
-      "sha256": "e79a706969ac12a00ae4c47952505d7314f9b3b9823ce4077c5b894842b64e53",
-      "reason": "Reuse the exact existing Practice text-hook attestation in Analytics without relaxing any foreign-owner/fingerprint gates"
+      "sha256": "9e8d894dc87215f4d10ccade1ec0051b09ee1922d8e5c63a8e5bd9947fdf6f2c",
+      "reason": "Correct Analytics player-card dispatch via Fog-owned getter, exact native map factories and bounded identity diagnostics; preserve grades, scope and native fallback"
     },
     {
       "path": "Modules/DynastyEnhancer/Source/AnalyticsPage.h",
@@ -183,8 +183,8 @@
     },
     {
       "path": "Modules/DynastyEnhancer/Source/RecruitingFog.cpp",
-      "sha256": "2f2a47bf5ffba8cfd05d5bdff97082a0fb8223014e2e3f98ba2f53ae0602e859",
-      "reason": "National 250-card native selection and compact counters; integrate production Analytics through existing COT hook owners and active Dynasty capture"
+      "sha256": "168e8cf4786ba94272067af37adf27b20ded931c8afa2622da89d956c56984c0",
+      "reason": "Correct Analytics player-card dispatch via Fog-owned getter, exact native map factories and bounded identity diagnostics; preserve grades, scope and native fallback"
     },
     {
       "path": "Modules/DynastyEnhancer/Source/build-recruiting-fog.ps1",
@@ -213,8 +213,8 @@
     },
     {
       "path": "Modules/DynastyEnhancer/Tests/RecruitingFogTests.cpp",
-      "sha256": "66a5904fa9fe5bc3e1f66778a493a69801af42f81c241030c6ec21339de22037",
-      "reason": "0.1.8 Social Media hotfix: restore native post containers; reject the unverified list build mode; validate real captured feed shape and retain Win32 diagnostics in isolated settings tests."
+      "sha256": "7a10bed684dad7688bbbfee20c3aaa36bb858b96cde7f3189b5c01c464eb9358",
+      "reason": "Correct Analytics player-card dispatch via Fog-owned getter, exact native map factories and bounded identity diagnostics; preserve grades, scope and native fallback"
     },
     {
       "path": "Modules/DynastyEnhancer/Tests/account_refresh.test.mjs",

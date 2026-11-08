@@ -86,6 +86,11 @@ struct FixtureView {
 #include "EnhancementCreationScopeTests.h"
 #include "IndependentGradeOptionsTests.h"
 #if defined(RECRUIT_NOTES_UI)
+namespace recruitingfog::runtime {
+#include "AnalyticsCardChecks.h"
+unsigned cardFallbacks=0;
+void* __fastcall cardFallback(void*,void** out,void*){++cardFallbacks;if(out){analyticscardtests::output={{"nativeFallback",true}};*out=&analyticscardtests::output;}return out;}
+}
 #include "CurrencyDisplayTests.h"
 #include "RecruitTransferClassTests.h"
 #endif
@@ -100,6 +105,16 @@ int main(){try{
     resume::transferClassLabelTests();
 #endif
     using namespace recruitingfog;
+#if defined(RECRUIT_NOTES_UI)
+    {
+        using namespace recruitingfog::runtime;
+        const auto saved=originalRosterPlayer;const auto savedOptions=enhancements::currentOptions.load();
+        enhancements::currentOptions=0;originalRosterPlayer=cardFallback;
+        analyticscardtests::run(require,[](void** out,void* argument,void*& result){const auto before=cardFallbacks;result=rosterPlayerHook(nullptr,out,argument);return cardFallbacks==before;});
+        originalRosterPlayer=saved;enhancements::currentOptions=savedOptions;
+        std::cout<<"Passed: Analytics cards through the sole Fog-owned roster callback, native output ABI, portraits/identity after National sorting, stale/missing/scope/disabled/allocation rejection and native fallback.\n";
+    }
+#endif
 #if defined(RECRUIT_NOTES_UI)
     {
         using namespace recruitingfog::presentation;

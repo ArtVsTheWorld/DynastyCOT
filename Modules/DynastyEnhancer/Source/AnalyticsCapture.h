@@ -12,7 +12,7 @@ inline std::set<std::string> fields(const std::string& name){
     if(name=="FranchiseServer_CareerFlow")return {"IsStageActive","IsStageAdvancing"};
     if(name=="FranchiseUser")return {"AdminLevel","IsRetired","Team"};
     if(name=="Team")return {"TeamIndex","DisplayName","LongName","TEAM_PREFIX_NAME","ShortName","TEAM_LOGO","TEAM_BACKGROUNDCOLORR","TEAM_BACKGROUNDCOLORG","TEAM_BACKGROUNDCOLORB","TEAM_BACKGROUNDCOLORR2","TEAM_BACKGROUNDCOLORG2","TEAM_BACKGROUNDCOLORB2"};
-    if(name=="Player")return {"FirstName","LastName","Position","TeamIndex","PLYR_PORTRAIT","OverallRating","JerseyNum","Height","Weight","SchoolYear","PLYR_HANDEDNESS","PLYR_HOME_STATE","InjuryStatus","RedshirtStatus","GameStats","PresentationId"};
+    if(name=="Player")return {"FirstName","LastName","Position","TeamIndex","PLYR_PORTRAIT","OverallRating","JerseyNum","Height","Weight","SchoolYear","PLYR_HANDEDNESS","PLYR_HOME_STATE","PLYR_HOME_TOWN","InjuryStatus","RedshirtStatus","GameStats","PresentationId"};
     if(name=="SeasonGame")return {"IsPractice","SeasonYear","SeasonWeek","SeasonWeekType","GameStatus","HomeTeam","AwayTeam"};
     if(name.find("[]")!=std::string::npos||name.rfind("Game",0)==0)return {};
     return {"TeamIndex"}; // Do not traverse unrelated recruiting/history graphs.
@@ -51,6 +51,10 @@ inline Json dataset(const Json& raw){
         const auto& p=record.at("v");const auto key=record.at("key").get<std::string>();auto name=p.value("FirstName",std::string())+" "+p.value("LastName",std::string());auto position=p.value("Position",std::string());int index=p.value("TeamIndex",255);
         if(index!=255){
             Json card={{"firstName",p.value("FirstName",std::string())},{"lastName",p.value("LastName",std::string())},{"position",position},{"portraitId",p.value("PLYR_PORTRAIT",0)},{"overall",p.value("OverallRating",0)},{"jerseyNumber",p.value("JerseyNum",0)},{"hometown",p.value("PLYR_HOME_STATE",std::string())},{"isInjured",p.value("InjuryStatus",std::string("Uninjured"))!="Uninjured"},{"redshirtStatus",p.value("RedshirtStatus",std::string())=="Previous"?1:0},{"isEmpty",false},{"showDealBreaker",false},{"showSeasonStats",false},{"showSkillGroups",false}};
+            card["position"]=displayPosition(position);
+            if(p.contains("PLYR_HOME_TOWN")&&p.at("PLYR_HOME_TOWN").is_string()&&!p.at("PLYR_HOME_TOWN").get_ref<const std::string&>().empty()){
+                const auto state=p.value("PLYR_HOME_STATE",std::string());card["hometown"]=p.at("PLYR_HOME_TOWN").get<std::string>()+(state.empty()?"":", "+state);
+            }
             const std::map<std::string,std::string> classes={{"Freshman","FR"},{"Sophomore","SO"},{"Junior","JR"},{"Senior","SR"}};auto year=p.value("SchoolYear",std::string());card["className"]=classes.count(year)?classes.at(year):year;
             if(p.contains("Height")){int height=p.at("Height").get<int>();card["height"]=std::to_string(height/12)+"' "+std::to_string(height%12)+"\"";}
             if(p.contains("Weight"))card["weight"]=p.at("Weight").get<int>()+160;

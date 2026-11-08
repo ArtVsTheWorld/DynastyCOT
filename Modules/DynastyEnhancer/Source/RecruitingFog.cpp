@@ -499,7 +499,8 @@ void __fastcall gridCloseHook(void* source,int form){
     CallGuard guard;auto state=ratingGridState.load();if(form==playerfog::gridStateForm(state))ratingGridState.compare_exchange_strong(state,0);originalGridClose(source,form);
 }
 void* __fastcall rosterPlayerHook(void* source,void** out,void* argument){
-    CallGuard guard;auto* result=originalRosterPlayer(source,out,argument);
+    CallGuard guard;void* result=nullptr;
+    if(!nativeanalytics::playerCard(out,argument,result))result=originalRosterPlayer(source,out,argument);
     if(!disabled&&(enhancements::options().roster||enhancements::options().colors)&&out&&*out){
         UiResponse view(read);
         const auto changed=playerfog::convert(view,reinterpret_cast<uintptr_t>(*out),playerfog::Surface::RosterNIL,[&](uintptr_t at,const char* key,const char* text){reinterpret_cast<void(__fastcall*)(void*,const char*,const char*)>(base+0x25a3e60)(reinterpret_cast<void*>(at),key,text);});
