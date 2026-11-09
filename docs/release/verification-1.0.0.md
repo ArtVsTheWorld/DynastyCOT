@@ -29,6 +29,7 @@ The release uses the exact source-built package Ace installed and tested after r
 | Setup window/engine | 36 actual GUI/engine checks, selected/full removal, folder detection and rollback |
 | Layout | 100/125/150% and bounded 1080/1152 working areas; final 150%/1080 capture reviewed, footer visible |
 | Optional updater | 95 discovery/download/install/rollback and failure-case checks in isolated fixtures |
+| Public anonymous release path | 8 real GitHub discovery/download/fixture install/rollback checks; public ZIP, installer and update metadata independently downloaded and SHA-256 matched |
 | Release metadata/privacy | 18 checks; private fixtures, paths and credentials excluded from public evidence |
 | Social Media | 461 Node tests passed in the final package validation |
 
@@ -48,6 +49,6 @@ The latest user confirmation is targeted acceptance, not independent observation
 - Broader home/neutral venues, scoring returns, long sessions, save/load and other game/overhaul versions remain useful regression coverage. AIO 1.4.1/TeamBuilder have targeted support, not blanket certification.
 - The earlier Play Now trace rejected an in-game card adapter bank despite an expected body hash. Final scope avoids first-time attachment outside Dynasty; its in-Dynasty-game coverage remains a review item. No fingerprint was bypassed.
 - Analytics is team-only. Its nonworking Player Stats shortcut stays hidden.
-- Public anonymous updater verification is performed after publication in an isolated fixture; it never installs into live MMC.
+- Public anonymous updater verification passed after publication in an isolated fixture; it never installs into live MMC. The first immediate requests saw a cached older release list; retrying after propagation discovered 1.0 without code changes. GitHub latest now resolves to stable v1.0.0.
 
 Use the [regression checklist](../../LIVE-ACCEPTANCE.md), [mode/scope investigation](1.0-offline-practice-playnow.md), [1.0 Discord post](dynasty-cot-1.0-discord.md), and [Gameday Update 4 post](gameday-update4-discord.md). Both Discord drafts stay below 2,000 characters. The [Gameday comparison](gameday-update4-code-review.md) uses the actual released 2.0.35 tag.
