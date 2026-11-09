@@ -8,13 +8,15 @@ def entries(doc):
         path=f['path'];module=f['module']
         if path.startswith(('COT-Runtime/','LICENSES/')) or path in (
             'Plugins/DynastyCOT.dll','Plugins/OfflineDynastySettings/OfflineDynastySettings.Persistence.exe',
-            'Plugins/SituationalPractice/SituationalPractice.Runtime.exe','Plugins/SituationalPractice/SituationalPractice.Runtime.pdb'):
+            'Plugins/OfflineDynastySettings/ExtraSettings.Persistence.exe',
+            'Plugins/SituationalPractice/SituationalPractice.Runtime.exe','Plugins/SituationalPractice/SituationalPractice.Runtime.pdb',
+            'Plugins/SituationalPractice/ExpandedPractice.Runtime.exe','Plugins/SituationalPractice/ExpandedPractice.Runtime.pdb'):
             if path.startswith('LICENSES/'):module='Core'
             if module=='DynastyEnhancerNews':module='DynastyEnhancer'
             yield dict(path=path,module=module,sha256=f['sha256'])
     for f in doc['embedded']:
         name=f['path'].removeprefix('resource:Attendance.')
-        match=re.fullmatch(r'DynamicGamedayAtmosphereNative-(\d+\.\d+\.\d+)\.dll',name)
+        match=re.fullmatch(r'(?:DynamicGamedayAtmosphereNative|GamedayAtmosphereNative)-(\d+\.\d+\.\d+)\.dll',name)
         if match:
             version=match[1]
             yield dict(path=f'DGA-Runtime/Runtime-{version}/{name}',module='GamedayAtmosphere',sha256=f['sha256'])
@@ -23,7 +25,7 @@ def entries(doc):
 
 if __name__=='__main__':
     files={}
-    for path in sorted((ROOT/'Release').glob('DynastyCOT-0.1.[01]-private.zip')):
+    for path in sorted((ROOT/'Release').glob('DynastyCOT-*.zip')):
         with zipfile.ZipFile(path) as z:
             for f in entries(json.loads(z.read('package-manifest.json'))):files[(f['path'],f['sha256'])]=f
     (ROOT/'Packaging/LegacyPayloads.json').write_text(json.dumps(dict(format=1,files=list(files.values())),indent=2)+'\n')

@@ -3,12 +3,14 @@ BANDS=[[(60,'F'),(70,'D'),(80,'C'),(90,'B'),(101,'A')],
        [(60,'F'),(63,'D-'),(67,'D'),(70,'D+'),(73,'C-'),(77,'C'),(80,'C+'),
         (83,'B-'),(87,'B'),(90,'B+'),(93,'A-'),(97,'A'),(101,'A+')],
        [(60,'F'),(70,'D'),(80,'C'),(90,'B'),(95,'A'),(101,'S')],
-       [(60,'Poor'),(70,'Fair'),(80,'Good'),(90,'Great'),(101,'Elite')]]
+       [(60,'POOR'),(70,'FAIR'),(80,'GOOD'),(90,'GREAT'),(101,'ELITE')]]
 BLIND_SCALE=4
 BLIND_LABEL='–'
 SCALE_COUNT=5
 COLORS={'A':0x1FE840,'B':0xA8D943,'C':0xFFD34D,'D':0xF68C2E,'F':0xF04444,
-        'S':0x409EFF,'Elite':0xBB70EF,'Great':0x529FF0,'Good':0x66CF75,'Fair':0xEDB34F,'Poor':0xEA6666}
+        'S':0x409EFF,'ELITE':0xBB70EF,'GREAT':0x529FF0,'GOOD':0x66CF75,'FAIR':0xEDB34F,'POOR':0xEA6666}
+# Accept older cached labels while new displays use capitals.
+for word in ['Poor','Fair','Good','Great','Elite']:COLORS[word]=COLORS[word.upper()]
 for tier in 'ABCD':
     for sign in '+-':COLORS[tier+sign]=COLORS[tier]
 def label(value,scale=0):return BLIND_LABEL if scale==BLIND_SCALE else next(text for upper,text in BANDS[scale] if value<upper)

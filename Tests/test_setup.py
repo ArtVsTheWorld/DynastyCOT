@@ -1,6 +1,6 @@
 """Exercise the shipped setup EXE's real WinForms buttons using fixtures only."""
 from pathlib import Path
-import datetime,hashlib,json,subprocess
+import datetime,hashlib,json,re,subprocess
 ROOT=Path(__file__).resolve().parents[1]
 def sha(p):return hashlib.sha256(p.read_bytes()).hexdigest()
 def snapshot(root):return {p.relative_to(root).as_posix():sha(p) for p in root.rglob('*') if p.is_file() and 'Backups' not in p.parts}
@@ -16,7 +16,6 @@ def main():
     put('Plugins/DynastyCOT.dll','previous COT adapter')
     put('Plugins/DynastyCOT/settings.json','{"format":1,"modules":{"DrivePractice":false}}')
     put('Plugins/OtherOverhaul.dll','unrelated overhaul')
-    put('Plugins/DynastyEnhancer.dll','previous standalone adapter')
     put('Plugins/DynastyEnhancer/Runtime-v103/RuntimeHistory/101/news.json','news history')
     before=snapshot(root);report=base/'ui-result.json'
     result=subprocess.run([str(exe),'--verify-payload'],capture_output=True,text=True,timeout=60)
@@ -38,11 +37,15 @@ def main():
         assert item['footerVisible'] and item['updateActionsVisible'] and item['allModulesReachable']
         assert item['fontScale']==item['scale'],'layout did not scale fonts with controls'
         assert item['footerParentContainment'] and item['footerTextFits'],'footer buttons are clipped by their parent or text bounds'
+        assert item['moduleDescriptionsFit'],'module description text is clipped'
         assert not item['inAppBrandImage'] and item['windowIconRetained'],'in-app image/icon regression'
         for page in ['install','updates','backups','activity']:
             image=layout/f"setup-{page}-{item['suffix']}.png";data=image.read_bytes();assert data[:8]==b'\x89PNG\r\n\x1a\n'
             dimensions[image.name]=struct.unpack('>II',data[16:24]);assert dimensions[image.name]==(item['width'],item['height'])
     assert {x['workingHeight'] for x in layouts if '-work' in x['suffix']}=={1080,1152}
+    product=json.loads((ROOT/'cot.product.json').read_text())
+    for module in product['modules']:
+        assert 1<=len(re.findall(r'[.!?](?:\s|$)',module['description']))<=3,'module descriptions must be one to three sentences'
     assert snapshot(root)==before,'layout capture changed fixture files'
     report_data=dict(version=meta['version'],exe=str(exe),setupSha256=sha(exe),payloadSha256=meta['payloadSha256'],
         uiChecks=ui['checks'],payloadVerified=True,fixtureRoundTrip=True,unsafeFixtureRejected=True,

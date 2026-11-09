@@ -5,10 +5,11 @@ const cotanalytics::Api* api=nullptr;
 uint64_t nextLookup=0;
 bool admitted=false;
 std::filesystem::path sibling(const std::filesystem::path& own){
-    auto name=own.filename().wstring();const std::wstring prefix=L"DynastyEnhancerNative-cot-";
+    auto name=own.filename().wstring();const std::wstring prefix=L"DynastyEnhancerNative-cot-",brandedPrefix=L"BeyondTheFieldNative-cot-";
     // Packaged payloads retain stable compatibility filenames. Development
     // builds use timestamped names; both must also match the compiled build ID.
-    if(name==L"DynastyEnhancerNative-v103.dll")return own.parent_path()/L"DynastyEnhancerRecruitFog-v1.dll";
+    if(name==L"BeyondTheFieldNative-v103.dll")return own.parent_path()/L"BeyondTheFieldRecruitFog-v1.dll";
+    if(name.rfind(brandedPrefix,0)==0&&own.extension()==L".dll")return own.parent_path()/(L"BeyondTheFieldRecruitFog-p"+name.substr(brandedPrefix.size()));
     if(name.rfind(prefix,0)==0&&own.extension()==L".dll")return own.parent_path()/(L"DynastyEnhancerRecruitFog-p"+name.substr(prefix.size()));
     return {};
 }

@@ -50,13 +50,14 @@ public:
     template<class Read>bool unchanged(Read read,uintptr_t* changed=nullptr)const{
         if(changed)*changed=0;
         if(!available())return false;
-        std::vector<unsigned char> buffer(chunkBytes);
+        std::vector<unsigned char> buffer;
         auto it=ranges.begin();
         while(it!=ranges.end()){
             const auto first=it;uintptr_t low=it->first,high=low+it->second.bytes.size();++it;
             while(it!=ranges.end()&&it->first<=((high-1)|uintptr_t(0xfff))&&it->first+it->second.bytes.size()-low<=chunkBytes){high=(std::max)(high,it->first+it->second.bytes.size());++it;}
             for(auto at=low;at<high;){
                 const auto count=static_cast<size_t>((std::min)(uintptr_t(chunkBytes),high-at));
+                if(buffer.size()<count)buffer.resize(count);
                 if(!read(at,buffer.data(),count))return false;
                 for(auto range=first;range!=it;++range){
                     const auto a=(std::max)(at,range->first),b=(std::min)(at+count,range->first+range->second.bytes.size());

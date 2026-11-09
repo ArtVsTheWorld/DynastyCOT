@@ -8,6 +8,12 @@ from build_player_card_ui import header_suffix,numeric_display_grade,team_module
 from recruit_notes_vm import Machine,UNDEFINED
 from grade_scales import label,COLORS
 
+# The shared policy feeds every UI producer, not just the full player card.
+for value in range(101):
+    expected='POOR' if value<60 else 'FAIR' if value<70 else 'GOOD' if value<80 else 'GREAT' if value<90 else 'ELITE'
+    assert label(value,3)==expected
+    assert COLORS[expected]==COLORS[expected.title()]
+
 def program(builder,scale,colors=True,fog=True,team=True):
     a=Assembler();builder(a);p=a.finish();code=bytearray(p.code)
     for at in p.scale_offsets+p.team_scale_offsets:code[at]=scale

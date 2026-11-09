@@ -1,4 +1,4 @@
-param([string]$Version='', [switch]$Automatic)
+param([string]$Version='', [switch]$Automatic, [switch]$CotBranding)
 $ErrorActionPreference='Stop'
 $product=Get-Content -LiteralPath (Join-Path $PSScriptRoot 'Product.json') -Raw | ConvertFrom-Json
 if(-not $Version){$Version='Release'+$product.version.Replace('.','')}
@@ -22,7 +22,8 @@ $crowdInclude=@(('/I'+(Join-Path $crowdTool.FullName 'include')),('/I'+(Join-Pat
 $crowdLib=@(('/LIBPATH:'+(Join-Path $crowdTool.FullName 'lib\x64')),('/LIBPATH:'+(Join-Path $crowdKits ('Lib\'+$crowdSdk.Name+'\ucrt\x64'))),('/LIBPATH:'+(Join-Path $crowdKits ('Lib\'+$crowdSdk.Name+'\um\x64'))))
 $productHeader='#pragma once'+[Environment]::NewLine+'#define GAMEDAY_VERSION "'+$product.version+'"'+[Environment]::NewLine+'#define GAMEDAY_SCHEMA '+$product.schema+[Environment]::NewLine
 Set-Content -LiteralPath (Join-Path $crowdOut 'ProductVersion.h') -Value $productHeader -Encoding ascii
-$buildInfo='namespace DynamicGamedayAtmosphere { internal static class BuildInfo { public const string Version="'+$product.version+'"; public const string AssemblyVersion="'+$product.version+'.0"; public const string NativeFile="DynamicGamedayAtmosphereNative-'+$product.version+'.dll"; } }'
+$nativePrefix=if($CotBranding){'GamedayAtmosphereNative-'}else{'DynamicGamedayAtmosphereNative-'}
+$buildInfo='namespace DynamicGamedayAtmosphere { internal static class BuildInfo { public const string Version="'+$product.version+'"; public const string AssemblyVersion="'+$product.version+'.0"; public const string NativeFile="'+$nativePrefix+$product.version+'.dll"; } }'
 Set-Content -LiteralPath (Join-Path $crowdOut 'BuildInfo.cs') -Value $buildInfo -Encoding ascii
 $crowdInclude+=('/I'+$crowdOut)
 $crowdBindings=Get-Content -LiteralPath (Join-Path $PSScriptRoot 'GameBindings.h') -Raw
@@ -44,7 +45,7 @@ try {
     }
     $crowdSource=Join-Path $PSScriptRoot 'Probe.cpp'
     $crowdDll='DynamicAttendanceProbe-'+$Version+'.dll'
-    if($Automatic){$crowdSource=Join-Path $PSScriptRoot 'NativeRuntime.cpp';$crowdDll='DynamicGamedayAtmosphereNative-'+$product.version+'.dll'}
+    if($Automatic){$crowdSource=Join-Path $PSScriptRoot 'NativeRuntime.cpp';$crowdDll=$nativePrefix+$product.version+'.dll'}
     & $crowdCl /nologo /O2 /MT /W4 /WX /EHsc /std:c++17 /DUNICODE /D_UNICODE /Zi @crowdInclude /LD $crowdSource @crowdObjects ('/Fe:'+$crowdDll) /link @crowdLib /DEBUG /INCREMENTAL:NO
     if($LASTEXITCODE -ne 0){throw 'Probe build failed'}
     if($Automatic){

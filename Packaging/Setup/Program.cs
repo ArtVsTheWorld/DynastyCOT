@@ -83,12 +83,12 @@ namespace DynastyCOT.Setup {
       }else if(phase==3){
        form.SetOperation(1);for(int i=0;i<4;i++)form.SetModule(i,i==3);form.ClickInstall();check(form.Busy,"selected uninstall did not start");phase=4;
       }else if(phase==4){
-       check(!File.Exists(Path.Combine(fixture.Root,"Plugins","SituationalPractice","SituationalPractice.Runtime.exe")),"selected practice helper retained");
+       check(!File.Exists(Path.Combine(fixture.Root,"Plugins","SituationalPractice","ExpandedPractice.Runtime.exe")),"selected practice helper retained");
        check(File.Exists(Path.Combine(fixture.Root,"Plugins","DynastyCOT.dll")),"selected removal removed host");
        check(!InstallerEngine.LoadModules(fixture.Root)["DrivePractice"]&&InstallerEngine.LoadModules(fixture.Root)["DynastyEnhancer"],"selected removal disabled other modules");
        form.ClickRestore();check(form.Busy,"selected removal undo did not start");phase=5;
       }else if(phase==5){
-       check(File.Exists(Path.Combine(fixture.Root,"Plugins","SituationalPractice","SituationalPractice.Runtime.exe")),"selected removal undo lost helper");
+       check(File.Exists(Path.Combine(fixture.Root,"Plugins","SituationalPractice","ExpandedPractice.Runtime.exe")),"selected removal undo lost helper");
        form.SetOperation(2);form.ClickInstall();check(form.Busy,"uninstall all did not start");phase=6;
       }else if(phase==6){
        check(!File.Exists(Path.Combine(fixture.Root,"Plugins","DynastyCOT.dll")),"all removal retained host");

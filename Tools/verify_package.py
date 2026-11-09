@@ -1,6 +1,6 @@
 """Verify the staged/private COT package without starting any engine."""
 from pathlib import Path,PurePosixPath
-import hashlib,json,shutil,subprocess,sys,datetime
+import hashlib,json,shutil,subprocess,sys,datetime,re
 ROOT=Path(__file__).resolve().parents[1]
 def hash_file(p):return hashlib.sha256(p.read_bytes()).hexdigest()
 def verify(stage):
@@ -38,13 +38,14 @@ def main():
     shutil.copytree(stage,fixture)
     compiler=Path(r'C:\Windows\Microsoft.NET\Framework64\v4.0.30319\csc.exe');exe=fixture.parent/(fixture.name+'.exe')
     subprocess.run([str(compiler),'/nologo','/platform:x64','/out:'+str(exe),str(ROOT/'Tests/PackageHostChecks.cs')],check=True)
-    subprocess.run([str(exe),str(fixture),str(sdk)],check=True)
+    host=subprocess.run([str(exe),str(fixture),str(sdk)],check=True,capture_output=True,text=True)
+    print(host.stdout,end='');assembly_checks=int(re.search(r'PASS: (\d+) actual COT assembly',host.stdout)[1])
     core_exe=fixture.parent/(fixture.name+'-Core.exe')
     subprocess.run([str(compiler),'/nologo','/platform:x64','/reference:System.Web.Extensions.dll','/out:'+str(core_exe),str(ROOT/'Core/CotConfiguration.cs'),str(ROOT/'Tests/CotCoreChecks.cs')],check=True)
     subprocess.run([str(core_exe)],check=True)
 
     # Verify exact manifests reject changed bytes and traversal before any install.
-    target=fixture/'Plugins/OfflineDynastySettings/OfflineDynastySettings.Persistence.exe';original=target.read_bytes()
+    target=fixture/'Plugins/OfflineDynastySettings/ExtraSettings.Persistence.exe';original=target.read_bytes()
     target.write_bytes(original+b'changed')
     try:verify(fixture)
     except ValueError:pass
@@ -58,7 +59,7 @@ def main():
     manifest.write_text(saved);verify(fixture)
     result=dict(atUtc=datetime.datetime.now(datetime.timezone.utc).isoformat(),stage=str(stage),
         manifestSha256=hash_file(stage/'package-manifest.json'),coreChecks=106,files=len(doc['files']),runtimeSourceChecks=runtime_sources,singleMmcEntry=True,hostChecks='passed',tamperRejection=True,pathRejection=True,
-        liveGameAccess=False,installerChecks='pending')
+        assemblyChecks=assembly_checks,liveGameAccess=False,installerChecks='pending')
     (ROOT/'Build/package-verification.json').write_text(json.dumps(result,indent=2)+'\n')
     print('PASS: staged package manifest, actual host, helpers, resources, tamper and traversal. No installation or game access.')
 if __name__=='__main__':main()

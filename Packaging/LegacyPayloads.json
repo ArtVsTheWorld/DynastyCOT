@@ -685,6 +685,921 @@
       "path": "Plugins/DynastyCOT.dll",
       "module": "Core",
       "sha256": "380d1e5be7dfcd8c08ccf3107b18b18b38fdefca45f34aa971aadfce2eeb19a9"
+    },
+    {
+      "path": "COT-Runtime/DynastyEnhancer/DynastyEnhancerNative-v103.dll",
+      "module": "DynastyEnhancer",
+      "sha256": "1a755afd44feadcfe171f38b7b3a1e4986325e883bac0e1beaa8d65344d1e6e8"
+    },
+    {
+      "path": "COT-Runtime/DynastyEnhancer/DynastyEnhancerRecruitFog-v1.dll",
+      "module": "DynastyEnhancer",
+      "sha256": "49379c2d770aba335b4c29dfe0b02ab3b64b0ffbee38b85822de95b940d338a8"
+    },
+    {
+      "path": "COT-Runtime/DynastyEnhancer/LoadDynastyEnhancer.exe",
+      "module": "DynastyEnhancer",
+      "sha256": "c8401c659cf4875e02f59d782a279da7202c86a7acbe3f23ec49c077231678b7"
+    },
+    {
+      "path": "COT-Runtime/DynastyEnhancer/Tools/account_presentation.mjs",
+      "module": "DynastyEnhancer",
+      "sha256": "e84412eebf4f9c362648d3e9e190d838ea95613dc21e858c2c3a643ea4d17996"
+    },
+    {
+      "path": "COT-Runtime/DynastyEnhancer/Tools/calendar_events.mjs",
+      "module": "DynastyEnhancer",
+      "sha256": "9c1c764ab8c02d435176c1889a73f802006f4ae21b051564f8ae7d0282d10f6a"
+    },
+    {
+      "path": "COT-Runtime/DynastyEnhancer/Tools/casual_events.mjs",
+      "module": "DynastyEnhancer",
+      "sha256": "56ce48860ab8c432f5cc68be2c4210aa04f242accf7517fa6211f8e75a651be5"
+    },
+    {
+      "path": "COT-Runtime/DynastyEnhancer/Tools/conference_language.mjs",
+      "module": "DynastyEnhancer",
+      "sha256": "a7ea570a95d32814723e3e4d1523a388f15ef26f80d8a8680736d0aa0c5a07f0"
+    },
+    {
+      "path": "COT-Runtime/DynastyEnhancer/Tools/draft_results.mjs",
+      "module": "DynastyEnhancer",
+      "sha256": "f077ccec8e57b52e5c49d93fb6eed79ae440d9d1563829f18bdc5c907b23b0c9"
+    },
+    {
+      "path": "COT-Runtime/DynastyEnhancer/Tools/edition_sidebar.mjs",
+      "module": "DynastyEnhancer",
+      "sha256": "4bd11eefedaeb3e763c464f1ea25ec2b07bdfa61562db850253cc116baa86eed"
+    },
+    {
+      "path": "COT-Runtime/DynastyEnhancer/Tools/editorial_policy.mjs",
+      "module": "DynastyEnhancer",
+      "sha256": "61826314b0ed1f028879b2ab3e7f39be904fc184bb70773945ac4b9421807fe7"
+    },
+    {
+      "path": "COT-Runtime/DynastyEnhancer/Tools/feed_engine.mjs",
+      "module": "DynastyEnhancer",
+      "sha256": "dc21bb97ce4789606ee29e529ba6b9985989c91636180ed4404431fab712a791"
+    },
+    {
+      "path": "COT-Runtime/DynastyEnhancer/Tools/feed_selection.mjs",
+      "module": "DynastyEnhancer",
+      "sha256": "61d47f51fc160e05ba19d6eef892147045a06035a3824c2ff6cdf515bab4d84c"
+    },
+    {
+      "path": "COT-Runtime/DynastyEnhancer/Tools/history_store.mjs",
+      "module": "DynastyEnhancer",
+      "sha256": "990a52941bfa8dbeeab7c45d7a67419ce6e1dba9f82aacdb340eeaaec7ab353d"
+    },
+    {
+      "path": "COT-Runtime/DynastyEnhancer/Tools/national_editorial.mjs",
+      "module": "DynastyEnhancer",
+      "sha256": "b38f9f03a4e416d05b4068a85d5c4147e475c748ff6768eeffbef5ad89cc10a7"
+    },
+    {
+      "path": "COT-Runtime/DynastyEnhancer/Tools/normalize_dynasty.mjs",
+      "module": "DynastyEnhancer",
+      "sha256": "92f116f0c0e931fa8081393042746dfbaf4b62bc5ee755f3a6d42cc7c01a9d0d"
+    },
+    {
+      "path": "COT-Runtime/DynastyEnhancer/Tools/recruit_account_name.mjs",
+      "module": "DynastyEnhancer",
+      "sha256": "eebdca760af0e2aa827db657015acdcacc0750c97823154a5770a9b676cd1da9"
+    },
+    {
+      "path": "COT-Runtime/DynastyEnhancer/Tools/recruit_game_records.mjs",
+      "module": "DynastyEnhancer",
+      "sha256": "3d80f32854b5630b9925262d22d5b65fd730e4be419f123da1b751674c662cd1"
+    },
+    {
+      "path": "COT-Runtime/DynastyEnhancer/Tools/runtime_archive.mjs",
+      "module": "DynastyEnhancer",
+      "sha256": "b3ff534903ce9459acae1d520612dcdc78d708703b3b1014d35be98105102c36"
+    },
+    {
+      "path": "COT-Runtime/DynastyEnhancer/Tools/runtime_lifecycle.mjs",
+      "module": "DynastyEnhancer",
+      "sha256": "335809238e69348a113c0ab0c3aa8ba44ab5124421f2f08e6a25f1f9ca562202"
+    },
+    {
+      "path": "COT-Runtime/DynastyEnhancer/Tools/social_discovery.mjs",
+      "module": "DynastyEnhancer",
+      "sha256": "e142691c1b258304522f04d6e6821e3ce0db71a8a527f99f335a4781db85268d"
+    },
+    {
+      "path": "COT-Runtime/DynastyEnhancer/Tools/story_authors.mjs",
+      "module": "DynastyEnhancer",
+      "sha256": "702c22c6e603331c6f50845ee90a205a587ee2f2cd8e322ace580ea013e4b607"
+    },
+    {
+      "path": "COT-Runtime/DynastyEnhancer/Tools/story_conversations.mjs",
+      "module": "DynastyEnhancer",
+      "sha256": "522a3a7f8a7a375678ceed62e250590384e0f0230bc875e8d02655eb3e4611a4"
+    },
+    {
+      "path": "COT-Runtime/DynastyEnhancer/Tools/story_engagement.mjs",
+      "module": "DynastyEnhancer",
+      "sha256": "50528c857444900b539d6548e1d8c85d399b3fadbddf3e1e22171583bd64ddb9"
+    },
+    {
+      "path": "COT-Runtime/DynastyEnhancer/Tools/story_events.mjs",
+      "module": "DynastyEnhancer",
+      "sha256": "0e60f033c481ec09221824324d5c634a0a9b0d65a4bcb3fd1d07051979a85404"
+    },
+    {
+      "path": "COT-Runtime/DynastyEnhancer/Tools/story_renderer.mjs",
+      "module": "DynastyEnhancer",
+      "sha256": "1277c32b5b68dff6fa099fd4c7e51bddd7b884d32bce6abd067923e7be0c811c"
+    },
+    {
+      "path": "COT-Runtime/DynastyEnhancer/Tools/story_templates.mjs",
+      "module": "DynastyEnhancer",
+      "sha256": "a4d230aae1e5c0cac8099bdcc0288c3cfbe055f078b64487de06c69dc901d24e"
+    },
+    {
+      "path": "COT-Runtime/DynastyEnhancer/Tools/story_variety.mjs",
+      "module": "DynastyEnhancer",
+      "sha256": "86b17c7fff2639942b831dbe0a9aaf8585a9b5e675f688344d3d17e69c9fcd3b"
+    },
+    {
+      "path": "COT-Runtime/DynastyEnhancer/Tools/voice_style.mjs",
+      "module": "DynastyEnhancer",
+      "sha256": "ccd375ea1171ba5249085cecb28be842d1feb0c2f43d4fc2b4861b8dc743aeb3"
+    },
+    {
+      "path": "COT-Runtime/DynastyEnhancer/Tools/weekly_budget.mjs",
+      "module": "DynastyEnhancer",
+      "sha256": "3508b46a6a4db36d01a7cdc9ce8e37fb87191582a4ef70d86ae90ae8aa6db6a7"
+    },
+    {
+      "path": "COT-Runtime/DynastyEnhancer/Tools/weekly_coverage.mjs",
+      "module": "DynastyEnhancer",
+      "sha256": "170b57c429c0c85eb63a25fa017577da6bb2a74f310b3a19bb27a1b28af5c212"
+    },
+    {
+      "path": "COT-Runtime/DynastyEnhancer/Tools/world_events.mjs",
+      "module": "DynastyEnhancer",
+      "sha256": "cec5aa2c4d7b441431320789d626d1d6941209a85f91437bfcc5c2306c715784"
+    },
+    {
+      "path": "COT-Runtime/DynastyEnhancer/Content/Runtime/archive-provenance.json",
+      "module": "DynastyEnhancer",
+      "sha256": "fc62252c4137ab4e30b0135a53dd909a8ddec7a2e5e65e77fae2fe865f3b1848"
+    },
+    {
+      "path": "COT-Runtime/DynastyEnhancer/Content/Runtime/beyond-field-pack.json",
+      "module": "DynastyEnhancer",
+      "sha256": "14967911fb0948ed5c5fafa1a993b79f89aa16a8570b52863585da4bb8590f56"
+    },
+    {
+      "path": "COT-Runtime/DynastyEnhancer/Content/Runtime/perspectives-pack.json",
+      "module": "DynastyEnhancer",
+      "sha256": "ed3bc3e4292aa47ad05c89cecf09f37dd7148e46ee4d2ae575a91c2909b46f30"
+    },
+    {
+      "path": "COT-Runtime/DynastyEnhancer/Content/Runtime/supplied-draft-order.json",
+      "module": "DynastyEnhancer",
+      "sha256": "3b523612d6327ee20ce6beb622c4095c0e4f026af8daec29a96a066250372599"
+    },
+    {
+      "path": "LICENSES/PlayerAnalytics-NOTICES.txt",
+      "module": "Core",
+      "sha256": "3346fbfb6e136bd0e9720cf23a8f76a349ac61209ba5cc3d83f6547cdeb0f5b4"
+    },
+    {
+      "path": "Plugins/OfflineDynastySettings/OfflineDynastySettings.Persistence.exe",
+      "module": "ExtraDynastySettings",
+      "sha256": "f5552283f0818c554625a435a67993cc8d99907149c3091192e41c70efc2efa1"
+    },
+    {
+      "path": "Plugins/SituationalPractice/SituationalPractice.Runtime.exe",
+      "module": "DrivePractice",
+      "sha256": "734a8b32d2ab09fa9ca94abd29ec7541e525cf82c382bf2841572faa4d292b26"
+    },
+    {
+      "path": "Plugins/SituationalPractice/SituationalPractice.Runtime.pdb",
+      "module": "DrivePractice",
+      "sha256": "7e0e5d37330de81c57788db5ecedb375e4f86b3cd95e0b6538d4a4fa2ebc2095"
+    },
+    {
+      "path": "Plugins/DynastyCOT.dll",
+      "module": "Core",
+      "sha256": "0932ea6be737ecd1eff33f14f04e4e8761abdcdb6a92f26e5d8af102a6e6f7d0"
+    },
+    {
+      "path": "DGA-Runtime/Runtime-2.1.9/DynamicGamedayAtmosphereNative-2.1.9.dll",
+      "module": "GamedayAtmosphere",
+      "sha256": "6b9d9509423065cba1a4ded673b6a69f9400bb482ed9c0d95a77a1922b7721f4"
+    },
+    {
+      "path": "DGA-Runtime/Runtime-2.1.9/DgaDiagnostics.exe",
+      "module": "GamedayAtmosphere",
+      "sha256": "377bed3f1111bff74bbf55d44921b05da9a6f77952b069131a9c8ff1f8fe4f47"
+    },
+    {
+      "path": "COT-Runtime/DynastyEnhancer/DynastyEnhancerNative-v103.dll",
+      "module": "DynastyEnhancer",
+      "sha256": "b791b4aeceb477f965c3c112520912ed5be4e830a7cdfa635561b37b60cd9766"
+    },
+    {
+      "path": "COT-Runtime/DynastyEnhancer/DynastyEnhancerRecruitFog-v1.dll",
+      "module": "DynastyEnhancer",
+      "sha256": "accc75d41e0ceb45940c86e8b3ec3f53e0693d937a90c27f564952de0325d4d3"
+    },
+    {
+      "path": "COT-Runtime/DynastyEnhancer/LoadDynastyEnhancer.exe",
+      "module": "DynastyEnhancer",
+      "sha256": "d1f2c727a1f6eb3370e20d96cf9af207784a7244b3ff6a4361a629cb1014bb7a"
+    },
+    {
+      "path": "COT-Runtime/DynastyEnhancer/Tools/feed_visibility.mjs",
+      "module": "DynastyEnhancer",
+      "sha256": "3742e3fb5d1508c865a36b7c70f486bac578219beab2e71c2de22bbc0a971233"
+    },
+    {
+      "path": "COT-Runtime/DynastyEnhancer/Tools/story_renderer.mjs",
+      "module": "DynastyEnhancer",
+      "sha256": "2a43e76a56ff08c893e8e4e3c88fcec462248ddff25fc8395daf4bae7050559d"
+    },
+    {
+      "path": "COT-Runtime/DynastyEnhancer/Tools/story_templates.mjs",
+      "module": "DynastyEnhancer",
+      "sha256": "709c19e4ccc468440b12cb17735330c90e43cad1d5bec7dcb04951bc7b8dad09"
+    },
+    {
+      "path": "COT-Runtime/DynastyEnhancer/Tools/story_variety.mjs",
+      "module": "DynastyEnhancer",
+      "sha256": "2d516bf5085eb5c90ef6b3f91b363b9c65097d2bd4e51a8216307dcde809bf79"
+    },
+    {
+      "path": "COT-Runtime/DynastyEnhancer/Content/Runtime/editorial011-pack.json",
+      "module": "DynastyEnhancer",
+      "sha256": "f158fae35b2af0448afda448fc6882db45cff93d42d239451e6b347b6caedd84"
+    },
+    {
+      "path": "Plugins/DynastyCOT.dll",
+      "module": "Core",
+      "sha256": "7fd9af5acdb47716e32b5f9748fcb5935047618f784d3d3b3487f38ebbce5a99"
+    },
+    {
+      "path": "COT-Runtime/DynastyEnhancer/DynastyEnhancerNative-v103.dll",
+      "module": "DynastyEnhancer",
+      "sha256": "8c647e3cec4c580d4c89e3b8e34cca93ec30841c4b6f3e6bf1ea16178cb90891"
+    },
+    {
+      "path": "COT-Runtime/DynastyEnhancer/DynastyEnhancerRecruitFog-v1.dll",
+      "module": "DynastyEnhancer",
+      "sha256": "f70c8c614c4628071b888371f98dc14626fda0c8eb6ca17fa9134d1cc4d077bb"
+    },
+    {
+      "path": "COT-Runtime/DynastyEnhancer/LoadDynastyEnhancer.exe",
+      "module": "DynastyEnhancer",
+      "sha256": "4b11522407b0e16c52a801ce28a7d581091c1b10e6c32a2d0e124e69fbe48767"
+    },
+    {
+      "path": "Plugins/DynastyCOT.dll",
+      "module": "Core",
+      "sha256": "ed20b7269c893806d201a304e2161c52e4d019b29853b3068f9c7c58d238ad8b"
+    },
+    {
+      "path": "COT-Runtime/DynastyEnhancer/DynastyEnhancerNative-v103.dll",
+      "module": "DynastyEnhancer",
+      "sha256": "6936c3c9238b17afccce2a8d5ea50f315334b1c1fb77fac01c7047e27f23fc35"
+    },
+    {
+      "path": "COT-Runtime/DynastyEnhancer/DynastyEnhancerRecruitFog-v1.dll",
+      "module": "DynastyEnhancer",
+      "sha256": "443cec3df4ed8de397cdfbc8056f50132edcaed8fb53950eded023321e7dbf78"
+    },
+    {
+      "path": "COT-Runtime/DynastyEnhancer/LoadDynastyEnhancer.exe",
+      "module": "DynastyEnhancer",
+      "sha256": "ddf149b80cb7bf74b6a5951f645101ee3d1cc302fc9b2460a73a3bd0abbde22c"
+    },
+    {
+      "path": "COT-Runtime/DynastyEnhancer/Tools/prose_cleanup.mjs",
+      "module": "DynastyEnhancer",
+      "sha256": "045d119ce725c59456878cddb627f13760b4dc10c5869391c45e88cfc7f8a969"
+    },
+    {
+      "path": "COT-Runtime/DynastyEnhancer/Tools/story_renderer.mjs",
+      "module": "DynastyEnhancer",
+      "sha256": "5ecc101d508225c7b6f37bad70532980b21eb43b03d3c3fdcbcd3f54c0b7e994"
+    },
+    {
+      "path": "COT-Runtime/DynastyEnhancer/Tools/story_templates.mjs",
+      "module": "DynastyEnhancer",
+      "sha256": "f5b60346b5193d94bd2a49279b8bdc74736293464ec262c17b2fdba8f346d86f"
+    },
+    {
+      "path": "Plugins/DynastyCOT.dll",
+      "module": "Core",
+      "sha256": "655a7b250fbfd1835c3c66aec6d7e8fe771ad1c2262b3fb057a262c1ff9993fb"
+    },
+    {
+      "path": "DGA-Runtime/Runtime-2.1.9/DynamicGamedayAtmosphereNative-2.1.9.dll",
+      "module": "GamedayAtmosphere",
+      "sha256": "e44abda8ca1216892c0eb50a1d2e27e0ca30e3760de681cbf39fb228f4497ad1"
+    },
+    {
+      "path": "DGA-Runtime/Runtime-2.1.9/DgaDiagnostics.exe",
+      "module": "GamedayAtmosphere",
+      "sha256": "da4ed79cefe43e72eadc3590eb117f34b00165148f97a8cae305a74ba1ebaece"
+    },
+    {
+      "path": "COT-Runtime/DynastyEnhancer/DynastyEnhancerNative-v103.dll",
+      "module": "DynastyEnhancer",
+      "sha256": "a3a9f65956487813c09bb81fa74d8a81d39a2a375a0e61082a90080a2c05e06e"
+    },
+    {
+      "path": "COT-Runtime/DynastyEnhancer/DynastyEnhancerRecruitFog-v1.dll",
+      "module": "DynastyEnhancer",
+      "sha256": "bb653c1443fb4b3cd810126ccd2bc0a14cecf20c403235aeab6acf47311c441c"
+    },
+    {
+      "path": "COT-Runtime/DynastyEnhancer/LoadDynastyEnhancer.exe",
+      "module": "DynastyEnhancer",
+      "sha256": "5ae7cd180520636b3888e130729ae328edae5c2d28f0fc1c05e7c8f9dff3d640"
+    },
+    {
+      "path": "COT-Runtime/DynastyEnhancer/Tools/editorial_policy.mjs",
+      "module": "DynastyEnhancer",
+      "sha256": "ee15729162377a7acbb588f4f05c84cad8235d1a058ba7c65c16bd63816bd363"
+    },
+    {
+      "path": "COT-Runtime/DynastyEnhancer/Tools/feed_engine.mjs",
+      "module": "DynastyEnhancer",
+      "sha256": "bee28c18a12c04d48ae4922016b462b9fc5f67bb130430b66742ff14ec0adce1"
+    },
+    {
+      "path": "COT-Runtime/DynastyEnhancer/Tools/national_editorial.mjs",
+      "module": "DynastyEnhancer",
+      "sha256": "17250bba392d6362e10fa8dc7fd11a0a7e2faab7b91ae26686a8c5bb2824e7e3"
+    },
+    {
+      "path": "COT-Runtime/DynastyEnhancer/Tools/news_cycles.mjs",
+      "module": "DynastyEnhancer",
+      "sha256": "0b8f963936eb1fa195653c0e85eede7b6ff70b62b28c4413b81631f9ece95a03"
+    },
+    {
+      "path": "COT-Runtime/DynastyEnhancer/Tools/pff_events.mjs",
+      "module": "DynastyEnhancer",
+      "sha256": "5a2441593dc7b11c6364e779c3ce206aa2e1394ddde23000e894fd8fb50aa472"
+    },
+    {
+      "path": "COT-Runtime/DynastyEnhancer/Tools/read_runtime.mjs",
+      "module": "DynastyEnhancer",
+      "sha256": "c0695e64a6e56cb0d9d2c2437fb049a3727328f4683a3fa27341a26a2a9be548"
+    },
+    {
+      "path": "COT-Runtime/DynastyEnhancer/Tools/runtime_lifecycle.mjs",
+      "module": "DynastyEnhancer",
+      "sha256": "6eebef8b1b2367bc9d53745eb0aa22d404035a30afb3b87ebd8951e5a6dd4dcc"
+    },
+    {
+      "path": "COT-Runtime/DynastyEnhancer/Tools/story_authors.mjs",
+      "module": "DynastyEnhancer",
+      "sha256": "1ebf87256e480854f239e80a027b990e8aa0b3ccde810f893012649637e53ee6"
+    },
+    {
+      "path": "COT-Runtime/DynastyEnhancer/Tools/story_conversations.mjs",
+      "module": "DynastyEnhancer",
+      "sha256": "5aaa229a61273d7b574df53c55a431627faf2ba49d61a7a2437b618f30fdd28c"
+    },
+    {
+      "path": "COT-Runtime/DynastyEnhancer/Tools/story_events.mjs",
+      "module": "DynastyEnhancer",
+      "sha256": "5550802440802513c9127471b522320d0be3435054a235db19f2cc12cbec2a6f"
+    },
+    {
+      "path": "COT-Runtime/DynastyEnhancer/Tools/story_templates.mjs",
+      "module": "DynastyEnhancer",
+      "sha256": "e2feae213d0785238abed2b0b6af1bd8e5f214284fae1f6fcc62a771281657f5"
+    },
+    {
+      "path": "COT-Runtime/DynastyEnhancer/Tools/voice_style.mjs",
+      "module": "DynastyEnhancer",
+      "sha256": "0cc737ce8b16fe9f1df9e483d4a840b4fba9e908c1249551871012c8f30645b8"
+    },
+    {
+      "path": "COT-Runtime/DynastyEnhancer/Content/Runtime/national-account-avatars.json",
+      "module": "DynastyEnhancer",
+      "sha256": "094e2cbc3e147be44f01bd9fc86ed17ad013d81f0522c933c8f07e1573334c8e"
+    },
+    {
+      "path": "COT-Runtime/DynastyEnhancer/Content/Runtime/pff-pack.json",
+      "module": "DynastyEnhancer",
+      "sha256": "584f70e6e8a3c9e22a2dec9fdb2d917b212108e759db7d484f2f665df7001308"
+    },
+    {
+      "path": "Plugins/DynastyCOT.dll",
+      "module": "Core",
+      "sha256": "935816f9a64132e79ac40ee4de5bb4f40bcb8a92035aadcf9e92fc9bd8c5042f"
+    },
+    {
+      "path": "COT-Runtime/DynastyEnhancer/DynastyEnhancerNative-v103.dll",
+      "module": "DynastyEnhancer",
+      "sha256": "9d50e2eaf1fadc912d12de66061bdc0fee82a6ff3ead8353572341740cd42d06"
+    },
+    {
+      "path": "COT-Runtime/DynastyEnhancer/DynastyEnhancerRecruitFog-v1.dll",
+      "module": "DynastyEnhancer",
+      "sha256": "ad36a38c649fed76e594df4765a1117d3e694eeee711fabac968859a18607ae5"
+    },
+    {
+      "path": "COT-Runtime/DynastyEnhancer/LoadDynastyEnhancer.exe",
+      "module": "DynastyEnhancer",
+      "sha256": "c6c973886905250ebc6f3535ae2bf5b830ae88432ada079d09a02e16c1ed96df"
+    },
+    {
+      "path": "COT-Runtime/DynastyEnhancer/Tools/editorial_policy.mjs",
+      "module": "DynastyEnhancer",
+      "sha256": "c2540b5520bad97d123a0f7d913f06a431af344a6c6d8191009f2c6e3d45dd5a"
+    },
+    {
+      "path": "COT-Runtime/DynastyEnhancer/Tools/feed_visibility.mjs",
+      "module": "DynastyEnhancer",
+      "sha256": "f4e0bb956d994fcf944efc4843ad53949555491f4113c68ac89459dbde92260f"
+    },
+    {
+      "path": "COT-Runtime/DynastyEnhancer/Tools/normalize_dynasty.mjs",
+      "module": "DynastyEnhancer",
+      "sha256": "9ec7fdc6c50b64c5790da9509df205bea13e31cd797351360182766c5a21be69"
+    },
+    {
+      "path": "COT-Runtime/DynastyEnhancer/Tools/pff_events.mjs",
+      "module": "DynastyEnhancer",
+      "sha256": "fb302054f3a61966c1f73726446a8a57d6901ce0a643d45196518ee5e7069c00"
+    },
+    {
+      "path": "COT-Runtime/DynastyEnhancer/Tools/pff_rankings.mjs",
+      "module": "DynastyEnhancer",
+      "sha256": "5b21ff1668f20340acd893e30504ea3b36857d8355b8304992fe9b051947b27f"
+    },
+    {
+      "path": "COT-Runtime/DynastyEnhancer/Content/Runtime/pff-pack.json",
+      "module": "DynastyEnhancer",
+      "sha256": "654402a6a23bd10c84080153c0f7e84667be5365153c4485eea996691db982b4"
+    },
+    {
+      "path": "Plugins/DynastyCOT.dll",
+      "module": "Core",
+      "sha256": "4a6994f20ba23e96a852c7f14bb450b4421acf615751f57be52fd4b0f1274c6f"
+    },
+    {
+      "path": "COT-Runtime/DynastyEnhancer/DynastyEnhancerNative-v103.dll",
+      "module": "DynastyEnhancer",
+      "sha256": "80fb332547116f90099f79d855b544f02256b0475b464df07236a17a7920ed24"
+    },
+    {
+      "path": "COT-Runtime/DynastyEnhancer/DynastyEnhancerRecruitFog-v1.dll",
+      "module": "DynastyEnhancer",
+      "sha256": "52e4d40a85a76f2f35ff84ed00f1e73269fecb821d4fc9ff5aeec46e9ee18ab9"
+    },
+    {
+      "path": "COT-Runtime/DynastyEnhancer/LoadDynastyEnhancer.exe",
+      "module": "DynastyEnhancer",
+      "sha256": "80263947679be242e6b78a7cd0f74513799c113808650e4ff9b1076208fb4dac"
+    },
+    {
+      "path": "COT-Runtime/DynastyEnhancer/Tools/conversation_topics.mjs",
+      "module": "DynastyEnhancer",
+      "sha256": "37b144e700bb5511813831075e49fb2380654b1db38e5ee026b704126f5f0719"
+    },
+    {
+      "path": "COT-Runtime/DynastyEnhancer/Tools/feed_selection.mjs",
+      "module": "DynastyEnhancer",
+      "sha256": "32e4b8c7fb3fd90c56b35c1f797e3c8fbeb224218e69cc767acb2c315e9b977e"
+    },
+    {
+      "path": "COT-Runtime/DynastyEnhancer/Tools/league_identity.mjs",
+      "module": "DynastyEnhancer",
+      "sha256": "37f096f784409e28f05da33bd0654f0123e9a7b8b96d5cdf81f00b80ac942bc1"
+    },
+    {
+      "path": "COT-Runtime/DynastyEnhancer/Tools/normalize_dynasty.mjs",
+      "module": "DynastyEnhancer",
+      "sha256": "e4e3966ec84e99640f3c4007629ad09e2d5263e569aaa02105676656f0e47781"
+    },
+    {
+      "path": "COT-Runtime/DynastyEnhancer/Tools/pff_events.mjs",
+      "module": "DynastyEnhancer",
+      "sha256": "5a3f3e2af059d3fd85e568d0ee46d124ceaf9b4a2bfe0c8ec550c0c92ec833c1"
+    },
+    {
+      "path": "COT-Runtime/DynastyEnhancer/Tools/prose_cleanup.mjs",
+      "module": "DynastyEnhancer",
+      "sha256": "eb68633bdfb651c5bf32a85c1d8a21fc4bfd8f817902b9fb9af03c4b2f34cabb"
+    },
+    {
+      "path": "COT-Runtime/DynastyEnhancer/Tools/read_runtime.mjs",
+      "module": "DynastyEnhancer",
+      "sha256": "3fc3a3fe86915e8563fdf7f58ade81665461c67b26dbf1ffc92ef5ad91afaebb"
+    },
+    {
+      "path": "COT-Runtime/DynastyEnhancer/Tools/story_renderer.mjs",
+      "module": "DynastyEnhancer",
+      "sha256": "96e91e8138ee976f0d49dcf482244fb6ef4b81e4568c06d5e46801d83c8909ec"
+    },
+    {
+      "path": "COT-Runtime/DynastyEnhancer/Tools/story_templates.mjs",
+      "module": "DynastyEnhancer",
+      "sha256": "dee18ebfa9547640d81e55455336d9eed4952f0a1d0a0e67c9aef758edb31d3d"
+    },
+    {
+      "path": "COT-Runtime/DynastyEnhancer/Tools/team_record.mjs",
+      "module": "DynastyEnhancer",
+      "sha256": "3a499485859a2dd33dacee4b1cd22d3805b4ea2feab07f2af678debc6557c948"
+    },
+    {
+      "path": "COT-Runtime/DynastyEnhancer/Tools/weekly_budget.mjs",
+      "module": "DynastyEnhancer",
+      "sha256": "d6186722c428df9dd55244e1f2a33fbf5f201436ddaad80c7e47c6d078c335ab"
+    },
+    {
+      "path": "COT-Runtime/DynastyEnhancer/Content/Runtime/season-fixes-pack.json",
+      "module": "DynastyEnhancer",
+      "sha256": "5f57c91c75df72dc5839c394c7a12e4bd87070b89c8aff5c319847962af22913"
+    },
+    {
+      "path": "Plugins/OfflineDynastySettings/OfflineDynastySettings.Persistence.exe",
+      "module": "ExtraDynastySettings",
+      "sha256": "763a448871c0a2083309e4bb10a1b680e9e14a17b31101faa31b04621b3a59d3"
+    },
+    {
+      "path": "Plugins/SituationalPractice/SituationalPractice.Runtime.exe",
+      "module": "DrivePractice",
+      "sha256": "3d90dcd5abee6e2bc23ebeeb92ae720088f72fd9006aa9d971786f428d94646c"
+    },
+    {
+      "path": "Plugins/SituationalPractice/SituationalPractice.Runtime.pdb",
+      "module": "DrivePractice",
+      "sha256": "6c30590e4b3725e9088976f2a3bb15f68e8ced2eab5e6921f4888811c9bd6873"
+    },
+    {
+      "path": "Plugins/DynastyCOT.dll",
+      "module": "Core",
+      "sha256": "b4e91a7622479b31c7a60af2f73724a72eb5c3c90842ee6afe94260cf9049d3c"
+    },
+    {
+      "path": "DGA-Runtime/Runtime-2.1.9/DynamicGamedayAtmosphereNative-2.1.9.dll",
+      "module": "GamedayAtmosphere",
+      "sha256": "b69fe791648c1ec8a8603560caacc1026ae84752b7b4d70b9af23b7d16571745"
+    },
+    {
+      "path": "DGA-Runtime/Runtime-2.1.9/DgaDiagnostics.exe",
+      "module": "GamedayAtmosphere",
+      "sha256": "8cf05a084f23a51dc78baa034de2d630710c6e3591203ed82c3b4ffa8db51462"
+    },
+    {
+      "path": "COT-Runtime/DynastyEnhancer/DynastyEnhancerNative-v103.dll",
+      "module": "DynastyEnhancer",
+      "sha256": "4e2b8ea7442e883fc979d6ccef2e64587fe625912206d2b6e415aefec5e85cca"
+    },
+    {
+      "path": "COT-Runtime/DynastyEnhancer/DynastyEnhancerRecruitFog-v1.dll",
+      "module": "DynastyEnhancer",
+      "sha256": "84203dd8d04172f4faa54e32927dc17d8b2cc9261357bf61cdc0c62caca0692d"
+    },
+    {
+      "path": "COT-Runtime/DynastyEnhancer/LoadDynastyEnhancer.exe",
+      "module": "DynastyEnhancer",
+      "sha256": "cadd9abe160cf02129a48acf16e9e456ae010b59af872febcd7a37cf09208307"
+    },
+    {
+      "path": "COT-Runtime/DynastyEnhancer/Tools/betting_model.mjs",
+      "module": "DynastyEnhancer",
+      "sha256": "3df4eaf4a249ca4ae56f8bed2ccdd7a3f7ea35888d1f56d227e29d611437df03"
+    },
+    {
+      "path": "COT-Runtime/DynastyEnhancer/Tools/export_runtime.mjs",
+      "module": "DynastyEnhancer",
+      "sha256": "0d6d32526f7dbed86f3ec08d12312898bcdb0d4e1dd23120aabaeb15128e9350"
+    },
+    {
+      "path": "Plugins/DynastyCOT.dll",
+      "module": "Core",
+      "sha256": "32b2912b39f9e4ea1dbe157b8c8e5e0b9d33f834e8454a9840899de4ea1f860a"
+    },
+    {
+      "path": "COT-Runtime/DynastyEnhancer/DynastyEnhancerNative-v103.dll",
+      "module": "DynastyEnhancer",
+      "sha256": "2a9aec5415afb03fecdeedbfeca1a9b9a0a3651ed073c55bf0acfd66bcc8debd"
+    },
+    {
+      "path": "COT-Runtime/DynastyEnhancer/DynastyEnhancerRecruitFog-v1.dll",
+      "module": "DynastyEnhancer",
+      "sha256": "1da28ee0a589c2243cb199bb4c52397d4e5497c300c8e48a499c7276dcae01a3"
+    },
+    {
+      "path": "COT-Runtime/DynastyEnhancer/LoadDynastyEnhancer.exe",
+      "module": "DynastyEnhancer",
+      "sha256": "d4c4b5fea1de1017bb7b74c39f835238d18820e1e7cb2209f55084ce54292d03"
+    },
+    {
+      "path": "Plugins/OfflineDynastySettings/OfflineDynastySettings.Persistence.exe",
+      "module": "ExtraDynastySettings",
+      "sha256": "0dcfe1244950cb4c01d95b265c38ec79f0266131446e7eaf2e03b66b78a6281e"
+    },
+    {
+      "path": "Plugins/SituationalPractice/SituationalPractice.Runtime.exe",
+      "module": "DrivePractice",
+      "sha256": "587df816b1140ba0b73ac5e58c1480e0a0d54d3a7a15a53c3b68a9f1b270f3dc"
+    },
+    {
+      "path": "Plugins/SituationalPractice/SituationalPractice.Runtime.pdb",
+      "module": "DrivePractice",
+      "sha256": "fb304fc6cbcedbd7f46a3e9bdc2a1488c6235a3ad883d90623521a11f97bf399"
+    },
+    {
+      "path": "Plugins/DynastyCOT.dll",
+      "module": "Core",
+      "sha256": "580514f02aa9bbf08f847a84c6d3c696884b2a191fcef37f2b36e0eb393de03c"
+    },
+    {
+      "path": "DGA-Runtime/Runtime-2.1.9/DynamicGamedayAtmosphereNative-2.1.9.dll",
+      "module": "GamedayAtmosphere",
+      "sha256": "64506cadfb7d39c87dcbef53f7cba7760077a3092d46ea898bb949bcc220ae46"
+    },
+    {
+      "path": "DGA-Runtime/Runtime-2.1.9/DgaDiagnostics.exe",
+      "module": "GamedayAtmosphere",
+      "sha256": "d1051bb389ea329b92b3d079dd4e4557896ceeb4d9cd6a39a503e10d04a939eb"
+    },
+    {
+      "path": "COT-Runtime/DynastyEnhancer/DynastyEnhancerNative-v103.dll",
+      "module": "DynastyEnhancer",
+      "sha256": "206f85681c89bd76f4bef3d15e0416eefcdda72973089756d68fd520da9d3ebb"
+    },
+    {
+      "path": "COT-Runtime/DynastyEnhancer/DynastyEnhancerRecruitFog-v1.dll",
+      "module": "DynastyEnhancer",
+      "sha256": "4a3e5f07fb72a99ed57ff1a2458b1686054fb3cc4cf5d3b4f76af0e4e17d8589"
+    },
+    {
+      "path": "COT-Runtime/DynastyEnhancer/LoadDynastyEnhancer.exe",
+      "module": "DynastyEnhancer",
+      "sha256": "a87cc1acb11f03ebb33b044ac29456bd52b73a79c46c356f7fa1850bcfb34f51"
+    },
+    {
+      "path": "COT-Runtime/DynastyEnhancer/Tools/feed_engine.mjs",
+      "module": "DynastyEnhancer",
+      "sha256": "8ce097fe674c999a0cea1016bbd616ea52d08b07bd247082a25c53ff6f448ef8"
+    },
+    {
+      "path": "COT-Runtime/DynastyEnhancer/Tools/story_authors.mjs",
+      "module": "DynastyEnhancer",
+      "sha256": "20706ba756bd05e61e18c2ab302cd0e183ddd15f439b87238118be7407502f3c"
+    },
+    {
+      "path": "Plugins/OfflineDynastySettings/OfflineDynastySettings.Persistence.exe",
+      "module": "ExtraDynastySettings",
+      "sha256": "d6eb4bc98237dfed89f24e74d4668ffa46ece9318f05052a8e532e09c6db4667"
+    },
+    {
+      "path": "Plugins/SituationalPractice/SituationalPractice.Runtime.exe",
+      "module": "DrivePractice",
+      "sha256": "989b75ccd38067d26a767763ae7a8591da4429dee981684b0b38818bb6a5fad1"
+    },
+    {
+      "path": "Plugins/SituationalPractice/SituationalPractice.Runtime.pdb",
+      "module": "DrivePractice",
+      "sha256": "ed533342792958f3a2a97f26b999fd6732813a14aa43cbdec497734c736a53e0"
+    },
+    {
+      "path": "Plugins/DynastyCOT.dll",
+      "module": "Core",
+      "sha256": "8c34e730dafb50f0f7ac16ad49446ec8b13e3a6ecad0817847eba9dcf108a157"
+    },
+    {
+      "path": "DGA-Runtime/Runtime-2.1.9/DynamicGamedayAtmosphereNative-2.1.9.dll",
+      "module": "GamedayAtmosphere",
+      "sha256": "738e4e0ed60364878a1800992fe89d61d9ef01efda6853ddf13dfe1bd2410fd8"
+    },
+    {
+      "path": "DGA-Runtime/Runtime-2.1.9/DgaDiagnostics.exe",
+      "module": "GamedayAtmosphere",
+      "sha256": "9de3ffd04b8b7c8e5cd4d5ac93c0979139568f343189eabfcdcd88873f86e72d"
+    },
+    {
+      "path": "COT-Runtime/DynastyEnhancer/DynastyEnhancerNative-v103.dll",
+      "module": "DynastyEnhancer",
+      "sha256": "b59ee88303d9acf4c44165ef1f62ef11d229ff1fbb4f0f3f957a0b90de6630fd"
+    },
+    {
+      "path": "COT-Runtime/DynastyEnhancer/DynastyEnhancerRecruitFog-v1.dll",
+      "module": "DynastyEnhancer",
+      "sha256": "2d78b5822166e7fe634dc9d957c89a6045297ad5715b1fe68a495008788329dc"
+    },
+    {
+      "path": "COT-Runtime/DynastyEnhancer/LoadDynastyEnhancer.exe",
+      "module": "DynastyEnhancer",
+      "sha256": "3f4d36713a3beefde0d1e3d3840e419729d8ad25845aeefb7c5221e811146593"
+    },
+    {
+      "path": "Plugins/DynastyCOT.dll",
+      "module": "Core",
+      "sha256": "61e4110b3c7645f14ddf855056def10dbe6696b2be39858ae7d6dd6961ccf000"
+    },
+    {
+      "path": "COT-Runtime/DynastyEnhancer/DynastyEnhancerNative-v103.dll",
+      "module": "DynastyEnhancer",
+      "sha256": "6f15ab725bb241f6f19fb09fc8a3a04c02cb38cfac35e3e82caddf64e2e3eb4f"
+    },
+    {
+      "path": "COT-Runtime/DynastyEnhancer/DynastyEnhancerRecruitFog-v1.dll",
+      "module": "DynastyEnhancer",
+      "sha256": "6007c31045cfe36e7d139443db38fd1cd75e0754fd6b10e4474df533c8a93b5e"
+    },
+    {
+      "path": "COT-Runtime/DynastyEnhancer/LoadDynastyEnhancer.exe",
+      "module": "DynastyEnhancer",
+      "sha256": "a19276059fbe191da176ba1a8d5cb9bdca916805064e40580e83dcbe09c6c4a6"
+    },
+    {
+      "path": "COT-Runtime/DynastyEnhancer/Tools/editorial_policy.mjs",
+      "module": "DynastyEnhancer",
+      "sha256": "341326626ec18c6293f931bbe3906951b6d82e3f48af4eb55e965e9ef9373421"
+    },
+    {
+      "path": "COT-Runtime/DynastyEnhancer/Tools/feed_selection.mjs",
+      "module": "DynastyEnhancer",
+      "sha256": "7852b5a04cf211bb2a1fd3a7152ea49eb9a34dcfa2e1b76823e533ef511ec55e"
+    },
+    {
+      "path": "COT-Runtime/DynastyEnhancer/Tools/story_conversations.mjs",
+      "module": "DynastyEnhancer",
+      "sha256": "225d31af2b52739feb19a255d199a1d72bf7d907960850fbb8a9978074628995"
+    },
+    {
+      "path": "COT-Runtime/DynastyEnhancer/Tools/story_renderer.mjs",
+      "module": "DynastyEnhancer",
+      "sha256": "e0cc715db51d51bd1fce9971164eaa301d7fd29788c0485d413536cfb835006f"
+    },
+    {
+      "path": "COT-Runtime/DynastyEnhancer/Tools/story_templates.mjs",
+      "module": "DynastyEnhancer",
+      "sha256": "4b7115d9be0e351a087b2e41768216a0b8ade983f77c4ac0d76bd54a05ef116c"
+    },
+    {
+      "path": "COT-Runtime/DynastyEnhancer/Tools/story_variety.mjs",
+      "module": "DynastyEnhancer",
+      "sha256": "532e26ffa8923d7f3b2537541e50f0fe2b69cc76984319b51b7494912214bdba"
+    },
+    {
+      "path": "COT-Runtime/DynastyEnhancer/Tools/weekly_coverage.mjs",
+      "module": "DynastyEnhancer",
+      "sha256": "160f2d4486243648551f70aaf54bfbb4321bebdbec7e874d4c3fa3432c061fa3"
+    },
+    {
+      "path": "Plugins/OfflineDynastySettings/OfflineDynastySettings.Persistence.exe",
+      "module": "ExtraDynastySettings",
+      "sha256": "77e638fb5d9fccdd75bdac6dcf67bc091c6b2a6ef7fb6bc3fec4d818eea765a0"
+    },
+    {
+      "path": "Plugins/SituationalPractice/SituationalPractice.Runtime.exe",
+      "module": "DrivePractice",
+      "sha256": "7ecfe8f39413c6d8cbec37bdb19aedfcaf4509f5fb5e221236beffc50215c8b8"
+    },
+    {
+      "path": "Plugins/SituationalPractice/SituationalPractice.Runtime.pdb",
+      "module": "DrivePractice",
+      "sha256": "7f118b641c1c2378936876f99bbdb56df334f44176cdd9c0ef894e07f62102a1"
+    },
+    {
+      "path": "Plugins/DynastyCOT.dll",
+      "module": "Core",
+      "sha256": "7c31bb184e87724149a81c04ce1d907b7bfede5df0abea4f2997880d3f27735d"
+    },
+    {
+      "path": "DGA-Runtime/Runtime-2.1.9/DynamicGamedayAtmosphereNative-2.1.9.dll",
+      "module": "GamedayAtmosphere",
+      "sha256": "3b24a923fbd3396999fb8534bb191356b49e4fe5b4bbfb2422d83814493ba226"
+    },
+    {
+      "path": "DGA-Runtime/Runtime-2.1.9/DgaDiagnostics.exe",
+      "module": "GamedayAtmosphere",
+      "sha256": "100460388ed3d642c6a79f9eb8d743cb043cafd421eff3e08cf7aee3fddbc845"
+    },
+    {
+      "path": "COT-Runtime/DynastyEnhancer/DynastyEnhancerNative-v103.dll",
+      "module": "DynastyEnhancer",
+      "sha256": "5deec2e2eb43d94cca1605dd8de73a7ed8584ffc8fc59fb55daa398dfdee95d5"
+    },
+    {
+      "path": "COT-Runtime/DynastyEnhancer/DynastyEnhancerRecruitFog-v1.dll",
+      "module": "DynastyEnhancer",
+      "sha256": "7300f10d4a19239a2d1e39baada95e02d421368d44436d4ac3ca5ce22e3bbcd5"
+    },
+    {
+      "path": "COT-Runtime/DynastyEnhancer/LoadDynastyEnhancer.exe",
+      "module": "DynastyEnhancer",
+      "sha256": "af6d137890cace391102ae4340d4dff924e7263451d0087675d83dd72916a206"
+    },
+    {
+      "path": "Plugins/OfflineDynastySettings/OfflineDynastySettings.Persistence.exe",
+      "module": "ExtraDynastySettings",
+      "sha256": "1fc3b622fd49d3e62fb87ca9314fda8d170c93f800fc1d54c5349de7aca4a6dd"
+    },
+    {
+      "path": "Plugins/SituationalPractice/SituationalPractice.Runtime.exe",
+      "module": "DrivePractice",
+      "sha256": "26ec68bd138061c088bbc9ac151945d941bf79c428eaf5927a8b1f2a1691b9e4"
+    },
+    {
+      "path": "Plugins/SituationalPractice/SituationalPractice.Runtime.pdb",
+      "module": "DrivePractice",
+      "sha256": "4812b1680a70ee66b432d233b4be7629d6fd0c631afb78f85c24100791c1312e"
+    },
+    {
+      "path": "Plugins/DynastyCOT.dll",
+      "module": "Core",
+      "sha256": "b25d95d7d249913c95e621e989f40bfe476cbb8a927cef4073b417c7387f0ac5"
+    },
+    {
+      "path": "DGA-Runtime/Runtime-2.1.9/DynamicGamedayAtmosphereNative-2.1.9.dll",
+      "module": "GamedayAtmosphere",
+      "sha256": "19f3243884d829ba6163e7fdfc40df8adcd53a4387c41f8fc75ca90b15877e91"
+    },
+    {
+      "path": "DGA-Runtime/Runtime-2.1.9/DgaDiagnostics.exe",
+      "module": "GamedayAtmosphere",
+      "sha256": "37a43212b4fea58725a747cb2b72ed8d4e8a730b46db3dd20db6cf89963f44f3"
+    },
+    {
+      "path": "COT-Runtime/DynastyEnhancer/DynastyEnhancerNative-v103.dll",
+      "module": "DynastyEnhancer",
+      "sha256": "706d8aec37b70e21376e66d8db760303f35300b9073369212c1992d8c6be6edb"
+    },
+    {
+      "path": "COT-Runtime/DynastyEnhancer/DynastyEnhancerRecruitFog-v1.dll",
+      "module": "DynastyEnhancer",
+      "sha256": "cb89496cf7ff2049dd43c5098718c30ee307e56b02088d63d73357ee4159719f"
+    },
+    {
+      "path": "COT-Runtime/DynastyEnhancer/LoadDynastyEnhancer.exe",
+      "module": "DynastyEnhancer",
+      "sha256": "39ab8e37112ad3150f1968b1648051a4911dd95d296909b938a623edc8d9d437"
+    },
+    {
+      "path": "COT-Runtime/DynastyEnhancer/Tools/feed_selection.mjs",
+      "module": "DynastyEnhancer",
+      "sha256": "7b267f5a295281a0bdec019b37f52311a22bc4b04aae4303833fe572fe08f718"
+    },
+    {
+      "path": "COT-Runtime/DynastyEnhancer/Tools/story_renderer.mjs",
+      "module": "DynastyEnhancer",
+      "sha256": "753985be536750dc8c8e6fe6a4c5027b0b189b10f8c9dc1f45e0052d51b4be2f"
+    },
+    {
+      "path": "Plugins/DynastyCOT.dll",
+      "module": "Core",
+      "sha256": "1e1e01369c74798cf69572e796d2af67b09cd01f2d0ffb8ca2dc34967d12efc8"
+    },
+    {
+      "path": "COT-Runtime/DynastyEnhancer/DynastyEnhancerNative-v103.dll",
+      "module": "DynastyEnhancer",
+      "sha256": "75cc29e3d32691c83f77bc84c445398bc1ff3f8f7ce35a71a013f7082340a09f"
+    },
+    {
+      "path": "COT-Runtime/DynastyEnhancer/DynastyEnhancerRecruitFog-v1.dll",
+      "module": "DynastyEnhancer",
+      "sha256": "adf1f27d9006836b06fac761d071990ad2d8dd2bbd40d3db4153f4790443d549"
+    },
+    {
+      "path": "COT-Runtime/DynastyEnhancer/LoadDynastyEnhancer.exe",
+      "module": "DynastyEnhancer",
+      "sha256": "0d2f9378146ff7d95ebb3172c251128f3d05e4e5c2777248040e3a1b3fa41845"
+    },
+    {
+      "path": "COT-Runtime/DynastyEnhancer/Tools/feed_selection.mjs",
+      "module": "DynastyEnhancer",
+      "sha256": "365b03adb8ae54bd8e85f584429449e1f6ba4cf05f86ee97145b36021b509e98"
+    },
+    {
+      "path": "Plugins/DynastyCOT.dll",
+      "module": "Core",
+      "sha256": "48b9195c82fe1cbb140609e9ea1a12918782216b03327996641721c21f23e0fc"
+    },
+    {
+      "path": "COT-Runtime/DynastyEnhancer/DynastyEnhancerNative-v103.dll",
+      "module": "DynastyEnhancer",
+      "sha256": "1d6283ed2b05e9b60fd4fddb07d0538216efd55a01730bfb0d3881538a8b134a"
+    },
+    {
+      "path": "COT-Runtime/DynastyEnhancer/DynastyEnhancerRecruitFog-v1.dll",
+      "module": "DynastyEnhancer",
+      "sha256": "385ec0ce3b33730c7fc77ce17cf215078e154c3c4c80f2381d76f2ba3d5ac68b"
+    },
+    {
+      "path": "COT-Runtime/DynastyEnhancer/LoadDynastyEnhancer.exe",
+      "module": "DynastyEnhancer",
+      "sha256": "e26d325c8f22f6b06d1febd3d191ccd03e1ee59bf106419f3af33f265164bd17"
+    },
+    {
+      "path": "Plugins/DynastyCOT.dll",
+      "module": "Core",
+      "sha256": "b1678a9656978121339ff444497ba73445bf80025172a7be9d173c5f37f15464"
     }
   ]
 }

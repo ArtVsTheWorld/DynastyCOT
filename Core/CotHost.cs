@@ -10,12 +10,12 @@ using Frosty.Core.Attributes;
 using FrostySdk.Interfaces;
 [assembly: AssemblyTitle("Dynasty COT")]
 [assembly: AssemblyProduct("Dynasty COT")]
-[assembly: AssemblyDescription("Dynasty additions by Ace - test prerelease")]
+[assembly: AssemblyDescription("Dynasty additions by Ace")]
 [assembly: AssemblyVersion(DynastyCOT.ProductInfo.AssemblyVersion)]
 [assembly: AssemblyFileVersion(DynastyCOT.ProductInfo.AssemblyVersion)]
 [assembly: PluginVersion(DynastyCOT.ProductInfo.Version)]
 [assembly: PluginAuthor("Ace")]
-[assembly: PluginDisplayName("DYNASTY COT by Ace (Prerelease)")]
+[assembly: PluginDisplayName("Dynasty COT")]
 [assembly: RegisterExecutionAction(typeof(DynastyCOT.LaunchAction))]
 namespace DynastyCOT {
  public sealed class LaunchAction : ExecutionAction {

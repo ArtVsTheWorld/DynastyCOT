@@ -31,6 +31,12 @@ inline void run(){
     for(const auto& [n,label]:boundaries)require(!strcmp(gradeLabel(n,GradeScale::PlusMinus),label),"Plus/minus cutoff differs from the approved scale");
     require(!strcmp(gradeLabel(94,GradeScale::STier),"A")&&!strcmp(gradeLabel(95,GradeScale::STier),"S"),"S threshold differs");
     require(gradeColor("Fair,TrendWithDelta,(+2)")==0xEDB34F&&gradeColor("S")==0x409EFF&&gradeColor("Elite")==0xBB70EF,"Descriptive/S colors differ");
+    for(int value=0;value<=100;++value){
+        const char* expected=value<60?"POOR":value<70?"FAIR":value<80?"GOOD":value<90?"GREAT":"ELITE";
+        require(!strcmp(gradeLabel(value,GradeScale::Descriptive),expected),"Descriptive grades must be uppercase on every native display path");
+        std::string legacy=expected;for(size_t i=1;i<legacy.size();++i)legacy[i]=char(legacy[i]-'A'+'a');
+        require(gradeColor(expected)==gradeColor(legacy)&&gradeColor(std::string(expected)+",TrendUp")==gradeColor(expected),"Uppercase descriptive grades changed colors or trend handling");
+    }
     const Json valid={{"format",1},{"league",1001},{"socialMedia",true},{"recruitingFog",true},{"rosterFog",true},{"gradeScale",0},{"ratingColors",true}};
     require(decodeOptions(valid,1001).packed()==103,"Valid profile did not decode");
     auto legacy=valid;legacy.erase("ratingColors");require(!decodeOptions(legacy,1001).colors,"Missing color setting must default Off");

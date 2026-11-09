@@ -25,6 +25,17 @@ namespace DynamicGamedayAtmosphere {
         void Close(IntPtr handle);
     }
     internal static class ManagedRuntimeLoader {
+        // Runtime families are independent: Beyond the Field's social and fog
+        // payloads must coexist, but two versions of either role must not.
+        internal static string RuntimeRole(string name){
+            if(name.StartsWith("DynamicAttendanceNative",StringComparison.OrdinalIgnoreCase)||name.StartsWith("DynamicAttendanceProbe",StringComparison.OrdinalIgnoreCase)||name.StartsWith("DynamicGamedayAtmosphereNative",StringComparison.OrdinalIgnoreCase)||name.StartsWith("GamedayAtmosphereNative",StringComparison.OrdinalIgnoreCase))return "atmosphere";
+            if(name.StartsWith("DynastyEnhancerRecruitFog",StringComparison.OrdinalIgnoreCase)||name.StartsWith("BeyondTheFieldRecruitFog",StringComparison.OrdinalIgnoreCase))return "fog";
+            if(name.StartsWith("DynastyEnhancerNative",StringComparison.OrdinalIgnoreCase)||name.StartsWith("BeyondTheFieldNative",StringComparison.OrdinalIgnoreCase))return "social";
+            return null;
+        }
+        internal static bool AllowedRuntime(string name){
+            return name=="BeyondTheFieldNative-v103.dll"||name=="BeyondTheFieldRecruitFog-v1.dll"||System.Text.RegularExpressions.Regex.IsMatch(name,@"^(DynamicGamedayAtmosphereNative|GamedayAtmosphereNative)-\d+\.\d+\.\d+\.dll$",System.Text.RegularExpressions.RegexOptions.IgnoreCase);
+        }
         static void Notice(Action<string> note,string text){if(note!=null)try{note(text);}catch{}}
         internal static void Load(int pid,string file,Action<string> note){Load(pid,file,new WindowsRuntimeLoadApi(),note);}
         internal static void Load(int pid,string file,IRuntimeLoadApi api,Action<string> note){
@@ -35,8 +46,8 @@ namespace DynamicGamedayAtmosphere {
                 if(IntPtr.Size!=8||pid<=0)throw new InvalidOperationException("An x64 host and valid game process ID are required.");
                 file=Path.GetFullPath(file);
                 if(!File.Exists(file))throw new FileNotFoundException("Native runtime DLL is missing.",file);
-                if(!Path.GetFileName(file).StartsWith("DynamicGamedayAtmosphereNative-",StringComparison.OrdinalIgnoreCase)||!file.EndsWith(".dll",StringComparison.OrdinalIgnoreCase))
-                    throw new InvalidOperationException("Only the versioned DGA runtime DLL can be loaded.");
+                if(!AllowedRuntime(Path.GetFileName(file)))
+                    throw new InvalidOperationException("Only a recognized COT runtime DLL can be loaded.");
                 step="open game for direct runtime loading";process=api.Open(pid);
                 step="validate direct-load target process";
                 if(!String.Equals(Path.GetFileName(api.Image(process)),"CollegeFB27.exe",StringComparison.OrdinalIgnoreCase))throw new InvalidOperationException("Target is not CollegeFB27.exe.");
@@ -47,8 +58,8 @@ namespace DynamicGamedayAtmosphere {
                         if(!String.Equals(Path.GetFullPath(module.Path),file,StringComparison.OrdinalIgnoreCase))throw new InvalidOperationException("The same runtime filename is already loaded from another folder. Restart the game and MMC.");
                         same=true;continue;
                     }
-                    if(module.Name.StartsWith("DynamicAttendanceNative",StringComparison.OrdinalIgnoreCase)||module.Name.StartsWith("DynamicAttendanceProbe",StringComparison.OrdinalIgnoreCase)||module.Name.StartsWith("DynamicGamedayAtmosphereNative",StringComparison.OrdinalIgnoreCase))
-                        throw new InvalidOperationException("Another attendance/atmosphere runtime is already loaded. Restart the game and MMC before updating.");
+                    if(RuntimeRole(module.Name)==RuntimeRole(Path.GetFileName(file)))
+                        throw new InvalidOperationException("Another runtime for this module role is already loaded. Restart the game and MMC before updating.");
                 }
                 if(same){Notice(note,"Requested runtime is already loaded from its expected folder.");return;}
                 step="resolve LoadLibraryW in its Windows module";

@@ -24,7 +24,7 @@ def main():
     for name,entry in manifest['nativeInputs'].items():
         assert sha(ROOT/entry['path'])==entry['sha256'],'Native input changed: '+name
     contract=read('Compatibility/practice-contract.json')
-    practice=next(x for x in manifest['files'] if x['path'].endswith('SituationalPractice.Runtime.exe'))
+    practice=next(x for x in manifest['files'] if x['path'].endswith('ExpandedPractice.Runtime.exe'))
     assert contract['helperSha256']==practice['sha256'],'Practice ownership contract mismatch'
     # Read-only checks of the original repositories and actual installed adapters.
     baseline=read('Baselines/source-files.json');original_count=0
@@ -40,7 +40,7 @@ def main():
         if status=='unchanged':installed.append(dict(name=ref['name'],sha256=observed))
     release=ROOT/'Release';release.mkdir(exist_ok=True)
     output=release/('DynastyCOT-'+manifest['version']+'.zip')
-    if output.exists():raise RuntimeError('Private archive already exists; use a new product version')
+    if output.exists():raise RuntimeError('Versioned archive already exists; use a new product version')
     with zipfile.ZipFile(output,'w',zipfile.ZIP_DEFLATED,compresslevel=9) as z:
         for p in sorted(stage.rglob('*')):
             if p.is_file():z.write(p,p.relative_to(stage).as_posix())
@@ -55,7 +55,7 @@ def main():
         atUtc=datetime.datetime.now(datetime.timezone.utc).isoformat(),archive=str(output),archiveSha256=sha(output),
         archiveBytes=output.stat().st_size,manifestSha256=manifest_sha,files=len(manifest['files']),
         originalSourcesUnchanged=original_count,installedAdaptersUnchanged=installed,installedReferenceAudit=reference_audit,
-        oneMmcEntry=True,moduleSelections=16,coreChecks=106,assemblyChecks=17,
+        oneMmcEntry=True,moduleSelections=16,coreChecks=106,assemblyChecks=package['assemblyChecks'],
         clockProfileChecks=86,emittedClockChecks=60,detachedHelperChecks=10,menuWriterChecks=79,
         practiceOwnershipChecks=4949,practiceNativeHookChecks=5717,installerChecks=installer['checks'],
         packageEvidence=str(ROOT/'Build/package-verification.json'),installerEvidence=str(ROOT/'Build/installer-verification.json'),
@@ -67,7 +67,7 @@ def main():
         if not prior_path.exists():prior_path.write_text(json.dumps(prior,indent=2)+'\n')
     (release/('verification-'+manifest['version']+'.json')).write_text(json.dumps(report,indent=2)+'\n')
     latest.write_text(json.dumps(report,indent=2)+'\n')
-    meta.update(archive=str(output),verification=str(release/'verification.json'),status='private ZIP verified; live acceptance pending')
+    meta.update(archive=str(output),verification=str(release/'verification.json'),status='ZIP verified; live acceptance pending')
     (ROOT/'Build/current-package.json').write_text(json.dumps(meta,indent=2)+'\n')
     print('PASS: private archive integrity/extraction, matching acceptance reports and '+str(original_count)+' original source hashes unchanged. Installed reference state recorded; no live writes.')
     print(str(output));print('SHA256 '+report['archiveSha256'])

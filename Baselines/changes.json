@@ -13,8 +13,8 @@
     },
     {
       "path": "Modules/DrivePractice/Plugin/Diagnostics.cs",
-      "sha256": "1592418e0704b4a7cdae85e5684f27163153fe354f84eacb71ff8dcf4e6872fb",
-      "reason": "Retain prior native practice and exact helper/ownership contracts; 0.1.6 user-facing Expanded Practice branding, original UTF-8 source encoding retained, internal IDs/paths unchanged."
+      "sha256": "cab584ef81da436d3ec458d776e381ce9d98402acb479578ece70dfbdc385804",
+      "reason": "1.0 branded source-built runtime names, direct verified loading and preserved data/hook contracts"
     },
     {
       "path": "Modules/DrivePractice/Plugin/NativeRuntime.cs",
@@ -23,8 +23,13 @@
     },
     {
       "path": "Modules/DrivePractice/Plugin/PracticeAction.cs",
-      "sha256": "9a0f6b562b013b34918a630b781bd71a6de681cb1c7132cc633ea3ad64e8d922",
-      "reason": "Retain prior native practice and exact helper/ownership contracts; 0.1.6 user-facing Expanded Practice branding, original UTF-8 source encoding retained, internal IDs/paths unchanged."
+      "sha256": "214cfb8fa6636b7f98f09a2f551997a265f8707c2ac025bf315a6dcbc41d846a",
+      "reason": "1.0 branded source-built runtime names, direct verified loading and preserved data/hook contracts"
+    },
+    {
+      "path": "Modules/DrivePractice/Plugin/RuntimeFiles.cs",
+      "sha256": "7ca18dab9ff8dcb8045ddf6584436a60542f98af4b0ec10a7d6bc3801a2f5715",
+      "reason": "1.0 branded source-built runtime names, direct verified loading and preserved data/hook contracts"
     },
     {
       "path": "Modules/DrivePractice/Tools/test_hooks.py",
@@ -38,8 +43,8 @@
     },
     {
       "path": "Modules/DynastyEnhancer/Source/AioCurrencyUiPrograms.h",
-      "sha256": "d150e81fc16107880e60b98bbe8b0361d5685b2ebe9bbada82f82fff678a17c5",
-      "reason": "Retain prior COT integration; 0.1.6 Beyond the Field: bounded content/selection/voices, native paging, persistent modeled recruit records, supported calendar/draft reference, exact AIO Notes/colors and numeric-preserving money redraw adapters."
+      "sha256": "a171190e1fd8742eb2540e9d1205a0603a601ea9222607b4a1c2a6767c740d8d",
+      "reason": "1.0 branded source-built runtime names, direct verified loading and preserved data/hook contracts"
     },
     {
       "path": "Modules/DynastyEnhancer/Source/AnalyticsModel.h",
@@ -88,13 +93,18 @@
     },
     {
       "path": "Modules/DynastyEnhancer/Source/DraftOvrUiPrograms.h",
-      "sha256": "d3faf0d543dfe6747baa95a19fcecd6cea3fc2df55a1532f04d138285d31cea2",
-      "reason": "0.1.16 bounded season-review fixes and source/fixture verification; retain native scopes, fingerprints, published identities/history, four-module selection and helper verification."
+      "sha256": "ca09d35587c04d7938ba9edd349126d8b66e6310b1542976f8146f09f7cee144",
+      "reason": "1.0 branded source-built runtime names, direct verified loading and preserved data/hook contracts"
+    },
+    {
+      "path": "Modules/DynastyEnhancer/Source/DraftResultsUiPrograms.h",
+      "sha256": "df5fdc477cce95577375cba20b3a89d326c18f789682a996dd9161d77f06ddd9",
+      "reason": "1.0 branded source-built runtime names, direct verified loading and preserved data/hook contracts"
     },
     {
       "path": "Modules/DynastyEnhancer/Source/EnhancementOptions.h",
-      "sha256": "7546a6d58d62ad719e5a1fe630ea4a60c81d476cd8e5263448aed5386716ef13",
-      "reason": "COT 0.1.3: independent Weekly Advance adapters with exact loader-pointer normalization, creation-page per-Dynasty options, requested defaults and fitted dollar prefixes"
+      "sha256": "dc98056afcca914cadda08506642f06bbaf37694e27c0ff22be38e3249917101",
+      "reason": "1.0 branded source-built runtime names, direct verified loading and preserved data/hook contracts"
     },
     {
       "path": "Modules/DynastyEnhancer/Source/EnhancementOptionsRuntime.h",
@@ -118,13 +128,13 @@
     },
     {
       "path": "Modules/DynastyEnhancer/Source/FogGapUiPrograms.h",
-      "sha256": "ebc6211f22ea278dea102e78bfaf26f417bca8387aafc1e35f529994673d9968",
-      "reason": "0.1.16 bounded season-review fixes and source/fixture verification; retain native scopes, fingerprints, published identities/history, four-module selection and helper verification."
+      "sha256": "c1bec865ba692bd086d8f3c788f206f3fff18ca9969109d1af7ddb7d1ab0ad8a",
+      "reason": "1.0 branded source-built runtime names, direct verified loading and preserved data/hook contracts"
     },
     {
       "path": "Modules/DynastyEnhancer/Source/LiveTables.h",
-      "sha256": "bc8d4784022da4714d9eec4fe8535a58bbdf44dcac8d1d3ad482341cdcf8c37d",
-      "reason": "0.1.14: released native production and position-relative grades with prestige uncertainty; same-model optional PFF publications and preserved history"
+      "sha256": "6f62a8b1bee603906ccd435e8afe6efeb61e1ddd925babd297953a2772f95d1d",
+      "reason": "1.0 branded source-built runtime names, direct verified loading and preserved data/hook contracts"
     },
     {
       "path": "Modules/DynastyEnhancer/Source/MmcPlugin.cs",
@@ -133,8 +143,8 @@
     },
     {
       "path": "Modules/DynastyEnhancer/Source/MmcRecruitingPlugin.cs",
-      "sha256": "e95f189100e1e5af2e2136f642a156183d265eff4067026a7cc337f68b95cbac",
-      "reason": "Retain prior COT integration; 0.1.6 Beyond the Field: bounded content/selection/voices, native paging, persistent modeled recruit records, supported calendar/draft reference, exact AIO Notes/colors and numeric-preserving money redraw adapters."
+      "sha256": "1a035ec14f2e9973bc1498fc1a1537a0e29422b8e0b6728efa5d5b35c54d8aac",
+      "reason": "1.0 branded source-built runtime names, direct verified loading and preserved data/hook contracts"
     },
     {
       "path": "Modules/DynastyEnhancer/Source/NativeSocialMedia.cpp",
@@ -142,49 +152,64 @@
       "reason": "0.1.16 bounded season-review fixes and source/fixture verification; retain native scopes, fingerprints, published identities/history, four-module selection and helper verification."
     },
     {
+      "path": "Modules/DynastyEnhancer/Source/PackedChangeWatch.h",
+      "sha256": "94203b314e3da2f8ffc99a7c444cad1542260008f282d889b59f005b05357ec1",
+      "reason": "1.0 branded source-built runtime names, direct verified loading and preserved data/hook contracts"
+    },
+    {
       "path": "Modules/DynastyEnhancer/Source/PlayerBlueprintUiPrograms.h",
-      "sha256": "5362ce75736bfc2043dc900f909b2fc94f43d0aad48298a557c982035842c2bd",
-      "reason": "COT 0.1.5 feedback: native focus colors, exact AIO shared overview; separate visitor demand/tickets, deficit bed, scoring audio priority and recorded-TD inset recovery. Workspace only."
+      "sha256": "b3644061335981ae3b3154ab2c055c62f9c68dd06280791dca42810513b7ea14",
+      "reason": "1.0 branded source-built runtime names, direct verified loading and preserved data/hook contracts"
     },
     {
       "path": "Modules/DynastyEnhancer/Source/PlayerCardUiPrograms.h",
-      "sha256": "854019d5cb0d4d4fed9d3c6da8052b6ec1e5d59032d078605381c9a5f4360363",
-      "reason": "RC013 native Analytics roster-card/action/return, delayed week visibility, safe filter transitions, isolated full-card fog adapters, glyph repair, installer footer and winning visitor departures"
+      "sha256": "c2d1f925f37ef8dbe1d9ae47182f229cd71b4978480d67d3e3e9850f3382ebd1",
+      "reason": "1.0 branded source-built runtime names, direct verified loading and preserved data/hook contracts"
+    },
+    {
+      "path": "Modules/DynastyEnhancer/Source/PlayerFogUiPrograms.h",
+      "sha256": "3d0aadabcde8b19d148464c42715cb388980d4bab3448ac3f0a53f1dc3434c06",
+      "reason": "1.0 branded source-built runtime names, direct verified loading and preserved data/hook contracts"
     },
     {
       "path": "Modules/DynastyEnhancer/Source/PlayerFormationUiPrograms.h",
-      "sha256": "1acae065be71a488fb8190f9a2044e24fa5fabb0db3e01391c9c6489fce2dba6",
-      "reason": "COT 0.1.5 feedback: native focus colors, exact AIO shared overview; separate visitor demand/tickets, deficit bed, scoring audio priority and recorded-TD inset recovery. Workspace only."
+      "sha256": "ea46c1d4fec062d4570007af80eb18a9df9bfd4d5ec8fc6bb3d25cb60a61c7f2",
+      "reason": "1.0 branded source-built runtime names, direct verified loading and preserved data/hook contracts"
     },
     {
       "path": "Modules/DynastyEnhancer/Source/PlayerHubUiPrograms.h",
-      "sha256": "80f95c36b569ffca567ca5420f4cf9e4487f4c5b5312962750b30903f53b09f1",
-      "reason": "COT 0.1.5 feedback: native focus colors, exact AIO shared overview; separate visitor demand/tickets, deficit bed, scoring audio priority and recorded-TD inset recovery. Workspace only."
+      "sha256": "2156e8b4eb75bbada49aa4ef52b9e6f5c6328fb325917a1527533747356d02c6",
+      "reason": "1.0 branded source-built runtime names, direct verified loading and preserved data/hook contracts"
     },
     {
       "path": "Modules/DynastyEnhancer/Source/PlayerInGameUiPrograms.h",
-      "sha256": "a68c4bf12f7c3c8c864efcf11d0d609654f80c47fc622eaf84e82d0544eb2595",
-      "reason": "COT 0.1.5 feedback: native focus colors, exact AIO shared overview; separate visitor demand/tickets, deficit bed, scoring audio priority and recorded-TD inset recovery. Workspace only."
+      "sha256": "df2f7d3c1ea3a3289ec5b4b351a8e8695bdf2ae8e53c06ffbc15e7892f7db64d",
+      "reason": "1.0 branded source-built runtime names, direct verified loading and preserved data/hook contracts"
     },
     {
       "path": "Modules/DynastyEnhancer/Source/PlayerNilUiPrograms.h",
-      "sha256": "915566f8c7bcab7b65aa759ad89e947fc90411ea620ae67d60449254574051df",
-      "reason": "COT 0.1.5 feedback: native focus colors, exact AIO shared overview; separate visitor demand/tickets, deficit bed, scoring audio priority and recorded-TD inset recovery. Workspace only."
+      "sha256": "1b9ee8510ee4cf74ee1bd848b5dc38348706c3de4fa0332762ebe32779e098b8",
+      "reason": "1.0 branded source-built runtime names, direct verified loading and preserved data/hook contracts"
+    },
+    {
+      "path": "Modules/DynastyEnhancer/Source/PlayerPlaycallUiPrograms.h",
+      "sha256": "596033b802829a913537141b1cf8ba5943322a90404813bffe60f43b872af2c2",
+      "reason": "1.0 branded source-built runtime names, direct verified loading and preserved data/hook contracts"
     },
     {
       "path": "Modules/DynastyEnhancer/Source/PlayerPracticeUiPrograms.h",
-      "sha256": "ffe4dc024326d0b38b62885d8aecba8083e92b5f8cb39efc2635193abcc5dec5",
-      "reason": "COT 0.1.5 feedback: native focus colors, exact AIO shared overview; separate visitor demand/tickets, deficit bed, scoring audio priority and recorded-TD inset recovery. Workspace only."
+      "sha256": "3bed62e83e2a5f1af85530264082dd031b5cd45eabf322573483ee5480214044",
+      "reason": "1.0 branded source-built runtime names, direct verified loading and preserved data/hook contracts"
     },
     {
       "path": "Modules/DynastyEnhancer/Source/PlayerRecruitUiPrograms.h",
-      "sha256": "6f1b0de6ae4516a3a27cc77dea15cd887b6e98856cd4487a315be066ee247291",
-      "reason": "COT 0.1.5 feedback: native focus colors, exact AIO shared overview; separate visitor demand/tickets, deficit bed, scoring audio priority and recorded-TD inset recovery. Workspace only."
+      "sha256": "12f1cc7fbd834a2ffdbc5d8a646cb93d62136b4effc3ac2dbfd9fe2fedf05cfc",
+      "reason": "1.0 branded source-built runtime names, direct verified loading and preserved data/hook contracts"
     },
     {
       "path": "Modules/DynastyEnhancer/Source/RecruitNotesUiPrograms.h",
-      "sha256": "f9bdb0448d909452be6ac8f2f2565875ce3f35d14e570ea3f3ba38fb5fb9a418",
-      "reason": "RC013 native Analytics roster-card/action/return, delayed week visibility, safe filter transitions, isolated full-card fog adapters, glyph repair, installer footer and winning visitor departures"
+      "sha256": "709a4d04731ce07718b2baa5339de1e8e0741fcbc6e6531a6bb1f36ab853dd59",
+      "reason": "1.0 branded source-built runtime names, direct verified loading and preserved data/hook contracts"
     },
     {
       "path": "Modules/DynastyEnhancer/Source/RecruitNotesUiRuntime.h",
@@ -208,13 +233,13 @@
     },
     {
       "path": "Modules/DynastyEnhancer/Source/RecruitingFog.cpp",
-      "sha256": "d303f3270192fd25c28a85065954fa9c9c49a0cc98a6dd6e95054e69eeb24992",
-      "reason": "0.1.16 bounded season-review fixes and source/fixture verification; retain native scopes, fingerprints, published identities/history, four-module selection and helper verification."
+      "sha256": "b2b11f1141e1bce18a1e3ddc4062bf8cb1eb7c629fe821d6b0f03d726f9981aa",
+      "reason": "1.0 branded source-built runtime names, direct verified loading and preserved data/hook contracts"
     },
     {
       "path": "Modules/DynastyEnhancer/Source/RuntimeFeed.h",
-      "sha256": "5e8b122fd1f72951f1b0eebfba971bd204ba97a89b4e81e0aa5673c120cdb037",
-      "reason": "0.1.14: released native production and position-relative grades with prestige uncertainty; same-model optional PFF publications and preserved history"
+      "sha256": "c0abcd095a5da0d766e8ca1f7799ad379bd9817aa74eafb90aa0ed7ce8d17472",
+      "reason": "1.0 branded source-built runtime names, direct verified loading and preserved data/hook contracts"
     },
     {
       "path": "Modules/DynastyEnhancer/Source/analytics-baselines.json",
@@ -223,13 +248,13 @@
     },
     {
       "path": "Modules/DynastyEnhancer/Source/build-recruiting-fog.ps1",
-      "sha256": "95c4f614501f39e27c334e4e3b06dc30094988f77f0226b6f2131b9545acaf61",
-      "reason": "0.1.14: released native production and position-relative grades with prestige uncertainty; same-model optional PFF publications and preserved history"
+      "sha256": "b2acdf3abce4621b04fb87d66372c1a1bdd693b0cc08586b642401ca9e703e10",
+      "reason": "1.0 branded source-built runtime names, direct verified loading and preserved data/hook contracts"
     },
     {
       "path": "Modules/DynastyEnhancer/Source/build.ps1",
-      "sha256": "25604b43a056377d7f16e3175af4853f00729575a97f46d1a96751892930e0e7",
-      "reason": "Bounded editorial candidate: reviewed proposal, native-window repetition memory and equivalent cached comparisons; stable publications and guards"
+      "sha256": "33e81eab078e6729fb61f9cbc9a96808113751e01d351d310f58627f8d3c150f",
+      "reason": "1.0 branded source-built runtime names, direct verified loading and preserved data/hook contracts"
     },
     {
       "path": "Modules/DynastyEnhancer/Tests/CurrencyDisplayTests.h",
@@ -238,13 +263,13 @@
     },
     {
       "path": "Modules/DynastyEnhancer/Tests/EnhancementOptionsTests.h",
-      "sha256": "00614369419b7018b2e52c21324ee3a8a9910fdc74f453366b62fdda294aa871",
-      "reason": "RC013 native Analytics roster-card/action/return, delayed week visibility, safe filter transitions, isolated full-card fog adapters, glyph repair, installer footer and winning visitor departures"
+      "sha256": "1d0b0e9c7c25f2eac32738dc4cd6e4917c2f1b2e03474c2ee7497bc6f463412b",
+      "reason": "1.0 branded source-built runtime names, direct verified loading and preserved data/hook contracts"
     },
     {
       "path": "Modules/DynastyEnhancer/Tests/NativeSocialMediaTests.cpp",
-      "sha256": "3ba1c18140d47352c028f86160ab304141c868ab03d8af309540b4d180fdc88e",
-      "reason": "0.1.16 bounded season-review fixes and source/fixture verification; retain native scopes, fingerprints, published identities/history, four-module selection and helper verification."
+      "sha256": "5864c108d79c3efb26bfdf8b6c68906f96b35dca4ce4a30b51c4227b1d79c94b",
+      "reason": "1.0 branded source-built runtime names, direct verified loading and preserved data/hook contracts"
     },
     {
       "path": "Modules/DynastyEnhancer/Tests/RecruitResumeExpansionTests.h",
@@ -318,8 +343,8 @@
     },
     {
       "path": "Modules/DynastyEnhancer/Tests/enhancement_grade_scales_test.py",
-      "sha256": "1dfb36bf96f187cd3d2a4d4779b4f00abb7f730205a868bd148852e51d352bd2",
-      "reason": "COT 0.1.5 feedback: native focus colors, exact AIO shared overview; separate visitor demand/tickets, deficit bed, scoring audio priority and recorded-TD inset recovery. Workspace only."
+      "sha256": "c318aab4dfe28700f7fca7390721d78ab0faa454c5915fff40e6e234017862c0",
+      "reason": "1.0 branded source-built runtime names, direct verified loading and preserved data/hook contracts"
     },
     {
       "path": "Modules/DynastyEnhancer/Tests/feed_engine.test.mjs",
@@ -350,6 +375,11 @@
       "path": "Modules/DynastyEnhancer/Tests/offseason_discourse.test.mjs",
       "sha256": "8bffc1c8d4ccb0d11f2a028b174494dc6fb27c29968df874b2326ea437734e14",
       "reason": "0.1.7: source-level weekly routine budget, complete continuous scope lists, concise native sidebar and header presentation."
+    },
+    {
+      "path": "Modules/DynastyEnhancer/Tests/player_card_ui_test.py",
+      "sha256": "81f254cbb31a1044e34919db229c5a71721f67fbc80986b70495112757d34798",
+      "reason": "1.0 branded source-built runtime names, direct verified loading and preserved data/hook contracts"
     },
     {
       "path": "Modules/DynastyEnhancer/Tests/portal_draft.test.mjs",
@@ -392,9 +422,19 @@
       "reason": "0.1.7: verify complete local views and fifteen-root allowance with protected major coverage."
     },
     {
+      "path": "Modules/DynastyEnhancer/Tests/world_expansion.test.mjs",
+      "sha256": "821f1f790cfec45bdeefcf7d3f6ead6e00c4f53eb5727f30ff649e61a6c9fc79",
+      "reason": "1.0 branded source-built runtime names, direct verified loading and preserved data/hook contracts"
+    },
+    {
       "path": "Modules/DynastyEnhancer/Tools/account_presentation.mjs",
       "sha256": "e84412eebf4f9c362648d3e9e190d838ea95613dc21e858c2c3a643ea4d17996",
       "reason": "COT hub clock scope, fresh practice picker and recruit star account presentation"
+    },
+    {
+      "path": "Modules/DynastyEnhancer/Tools/betting_model.mjs",
+      "sha256": "3df4eaf4a249ca4ae56f8bed2ccdd7a3f7ea35888d1f56d227e29d611437df03",
+      "reason": "1.0 branded source-built runtime names, direct verified loading and preserved data/hook contracts"
     },
     {
       "path": "Modules/DynastyEnhancer/Tools/build_aio_currency_ui.py",
@@ -403,8 +443,8 @@
     },
     {
       "path": "Modules/DynastyEnhancer/Tools/build_currency_recruiteditor_ui.py",
-      "sha256": "18e69338c9ad998ec3903a0c5a6204e8af9126170bf8dec3e3dbc2229588395e",
-      "reason": "Retain prior COT integration; 0.1.6 Beyond the Field: bounded content/selection/voices, native paging, persistent modeled recruit records, supported calendar/draft reference, exact AIO Notes/colors and numeric-preserving money redraw adapters."
+      "sha256": "51a80f770dc961745ef1ee32075a5f80a269e4077ad09f84389ae449345bdfb2",
+      "reason": "1.0 branded source-built runtime names, direct verified loading and preserved data/hook contracts"
     },
     {
       "path": "Modules/DynastyEnhancer/Tools/build_currency_ui.py",
@@ -423,8 +463,13 @@
     },
     {
       "path": "Modules/DynastyEnhancer/Tools/build_player_card_ui.py",
-      "sha256": "ad02e5566a74169911f20c90a409ea27e51c2daf753d6c597d90a7e610ab9e80",
-      "reason": "RC013 native Analytics roster-card/action/return, delayed week visibility, safe filter transitions, isolated full-card fog adapters, glyph repair, installer footer and winning visitor departures"
+      "sha256": "9acb5ae28c78d180e9407cae5348f418665ea634f83c4e3b934d9cc279fc8ed7",
+      "reason": "1.0 branded source-built runtime names, direct verified loading and preserved data/hook contracts"
+    },
+    {
+      "path": "Modules/DynastyEnhancer/Tools/build_player_nil_ui.py",
+      "sha256": "d365c947e969ab67cbb6b29e2c92acec4f5746cbac53c2eb7f3f89a4c72e60fe",
+      "reason": "1.0 branded source-built runtime names, direct verified loading and preserved data/hook contracts"
     },
     {
       "path": "Modules/DynastyEnhancer/Tools/build_recruit_notes_ui.py",
@@ -447,6 +492,11 @@
       "reason": "0.1.15: reviewed PFF editorial pack, verified position boards and weekly grade honors; National Social capacity 300"
     },
     {
+      "path": "Modules/DynastyEnhancer/Tools/export_runtime.mjs",
+      "sha256": "0d6d32526f7dbed86f3ec08d12312898bcdb0d4e1dd23120aabaeb15128e9350",
+      "reason": "1.0 branded source-built runtime names, direct verified loading and preserved data/hook contracts"
+    },
+    {
       "path": "Modules/DynastyEnhancer/Tools/feed_engine.mjs",
       "sha256": "bee28c18a12c04d48ae4922016b462b9fc5f67bb130430b66742ff14ec0adce1",
       "reason": "0.1.14: released native production and position-relative grades with prestige uncertainty; same-model optional PFF publications and preserved history"
@@ -455,6 +505,11 @@
       "path": "Modules/DynastyEnhancer/Tools/feed_selection.mjs",
       "sha256": "32e4b8c7fb3fd90c56b35c1f797e3c8fbeb224218e69cc767acb2c315e9b977e",
       "reason": "0.1.16 bounded season-review fixes and source/fixture verification; retain native scopes, fingerprints, published identities/history, four-module selection and helper verification."
+    },
+    {
+      "path": "Modules/DynastyEnhancer/Tools/grade_scales.py",
+      "sha256": "e835caaa5c10b678836e278cec783b566b44f8f29b7c9525e4d6a3c1748813d2",
+      "reason": "1.0 branded source-built runtime names, direct verified loading and preserved data/hook contracts"
     },
     {
       "path": "Modules/DynastyEnhancer/Tools/history_store.mjs",
@@ -582,6 +637,11 @@
       "reason": "COT per-Dynasty clock table, native reads/writes and detached persistence"
     },
     {
+      "path": "Modules/ExtraDynastySettings/Plugin/RuntimeFiles.cs",
+      "sha256": "8110f0a6898b710cdeced3d58e51753c52a45d474131aeaa5242296df537eefb",
+      "reason": "1.0 branded source-built runtime names, direct verified loading and preserved data/hook contracts"
+    },
+    {
       "path": "Modules/ExtraDynastySettings/Plugin/build.ps1",
       "sha256": "05b0bba8d63226652165b930a20065410b5a5d7ce3d895b88caa73a73128b252",
       "reason": "COT per-Dynasty clock table, native reads/writes and detached persistence"
@@ -633,8 +693,8 @@
     },
     {
       "path": "Modules/GamedayAtmosphere/Source/Build.ps1",
-      "sha256": "82241e3992572142a4b0e3a124c19ccbc2c61ce68a386b34fbf2c9cfc1795e90",
-      "reason": "Retain prior COT integration; 0.1.6 Gameday Atmosphere branding and appended stable-ID visitor-strength control, new-plan-only odds preference with existing native/neutral/protected/history gates retained."
+      "sha256": "e5779ee0b849dae95ea8121aae55186bd504a97d4760a773ac59a59df6095c3f",
+      "reason": "1.0 branded source-built runtime names, direct verified loading and preserved data/hook contracts"
     },
     {
       "path": "Modules/GamedayAtmosphere/Source/DgaDiagnostics.cs",
@@ -650,6 +710,11 @@
       "path": "Modules/GamedayAtmosphere/Source/MajorReplay.h",
       "sha256": "ad5c74c6979f0d0903155fae6e10097487bd6321138480a40f336c12c8f581f4",
       "reason": "COT 0.1.5 feedback: native focus colors, exact AIO shared overview; separate visitor demand/tickets, deficit bed, scoring audio priority and recorded-TD inset recovery. Workspace only."
+    },
+    {
+      "path": "Modules/GamedayAtmosphere/Source/ManagedRuntimeLoader.cs",
+      "sha256": "56cb7f1a02f224efd27727bfb21cddd3916289bb1f139c4282ca4dba133e845f",
+      "reason": "1.0 branded source-built runtime names, direct verified loading and preserved data/hook contracts"
     },
     {
       "path": "Modules/GamedayAtmosphere/Source/MmcPlugin.cs",
@@ -730,6 +795,11 @@
       "path": "Modules/GamedayAtmosphere/Tests/MajorReplayTests.cpp",
       "sha256": "abc31a77f3ca7fca828a2b17aed3270ac472356ab7d4d2bcda81e79a3b0ad253",
       "reason": "COT 0.1.5 feedback: native focus colors, exact AIO shared overview; separate visitor demand/tickets, deficit bed, scoring audio priority and recorded-TD inset recovery. Workspace only."
+    },
+    {
+      "path": "Modules/GamedayAtmosphere/Tests/ManagedRuntimeLoaderTests.cs",
+      "sha256": "352ff62e5209cc395f260a1821227e74e0ee805dfbe6620602455ef9e0675fb7",
+      "reason": "1.0 branded source-built runtime names, direct verified loading and preserved data/hook contracts"
     },
     {
       "path": "Modules/GamedayAtmosphere/Tests/MotionSoundCoverageTests.cpp",

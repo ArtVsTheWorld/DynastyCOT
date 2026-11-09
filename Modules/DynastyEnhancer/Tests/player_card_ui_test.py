@@ -3,6 +3,7 @@ import copy
 import math
 from pathlib import Path
 import sys
+from dataclasses import replace
 sys.path.insert(0,str(Path(__file__).resolve().parents[1]/'Tools'))
 from build_recruit_notes_ui import Assembler, GRADE_COLORS
 from build_player_card_ui import (header_suffix,badge_suffix,attributes_suffix,
@@ -116,6 +117,13 @@ for rating in [0,59,60,79,80,90,100]:
     for name in ['FocusValueTextStyle','UnfocusValueTextStyle','UnfocusableValueTextStyle']:
         style=clip['mData']['ExtraInfo'][name]
         assert style['fontColor']==GRADE_COLORS[expected(rating)] and style['font']=='native-font' and style['size']==28
+    clip['calls'].clear()
+    Machine({},[]).run(program(group_suffix),{1:data,2:clip})
+    assert clip['calls']==[], 'Unchanged skill group reapplied native styles'
+    for name in ['FocusValueTextStyle','UnfocusValueTextStyle','UnfocusableValueTextStyle']:
+        clip['mData']['ExtraInfo'][name]['fontColor']=0xFFFFFF
+        Machine({},[]).run(program(group_suffix),{1:data,2:clip})
+        assert clip['mData']['ExtraInfo'][name]['fontColor']==GRADE_COLORS[expected(rating)]
     updates=[];old_extra={'font':'native-title','hAlign':'right','fontColor':0xFFFFFF}
     old_extra['CloneAndModify']=lambda patch,original=old_extra:{**original,**patch}
     levels=[{'display':rating,'ExtraInfo':old_extra},{'display':3,'ExtraInfo':{'fontColor':0x00FF00}}]
@@ -128,6 +136,28 @@ for rating in [0,59,60,79,80,90,100]:
     assert levels[1]==bonus and old_extra['fontColor']==0xFFFFFF, 'Upgrade bonus or shared style was altered'
     assert levels[0]['ExtraInfo']['fontColor']==GRADE_COLORS[expected(rating)]
     assert levels[0]['ExtraInfo']['font']=='native-title' and levels[0]['ExtraInfo']['hAlign']=='right'
+    updates.clear()
+    Machine(globals_,[]).run(program(level_suffix),{1:receiver,4:rating,5:3})
+    assert updates==[], 'Unchanged skill title notified native data provider'
+    levels[0]['display']=rating
+    Machine(globals_,[]).run(program(level_suffix),{1:receiver,4:rating,5:3})
+    assert updates==[(0,'display')], 'Native title reset did not repaint exactly once'
+    updates.clear();levels[0]['ExtraInfo']['fontColor']=0xFFFFFF
+    Machine(globals_,[]).run(program(level_suffix),{1:receiver,4:rating,5:3})
+    assert updates==[(0,'ExtraInfo')] and levels[1]==bonus
+
+# Native display listeners can replace the item while handling UpdateProperty.
+# Style the current item, retaining that listener's unrelated font/layout data.
+replacement_style={'font':'native-rebound','fontColor':0xFFFFFF,'size':30}
+replacement_style['CloneAndModify']=lambda patch:{**replacement_style,**patch}
+rebound=[{'display':64,'ExtraInfo':{'fontColor':0xFFFFFF}}]
+def replace_on_title(index,key,value):
+    if key=='display':rebound[0]={'display':value,'ExtraInfo':replacement_style}
+    else:rebound[0][key]=value
+receiver={'mSkillLevelDataProvider':{'UpdateProperty':replace_on_title,'GetItemData':lambda index:rebound[index]}}
+Machine({},[]).run(program(level_suffix),{1:receiver,4:64,5:3})
+assert rebound[0]['display']=='D' and rebound[0]['ExtraInfo']['font']=='native-rebound'
+assert rebound[0]['ExtraInfo']['fontColor']==GRADE_COLORS['D'] and rebound[0]['ExtraInfo']['size']==30
 
 for revealed in [True,False]:
     widgets=[text_widget() for _ in range(6)]
@@ -143,12 +173,15 @@ for revealed in [True,False]:
 for rating in [59,70,90]:
     entry={'Rating':rating,'Level':3,'SkillGroupCap':8,'MaxSkillGroupCap':10}
     gauge={'mData':{'value':3,'ExtraInfo':{}},'calls':[]}
-    gauge['SetExtraInfo']=lambda extra:gauge['calls'].append(extra)
+    def apply_gauge(extra):gauge['calls'].append(extra);gauge['mData']['ExtraInfo'].update(extra)
+    gauge['SetExtraInfo']=apply_gauge
     receiver={'mData':{'ExtraInfo':{'SkillData0':entry}},'mcSkill0':gauge}
     before=copy.deepcopy(entry)
     Machine({},[]).run(program(skill_slots_suffix),{1:receiver})
     assert entry==before and gauge['mData']['value']==3
     assert gauge['calls']==[{'RightLabelDisplayOverride':expected(rating),'DEPlayerRating':True}]
+    gauge['calls'].clear();Machine({},[]).run(program(skill_slots_suffix),{1:receiver})
+    assert gauge['calls']==[], 'Unchanged six-slot rating renderer reapplied its style'
 for suffix in [attribute_slots_suffix,skill_slots_suffix]:
     for receiver in [{},{'mData':{}},{'mData':{'ExtraInfo':{}}}]:Machine({},[]).run(program(suffix),{1:receiver})
 
@@ -166,6 +199,41 @@ for rating in range(101):
     assert 'RightLabelDisplayOverride' not in original_extra and style['fontColor']==0xFFFFFF
     for key in ['MinValue','MaxValue','IncreaseValue','CanIncrease']:assert extra[key]==original_extra[key]
     assert extra['UnfocusValueTextStyle']['font']=='native' and extra['UnfocusValueTextStyle']['fontColor']==GRADE_COLORS[expected(rating)]
+    updates.clear()
+    Machine(globals_,[]).run(program(subskills_suffix),{1:{'mSubskillsDataProvider':provider}})
+    assert updates==[], 'Unchanged subskill notified native data provider'
+    # A reused row, missing marker, or native focus/style reset must not be
+    # suppressed by the no-op guard. Numeric progression remains untouched.
+    for field,value in [('RightLabelDisplayOverride','native'),('DEPlayerRating',False)]:
+        rows[0]['ExtraInfo'][field]=value;updates.clear()
+        Machine(globals_,[]).run(program(subskills_suffix),{1:{'mSubskillsDataProvider':provider}})
+        assert updates==[(0,'ExtraInfo')] and rows[0]['ExtraInfo']['RightLabelDisplayOverride']==expected(rating)
+    rows[0]['ExtraInfo']['UnfocusValueTextStyle']['fontColor']=0xFFFFFF;updates.clear()
+    Machine(globals_,[]).run(program(subskills_suffix),{1:{'mSubskillsDataProvider':provider}})
+    assert updates==[(0,'ExtraInfo')] and rows[0]['value']==rating
+
+# Reuse the same subskill row across scale, fog and color transitions. Inspect
+# actual display/style fields so no widget-identity cache can hide new values.
+row={'value':86,'display':'Speed','ExtraInfo':{}}
+notifications=[]
+def redraw_update(index,key,value):
+    row[key]=value;notifications.append((index,key))
+redraw_provider={'GetNumItems':lambda:1,'GetItemData':lambda index:row,'UpdateProperty':redraw_update}
+from grade_scales import label
+for scale in [0,1,2,3,4,0]:
+    for colors in [True,False,True]:
+        for fog in [True,False,True]:
+            if not colors and not fog:continue # Both off delegates to native.
+            p=program(subskills_suffix);code=bytearray(p.code)
+            for offsets,value in [(p.scale_offsets,scale),(p.color_offsets,int(colors)),(p.fog_offsets,int(fog))]:
+                for at in offsets:code[at]=value
+            p=replace(p,code=bytes(code))
+            Machine(globals_,[]).run(p,{1:{'mSubskillsDataProvider':redraw_provider}})
+            assert row['ExtraInfo']['RightLabelDisplayOverride']==(label(86,scale) if fog else '86')
+            assert row['value']==86 and row['display']=='Speed'
+            notifications.clear()
+            Machine(globals_,[]).run(p,{1:{'mSubskillsDataProvider':redraw_provider}})
+            assert notifications==[], 'Unchanged row notified provider after option transition'
 
 sys.path.insert(0,'C:/Apps/CFB 27/Working/Teambuilder Import Plugin/Tools')
 from inspect_tb_ast import load

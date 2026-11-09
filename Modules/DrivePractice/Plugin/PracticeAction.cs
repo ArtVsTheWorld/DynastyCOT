@@ -30,7 +30,7 @@ namespace SituationalPractice
                         if(launched.Contains(key))continue;
                         string folder=BuildIdentity.Folder;Directory.CreateDirectory(folder);
                         WriteLaunchContext(folder,p,diagnostics);
-                        string helper=Path.Combine(folder,"SituationalPractice.Runtime.exe");
+                        string helper=RuntimeFiles.PathIn(Path.GetDirectoryName(typeof(PracticeAction).Assembly.Location));
                         int gamePid=p.Id;long gameStart=p.StartTime.ToUniversalTime().Ticks;
                         Process child;
                         using(RuntimeFiles.OpenVerified(helper))

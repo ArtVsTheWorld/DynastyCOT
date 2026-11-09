@@ -9,6 +9,27 @@ BASE.mkdir()
 extractor=BASE/'ExtractAtmosphereFixture.exe'
 subprocess.run([r'C:\Windows\Microsoft.NET\Framework64\v4.0.30319\csc.exe','/nologo','/platform:x64','/out:'+str(extractor),str(ROOT/'Tests/ExtractAtmosphereFixture.cs')],check=True)
 checks=0
+TRUSTED_ROOTS=set()
+# These deliberately synthetic standalone owners exercise the same manifest
+# hash policy without committing/redistributing old release binaries.
+TRUSTED_PACKAGE=BASE/'KnownLegacyFixturePackage';shutil.copytree(PKG,TRUSTED_PACKAGE)
+ownership_path=TRUSTED_PACKAGE/'Templates/owned-payloads.json'
+fixture_ownership=json.loads(ownership_path.read_text())
+fixture_proofs=[]
+for name,module in [('DynastyEnhancer.dll','DynastyEnhancer'),('DynamicGamedayAtmosphere.dll','GamedayAtmosphere'),('OfflineDynastySettings.dll','ExtraDynastySettings'),('SituationalPractice.dll','DrivePractice')]:
+ fixture_proofs.append((f'Plugins/{name}',module,('old '+name).encode()))
+fixture_proofs.extend([
+ ('Plugins/DynastyEnhancer/Runtime-v103/DynastyEnhancerNative-v103.dll','DynastyEnhancer',b'old native payload'),
+ ('Plugins/DynamicGamedayAtmosphere/Runtime-1.54.0/DynamicGamedayAtmosphereNative-1.54.0.dll','GamedayAtmosphere',b'old atmosphere payload'),
+ ('Plugins/PlayerAnalytics.dll','DynastyEnhancer',b'previous standalone Analytics'),
+ ('Plugins/PlayerAnalytics.dll','DynastyEnhancer',b'standalone owner'),
+ ('Plugins/PlayerAnalytics/Runtime-v0.1/PlayerAnalyticsNative-v0.1.dll','DynastyEnhancer',b'previous standalone Analytics')])
+fixture_ownership.setdefault('standalone',[]).extend(dict(path=path,module=module,sha256=hashlib.sha256(data).hexdigest()) for path,module,data in fixture_proofs)
+ownership_path.write_text(json.dumps(fixture_ownership))
+fixture_manifest_path=TRUSTED_PACKAGE/'package-manifest.json';fixture_manifest=json.loads(fixture_manifest_path.read_text())
+for item in fixture_manifest['files']:
+ if item['path']=='Templates/owned-payloads.json':item['sha256']=hashlib.sha256(ownership_path.read_bytes()).hexdigest()
+fixture_manifest_path.write_text(json.dumps(fixture_manifest))
 def check(ok,message):
  global checks
  assert ok,message
@@ -23,6 +44,7 @@ def seed(name,existing=True):
  write(root,'Plugins/OtherOverhaul.dll',b'unrelated overhaul plugin')
  write(root,'Plugins/OtherOverhaul/settings.json',b'unrelated settings')
  if existing:
+  TRUSTED_ROOTS.add(root)
   for name in ['DynastyEnhancer.dll','DynamicGamedayAtmosphere.dll','OfflineDynastySettings.dll','SituationalPractice.dll']:
    write(root,'Plugins/'+name,('old '+name).encode())
   write(root,'Plugins/DynastyEnhancer/Runtime-v103/DynastyEnhancerNative-v103.dll',b'old native payload')
@@ -37,6 +59,7 @@ def seed(name,existing=True):
   write(root,'Plugins/DynastyCOT/settings.json',b'{"format":1,"modules":{"DrivePractice":false}}')
  return root
 def run(root,*extra,success=True,package=PKG):
+ if package==PKG and root in TRUSTED_ROOTS:package=TRUSTED_PACKAGE
  command=[os.environ.get('COT_TEST_POWERSHELL','pwsh'),'-NoProfile','-NonInteractive','-ExecutionPolicy','Bypass','-File',str(package/'Install.ps1'),'-MmcRoot',str(root),
           '-PackageRoot',str(package),'-Fixture','-FixtureRoot',str(BASE),*extra]
  environment=os.environ.copy()
@@ -52,7 +75,7 @@ host=next(f for f in manifest['files'] if f['path']=='Plugins/DynastyCOT.dll')
 check(hashlib.sha256((fresh/host['path']).read_bytes()).hexdigest()==host['sha256'],'fresh host differs')
 check(all(json.loads((fresh/'Plugins/DynastyCOT/settings.json').read_text())['modules'].values()),'fresh module defaults')
 receipt=json.loads((fresh/'Plugins/DynastyCOT/installed-files.json').read_text())
-check({'Plugins/DynastyCOT.dll','COT-Runtime/Shared/node.exe','Plugins/OfflineDynastySettings/OfflineDynastySettings.Persistence.exe','Plugins/SituationalPractice/SituationalPractice.Runtime.exe'}.issubset({f['path'] for f in receipt['files']}),'receipt omitted module payloads')
+check({'Plugins/DynastyCOT.dll','COT-Runtime/Shared/node.exe','Plugins/OfflineDynastySettings/ExtraSettings.Persistence.exe','Plugins/SituationalPractice/ExpandedPractice.Runtime.exe'}.issubset({f['path'] for f in receipt['files']}),'receipt omitted module payloads')
 # Migration, user choices, history and repeat update.
 upgrade=seed('Upgrade');before=snapshot(upgrade);run(upgrade)
 for name in ['DynastyEnhancer.dll','DynamicGamedayAtmosphere.dll','OfflineDynastySettings.dll','SituationalPractice.dll']:
@@ -128,8 +151,8 @@ check(snapshot(root)==before,'invalid GUI module choices changed target')
 remove={id:False for id in choices};remove['DrivePractice']=True
 root=seed('RemoveSelected');run(root);before=snapshot(root)
 run(root,'-Action','UninstallSelected','-ModuleChoicesJson',json.dumps(remove))
-check(not (root/'Plugins/SituationalPractice/SituationalPractice.Runtime.exe').exists(),'selected helper retained')
-check((root/'Plugins/DynastyCOT.dll').exists() and (root/'Plugins/OfflineDynastySettings/OfflineDynastySettings.Persistence.exe').exists(),'other modules removed')
+check(not (root/'Plugins/SituationalPractice/ExpandedPractice.Runtime.exe').exists(),'selected helper retained')
+check((root/'Plugins/DynastyCOT.dll').exists() and (root/'Plugins/OfflineDynastySettings/ExtraSettings.Persistence.exe').exists(),'other modules removed')
 check(not json.loads((root/'Plugins/DynastyCOT/settings.json').read_text())['modules']['DrivePractice'],'removed module not disabled')
 check((root/'COT-Runtime/DynastyEnhancer/RuntimeHistory/101/history.json').read_bytes()==b'news history','removal lost history')
 backup=sorted((root/'Plugins/DynastyCOT/Backups').iterdir())[-1]
@@ -143,14 +166,14 @@ subprocess.run([str(extractor),str(root),str(BASE)],check=True)
 for embedded in ownership['current']:
  check(hashlib.sha256((root/embedded['path']).read_bytes()).hexdigest()==embedded['sha256'],'embedded fixture differs')
 # A foreign replacement must survive; its module is still disabled.
-write(root,'Plugins/SituationalPractice/SituationalPractice.Runtime.exe',b'changed helper')
+write(root,'Plugins/SituationalPractice/ExpandedPractice.Runtime.exe',b'changed helper')
 write(root,'COT-Runtime/DynastyEnhancer/RuntimeHistory/101/later.json',b'later history')
 write(root,'DGA-Runtime/Runtime-2.1.9/unknown.txt',b'unrelated runtime neighbor')
 run(root,'-Action','UninstallAll')
 check(not (root/'Plugins/DynastyCOT.dll').exists(),'full removal kept host')
 check(not (root/'COT-Runtime/Shared/node.exe').exists(),'full removal kept bundled node')
 check(all(not (root/f['path']).exists() for f in ownership['current']),'full removal kept extracted Atmosphere payload')
-check((root/'Plugins/SituationalPractice/SituationalPractice.Runtime.exe').read_bytes()==b'changed helper','removal deleted changed helper')
+check((root/'Plugins/SituationalPractice/ExpandedPractice.Runtime.exe').read_bytes()==b'changed helper','removal deleted changed helper')
 check((root/'Plugins/OtherOverhaul.dll').read_bytes()==b'unrelated overhaul plugin','removal changed another mod')
 check((root/'DGA-Runtime/Runtime-2.1.9/unknown.txt').read_bytes()==b'unrelated runtime neighbor','removal swept neighbor')
 check(not any(json.loads((root/'Plugins/DynastyCOT/settings.json').read_text())['modules'].values()),'full removal left modules on')
@@ -178,7 +201,7 @@ check(not (root/'Plugins/DynastyCOT.dll').exists() and not (root/'COT-Runtime/Sh
 check(not any((root/'DGA-Runtime').rglob('*.dll')),'legacy embedded runtime retained')
 check((root/'COT-Runtime/DynastyEnhancer/RuntimeHistory/101/history.json').read_bytes()==b'old edition','legacy history lost')
 # Tamper and traversal reject before target writes.
-bad=BASE/'BadPackage';shutil.copytree(PKG,bad);helper=bad/'Plugins/OfflineDynastySettings/OfflineDynastySettings.Persistence.exe'
+bad=BASE/'BadPackage';shutil.copytree(PKG,bad);helper=bad/'Plugins/OfflineDynastySettings/ExtraSettings.Persistence.exe'
 original=helper.read_bytes();helper.write_bytes(original+b'bad')
 root=seed('Tamper');before=snapshot(root);run(root,success=False,package=bad);check(snapshot(root)==before,'tampered package changed target')
 helper.write_bytes(original)
@@ -187,6 +210,6 @@ root=seed('Traversal');before=snapshot(root);run(root,success=False,package=bad)
 report=dict(atUtc=datetime.datetime.now(datetime.timezone.utc).isoformat(),checks=checks,fixtureRoot=str(BASE),packageStage=str(PKG),manifestSha256=hashlib.sha256((PKG/'package-manifest.json').read_bytes()).hexdigest(),
  cleanInstall=True,update=True,migration=True,automaticRollbackStages=3,manualRollback=True,
  laterHistoryPreserved=True,tamperRejection=True,traversalRejection=True,guiModuleChoices=True,
- powershell=os.environ.get('COT_TEST_POWERSHELL','pwsh'),selectedUninstall=True,fullUninstall=True,uninstallRollback=True,legacyNoReceiptRemoval=True,embeddedPayloadRemoval=True,liveInstall=False)
+ powershell=os.environ.get('COT_TEST_POWERSHELL','pwsh'),selectedUninstall=True,fullUninstall=True,uninstallRollback=True,legacyNoReceiptRemoval=True,embeddedPayloadRemoval=True,syntheticStandaloneProofs=True,liveInstall=False)
 (ROOT/'Build/installer-verification.json').write_text(json.dumps(report,indent=2)+'\n')
 print('PASS:',checks,'installer checks; clean/update, migration, selected/all uninstall including legacy/extracted payloads, rollback, changed-file preservation and tamper/path rejection. Fixtures only.')

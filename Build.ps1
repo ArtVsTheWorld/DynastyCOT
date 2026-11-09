@@ -22,19 +22,19 @@ foreach($name in $selected){
    'DynastyEnhancer' {
     & (Join-Path $root 'Tools/Refresh-PracticeContract.ps1')
     if($LASTEXITCODE -ne 0){throw 'Practice compatibility contract failed'}
-    & './Source/build.ps1' -NativeName ('DynastyEnhancerNative-cot-'+$buildId)
+    & './Source/build.ps1' -NativeName ('BeyondTheFieldNative-cot-'+$buildId)
     if($LASTEXITCODE -ne 0){throw 'Enhancer native build failed'}
-    & './Source/build-recruiting-fog.ps1' -Name ('DynastyEnhancerRecruitFog-p'+$buildId) -RecruitNotesUi -PlayerFogPerf
+    & './Source/build-recruiting-fog.ps1' -Name ('BeyondTheFieldRecruitFog-p'+$buildId) -RecruitNotesUi -PlayerFogPerf
     if($LASTEXITCODE -ne 0){throw 'Enhancer Fog build failed'}
     $hashes=@{}
     foreach($file in Get-ChildItem -LiteralPath 'Source' -File | Where-Object {$_.Extension -in @('.cpp','.h','.ps1')}){
      $hashes['Modules/DynastyEnhancer/Source/'+$file.Name]=(Get-FileHash -LiteralPath $file.FullName).Hash.ToLowerInvariant()
     }
     $hashes['Compatibility/PracticeTextSetter.generated.h']=(Get-FileHash -LiteralPath (Join-Path $root 'Compatibility/PracticeTextSetter.generated.h')).Hash.ToLowerInvariant()
-    $inputs=@{socialNative=('Modules/DynastyEnhancer/Build/DynastyEnhancerNative-cot-'+$buildId+'.dll');fogNative=('Modules/DynastyEnhancer/Build/DynastyEnhancerRecruitFog-p'+$buildId+'.dll');socialRenderMode='native-post-containers';sourceHashes=$hashes}
+    $inputs=@{socialNative=('Modules/DynastyEnhancer/Build/BeyondTheFieldNative-cot-'+$buildId+'.dll');fogNative=('Modules/DynastyEnhancer/Build/BeyondTheFieldRecruitFog-p'+$buildId+'.dll');socialRenderMode='native-post-containers';sourceHashes=$hashes}
     [IO.File]::WriteAllText((Join-Path $root 'cot.build-inputs.json'),($inputs|ConvertTo-Json -Depth 5),[Text.UTF8Encoding]::new($false))
    }
-   'GamedayAtmosphere' { & './Source/Build.ps1' -Automatic }
+   'GamedayAtmosphere' { & './Source/Build.ps1' -Automatic -CotBranding }
    'ExtraDynastySettings' { & './Build.ps1' -MmcRoot $MmcRoot }
    'DrivePractice' { & './Build.ps1' -MmcRoot $MmcRoot }
   }
@@ -59,6 +59,10 @@ if($Package){
  if($LASTEXITCODE -ne 0){throw 'COT package checks failed'}
  & python (Join-Path $root 'Tests/test_installer.py')
  if($LASTEXITCODE -ne 0){throw 'COT installer fixture checks failed'}
+ & python (Join-Path $root 'Tests/test_runtime_upgrade.py')
+ if($LASTEXITCODE -ne 0){throw 'COT renamed-runtime upgrade and rollback checks failed'}
+ & python (Join-Path $root 'Modules/DynastyEnhancer/Tests/btf_managed_launcher_test.py')
+ if($LASTEXITCODE -ne 0){throw 'Beyond the Field direct launcher checks failed'}
  & python (Join-Path $root 'Tools/finalize_package.py') $MmcRoot
  if($LASTEXITCODE -ne 0){throw 'COT archive verification failed'}
  & python (Join-Path $root 'Tools/build_installer.py')

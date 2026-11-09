@@ -7,9 +7,14 @@ const weights={off:{QB:3,HB:1.5,FB:.5,WR:2,TE:1,LT:1.5,LG:1,C:1,RG:1,RT:1.5},def
 const mean=a=>a.length?a.reduce((n,x)=>n+x,0)/a.length:null;
 const clamp=(v,a,b)=>Math.max(a,Math.min(b,v));
 export function rosterStrengths(s){
- const rows=new Map();
- for(const t of s.teams.filter(t=>t.id!==255)){
-  const positions={};for(const p of s.players)if(p.team===t.id&&p.injury==='Uninjured'&&Number.isFinite(p.overall)&&p.overall>0&&p.overall<=99&&counts[p.position])(positions[p.position]??=[]).push(p.overall);
+ const rows=new Map(),teams=s.teams.filter(t=>t.id!==255),teamIds=new Set(teams.map(t=>t.id)),rosters=new Map();
+ // Keep each team's native player order and the identical blending math,
+ // without scanning the entire national player/recruit pool for every team.
+ for(const p of s.players)if(teamIds.has(p.team)&&p.injury==='Uninjured'&&Number.isFinite(p.overall)&&p.overall>0&&p.overall<=99&&counts[p.position]){
+  let positions=rosters.get(p.team);if(!positions){positions={};rosters.set(p.team,positions);}(positions[p.position]??=[]).push(p.overall);
+ }
+ for(const t of teams){
+  const positions=rosters.get(t.id)??{};
   const blended={};for(const [pos,a] of Object.entries(positions)){a.sort((a,b)=>b-a);blended[pos]=.72*mean(a.slice(0,counts[pos]))+.28*mean(a);}
   const r={};for(const [unit,w] of Object.entries(weights)){const available=Object.entries(w).filter(([p])=>Number.isFinite(blended[p]));r[unit]=available.length?available.reduce((n,[p,w])=>n+blended[p]*w,0)/available.reduce((n,[,w])=>n+w,0):null;}
   // Thin/unknown rosters cannot silently become average opponents.

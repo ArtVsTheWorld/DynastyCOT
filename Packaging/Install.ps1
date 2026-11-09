@@ -30,10 +30,18 @@ function Hash([string]$Path){return (Get-FileHash -LiteralPath $Path -Algorithm 
 function Owned-Module([string]$Path){
  # Runtime data is deliberately outside this allowlist, even in a receipt.
  if($Path -eq 'Plugins/DynastyCOT.dll' -or $Path -match '^LICENSES/[^/]+[.]txt$'){return 'Core'}
- if($Path -match '^COT-Runtime/Shared/node[.]exe$' -or $Path -match '^COT-Runtime/DynastyEnhancer/(DynastyEnhancerNative-v103[.]dll|DynastyEnhancerRecruitFog-v1[.]dll|LoadDynastyEnhancer[.]exe|dynasty-enhancer[.]json|Tools/[^/]+[.]mjs|Content/Runtime/[^/]+[.]json)$'){return 'DynastyEnhancer'}
- if($Path -match '^DGA-Runtime/Runtime-\d+[.]\d+[.]\d+/(DynamicGamedayAtmosphereNative-\d+[.]\d+[.]\d+[.]dll|DgaDiagnostics[.]exe)$'){return 'GamedayAtmosphere'}
- if($Path -eq 'Plugins/OfflineDynastySettings/OfflineDynastySettings.Persistence.exe'){return 'ExtraDynastySettings'}
- if($Path -match '^Plugins/SituationalPractice/SituationalPractice[.]Runtime[.](exe|pdb)$'){return 'DrivePractice'}
+ if($Path -match '^COT-Runtime/Shared/node[.]exe$' -or $Path -match '^COT-Runtime/DynastyEnhancer/((DynastyEnhancer|BeyondTheField)Native-v103[.]dll|(DynastyEnhancer|BeyondTheField)RecruitFog-v1[.]dll|LoadDynastyEnhancer[.]exe|dynasty-enhancer[.]json|Tools/[^/]+[.]mjs|Content/Runtime/[^/]+[.]json)$'){return 'DynastyEnhancer'}
+ if($Path -match '^DGA-Runtime/Runtime-\d+[.]\d+[.]\d+/((DynamicGamedayAtmosphere|GamedayAtmosphere)Native-\d+[.]\d+[.]\d+[.]dll|DgaDiagnostics[.]exe)$'){return 'GamedayAtmosphere'}
+ if($Path -in @('Plugins/OfflineDynastySettings/OfflineDynastySettings.Persistence.exe','Plugins/OfflineDynastySettings/ExtraSettings.Persistence.exe')){return 'ExtraDynastySettings'}
+ if($Path -match '^Plugins/SituationalPractice/(SituationalPractice|ExpandedPractice)[.]Runtime[.](exe|pdb)$'){return 'DrivePractice'}
+ return $null
+}
+function Standalone-Module([string]$Path){
+ if($Path -eq 'Plugins/DynastyEnhancer.dll' -or $Path -match '^Plugins/(DynastyEnhancer/Runtime-[^/]+/)?(DynastyEnhancerNative[^/]*|DynastyEnhancerRecruitFog[^/]*)[.]dll$'){return 'DynastyEnhancer'}
+ if($Path -in @('Plugins/DynamicGamedayAtmosphere.dll','Plugins/LoadDynamicGamedayAtmosphere.exe','Plugins/DgaDiagnostics.exe') -or $Path -match '^Plugins/(DynamicGamedayAtmosphere/Runtime-[^/]+/)?(DynamicGamedayAtmosphereNative[^/]*|DynamicAttendanceNative[^/]*)[.]dll$' -or $Path -match '^Plugins/DynamicGamedayAtmosphere/(Runtime-[^/]+/LoadDynamicGamedayAtmosphere[.]exe|Tools/DgaDiagnostics[.]exe)$'){return 'GamedayAtmosphere'}
+ if($Path -eq 'Plugins/OfflineDynastySettings.dll' -or $Path -eq 'Plugins/OfflineDynastySettings/OfflineDynastySettings.Persistence.exe'){return 'ExtraDynastySettings'}
+ if($Path -eq 'Plugins/SituationalPractice.dll' -or $Path -match '^Plugins/SituationalPractice/SituationalPractice[.]Runtime[.](exe|pdb)$'){return 'DrivePractice'}
+ if($Path -match '^Plugins/(PlayerAnalytics[.]dll|(PlayerAnalytics/Runtime-v0[.]1/)?PlayerAnalyticsNative-v0[.]1[.]dll)$'){return 'DynastyEnhancer'}
  return $null
 }
 $MmcRoot=[IO.Path]::GetFullPath($MmcRoot).TrimEnd('\','/')
@@ -107,7 +115,7 @@ foreach($file in $manifest.files){
  $seen[$file.path.ToLowerInvariant()]=$true
  $source=Resolve-Owned $PackageRoot $file.path;Assert-NoLink $PackageRoot $source
  if(!(Test-Path -LiteralPath $source -PathType Leaf) -or (Hash $source) -ne $file.sha256){throw ('Package integrity failed: '+$file.path)}
- if($file.path -match '^(COT-Runtime/|LICENSES/)' -or $file.path -in @('Plugins/DynastyCOT.dll','Plugins/OfflineDynastySettings/OfflineDynastySettings.Persistence.exe','Plugins/SituationalPractice/SituationalPractice.Runtime.exe','Plugins/SituationalPractice/SituationalPractice.Runtime.pdb')){
+ if($file.path -match '^(COT-Runtime/|LICENSES/)' -or $file.path -in @('Plugins/DynastyCOT.dll','Plugins/OfflineDynastySettings/OfflineDynastySettings.Persistence.exe','Plugins/OfflineDynastySettings/ExtraSettings.Persistence.exe','Plugins/SituationalPractice/SituationalPractice.Runtime.exe','Plugins/SituationalPractice/SituationalPractice.Runtime.pdb','Plugins/SituationalPractice/ExpandedPractice.Runtime.exe','Plugins/SituationalPractice/ExpandedPractice.Runtime.pdb')){
   $target=Resolve-Owned $MmcRoot $file.path;Assert-NoLink $MmcRoot $target
   $payload+=@{source=$source;path=$file.path;hash=$file.sha256;userData=$false}
   $owner=Owned-Module $file.path
@@ -169,6 +177,65 @@ foreach($name in $(if($Action -eq 'Install' -and !$updatingCot){@('RuntimeHistor
     if((Hash $target) -ne $hash){throw ('Conflicting Enhancer history preserved; resolve before install: '+$path)}
    }else{$payload+=@{source=$file.FullName;path=$path;hash=$hash;userData=$true}}
   }
+ }
+}
+$retire=@();$retainedLegacy=@();$standaloneRetire=@();$logRetire=@()
+if($Action -eq 'Install'){
+ $analyticsEnabled=$true
+ $effectiveChoices=if($ModuleChoicesJson){$choices}elseif(Test-Path -LiteralPath $config){(Get-Content -LiteralPath $config -Raw | ConvertFrom-Json).modules}else{$null}
+ if($effectiveChoices -and $effectiveChoices.PSObject.Properties['DynastyEnhancer']){$analyticsEnabled=[bool]$effectiveChoices.DynastyEnhancer}
+ $standalone=@($ownership.standalone|Where-Object {$null -ne $_})
+ foreach($file in $standalone){if((Standalone-Module $file.path) -ne $file.module -or $file.sha256 -notmatch '^[0-9a-f]{64}$'){throw 'Unsafe standalone ownership metadata'}}
+ $known=@($ownership.legacy)+@($installedReceipt.files)+$standalone
+ $currentPaths=@{};foreach($file in $ownedFiles){$currentPaths[$file.path]=$true}
+ # Only the explicit 1.0 binary-name migration is retired. Data paths never move.
+ $renames=@{
+  'COT-Runtime/DynastyEnhancer/DynastyEnhancerNative-v103.dll'='COT-Runtime/DynastyEnhancer/BeyondTheFieldNative-v103.dll'
+  'COT-Runtime/DynastyEnhancer/DynastyEnhancerRecruitFog-v1.dll'='COT-Runtime/DynastyEnhancer/BeyondTheFieldRecruitFog-v1.dll'
+  'COT-Runtime/DynastyEnhancer/LoadDynastyEnhancer.exe'=''
+  'DGA-Runtime/Runtime-2.1.9/DynamicGamedayAtmosphereNative-2.1.9.dll'='DGA-Runtime/Runtime-2.1.9/GamedayAtmosphereNative-2.1.9.dll'
+  'Plugins/OfflineDynastySettings/OfflineDynastySettings.Persistence.exe'='Plugins/OfflineDynastySettings/ExtraSettings.Persistence.exe'
+  'Plugins/SituationalPractice/SituationalPractice.Runtime.exe'='Plugins/SituationalPractice/ExpandedPractice.Runtime.exe'
+  'Plugins/SituationalPractice/SituationalPractice.Runtime.pdb'='Plugins/SituationalPractice/ExpandedPractice.Runtime.pdb'
+ }
+ foreach($path in $renames.Keys){
+  if($currentPaths.ContainsKey($path)){continue}
+  $replacement=$renames[$path];if($replacement -and !$currentPaths.ContainsKey($replacement)){continue}
+  $target=Resolve-Owned $MmcRoot $path;Assert-NoLink $MmcRoot $target
+  if(!(Test-Path -LiteralPath $target -PathType Leaf)){continue}
+  $observed=Hash $target;$owner=Owned-Module $path
+  $proven=@($known|Where-Object {$_.path -eq $path -and $_.module -eq $owner -and $_.sha256 -eq $observed})
+  if($proven.Count){$retire+=$path}else{$retainedLegacy+=$path}
+ }
+ # Standalone trust is separate from the COT uninstall receipt namespace.
+ $plugins=Join-Path $MmcRoot 'Plugins'
+ if(Test-Path -LiteralPath $plugins){foreach($file in Get-ChildItem -LiteralPath $plugins -Recurse -File | Where-Object {$_.Extension -in @('.dll','.exe')}){
+  $path=$file.FullName.Substring($MmcRoot.Length+1).Replace('\','/');$owner=Standalone-Module $path
+  if(!$owner -or (!$analyticsEnabled -and $path -match '^Plugins/(PlayerAnalytics[.]dll|(.*/)?PlayerAnalyticsNative-v0[.]1[.]dll)$')){continue}
+  Assert-NoLink $MmcRoot $file.FullName;$observed=Hash $file.FullName
+  $proven=@($standalone|Where-Object {$_.path -eq $path -and $_.module -eq $owner -and $_.sha256 -eq $observed})
+  # Identical native bytes may have shipped in COT's detached runtime folder.
+  if(!$proven.Count -and $path -ne 'Plugins/PlayerAnalytics.dll' -and $path -match 'Native[^/]*[.]dll$'){
+   $proven=@((@($ownedFiles)+$known)|Where-Object {$_.module -eq $owner -and $_.path -match '[.]dll$' -and $_.sha256 -eq $observed})
+  }
+  if(!$proven.Count){
+   if($file.Extension -eq '.exe'){$retainedLegacy+=$path;continue}
+   throw ('Unrecognized active legacy payload kept; no installation changes made: '+$path+'. Close MMC/game and remove or verify that standalone mod before retrying.')
+  }
+  $standaloneRetire+=$path
+ }}
+ # Exact legacy log names are user data, never swept by an extension wildcard.
+ foreach($suffix in @('','.1')){
+  $path='Plugins/DynastyEnhancer-launcher.log'+$suffix;$source=Resolve-Owned $MmcRoot $path;Assert-NoLink $MmcRoot $source
+  if(!(Test-Path -LiteralPath $source -PathType Leaf)){continue}
+  $hash=Hash $source;$destination='Plugins/DynastyEnhancer/Logs/legacy-launcher.log'+$suffix
+  $target=Resolve-Owned $MmcRoot $destination;Assert-NoLink $MmcRoot $target
+  if((Test-Path -LiteralPath $target -PathType Leaf) -and (Hash $target) -ne $hash){
+   $destination='Plugins/DynastyEnhancer/Logs/legacy-launcher-'+$hash+'.log'+$suffix
+   $target=Resolve-Owned $MmcRoot $destination;Assert-NoLink $MmcRoot $target
+   if((Test-Path -LiteralPath $target -PathType Leaf) -and (Hash $target) -ne $hash){throw ('Archived legacy launcher log changed; no installation changes made: '+$destination)}
+  }
+  $payload+=@{source=$source;path=$destination;hash=$hash;userData=$true};$logRetire+=$path
  }
 }
 $directory=Join-Path $backupBase ([DateTime]::UtcNow.ToString('yyyyMMddTHHmmssfff')+'-'+[Guid]::NewGuid().ToString('N'))
@@ -254,32 +321,17 @@ try{
  }
  # Retain ownership of older versioned runtimes across later updates.
  # They may still be on disk after the module moves to a new runtime version.
- if($installedReceipt){$ownedFiles+=@($installedReceipt.files)}
+ if($installedReceipt){$ownedFiles+=@($installedReceipt.files|Where-Object {$retire -notcontains $_.path})}
  $ownedFiles=@($ownedFiles|Sort-Object path,sha256 -Unique)
  $payload+=Json-Payload $receiptPath ([ordered]@{format=1;version=$manifest.version;files=$ownedFiles}) $false
  foreach($file in $payload | Where-Object {$_.path -ne 'Plugins/DynastyCOT.dll'}){Write-Payload $file}
  Fault 'AfterPayload'
- $analyticsEnabled=$true
- $effectiveChoices=if($ModuleChoicesJson){$choices}elseif(Test-Path -LiteralPath $config){(Get-Content -LiteralPath $config -Raw | ConvertFrom-Json).modules}else{$null}
- if($effectiveChoices -and $effectiveChoices.PSObject.Properties['DynastyEnhancer']){$analyticsEnabled=[bool]$effectiveChoices.DynastyEnhancer}
- $standaloneLoaders=@('DynastyEnhancer.dll','DynamicGamedayAtmosphere.dll','OfflineDynastySettings.dll','SituationalPractice.dll')
- if($analyticsEnabled){$standaloneLoaders+='PlayerAnalytics.dll'}
- foreach($name in $standaloneLoaders){
-  $path='Plugins/'+$name;$target=Resolve-Owned $MmcRoot $path
-  if(Test-Path -LiteralPath $target -PathType Leaf){
-   Record-Target $path $false | Out-Null
-   Remove-Item -LiteralPath $target -Force
-  }
+ # Every deletion was preflighted by exact path and receipt/known hash.
+ foreach($path in @((@($retire)+@($standaloneRetire))|Sort-Object -Unique)){
+  Record-Target $path $false | Out-Null
+  Remove-Item -LiteralPath (Resolve-Owned $MmcRoot $path) -Force
  }
- # Retire only recognized old native payload names, never history or another mod.
- foreach($file in Get-ChildItem -LiteralPath (Join-Path $MmcRoot 'Plugins') -Recurse -File -Filter '*.dll'){
-  $relative=$file.FullName.Substring($MmcRoot.Length+1).Replace('\','/')
-  $oldAnalytics=$analyticsEnabled -and $relative -match '^Plugins/(PlayerAnalytics/Runtime-v0[.]1/)?PlayerAnalyticsNative-v0[.]1[.]dll$'
-  if($oldAnalytics -or $relative -match '^Plugins/(DynastyEnhancer/Runtime-[^/]+/|DynamicGamedayAtmosphere/Runtime-[^/]+/)?(DynastyEnhancerNative[^/]*|DynastyEnhancerRecruitFog[^/]*|DynamicGamedayAtmosphereNative[^/]*|DynamicAttendanceNative[^/]*)[.]dll$'){
-   Record-Target $relative $false | Out-Null
-   Remove-Item -LiteralPath $file.FullName -Force
-  }
- }
+ foreach($path in $logRetire){Record-Target $path $true | Out-Null;Remove-Item -LiteralPath (Resolve-Owned $MmcRoot $path) -Force}
  Fault 'AfterLegacyDisable'
  Write-Payload ($payload | Where-Object {$_.path -eq 'Plugins/DynastyCOT.dll'})
  Fault 'AfterAdapter'
@@ -287,6 +339,7 @@ try{
  $journal.status='committed';Save-Journal
  Write-Output ('COT installation verified. Backup: '+$directory)
  Write-Output 'Module switches: Plugins/DynastyCOT/settings.json. Restart MMC and the game after changes.'
+ foreach($path in @($retainedLegacy|Sort-Object -Unique)){Write-Output ('Kept changed or unknown inactive legacy payload: '+$path)}
 }catch{
  $failure=$_
  try{Restore-Transaction $directory -Automatic}catch{throw ('Install failed: '+$failure.Exception.Message+'; rollback needs review: '+$_.Exception.Message+'; backup: '+$directory)}

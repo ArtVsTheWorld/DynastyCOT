@@ -279,9 +279,35 @@ public:
         }
         if(seen.size()!=3)throw std::runtime_error("Missing draft identity proof");return out;
     }
-    Json run(PackedChangeWatch* observation=nullptr){
+    Json run(PackedChangeWatch* observation=nullptr,PackedChangeWatch* identityObservation=nullptr){
         memory.observation=observation;
         const auto before=status();
+        // A subset of this exact verified capture: active session ownership,
+        // context, SeasonInfo, LeagueID and career-flow bytes. Used only to
+        // wake the full collector sooner; never authorizes publication itself.
+        if(identityObservation&&observation)try{
+            // The full status read inventories many unrelated table names.
+            // Reuse the existing exact, masked three-table identity contract
+            // instead of polling that entire inventory at a higher cadence.
+            const auto proof=identityProof();
+            for(const auto& item:proof)for(const auto& check:item.at("checks")){
+                const auto size=check.at("size").get<unsigned>();
+                if(!size||size>8)throw std::runtime_error("Invalid feed identity proof width");
+                const auto expected=check.at("expected").get<uint64_t>(),mask=check.at("mask").get<uint64_t>();
+                std::vector<unsigned char> bytes(size),masks(size);memcpy(bytes.data(),&expected,size);memcpy(masks.data(),&mask,size);
+                identityObservation->recordMasked(check.at("address").get<Address>(),bytes,masks);
+            }
+            memory.observation=identityObservation;
+            if(!(activeSession(image,[&](Address at){return memory.at<Address>(at);})==session))throw std::runtime_error("Feed identity owner changed");
+            if(memory.at<Address>(context)!=image+0xbd0d378||(context!=sessionContext&&parent(context)!=sessionContext))throw std::runtime_error("Feed identity context changed");
+            if(ownerBound&&ownedCareerContext(image,session,[&](Address at){return memory.at<Address>(at);})!=context)throw std::runtime_error("Feed identity view changed");
+            memory.observation=observation;
+        }catch(const std::exception&){
+            // Optional wakeup acceleration cannot make a supported full
+            // capture unavailable. Original packed-table/session checks below
+            // still decide whether the snapshot is safe to use.
+            memory.observation=observation;*identityObservation=PackedChangeWatch{};
+        }
         for(const auto& [id,a]:ids){(void)id;Schema s;s.name=memory.text(memory.at<Address>(memory.at<Address>(a+8)+0x18));
             if(selectedRoots&&!selectedRoots(s.name))continue;
 #if defined(RECRUIT_RESUME_CAPTURE)

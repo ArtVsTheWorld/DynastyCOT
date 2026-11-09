@@ -3,7 +3,13 @@ using System.IO;
 using System.Security.Cryptography;
 namespace OfflineDynastySettings {
  internal static class RuntimeFiles {
-  internal static string PathIn(string pluginFolder){return Path.Combine(pluginFolder,"OfflineDynastySettings","OfflineDynastySettings.Persistence.exe");}
+  internal static string PathIn(string pluginFolder){return Path.Combine(pluginFolder,"OfflineDynastySettings",
+#if COT_BRANDED_RUNTIME
+   "ExtraSettings.Persistence.exe"
+#else
+   "OfflineDynastySettings.Persistence.exe"
+#endif
+  );}
   // Hold this read-only lease until process creation completes. Windows denies
   // replacement/deletion between verification and launch. Never extract or repair.
   internal static FileStream OpenVerified(string path) {

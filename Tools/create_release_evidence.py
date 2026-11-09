@@ -30,6 +30,13 @@ def main():
             evidence[name]['layoutScaleCaptures']=[x for x in doc.get('scaling',[]) if type(x) is int and 50<=x<=400]
             evidence[name]['boundedWorkingAreaHeights']=[x for x in doc.get('boundedWorkingAreas',[]) if type(x) is int and 200<=x<=10000]
         if name=='updater':evidence[name]['failureCaseCount']=len(doc.get('failureCases',[]))
+    if product.get('runtimeBranding'):
+        path=ROOT/'Build/runtime-upgrade-verification.json'
+        if not path.exists():raise ValueError('Missing branded-runtime upgrade verification')
+        doc=json.loads(path.read_text())
+        if doc.get('toVersion')!=version or doc.get('synthetic') is not False or doc.get('liveInstall') is not False or doc.get('rollback') is not True:
+            raise ValueError('Branded-runtime upgrade checks must cover this actual source-built candidate')
+        evidence['runtimeUpgrade']=select(doc,['checks','fromVersion','toVersion','synthetic','liveInstall','rollback','faultStages','hashProvenRetirement','unknownActiveRejectedBeforeMutation','dataPathsPreserved','publicGda2035','legacyLogMigration','pluginsRootOnlySharedDll'])
     published=ROOT/'Build/updater-published-verification.json'
     if published.exists():
         doc=json.loads(published.read_text())

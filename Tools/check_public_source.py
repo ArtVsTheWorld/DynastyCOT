@@ -13,6 +13,10 @@ DENIED_SUFFIXES = {'.dll', '.exe', '.pdb', '.obj', '.ast', '.raw', '.bin', '.sav
                    '.fbmod', '.fbproject', '.zip', '.htm', '.html', '.png', '.jpg'}
 SECRET = re.compile(rb'(?:gh[pousr]_[A-Za-z0-9]{30,}|github_pat_[A-Za-z0-9_]{40,}|'
                     rb'-----BEGIN (?:RSA |EC |OPENSSH )?PRIVATE KEY-----)')
+# These four screenshots were explicitly supplied for the public README.
+# Other captures and game assets remain excluded.
+README_IMAGES = {'docs/images/beyond-the-field.png','docs/images/gameday-atmosphere.png',
+                 'docs/images/expanded-practice.png','docs/images/extra-settings.png'}
 
 
 def check():
@@ -25,7 +29,7 @@ def check():
         path = Path(rel)
         authored_release_doc = rel.startswith('docs/release/') and path.suffix.lower() == '.md'
         if ((set(x.lower() for x in path.parts) & DENIED_PARTS and not authored_release_doc) or
-                (path.suffix.lower() in DENIED_SUFFIXES and rel not in {'Packaging/Setup/Assets/Crown.png','Packaging/Setup/Assets/Crown.ico'}) or
+                (path.suffix.lower() in DENIED_SUFFIXES and rel not in README_IMAGES | {'Packaging/Setup/Assets/Crown.png','Packaging/Setup/Assets/Crown.ico'}) or
                 path.name.lower() in {'private-fixtures.json', 'cot.build-inputs.json',
                                      'ulm-close-games-2026.json', 'review-samples.json'}):
             errors.append({'path': rel, 'reason': 'private/generated input in public source'})

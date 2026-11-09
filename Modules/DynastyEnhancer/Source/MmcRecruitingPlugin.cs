@@ -20,8 +20,8 @@ using FrostySdk.Interfaces;
 [assembly: RegisterExecutionAction(typeof(DynastyEnhancer.LaunchAction))]
 namespace DynastyEnhancer {
  public sealed class LaunchAction : ExecutionAction {
-  public const string NativeFile="DynastyEnhancerNative-v103.dll";
-  public const string RecruitingNativeFile="DynastyEnhancerRecruitFog-v1.dll";
+  public const string NativeFile="BeyondTheFieldNative-v103.dll";
+  public const string RecruitingNativeFile="BeyondTheFieldRecruitFog-v1.dll";
   public static string[] NativeFiles {get{return new[]{NativeFile,RecruitingNativeFile};}}
   private static int watching;
   private static Mutex watcherMutex;
@@ -56,7 +56,8 @@ namespace DynastyEnhancer {
    }catch(Exception error){return "Runtime configuration unavailable: "+error.Message;}
   }
   private static void Note(string message){
-   var path=Path.Combine(PluginsFolder,"DynastyEnhancer-launcher.log");
+   var folder=Path.Combine(PluginsFolder,"DynastyEnhancer","Logs");Directory.CreateDirectory(folder);
+   var path=Path.Combine(folder,"BeyondTheField-launcher.log");
    if(File.Exists(path)&&new FileInfo(path).Length>1024*1024){if(File.Exists(path+".1"))File.Delete(path+".1");File.Move(path,path+".1");}
    File.AppendAllText(path,DateTimeOffset.Now.ToString("O")+" | "+message+Environment.NewLine);
   }
@@ -75,21 +76,18 @@ namespace DynastyEnhancer {
        var key=game.Id+":"+game.StartTime.ToUniversalTime().Ticks+":"+nativeFile;DateTime next;int count;attempts.TryGetValue(key,out count);
        if(loaded.Contains(key)||count>=3||retryAt.TryGetValue(key,out next)&&DateTime.UtcNow<next)continue;
        attempts[key]=count+1;retryAt[key]=DateTime.UtcNow.AddSeconds(10);
-       var info=new ProcessStartInfo(Path.Combine(RuntimeFolder,"LoadDynastyEnhancer.exe"),game.Id+" \""+Path.Combine(RuntimeFolder,nativeFile)+"\""){
-        WorkingDirectory=RuntimeFolder,UseShellExecute=false,CreateNoWindow=true,WindowStyle=ProcessWindowStyle.Hidden,RedirectStandardOutput=true,RedirectStandardError=true};
-       using(var loader=Process.Start(info)){
-        if(loader==null)throw new IOException("Loader did not start");
-        var output=loader.StandardOutput.ReadToEnd();var errors=loader.StandardError.ReadToEnd();loader.WaitForExit();
-        if(loader.ExitCode!=0)throw new IOException("Loader exit "+loader.ExitCode+": "+errors+output);
-        loaded.Add(key);Note(nativeFile+" loaded for PID "+game.Id+"; see the native runtime logs for activation.");
-       }
+       // An unknown remote completion must never start a second load request.
+       // Payload hashes are verified by Prepare before the watcher starts.
+       attempts[key]=3;
+       DynamicGamedayAtmosphere.ManagedRuntimeLoader.Load(game.Id,Path.Combine(RuntimeFolder,nativeFile),Note);
+       loaded.Add(key);Note(nativeFile+" loaded for PID "+game.Id+"; see the native runtime logs for activation.");
       }
       }catch(Exception error){Note("Load attempt failed: "+error.Message);}
       Thread.Sleep(1000);
      }
     }catch(Exception error){try{Note("Watcher stopped: "+error.Message);}catch{}}
     finally{Interlocked.Exchange(ref watching,0);}
-   }){IsBackground=true,Name="Dynasty Enhancer launch watcher"}.Start();
+   }){IsBackground=true,Name="Beyond the Field launch watcher"}.Start();
   }
  }
 }

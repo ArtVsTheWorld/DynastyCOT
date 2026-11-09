@@ -9,6 +9,8 @@ from build_player_card_ui import path,numeric_grade,palette,text_label
 
 
 def nil_draw_suffix(a):
+    from build_nil_currency_ui import mark_current_nil
+    mark_current_nil(a)
     done='nilDone'
     path(a,1,'mData');a.raw(0x76,0x49);a.branch(done)
     path(a,1,'mData','ExtraInfo');a.raw(0x76,0x49);a.branch(done)

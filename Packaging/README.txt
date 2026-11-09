@@ -1,5 +1,5 @@
 DYNASTY COT by Ace
-Public test prerelease 0.1.6-private (nonstable candidate)
+Dynasty COT 1.0 (package version 1.0.0)
 
 This combines four independently optional modules behind one MMC plugin entry:
 - Beyond the Field: a livelier Dynasty feed, fog, grades and clearer money labels.
@@ -8,17 +8,18 @@ This combines four independently optional modules behind one MMC plugin entry:
 - Expanded Practice: full drives and scrimmages from the normal practice menu.
 
 INSTALL / UPDATE
-Double-click DynastyCOT-Setup-0.1.6-private.exe. The setup EXE includes the
+Double-click DynastyCOT-Setup-1.0.0.exe. The setup EXE includes the
 whole package; there is nothing else to download or extract.
 Close MMC and the game. Choose your MMC Mod Manager folder (usually
 MMC_ModManager_vX.X.X.X, not its parent MMC folder), select the modules you
-want enabled, then click Install 0.1.6-private. Current module choices are loaded.
+want enabled, then click Install COT. Current module choices are loaded.
 
 The ZIP is an alternative for advanced use. After extracting it:
   .\Install.ps1 -MmcRoot 'C:\Your\MMC_ModManager_vX.X.X.X'
 
 Use setup for the first migration. It verifies the package, backs up replaced
-files, disables the four standalone adapters and activates COT last.
+files, retires recognized standalone adapters and activates COT last.
+Unrecognized conflicting old plugins stop installation for review.
 It preserves Gameday Atmosphere/playcall data and copies Beyond the Field's
 RuntimeHistory and RecruitResumeHistory from the legacy Runtime-v103 path. Legacy settings
 start fresh. Conflicting history copies stop installation for review.

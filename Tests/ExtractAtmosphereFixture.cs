@@ -10,10 +10,10 @@ class ExtractAtmosphereFixture {
    if(!root.StartsWith(parent,StringComparison.OrdinalIgnoreCase)||!File.Exists(Path.Combine(root,".cot-fixture")))throw new IOException("Fixture required");
    var assembly=Assembly.LoadFrom(Path.Combine(root,"Plugins","DynastyCOT.dll"));
    foreach(string resource in assembly.GetManifestResourceNames()){
-    var match=Regex.Match(resource,@"^Attendance\.DynamicGamedayAtmosphereNative-(\d+\.\d+\.\d+)\.dll$");
+    var match=Regex.Match(resource,@"^Attendance\.((?:DynamicGamedayAtmosphere|GamedayAtmosphere)Native)-(\d+\.\d+\.\d+)\.dll$");
     if(!match.Success)continue;
-    string folder=Path.Combine(root,"DGA-Runtime","Runtime-"+match.Groups[1].Value);Directory.CreateDirectory(folder);
-    foreach(string name in new[]{"DynamicGamedayAtmosphereNative-"+match.Groups[1].Value+".dll","DgaDiagnostics.exe"})
+    string folder=Path.Combine(root,"DGA-Runtime","Runtime-"+match.Groups[2].Value);Directory.CreateDirectory(folder);
+    foreach(string name in new[]{match.Groups[1].Value+"-"+match.Groups[2].Value+".dll","DgaDiagnostics.exe"})
      using(var input=assembly.GetManifestResourceStream("Attendance."+name))using(var output=File.Create(Path.Combine(folder,name)))input.CopyTo(output);
     return 0;
    }throw new IOException("Atmosphere resource missing");

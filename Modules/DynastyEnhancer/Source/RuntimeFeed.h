@@ -2,6 +2,7 @@
 #include "LiveTables.h"
 #include "FeedRefresh.h"
 #include "AnalyticsSummary.h"
+#include "FeedSchedule.h"
 namespace dynasty::live {
 inline uint64_t fingerprint(std::string_view text){uint64_t value=14695981039346656037ull;for(unsigned char c:text){value^=c;value*=1099511628211ull;}return value;}
 inline void validateRuntimeIdentity(const Json& feed,const Json& status){
@@ -13,11 +14,11 @@ inline void validateRuntimeIdentity(const Json& feed,const Json& status){
 // debounce both simulation completion and midweek edits independently of save I/O.
 class FeedWorker {
     std::filesystem::path folder,node,exporter,resumer;Address base=0,lastContext=0;
-    uint64_t pollAt=0,observed=0,accepted=0;bool haveObserved=false,haveAccepted=false;
-    std::string lastError,lastStatus;unsigned failures=0;
-    PackedChangeWatch settledProbe;uint64_t fastPolls=0,lastProbeReport=0,sameContentRefreshes=0,lastSameReport=0;
+    uint64_t observed=0,accepted=0;bool haveObserved=false,haveAccepted=false;FeedSchedule schedule;
+    std::string lastError,lastStatus;unsigned failures=0;bool identityLimited=false;
+    PackedChangeWatch settledProbe,settledIdentity;uint64_t fastPolls=0,identityPolls=0,lastIdentityReport=0,lastProbeReport=0,sameContentRefreshes=0,lastSameReport=0;
 public:
-    void restart(){pollAt=0;haveObserved=false;haveAccepted=false;lastStatus.clear();lastContext=0;lastError.clear();failures=0;}
+    void restart(){schedule.reset();haveObserved=false;haveAccepted=false;lastStatus.clear();lastContext=0;lastError.clear();failures=0;identityLimited=false;settledIdentity=PackedChangeWatch{};settledProbe=PackedChangeWatch{};}
     void configure(const std::filesystem::path& directory,Address image){
         folder=directory;base=image;auto c=social::refresh::readJson(folder/L"dynasty-enhancer.json");
         auto resolve=[&](const char* key){auto p=std::filesystem::u8path(c.at(key).get<std::string>());return std::filesystem::absolute(p.is_absolute()?p:folder/p);};node=resolve("node");exporter=resolve("exporter");
@@ -33,33 +34,47 @@ public:
         if(!std::filesystem::is_regular_file(node)||!std::filesystem::is_regular_file(exporter)||!std::filesystem::is_regular_file(resumer))throw std::runtime_error("Dynasty Enhancer runtime generator is unavailable");
     }
     std::optional<Json> tick(const std::function<bool()>& cancelled,const std::function<void(Json)>& report,const std::function<void()>& invalidate){
-        auto now=GetTickCount64();if(now<pollAt||cancelled())return {};pollAt=now+3000;
+        auto now=GetTickCount64();if(!schedule.due(now)||cancelled())return {};schedule.begin(now);
         try{
-            if(haveAccepted&&settledProbe.available()){
+            bool identityChanged=false;
+            if(haveAccepted&&schedule.identityOnly(now)&&settledIdentity.available()){
+                const auto began=GetTickCount64();size_t bytes=0,calls=0;bool exceeded=false;
+                if(settledIdentity.unchanged([&](uintptr_t address,void* out,size_t size){
+                    if(cancelled())return false;
+                    if(GetTickCount64()-began>100||bytes+size>1024u*1024){exceeded=true;return false;}
+                    SIZE_T got=0;bytes+=size;++calls;return ReadProcessMemory(GetCurrentProcess(),reinterpret_cast<void*>(address),out,size,&got)&&got==size;
+                })){schedule.unchangedIdentity(GetTickCount64());++identityPolls;
+                    if(GetTickCount64()-lastIdentityReport>=30000){lastIdentityReport=GetTickCount64();report({{"event","runtime_identity_probe"},{"probeMs",GetTickCount64()-began},{"readBytes",bytes},{"readCalls",calls},{"polls",identityPolls}});}return {};}
+                // A costly proof must not turn each quick wakeup into a full
+                // capture. Fall back to the existing cadence for this context.
+                if(exceeded){identityLimited=true;report({{"event","runtime_identity_probe_limited"},{"readBytes",bytes},{"readCalls",calls}});}
+                identityChanged=true;
+            }
+            if(haveAccepted&&!identityChanged&&settledProbe.available()){
                 const auto began=GetTickCount64();size_t bytes=0,calls=0;
                 const bool unchanged=settledProbe.unchanged([&](uintptr_t address,void* out,size_t size){
                     if(cancelled()||GetTickCount64()-began>500||bytes+size>PackedChangeWatch::maximumBytes)return false;
                     SIZE_T got=0;++calls;bytes+=size;return ReadProcessMemory(GetCurrentProcess(),reinterpret_cast<void*>(address),out,size,&got)&&got==size;
                 });
-                if(unchanged){++fastPolls;lastError.clear();failures=0;pollAt=GetTickCount64()+5000;
+                if(unchanged){++fastPolls;lastError.clear();failures=0;schedule.accepted(GetTickCount64(),settledIdentity.available()&&!identityLimited);
                     if(GetTickCount64()-lastProbeReport>=30000){lastProbeReport=GetTickCount64();report({{"event","runtime_unchanged_probe"},{"probeMs",GetTickCount64()-began},{"readBytes",bytes},{"readCalls",calls},{"fastPolls",fastPolls},{"sameContentRefreshes",sameContentRefreshes}});}return {};
                 }
             }
             if(cancelled())return {};
-            PackedChangeWatch candidateProbe;
-            const auto captureBegan=GetTickCount64();auto raw=Capture(base).run(&candidateProbe);const auto captureMs=GetTickCount64()-captureBegan;const auto ctx=raw.at("context").get<Address>();
-            auto status=raw.at("status").dump();if(ctx!=lastContext||status!=lastStatus){lastStatus=status;lastContext=ctx;haveObserved=false;haveAccepted=false;invalidate();report({{"event","active_dynasty_context"},{"context",ctx}});}
+            PackedChangeWatch candidateProbe,candidateIdentity;
+            const auto captureBegan=GetTickCount64();auto raw=Capture(base).run(&candidateProbe,&candidateIdentity);const auto captureMs=GetTickCount64()-captureBegan;const auto ctx=raw.at("context").get<Address>();
+            auto status=raw.at("status").dump();if(ctx!=lastContext||status!=lastStatus){if(ctx!=lastContext)identityLimited=false;lastStatus=status;lastContext=ctx;haveObserved=false;haveAccepted=false;invalidate();report({{"event","active_dynasty_context"},{"context",ctx}});}
             auto payload=raw.at("records").dump();auto hash=fingerprint(payload);
             auto accept=[&](Json feed,const char* event)->std::optional<Json>{
                 social::refresh::validate(feed,Json{{"save",feed.at("source")},{"leagueId",feed.at("leagueId")},{"userTeamIndex",feed.at("userTeamIndex")}});validateRuntimeIdentity(feed,raw.at("status"));
                 if(Capture(base).status().dump()!=status||cancelled()){haveObserved=false;invalidate();return {};}
-                accepted=hash;haveAccepted=true;lastError.clear();failures=0;settledProbe=std::move(candidateProbe);
+                accepted=hash;haveAccepted=true;lastError.clear();failures=0;settledProbe=std::move(candidateProbe);settledIdentity=std::move(candidateIdentity);schedule.accepted(GetTickCount64(),settledIdentity.available()&&!identityLimited);
                 social::refresh::writeAtomic(folder/L"runtime-feed.json.tmp",folder/L"runtime-feed.json",feed);
-                report({{"event",event},{"league",feed.at("leagueId")},{"team",feed.at("userTeamIndex")},{"week",feed.at("week")},{"stories",feed.at("stories").size()},{"saveRequired",false}});return feed;
+                report({{"event",event},{"league",feed.at("leagueId")},{"team",feed.at("userTeamIndex")},{"week",feed.at("week")},{"stories",feed.at("stories").size()},{"saveRequired",false},{"identityProbeEnabled",settledIdentity.available()&&!identityLimited},{"identityProbeBytes",settledIdentity.bytes()},{"identityProbeRanges",settledIdentity.rangeCount()}});return feed;
             };
-            if(haveAccepted&&hash==accepted){settledProbe=std::move(candidateProbe);lastError.clear();failures=0;pollAt=GetTickCount64()+5000;++sameContentRefreshes;
+            if(haveAccepted&&hash==accepted){settledProbe=std::move(candidateProbe);settledIdentity=std::move(candidateIdentity);lastError.clear();failures=0;schedule.accepted(GetTickCount64(),settledIdentity.available()&&!identityLimited);++sameContentRefreshes;
                 if(GetTickCount64()-lastSameReport>=30000){lastSameReport=GetTickCount64();report({{"event","runtime_same_content_refresh"},{"captureMs",captureMs},{"captureAndHashMs",GetTickCount64()-captureBegan},{"sameContentRefreshes",sameContentRefreshes}});}return {};}
-            if(!haveObserved||hash!=observed){const bool mayResume=!haveObserved&&!haveAccepted;observed=hash;haveObserved=true;report({{"event","runtime_change_observed"},{"records",raw.at("records").size()},{"captureMs",captureMs}});
+            if(!haveObserved||hash!=observed){const bool mayResume=!haveObserved&&!haveAccepted;observed=hash;haveObserved=true;schedule.observed(GetTickCount64());report({{"event","runtime_change_observed"},{"records",raw.at("records").size()},{"captureMs",captureMs}});
                 if(mayResume&&!cancelled()){
                     const auto input=folder/L"runtime-raw.json",output=folder/L"runtime-resume.json";social::refresh::writeAtomic(folder/L"runtime-raw.json.tmp",input,raw);
                     social::refresh::Settings settings{{},node,resumer,input};const auto code=social::refresh::exportSave(settings,output,folder/L"runtime-generator.log",cancelled);
@@ -77,7 +92,7 @@ public:
             if(social::refresh::exportSave(settings,output,folder/L"runtime-generator.log",cancelled))throw std::runtime_error("Runtime generator failed; see runtime-generator.log");
             report({{"event","runtime_generation_timing"},{"captureMs",captureMs},{"generationMs",GetTickCount64()-generationBegan}});
             return accept(social::refresh::readJson(output),"runtime_feed_published");
-        }catch(const std::exception& e){haveObserved=false;if(++failures>=2){haveAccepted=false;invalidate();}if(lastError!=e.what()){lastError=e.what();report({{"event","runtime_waiting"},{"reason",lastError}});}return {};}
+        }catch(const std::exception& e){schedule.failed(GetTickCount64());haveObserved=false;if(++failures>=2){haveAccepted=false;invalidate();}if(lastError!=e.what()){lastError=e.what();report({{"event","runtime_waiting"},{"reason",lastError}});}return {};}
     }
 };
 }

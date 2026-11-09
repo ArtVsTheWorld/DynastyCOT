@@ -8,8 +8,8 @@ def clean_adapter(source):
     return re.sub(r'^\[assembly:.*\]\s*\n','',source,flags=re.M)
 
 def analytics_build_id(social,fog):
-    s=re.fullmatch(r'DynastyEnhancerNative-cot-([0-9]+)[.]dll',Path(social).name)
-    f=re.fullmatch(r'DynastyEnhancerRecruitFog-p([0-9]+)[.]dll',Path(fog).name)
+    s=re.fullmatch(r'(?:DynastyEnhancerNative|BeyondTheFieldNative)-cot-([0-9]+)[.]dll',Path(social).name)
+    f=re.fullmatch(r'(?:DynastyEnhancerRecruitFog|BeyondTheFieldRecruitFog)-p([0-9]+)[.]dll',Path(fog).name)
     if not s or not f or s[1]!=f[1] or not 0<int(s[1])<2**64:
         raise RuntimeError('Analytics requires a matched pair of source-built native payloads')
     return s[1]
@@ -28,7 +28,7 @@ def main():
     a.fog_native=a.fog_native or inputs['fogNative']
     analytics_build=analytics_build_id(a.social_native,a.fog_native)
     product=json.loads((ROOT/'cot.product.json').read_text())
-    if not re.fullmatch(r'\d+\.\d+\.\d+-private',product['version']):raise RuntimeError('Expected a private product version')
+    if not re.fullmatch(r'\d+\.\d+\.\d+(?:-[0-9A-Za-z.-]+)?',product['version']):raise RuntimeError('Expected a semantic product version')
     for name in ['FrostyCore.dll','FrostySdk.dll']:
         if not (sdk/name).is_file():raise RuntimeError('Missing MMC SDK '+name)
     node_version=subprocess.check_output([str(node),'--version'],text=True).strip()
@@ -56,9 +56,8 @@ def main():
         raise RuntimeError('Regenerate and verify the Practice hook contract, then rebuild Enhancer')
     # No previous MMC runtime is a source input.
     runtime='COT-Runtime/DynastyEnhancer/'
-    copy(ROOT/a.social_native,runtime+'DynastyEnhancerNative-v103.dll','DynastyEnhancer')
-    copy(ROOT/a.fog_native,runtime+'DynastyEnhancerRecruitFog-v1.dll','DynastyEnhancer')
-    copy(de/'Build/LoadDynastyEnhancer.exe',runtime+'LoadDynastyEnhancer.exe','DynastyEnhancer')
+    copy(ROOT/a.social_native,runtime+'BeyondTheFieldNative-v103.dll','DynastyEnhancer')
+    copy(ROOT/a.fog_native,runtime+'BeyondTheFieldRecruitFog-v1.dll','DynastyEnhancer')
     for path in sorted((de/'Tools').glob('*.mjs')):
         # Read-only checkpoint research needs private schema/parser inputs and
         # is a development tool, never part of the installed runtime.
@@ -76,11 +75,11 @@ def main():
     # Keep the established external-helper data layouts; only native DLLs need to
     # live outside the recursive Plugins scan.
     copy(extra/('Release/OfflineDynastySettings-'+extra_version+'/OfflineDynastySettings/OfflineDynastySettings.Persistence.exe'),
-         'Plugins/OfflineDynastySettings/OfflineDynastySettings.Persistence.exe','ExtraDynastySettings')
+         'Plugins/OfflineDynastySettings/ExtraSettings.Persistence.exe','ExtraDynastySettings')
     copy(practice_helper,
-         'Plugins/SituationalPractice/SituationalPractice.Runtime.exe','DrivePractice')
+         'Plugins/SituationalPractice/ExpandedPractice.Runtime.exe','DrivePractice')
     copy(practice_helper.with_suffix('.pdb'),
-         'Plugins/SituationalPractice/SituationalPractice.Runtime.pdb','DrivePractice')
+         'Plugins/SituationalPractice/ExpandedPractice.Runtime.pdb','DrivePractice')
     # Enhancer's legacy resource hash list is scoped to its complete source-built payload.
     de_manifest=emit('enhancer-payload.txt',''.join(
         e['sha256']+'|'+e['path'][len(runtime):]+'\n'
@@ -117,7 +116,7 @@ def main():
     sources.extend(str(ROOT/'Core'/name) for name in ['CotConfiguration.cs','CotHost.cs'])
     sources.append(emit('ProductInfo.cs','namespace DynastyCOT { internal static class ProductInfo { internal const string Version='+json.dumps(product['version'])+'; internal const string AssemblyVersion='+json.dumps(product['version'].split('-')[0]+'.0')+'; }}\n'))
     resource_files=[
-        (dga_build/('DynamicGamedayAtmosphereNative-'+atmosphere_version+'.dll'),'Attendance.DynamicGamedayAtmosphereNative-'+atmosphere_version+'.dll'),
+        (dga_build/('GamedayAtmosphereNative-'+atmosphere_version+'.dll'),'Attendance.GamedayAtmosphereNative-'+atmosphere_version+'.dll'),
         (dga/'Source/DynamicGamedayAtmosphere.ini','Attendance.DynamicGamedayAtmosphere.ini'),
         (dga_build/'DgaDiagnostics.exe','Attendance.DgaDiagnostics.exe')]
     for file,name in resource_files:entries.append(dict(module='GamedayAtmosphere',path='resource:'+name,sha256=digest(file)))
@@ -127,7 +126,7 @@ def main():
     dll=stage/'Plugins/DynastyCOT.dll';dll.parent.mkdir(parents=True,exist_ok=True)
     compiler=Path(r'C:\Windows\Microsoft.NET\Framework64\v4.0.30319\csc.exe')
     command=[str(compiler),'/nologo','/target:library','/platform:x64','/optimize+',
-        '/define:COMBINED_DYNASTY_SETTINGS;DIRECT_RUNTIME_LOADING','/out:'+str(dll),
+        '/define:COMBINED_DYNASTY_SETTINGS;DIRECT_RUNTIME_LOADING;COT_BRANDED_RUNTIME','/out:'+str(dll),
         '/reference:'+str(sdk/'FrostyCore.dll'),'/reference:'+str(sdk/'FrostySdk.dll'),
         '/reference:System.Web.Extensions.dll','/reference:System.IO.Compression.dll','/reference:System.IO.Compression.FileSystem.dll']
     subprocess.run(command+resources+sources,check=True)
@@ -138,7 +137,10 @@ def main():
     entries.append(dict(module='Core',path='Templates/settings.json',sha256=digest(settings)))
     ownership=stage/'Templates/owned-payloads.json'
     embedded_doc=dict(files=[],embedded=[e for e in entries if e['path'].startswith('resource:')])
-    ownership.write_text(json.dumps(dict(format=1,current=list(owned_entries(embedded_doc)),
+    standalone=[dict(path='Plugins/'+m['installedReference']['name'],module=m['id'],sha256=m['installedReference']['sha256'])
+        for m in json.loads((ROOT/'Baselines/import.json').read_text())['modules']]
+    standalone+=json.loads((ROOT/'Packaging/StandalonePayloads.json').read_text())['files']
+    ownership.write_text(json.dumps(dict(format=1,current=list(owned_entries(embedded_doc)),standalone=standalone,
         legacy=json.loads((ROOT/'Packaging/LegacyPayloads.json').read_text())['files']),indent=2)+'\n')
     entries.append(dict(module='Core',path='Templates/owned-payloads.json',sha256=digest(ownership)))
     manifest=dict(format=1,product='DynastyCOT',version=product['version'],nodeVersion=node_version,

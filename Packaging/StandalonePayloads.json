@@ -1,0 +1,102 @@
+{
+  "format": 1,
+  "files": [
+    {
+      "path": "Plugins/DynamicGamedayAtmosphere.dll",
+      "module": "GamedayAtmosphere",
+      "sha256": "c53da1d108df11fe881a63cc701264fbd3fb0207f90b188026293f8cba132a35",
+      "release": "GDA-2.0.35"
+    },
+    {
+      "path": "Plugins/DynamicGamedayAtmosphere/Runtime-2.0.35/LoadDynamicGamedayAtmosphere.exe",
+      "module": "GamedayAtmosphere",
+      "sha256": "fa1bb1f620cad5125883261693eaab919f60af09e01fab16dc0835a06bf69e4a",
+      "release": "GDA-2.0.35"
+    },
+    {
+      "path": "Plugins/DynamicGamedayAtmosphere/Runtime-2.0.35/DynamicGamedayAtmosphereNative-2.0.35.dll",
+      "module": "GamedayAtmosphere",
+      "sha256": "1e809a8149a6674c4437b1ffeaad85ed5beb4b38e9daf236d701ffefb610cb7f",
+      "release": "GDA-2.0.35"
+    },
+    {
+      "path": "Plugins/DynamicGamedayAtmosphere/Tools/DgaDiagnostics.exe",
+      "module": "GamedayAtmosphere",
+      "sha256": "03e6b3aff89c2b01b65d80b89509be6ea22eed2468a295a7c87359edb1631ab5",
+      "release": "GDA-2.0.35"
+    },
+    {
+      "path": "Plugins/OfflineDynastySettings.dll",
+      "module": "ExtraDynastySettings",
+      "sha256": "79aa4453d0a0a8bbf809a1df62b64e3596cfaeab78bb523a814bf07038d4289d",
+      "release": "ODS-0.2.9"
+    },
+    {
+      "path": "Plugins/OfflineDynastySettings/OfflineDynastySettings.Persistence.exe",
+      "module": "ExtraDynastySettings",
+      "sha256": "e67bad29394d52a4ddf0f7511d752181bbe2a9be1d293da7dfad972fc9624286",
+      "release": "ODS-0.2.9"
+    },
+    {
+      "path": "Plugins/SituationalPractice.dll",
+      "module": "DrivePractice",
+      "sha256": "bd1614d6f8e666836e90335415207e46261f864c3f15bd02d1893eaca7f1bcbf",
+      "release": "Practice-0.8.20"
+    },
+    {
+      "path": "Plugins/SituationalPractice/SituationalPractice.Runtime.exe",
+      "module": "DrivePractice",
+      "sha256": "a4c2c37d4bded491d70d447bd85b5ff91615e3926bd92eb2226deb6201e17500",
+      "release": "Practice-0.8.20"
+    },
+    {
+      "path": "Plugins/SituationalPractice/SituationalPractice.Runtime.pdb",
+      "module": "DrivePractice",
+      "sha256": "c1582758264ea0acac02713b2c6176071bccd46761deb9d9f1f7997bf6ce7f47",
+      "release": "Practice-0.8.20"
+    },
+    {
+      "path": "Plugins/LoadDynamicGamedayAtmosphere.exe",
+      "module": "GamedayAtmosphere",
+      "sha256": "fa1bb1f620cad5125883261693eaab919f60af09e01fab16dc0835a06bf69e4a",
+      "release": "GDA-2.0.35",
+      "layout": "legacy-flat"
+    },
+    {
+      "path": "Plugins/DgaDiagnostics.exe",
+      "module": "GamedayAtmosphere",
+      "sha256": "03e6b3aff89c2b01b65d80b89509be6ea22eed2468a295a7c87359edb1631ab5",
+      "release": "GDA-2.0.35",
+      "layout": "legacy-flat"
+    }
+  ],
+  "provenance": [
+    {
+      "id": "GDA-2.0.35",
+      "repository": "ArtVsTheWorld/DynamicGamedayAtmosphere",
+      "tag": "v2.0.35",
+      "sourceRevision": "193662a9af440ef9cdc6903171e1a30b8acb0164",
+      "archive": "DynamicGamedayAtmosphere-Update3Hotfix.zip",
+      "archiveSha256": "c57c3eea0b25158d7100aa9644341b635d59ca67855b75452a7f10381a0272ac",
+      "verification": "Archive hash matches releases.json at the source tag and recorded verified public upload; embedded resource hashes read without running engines."
+    },
+    {
+      "id": "ODS-0.2.9",
+      "repository": "ArtVsTheWorld/offline-dynasty-settings",
+      "tag": "v0.2.9",
+      "sourceRevision": "7f4c5fa3561a47bb53fa73bbc532faa2b1b3f5fb",
+      "archive": "OfflineDynastySettings-0.2.9.zip",
+      "archiveSha256": "5e3664246886de89b63a0dc52f29e261eae30f8b9682dd857197544b07bfec43",
+      "verification": "Adapter bytes match the frozen installedReference hash; embedded helper hash read from that release assembly without running engines."
+    },
+    {
+      "id": "Practice-0.8.20",
+      "repository": "ArtVsTheWorld/drive-based-practice",
+      "tag": "v0.8.20",
+      "sourceRevision": "58f97ae7a15b29545e82d6d460b4af538019f3d8",
+      "archive": "Drive-Based-Practice-0.8.20.zip",
+      "archiveSha256": "5e608f3dab87aa51a2905c487239d0e6888cf7e93ddb01ef809002387f8b99dc",
+      "verification": "Adapter bytes match the frozen installedReference hash; embedded helper/PDB hashes read from that release assembly without running engines."
+    }
+  ]
+}

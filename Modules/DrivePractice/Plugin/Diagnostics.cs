@@ -231,7 +231,8 @@ namespace SituationalPractice
         {
             return (id==1000 || id==1001 || id==1026) && timestamp>=since
                 && (message.IndexOf("CollegeFB27",StringComparison.OrdinalIgnoreCase)>=0
-                    || message.IndexOf("SituationalPractice.Runtime",StringComparison.OrdinalIgnoreCase)>=0);
+                    || message.IndexOf("SituationalPractice.Runtime",StringComparison.OrdinalIgnoreCase)>=0
+                    || message.IndexOf("ExpandedPractice.Runtime",StringComparison.OrdinalIgnoreCase)>=0);
         }
         internal static string ReadWindowsEvents(DateTime sessionStart)
         {

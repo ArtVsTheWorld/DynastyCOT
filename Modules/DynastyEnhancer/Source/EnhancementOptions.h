@@ -36,14 +36,14 @@ inline const char* gradeLabel(int rating,GradeScale scale){
     }
     const unsigned band=rating>=90?0:rating>=80?1:rating>=70?2:rating>=60?3:4;
     constexpr const char* letters[]={"A","B","C","D","F"};
-    constexpr const char* words[]={"Elite","Great","Good","Fair","Poor"};
+    constexpr const char* words[]={"ELITE","GREAT","GOOD","FAIR","POOR"};
     if(scale==GradeScale::Descriptive)return words[band];
     return scale==GradeScale::STier&&rating>=95?"S":letters[band];
 }
 inline int gradeColor(std::string_view label){
     label=label.substr(0,label.find(','));
-    if(label=="Elite")return 0xBB70EF;if(label=="Great")return 0x529FF0;if(label=="S")return 0x409EFF;
-    if(label=="Good")return 0x66CF75;if(label=="Fair")return 0xEDB34F;if(label=="Poor")return 0xEA6666;
+    if((label=="ELITE"||label=="Elite"))return 0xBB70EF;if((label=="GREAT"||label=="Great"))return 0x529FF0;if(label=="S")return 0x409EFF;
+    if((label=="GOOD"||label=="Good"))return 0x66CF75;if((label=="FAIR"||label=="Fair"))return 0xEDB34F;if((label=="POOR"||label=="Poor"))return 0xEA6666;
     if(label.empty())return 0xF3F0E7;
     switch(label[0]){case 'A':return 0x1FE840;case 'B':return 0xA8D943;case 'C':return 0xFFD34D;case 'D':return 0xF68C2E;case 'F':return 0xF04444;default:return 0xF3F0E7;}
 }

@@ -7,6 +7,17 @@ import {projectLine,rosterStrengths} from '../Tools/betting_model.mjs';
 import {updateRuntime} from '../Tools/runtime_lifecycle.mjs';
 import {buildFeed} from '../Tools/feed_engine.mjs';
 import {likesFor,replyLikesFor,ENGAGEMENT_VERSION} from '../Tools/story_engagement.mjs';
+test('national roster calculation scans the player pool once and preserves missing/injured/mutable inputs',()=>{
+ const positions=['QB','HB','FB','WR','TE','LT','LG','C','RG','RT','DT','LE','RE','MLB','LOLB','ROLB','CB','FS','SS','K','P'];
+ const teams=Array.from({length:64},(_,id)=>({id})),players=teams.flatMap(t=>positions.map(position=>({team:t.id,position,overall:80,injury:'Uninjured'})));
+ players.push(...Array.from({length:10000},()=>({team:255,position:'QB',overall:99,injury:'Uninjured'})),{team:0,position:'QB',overall:99,injury:'Injured'},{team:0,position:'QB',overall:NaN,injury:'Uninjured'});
+ let scans=0;const iterator=players[Symbol.iterator];players[Symbol.iterator]=function(){++scans;return iterator.call(this);};
+ const s={teams,players},result=rosterStrengths(s);assert.equal(scans,1);assert.equal(result.size,64);
+ for(const r of result.values())assert.deepEqual([r.off,r.def,r.st],[80,80,80]);
+ players[0].overall=60;assert.equal(rosterStrengths(s).get(0).units.QB,60,'A retained identity cache concealed an actual rating change');
+ players[0].injury='Injured';assert.equal(rosterStrengths(s).has(0),false,'An unavailable quarterback silently became an average roster');
+ assert.equal(players.at(-2).overall,99);assert.ok(Number.isNaN(players.at(-1).overall));
+});
 function fixture(){
  const stats={OFFPASSYARDS:350,OFFRUSHYARDS:190,OFFYARDS:540,PASSATTEMPTS:30,PASSCOMPLETIONS:24,RUSHATTEMPTS:30,PASSINTS:0,PASSTDS:4,RUSHTDS:5,FOURTHDOWNS:4,FOURTHDOWNCONV:3,DEFRUSHYARDS:70,DEFPASSYARDS:160,TAKEAWAYS:3,GIVEAWAYS:0,SACKS:4,OFFREDZONEFGS:2,OFFREDZONETDS:3,PENALTYYARDS:20,DEFREDZONES:4,DEFREDZONETDS:1};
  const s={format:2,gameYear:27,sourceUnchanged:true,source:'runtime:1:1',sourceKind:'runtime',sha256:'a'.repeat(64),leagueId:1,userTeamIndex:1,season:{CurrentYear:1,CurrentSeasonYear:2027,CurrentWeek:4,CurrentWeekType:'RegularSeason',CurrentStage:'NFLSeason'},teams:[{id:1,name:'Harbor',nickname:'Captains',logo:11,conferenceId:'c',conferenceName:'Coast',prestigeStars:1,mediaRank:8,mediaLastRank:24,wins:3,losses:0,ties:0,headCoach:{name:'Alex Stone',lastName:'Stone'},offensiveCoordinator:{name:'Casey Reed'},defensiveCoordinator:{name:'Sam West'}},{id:2,name:'Mesa',logo:22,conferenceId:'c',conferenceName:'Coast',mediaRank:20,mediaLastRank:3,wins:0,losses:3,ties:0}],conferences:[{id:'c',name:'Coast',teams:[1,2]}],players:[],games:[],performances:[],offers:[],commitments:[],heisman:[],records:[],weeklyAwards:[]};

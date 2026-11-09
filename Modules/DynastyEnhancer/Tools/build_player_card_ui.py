@@ -54,6 +54,12 @@ def numeric_display_grade(a, source, output, done, prefix):
     a.reg(source);a.raw(0x44);a.string('string');a.raw(0x66);a.branch(prefix+'Strings')
     numeric_grade(a,source,output,done,prefix+'Numeric');a.branch(prefix+'Ready',0x99)
     a.label(prefix+'Strings')
+    # Already-graded/hidden text is common on reused native widgets. Reject
+    # it before the exact canonical-integer whitelist; do not coerce strings.
+    path(a,source,'length');a.number(3);a.raw(0x67);a.branch(done)
+    for boundary,operation in [('0',0x48),('9',0x67)]:
+        a.number(0);a.number(1);a.reg(source);a.string('charAt');a.raw(0x52)
+        a.string(boundary);a.raw(operation);a.branch(done)
     for value in range(101):
         a.reg(source);a.string(str(value));a.raw(0x66);a.branch(prefix+'Convert')
     a.branch(done,0x99)
@@ -71,6 +77,10 @@ def palette(a, label, color, done, prefix, numeric_guard=None,team=False):
         if scale:a.label(prefix+'scale'+str(scale))
         for index,(_,grade) in enumerate(bands):
             a.reg(label);a.string(grade);a.raw(0x66);a.branch(prefix+str(scale)+'grade'+str(index))
+            # A reused native widget may still hold a pre-update display label.
+            # Keep its color until the current producer refreshes it in caps.
+            if scale==3:
+                a.reg(label);a.string(grade.title());a.raw(0x66);a.branch(prefix+str(scale)+'grade'+str(index))
         a.branch(prefix+str(scale)+'numericEntry',0x99)
         for index,(_,grade) in enumerate(bands):
             a.label(prefix+str(scale)+'grade'+str(index));a.number(COLORS[grade]);a.store(color);a.branch(prefix+'chosen',0x99)
@@ -279,6 +289,8 @@ def rating_value_draw_suffix(a):
     a.label('ratingDrawLabel');palette(a,2,3,done,'ratingDrawPalette',team='auto')
     path(a,1,'mcValue');a.store(4);text_label(a,4,2,3,5,done,'ratingDrawText',team='auto')
     a.label(done)
+    from build_rating_badge_fit_ui import fit_badge
+    fit_badge(a)
 
 
 def kicker_value_set_suffix(a):
@@ -296,10 +308,16 @@ def kicker_value_set_suffix(a):
 
 
 def generic_slider_draw_suffix(a):
+    from build_nil_currency_ui import MARKER,suffix as nil_currency
+    # Only the fingerprinted NIL roster row can mark its Current NIL child.
+    path(a,1,MARKER);a.raw(0x73,0x66);a.branch('sliderNilCurrency')
     # GenericSlider is shared with progression/settings. Recolor only a
     # private-marked, already-converted player display override; never infer
     # a rating from the shared numeric slider value or skill-group level.
     done='sliderDrawDone'
+    a.fog_enabled();a.number(1);a.raw(0x66);a.branch('sliderRatingEnabled')
+    a.grade_colors_enabled();a.number(1);a.raw(0x66);a.branch(done,0xB8)
+    a.label('sliderRatingEnabled')
     path(a,1,'mData');a.raw(0x76,0x49);a.branch(done)
     path(a,1,'mData','ExtraInfo');a.raw(0x76,0x49);a.branch(done)
     path(a,1,'mData','ExtraInfo','DEPlayerRating');a.raw(0x73,0x66);a.branch(done,0xB8)
@@ -308,6 +326,12 @@ def generic_slider_draw_suffix(a):
     path(a,1,'mcRightValue');a.store(4)
     text_label(a,4,2,3,5,done,'sliderDrawText')
     a.label(done)
+    a.branch('sliderAllDone',0x99)
+    a.label('sliderNilCurrency');nil_currency(a)
+    a.label('sliderAllDone')
+    from build_rating_bar_ui import rating_bars,restore_bucket_focus
+    rating_bars(a)
+    restore_bucket_focus(a)
 
 
 def formation_parent_suffix(a):
@@ -388,6 +412,19 @@ def template_suffix(a):
     a.label('return'); a.reg(1); a.raw(0x3E)
 
 
+def unchanged_slider_extra(a, extra, label, color, scratch, changed, done, prefix):
+    # Inspect the actual native presentation, rather than caching by player or
+    # widget identity. Reused widgets, focus resets and option changes must
+    # still repaint. Avoid redundant provider notifications for unchanged data.
+    path(a,extra,'RightLabelDisplayOverride');a.reg(label);a.raw(0x66);a.branch(changed,0xB8)
+    path(a,extra,'DEPlayerRating');a.raw(0x73,0x66);a.branch(changed,0xB8)
+    for index,name in enumerate(('FocusValueTextStyle','UnfocusValueTextStyle','UnfocusableValueTextStyle')):
+        path(a,extra,name);a.store(scratch);a.missing(scratch,prefix+str(index))
+        path(a,scratch,'fontColor');a.reg(color);a.raw(0x66);a.branch(changed,0xB8)
+        a.label(prefix+str(index))
+    a.branch(done,0x99)
+
+
 def group_suffix(a):
     done='groupDone'
     a.missing(1, done); a.missing(2, done)
@@ -395,6 +432,10 @@ def group_suffix(a):
     path(a, 1, 'ExtraInfo', 'Rating'); a.store(3)
     numeric_grade(a, 3, 4, done, 'groupGrade')
     palette(a, 4, 6, done, 'groupPalette')
+    path(a,2,'mData');a.store(5);a.missing(5,'groupChanged')
+    path(a,5,'ExtraInfo');a.store(5);a.missing(5,'groupChanged')
+    unchanged_slider_extra(a,5,4,6,7,'groupChanged',done,'groupUnchangedStyle')
+    a.label('groupChanged')
     a.empty_object(5); a.reg(5); a.string('RightLabelDisplayOverride'); a.reg(4); a.raw(0x4F)
     a.set_field(5,'DEPlayerRating',True)
     # Native slider applies these style objects again on focus changes. Clone
@@ -413,11 +454,18 @@ def group_suffix(a):
 
 def level_suffix(a):
     numeric_grade(a, 4, 6, 'levelDone', 'levelGrade')
+    a.number(0);a.number(1);path(a,1,'mSkillLevelDataProvider');a.string('GetItemData');a.raw(0x52);a.store(8);a.missing(8,'levelDone')
+    path(a,8,'display');a.reg(6);a.raw(0x66);a.branch('levelDisplayReady')
     a.reg(6); a.string('display'); a.number(0); a.number(3)
     path(a, 1, 'mSkillLevelDataProvider'); a.call('UpdateProperty')
-    palette(a,6,7,'levelDone','levelPalette')
+    # Preserve any native style replacement caused by the display notification.
     a.number(0);a.number(1);path(a,1,'mSkillLevelDataProvider');a.string('GetItemData');a.raw(0x52);a.store(8);a.missing(8,'levelDone')
+    a.label('levelDisplayReady')
+    palette(a,6,7,'levelDone','levelPalette')
     path(a,8,'ExtraInfo');a.store(9);a.missing(9,'levelDone')
+    path(a,9,'fontColor');a.reg(7);a.raw(0x66);a.branch('levelStyleChanged',0xB8)
+    path(a,9,'DEPlayerRating');a.raw(0x73,0x66);a.branch('levelDone')
+    a.label('levelStyleChanged')
     a.empty_object(10);a.reg(10);a.string('fontColor');a.reg(7);a.raw(0x4F)
     a.reg(10);a.number(1);a.reg(9);a.string('CloneAndModify');a.raw(0x52);a.store(10)
     a.reg(10);a.string('fontColor');a.reg(7);a.raw(0x4F)
@@ -438,7 +486,9 @@ def subskills_suffix(a):
     a.reg(2);a.number(0);path(a,1,'mSubskillsDataProvider');a.string('GetNumItems');a.raw(0x52,0x48);a.branch('subskillsDone',0xB8)
     a.reg(2);a.number(1);path(a,1,'mSubskillsDataProvider');a.string('GetItemData');a.raw(0x52);a.store(3);a.missing(3,'subskillsNext')
     path(a,3,'value');a.store(4);numeric_grade(a,4,5,'subskillsNext','subskillsGrade');palette(a,5,6,'subskillsNext','subskillsPalette')
-    path(a,3,'ExtraInfo');a.store(8);a.missing(8,'subskillsNext');a.empty_object(7)
+    path(a,3,'ExtraInfo');a.store(8);a.missing(8,'subskillsNext')
+    unchanged_slider_extra(a,8,5,6,9,'subskillsChanged','subskillsNext','subskillsUnchangedStyle')
+    a.label('subskillsChanged');a.empty_object(7)
     a.reg(8);a.reg(7);a.number(2);a.global_object('cafe','utility','ObjectUtil');a.call('MergeInto')
     a.reg(7);a.string('RightLabelDisplayOverride');a.reg(5);a.raw(0x4F)
     a.set_field(7,'DEPlayerRating',True)
@@ -488,6 +538,10 @@ def skill_slots_suffix(a):
     numeric_grade(a,14,15,'skillSlotsNext','skillSlotsGrade')
     palette(a,15,16,'skillSlotsNext','skillSlotsPalette')
     a.reg(1);a.string('mcSkill');a.reg(12);a.raw(0x47,0x4E);a.store(17);a.missing(17,'skillSlotsNext')
+    path(a,17,'mData');a.store(18);a.missing(18,'skillSlotsChanged')
+    path(a,18,'ExtraInfo');a.store(18);a.missing(18,'skillSlotsChanged')
+    unchanged_slider_extra(a,18,15,16,19,'skillSlotsChanged','skillSlotsNext','skillSlotsUnchangedStyle')
+    a.label('skillSlotsChanged')
     a.empty_object(18);a.reg(18);a.string('RightLabelDisplayOverride');a.reg(15);a.raw(0x4F)
     a.set_field(18,'DEPlayerRating',True)
     path(a,17,'mData');a.raw(0x76,0x49);a.branch('skillSlotsApply')
@@ -544,9 +598,21 @@ def generate(destination):
             original=apt.data[off+48:off+48+size]
             if fnv(original)!=expected:raise ValueError(f'Unsupported native player method {asset}:{off:x}')
             count=size if copy_bytes is None else copy_bytes
-            program=append_program(size,suffix,copy_bytes)
+            copy_at=0
+            if name=='skillPrograms' and off==0x54EC0:
+                # Native publication precedes row styling. Prepare the complete
+                # presentation array first, then retain the exact native clear/add
+                # prefix. Never replace numerical ratings or progression values.
+                from build_ratings_publication_ui import prepare
+                a=Assembler();prepare(a)
+                while len(a.code)%8:a.raw(0x09)
+                copy_at=len(a.code);count=18;a.code.extend(bytes(count));a.ret();program=a.finish()
+            elif name=='skillPrograms' and off==0x54E20:
+                from build_ratings_publication_ui import fit_level,fit_title
+                a=Assembler();a.code.extend(bytes(size));suffix(a);fit_level(a);fit_title(a);a.ret();program=a.finish()
+            else:program=append_program(size,suffix,copy_bytes)
             code='{'+','.join(hex(b) for b in program.code)+'}'
-            lines.append(f'result.push_back({{{off},{argc},{regs},{flags},{size},{expected}ull,{newregs},0,{count},{code}}});')
+            lines.append(f'result.push_back({{{off},{argc},{regs},{flags},{size},{expected}ull,{newregs},{copy_at},{count},{code}}});')
             if name=='cardPrograms' and off==0x3EF0:
                 # Only loader metadata is normalized for the parent-body hash.
                 # Every callback instruction/header semantic remains checked.

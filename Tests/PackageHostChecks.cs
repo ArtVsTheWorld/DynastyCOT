@@ -16,10 +16,13 @@ class PackageHostChecks {
    Check(registered.Length==1,"Expected exactly one execution registration");
    Check(((Type)registered[0].ConstructorArguments[0].Value).FullName=="DynastyCOT.LaunchAction","Wrong registered host");
    Check(attrs.Count(x=>x.AttributeType.Name.StartsWith("PluginDisplayName"))==1,"Duplicate MMC entries");
+   Check((string)attrs.Single(x=>x.AttributeType.Name.StartsWith("PluginDisplayName")).ConstructorArguments[0].Value=="Dynasty COT","MMC product branding");
+   Check((string)attrs.Single(x=>x.AttributeType.Name.StartsWith("PluginAuthor")).ConstructorArguments[0].Value=="Ace","MMC author branding");
+   Check(!Directory.GetFiles(root,"LoadDynastyEnhancer.exe",SearchOption.AllDirectories).Any(),"Separate Beyond the Field loader remains");
    Check(Directory.GetFiles(Path.Combine(root,"Plugins"),"*.dll",SearchOption.AllDirectories).Length==1,"Internal native DLL would be scanned as a plugin");
    Type host=dll.GetType("DynastyCOT.LaunchAction",true);MethodInfo verify=host.GetMethod("VerifyModule",BindingFlags.Public|BindingFlags.Static);
    foreach(string id in new[]{"DynastyEnhancer","GamedayAtmosphere","ExtraDynastySettings","DrivePractice"}){verify.Invoke(null,new object[]{id});count++;}
-   string helper=Path.Combine(root,"Plugins","OfflineDynastySettings","OfflineDynastySettings.Persistence.exe");
+   string helper=Path.Combine(root,"Plugins","OfflineDynastySettings","ExtraSettings.Persistence.exe");
    byte[] saved=File.ReadAllBytes(helper);
    try{
     byte[] changed=(byte[])saved.Clone();changed[changed.Length-1]^=1;File.WriteAllBytes(helper,changed);bool rejected=false;
@@ -30,7 +33,7 @@ class PackageHostChecks {
    }finally{File.WriteAllBytes(helper,saved);}
    foreach(string name in new[]{"OfflineDynastySettings.RuntimeFiles","SituationalPractice.RuntimeFiles"}){
     Type t=dll.GetType(name,true);MethodInfo open=t.GetMethod("OpenVerified",BindingFlags.NonPublic|BindingFlags.Static);
-    string file=name.StartsWith("Offline")?helper:Path.Combine(root,"Plugins","SituationalPractice","SituationalPractice.Runtime.exe");
+    string file=name.StartsWith("Offline")?helper:Path.Combine(root,"Plugins","SituationalPractice","ExpandedPractice.Runtime.exe");
     using((IDisposable)open.Invoke(null,new object[]{file})){count++;}
    }
    Type de=dll.GetType("DynastyEnhancer.LaunchAction",true);

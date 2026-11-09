@@ -50,6 +50,7 @@
 #include "PlayerRecruitUiPrograms.h"
 #include "PlayerFormationUiPrograms.h"
 #include "PlayerNilUiPrograms.h"
+#include "NilToggleUiPrograms.h"
 #include "PlayerBlueprintUiPrograms.h"
 #include "PlayerPracticeUiPrograms.h"
 #include "PlayerAbilityDescriptions.h"
@@ -98,6 +99,7 @@ notesui::Runtime playerBlueprintUi(playerblueprintui::programs());
 notesui::Runtime playerBlueprintAioUi(playerblueprintui::aioPrograms());
 notesui::Runtime playerPracticeUi(playerpracticeui::programs());
 notesui::Runtime playerNilEmbeddedUi(playernilui::embeddedPrograms());
+notesui::Runtime nilToggleUi(niltoggleui::programs());
 notesui::Runtime playerKickerUi(playeringameui::kickerPrograms());
 notesui::Runtime playerIndividualPanelUi(playerplaycallui::individualPrograms());
 notesui::Runtime playerComparisonPanelUi(playerplaycallui::comparisonPrograms());
@@ -120,8 +122,9 @@ notesui::Runtime draftOvrStrategyUi(draftovrui::strategyPrograms()),draftOvrCurr
 notesui::Runtime aioCurrency0(aiocurrencyui::group0()),aioCurrency1(aiocurrencyui::group1()),aioCurrency2(aiocurrencyui::group2()),aioCurrency3(aiocurrencyui::group3());
 notesui::Runtime aioNotesUi(aiorecruitnotesui::programs());
 notesui::Runtime analyticsRowUi(analyticsactions::hubRowPrograms()),analyticsCurrentRowUi(analyticsactions::currentRowPrograms());
-const std::array<notesui::Runtime*,58> cardUiBanks={&playerControlUi,&playerCardUi,&playerTemplateUi,&playerSkillUi,&playerHubUi,&playerSliderUi,&playerInGameUi,&playerRecruitUi,&playerFormationUi,&playerLegacyOvrUi,&playerNilUi,&playerBlueprintUi,&playerPracticeUi,&playerNilEmbeddedUi,&playerKickerUi,&playerIndividualPanelUi,&playerComparisonPanelUi,&playerImpactPanelUi,&playerLineupPanelUi,&playerTrenchPanelUi,&playerInjuryScreenUi,&currencyIconUi,&currencySlotUi,&currencyCellUi,&gapCoreUi,&gapHubUi,&gapRecruitUi,&gapTeamSelectUi,&draftOvrStrategyUi,&draftOvrCurrentStrategyUi,&draftOvrRowsUi,&currencyTopbarUi,&currencyRecruitingUi,&currencyBudgetUi,&currencyAnimationUi,&currencyBudgetArtUi,&currencyRecruitDetailUi,&currencyRecruitEditorUi,&aioCurrency0,&aioCurrency1,&aioCurrency2,&aioCurrency3,&playerBlueprintAioUi,&gapWeeklyUi,&gapTopPlayersUi,&gapAioTopPlayersUi,&aioNotesUi,&analyticsMainUi,&analyticsCurrentUi,&analyticsCleanupUi,&analyticsCurrentCleanupUi,&analyticsHintsUi,&playerTeamModuleUi,&analyticsRefreshUi,&analyticsCurrentRefreshUi,&analyticsCurrentHintsUi,&analyticsRowUi,&analyticsCurrentRowUi};
+const std::array<notesui::Runtime*,59> cardUiBanks={&playerControlUi,&playerCardUi,&playerTemplateUi,&playerSkillUi,&playerHubUi,&playerSliderUi,&playerInGameUi,&playerRecruitUi,&playerFormationUi,&playerLegacyOvrUi,&playerNilUi,&playerBlueprintUi,&playerPracticeUi,&playerNilEmbeddedUi,&playerKickerUi,&playerIndividualPanelUi,&playerComparisonPanelUi,&playerImpactPanelUi,&playerLineupPanelUi,&playerTrenchPanelUi,&playerInjuryScreenUi,&currencyIconUi,&currencySlotUi,&currencyCellUi,&gapCoreUi,&gapHubUi,&gapRecruitUi,&gapTeamSelectUi,&draftOvrStrategyUi,&draftOvrCurrentStrategyUi,&draftOvrRowsUi,&currencyTopbarUi,&currencyRecruitingUi,&currencyBudgetUi,&currencyAnimationUi,&currencyBudgetArtUi,&currencyRecruitDetailUi,&currencyRecruitEditorUi,&aioCurrency0,&aioCurrency1,&aioCurrency2,&aioCurrency3,&playerBlueprintAioUi,&gapWeeklyUi,&gapTopPlayersUi,&gapAioTopPlayersUi,&aioNotesUi,&analyticsMainUi,&analyticsCurrentUi,&analyticsCleanupUi,&analyticsCurrentCleanupUi,&analyticsHintsUi,&playerTeamModuleUi,&analyticsRefreshUi,&analyticsCurrentRefreshUi,&analyticsCurrentHintsUi,&analyticsRowUi,&analyticsCurrentRowUi,&nilToggleUi};
 bool cardBankEnabled(size_t bank){const auto selected=enhancements::options();const auto* runtime=cardUiBanks[bank];
+    if(runtime==&nilToggleUi)return selected.dollars;
     if(runtime==&analyticsMainUi||runtime==&analyticsCurrentUi)return nativeanalytics::opened;
     if(runtime==&analyticsRowUi||runtime==&analyticsCurrentRowUi)return true;
     if(runtime==&analyticsRefreshUi||runtime==&analyticsCurrentRefreshUi)return true;
@@ -131,8 +134,9 @@ bool cardBankEnabled(size_t bank){const auto selected=enhancements::options();co
     if(runtime==&gapRecruitUi)return selected.recruiting;
     // Currency layout must undo its own prior fit when dollars is switched Off.
     // The suffix retains the real option gate; fresh Off widgets are a no-op.
-    if(runtime==&currencySlotUi||runtime==&currencyRecruitingUi||runtime==&currencyRecruitDetailUi||runtime==&currencyRecruitEditorUi)return true;
+    if(runtime==&currencySlotUi||runtime==&currencyRecruitingUi||runtime==&currencyRecruitDetailUi||runtime==&currencyRecruitEditorUi||runtime==&playerSliderUi)return true;
     if(runtime==&currencyIconUi||runtime==&currencyCellUi||runtime==&currencyTopbarUi||runtime==&currencyBudgetUi||runtime==&currencyAnimationUi||runtime==&currencyBudgetArtUi)return selected.dollars;
+    if(runtime==&playerNilUi||runtime==&playerNilEmbeddedUi)return selected.dollars||selected.roster||selected.team||selected.colors;
     if(runtime==&playerSkillUi&&selected.dollars)return true;
     if(runtime==&draftOvrStrategyUi||runtime==&draftOvrCurrentStrategyUi||runtime==&draftOvrRowsUi)return selected.roster;
     return selected.roster||selected.team||selected.colors;
@@ -458,7 +462,9 @@ unsigned __fastcall colorLengthHook(void* object){
 #if !defined(PLAYER_FOG_PREVIEW) || defined(PLAYER_FOG_COLORS)
         attachPlayerGridUi(object,true,h);
 #endif
-        for(size_t bank=0;bank<cardUiBanks.size();++bank)if(!cardUiFailed[bank]&&cardUiBanks[bank]->acceptsFrame(h,true))
+        static const notesui::FrameDispatch<cardUiBanks.size()> fixedDispatch(cardUiBanks);
+        const auto candidates=fixedDispatch.candidates(h,true);
+        for(size_t bank=0;bank<cardUiBanks.size();++bank)if((candidates&(uint64_t{1}<<bank))&&!cardUiFailed[bank])
         try{CallGuard guard;if(disabled)return originalColorLength(object);const auto index=cardUiBanks[bank]->beforeInvoke(object,read,true,cardBankEnabled(bank),unsigned(enhancements::options().scale),enhancements::options().colors,enhancements::options().roster,enhancements::options().team,enhancements::options().dollars,unsigned(enhancements::options().teamScale));
             if(index>=0){const auto bit=1u<<index;if(!(cardUiAttached[bank].fetch_or(bit)&bit))note({{"event","player_fog_card_adapter_attached"},{"bank",bank},{"method",index},{"path","fixed frame body accessor"}});}}
         catch(const std::exception& error){cardUiFailed[bank]=true;note({{"event","player_fog_card_adapter_failed"},{"bank",bank},{"reason",error.what()}});}

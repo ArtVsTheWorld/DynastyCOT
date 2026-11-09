@@ -3,7 +3,13 @@ using System.IO;
 using System.Security.Cryptography;
 namespace SituationalPractice {
  internal static class RuntimeFiles {
-  internal static string PathIn(string pluginFolder){return Path.Combine(pluginFolder,"SituationalPractice","SituationalPractice.Runtime.exe");}
+  internal static string PathIn(string pluginFolder){return Path.Combine(pluginFolder,"SituationalPractice",
+#if COT_BRANDED_RUNTIME
+   "ExpandedPractice.Runtime.exe"
+#else
+   "SituationalPractice.Runtime.exe"
+#endif
+  );}
   // Hold this read-only lease until process creation completes. Windows denies
   // replacement/deletion between verification and launch. Never extract or repair.
   internal static FileStream OpenVerified(string path) {

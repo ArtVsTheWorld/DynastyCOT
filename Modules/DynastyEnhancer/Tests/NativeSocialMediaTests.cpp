@@ -48,8 +48,22 @@ int main(int argc,char** argv){
     try {
         socialtexttests::run();
         {
-            require(analyticsmenu::sibling(L"C:/COT Runtime/DynastyEnhancerNative-v103.dll").filename()==L"DynastyEnhancerRecruitFog-v1.dll","Packaged stable filenames do not resolve the Analytics owner");
-            require(analyticsmenu::sibling(L"C:/COT Runtime/DynastyEnhancerNative-cot-123.dll").filename()==L"DynastyEnhancerRecruitFog-p123.dll"&&analyticsmenu::sibling(L"C:/Other.dll").empty(),"Development or foreign module names resolved incorrectly");
+            dynasty::live::FeedSchedule cadence;
+            require(cadence.due(0),"Fresh feed schedule did not start immediately");
+            cadence.accepted(1000);
+            require(!cadence.due(1499)&&cadence.due(1500)&&cadence.identityOnly(1500),"Identity probe interval changed");
+            for(uint64_t now=1500;now<6000;now+=500){require(cadence.identityOnly(now),"Full content scan ran early");cadence.unchangedIdentity(now);}
+            require(cadence.due(6000)&&!cadence.identityOnly(6000),"Midweek content scan was postponed by identity probes");
+            cadence.observed(6100);require(!cadence.due(6849)&&cadence.due(6850)&&!cadence.identityOnly(6850),"Second full capture lost its settling interval");
+            cadence.failed(7000);require(!cadence.due(7999)&&cadence.due(8000),"Unstable capture retries were unbounded or delayed");
+            cadence.accepted(9000,false);require(!cadence.due(13999)&&cadence.due(14000),"Missing identity proof increased expensive idle scans");
+            cadence.reset();require(cadence.due(0)&&!cadence.identityOnly(0),"New Dynasty reused a previous capture schedule");
+        }
+        {
+            require(analyticsmenu::sibling(L"C:/COT Runtime/BeyondTheFieldNative-v103.dll").filename()==L"BeyondTheFieldRecruitFog-v1.dll","Packaged stable filenames do not resolve the Analytics owner");
+            require(analyticsmenu::sibling(L"C:/COT Runtime/DynastyEnhancerNative-cot-123.dll").filename()==L"DynastyEnhancerRecruitFog-p123.dll"&&analyticsmenu::sibling(L"C:/Other.dll").empty()&&analyticsmenu::sibling(L"C:/COT Runtime/DynastyEnhancerNative-v103.dll").empty(),"Development or foreign module names resolved incorrectly");
+            require(analyticsmenu::sibling(L"C:/COT Runtime/BeyondTheFieldNative-cot-123.dll").filename()==L"BeyondTheFieldRecruitFog-p123.dll","Branded development filenames do not resolve matching Analytics owner");
+            require(analyticsmenu::sibling(L"C:/COT Runtime/BeyondTheFieldNative-cot-124.dll").filename()!=analyticsmenu::sibling(L"C:/COT Runtime/BeyondTheFieldNative-cot-123.dll").filename()&&analyticsmenu::sibling(L"C:/COT Runtime/BeyondTheFieldNative-cot-123.exe").empty(),"Branded sibling mapping lost build isolation or accepted a foreign extension");
             Collector out{vt,{}};ContainerProxy proxy{containerVt,&out,{},true};
             for(unsigned n=0;n<8;++n){proxy.captured[n]={{"tileCoords",std::to_string(n+1)},{"panelId","CM_LEAGUE"},{"Priority",0},{"linkage",""}};}
             require(analyticsmenu::append(proxy)&&out.rows.size()==9&&out.rows[5]["tileCoords"]=="6"&&out.rows[6]["tileCoords"]=="7","Analytics insertion did not preserve the native Stats & Records grid");
@@ -79,6 +93,15 @@ int main(int argc,char** argv){
             const auto calls=navForwardCalls;navRequestHook(nullptr,0,"NEWS_MENU",nullptr);
             require(navForwardCalls==calls+1&&navForwardName=="DO_NOTHING"&&!opened,"Social Off opened a stale cached feed button or stranded navigation");
             containers=savedContainers;navRequest=savedNav;enhancements::currentOptions=39;
+        }
+        {
+            dynasty::live::PackedChangeWatch identity;std::array<unsigned char,32> state{};
+            auto at=reinterpret_cast<uintptr_t>(state.data());identity.record(at,{0});
+            auto full=identity;full.record(at+16,{0});
+            auto read=[](uintptr_t p,void* out,size_t n){memcpy(out,reinterpret_cast<const void*>(p),n);return true;};
+            state[16]=1;require(identity.unchanged(read)&&!full.unchanged(read),"Identity probe swallowed a midweek-content change");
+            state[0]=1;require(!identity.unchanged(read),"Week/context identity transition failed to wake capture");
+            require(!identity.unchanged([](uintptr_t,void*,size_t){return false;}),"Unreadable identity proof suppressed capture");
         }
         {
             dynasty::live::PackedChangeWatch watch;std::vector<unsigned char> memory(0x4000,7);constexpr uintptr_t start=0x100000;

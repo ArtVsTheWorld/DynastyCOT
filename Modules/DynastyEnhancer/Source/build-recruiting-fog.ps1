@@ -1,4 +1,4 @@
-param([Parameter(Mandatory=$true)][ValidatePattern('^DynastyEnhancerRecruitFog-p[0-9]+$')][string]$Name,[switch]$RecruitNotesProbe,[switch]$RecruitNotesUi,[switch]$PlayerFogPreview,[switch]$PlayerFogColors,[switch]$PlayerFogPerf,[switch]$PresentationPreview)
+param([Parameter(Mandatory=$true)][ValidatePattern('^(?:DynastyEnhancerRecruitFog|BeyondTheFieldRecruitFog)-p[0-9]+$')][string]$Name,[switch]$RecruitNotesProbe,[switch]$RecruitNotesUi,[switch]$PlayerFogPreview,[switch]$PlayerFogColors,[switch]$PlayerFogPerf,[switch]$PresentationPreview)
 $ErrorActionPreference='Stop'
 $fogRoot=Split-Path -Parent $PSScriptRoot
 $fogOut=Join-Path $fogRoot 'Build'
@@ -13,10 +13,13 @@ $fogCl=Join-Path $fogTool.FullName 'bin/Hostx64/x64/cl.exe'
 $fogInc=@(('/I'+(Join-Path $fogTool.FullName 'include')),('/I'+(Join-Path $fogSdk.FullName 'ucrt')),('/I'+(Join-Path $fogSdk.FullName 'shared')),('/I'+(Join-Path $fogSdk.FullName 'um')))
 $fogLib=@(('/LIBPATH:'+(Join-Path $fogTool.FullName 'lib/x64')),('/LIBPATH:'+(Join-Path $fogKits ('Lib/'+$fogSdk.Name+'/ucrt/x64'))),('/LIBPATH:'+(Join-Path $fogKits ('Lib/'+$fogSdk.Name+'/um/x64'))))
 $fogFlags=@('/nologo','/O2','/MT','/W4','/WX','/EHsc','/std:c++17','/utf-8')+$fogInc
-$fogFlags+=('/DCOT_ANALYTICS_BUILD_ID='+$Name.Substring('DynastyEnhancerRecruitFog-p'.Length)+'ull')
+$Name -match '-p([0-9]+)$' | Out-Null
+$fogFlags+=('/DCOT_ANALYTICS_BUILD_ID='+$Matches[1]+'ull')
 if($RecruitNotesProbe -and $RecruitNotesUi){throw 'Choose either the pass-through probe or Notes UI candidate'}
 if($RecruitNotesProbe){$fogFlags+='/DRECRUIT_NOTES_PROBE'}
-if($RecruitNotesUi){$fogFlags+='/DRECRUIT_NOTES_UI'}
+if($RecruitNotesUi){
+ & python (Join-Path $fogRoot 'Tools/build_nil_toggle_ui.py')
+ if($LASTEXITCODE -ne 0){throw 'Native NIL toggle generation failed'}$fogFlags+='/DRECRUIT_NOTES_UI'}
 if($PlayerFogPreview){if(-not $RecruitNotesUi){throw 'Preview requires the shared UI implementation'};$fogFlags+='/DPLAYER_FOG_PREVIEW'}
 if($PlayerFogColors){if(-not $RecruitNotesUi){throw 'Player colors require UI support'};$fogFlags+='/DPLAYER_FOG_COLORS'}
 if($PlayerFogPerf){if(-not $RecruitNotesUi){throw 'Player profiling requires UI support'};$fogFlags+='/DPLAYER_FOG_PERF'}
@@ -40,6 +43,18 @@ if($RecruitNotesUi){
  if($LASTEXITCODE -ne 0){throw 'Recruiting scholarship detail currency checks failed'}
  & python (Join-Path $fogRoot 'Tests/currency_recruiteditor_ui_test.py')
  if($LASTEXITCODE -ne 0){throw 'Recruiting scholarship editor currency checks failed'}
+ & python (Join-Path $fogRoot 'Tests/nil_toggle_ui_test.py')
+ if($LASTEXITCODE -ne 0){throw 'Current NIL native toggle checks failed'}
+ & python (Join-Path $fogRoot 'Tests/ratings_publication_ui_test.py')
+ if($LASTEXITCODE -ne 0){throw 'Ratings prepublication/fitting checks failed'}
+ & python (Join-Path $fogRoot 'Tests/rating_bar_ui_test.py')
+ if($LASTEXITCODE -ne 0){throw 'Native rating bar color checks failed'}
+ & python (Join-Path $fogRoot 'Tests/rating_bucket_focus_ui_test.py')
+ if($LASTEXITCODE -ne 0){throw 'Native bucket highlight checks failed'}
+ & python (Join-Path $fogRoot 'Tests/rating_badge_fit_ui_test.py')
+ if($LASTEXITCODE -ne 0){throw 'Native descriptive badge fitting checks failed'}
+ & python (Join-Path $fogRoot 'Tests/currency_nil_ui_test.py')
+ if($LASTEXITCODE -ne 0){throw 'Current NIL slider edit/redraw checks failed'}
  & python (Join-Path $fogRoot 'Tests/currency_budget_ui_test.py')
  if($LASTEXITCODE -ne 0){throw 'Budget and offer currency display checks failed'}
  & python (Join-Path $fogRoot 'Tests/draft_ovr_ui_test.py')

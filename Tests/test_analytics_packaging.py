@@ -19,6 +19,7 @@ def exported_api(path):
     def cstring(at):
         end=data.index(0,at);assert end-at<256;return data[at:end].decode('ascii')
     directory=offset(u32(pe+24+112));functions=offset(u32(directory+28));names=offset(u32(directory+32));ordinals=offset(u32(directory+36))
+    assert cstring(offset(u32(directory+12))).startswith('BeyondTheFieldRecruitFog-p'),'PE export module name retains old branding'
     for i in range(u32(directory+24)):
         if cstring(offset(u32(names+i*4)))!='DynastyCotAnalyticsApi':continue
         ordinal=u16(ordinals+i*2);assert ordinal<u32(directory+20);rva=u32(functions+ordinal*4);at=offset(rva)
@@ -34,6 +35,7 @@ def main():
         nonlocal checks
         assert ok,message;checks+=1
     sample='20261108010101001';check(analytics_build_id('DynastyEnhancerNative-cot-'+sample+'.dll','DynastyEnhancerRecruitFog-p'+sample+'.dll')==sample,'Matched native source pair rejected')
+    check(analytics_build_id('BeyondTheFieldNative-cot-'+sample+'.dll','BeyondTheFieldRecruitFog-p'+sample+'.dll')==sample,'Branded matched native source pair rejected')
     for social,fog in [('DynastyEnhancerNative-v103.dll','DynastyEnhancerRecruitFog-v1.dll'),('DynastyEnhancerNative-cot-1.dll','DynastyEnhancerRecruitFog-p2.dll'),('DynastyEnhancerNative-cot-0.dll','DynastyEnhancerRecruitFog-p0.dll'),('DynastyEnhancerNative-cot-18446744073709551616.dll','DynastyEnhancerRecruitFog-p18446744073709551616.dll')]:
         refused=False
         try:analytics_build_id(social,fog)
@@ -41,11 +43,11 @@ def main():
         check(refused,'Unversioned/mixed/invalid native pair accepted')
     stage=Path(sys.argv[1]) if len(sys.argv)>1 else Path(json.loads((ROOT/'Build/current-package.json').read_text())['stage'])
     manifest=json.loads((stage/'package-manifest.json').read_text());expected=analytics_build_id(manifest['nativeInputs']['social']['path'],manifest['nativeInputs']['fog']['path'])
-    size,version,build=exported_api(stage/'COT-Runtime/DynastyEnhancer/DynastyEnhancerRecruitFog-v1.dll')
+    size,version,build=exported_api(stage/'COT-Runtime/DynastyEnhancer/BeyondTheFieldRecruitFog-v1.dll')
     check((size,version)==(64,2),'Packaged Analytics API ABI differs')
     check(manifest['analyticsBridge']['abi']==version,'Manifest Analytics ABI differs from the native export')
     check(str(build)==expected==manifest['analyticsBridge']['buildId'],'Packaged native API build ID differs from source/manifest')
-    check((stage/'COT-Runtime/DynastyEnhancer/DynastyEnhancerNative-v103.dll').is_file(),'Expected stable Social runtime name missing')
+    check((stage/'COT-Runtime/DynastyEnhancer/BeyondTheFieldNative-v103.dll').is_file(),'Expected stable Social runtime name missing')
     check((stage/'LICENSES/PlayerAnalytics-NOTICES.txt').is_file(),'Analytics notices missing')
     print(f'PASS: {checks} Analytics packaged ABI/build-pair/stable-name/license checks; native DLLs never loaded.')
 if __name__=='__main__':main()
