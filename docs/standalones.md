@@ -4,10 +4,10 @@ Want one feature? Download its standalone ZIP. Want the collection? Download Dyn
 
 | Module | Standalone repository | Current standalone |
 |---|---|---|
-| Beyond the Field | [BeyondTheField](https://github.com/ArtVsTheWorld/BeyondTheField) | 1.0.2 preview |
+| Beyond the Field | [BeyondTheField](https://github.com/ArtVsTheWorld/BeyondTheField) | 1.0.2 stable |
 | Gameday Atmosphere | [DynamicGamedayAtmosphere](https://github.com/ArtVsTheWorld/DynamicGamedayAtmosphere) | 2.1.9 / Update 4 |
-| Extra Settings | [offline-dynasty-settings](https://github.com/ArtVsTheWorld/offline-dynasty-settings) | 0.2.10 preview |
-| Expanded Practice | [drive-based-practice](https://github.com/ArtVsTheWorld/drive-based-practice) | 0.8.21 preview |
+| Extra Settings | [offline-dynasty-settings](https://github.com/ArtVsTheWorld/offline-dynasty-settings) | 0.2.10 stable |
+| Expanded Practice | [drive-based-practice](https://github.com/ArtVsTheWorld/drive-based-practice) | 0.8.21 stable |
 
 Each ZIP contains exactly its branded plugin DLL, README.txt and FEATURES.md. Required program files and notices are embedded and verified when prepared. Native DLLs stay outside MMC's recursive Plugins scan; Extra Settings/Practice still use their verified helper processes. One-DLL downloads do not mean no generated support files.
 
@@ -33,7 +33,7 @@ These old IDs/folder names are compatibility aliases, not extra copies of the pl
 
 | Combination | What to watch for |
 |---|---|
-| All four matching current standalones | Fixture loading, distinct startup guards, payload paths and retained COT hook contracts pass. A full clean-process live test of the three new wrappers is still pending. |
+| All four matching current standalones | Fixture loading, distinct startup guards, payload paths and retained COT hook contracts pass. Ace reported all four standalone releases verified working on November 9, 2026. This does not certify every other setup. |
 | Beyond the Field + Expanded Practice | BTF fingerprints code that Practice patches. It recognizes only the exact supported practice hook bodies/relocations. An older/modified Practice helper can make BTF reject activation. Keep this matched release set together. |
 | Beyond the Field + Extra Settings | Both extend Dynasty settings through different native layers. Current menu/writer contracts are retained. Another mod rewriting those callbacks or a mismatched old version can block one module. |
 | Extra Settings + Expanded Practice | They share the supported controller bridge. Exact known ownership is recognized; unknown bridge changes are rejected. This is not general compatibility with every controller/gameplay plugin. |
@@ -64,4 +64,4 @@ Gameday notes compare source against v2.0.35; Extra Settings against v0.2.1; Exp
 4. Test Expanded Practice with Extra Settings/BTF present: main-menu and Dynasty Practice, all modes, side switching and returning to native practice.
 5. Confirm Dynasty and basic Play Now crowd/noise/shake behavior, plus native touchdown presentation. Crowd effects in Practice should remain absent.
 
-Preview publishing makes the three new wrappers available for these checks; it does not mark them complete.
+Ace confirmed all four standalone releases verified working on November 9, 2026. The three preview releases were promoted to stable without changing their tested ZIP/DLL bytes. Enclosed build-time preview labels remain historical; current release notes and repository status record this acceptance.

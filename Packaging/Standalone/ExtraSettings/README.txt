@@ -1,4 +1,4 @@
-EXTRA SETTINGS by Ace - 0.2.10 standalone preview
+EXTRA SETTINGS by Ace - 0.2.10 standalone release
 More offline Dynasty clocks and playcall controls. COT is optional.
 
 INSTALL
@@ -25,5 +25,5 @@ LOGS
 Plugins/OfflineDynastySettings/Diagnostics and its existing module log files.
 Package setup: Standalone-Runtime/ExtraDynastySettings/Logs/package.log.
 
-See FEATURES.md. This new standalone packaging needs clean-launch live checks;
-successful startup alone does not establish game/overhaul compatibility.
+See FEATURES.md. Ace reported the standalone release working on November 9, 2026.
+Other game/overhaul combinations still need their own checks.

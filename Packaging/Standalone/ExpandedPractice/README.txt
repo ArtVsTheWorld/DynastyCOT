@@ -1,4 +1,4 @@
-EXPANDED PRACTICE by Ace - 0.8.21 standalone preview
+EXPANDED PRACTICE by Ace - 0.8.21 standalone release
 Normal practice, full drives and scrimmages. COT is optional.
 
 INSTALL
@@ -24,4 +24,4 @@ Plugins/SituationalPractice/launcher.log and its session diagnostic folders.
 Package setup: Standalone-Runtime/DrivePractice/Logs/package.log.
 
 See FEATURES.md. Native hooks and helper integrity checks remain in place.
-This new standalone packaging needs a clean-launch live acceptance check.
+Ace reported the standalone release working on November 9, 2026.

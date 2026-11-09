@@ -1,4 +1,4 @@
-BEYOND THE FIELD by Ace - 1.0.2 standalone preview
+BEYOND THE FIELD by Ace - 1.0.2 standalone release
 Dynasty news, scouting uncertainty and player performance grades. COT is optional.
 
 INSTALL
@@ -29,6 +29,6 @@ Package setup: Standalone-Runtime/DynastyEnhancer/Logs/package.log under MMC.
 Native/generator: COT-Runtime/DynastyEnhancer under MMC.
 Launcher: Plugins/DynastyEnhancer/Logs/BeyondTheField-launcher.log.
 
-See FEATURES.md. This preview needs clean-launch live acceptance. Offline
-checks do not establish compatibility with every game or overhaul version.
+See FEATURES.md. Ace reported the standalone release working on November 9, 2026.
+Other game/overhaul combinations still need their own checks.
 Third-party notices are embedded and prepared under MMC/LICENSES.
