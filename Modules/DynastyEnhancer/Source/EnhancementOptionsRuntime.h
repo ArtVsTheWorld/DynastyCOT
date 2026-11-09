@@ -60,7 +60,7 @@ public:
     void bind(const std::string& identity){
         size_t consumed=0;const auto number=std::stoull(identity,&consumed);if(consumed!=identity.size()||!number||number>=UINT32_MAX)throw std::runtime_error("Invalid enhancement Dynasty identity");
         Options selected;
-        {std::lock_guard<std::mutex> guard(mutex);if(ready&&league==number)return;ready=false;currentOptions=selected.packed();shared.publish(static_cast<uint32_t>(number),selected);}
+        {std::lock_guard<std::mutex> guard(mutex);if(ready&&league==number)return;ready=false;currentOptionsLeague=0;currentOptions=selected.packed();shared.publish(static_cast<uint32_t>(number),selected);}
         // Pending edits belong to their original profile even if its write
         // fails during a Dynasty switch. The next worker pass can retry them.
         flush();std::lock_guard<std::mutex> ioGuard(ioMutex);
@@ -70,7 +70,7 @@ public:
             std::ifstream input(file);nlohmann::json saved;input>>saved;
             selected=decodeOptions(saved,static_cast<uint32_t>(number));
         }
-        std::lock_guard<std::mutex> guard(mutex);league=static_cast<uint32_t>(number);selectedProfile=selected;ready=true;dirty=false;++revision;currentOptions=selected.packed();shared.publish(league,selected);
+        std::lock_guard<std::mutex> guard(mutex);league=static_cast<uint32_t>(number);selectedProfile=selected;ready=true;dirty=false;++revision;currentOptions=selected.packed();currentOptionsLeague=league;shared.publish(league,selected);
     }
     bool change(unsigned index,int value){
         std::lock_guard<std::mutex> guard(mutex);if(!ready||index>7||value<0||value>((index==3||index==7)?4:1))return false;

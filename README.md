@@ -28,7 +28,7 @@ Find the options under **Beyond the Field** in Dynasty settings. Social Media an
 
 Bands and verified military crowd groups retain their protection. Neutral-site crowd appearance stays native. Find the module under **User Settings > Gameday Atmosphere**.
 
-The new **basic offline Play Now** path uses live-match crowd reactions and departures. Starting attendance and visiting-fan appearance stay native; Dynasty travel, season plans and saved crowd history are not used. Its final live check is still pending in this release candidate.
+The **basic offline Play Now** path adds crowd reactions, sound, shake and departures. With arrivals enabled, fresh games start at 75% of the available crowd, then fans continue arriving. Visiting-fan appearance stays native; Dynasty travel, season plans and saved crowd history are not used. Added replay changes skip touchdowns so the game controls their presentation. The earlier Play Now sound/shake smoke test passed; the final 75% and touchdown changes still need live acceptance.
 
 ## Expanded Practice
 

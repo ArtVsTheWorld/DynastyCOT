@@ -23,7 +23,14 @@ struct Options {
 };
 inline constexpr unsigned defaultOptions=Options{}.packed();
 inline std::atomic<unsigned> currentOptions{defaultOptions};
-inline Options options(){return Options::unpack(currentOptions.load(std::memory_order_relaxed));}
+inline std::atomic<uint32_t> currentOptionsLeague{0};
+using PresentationGuard=bool(*)();
+inline std::atomic<PresentationGuard> presentationGuard{nullptr};
+inline Options configuredOptions(){return Options::unpack(currentOptions.load(std::memory_order_relaxed));}
+inline bool presentationAllowed(){auto guard=presentationGuard.load(std::memory_order_acquire);return !guard||guard();}
+// Keep the saved profile independent of its current presentation scope. Leaving
+// Dynasty never changes or publishes the user's choices to another profile.
+inline Options options(){auto selected=configuredOptions();if(presentationAllowed())return selected;auto native=Options::unpack(0);native.social=selected.social;return native;}
 inline const char* gradeLabel(int rating,GradeScale scale){
     if(rating<0||rating>100)return "?";
     if(scale==GradeScale::Blind)return u8"–";

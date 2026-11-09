@@ -6,6 +6,7 @@ struct Settings {
     int enabled=1,startPercent=55,lateStartPercent=45;
     int finishPercent=50,lateFinishPercent=75;
     int bigGameBonus=3,badWeatherPenalty=5;
+    int openingOverride=-1; // Internal, fresh Play Now opening; no INI/profile migration.
 };
 enum class Group { Standard,Severe };
 inline bool fcsTeam(int team){return attendance::fcsTeam(team);}
@@ -26,6 +27,7 @@ inline int baselinePercent(const Settings& c,const State& s){
 }
 inline bool postseasonOpening(const State& s){return s.playoff||s.conferenceChampionship||s.bowl!=127;}
 inline int openingPercent(const Settings& c,const State& s){
+    if(c.openingOverride>=0)return (std::clamp)(c.openingOverride,0,100);
     if(postseasonOpening(s)){
         int low=championship(s)||s.conferenceChampionship?80:70;
         float appeal=.5f*(turnout::rankStrength(s.rank0,138)+turnout::rankStrength(s.rank1,138));

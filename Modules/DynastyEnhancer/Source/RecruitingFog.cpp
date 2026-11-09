@@ -16,6 +16,7 @@
 #include "RecruitingGradePolicy.h"
 #include "EnhancementSettingsMenu.h"
 #include "EnhancementCreationScope.h"
+#include "DynastyPresentationScope.h"
 #include "RecruitingUiResponse.h"
 #include "RecruitingUiGates.h"
 #include "PlayingTimeGates.h"
@@ -334,14 +335,14 @@ void __fastcall enhancementListHook(void* source,void* target,void* category){
     settingsList(source,&collector,category);
     // A populated native page is required: inactive/unsupported careers do not
     // acquire a new section. Existing rows and keys are never rewritten.
-    const auto first=enhancements::menu::emit(collector,enhancements::options(),true);
-    if(collector.next)note({{"event","enhancement_settings_menu"},{"firstRow",first},{"sourceRows",collector.next},{"options",enhancements::options().packed()}});
+    const auto first=enhancements::menu::emit(collector,enhancements::configuredOptions(),true);
+    if(collector.next)note({{"event","enhancement_settings_menu"},{"firstRow",first},{"sourceRows",collector.next},{"options",enhancements::configuredOptions().packed()}});
 }
 void __fastcall enhancementWriterHook(void* source,void* input,void* result){
     CallGuard guard;
     if(!disabled&&enhancementProfileReady())try{
         const auto count=enhancements::menu::consume(input,[](unsigned index,int value){return enhancementSettings.change(index,value);});
-        if(count)note({{"event","enhancement_settings_changed"},{"fields",count},{"options",enhancements::options().packed()}});
+        if(count)note({{"event","enhancement_settings_changed"},{"fields",count},{"options",enhancements::configuredOptions().packed()}});
     }catch(const std::exception& error){note({{"event","enhancement_settings_failed"},{"reason",error.what()}});}
     settingsWriter(source,input,result);
 }
@@ -466,7 +467,7 @@ unsigned __fastcall colorLengthHook(void* object){
 #endif
         static const notesui::FrameDispatch<cardUiBanks.size()> fixedDispatch(cardUiBanks);
         const auto candidates=fixedDispatch.candidates(h,true);
-        for(size_t bank=0;bank<cardUiBanks.size();++bank)if((candidates&(uint64_t{1}<<bank))&&!cardUiFailed[bank])
+        for(size_t bank=0;bank<cardUiBanks.size();++bank)if((candidates&(uint64_t{1}<<bank))&&!cardUiFailed[bank]&&(enhancements::presentationAllowed()||cardUiBanks[bank]->retainedDefinitionCount()!=0))
         try{CallGuard guard;if(disabled)return originalColorLength(object);const auto index=cardUiBanks[bank]->beforeInvoke(object,read,true,cardBankEnabled(bank),unsigned(enhancements::options().scale),enhancements::options().colors,enhancements::options().roster,enhancements::options().team,enhancements::options().dollars,unsigned(enhancements::options().teamScale));
             if(index>=0){const auto bit=1u<<index;if(!(cardUiAttached[bank].fetch_or(bit)&bit))note({{"event","player_fog_card_adapter_attached"},{"bank",bank},{"method",index},{"path","fixed frame body accessor"}});}}
         catch(const std::exception& error){cardUiFailed[bank]=true;note({{"event","player_fog_card_adapter_failed"},{"bank",bank},{"reason",error.what()}});}
@@ -587,7 +588,7 @@ uintptr_t __fastcall notesSetupHook(void* object,void* saved,uintptr_t receiver,
     }
     static const notesui::FrameDispatch<cardUiBanks.size()> cardDispatch(cardUiBanks);
     const auto candidates=cardDispatch.candidates(liveHeader);
-    for(size_t bank=0;bank<cardUiBanks.size();++bank)if((candidates&(uint64_t{1}<<bank))&&!cardUiFailed[bank])try{
+    for(size_t bank=0;bank<cardUiBanks.size();++bank)if((candidates&(uint64_t{1}<<bank))&&!cardUiFailed[bank]&&(enhancements::presentationAllowed()||cardUiBanks[bank]->retainedDefinitionCount()!=0))try{
         const auto index=cardUiBanks[bank]->beforeInvoke(object,read,false,cardBankEnabled(bank),unsigned(enhancements::options().scale),enhancements::options().colors,enhancements::options().roster,enhancements::options().team,enhancements::options().dollars,unsigned(enhancements::options().teamScale));
         if(index>=0){const auto bit=1u<<index;if(!(cardUiAttached[bank].fetch_or(bit)&bit))note({{"event","player_fog_card_adapter_attached"},{"bank",bank},{"method",index}});}
     }catch(const std::exception& error){cardUiFailed[bank]=true;note({{"event","player_fog_card_adapter_failed"},{"bank",bank},{"reason",error.what()}});}
@@ -750,7 +751,7 @@ DWORD stop(){
     return ownershipFailed?2:inflight?3:0;
 }
 DWORD WINAPI worker(void*){
-    wchar_t path[32768]{};GetModuleFileNameW(self,path,32768);const auto folder=std::filesystem::path(path).parent_path();base=reinterpret_cast<uintptr_t>(GetModuleHandleW(nullptr));
+    wchar_t path[32768]{};GetModuleFileNameW(self,path,32768);const auto folder=std::filesystem::path(path).parent_path();base=reinterpret_cast<uintptr_t>(GetModuleHandleW(nullptr));enhancements::requireDynastyPresentation(base);
     auto flush=[&](){std::deque<Json> items;{std::lock_guard<std::mutex> lock(queueMutex);items.swap(pending);}if(!items.empty()){std::ofstream out(folder/L"recruiting-fog.jsonl",std::ios::app);for(const auto& j:items)out<<j.dump(-1,' ',false,Json::error_handler_t::replace)<<'\n';}};
     try{
         enhancementSettings.configure(folder);

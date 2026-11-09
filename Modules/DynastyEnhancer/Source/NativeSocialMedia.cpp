@@ -27,6 +27,7 @@
 #include "NewsDiscovery.h"
 #include "RuntimeFeed.h"
 #include "EnhancementOptionsRuntime.h"
+#include "DynastyPresentationScope.h"
 #include "Startup.h"
 #include "NativeMapValue.h"
 #include "NewsAssetDiscovery.h"
@@ -78,7 +79,7 @@ std::filesystem::path folder;
 std::string buildId;
 enhancements::SharedOptions enhancementOptions;
 std::atomic<uint64_t> enhancementProfile{UINT64_MAX};
-bool socialEnabled(){enhancements::Options selected;uint32_t league=0;if(enhancementOptions.read(selected,&league)){enhancements::currentOptions=selected.packed();enhancementProfile=league;}return enhancements::options().social;}
+bool socialEnabled(){enhancements::Options selected;uint32_t league=0;if(enhancementOptions.read(selected,&league)){enhancements::currentOptions=selected.packed();enhancements::currentOptionsLeague=league;enhancementProfile=league;}return enhancements::options().social;}
 std::atomic<bool> disabled{false},opened{false},uiReady{false};
 std::atomic<unsigned> callbacks{0};
 std::atomic<bool> preflightRunning{false},preflightReady{false},preflightAttempted{false};
@@ -777,7 +778,7 @@ void publishFeed(const Json& data){
 void flush(){std::deque<Json> batch;{std::lock_guard<std::mutex> lock(logMutex);batch.swap(messages);}if(batch.empty())return;std::ofstream out(folder/L"social-media.jsonl",std::ios::app);for(const auto& x:batch)out<<x.dump()<<'\n';}
 DWORD WINAPI worker(void*){
     SetThreadPriority(GetCurrentThread(),THREAD_PRIORITY_BELOW_NORMAL);
-    wchar_t path[32768]{};GetModuleFileNameW(module,path,32768);folder=std::filesystem::path(path).parent_path();buildId=std::filesystem::path(path).filename().u8string();base=reinterpret_cast<uintptr_t>(GetModuleHandleW(nullptr));
+    wchar_t path[32768]{};GetModuleFileNameW(module,path,32768);folder=std::filesystem::path(path).parent_path();buildId=std::filesystem::path(path).filename().u8string();base=reinterpret_cast<uintptr_t>(GetModuleHandleW(nullptr));enhancements::requireDynastyPresentation(base);
     try{
         enhancementOptions.open();
         dynasty::live::FeedWorker refresh;refresh.configure(folder,base);waitingFeed();adoptFeed();

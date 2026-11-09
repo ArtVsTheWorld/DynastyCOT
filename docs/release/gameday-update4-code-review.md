@@ -18,3 +18,5 @@ Compared the COT integration source directly against local Git tag `v2.0.35`, co
 The comparison checks implementation changes, not rendered or audible behavior. Existing 2.0.35 features such as in-game settings, general arrivals/departures, camera preferences and reaction sound variety are not presented as new Update 4 features. Kicker celebrations are not advertised: a live kicker shot did not establish celebration animation support.
 
 Branding changes retain the native scope, signature and history checks. No claim of universal overhaul compatibility, measured FPS improvement or native gameplay home-field advantage changes is made.
+
+Final 1.0 refinement: the replay addition hooks remain installed and optional, but touchdown routing/promotion/inset recovery is excluded. Ordinary completed non-scoring plays retain eligible added replay paths. The updated draft describes native touchdown presentation rather than claiming the skipped-sequence problem is universally resolved. Play Now has its separate 75% opening policy; Dynasty turnout/travel/history do not supply that opening.

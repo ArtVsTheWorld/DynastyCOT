@@ -108,6 +108,7 @@
 #include "ReplayPresentation.h"
 #include "ReplaySelectionTrace.h"
 #include "MajorReplay.h"
+#include "ReplayTouchdownPolicy.h"
 #include "PauseMenu.h"
 #include "NativeSettingsMenu.h"
 
@@ -317,6 +318,8 @@ bool replayModeBinding=false;
 attendance::replaymode::Tracker replayModeTracker;
 std::atomic<attendance::replaymode::Mode> replayMode{attendance::replaymode::Mode::Unknown};
 std::mutex majorReplayMutex;attendance::majorreplay::Model majorReplay;attendance::energy::Tracker replayPlayTracker;
+attendance::replaypolicy::TouchdownExclusion replayTouchdown;
+bool extraReplayForCurrentPlay(){std::lock_guard<std::mutex> guard(majorReplayMutex);return replayTouchdown.allowed();}
 A replayTrackerMatch=0;unsigned replayTrackerEpoch=0;attendance::energy::Play replayObserved;
 double replayRecordingStart=-1;uint64_t replayRecordingSequence=0;
 std::mutex replayTraceMutex;attendance::replaytrace::Buffer replayTrace;
@@ -1029,12 +1032,15 @@ bool __fastcall museLogicEvaluate(A node,A context){
     attendance::timing::ExclusiveScope<> measured(replaySelectorTimings,&replaySelectorWorkNs);
     auto view=replayPresentationView();
     const bool root=replaySelection.depth==0;
-    const bool allowed=root&&replayPresentationAllowed();
-    auto majorRoute=allowed&&majorReplayBindings&&!majorReplayFailed&&bigPlayReplays?view.major(node):attendance::replaypresentation::MajorRoute::None;
-    // Most Logic roots are unrelated to replays. Only a recognized major-play
-    // selector needs a synchronous score/result refresh before native Eval.
-    // Presentation/replay updates continue observing the full play lifecycle.
-    if(majorRoute!=attendance::replaypresentation::MajorRoute::None){++replayMajorSelectorSamples;guardedMajorReplay(false);}
+    const bool contextAllowed=root&&replayPresentationAllowed();
+    auto majorRoute=contextAllowed?view.major(node):attendance::replaypresentation::MajorRoute::None;
+    auto identified=contextAllowed?view.identify(node):attendance::replaypresentation::Selection{};
+    const bool recognized=majorRoute!=attendance::replaypresentation::MajorRoute::None||identified.fullComparison||identified.insetGate||identified.denyRoot;
+    // Refresh only replay selectors, before any nested native comparison can
+    // be changed. Missing/unfinished same-snap facts retain native behavior.
+    if(recognized){++replayMajorSelectorSamples;guardedMajorReplay(false);}
+    const bool allowed=contextAllowed&&recognized&&extraReplayForCurrentPlay();
+    const bool fullRouting=majorReplayBindings&&!majorReplayFailed&&bigPlayReplays;
     attendance::majorreplay::Kind wantedMajor=attendance::majorreplay::Kind::None;
     if(majorRoute!=attendance::replaypresentation::MajorRoute::None&&!majorReplayFailed){
         std::lock_guard<std::mutex> guard(majorReplayMutex);
@@ -1050,16 +1056,9 @@ bool __fastcall museLogicEvaluate(A node,A context){
     if(valid&&!majorReplayFailed&&majorRoute!=attendance::replaypresentation::MajorRoute::None){
         if(majorRoute==attendance::replaypresentation::MajorRoute::Touchdown&&view.trueBoolean(node+0x38)){
             std::lock_guard<std::mutex> guard(majorReplayMutex);
-            const auto& start=replayPlayTracker.start;
-            if(replayPlayTracker.serial&&!replayObserved.simulated&&
-               attendance::majorreplay::touchdownScoreProof(start.game.homeScore,start.game.awayScore,replayObserved.game.homeScore,replayObserved.game.awayScore)){
-                // The native TD selector and fresh scoreboard can settle before
-                // the official result hash. Arm THIS snap at that boundary.
-                majorReplay.arm(replayTrackerMatch,replayTrackerEpoch,GetTickCount64(),replayPlayTracker.serial,attendance::majorreplay::Kind::Touchdown,routineInsets?replayMode.load():attendance::replaymode::Mode::Unknown);
-                wantedMajor=majorReplay.kind();
-            }
+            replayTouchdown.nativeTouchdown();majorReplay.reset();wantedMajor=attendance::majorreplay::Kind::None;
         }
-        if(majorRoute==attendance::replaypresentation::MajorRoute::Takeaway&&view.trueBoolean(node+0x38)&&view.challengeExcluded(node)){
+        if(fullRouting&&extraReplayForCurrentPlay()&&majorRoute==attendance::replaypresentation::MajorRoute::Takeaway&&view.trueBoolean(node+0x38)&&view.challengeExcluded(node)){
             std::lock_guard<std::mutex> guard(majorReplayMutex);
             const auto& start=replayPlayTracker.start;
             if(replayPlayTracker.serial&&attendance::energy::normalDown(start)&&!start.specialTeams&&
@@ -1069,9 +1068,8 @@ bool __fastcall museLogicEvaluate(A node,A context){
             }
         }
         using R=attendance::replaypresentation::MajorRoute;using K=attendance::majorreplay::Kind;
-        bool promote=(majorRoute==R::Touchdown&&wantedMajor==K::Touchdown)||
-            (majorRoute==R::Takeaway&&wantedMajor==K::Takeaway&&view.challengeExcluded(node));
-        bool decline=wantedMajor!=K::None&&(majorRoute==R::QuickSkip||majorRoute==R::QuickTouchdown);
+        bool promote=fullRouting&&extraReplayForCurrentPlay()&&majorRoute==R::Takeaway&&wantedMajor==K::Takeaway&&view.challengeExcluded(node);
+        bool decline=fullRouting&&extraReplayForCurrentPlay()&&wantedMajor==K::Takeaway&&majorRoute==R::QuickSkip;
         if(promote&&view.falseBoolean(node+0x38)&&writeReplayBoolean(node+0x38))++fullEligibilityChanges;
         if(decline&&view.trueBoolean(node+0x38)&&writeReplayBoolean(node+0x38,false))++fullEligibilityChanges;
     }
@@ -1079,12 +1077,12 @@ bool __fastcall museLogicEvaluate(A node,A context){
         recordReplaySelection(node,static_cast<int>(majorRoute),nativeValue,valid?(view.trueBoolean(node+0x38)?1:view.falseBoolean(node+0x38)?0:-1):-1,allowed,at<int>(at<A>(image+attendance::bindings::GameStates)+0xa0));
     // A Logic Eval's return means its cached variant is valid, not that its
     // Boolean is true. The native parent reads this cache after Eval returns.
-    if(valid&&node==replaySelection.selection.insetGate&&extraReplays&&routineInsets&&!replayPresentationFailed&&
+    if(valid&&node==replaySelection.selection.insetGate&&extraReplayForCurrentPlay()&&extraReplays&&routineInsets&&!replayPresentationFailed&&
        view.falseBoolean(node+0x38)&&writeReplayBoolean(node+0x38))++insetEligibilityChanges;
     // Decline only complete authored shortcut selectors, never the underlying
     // sack/tackle facts. Standard Flow then chooses the native sack replay, or
     // the routine run/pass inset instead of the replay-less TFL cutaway.
-    if(valid&&node==replaySelection.selection.denyRoot&&extraReplays&&defensiveReplays&&!replayPresentationFailed&&
+    if(valid&&node==replaySelection.selection.denyRoot&&extraReplayForCurrentPlay()&&extraReplays&&defensiveReplays&&!replayPresentationFailed&&
        view.trueBoolean(node+0x38)&&writeReplayBoolean(node+0x38,false))++defensiveRouteChanges;
     return valid;
 }
@@ -1092,7 +1090,7 @@ A __fastcall museComparisonValue(A node,A output){
     if(!enabled||mode==2||!extraReplays||!replayPresentationInstalled||replayPresentationFailed)return originalMuseComparison(node,output);
     attendance::timing::ExclusiveScope<> measured(replaySelectorTimings,&replaySelectorWorkNs);
     measured.pause();A result=originalMuseComparison(node,output);measured.resume();
-    if(node==replaySelection.selection.fullComparison&&extraReplays&&bigPlayReplays&&!replayPresentationFailed){
+    if(node==replaySelection.selection.fullComparison&&extraReplayForCurrentPlay()&&extraReplays&&bigPlayReplays&&!replayPresentationFailed){
         auto view=replayPresentationView();
         if(result&&view.falseBoolean(result)&&view.fullEligible(node,replayMinimumYards.load())&&writeReplayBoolean(result))++fullEligibilityChanges;
     }
@@ -2298,7 +2296,7 @@ void __fastcall replayEventNode(A node){
         attendance::State state;A match=0;
         if(majorReplayWorld(state,match)&&(state.phase==4||state.phase==5)){
             std::lock_guard<std::mutex> guard(majorReplayMutex);
-            handled=majorReplay.suppressInset(match,audioEpoch.load());
+            handled=replayTouchdown.allowed()&&majorReplay.suppressInset(match,audioEpoch.load());
         }
     }
     if(at<A>(node)==image+attendance::bindings::ReplayEventNodeVtable&&at<int>(node+0x50)==12)
@@ -2344,7 +2342,7 @@ void observeMajorReplay(bool dispatch){
     bool send=false;attendance::majorreplay::Notice notice=attendance::majorreplay::Notice::None;uint64_t sequence=0;
     {
         std::lock_guard<std::mutex> lock(majorReplayMutex);
-        if(!world||match!=replayTrackerMatch||epoch!=replayTrackerEpoch){majorReplay.reset();replayPlayTracker.reset();replayTrackerMatch=match;replayTrackerEpoch=epoch;replaySnapType=-1;replayRecordingStart=-1;replayRecordingSequence=0;}
+        if(!world||match!=replayTrackerMatch||epoch!=replayTrackerEpoch){majorReplay.reset();replayTouchdown.reset();replayPlayTracker.reset();replayTrackerMatch=match;replayTrackerEpoch=epoch;replaySnapType=-1;replayRecordingStart=-1;replayRecordingSequence=0;}
         presentationMode=replayModeTracker.update(world?match:0,epoch,modeSample);modeChanged=replayMode.exchange(presentationMode)!=presentationMode;
         double recording=-1;A recorder=at<A>(image+attendance::bindings::ReplayManager);
         if(world&&replayBinding&&at<A>(recorder)==image+attendance::bindings::ReplayVtable)read(recorder+0x1030,&recording,sizeof(recording));
@@ -2352,16 +2350,14 @@ void observeMajorReplay(bool dispatch){
             replayObserved=play;auto result=replayPlayTracker.observe(*std::atomic_load(&retentionEventSettings),play);
             if(play.game.phase==3&&!play.simulated&&replayPlayTracker.serial!=replayRecordingSequence){replayRecordingSequence=replayPlayTracker.serial;replayRecordingStart=recording;}
             if(replayPlayTracker.serial)replaySnapType=replayPlayTracker.start.selectedType;
-            if(majorReplayBindings&&!majorReplayFailed&&bigPlayReplays&&!play.simulated&&result.accepted&&result.completed){
-                int scored=(std::max)(result.homePoints,result.awayPoints);
-                if(scored>=6&&scored<=8){
-                    majorReplay.arm(match,epoch,now,result.sequence,attendance::majorreplay::Kind::Touchdown,routineInsets?presentationMode:attendance::replaymode::Mode::Unknown);
-                    std::lock_guard<std::mutex> traceLock(replayTraceMutex);replayTrace.confirm(match,epoch,result.sequence);
-                }
-                else if(result.takeaway)majorReplay.arm(match,epoch,now,result.sequence,attendance::majorreplay::Kind::Takeaway,routineInsets?presentationMode:attendance::replaymode::Mode::Unknown);
-            }
+            replayTouchdown.observe(match,epoch,replayPlayTracker.serial,
+                replayPlayTracker.start.game.homeScore,replayPlayTracker.start.game.awayScore,
+                play.game.homeScore,play.game.awayScore,result.accepted&&result.completed,play.simulated);
+            if(!replayTouchdown.allowed())majorReplay.reset();
+            if(majorReplayBindings&&!majorReplayFailed&&bigPlayReplays&&replayTouchdown.allowed()&&result.accepted&&result.completed&&result.takeaway)
+                majorReplay.arm(match,epoch,now,result.sequence,attendance::majorreplay::Kind::Takeaway,routineInsets?presentationMode:attendance::replaymode::Mode::Unknown);
         }
-        attendance::majorreplay::Input input{match,epoch,now,state.phase,world&&majorReplayBindings&&!majorReplayFailed&&bigPlayReplays,paused,replay,dispatch,routineInsets?presentationMode:attendance::replaymode::Mode::Unknown,modeSample.playcallOpen};
+        attendance::majorreplay::Input input{match,epoch,now,state.phase,world&&replayTouchdown.allowed()&&majorReplayBindings&&!majorReplayFailed&&bigPlayReplays,paused,replay,dispatch,routineInsets?presentationMode:attendance::replaymode::Mode::Unknown,modeSample.playcallOpen};
         input.recordingReady=replayRecordingSequence==majorReplay.sequence()&&attendance::majorreplay::recordingAvailable(replayRecordingStart,recording);
         send=majorReplay.tick(input);notice=majorReplay.takeNotice();sequence=majorReplay.sequence();
     }
@@ -2396,6 +2392,7 @@ void observeMajorReplay(bool dispatch){
             return;
         }
     }
+    if(send&&!extraReplayForCurrentPlay())return;
     if(send&&!enterNativeInset()){
         {std::lock_guard<std::mutex> lock(majorReplayMutex);majorReplay.dispatchFailed();}
         majorReplayFailed=true;log("major-replay","Native inset handoff failed; major-play additions stopped, original playback remains active.");
@@ -2941,7 +2938,9 @@ void checkpoint(const attendance::Settings& c,const attendance::State& s,bool wa
     currentLoss=highestTarget=static_cast<float>(result.loss);shownCurrent=currentLoss;shownTarget=highestTarget;
 }
 attendance::arrivals::Settings arrivalSettings(){
-    return {arrivalEnabled.load(),arrivalStart.load(),arrivalLateStart.load(),arrivalFinish.load(),arrivalLateFinish.load(),arrivalBigBonus.load(),arrivalWeatherPenalty.load()};
+    attendance::arrivals::Settings selected{arrivalEnabled.load(),arrivalStart.load(),arrivalLateStart.load(),arrivalFinish.load(),arrivalLateFinish.load(),arrivalBigBonus.load(),arrivalWeatherPenalty.load()};
+    if(attendance::scope::playNow(at<int>(image+0xd9eb808)))selected.openingOverride=75;
+    return selected;
 }
 void beginAttendanceHistory(attendance::State& s,bool midgame){
     if(attendance::scope::playNow(at<int>(image+0xd9eb808))){
@@ -3610,6 +3609,7 @@ void writeStatus(std::ostream& state,unsigned long long now){
     report.field("Replay crowd")<<(replayLoss>=0?std::to_string(100-replayLoss.load())+(replaySuspendsAtmosphere?"% (interactive; live target preserved)":"% (automatic; live target preserved)"):"inactive")<<"\n";
     report.field("Major-play replay sequence")<<(!majorReplayBindings?"unavailable on this native layout":majorReplayFailed?"stopped after a fault":!extraReplays||!bigPlayReplays?"native flow; full-screen additions disabled":!routineInsets?"full-screen additions; added insets disabled":replayMode==attendance::replaymode::Mode::RealtimeSim?"Slow Sim: native full-screen sequence, no added inset":replayMode!=attendance::replaymode::Mode::PlayCall?"native full-screen sequence; play-call destination not verified":"full native sequence, then separate inset repeat; live verification required")<<"\n";
     report.field("Extra post-play replays")<<(!replayPresentationInstalled?"unavailable":replayPresentationFailed?"stopped after a fault":!extraReplays?"disabled":"enabled")<<"\n";
+    report.field("Touchdown replay additions")<<"excluded; native presentation retained"<<"\n";
     report.field("Routine insets")<<(routineInsets?"on":"off")<<"\n";
     report.field("Full-screen gains")<<(bigPlayReplays?std::to_string(replayMinimumYards.load())+"+ yards":"off")<<"\n";
     report.field("Defensive highlights")<<(defensiveReplays?"on":"off")<<"\n";

@@ -11,8 +11,9 @@
 **Sound, Shake & Presentation**
 - Shake requests matching crowd sound, including pre-play buildup.
 - Background roar settles as the home deficit grows. Cheers and scoring reactions take priority over that background noise.
-- Improved full-screen/inset replay handoff so an inset waits for the proper play-selection destination.
+- Added replays remain available for non-touchdown plays. Touchdowns use the game's normal presentation while we investigate skipped celebrations.
 - Gentler opening-kickoff shake and better first-drive atmosphere.
+- Basic offline Play Now crowd reactions, sound and shake. Fresh games start at 75% with arrivals enabled; Dynasty travel/history stay separate.
 
 **Fixes & Installation**
 - Better crowd-plan persistence and save/resume matching, plus fixes for own-team fumble recoveries being mistaken for takeaways.

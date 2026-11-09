@@ -6,6 +6,12 @@ Close the game and MMC Mod Manager before installing. Keep the older installer a
 
 Use copies of the original DYNASTY-EPUFT checkpoints; do not overwrite them. Filenames are labels, not authoritative native stages, and manual saves can differ from autosaves. Record the actual game version, overhaul versions and load order for failures.
 
+## Final scope and replay changes
+
+- Start a fresh offline Play Now fixture with arrivals enabled: crowd opening is 75% of the original available crowd, then arrivals progress. Existing active matches are not reset. Check neutral and ordinary home venues.
+- With Additional Replays On, watch an ordinary long gain and a non-scoring takeaway. Then score a touchdown without skipping: COT must leave its replay and celebration sequence native. Include a pick-six/return touchdown if practical. The temporary Off preference can be restored after installing this final build.
+- In Dynasty, retain the saved fog/grade/color/dollar choices. Return to the main menu and Play Now: ratings and money displays must be native. Reload Dynasty and confirm its choices return. Check saved history is unchanged.
+
 ## First: recent fixes
 
 1. Open a full player card's Ratings tab. Rapidly switch buckets with the controller, including Quickness, Hands and Route Running. The white highlight must follow selection; numbers must not flash; grades, bar colors and headings must remain correct. Back to roster and reopen several times, checking responsiveness and selection.
