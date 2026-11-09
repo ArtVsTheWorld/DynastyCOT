@@ -63,7 +63,7 @@ def main():
    if item['path'] in RENAMES:item['path']=RENAMES[item['path']]
   (stage/'Templates/owned-payloads.json').write_text(json.dumps(ownership))
   (stage/'Install.ps1').write_bytes((ROOT/'Packaging/Install.ps1').read_bytes());refresh(stage)
- manifest=json.loads((stage/'package-manifest.json').read_text());assert manifest['version']=='1.0.0','Stage 1.0.0 first, or use --synthetic for development only'
+ manifest=json.loads((stage/'package-manifest.json').read_text());assert manifest['version']==json.loads((ROOT/'cot.product.json').read_text())['version'],'Stage the current product version first'
  assert 'BeyondTheFieldNative-v103.dll' in ''.join(x['path'] for x in manifest['files'])
  assert sorted(p.name for p in (stage/'Plugins').iterdir() if p.is_file())==['DynastyCOT.dll'],'Loose Plugins payload: only the shared DLL belongs at the root'
  extractor=base/'ExtractAtmosphereFixture.exe'
@@ -99,7 +99,7 @@ def main():
  check(sha(root/path)==before and 'Kept changed or unknown inactive legacy payload' in message,'changed detached binary removed silently');data_intact(root)
  for path in ['Plugins/DynastyEnhancer.dll','Plugins/DynastyEnhancerNative-unknown.dll','Plugins/DynamicGamedayAtmosphere/Runtime-x/DynamicAttendanceNative-unknown.dll','Plugins/PlayerAnalytics.dll']:
   root=seed('ActiveUnknown-'+str(checks));write(root,path,b'unknown active owner');before=snapshot(root);message=run(root,success=False)
-  check(snapshot(root)==before and 'Unrecognized active legacy payload kept' in message,'unknown active owner not rejected before mutation: '+path)
+  check(snapshot(root)==before and 'COT_STANDALONE_CONFLICTS:' in message,'unknown active owner not rejected before mutation: '+path)
  # Explicit synthetic trust metadata tests standalone recognition without
  # redistributing old standalone binaries or weakening production hash guards.
  trusted=base/'TrustedStandaloneFixture';shutil.copytree(stage,trusted)
@@ -152,7 +152,7 @@ def main():
  run(root,extra=('-Action','UninstallAll'));check(not (root/'Plugins/DynastyCOT.dll').exists(),'full uninstall retained host')
  for path,data in DATA.items():
   if path!='Plugins/DynastyCOT/settings.json':check((root/path).read_bytes()==data,'full uninstall lost data: '+path)
- report=dict(checks=checks,fromVersion='0.1.19-private',toVersion='1.0.0',synthetic=args.synthetic,fixtureRoot=str(base),liveInstall=False,rollback=True,faultStages=3,hashProvenRetirement=True,unknownActiveRejectedBeforeMutation=True,dataPathsPreserved=True,publicGda2035=True,legacyLogMigration=True,pluginsRootOnlySharedDll=True)
+ report=dict(checks=checks,fromVersion='0.1.19-private',toVersion=manifest['version'],synthetic=args.synthetic,fixtureRoot=str(base),liveInstall=False,rollback=True,faultStages=3,hashProvenRetirement=True,unknownActiveRejectedBeforeMutation=True,dataPathsPreserved=True,publicGda2035=True,legacyLogMigration=True,pluginsRootOnlySharedDll=True)
  (ROOT/'Build/runtime-upgrade-verification.json').write_text(json.dumps(report,indent=2)+'\n')
  print('PASS:',checks,'runtime upgrade checks; synthetic=',args.synthetic,'no live installation')
 if __name__=='__main__':main()

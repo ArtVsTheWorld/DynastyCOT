@@ -1600,6 +1600,46 @@
       "path": "Plugins/DynastyCOT.dll",
       "module": "Core",
       "sha256": "b1678a9656978121339ff444497ba73445bf80025172a7be9d173c5f37f15464"
+    },
+    {
+      "path": "COT-Runtime/DynastyEnhancer/BeyondTheFieldNative-v103.dll",
+      "module": "DynastyEnhancer",
+      "sha256": "7a5e75e31bc4216598ae85c2c4315b076e55ea134ed866bfc712e3a63e4425b2"
+    },
+    {
+      "path": "COT-Runtime/DynastyEnhancer/BeyondTheFieldRecruitFog-v1.dll",
+      "module": "DynastyEnhancer",
+      "sha256": "938c564eec950197b914b71a488ee6cb3a27c7afa9c955b7ebdbd444d619d621"
+    },
+    {
+      "path": "Plugins/OfflineDynastySettings/ExtraSettings.Persistence.exe",
+      "module": "ExtraDynastySettings",
+      "sha256": "487866904791fce302d069a52a42f36cbd87a43a63f14b5c846b65c3ee346afa"
+    },
+    {
+      "path": "Plugins/SituationalPractice/ExpandedPractice.Runtime.exe",
+      "module": "DrivePractice",
+      "sha256": "8302c107effe759a28444890c2fafb9e847e7719f34c5d42842928fa71e7e0b1"
+    },
+    {
+      "path": "Plugins/SituationalPractice/ExpandedPractice.Runtime.pdb",
+      "module": "DrivePractice",
+      "sha256": "94a183b06e73b6eb6382abf5d67d6a2383ab09d847e54f4f8f62c203efdab48e"
+    },
+    {
+      "path": "Plugins/DynastyCOT.dll",
+      "module": "Core",
+      "sha256": "0ac825a2b6fcf53c189746456dea8655bb8d03d920a43a2f2540ffa368e15ee0"
+    },
+    {
+      "path": "DGA-Runtime/Runtime-2.1.9/GamedayAtmosphereNative-2.1.9.dll",
+      "module": "GamedayAtmosphere",
+      "sha256": "551d30139d0e3571cab1f217493d79fe97e6fffc24c6365d3a60b5cdcee82904"
+    },
+    {
+      "path": "DGA-Runtime/Runtime-2.1.9/DgaDiagnostics.exe",
+      "module": "GamedayAtmosphere",
+      "sha256": "897eb1b0e1327b37f750bdc1d44e34368861c9ca51a40c938f62a066df9feab6"
     }
   ]
 }

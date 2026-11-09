@@ -2,7 +2,7 @@
   "name": "DynastyCOT",
   "title": "DYNASTY COT by Ace",
   "author": "Ace",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "runtimeBranding": 1,
   "stage": "stable",
   "installable": true,
@@ -41,15 +41,15 @@
     }
   ],
   "pending": [
-    "Broader gameplay/save-load regression coverage",
+    "Affected-user installer confirmation",
     "Exact compatibility across other game and overhaul versions"
   ],
-  "liveAcceptance": "user-confirmed-targeted",
+  "liveAcceptance": "pending-installer-hotfix",
   "published": true,
   "distribution": {
     "repository": "ArtVsTheWorld/DynastyCOT",
     "visibility": "public",
     "prerelease": false,
-    "compatibilityNotes": "Offline Dynasty, offline main-menu Practice, and basic offline Play Now atmosphere. Ace installed the final 1.0 build, restarted MMC and the game, and reported the fixes working. AIO 1.4.1 and its TeamBuilder patch have targeted adapters; unknown native programs are rejected. This is targeted live confirmation, not universal overhaul compatibility or an FPS benchmark. Updates are optional; retain save backups and your previous installer."
+    "compatibilityNotes": "Installer-focused 1.0.1 hotfix. Game-module/native/helper bytes are unchanged from the released, user-tested 1.0 build. Old standalone DLLs can be explicitly reviewed, backed up and replaced; settings and history are preserved. Program Files installations require write permission, and runtime data must remain writable. Affected-user confirmation is pending. Offline modes only; exact overhaul/version combinations remain targeted rather than universally certified. Updates stay optional."
   }
 }

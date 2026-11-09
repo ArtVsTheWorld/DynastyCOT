@@ -21,8 +21,9 @@ namespace DynastyCOT.Setup {
   internal string Path, Label;
   public override string ToString(){return Label;}
  }
+ internal sealed class StandaloneConflict {internal string Path,Module,Sha256;}
  internal sealed class InstallResult {
-  internal bool Success;internal string Details;
+  internal bool Success;internal string Details;internal List<StandaloneConflict> Conflicts;
  }
  internal sealed class InstallerEngine : IDisposable {
   internal static readonly string[] ModuleIds={"DynastyEnhancer","GamedayAtmosphere","ExtraDynastySettings","DrivePractice"};
@@ -138,7 +139,7 @@ namespace DynastyCOT.Setup {
    foreach(string file in Directory.GetFiles(folder,"*",SearchOption.AllDirectories))if(!String.Equals(file,Path.Combine(folder,"package-manifest.json"),StringComparison.OrdinalIgnoreCase)&&!paths.Contains(file))throw new IOException("Selected package contains an unlisted file.");return folder;
   }
   internal static string Quote(string value){return "'"+value.Replace("'","''")+"'";}
-  internal InstallResult Run(string root,Dictionary<string,bool> modules,string rollback,Fixture fixture,Action<string> progress,string action="Install",VerifiedUpdate update=null){
+  internal InstallResult Run(string root,Dictionary<string,bool> modules,string rollback,Fixture fixture,Action<string> progress,string action="Install",VerifiedUpdate update=null,IList<StandaloneConflict> reviewed=null){
    root=ValidateRoot(root);
    if(fixture!=null&&!String.Equals(root,fixture.Root,StringComparison.OrdinalIgnoreCase))throw new IOException("The test target changed.");
    string folder=update!=null&&rollback==null&&action=="Install"?ExtractUpdate(update,progress):Extract(progress),script=Path.Combine(folder,"Install.ps1");
@@ -154,6 +155,11 @@ namespace DynastyCOT.Setup {
     foreach(string id in ModuleIds)if(!modules.ContainsKey(id))throw new IOException("Missing COT module choice.");
     call+=" -ModuleChoicesJson "+Quote(new JavaScriptSerializer().Serialize(modules))+" -Action "+Quote(action);
    }
+   if(reviewed!=null&&reviewed.Count>0){
+    if(rollback!=null||action!="Install")throw new IOException("Standalone review is only valid for installation.");
+    var rows=new List<Dictionary<string,string>>();foreach(var entry in reviewed)rows.Add(new Dictionary<string,string>{{"path",entry.Path},{"module",entry.Module},{"sha256",entry.Sha256}});
+    call+=" -ReviewedStandaloneJson "+Quote(new JavaScriptSerializer().Serialize(rows));
+   }
    string command="$ErrorActionPreference='Stop';$ProgressPreference='SilentlyContinue';try { "+call+";exit 0 } catch { [Console]::Error.WriteLine($_.Exception.Message);exit 1 }";
    var start=new ProcessStartInfo(Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.System),"WindowsPowerShell","v1.0","powershell.exe"),
     "-NoLogo -NoProfile -NonInteractive -ExecutionPolicy Bypass -EncodedCommand "+Convert.ToBase64String(Encoding.Unicode.GetBytes(command))){
@@ -166,8 +172,16 @@ namespace DynastyCOT.Setup {
    progress(rollback!=null?"Restoring the selected backup...":action=="Install"?"Installing COT and creating a backup...":"Removing COT files and creating a backup...");
    using(var process=new Process{StartInfo=start}){
     process.OutputDataReceived+=receive;process.ErrorDataReceived+=receive;process.Start();process.BeginOutputReadLine();process.BeginErrorReadLine();process.WaitForExit();
-    return new InstallResult{Success=process.ExitCode==0,Details=details.ToString()};
+    return new InstallResult{Success=process.ExitCode==0,Details=details.ToString(),Conflicts=ReadConflicts(details.ToString())};
    }
+  }
+  internal static List<StandaloneConflict> ReadConflicts(string text){
+   const string marker="COT_STANDALONE_CONFLICTS:";var result=new List<StandaloneConflict>();
+   foreach(string line in text.Split(new[]{'\r','\n'},StringSplitOptions.RemoveEmptyEntries)){
+    if(!line.StartsWith(marker,StringComparison.Ordinal))continue;
+    var rows=new JavaScriptSerializer().DeserializeObject(line.Substring(marker.Length)) as object[];if(rows==null)throw new IOException("Invalid standalone review response.");
+    foreach(object row in rows){var entry=row as Dictionary<string,object>;result.Add(new StandaloneConflict{Path=UpdateClient.StringField(entry,"path",2048),Module=UpdateClient.StringField(entry,"module",100),Sha256=UpdateClient.StringField(entry,"sha256",64)});}
+   }return result;
   }
   public void Dispose(){
    // Only remove this instance's uniquely created extraction directory.

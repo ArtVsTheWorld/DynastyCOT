@@ -6,6 +6,7 @@ param(
  [ValidateSet('None','AfterPayload','AfterLegacyDisable','AfterAdapter')][string]$FaultAtStage='None',
  [string]$Rollback='',
  [string]$ModuleChoicesJson='',
+ [string]$ReviewedStandaloneJson='',
  [ValidateSet('Install','UninstallSelected','UninstallAll')][string]$Action='Install'
 )
 $ErrorActionPreference='Stop'
@@ -24,6 +25,25 @@ function Assert-NoLink([string]$Root,[string]$Path){
    if((Get-Item -LiteralPath $current -Force).Attributes -band [IO.FileAttributes]::ReparsePoint){throw ('Linked path is not an installation target: '+$current)}
   }
   $current=Split-Path -Parent $current
+ }
+}
+function Ensure-Directory([string]$Path){
+ try{[IO.Directory]::CreateDirectory($Path)|Out-Null}catch{throw ('COT_WRITE_ACCESS: Cannot create folder: '+$Path+'. '+$_.Exception.Message+' Check folder permissions and Windows Security protection history. No permissions were changed by setup.')}
+}
+function Assert-WriteAccess($Paths){
+ $checked=@{}
+ foreach($path in $Paths){
+  $parent=Split-Path -Parent $path
+  while(!(Test-Path -LiteralPath $parent -PathType Container)){
+   if(Test-Path -LiteralPath $parent -PathType Leaf){throw ('COT_WRITE_ACCESS: A file is blocking the required folder: '+$parent+'. Move that file to a safe backup and retry.')}
+   $next=Split-Path -Parent $parent;if(!$next -or $next -eq $parent){throw ('COT_WRITE_ACCESS: No writable parent for: '+$path)};$parent=$next
+  }
+  if($checked.ContainsKey($parent)){continue};$checked[$parent]=$true
+  $probe=Join-Path $parent ('.cot-write-check-'+[Guid]::NewGuid().ToString('N')+'.tmp')
+  try{
+   $stream=New-Object IO.FileStream($probe,[IO.FileMode]::CreateNew,[IO.FileAccess]::Write,[IO.FileShare]::None,4096,[IO.FileOptions]::DeleteOnClose)
+   $stream.Dispose()
+  }catch{throw ('COT_WRITE_ACCESS: Windows denied write access in: '+$parent+'. '+$_.Exception.Message+' Choose a writable MMC Mod Manager folder or check its permissions and Windows Security protection history. Setup did not change permissions.')}
  }
 }
 function Hash([string]$Path){return (Get-FileHash -LiteralPath $Path -Algorithm SHA256).Hash.ToLowerInvariant()}
@@ -52,7 +72,7 @@ if($Fixture){
  if(!$MmcRoot.StartsWith($FixtureRoot+'\',[StringComparison]::OrdinalIgnoreCase) -or !(Test-Path -LiteralPath (Join-Path $MmcRoot '.cot-fixture'))){throw 'Not an isolated COT fixture'}
 }else{
  if($FaultAtStage -ne 'None'){throw 'Fault injection is fixture-only'}
- if(Get-Process MMCModManager,CollegeFB27 -ErrorAction SilentlyContinue){throw 'Close MMC and the game before installing or rolling back'}
+ if(Get-Process MMCModManager,CollegeFB27 -ErrorAction SilentlyContinue){throw 'COT_RUNNING_PROCESSES: Close MMC and the game before installing or rolling back'}
 }
 $utf8=New-Object Text.UTF8Encoding($false)
 $backupBase=Resolve-Owned $MmcRoot 'Plugins/DynastyCOT/Backups'
@@ -87,7 +107,7 @@ function Restore-Transaction([string]$Directory,[switch]$Automatic){
   $target=Resolve-Owned $MmcRoot $op.path
   if(!$Automatic -and $op.userData -and (Test-Path -LiteralPath $target) -and (Hash $target) -ne $op.installed){continue}
   if($op.existed){
-   New-Item -ItemType Directory -Path (Split-Path -Parent $target) -Force | Out-Null
+   Ensure-Directory (Split-Path -Parent $target)
    Copy-Item -LiteralPath (Resolve-Owned $Directory $op.backup) -Destination $target -Force
    if((Hash $target) -ne $op.before){throw 'Rollback restore failed verification'}
   }elseif(Test-Path -LiteralPath $target -PathType Leaf){Remove-Item -LiteralPath $target -Force}
@@ -179,7 +199,14 @@ foreach($name in $(if($Action -eq 'Install' -and !$updatingCot){@('RuntimeHistor
   }
  }
 }
-$retire=@();$retainedLegacy=@();$standaloneRetire=@();$logRetire=@()
+$retire=@();$retainedLegacy=@();$standaloneRetire=@();$logRetire=@();$standaloneExpected=@{};$standaloneConflicts=@()
+$reviewed=@{}
+if($ReviewedStandaloneJson){
+ foreach($entry in ($ReviewedStandaloneJson|ConvertFrom-Json)){
+  if(!$entry.path -or !$entry.module -or (Standalone-Module $entry.path) -ne $entry.module -or $entry.path -notmatch "[.]dll$" -or $entry.sha256 -notmatch "^[0-9a-f]{64}$" -or $reviewed.ContainsKey($entry.path)){throw "Invalid reviewed standalone list"}
+  Resolve-Owned $MmcRoot $entry.path|Out-Null;$reviewed[$entry.path]=$entry
+ }
+}
 if($Action -eq 'Install'){
  $analyticsEnabled=$true
  $effectiveChoices=if($ModuleChoicesJson){$choices}elseif(Test-Path -LiteralPath $config){(Get-Content -LiteralPath $config -Raw | ConvertFrom-Json).modules}else{$null}
@@ -220,10 +247,15 @@ if($Action -eq 'Install'){
   }
   if(!$proven.Count){
    if($file.Extension -eq '.exe'){$retainedLegacy+=$path;continue}
-   throw ('Unrecognized active legacy payload kept; no installation changes made: '+$path+'. Close MMC/game and remove or verify that standalone mod before retrying.')
+   if(!$reviewed.ContainsKey($path) -or $reviewed[$path].module -ne $owner -or $reviewed[$path].sha256 -ne $observed){
+    $standaloneConflicts+=@{path=$path;module=$owner;sha256=$observed};continue
+   }
+   # Explicit review permits backup/removal of these exact bytes only. This
+   # does not make them trusted payloads or relax runtime ownership checks.
   }
-  $standaloneRetire+=$path
+  $standaloneRetire+=$path;$standaloneExpected[$path]=$observed
  }}
+ if($standaloneConflicts.Count){throw ("COT_STANDALONE_CONFLICTS:"+(ConvertTo-Json -InputObject @($standaloneConflicts) -Compress -Depth 3))}
  # Exact legacy log names are user data, never swept by an extension wildcard.
  foreach($suffix in @('','.1')){
   $path='Plugins/DynastyEnhancer-launcher.log'+$suffix;$source=Resolve-Owned $MmcRoot $path;Assert-NoLink $MmcRoot $source
@@ -240,7 +272,9 @@ if($Action -eq 'Install'){
 }
 $directory=Join-Path $backupBase ([DateTime]::UtcNow.ToString('yyyyMMddTHHmmssfff')+'-'+[Guid]::NewGuid().ToString('N'))
 Assert-NoLink $MmcRoot $directory
-New-Item -ItemType Directory -Path $directory -Force | Out-Null
+# Test required parent folders before creating the transaction or replacing files.
+Assert-WriteAccess (@($payload|ForEach-Object {Resolve-Owned $MmcRoot $_.path})+@(Join-Path $backupBase 'transaction-check'))
+Ensure-Directory $directory
 $operations=New-Object 'Collections.Generic.List[object]'
 $journal=@{format=1;root=$MmcRoot;status='installing';action=$Action;operations=@()}
 function Save-Journal {
@@ -260,9 +294,11 @@ function Write-Payload($File){
  $target=Resolve-Owned $MmcRoot $File.path
  if((Test-Path -LiteralPath $target -PathType Leaf) -and (Hash $target) -eq $File.hash){return}
  $op=Record-Target $File.path $File.userData
- New-Item -ItemType Directory -Path (Split-Path -Parent $target) -Force | Out-Null
- if($File.ContainsKey('content')){[IO.File]::WriteAllText($target,$File.content,$utf8)}
- else{Copy-Item -LiteralPath $File.source -Destination $target -Force}
+ Ensure-Directory (Split-Path -Parent $target)
+ try{
+  if($File.ContainsKey('content')){[IO.File]::WriteAllText($target,$File.content,$utf8)}
+  else{Copy-Item -LiteralPath $File.source -Destination $target -Force}
+ }catch [UnauthorizedAccessException]{throw ('COT_WRITE_ACCESS: Cannot replace file: '+$target+'. '+$_.Exception.Message+' Check folder permissions and Windows Security protection history. Setup did not change permissions.')}
  if((Hash $target) -ne $File.hash){throw ('Installed file differs: '+$File.path)}
  $op.installed=$File.hash;Save-Journal
 }
@@ -328,6 +364,7 @@ try{
  Fault 'AfterPayload'
  # Every deletion was preflighted by exact path and receipt/known hash.
  foreach($path in @((@($retire)+@($standaloneRetire))|Sort-Object -Unique)){
+  if($standaloneExpected.ContainsKey($path) -and (Hash (Resolve-Owned $MmcRoot $path)) -ne $standaloneExpected[$path]){throw ('Reviewed standalone changed before backup: '+$path)}
   Record-Target $path $false | Out-Null
   Remove-Item -LiteralPath (Resolve-Owned $MmcRoot $path) -Force
  }

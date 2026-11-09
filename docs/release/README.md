@@ -2,6 +2,8 @@
 
 [Dynasty COT 1.0](https://github.com/ArtVsTheWorld/DynastyCOT/releases/tag/v1.0.0) is the first stable release. The older 0.1.6 public test prerelease remains available. See the [1.0 notes](1.0.0.md) and [verification report](verification-1.0.0.md).
 
+**1.0.1** is an installer-only hotfix for old standalone conflicts and clearer write-access errors. It does not change the game modules. See the [hotfix notes](1.0.1.md) and [ZIP/manual guide](../manual-install.md).
+
 ## Choose your setup
 
 Run `DynastyCOT-Setup-VERSION.exe` and choose the **MMC Mod Manager** folder containing `MMCModManager.exe`, usually `MMC_ModManager_vX.X.X.X`. It is different from the parent MMC folder. Close MMC and the game before changing an installation.

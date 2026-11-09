@@ -22,6 +22,7 @@ namespace DynastyCOT.Setup {
   private Rectangle? layoutArea;private Rectangle lastWorkingArea;
   private string currentPage="Install";
   private bool busy,restoring,loadingReleases,fitting;private UpdateMetadata inspected;private VerifiedUpdate selectedUpdate;
+  internal Func<List<StandaloneConflict>,bool> ReviewStandalone;
   private UpdateClient updates;private string downloads;
   internal bool Busy{get{return busy;}}internal bool LastSuccess{get;private set;}internal string StatusText{get{return status.Text;}}internal string DetailsText{get{return details.Text;}}
   internal SetupForm(Fixture testFixture){
@@ -71,7 +72,13 @@ namespace DynastyCOT.Setup {
   private void BuildBackups(){var table=Stack(pages["Backups"]);Row(table,Heading("Undo changes"),38);Row(table,Body("Installations, updates and removals create transaction backups. Choose one to undo it. Later changes to user settings and histories are retained."),70);backups.DropDownStyle=ComboBoxStyle.DropDownList;backups.AccessibleName="COT backup";Row(table,backups,43);StyleButton(restore,"Restore selected backup",false);Row(table,restore,45);Row(table,Body("Close MMC and the game before restoring. If a managed file changed since the backup, setup stops and explains the conflict instead of replacing it."),66);}
   private void ShowPage(string name){currentPage=name;install.Visible=name=="Install"||name=="Updates"&&selectedUpdate!=null;copy.Visible=name=="Activity";foreach(var pair in pages)pair.Value.Visible=pair.Key==name;foreach(var pair in navButtons){pair.Value.BackColor=pair.Key==name?Color.FromArgb(21,76,53):Color.FromArgb(10,17,21);pair.Value.ForeColor=pair.Key==name?Color.White:Color.FromArgb(213,224,218);}pages[name].BringToFront();}
   private void ConfigureWorkers(){
-   worker.WorkerReportsProgress=true;worker.ProgressChanged+=(s,e)=>Append((string)e.UserState);worker.RunWorkerCompleted+=(s,e)=>{LastSuccess=e.Error==null&&((InstallResult)e.Result).Success;if(e.Error!=null)Append(e.Error.Message);if(LastSuccess){if(fixture==null)MmcLocator.Remember(loadedRoot);status.Text=restoring?"Backup restored. Restart MMC and the game when you are ready.":runningAction=="Install"?"COT is installed. Restart MMC and the game when you are ready.":"Removal complete. Settings, histories and backups were kept.";status.ForeColor=Green;}else{status.Text=FriendlyError(e.Error==null?((InstallResult)e.Result).Details:e.Error.Message);status.ForeColor=Color.FromArgb(149,44,60);}busy=false;settings.Enabled=true;navigation.Enabled=true;progress.Visible=false;loadedRoot=null;RefreshTarget();UpdateButtons();};
+   worker.WorkerReportsProgress=true;worker.ProgressChanged+=(s,e)=>Append((string)e.UserState);worker.RunWorkerCompleted+=(s,e)=>{LastSuccess=e.Error==null&&((InstallResult)e.Result).Success;if(e.Error!=null)Append(e.Error.Message);if(LastSuccess){if(fixture==null)MmcLocator.Remember(loadedRoot);status.Text=restoring?"Backup restored. Restart MMC and the game when you are ready.":runningAction=="Install"?"COT is installed. Restart MMC and the game when you are ready.":"Removal complete. Settings, histories and backups were kept.";status.ForeColor=Green;}else{status.Text=FriendlyError(e.Error==null?((InstallResult)e.Result).Details:e.Error.Message);status.ForeColor=Color.FromArgb(149,44,60);}busy=false;settings.Enabled=true;navigation.Enabled=true;progress.Visible=false;if(LastSuccess)loadedRoot=null;RefreshTarget();UpdateButtons();
+    var result=e.Error==null?e.Result as InstallResult:null;
+    if(!LastSuccess&&!restoring&&runningAction=="Install"&&result!=null&&result.Conflicts!=null&&result.Conflicts.Count>0){
+     bool approved=ReviewStandalone!=null?ReviewStandalone(result.Conflicts):fixture==null&&ConfirmStandalone(result.Conflicts);
+     if(approved)Begin(false,result.Conflicts);
+    }
+   };
    network.WorkerReportsProgress=true;network.ProgressChanged+=(s,e)=>{if(e.ProgressPercentage>=0){progress.Style=ProgressBarStyle.Continuous;progress.Value=Math.Min(100,e.ProgressPercentage);}status.Text=(string)e.UserState;};network.RunWorkerCompleted+=(s,e)=>{
     busy=false;settings.Enabled=true;navigation.Enabled=true;progress.Visible=false;
     if(e.Error!=null){Append(e.Error.Message);status.Text="Update action stopped. Your installation has not changed.";releaseInfo.Text=e.Error.Message;inspected=null;}
@@ -94,12 +101,28 @@ namespace DynastyCOT.Setup {
   private void ApplyOperation(){loadedRoot=null;selectionHint.Text=operation.SelectedIndex==0?"Turn on the features you want to use.":operation.SelectedIndex==1?"Check modules to remove. Other modules and user data stay.":"Remove the shared COT plugin and all four modules; keep user data and backups.";for(int i=0;i<4;i++)if(modules[i]!=null)modules[i].Enabled=operation.SelectedIndex!=2;RefreshTarget();UpdatePackageSource();}
   private void UpdatePackageSource(){install.Visible=currentPage=="Install"||currentPage=="Updates"&&selectedUpdate!=null;packageSource.Text="PACKAGE  |  "+(selectedUpdate==null?"Bundled "+SetupInfo.Version:selectedUpdate.Metadata.Version+" - downloaded and SHA-256 verified");install.Text=operation.SelectedIndex==0?(selectedUpdate==null?"Install "+SetupInfo.Version:"Install "+selectedUpdate.Metadata.Version):operation.SelectedIndex==1?"Uninstall selected":"Uninstall all COT";}
   internal void ClickInstall(){ShowPage("Install");install.PerformClick();}internal void ClickRestore(){ShowPage("Backups");restore.PerformClick();}
-  private void Begin(bool rollback){
+  private void Begin(bool rollback){Begin(rollback,null);}
+  private void Begin(bool rollback,IList<StandaloneConflict> reviewed){
    if(busy)return;RefreshTarget();if(rootError!=null){status.Text=rootError;return;}var backup=backups.SelectedItem as Backup;if(rollback&&backup==null)return;string root=InstallerEngine.ValidateRoot(target.Text),backupPath=rollback?backup.Path:null;var selected=Selection();var update=selectedUpdate;
-   runningAction=ActionName;busy=true;restoring=rollback;LastSuccess=false;settings.Enabled=false;navigation.Enabled=false;UpdateButtons();progress.Style=ProgressBarStyle.Marquee;progress.Visible=true;status.ForeColor=Ink;status.Text=rollback?"Restoring selected backup...":runningAction=="Install"?"Installing selected package and creating a backup...":"Removing selected COT files and creating a backup...";details.Clear();DoWorkEventHandler task=null;task=(s,e)=>{try{e.Result=engine.Run(root,selected,backupPath,fixture,line=>worker.ReportProgress(0,line),runningAction,update);}finally{worker.DoWork-=task;}};worker.DoWork+=task;worker.RunWorkerAsync();
+   runningAction=ActionName;busy=true;restoring=rollback;LastSuccess=false;settings.Enabled=false;navigation.Enabled=false;UpdateButtons();progress.Style=ProgressBarStyle.Marquee;progress.Visible=true;status.ForeColor=Ink;status.Text=rollback?"Restoring selected backup...":runningAction=="Install"?"Installing selected package and creating a backup...":"Removing selected COT files and creating a backup...";details.Clear();DoWorkEventHandler task=null;task=(s,e)=>{try{e.Result=engine.Run(root,selected,backupPath,fixture,line=>worker.ReportProgress(0,line),runningAction,update,reviewed);}finally{worker.DoWork-=task;}};worker.DoWork+=task;worker.RunWorkerAsync();
   }
   private void UpdateButtons(){bool any=false;foreach(var module in modules)if(module!=null&&module.Checked)any=true;install.Enabled=!busy&&rootError==null&&(operation.SelectedIndex!=1||any);restore.Enabled=!busy&&rootError==null&&backups.Items.Count>0;backups.Enabled=!busy&&backups.Items.Count>0;close.Enabled=!busy;browse.Enabled=!busy;target.Enabled=!busy;checkUpdates.Enabled=!busy&&updates!=null;releases.Enabled=!busy;download.Enabled=!busy&&inspected!=null;bundled.Enabled=!busy;}
-  private static string FriendlyError(string text){if(text.Contains("Close MMC"))return "Close MMC and the game, then try again.";if(text.Contains("restored:"))return "Installation stopped; previous files were restored. See Activity.";if(text.Contains("Conflicting Enhancer history"))return "The two history copies differ. Both were kept; see Activity.";if(text.Contains("changed after installation"))return "A managed file changed since this backup. Nothing was restored.";return "Setup could not finish. See Activity for the specific next step.";}
+  private bool ConfirmStandalone(List<StandaloneConflict> conflicts){
+   var names=new List<string>();for(int i=0;i<Math.Min(8,conflicts.Count);i++)names.Add(conflicts[i].Path);
+   string more=conflicts.Count>8?"\r\n...and "+(conflicts.Count-8)+" more (full list in Details).":"";
+   return MessageBox.Show(this,"These older standalone plugin files are not recognized:\r\n\r\n"+String.Join("\r\n",names.ToArray())+more+
+    "\r\n\r\nBack up these exact files and replace them with COT? Settings and histories stay. Undo changes can restore the originals. Choose No to leave everything unchanged.","Replace older standalone copies?",MessageBoxButtons.YesNo,MessageBoxIcon.Question,MessageBoxDefaultButton.Button2)==DialogResult.Yes;
+  }
+  internal static string FriendlyError(string text){
+   if(text.Contains("COT_STANDALONE_CONFLICTS:")||text.Contains("Unrecognized active legacy payload kept"))return "Older standalone copies need review. Files are unchanged; open Details.";
+   if(text.Contains("COT_RUNNING_PROCESSES:")||text.Trim()=="Close MMC and the game before installing or rolling back")return "Close MMC and the game, then try again.";
+   if(text.Contains("COT_WRITE_ACCESS:"))return "Cannot write to the selected Mod Manager folder. Open Details for the path and next steps.";
+   if(text.Contains("restored:"))return "Installation stopped; previous files were restored. Open Details.";
+   if(text.Contains("Conflicting Enhancer history"))return "The two history copies differ. Both were kept; open Details.";
+   if(text.Contains("changed after installation"))return "A managed file changed since this backup. Nothing was restored.";
+   return "Setup could not finish. Open Details for the specific next step.";
+  }
+
   // Absolute sidebar/header rows scale with DPI; the page host takes the remaining
   // space. Never let the scaled minimum push the persistent footer
   // below the monitor's usable desktop (taskbar excluded).

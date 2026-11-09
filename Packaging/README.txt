@@ -1,149 +1,59 @@
 DYNASTY COT by Ace
-Dynasty COT 1.0 (package version 1.0.0)
-
-This combines four independently optional modules behind one MMC plugin entry:
-- Beyond the Field: a livelier Dynasty feed, fog, grades and clearer money labels.
-- Gameday Atmosphere: crowds that arrive, react and travel with the matchup.
-- Extra Settings: offline controls, including clocks saved for each Dynasty.
-- Expanded Practice: full drives and scrimmages from the normal practice menu.
+Package version 1.0.1 - installer hotfix
 
 INSTALL / UPDATE
-Double-click DynastyCOT-Setup-1.0.0.exe. The setup EXE includes the
-whole package; there is nothing else to download or extract.
-Close MMC and the game. Choose your MMC Mod Manager folder (usually
-MMC_ModManager_vX.X.X.X, not its parent MMC folder), select the modules you
-want enabled, then click Install COT. Current module choices are loaded.
+Close MMC and the game. Run DynastyCOT-Setup-1.0.1.exe, confirm the actual
+versioned MMC Mod Manager folder and choose your modules. For an installation
+inside Program Files, right-click setup and choose Run as administrator.
+Setup does not automatically change permissions or security settings.
 
-The ZIP is an alternative for advanced use. After extracting it:
-  .\Install.ps1 -MmcRoot 'C:\Your\MMC_ModManager_vX.X.X.X'
+Recognized older standalone copies are backed up and replaced automatically.
+Unrecognized copies are listed for review. Yes backs up and replaces those
+exact files; No leaves everything unchanged. Settings/history are retained.
+You do not need to delete whole module folders. A file changed after review
+must be reviewed again. Undo changes can restore the original files.
 
-Use setup for the first migration. It verifies the package, backs up replaced
-files, retires recognized standalone adapters and activates COT last.
-Unrecognized conflicting old plugins stop installation for review.
-It preserves Gameday Atmosphere/playcall data and copies Beyond the Field's
-RuntimeHistory and RecruitResumeHistory from the legacy Runtime-v103 path. Legacy settings
-start fresh. Conflicting history copies stop installation for review.
-Later updates keep COT's current history and do not re-import stale standalone copies.
+ZIP / MANUAL SCRIPT
+Extract the entire ZIP into a separate folder. Open PowerShell; use Run as
+administrator if the target Mod Manager is inside Program Files. Run:
+  powershell.exe -NoProfile -ExecutionPolicy Bypass -File "C:\Extracted-COT\Install.ps1" -MmcRoot "C:\Your\MMC_ModManager_vX.X.X.X"
+Replace both example paths. This uses the same package checks, backups and
+history/settings migration. The script stops on unknown standalone DLLs;
+use the setup EXE for the reviewed backup-and-replace prompt.
+See https://github.com/ArtVsTheWorld/DynastyCOT/blob/main/docs/manual-install.md
+for advanced file-copy installation and its migration/rollback limitations.
 
-MODULES
-Check modules to enable them when installing/updating. Unchecked modules
-stay installed but do not run. You can also edit Plugins/DynastyCOT/settings.json,
-then restart MMC and the game. The four controls are DynastyEnhancer,
-GamedayAtmosphere, ExtraDynastySettings and DrivePractice. The bundled Node
-runtime needs no separate installation.
+ACCESS DENIED
+Details identifies the blocked path. Confirm the selected Mod Manager folder
+is writable. Program Files normally requires an elevated installer. Check
+folder permissions and Windows Security protection history if needed.
+Downloads working while Program Files fails strongly suggests a permissions
+issue, but does not identify every possible security or file-lock cause.
 
-UNINSTALL
-Choose Uninstall selected modules, check the modules to remove, then click
-Uninstall selected. Or choose Uninstall all COT to remove the host and all
-four modules. Close MMC and the game first. Settings, histories, profiles
-and backups stay available for reinstalling or restoring a backup.
-Selected removal disables that module in the shared host and removes its
-external payloads. A changed/unrecognized payload is kept and reported.
-Standalone mods are not automatically re-enabled. Restore backup can undo
-an uninstall. Installing again restores payloads; choose which modules to enable.
+FEATURES
+All four modules are optional. Checked modules run; unchecked modules remain
+installed but disabled. Existing choices are retained. Beyond the Field adds
+Dynasty news, fog, grades, colors, money displays and team Player Analytics.
+Gameday Atmosphere adds crowds, sound and shake, including basic Play Now.
+Extra Settings keeps playclock/playcall choices per Dynasty. Expanded Practice
+adds drives and scrimmages in offline Dynasty and main-menu Practice.
+Game-module/native/helper code is unchanged from the released 1.0 package.
+
+REMOVAL / ROLLBACK
+Choose Remove selected features or Remove all COT. Settings, published history,
+profiles and backups remain. Undo changes restores an installation backup;
+rollback does not roll back your Dynasty save. Keep older installers and saves.
 
 OPTIONAL UPDATES
-Open Updates > Check for updates. Choose an available version, including an
-older or marked test release, and read its notes and compatibility information.
-Download selected release verifies its size and SHA-256. Downloading does not
-install; the Install button explicitly names the selected package version.
-Use bundled returns to the version embedded in this installer. Nothing checks,
-downloads or installs automatically. No GitHub credentials are included.
-Project and release instructions: https://github.com/ArtVsTheWorld/DynastyCOT
+Use Updates > Check for updates, inspect the notes, choose a version, download
+and explicitly install it. Nothing downloads or installs automatically.
 
-CHANGES IN 0.1.6
-- Toolkit-inspired green setup with separate Install, Updates, Backups and
-  Activity pages, module descriptions, older-version choice and manual updates.
-- Visiting Fan Strength (%) is an existing Gameday Atmosphere user preference:
-  100 default, 0-200 range. It changes newly generated crowd plans; existing
-  saved fixture plans and history remain unchanged.
-- Beyond the Field has a bounded content/filtering/seasonal/native UI pass.
-  See the versioned release notes and verification evidence for supported
-  behavior, limitations and remaining live checkpoint acceptance.
-- Public test prerelease source: ArtVsTheWorld/DynastyCOT. Internal module IDs,
-  history paths, fingerprints and scope/ownership protections are retained.
+REPORTS
+COT startup: Plugins/DynastyCOT/launcher-status.txt
+Beyond the Field: COT-Runtime/DynastyEnhancer/*.jsonl and runtime-generator.log
+Gameday: Plugins/DynamicGamedayAtmosphere/Logs/
+Extra Settings: Plugins/OfflineDynastySettings/*.log
+Practice: Plugins/SituationalPractice/launcher.log and SituationalPractice.log
 
-CHANGES IN 0.1.5
-- Rating Colors Off retains native theme/focus colors while grade labels fit.
-- Exact AIO 1.4.1 Top Players overview adapter covers both initial Dynasty
-  creation and Add Coach within an existing Dynasty.
-- Large visiting followings resist distance more. Strong hosts mainly resist
-  extra takeover demand; verified AP top-ten matchups have a capped demand boost.
-- Added background roar weakens progressively with the home deficit. Earned
-  scoring/reaction roars and neutral support keep their own behavior.
-- Scoring cheers take priority over live accents, queued followups and competing
-  layers, with one bounded delayed recovery for a dropped native selector.
-- Confirmed TDs with fresh same-snap recording data can request one inset recovery
-  at stable play selection if native replay playback never appeared. Native
-  celebrations and active replays retain ownership. Live retest pending.
-- Kicker animation playback is not added: native clip/actor binding research
-  remains incomplete. No guessed animation or input-dispatch hook is enabled.
-
-CHANGES IN 0.1.4
-- Expanded factual Social Media perspectives, persistent account voices and
-  replies that respond to the parent's details. Four-edition wording/structure
-  memory improves variety across accounts, families and feed views.
-- Unchanged narratives wait for a supported development. Essential news stays
-  covered; already published wording and history remain preserved.
-- Native menu presentation caching, indexed fog/colors/dollars dispatch,
-  reused generation lookups and compact new archive records reduce repeated work.
-- Shake drives its accompanying roar/swell without waiting for an active-audio
-  receipt. Existing timing/intensity and mute/pause/replay guards remain.
-- Main visiting sections are 25% smaller with home-fan pockets. Strong home
-  programs reduce away travel demand; neutral-site behavior remains native.
-- Offline review: 63.5% structural repetition reduction across 60 editions;
-  generation averaged 5.5% faster. These are not live menu/FPS measurements.
-
-CHANGES IN 0.1.3
-- Weekly Advance / My School Update players-at-risk OVRs have an independent
-  adapter, so a neighboring renderer cannot block their grade display.
-- Dynasty Enhancements also appears on initial offline Dynasty creation.
-  Its choices use the LeagueID allocated by that creation, not a global preset.
-- Fresh defaults: Social Media Feed, Recruiting Fog, Roster Fog and Team Fog On;
-  player and team grade scales A+-; Rating Colors and Dollar Values Off.
-  Existing saved choices remain in effect.
-- Compact money labels include $, retaining their native slot-fitting bounds.
-  AIO's full topbar dollar amounts remain unchanged.
-
-PREVIOUS FEEDBACK CHANGES
-- Clock rows work in the validated offline Dynasty hub as well as gameplay.
-- AIO 1.4.1 keeps its full topbar dollar values; tight labels use K/M.
-  Player-card Class & NIL text fits inside its slot beside Height/Weight.
-- An exact AIO Highest NIL Players adapter applies the roster grade options.
-- Recruit account names include available 1-5 star ratings; handles/history stay.
-- Drive/Scrimmage switches from the line reopen the playcall picker.
-- Crowd motion and sound are paired (revised in 0.1.4 as described above).
-- Travel uses city distance, then a weaker state estimate, a modest same-state
-  bonus when cities are missing, or neutral x1.00 when location is unknown.
-- Green setup with separate install, selected uninstall and full uninstall actions.
-
-CLOCKS
-Offensive On / Off At Playcall / Off / 60 Seconds and defensive
-3 / 5 / 15 / 20 / 30 / 45 / 60 Seconds / Off save separately for each Dynasty.
-New Dynasties default to offensive On and defensive 15 Seconds.
-Previous global preferences are not assigned to every Dynasty.
-
-PRACTICE
-Normal Default Practice remains the initial mode. Pause > Mode selects
-Drive Practice or Scrimmage. No initialization play is required.
-
-ROLLBACK
-Open setup, select the same MMC Mod Manager folder, open Backups, choose a
-transaction and click Restore selected backup. Close MMC and the game first. Advanced command:
-  .\Install.ps1 -MmcRoot 'C:\Your\MMC_ModManager_vX.X.X.X' -Rollback '<printed backup directory>'
-Later user edits to settings/history are retained. A changed managed file
-requires review before manual rollback. Keep backups and module data folders.
-
-STATUS / REPORTS
-Plugins/DynastyCOT/launcher-status.txt reports requested module startup.
-Actual native activation is recorded in component logs. Startup success
-alone does not prove that game hooks activated. Keep settings/logs for reports.
-
-LIVE VALIDATION STILL REQUIRED
-This package has offline build, code, integrity and fixture checks.
-It has not been installed into the live game for acceptance.
-See LIVE-ACCEPTANCE.md for the checklist. These feedback changes need a
-cold launch and in-game testing with AIO 1.4.1 + the TeamBuilder patch.
-No blanket compatibility with every Dynasty overhaul is claimed.
-
-Do not delete generated history to update the product.
+This installer hotfix has private fixture validation. Affected-user acceptance
+is pending. Native fingerprints, ownership and helper verification remain.

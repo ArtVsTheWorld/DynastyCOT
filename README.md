@@ -4,7 +4,7 @@
 
 [Download](https://github.com/ArtVsTheWorld/DynastyCOT/releases) · [Release notes](docs/release/1.0.0.md) · [Help and rollback](docs/release/README.md)
 
-**1.0 is available now.** [Download the Windows installer](https://github.com/ArtVsTheWorld/DynastyCOT/releases/download/v1.0.0/DynastyCOT-Setup-1.0.0.exe). Existing users can install over a supported earlier version; settings and history are kept.
+**1.0.1 installer hotfix:** fixes the misleading red Close MMC warning when older standalone plugins are present. [Download the Windows installer](https://github.com/ArtVsTheWorld/DynastyCOT/releases/download/v1.0.1/DynastyCOT-Setup-1.0.1.exe). Game-module code is unchanged from 1.0. Existing users can install over a supported earlier version; settings and history are kept.
 
 ## Beyond the Field
 
@@ -54,10 +54,12 @@ Open **Dynasty > League Settings > Game Settings**. Start a new game after chang
 
 1. Download the **DynastyCOT-Setup** EXE from [Releases](https://github.com/ArtVsTheWorld/DynastyCOT/releases). Keep your older installer if you may want to go back.
 2. Close **the game and MMC Mod Manager**.
-3. Open setup. It tries to find MMC automatically. If needed, click **Find exe** and select **MMCModManager.exe** inside the versioned `MMC_ModManager_v…` folder.
+3. Open setup. If your Mod Manager is under Program Files, run setup as administrator; a user-writable MMC folder outside Program Files is preferable for runtime logs/settings/history. It tries to find MMC automatically. If needed, click **Find exe** and select **MMCModManager.exe** inside the versioned `MMC_ModManager_v…` folder.
 4. Check the modules you want and click **Install COT**. Open MMC and launch normally.
 
-Use the installer when upgrading from older COT or supported standalone modules. It backs up replaced files and keeps settings and history. If an old file has been changed or is unrecognized, setup reports it for review rather than guessing. Do not keep old standalone plugins enabled alongside COT.
+Use the installer when upgrading from older COT or supported standalone modules. It backs up replaced files and keeps settings and history. If an old file has been changed or is unrecognized, setup reports it for review rather than guessing. Do not keep old standalone plugins enabled alongside COT. In 1.0.1, unrecognized older standalone copies are listed for review: approve backing up and replacing those exact files, or decline to leave everything unchanged. You do not need to delete whole module folders.
+
+For a ZIP/script installation or advanced file copying, see the [manual installation guide](docs/manual-install.md).
 
 **Updates are your choice.** Use **Check for updates**, read the notes, then decide whether to download and install. Setup also supports selected-module removal, full removal and restoring a backup. It does not automatically force the newest version.
 
