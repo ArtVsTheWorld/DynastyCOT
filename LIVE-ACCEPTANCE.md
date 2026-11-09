@@ -1,7 +1,6 @@
 # Dynasty COT 1.0: clean-start acceptance
 
-Targeted session-only live tests verified the prior UI fixes. The 1.0 build adds branded runtime names and direct Beyond the Field loading. This exact installed package still needs a clean-start test; startup and offline timings do not certify every overhaul combination or live FPS. Consult the matching release evidence for automated results.
-
+Ace installed the final 1.0 package, restarted MMC and the game, and reported the fixes working. Read-only checks matched the six installed binary hashes and the three loaded native DLL paths. The checklist below remains useful regression coverage; it is not a claim that every item was independently observed, that every overhaul works, or that live FPS was benchmarked.
 Close the game and MMC Mod Manager before installing. Keep the older installer and setup backup. Launch a fresh game process after installation, so temporary development adapters are absent. Confirm Dynasty COT version 1.0.0, author Ace, and your chosen module switches. Check both BeyondTheField native DLLs activate without a loader EXE, GamedayAtmosphereNative activates, and no new loose log files appear in Plugins.
 
 Use copies of the original DYNASTY-EPUFT checkpoints; do not overwrite them. Filenames are labels, not authoritative native stages, and manual saves can differ from autosaves. Record the actual game version, overhaul versions and load order for failures.
@@ -9,7 +8,7 @@ Use copies of the original DYNASTY-EPUFT checkpoints; do not overwrite them. Fil
 ## Final scope and replay changes
 
 - Start a fresh offline Play Now fixture with arrivals enabled: crowd opening is 75% of the original available crowd, then arrivals progress. Existing active matches are not reset. Check neutral and ordinary home venues.
-- With Additional Replays On, watch an ordinary long gain and a non-scoring takeaway. Then score a touchdown without skipping: COT must leave its replay and celebration sequence native. Include a pick-six/return touchdown if practical. The temporary Off preference can be restored after installing this final build.
+- With Additional Replays On, watch an ordinary long gain and a non-scoring takeaway. Then score a touchdown without skipping: COT must leave its replay and celebration sequence native. Include a pick-six/return touchdown if practical. Additional Replays was restored to On; the final runtime excludes touchdown additions.
 - In Dynasty, retain the saved fog/grade/color/dollar choices. Return to the main menu and Play Now: ratings and money displays must be native. Reload Dynasty and confirm its choices return. Check saved history is unchanged.
 
 ## First: recent fixes
@@ -41,4 +40,4 @@ Use copies of the original DYNASTY-EPUFT checkpoints; do not overwrite them. Fil
 - Updates are optional and user initiated. Check for updates must show version, notes and compatibility without forcing installation. An unpublished local package is not available through GitHub update discovery.
 - With MMC/game closed, selective/full uninstall and restoring a previous backup must preserve settings, publication history and unrelated mods. Keep the original checkpoints untouched.
 
-For a failure record the checkpoint, native year/stage, modules/options, game/overhaul versions, exact screen/action, expected/actual result and logs. Public release requires a successful clean-start pass of this exact installed candidate plus a short normal-play/save/load smoke test.
+For a failure record the checkpoint, native year/stage, modules/options, game/overhaul versions, exact screen/action, expected/actual result and logs. The final package has targeted user-confirmed clean-start acceptance. Continue the broader normal-play/save/load and checkpoint checks when testing future changes.

@@ -4,7 +4,7 @@
   "author": "Ace",
   "version": "1.0.0",
   "runtimeBranding": 1,
-  "stage": "release-candidate",
+  "stage": "stable",
   "installable": true,
   "modules": [
     {
@@ -41,15 +41,15 @@
     }
   ],
   "pending": [
-    "Live gameplay and save/load acceptance",
-    "Exact overhaul/version compatibility acceptance"
+    "Broader gameplay/save-load regression coverage",
+    "Exact compatibility across other game and overhaul versions"
   ],
-  "liveAcceptance": "pending",
-  "published": false,
+  "liveAcceptance": "user-confirmed-targeted",
+  "published": true,
   "distribution": {
     "repository": "ArtVsTheWorld/DynastyCOT",
     "visibility": "public",
     "prerelease": false,
-    "compatibilityNotes": "Offline Dynasty, offline main-menu Practice, and a basic offline Play Now atmosphere path awaiting live acceptance. AIO 1.4.1 and its TeamBuilder patch have targeted adapters; unknown native programs are rejected. Exact game/overhaul combinations and the renamed runtime loading path still require fresh-launch live acceptance. Updates are optional; keep a backup and your previous installer."
+    "compatibilityNotes": "Offline Dynasty, offline main-menu Practice, and basic offline Play Now atmosphere. Ace installed the final 1.0 build, restarted MMC and the game, and reported the fixes working. AIO 1.4.1 and its TeamBuilder patch have targeted adapters; unknown native programs are rejected. This is targeted live confirmation, not universal overhaul compatibility or an FPS benchmark. Updates are optional; retain save backups and your previous installer."
   }
 }

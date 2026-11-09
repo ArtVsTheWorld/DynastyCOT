@@ -21,3 +21,5 @@
 - Included in **Dynasty COT 1.0** as an optional module. Close the game and MMC, run setup, and choose what you want.
 
 Settings and history are retained. As always, exact game/overhaul combinations still need testing.
+
+https://github.com/ArtVsTheWorld/DynastyCOT/releases/tag/v1.0.0

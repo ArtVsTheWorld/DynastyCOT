@@ -1,8 +1,6 @@
 # Dynasty COT release and updates
 
-Dynasty COT is published at [ArtVsTheWorld/DynastyCOT](https://github.com/ArtVsTheWorld/DynastyCOT). `0.1.6-private` is a **public test prerelease**. The suffix identifies a nonstable candidate, not private repository access. The first candidate is not a promise that every game or overhaul combination works.
-
-The locally built `0.1.7-private` candidate is not published. See its [notes](0.1.7-private.md) and [verification](../verification/0.1.7-private.md), including the blocked 0.1.6 cross-version rollback check.
+[Dynasty COT 1.0](https://github.com/ArtVsTheWorld/DynastyCOT/releases/tag/v1.0.0) is the first stable release. The older 0.1.6 public test prerelease remains available. See the [1.0 notes](1.0.0.md) and [verification report](verification-1.0.0.md).
 
 ## Choose your setup
 
@@ -29,7 +27,7 @@ The release's `cot-update.json` pins the ZIP's exact byte length and SHA-256, no
 
 ## Restore a previous version
 
-Open **Backups**, select a transaction and choose **Restore selected backup**. Each install/update/removal records a transaction. Restore reverses that transaction's managed files. Later user edits to settings and published histories are kept. If a managed binary was changed outside COT since the transaction, restoration stops with a conflict; read **Activity** rather than replacing files manually. Keep an older versioned installer and a copy of your saves separately. Rollback never rolls back a Dynasty save.
+Open **Undo changes**, select an installation backup and restore it. Each install/update/removal records a transaction. Restore reverses that transaction's managed files. Later user edits to settings and published histories are kept. If a managed binary was changed outside COT since the transaction, restoration stops with a conflict; read **Activity** rather than replacing files manually. Keep an older versioned installer and a copy of your saves separately. Rollback never rolls back a Dynasty save.
 
 To deliberately install an older available release, use the same explicit select/download/install flow. Keep its compatibility notes in mind. A module may reject newer data it does not understand; file rollback is not proof of backwards game compatibility.
 
@@ -61,7 +59,7 @@ python Tests/test_updater.py --published 0.1.6-private
 
 ## Publish one candidate
 
-The lead reviews source/private-input exclusions, commits and pushes source, runs the complete source build and checks, and reads the versioned release notes. After the complete build, run `python Tools/create_release_evidence.py`. It refuses stale or baseline-only checks and exports allowlisted public counts/hashes, compatibility notes and the source revision without local paths or private fixtures. Release assets are the ZIP, setup EXE, `cot-update.json`, checksums, versioned release notes and `release-evidence-VERSION.json`. Keep older assets available. Publish tag `vVERSION` only after the clean-start acceptance for that exact package. Development candidates use prereleases; 1.0.0 is the first stable-version target. The checked-in workflow is manual-only and requires a prepared, access-controlled Windows self-hosted runner; it never publishes on a source push.
+The lead reviews source/private-input exclusions, builds and verifies the payload, completes targeted clean-start acceptance, and commits/pushes the matching source and versioned release notes. A documentation-only release update may retain the exact tested payload bytes; record the implementation revision and later documentation revision separately. After the complete build, run `python Tools/create_release_evidence.py`. It refuses stale or baseline-only checks and exports allowlisted public counts/hashes, compatibility notes and the source revision without local paths or private fixtures. Release assets are the ZIP, setup EXE, `cot-update.json`, checksums, versioned release notes and `release-evidence-VERSION.json`. Keep older assets available. Publish tag `vVERSION` only after the clean-start acceptance for that exact package. Development candidates use prereleases; 1.0.0 is the first stable-version target. The checked-in workflow is manual-only and requires a prepared, access-controlled Windows self-hosted runner; it never publishes on a source push.
 
 After upload, run the explicit published-fixture check above. No public website API call, startup success, isolated installer test or offline fixture establishes live compatibility. Document the remaining checkpoint acceptance separately. Do not replace a published version's payload under the same version tag; fix failures in a newly versioned candidate.
 
