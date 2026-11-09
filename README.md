@@ -4,7 +4,7 @@
 
 [Download](https://github.com/ArtVsTheWorld/DynastyCOT/releases) · [Release notes](docs/release/1.0.0.md) · [Help and rollback](docs/release/README.md)
 
-**1.0.1 installer hotfix:** fixes the misleading red Close MMC warning when older standalone plugins are present. [Download the Windows installer](https://github.com/ArtVsTheWorld/DynastyCOT/releases/download/v1.0.1/DynastyCOT-Setup-1.0.1.exe). Game-module code is unchanged from 1.0. Existing users can install over a supported earlier version; settings and history are kept.
+**1.0.2 generator hotfix:** fixes a Social Media crash when restoring a saved player/recruit voice. [Download the Windows installer](https://github.com/ArtVsTheWorld/DynastyCOT/releases/download/v1.0.2/DynastyCOT-Setup-1.0.2.exe). Existing settings and published history are kept. The 1.0.1 installer fixes remain included.
 
 ## Beyond the Field
 

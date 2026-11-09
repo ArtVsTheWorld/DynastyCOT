@@ -1,8 +1,8 @@
 DYNASTY COT by Ace
-Package version 1.0.1 - installer hotfix
+Package version 1.0.2 - generator crash hotfix
 
 INSTALL / UPDATE
-Close MMC and the game. Run DynastyCOT-Setup-1.0.1.exe, confirm the actual
+Close MMC and the game. Run DynastyCOT-Setup-1.0.2.exe, confirm the actual
 versioned MMC Mod Manager folder and choose your modules. For an installation
 inside Program Files, right-click setup and choose Run as administrator.
 Setup does not automatically change permissions or security settings.
@@ -37,7 +37,10 @@ Dynasty news, fog, grades, colors, money displays and team Player Analytics.
 Gameday Atmosphere adds crowds, sound and shake, including basic Play Now.
 Extra Settings keeps playclock/playcall choices per Dynasty. Expanded Practice
 adds drives and scrimmages in offline Dynasty and main-menu Practice.
-Game-module/native/helper code is unchanged from the released 1.0 package.
+Native game-module/helper code is unchanged from the released 1.0 package.
+The Social Media generator now resolves the actual player when restoring an
+archived personal voice, preventing a null-player crash. Published wording,
+account identities, settings and history are kept.
 
 REMOVAL / ROLLBACK
 Choose Remove selected features or Remove all COT. Settings, published history,

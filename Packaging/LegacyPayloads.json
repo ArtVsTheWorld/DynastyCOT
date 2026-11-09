@@ -1640,6 +1640,11 @@
       "path": "DGA-Runtime/Runtime-2.1.9/DgaDiagnostics.exe",
       "module": "GamedayAtmosphere",
       "sha256": "897eb1b0e1327b37f750bdc1d44e34368861c9ca51a40c938f62a066df9feab6"
+    },
+    {
+      "path": "Plugins/DynastyCOT.dll",
+      "module": "Core",
+      "sha256": "63d639817071c4a65086c10e8825215cf3f54bed43a39dc2511bb30e4012d51a"
     }
   ]
 }

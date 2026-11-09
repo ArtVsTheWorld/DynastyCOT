@@ -2,7 +2,7 @@
   "name": "DynastyCOT",
   "title": "DYNASTY COT by Ace",
   "author": "Ace",
-  "version": "1.0.1",
+  "version": "1.0.2",
   "runtimeBranding": 1,
   "stage": "stable",
   "installable": true,
@@ -41,15 +41,15 @@
     }
   ],
   "pending": [
-    "Affected-user installer confirmation",
+    "Affected Dynasty generator confirmation",
     "Exact compatibility across other game and overhaul versions"
   ],
-  "liveAcceptance": "pending-installer-hotfix",
+  "liveAcceptance": "pending-generator-hotfix",
   "published": true,
   "distribution": {
     "repository": "ArtVsTheWorld/DynastyCOT",
     "visibility": "public",
     "prerelease": false,
-    "compatibilityNotes": "Installer-focused 1.0.1 hotfix. Game-module/native/helper bytes are unchanged from the released, user-tested 1.0 build. Old standalone DLLs can be explicitly reviewed, backed up and replaced; settings and history are preserved. Program Files installations require write permission, and runtime data must remain writable. Affected-user confirmation is pending. Offline modes only; exact overhaul/version combinations remain targeted rather than universally certified. Updates stay optional."
+    "compatibilityNotes": "1.0.2 fixes a Social Media generator crash when restoring a saved personal author voice. Native game modules, runtime helpers, settings paths and account/history IDs remain unchanged from 1.0.1. The released failure was reproduced with a regression fixture; the attached log alone is not a full replay of the affected Dynasty. Offline modes only. Updates remain optional; existing settings and published history are preserved."
   }
 }

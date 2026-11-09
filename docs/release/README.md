@@ -4,6 +4,8 @@
 
 **1.0.1** is an installer-only hotfix for old standalone conflicts and clearer write-access errors. It does not change the game modules. See the [hotfix notes](1.0.1.md) and [ZIP/manual guide](../manual-install.md).
 
+**1.0.2** fixes the Social Media generator null-player crash while retaining the installer fixes. See the [generator hotfix notes](1.0.2.md).
+
 ## Choose your setup
 
 Run `DynastyCOT-Setup-VERSION.exe` and choose the **MMC Mod Manager** folder containing `MMCModManager.exe`, usually `MMC_ModManager_vX.X.X.X`. It is different from the parent MMC folder. Close MMC and the game before changing an installation.
