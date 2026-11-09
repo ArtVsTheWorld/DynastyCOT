@@ -21,7 +21,7 @@ def seed(name):
  shutil.copyfile(META['dll'],root/'Plugins/GamedayAtmosphere.dll');return root
 def fixture(case,root):
  global checks
- output=run([EXE,case,root,BASE,META['sdk']]);checks+=int(output.strip().split()[-1])
+ output=run([EXE,case,root,BASE,META['sdk'],META['version']]);checks+=int(output.strip().split()[-1])
 compiler=Path(r'C:\Windows\Microsoft.NET\Framework64\v4.0.30319\csc.exe');EXE=BASE/'GamedayStandaloneFixture.exe'
 run([compiler,'/nologo','/platform:x64','/out:'+str(EXE),ROOT/'Tests/GamedayStandaloneFixture.cs'])
 check(sha(Path(META['dll']))==META['dllSha256'],'Exact source-built managed DLL')

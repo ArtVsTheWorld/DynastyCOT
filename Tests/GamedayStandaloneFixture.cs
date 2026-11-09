@@ -32,11 +32,11 @@ class GamedayStandaloneFixture {
    Check(!(bool)Call(duplicate,"TryClaimWatcher",duplicateArgs)&&(bool)duplicateArgs[0],"Separate adapter instance cannot start a second watcher");
   }else if(args[0]=="files"){
    Check(assembly.GetName().Name=="GamedayAtmosphere","Branded assembly name");
-   Check(assembly.GetName().Version==new Version(1,0,2,0),"Distribution assembly version");
+   Check(assembly.GetName().Version==new Version(args.Length>4?args[4].Split('-')[0]+".0":"1.0.2.0"),"Distribution assembly version");
    var attributes=assembly.GetCustomAttributesData();
    foreach(string name in new[]{"PluginAuthorAttribute","PluginDisplayNameAttribute","PluginVersionAttribute"}){
     var attr=attributes.Single(x=>x.AttributeType.Name==name);string value=(string)attr.ConstructorArguments[0].Value;
-    Check(value==(name=="PluginAuthorAttribute"?"Ace":name=="PluginDisplayNameAttribute"?"Gameday Atmosphere":"1.0.2-standalone-test"),"MMC branding "+name);
+    Check(value==(name=="PluginAuthorAttribute"?"Ace":name=="PluginDisplayNameAttribute"?"Gameday Atmosphere":(args.Length>4?args[4]:"1.0.2-standalone-test")),"MMC branding "+name);
    }
    var names=assembly.GetManifestResourceNames();Check(names.Length==3&&!names.Any(x=>x.Contains("LoadDynamic")),"Exactly engine/defaults/diagnostics resources; no loader EXE");
    Check(Call(action,"LegacyStandaloneIssue")==null,"No false legacy conflict");

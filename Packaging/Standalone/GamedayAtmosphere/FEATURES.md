@@ -59,4 +59,4 @@ By Ace. A standalone crowd and stadium-atmosphere mod for offline Dynasty and ba
 - Play Now retains native visiting-fan appearance. It does not use Dynasty travel/season plans or write Dynasty crowd history.
 - Offline modes only. Practice, online play and general Road to Glory support are not claimed.
 - Stadium layouts, native presentation, available data, exact game version and other mods can affect results. Unknown native layouts and foreign hook ownership remain rejected.
-- The crowd engine matches released COT 1.0.2; the new standalone launcher/settings packaging still needs clean-launch live acceptance. No new FPS benchmark or universal overhaul compatibility is claimed.
+- The crowd engine matches released COT 1.0.2; Ace reported the standalone packaging working; other game/mod setups still need their own live acceptance. No new FPS benchmark or universal overhaul compatibility is claimed.

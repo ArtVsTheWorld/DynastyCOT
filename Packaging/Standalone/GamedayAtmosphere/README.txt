@@ -1,4 +1,4 @@
-GAMEDAY ATMOSPHERE by Ace - standalone test
+GAMEDAY ATMOSPHERE by Ace - 2.1.9 / Update 4
 Based on the crowd engine in Dynasty COT 1.0.2. COT is not required.
 
 INSTALL
@@ -29,5 +29,5 @@ REMOVE
 Close MMC/game and remove GamedayAtmosphere.dll. Keep shared data/runtime
 folders if using COT or preserving your settings/history for later.
 
-See FEATURES.md for the full feature list and mode limits. This new packaging
-needs a clean-launch live check; offline tests are not a live compatibility pass.
+See FEATURES.md for the full feature list and mode limits. The standalone
+packaging was reported working by Ace; other setups still need their own checks.
