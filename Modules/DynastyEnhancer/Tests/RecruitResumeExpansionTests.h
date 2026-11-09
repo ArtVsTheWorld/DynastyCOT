@@ -3,6 +3,13 @@
 inline nlohmann::json expansionTests(){
     using namespace recruitingfog::resume;
     transferClassLabelTests();
+    // The shared Analytics include used to hide these fields from the capture.
+    if(!dynasty::live::resumeCaptureFields("Player").count("PLYR_HOME_TOWN")||!dynasty::live::resumeCaptureFields("Player").count("PresentationId"))throw std::runtime_error("Resume identity fields missing from explicit capture contract");
+    Json raw={{"format",1},{"sourceKind","runtime"},{"status",{{"league",1},{"season",{{"CurrentSeasonYear",2026},{"CurrentYear",0}}}}},{"records",Json::object()}};
+    Json recruit={{"Class","HighSchool"},{"Player","5:1"}};
+    raw["records"]["6:1"]={{"key","6:1"},{"type","Recruit"},{"capacity",2},{"v",recruit}};
+    raw["records"]["5:1"]={{"key","5:1"},{"type","Player"},{"capacity",2},{"v",{{"FirstName","Test"},{"LastName","Prospect"},{"PresentationId",1234}}}};
+    const auto unavailable=parseNativeClass(raw);if(!unavailable.entries.empty()||unavailable.unavailable.size()!=1)throw std::runtime_error("Missing optional hometown aborted class or manufactured identity");
     Prospect p;p.identity="expansion";p.position="QB";p.stars=3;p.state="NorthCarolina";p.ratings={{"OverallRating",70},{"AwarenessRating",70}};
     double gpaTotal=0;int middle=0,edges=0,nearby=0,assigned=0;std::set<std::string> levels;
     const std::set<std::string> active={schoolKey("Elon University"),schoolKey("North Dakota State"),schoolKey("Mount Union")};

@@ -1,4 +1,5 @@
 import {phaseIndex} from './publication_timeline.mjs';
+import {teamRecord} from './team_record.mjs';
 // Shared story facts from either a read-only save adapter or a native runtime snapshot.
 export async function normalizeDynasty({records,resolve,array,arraySlots},identity) {
   const season=(await records('SeasonInfo'))[0]?.v,franchise=(await records('Franchise'))[0]?.v;
@@ -43,7 +44,7 @@ export async function normalizeDynasty({records,resolve,array,arraySlots},identi
       cfpRank:v.CFPPoll_CurrentRank,cfpLastRank:v.CFPPoll_LastWeeksRank,
       conferenceRank:v.CurSeasonConfStanding,conferenceLastRank:v.LastWeekConferenceStanding,
       conferenceWins:v.ConfWin,conferenceLosses:v.ConfLoss,conferenceTies:v.ConfTie,
-      wins:v.HomeWin+v.RoadWin,losses:v.HomeLoss+v.RoadLoss,ties:(v.HomeTie??0)+(v.RoadTie??0)});rawTeams.push(v);
+      ...teamRecord(v,seasonStats?.stats)});rawTeams.push(v);
   }
   const teamIndex=async ref=>{const t=await resolve(ref);return t?teamRefs.get(t.key)??t.v.TeamIndex:null;};
   const teamName=async ref=>{const t=await resolve(ref);return t?.v.DisplayName||t?.v.LongName||t?.v.ShortName||null;};

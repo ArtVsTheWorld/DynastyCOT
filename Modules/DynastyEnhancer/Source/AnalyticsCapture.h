@@ -49,7 +49,11 @@ inline Json dataset(const Json& raw){
         const auto& v=record.at("v");if(v.value("IsPractice",true))return nullptr;auto home=values(v.value("HomeTeam",Json()),"Team"),away=values(v.value("AwayTeam",Json()),"Team");if(!home||!away)return nullptr;
         Json result=v;result["key"]=record.at("key");result["homeTeamIndex"]=home->at("TeamIndex");result["awayTeamIndex"]=away->at("TeamIndex");return result;
     };
+    // A finalized game is referenced by dozens of player stat rows. Resolve
+    // and validate its immutable metadata once per capture, not once per player.
+    std::map<std::string,const Json*> gameCache;
     for(const auto& record:records)if(record.at("type")=="SeasonGame"){auto game=gameInfo(record);if(!game.is_null())out["games"].push_back(std::move(game));}
+    for(const auto& game:out.at("games"))gameCache.emplace(game.at("key").get<std::string>(),&game);
     std::map<int,double> prestige;for(const auto& record:records)if(record.at("type")=="Team"){const auto& t=record.at("v");if(t.value("TeamPrestige",0)>0&&t.value("TeamPrestige",0)<=10)prestige[t.at("TeamIndex").get<int>()]=t.at("TeamPrestige").get<double>()/2.;}
     const auto config=calibration();
     for(const auto& record:records)if(record.at("type")=="Player"&&record.at("capacity").get<int>()>1){
@@ -70,7 +74,7 @@ inline Json dataset(const Json& raw){
         for(const auto& ref:*stats){if(!ref.is_string()||!seen.insert(ref.get<std::string>()).second)continue;
             try{
                 const auto& stat=records.at(ref.get<std::string>());auto type=stat.at("type").get<std::string>();if(type.rfind("Game",0)!=0||type.find("Stats")==std::string::npos)throw std::runtime_error("Unexpected game-stat record");const auto& s=stat.at("v");
-                auto g=resolve(s.value("SeasonGame",Json()),"SeasonGame");if(!g)throw std::runtime_error("Missing game reference");auto game=gameInfo(*g);if(game.is_null())continue;
+                auto g=resolve(s.value("SeasonGame",Json()),"SeasonGame");if(!g)throw std::runtime_error("Missing game reference");auto cached=gameCache.find(g->at("key").get<std::string>());if(cached==gameCache.end())continue;const auto& game=*cached->second;
                 auto home=values(g->at("v").at("HomeTeam"),"Team"),away=values(g->at("v").at("AwayTeam"),"Team");const Json* team=nullptr;const auto opponent=s.value("OpposingTeam",Json());
                 if(opponent==g->at("v").at("HomeTeam"))team=away;else if(opponent==g->at("v").at("AwayTeam"))team=home;
                 if(!team)throw std::runtime_error("Opponent is not part of game");

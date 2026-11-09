@@ -89,11 +89,24 @@ def generate(root,header,evidence):
         for field,offsets in [('scaleOffsets',p.scale_offsets),('teamScaleOffsets',p.team_scale_offsets),('fogOffsets',p.fog_offsets),('colorOffsets',p.color_offsets)]:
             for at in offsets:lines.append(f'result.back().{field}.push_back({at});')
         for at,value in p.literals:lines.append('{const auto pointer=reinterpret_cast<uintptr_t>('+json.dumps(value)+f');memcpy(result.back().code.data()+{at},&pointer,8);}}')
+        if mode=='strategy':
+            # AIO relocates this class while retaining the exact native method.
+            # Prove both the class and the full body; never attach by name alone.
+            candidates=list(Path('C:/Apps/CFB 27/Working/Teambuilder Import Plugin/Compatibility').glob('AIO-Dynasty-1.4.1*/**/hub/corenode.ast'))
+            if len(candidates)!=1:raise ValueError('One approved AIO 1.4.1 hub reference required')
+            current=load(candidates[0]);items=current.decode(0xaf0c0)
+            assert items[0][2][6]=='PlayersLeavingStrategy'
+            matches=[i for i,item in enumerate(items) if len(item)>3 and item[2][3]=='0xb0080']
+            assert len(matches)==1 and items[matches[0]-1][2][1]=='_GetTeamModule'
+            assert current.data[0xb0080:0xb0080+size]==original
+            assert struct.unpack_from('<IHH',current.data,0xb0050+8)==(argc,regs,flags)
+            report.append(dict(mode='strategy-aio141',asset='AIO 1.4.1 hub',method=name,definition=0xb0050,hash=expected,copyBytes=size,customBytes=0))
         lines.append('return result;}')
+        if mode=='strategy':lines.append('inline std::vector<notesui::Program> currentStrategyPrograms(){auto result=strategyPrograms();result.front().offset=0xb0050;return result;}')
         report.append(dict(mode=mode,asset=ASSETS[mode],method=name,definition=body-48,argc=argc,registers=regs,flags=flags,size=size,hash=expected,copyAt=copy_at,copyBytes=copy_bytes,customBytes=len(p.code)-copy_bytes))
     lines.append('}');header.write_text('\n'.join(lines)+'\n',encoding='utf8')
     evidence.parent.mkdir(parents=True,exist_ok=True);evidence.write_text(json.dumps(report,indent=2)+'\n',encoding='utf8')
-    print(json.dumps({'callbacks':2,'customBytes':sum(r['customBytes'] for r in report),'header':str(header)}))
+    print(json.dumps({'callbackKinds':2,'verifiedDefinitions':len(report),'customBytes':sum(r['customBytes'] for r in report),'header':str(header)}))
 
 if __name__=='__main__':
     parser=argparse.ArgumentParser(description=__doc__);parser.add_argument('--assets',type=Path,default=Path('../PlayerAnalytics/Research/assets'));parser.add_argument('--header',type=Path,default=Path('Source/DraftOvrUiPrograms.h'));parser.add_argument('--evidence',type=Path,default=Path('Evidence/PlayerFog/Draft/minimal-ovr-programs.json'));args=parser.parse_args();generate(args.assets,args.header,args.evidence)

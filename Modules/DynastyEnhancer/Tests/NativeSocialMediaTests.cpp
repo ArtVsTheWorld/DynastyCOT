@@ -32,6 +32,11 @@ void __fastcall originalFilter(void*,void* out,void*,void*){++filterForwardCalls
 unsigned changedForwardCalls=0;
 unsigned navForwardCalls=0;
 std::string navForwardName;
+struct InfoCollector{void** vt;Json fields=Json::object();};
+void __fastcall infoText(InfoCollector* out,const char* key,const char* value){out->fields[key]=value;}
+void* infoCollectorVt[]={nullptr,nullptr,nullptr,nullptr,reinterpret_cast<void*>(infoText)};
+std::string stageTitle="Roster";
+void __fastcall originalNavInfo(void*,void*,void* out){objectText(out,"Id","ROSTER");objectText(out,"Title",stageTitle.c_str());}
 void __fastcall originalNav(void*,unsigned,const char* name,void*){++navForwardCalls;navForwardName=name?name:"";}
 void __fastcall originalChanged(void*,const char*,const char*,void*){++changedForwardCalls;}
 struct FilterValue {void** vt;int key;};
@@ -56,6 +61,9 @@ int main(int argc,char** argv){
             const cotanalytics::Api ready{sizeof(cotanalytics::Api),cotanalytics::abi,cotanalytics::buildId,[]{return true;},[]{return true;},[]{return true;},[]{},[]{},[]{return false;}};
             require(cotanalytics::buildId?cotanalytics::compatible(ready):!cotanalytics::compatible(ready),"Analytics must accept matched COT identities and reject unversioned standalone builds");auto wrong=ready;wrong.build^=1;require(!cotanalytics::compatible(wrong),"Mixed native builds passed the Analytics sibling gate");wrong=ready;wrong.version++;require(!cotanalytics::compatible(wrong),"Unknown Analytics ABI was accepted");
             analyticsmenu::api=&ready;enhancements::currentOptions=38;navRequestHook(nullptr,0,"PLAYER_ANALYTICS",nullptr);require(navForwardName=="ROSTER","Social Off also disabled Player Analytics native navigation");enhancements::currentOptions=39;
+            const auto oldInfo=navInfo;navInfo=originalNavInfo;
+            for(const auto* title:{"Roster","Position Changes","Training Results"}){stageTitle=title;InfoCollector result{infoCollectorVt};Alias request{aliasVt,"PLAYER_ANALYTICS"};navInfoHook(nullptr,&request,&result);require(result.fields["Id"]=="PLAYER_ANALYTICS"&&result.fields["Title"]=="Player Analytics","Stage-specific donor title leaked into Analytics navigation");}
+            InfoCollector ordinary{infoCollectorVt};Alias ordinaryRequest{aliasVt,"ROSTER"};navInfoHook(nullptr,&ordinaryRequest,&ordinary);require(ordinary.fields["Title"]==stageTitle&&ordinary.fields["Id"]=="ROSTER","Analytics title changed ordinary Roster navigation");navInfo=oldInfo;
             auto returning=ready;returning.resumeCard=resumeCardFixture;returning.leave=leaveAnalyticsFixture;analyticsmenu::api=&returning;
             resumeAllowed=true;navRequestHook(nullptr,0,"ROSTER",nullptr);require(resumeChecks==1&&leaveChecks==0&&navForwardName=="ROSTER","Native card return discarded the Analytics session");
             resumeAllowed=false;navRequestHook(nullptr,0,"ROSTER",nullptr);require(resumeChecks==2&&leaveChecks==1,"Ordinary Roster inherited Analytics state");

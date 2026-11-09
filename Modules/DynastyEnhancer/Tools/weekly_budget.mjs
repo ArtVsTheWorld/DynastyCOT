@@ -12,7 +12,7 @@ export function weeklyBudget(){
  const counts=new Map();
  return {
   allows(event,role,{reply=false,published=false}={}){
-   return reply||published||event.category==='recruit-film'||protectedNews(event,role)||(event.teamIds??[]).filter(id=>id!==255).every(id=>(counts.get(id)??0)<WEEKLY_TEAM_POST_LIMIT);
+   return reply||published||event.category==='recruit-film'||event.category==='holiday'||protectedNews(event,role)||(event.teamIds??[]).filter(id=>id!==255).every(id=>(counts.get(id)??0)<WEEKLY_TEAM_POST_LIMIT);
   },
   record(event,{reply=false}={}){if(reply||event.category==='recruit-film')return;for(const id of new Set(event.teamIds??[]))if(id!==255)counts.set(id,(counts.get(id)??0)+1);},
   counts

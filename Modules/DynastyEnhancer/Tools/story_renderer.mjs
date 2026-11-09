@@ -15,7 +15,7 @@ import {publishOffer,publishReply} from './publication_policy.mjs';
 import {canonicalTopic} from './conversation_topics.mjs';
 import {personalVoice,finishPersonalText,accountVoice} from './voice_style.mjs';
 import {rememberVariety} from './story_variety.mjs';
-import {capitalizeSentences,socialDisplayText} from './prose_cleanup.mjs';
+import {capitalizeSentences,socialDisplayText,proofreadNewText} from './prose_cleanup.mjs';
 import {conferenceGrammar} from './conference_language.mjs';
 import {scopeViews} from './feed_selection.mjs';
 import {nativeViewIds} from './feed_visibility.mjs';
@@ -80,7 +80,7 @@ function renderPass(s,events,{authors={},history=[],sameWeek=null,onTemplates=nu
     const p=players.get(e.playerId),ref=p&&publicPosition(p.position)+' '+p.name;
     if(ref&&body.includes(ref)&&!body.toLowerCase().includes((filled.prospectType+ref).toLowerCase()))body=body.replace(ref,filled.prospectType+ref);
     if(['analyst','beat','official'].includes(role)&&filled.recruitKind==='transfer'&&filled.formerSchool&&!body.includes(filled.formerSchool))body+=' Previously at '+filled.formerSchool+'.';
-   }body=socialDisplayText(conferenceGrammar(body.replace(/\b(Jr|Sr|St)\.\.(?=\s|$)/g,'$1.')));return capitalizeSentences(style?finishPersonalText(body,style):body);
+   }body=proofreadNewText(socialDisplayText(conferenceGrammar(body.replace(/\b(Jr|Sr|St)\.\.(?=\s|$)/g,'$1.'))));return capitalizeSentences(style?finishPersonalText(body,style):body);
   };
   const renderKey=createHash('sha256').update(JSON.stringify({family,values:filled,handle:account.handle,style})).digest('hex');
   const oldStory=sameStories.get(id),baseOld=oldStory?.rawBody?{...oldStory,body:oldStory.rawBody}:oldStory,oldEvent=publishedEvents.get(e.id),preservePublished=oldStory&&oldEvent&&unchangedPublishedFacts(oldEvent.facts,e.facts);
@@ -213,7 +213,7 @@ function renderPass(s,events,{authors={},history=[],sameWeek=null,onTemplates=nu
    const g=games.get(f.gameId);if(!g||final(g))continue;Object.assign(v,{home:g.homeName??teams.get(g.home)?.name,away:g.awayName??teams.get(g.away)?.name});add(e,f.pickem?'model.pickem':'model.line',v,{role:'model'});
   }else if(e.category==='holiday'){
    const own=teams.get(s.userTeamIndex),seed=hash(e.id+'|calendar-voice'),roster=s.players.filter(p=>p.team===own?.id&&p.injury==='Uninjured').sort((a,b)=>a.id.localeCompare(b.id)),role=seed%4===0?'official':seed%4===1&&roster.length?'player':'fan',person=role==='player'?roster[seed%roster.length]:null;
-   add(e,f.calendarKey?'calendar.'+f.calendarKey:'fan.holiday',v,{role,team:own,player:person});
+   add(e,f.calendarKey?'calendar.'+f.calendarKey:'fan.holiday',v,{role,team:own,player:person,important:!!f.calendarKey});
   }
   else if(e.category==='analytics'){
    let family;

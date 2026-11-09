@@ -1,5 +1,6 @@
 import {createHash} from 'node:crypto';
 import {normalizeDynasty} from './normalize_dynasty.mjs';
+import {sameLeague} from './league_identity.mjs';
 
 export async function readRuntime(raw){
   if(raw.format!==1||raw.sourceKind!=='runtime'||!raw.records)throw Error('Invalid runtime capture');
@@ -13,7 +14,7 @@ export async function readRuntime(raw){
   if(!flow?.IsStageActive||flow.IsStageAdvancing)throw Error('Dynasty stage is inactive or advancing');
   const snapshot=await normalizeDynasty({records,resolve,array,arraySlots},{source:'runtime',sha256:'0'.repeat(64),sourceKind:'runtime'});
   const analytics=raw.playerAnalytics;
-  if(analytics?.format===1&&analytics.leagueId===snapshot.leagueId&&analytics.year===snapshot.season.CurrentYear&&analytics.season===snapshot.season.CurrentSeasonYear&&typeof analytics.modelVersion==='string'&&Array.isArray(analytics.weekly)&&Array.isArray(analytics.seasonRows))snapshot.playerAnalytics=analytics;
+  if(analytics?.format===1&&sameLeague(analytics.leagueId,snapshot.leagueId)&&analytics.year===snapshot.season.CurrentYear&&analytics.season===snapshot.season.CurrentSeasonYear&&typeof analytics.modelVersion==='string'&&Array.isArray(analytics.weekly)&&Array.isArray(analytics.seasonRows))snapshot.playerAnalytics=analytics;
   snapshot.source=`runtime:${snapshot.leagueId}:${snapshot.userTeamIndex}`;
   // Content hash excludes pointers, schema internals, and unconsumed game fields.
   snapshot.sha256=createHash('sha256').update(JSON.stringify({...snapshot,sha256:undefined})).digest('hex');

@@ -669,7 +669,7 @@ void* infoVt[]={reinterpret_cast<void*>(unmapped),reinterpret_cast<void*>(infoBo
 bool runPreflight();
 const char* socialDestination(){return socialEnabled()&&uiReady&&feedReady()&&newsLayoutUsable()&&ensureNewsModel()?"NEWS":"DO_NOTHING";}
 void __fastcall navInfoHook(void* self,void* arg,void* out){Guard guard;auto name=argument(arg);if(!disabled&&name=="PLAYER_ANALYTICS"){
-    auto bridge=analyticsmenu::resolve();const bool ready=analyticsmenu::admitted&&bridge&&bridge->available();Alias alias{aliasVt,ready?"ROSTER":"DO_NOTHING"};navInfo(self,&alias,out);if(ready)objectText(out,"Id","PLAYER_ANALYTICS");return;}
+    auto bridge=analyticsmenu::resolve();const bool ready=analyticsmenu::admitted&&bridge&&bridge->available();Alias alias{aliasVt,ready?"ROSTER":"DO_NOTHING"};navInfo(self,&alias,out);if(ready){objectText(out,"Id","PLAYER_ANALYTICS");objectText(out,"Title","Player Analytics");}return;}
     if(!disabled&&name=="NEWS_MENU"){const auto destination=socialDestination();Alias alias{aliasVt,destination};InfoProxy proxy{infoVt,out};navInfo(self,&alias,&proxy);if(strcmp(destination,"NEWS")==0)objectText(out,"Id","NEWS_MENU");}else navInfo(self,arg,out);
 #ifdef SOCIAL_PREFLIGHT_ONLY
     if(!disabled&&uiReady&&name=="HEISMAN_WATCH"&&!preflightAttempted.exchange(true))runPreflight();

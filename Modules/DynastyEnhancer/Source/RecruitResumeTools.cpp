@@ -1,4 +1,5 @@
 #include "RecruitResumeSource.h"
+#include "RecruitResumeCaptureFields.h"
 #include <fstream>
 #include <iostream>
 using namespace recruitingfog::resume;

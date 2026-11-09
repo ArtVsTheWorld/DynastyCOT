@@ -45,6 +45,15 @@ inline std::string displayPosition(const std::string& position){
     if(position=="ROLB")return "WILL";
     return position;
 }
+inline std::string weekLabel(int week,const std::string& type){
+    if(week==SeasonWeek)return "Season";
+    if(type=="RegularSeason")return "Week "+std::to_string(week);
+    if(type=="BowlSeason1")return "Bowl / Playoff Round 1";
+    if(type=="BowlSeason2")return "Bowl / Playoff Round 2";
+    if(type=="BowlSeason3")return "Playoff Semifinals";
+    if(type=="NationalChampionship")return "National Championship";
+    return "Postseason Week "+std::to_string(week);
+}
 inline int positionRank(const std::string& position){
     const auto label=displayPosition(position);
     constexpr const char* order[]={"QB","HB","FB","WR","TE","LT","LG","C","RG","RT","LEDG","REDG","DT","SAM","MIKE","WILL","CB","FS","SS","K","P"};

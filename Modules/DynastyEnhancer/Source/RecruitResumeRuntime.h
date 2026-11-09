@@ -1,12 +1,13 @@
 #pragma once
-#define RECRUIT_RESUME_CAPTURE
 #include "LiveTables.h"
+#include "RecruitResumeCaptureFields.h"
 #include "RecruitResumeSource.h"
 #include <atomic>
 namespace recruitingfog::resume {
 struct Published {dynasty::live::SessionBinding binding;NativeClass data;uint64_t capturedAt=0;bool transfers=false;};
 class Cache {
     std::shared_ptr<const Published> published;std::atomic<bool> requested{true};uint64_t nextAttempt=0;
+    std::string lastFailure;unsigned failures=0;dynasty::live::SessionBinding attemptedBinding{};
 public:
     void request(){requested=true;}
     template<class Read>std::shared_ptr<const Published> current(uintptr_t image,Read read){
@@ -22,22 +23,38 @@ public:
         requested=true;return {};
     }
     template<class Read>Json tick(uintptr_t image,const std::filesystem::path& folder,Read read){
-        if(GetTickCount64()<nextAttempt)return nullptr;
         auto q=[&](uintptr_t address){uintptr_t v=0;if(!read(address,&v,8))throw std::runtime_error("Dynasty ownership unavailable");return v;};
         dynasty::live::SessionBinding binding;
         try{binding=dynasty::live::activeSession(image,q);}catch(...){std::atomic_store(&published,std::shared_ptr<const Published>{});requested=true;nextAttempt=GetTickCount64()+1000;return nullptr;}
+        if(!(binding==attemptedBinding)){lastFailure.clear();failures=0;attemptedBinding=binding;nextAttempt=0;}
+        if(GetTickCount64()<nextAttempt)return nullptr;
         auto existing=std::atomic_load(&published);if(existing&&existing->binding==binding&&!requested.exchange(false))return nullptr;
         requested=false;nextAttempt=GetTickCount64()+2000;
-        const auto began=GetTickCount64();auto raw=dynasty::live::Capture(image).run();auto data=parseNativeClass(raw);persistClass(data,folder);
+        const auto began=GetTickCount64();
+        try{
+        // Explicit selectors are independent of include order with Analytics.
+        auto roots=[](const std::string& name){return name=="SeasonInfo"||name=="Franchise"||name=="FranchiseServer_CareerFlow"||name=="Recruit"||name=="Team";};
+        auto raw=dynasty::live::Capture(image,GetCurrentProcess(),dynasty::live::resumeCaptureFields,roots).run();auto data=parseNativeClass(raw);persistClass(data,folder);
         if(!(dynasty::live::activeSession(image,q)==binding))throw std::runtime_error("Dynasty changed while preparing resume cache");
         auto value=std::make_shared<Published>();value->binding=binding;value->data=std::move(data);value->capturedAt=GetTickCount64();for(const auto& [id,e]:value->data.entries){(void)id;if(!e.highSchool&&!e.juniorCollege)value->transfers=true;}size_t hs=0;for(const auto& [id,e]:value->data.entries){(void)id;if(e.highSchool)++hs;}
         std::atomic_store(&published,std::shared_ptr<const Published>(value));requested=false;
-        return {{"event","recruit_resume_cache_ready"},{"highSchoolProspects",hs},{"records",raw.at("records").size()},{"ms",GetTickCount64()-began},{"league",value->data.league},{"season",value->data.season}};
+        lastFailure.clear();failures=0;
+        return {{"event","recruit_resume_cache_ready"},{"highSchoolProspects",hs},{"unavailableProspects",value->data.unavailable.size()},{"records",raw.at("records").size()},{"ms",GetTickCount64()-began},{"league",value->data.league},{"season",value->data.season}};
+        }catch(const std::exception& error){
+            const bool repeated=lastFailure==error.what();lastFailure=error.what();failures=repeated?(std::min)(failures+1,5u):1u;
+            nextAttempt=GetTickCount64()+(std::min)(60000ull,2000ull<<failures);requested=true;
+            // Log the first error; identical failures back off without log spam.
+            if(!repeated)throw;return nullptr;
+        }
     }
     std::string compose(const std::shared_ptr<const Published>& cache,NotesProspect& publicNotes,double rawId,const std::string& first,const std::string& last,bool& loading){
         loading=false;const NativeEntry* found=nullptr;
         if(cache&&rawId>=0&&rawId<=4294967295.0&&std::floor(rawId)==rawId){auto it=cache->data.entries.find(static_cast<uint32_t>(rawId));if(it!=cache->data.entries.end()&&it->second.first==first&&it->second.last==last)found=&it->second;}
-        if(!found){request();loading=true;return "RECRUIT BACKGROUND\nPreparing background report...\n\n"+scoutingSection(publicNotes);}
+        if(!found){
+            if(cache&&rawId>=0&&rawId<=4294967295.0&&std::floor(rawId)==rawId){const auto missing=cache->data.unavailable.find(static_cast<uint32_t>(rawId));
+                if(missing!=cache->data.unavailable.end()&&missing->second==std::make_pair(first,last))return "RECRUIT BACKGROUND\nBackground information unavailable.\n\n"+scoutingSection(publicNotes);}
+            request();loading=true;return "RECRUIT BACKGROUND\nPreparing background report...\n\n"+scoutingSection(publicNotes);
+        }
         auto notes=publicNotes;
         notes.identity=found->identity;
         if(found->juniorCollege&&!found->classYear.empty())publicNotes.classification=found->saved.at("competitionClass").get<std::string>()+" ("+found->classYear+")";

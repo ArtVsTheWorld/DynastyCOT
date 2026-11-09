@@ -48,13 +48,13 @@
     },
     {
       "path": "Modules/DynastyEnhancer/Source/AnalyticsNative.h",
-      "sha256": "e3dd5a4468e8ac99d04f01ea47584861ffa71d0180fbc19fd74548bae7145789",
-      "reason": "0.1.14: released native production and position-relative grades with prestige uncertainty; same-model optional PFF publications and preserved history"
+      "sha256": "4f633a1711db49e5851ff866a61f8fc83c0c6f1b168de4cce1a6c51bff855a51",
+      "reason": "0.1.16 bounded season-review fixes and source/fixture verification; retain native scopes, fingerprints, published identities/history, four-module selection and helper verification."
     },
     {
       "path": "Modules/DynastyEnhancer/Source/AnalyticsPage.h",
-      "sha256": "d39e971760c74af313baeda5bc18a8f8db5034f782d577211cd4bc067104e1f4",
-      "reason": "0.1.14: released native production and position-relative grades with prestige uncertainty; same-model optional PFF publications and preserved history"
+      "sha256": "e9b8bf856acc4bd372c555220ab4fc541caf431696868d9fb2624e4fa17be69d",
+      "reason": "0.1.16 bounded season-review fixes and source/fixture verification; retain native scopes, fingerprints, published identities/history, four-module selection and helper verification."
     },
     {
       "path": "Modules/DynastyEnhancer/Source/CurrencyBudgetUiPrograms.h",
@@ -87,6 +87,11 @@
       "reason": "Retain prior COT integration; 0.1.6 Beyond the Field: bounded content/selection/voices, native paging, persistent modeled recruit records, supported calendar/draft reference, exact AIO Notes/colors and numeric-preserving money redraw adapters."
     },
     {
+      "path": "Modules/DynastyEnhancer/Source/DraftOvrUiPrograms.h",
+      "sha256": "d3faf0d543dfe6747baa95a19fcecd6cea3fc2df55a1532f04d138285d31cea2",
+      "reason": "0.1.16 bounded season-review fixes and source/fixture verification; retain native scopes, fingerprints, published identities/history, four-module selection and helper verification."
+    },
+    {
       "path": "Modules/DynastyEnhancer/Source/EnhancementOptions.h",
       "sha256": "7546a6d58d62ad719e5a1fe630ea4a60c81d476cd8e5263448aed5386716ef13",
       "reason": "COT 0.1.3: independent Weekly Advance adapters with exact loader-pointer normalization, creation-page per-Dynasty options, requested defaults and fitted dollar prefixes"
@@ -113,8 +118,8 @@
     },
     {
       "path": "Modules/DynastyEnhancer/Source/FogGapUiPrograms.h",
-      "sha256": "9fa4c4d504d9bd3e02d139ad6b1284ea64ffea73136ea31f1b3085065da645cd",
-      "reason": "COT 0.1.5 feedback: native focus colors, exact AIO shared overview; separate visitor demand/tickets, deficit bed, scoring audio priority and recorded-TD inset recovery. Workspace only."
+      "sha256": "ebc6211f22ea278dea102e78bfaf26f417bca8387aafc1e35f529994673d9968",
+      "reason": "0.1.16 bounded season-review fixes and source/fixture verification; retain native scopes, fingerprints, published identities/history, four-module selection and helper verification."
     },
     {
       "path": "Modules/DynastyEnhancer/Source/LiveTables.h",
@@ -133,8 +138,8 @@
     },
     {
       "path": "Modules/DynastyEnhancer/Source/NativeSocialMedia.cpp",
-      "sha256": "74a496a0d2b438d37f9da2874c61ae37b4d33c57b0f713fb7c880cbc71a14443",
-      "reason": "RC013 native Analytics roster-card/action/return, delayed week visibility, safe filter transitions, isolated full-card fog adapters, glyph repair, installer footer and winning visitor departures"
+      "sha256": "9338f9d36200129932ff99a0c47469a320e298787c1444da12ea2dc922b21197",
+      "reason": "0.1.16 bounded season-review fixes and source/fixture verification; retain native scopes, fingerprints, published identities/history, four-module selection and helper verification."
     },
     {
       "path": "Modules/DynastyEnhancer/Source/PlayerBlueprintUiPrograms.h",
@@ -187,9 +192,24 @@
       "reason": "RC013 native Analytics roster-card/action/return, delayed week visibility, safe filter transitions, isolated full-card fog adapters, glyph repair, installer footer and winning visitor departures"
     },
     {
+      "path": "Modules/DynastyEnhancer/Source/RecruitResumeRuntime.h",
+      "sha256": "3e4a9b1a78919202e73a28e858f92bed174e6642abcf7cac13aa03959305f847",
+      "reason": "0.1.16 bounded season-review fixes and source/fixture verification; retain native scopes, fingerprints, published identities/history, four-module selection and helper verification."
+    },
+    {
+      "path": "Modules/DynastyEnhancer/Source/RecruitResumeSource.h",
+      "sha256": "d04719afa4930b91fefe06c8acf6229c4e577c2d802911695f1e835d3f921faa",
+      "reason": "0.1.16 bounded season-review fixes and source/fixture verification; retain native scopes, fingerprints, published identities/history, four-module selection and helper verification."
+    },
+    {
+      "path": "Modules/DynastyEnhancer/Source/RecruitResumeTools.cpp",
+      "sha256": "cdf4baa0cd44084223f3972d48c68e94beee6c2a56273df447f9f4dc6410e355",
+      "reason": "0.1.16 bounded season-review fixes and source/fixture verification; retain native scopes, fingerprints, published identities/history, four-module selection and helper verification."
+    },
+    {
       "path": "Modules/DynastyEnhancer/Source/RecruitingFog.cpp",
-      "sha256": "46579c1bd933746fa6055c96177f4c9988cb78b65dbaeb6384682473fa29238d",
-      "reason": "RC013 native Analytics roster-card/action/return, delayed week visibility, safe filter transitions, isolated full-card fog adapters, glyph repair, installer footer and winning visitor departures"
+      "sha256": "d303f3270192fd25c28a85065954fa9c9c49a0cc98a6dd6e95054e69eeb24992",
+      "reason": "0.1.16 bounded season-review fixes and source/fixture verification; retain native scopes, fingerprints, published identities/history, four-module selection and helper verification."
     },
     {
       "path": "Modules/DynastyEnhancer/Source/RuntimeFeed.h",
@@ -223,8 +243,13 @@
     },
     {
       "path": "Modules/DynastyEnhancer/Tests/NativeSocialMediaTests.cpp",
-      "sha256": "2ed208bdeec0290438475d6ec3eb3a51c02a3174481d67a98692f69db9a0dab9",
-      "reason": "0.1.15: reviewed PFF editorial pack, verified position boards and weekly grade honors; National Social capacity 300"
+      "sha256": "3ba1c18140d47352c028f86160ab304141c868ab03d8af309540b4d180fdc88e",
+      "reason": "0.1.16 bounded season-review fixes and source/fixture verification; retain native scopes, fingerprints, published identities/history, four-module selection and helper verification."
+    },
+    {
+      "path": "Modules/DynastyEnhancer/Tests/RecruitResumeExpansionTests.h",
+      "sha256": "ffc9494d5eb2d2fcb279175ae018119134aa2f65344177b9094dd9b218d5e797",
+      "reason": "0.1.16 bounded season-review fixes and source/fixture verification; retain native scopes, fingerprints, published identities/history, four-module selection and helper verification."
     },
     {
       "path": "Modules/DynastyEnhancer/Tests/RecruitingFogTests.cpp",
@@ -282,6 +307,11 @@
       "reason": "COT 0.1.3: independent Weekly Advance adapters with exact loader-pointer normalization, creation-page per-Dynasty options, requested defaults and fitted dollar prefixes"
     },
     {
+      "path": "Modules/DynastyEnhancer/Tests/draft_results_frame_tests.cpp",
+      "sha256": "da2bb2a0bb56fd34ce527b467ee3f84380dbd3b532bf7a712d228bcef5d7f8fb",
+      "reason": "0.1.16 bounded season-review fixes and source/fixture verification; retain native scopes, fingerprints, published identities/history, four-module selection and helper verification."
+    },
+    {
       "path": "Modules/DynastyEnhancer/Tests/editorial_selection.test.mjs",
       "sha256": "a4a1c572075fb149a9f11fd1b1483589521cd3354fb739ef189440f67971476b",
       "reason": "0.1.7: source-level weekly routine budget, complete continuous scope lists, concise native sidebar and header presentation."
@@ -303,8 +333,8 @@
     },
     {
       "path": "Modules/DynastyEnhancer/Tests/fog_gap_ui_test.py",
-      "sha256": "635d4398af9c764921452ddb17c84bcf859f0f0318d66149a94f83f856fac3aa",
-      "reason": "COT 0.1.5 feedback: native focus colors, exact AIO shared overview; separate visitor demand/tickets, deficit bed, scoring audio priority and recorded-TD inset recovery. Workspace only."
+      "sha256": "c321fae2b237f19ad31a083fc6aa8e3461225847493deaea12bd768a96cf6a05",
+      "reason": "0.1.16 bounded season-review fixes and source/fixture verification; retain native scopes, fingerprints, published identities/history, four-module selection and helper verification."
     },
     {
       "path": "Modules/DynastyEnhancer/Tests/independent_grade_modes_test.py",
@@ -382,9 +412,14 @@
       "reason": "Retain prior COT integration; 0.1.6 Beyond the Field: bounded content/selection/voices, native paging, persistent modeled recruit records, supported calendar/draft reference, exact AIO Notes/colors and numeric-preserving money redraw adapters."
     },
     {
+      "path": "Modules/DynastyEnhancer/Tools/build_draft_ovr_ui.py",
+      "sha256": "49e5f7e62cb54d441d31323e8891fa85663fc041acb24c8baa6b5af14c9d7a6f",
+      "reason": "0.1.16 bounded season-review fixes and source/fixture verification; retain native scopes, fingerprints, published identities/history, four-module selection and helper verification."
+    },
+    {
       "path": "Modules/DynastyEnhancer/Tools/build_fog_gap_ui.py",
-      "sha256": "52cf66523b2fbc07dae9e3efe3144e7e3fdcc5c3625bec03b40c432d49e6d957",
-      "reason": "COT 0.1.5 feedback: native focus colors, exact AIO shared overview; separate visitor demand/tickets, deficit bed, scoring audio priority and recorded-TD inset recovery. Workspace only."
+      "sha256": "a87b7ddd6f46b778046138d369ad93fdecdf98211f49a9079991a0d437765aa4",
+      "reason": "0.1.16 bounded season-review fixes and source/fixture verification; retain native scopes, fingerprints, published identities/history, four-module selection and helper verification."
     },
     {
       "path": "Modules/DynastyEnhancer/Tools/build_player_card_ui.py",
@@ -395,6 +430,11 @@
       "path": "Modules/DynastyEnhancer/Tools/build_recruit_notes_ui.py",
       "sha256": "3ecdc39080e07e77ca51608f0e4c38b660e318717d4be7b6ebfe4c903968baf0",
       "reason": "RC013 native Analytics roster-card/action/return, delayed week visibility, safe filter transitions, isolated full-card fog adapters, glyph repair, installer footer and winning visitor departures"
+    },
+    {
+      "path": "Modules/DynastyEnhancer/Tools/conversation_topics.mjs",
+      "sha256": "37b144e700bb5511813831075e49fb2380654b1db38e5ee026b704126f5f0719",
+      "reason": "0.1.16 bounded season-review fixes and source/fixture verification; retain native scopes, fingerprints, published identities/history, four-module selection and helper verification."
     },
     {
       "path": "Modules/DynastyEnhancer/Tools/draft_results.mjs",
@@ -413,8 +453,8 @@
     },
     {
       "path": "Modules/DynastyEnhancer/Tools/feed_selection.mjs",
-      "sha256": "61d47f51fc160e05ba19d6eef892147045a06035a3824c2ff6cdf515bab4d84c",
-      "reason": "National 250-card native selection and compact counters; integrate production Analytics through existing COT hook owners and active Dynasty capture"
+      "sha256": "32e4b8c7fb3fd90c56b35c1f797e3c8fbeb224218e69cc767acb2c315e9b977e",
+      "reason": "0.1.16 bounded season-review fixes and source/fixture verification; retain native scopes, fingerprints, published identities/history, four-module selection and helper verification."
     },
     {
       "path": "Modules/DynastyEnhancer/Tools/history_store.mjs",
@@ -433,18 +473,18 @@
     },
     {
       "path": "Modules/DynastyEnhancer/Tools/normalize_dynasty.mjs",
-      "sha256": "9ec7fdc6c50b64c5790da9509df205bea13e31cd797351360182766c5a21be69",
-      "reason": "0.1.15: reviewed PFF editorial pack, verified position boards and weekly grade honors; National Social capacity 300"
+      "sha256": "e4e3966ec84e99640f3c4007629ad09e2d5263e569aaa02105676656f0e47781",
+      "reason": "0.1.16 bounded season-review fixes and source/fixture verification; retain native scopes, fingerprints, published identities/history, four-module selection and helper verification."
     },
     {
       "path": "Modules/DynastyEnhancer/Tools/prose_cleanup.mjs",
-      "sha256": "045d119ce725c59456878cddb627f13760b4dc10c5869391c45e88cfc7f8a969",
-      "reason": "RC013 native Analytics roster-card/action/return, delayed week visibility, safe filter transitions, isolated full-card fog adapters, glyph repair, installer footer and winning visitor departures"
+      "sha256": "eb68633bdfb651c5bf32a85c1d8a21fc4bfd8f817902b9fb9af03c4b2f34cabb",
+      "reason": "0.1.16 bounded season-review fixes and source/fixture verification; retain native scopes, fingerprints, published identities/history, four-module selection and helper verification."
     },
     {
       "path": "Modules/DynastyEnhancer/Tools/read_runtime.mjs",
-      "sha256": "c0695e64a6e56cb0d9d2c2437fb049a3727328f4683a3fa27341a26a2a9be548",
-      "reason": "0.1.14: released native production and position-relative grades with prestige uncertainty; same-model optional PFF publications and preserved history"
+      "sha256": "3fc3a3fe86915e8563fdf7f58ade81665461c67b26dbf1ffc92ef5ad91afaebb",
+      "reason": "0.1.16 bounded season-review fixes and source/fixture verification; retain native scopes, fingerprints, published identities/history, four-module selection and helper verification."
     },
     {
       "path": "Modules/DynastyEnhancer/Tools/runtime_archive.mjs",
@@ -483,13 +523,13 @@
     },
     {
       "path": "Modules/DynastyEnhancer/Tools/story_renderer.mjs",
-      "sha256": "5ecc101d508225c7b6f37bad70532980b21eb43b03d3c3fdcbcd3f54c0b7e994",
-      "reason": "RC013 native Analytics roster-card/action/return, delayed week visibility, safe filter transitions, isolated full-card fog adapters, glyph repair, installer footer and winning visitor departures"
+      "sha256": "96e91e8138ee976f0d49dcf482244fb6ef4b81e4568c06d5e46801d83c8909ec",
+      "reason": "0.1.16 bounded season-review fixes and source/fixture verification; retain native scopes, fingerprints, published identities/history, four-module selection and helper verification."
     },
     {
       "path": "Modules/DynastyEnhancer/Tools/story_templates.mjs",
-      "sha256": "e2feae213d0785238abed2b0b6af1bd8e5f214284fae1f6fcc62a771281657f5",
-      "reason": "0.1.14: released native production and position-relative grades with prestige uncertainty; same-model optional PFF publications and preserved history"
+      "sha256": "dee18ebfa9547640d81e55455336d9eed4952f0a1d0a0e67c9aef758edb31d3d",
+      "reason": "0.1.16 bounded season-review fixes and source/fixture verification; retain native scopes, fingerprints, published identities/history, four-module selection and helper verification."
     },
     {
       "path": "Modules/DynastyEnhancer/Tools/voice_style.mjs",
@@ -505,6 +545,11 @@
       "path": "Modules/DynastyEnhancer/Tools/world_events.mjs",
       "sha256": "cec5aa2c4d7b441431320789d626d1d6941209a85f91437bfcc5c2306c715784",
       "reason": "Retain prior COT integration; 0.1.6 Beyond the Field: bounded content/selection/voices, native paging, persistent modeled recruit records, supported calendar/draft reference, exact AIO Notes/colors and numeric-preserving money redraw adapters."
+    },
+    {
+      "path": "Modules/DynastyEnhancer/docs/draft-ovr-native.md",
+      "sha256": "5146e1d61492a7aee5b754f7cd0a6a37b311ecebe9514ea5480cd4d0bdb0e4a6",
+      "reason": "0.1.16 bounded season-review fixes and source/fixture verification; retain native scopes, fingerprints, published identities/history, four-module selection and helper verification."
     },
     {
       "path": "Modules/ExtraDynastySettings/.gitattributes",

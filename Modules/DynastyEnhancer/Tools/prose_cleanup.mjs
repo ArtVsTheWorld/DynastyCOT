@@ -2,6 +2,14 @@
 // The native News font shows U+2192 as tofu. Normalize only that confirmed
 // unsupported symbol; Unicode names and native punctuation keep their bytes.
 export function socialDisplayText(body){return body.replace(/[ \t]*\u2192[ \t]*/g,' to ');}
+// Render-time agreement: templates can be reused with zero, one or many.
+// Run only while choosing NEW wording, never over a published archive.
+export function proofreadNewText(body){
+ const singular={points:'point',yards:'yard',touchdowns:'touchdown',interceptions:'interception',sacks:'sack',wins:'win',losses:'loss',games:'game',attempts:'attempt',catches:'catch',receptions:'reception',tackles:'tackle',commits:'commit',players:'player',spots:'spot',votes:'vote',weeks:'week',seasons:'season',punts:'punt',snaps:'snap'};
+ return body.replace(/(?<![\d.,–-])\b1 (points|yards|touchdowns|interceptions|sacks|wins|losses|games|attempts|catches|receptions|tackles|commits|players|spots|votes|weeks|seasons|punts|snaps)\b/gi,(_,word)=>'1 '+singular[word.toLowerCase()])
+  .replace(/\b([Aa]) (\$?(?:8\d*|11|18)(?:[.,]\d+)?[KM]?)(?=[\s–-])/g,(_,article,value)=>(article==='A'?'An':'an')+' '+value)
+  .replace(/\b(rankings) has\b/gi,'$1 have');
+}
 export function capitalizeSentences(body){
  return body.replace(/^((?:@[A-Za-z0-9_.]+\s+)+)([a-z])/,(_,mentions,letter)=>mentions+letter.toUpperCase()).replace(/(^|\n|[!?]\s+|\.\s+)(["'“‘(]*)([a-z])/g,(all,before,quote,letter,offset,source)=>{
   if(before.startsWith('.')&&/(?:\b(?:vs|No|Mr|Mrs|Dr|Jr|Sr|St|i\.e|e\.g)|\b[A-Z])\.$/i.test(source.slice(0,offset+1)))return all;

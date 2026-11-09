@@ -1,0 +1,301 @@
+{
+  "format": 1,
+  "revision": "season-review-0.1.16",
+  "newVariants": 0,
+  "overrides": [
+    {
+      "id": "analysis.player.passing-yards-leader.variety.2",
+      "family": "analysis.player.passing-yards-leader",
+      "originalBody": "The passing-yardage list in {field} starts with {school}'s {playerName}: {value} {metricLabel}, which {lead} the group.",
+      "body": "The passing-yardage list has {school}'s {playerName} at the front. He {lead} {field} with {value} {metricLabel}."
+    },
+    {
+      "id": "analysis.player.passing-yards-leader.variety.6",
+      "family": "analysis.player.passing-yards-leader",
+      "originalBody": "At {school}, the name atop the passing list is {playerName}. His {value} {metricLabel} {lead} {field}.",
+      "body": "At {school}, the name atop the passing list is {playerName}. With {value} {metricLabel}, he {lead} {field}."
+    },
+    {
+      "id": "analysis.player.passing-yards-leader.variety.9",
+      "family": "analysis.player.passing-yards-leader",
+      "originalBody": "If you're checking passing leaders in {field}, start with {playerName} at {school}: {value} {metricLabel}. He {lead}.",
+      "body": "If you're checking passing leaders in {field}, start with {playerName} at {school}: {value} {metricLabel}."
+    },
+    {
+      "id": "analysis.player.passing-td-leader.variety.5",
+      "family": "analysis.player.passing-td-leader",
+      "originalBody": "A passing touchdown list with {playerName} at the front: {value} {metricLabel} for {school}, {lead} {field}.",
+      "body": "A passing touchdown list with {playerName} at the front: {value} {metricLabel} for {school}. He {lead} {field}."
+    },
+    {
+      "id": "analysis.player.passing-td-leader.variety.8",
+      "family": "analysis.player.passing-td-leader",
+      "originalBody": "When the conversation turns to passing touchdowns in {field}, {playerName} of {school} {lead} with {value} {metricLabel}.",
+      "body": "Passing touchdowns keep {playerName} of {school} on this leaderboard: he {lead} {field} with {value} {metricLabel}."
+    },
+    {
+      "id": "analysis.player.passing-td-leader.variety.9",
+      "family": "analysis.player.passing-td-leader",
+      "originalBody": "For {school}'s {playerName}, it's {value} {metricLabel} and the lead in {field}: he {lead}.",
+      "body": "For {school}'s {playerName}, the total is {value} {metricLabel}. He {lead} {field}."
+    },
+    {
+      "id": "analysis.player.rushing-yards-leader.variety.2",
+      "family": "analysis.player.rushing-yards-leader",
+      "originalBody": "The rushing leaderboard in {field} has {school}'s {playerName} out front: {value} {metricLabel}. He {lead}.",
+      "body": "The rushing leaderboard in {field} has {school}'s {playerName} out front: {value} {metricLabel}."
+    },
+    {
+      "id": "analysis.player.rushing-yards-leader.variety.9",
+      "family": "analysis.player.rushing-yards-leader",
+      "originalBody": "Up front in {field}'s rushing totals: {playerName} from {school}, {value} {metricLabel}. He {lead}.",
+      "body": "Up front in {field}'s rushing totals: {playerName} from {school}, {value} {metricLabel}."
+    },
+    {
+      "id": "analysis.player.receiving-yards-leader.variety.2",
+      "family": "analysis.player.receiving-yards-leader",
+      "originalBody": "Receiving yards in {field}: {playerName} of {school} {lead} with {value} {metricLabel}.",
+      "body": "Receiving yards: {playerName} of {school} {lead} {field} with {value} {metricLabel}."
+    },
+    {
+      "id": "analysis.player.receiving-yards-leader.variety.10",
+      "family": "analysis.player.receiving-yards-leader",
+      "originalBody": "Atop the {field} receiving list is {playerName} from {school}. His {value} {metricLabel} {lead}.",
+      "body": "Atop the {field} receiving list is {playerName} from {school}. The total: {value} {metricLabel}."
+    },
+    {
+      "id": "analysis.player.sacks-leader.variety.4",
+      "family": "analysis.player.sacks-leader",
+      "originalBody": "Sack leaders in {field}: {playerName} from {school} {lead} with {value} {metricLabel}.",
+      "body": "Sack leaders: {playerName} from {school} {lead} {field} with {value} {metricLabel}."
+    },
+    {
+      "id": "analysis.player.sacks-leader.variety.5",
+      "family": "analysis.player.sacks-leader",
+      "originalBody": "Put {playerName} on the pass-rush watch list. His {value} {metricLabel} for {school} {lead} {field}.",
+      "body": "Put {playerName} on the pass-rush watch list. With {value} {metricLabel} for {school}, he {lead} {field}."
+    },
+    {
+      "id": "analysis.player.sacks-leader.variety.6",
+      "family": "analysis.player.sacks-leader",
+      "originalBody": "{value} {metricLabel} puts {school}'s {playerName} at the front of {field}: he {lead}.",
+      "body": "On the sack leaderboard: {school}'s {playerName}, {value} {metricLabel}. He {lead} {field}."
+    },
+    {
+      "id": "analysis.player.sacks-leader.variety.8",
+      "family": "analysis.player.sacks-leader",
+      "originalBody": "The pass rush has a name to know in {field}: {school}'s {playerName}, {value} {metricLabel}. He {lead}.",
+      "body": "The pass rush has a name to know in {field}: {school}'s {playerName}, {value} {metricLabel}."
+    },
+    {
+      "id": "analysis.player.sacks-leader.variety.10",
+      "family": "analysis.player.sacks-leader",
+      "originalBody": "In {field}, {playerName} is setting the sack pace for {school}: {value} {metricLabel}. He {lead}.",
+      "body": "In {field}, {playerName} is setting the sack pace for {school}: {value} {metricLabel}."
+    },
+    {
+      "id": "analysis.player.interceptions-leader.variety.2",
+      "family": "analysis.player.interceptions-leader",
+      "originalBody": "The interception leaders in {field} include a name on top: {school}'s {playerName}, {value} {metricLabel}. He {lead}.",
+      "body": "The interception leaders in {field} include a name on top: {school}'s {playerName}, {value} {metricLabel}."
+    },
+    {
+      "id": "analysis.player.interceptions-leader.variety.10",
+      "family": "analysis.player.interceptions-leader",
+      "originalBody": "Among the turnover makers in {field}, {school}'s {playerName} {lead} with {value} {metricLabel}.",
+      "body": "Among the turnover makers, {school}'s {playerName} {lead} {field} with {value} {metricLabel}."
+    },
+    {
+      "id": "world.decommit.reporter.4",
+      "family": "world.decommit",
+      "originalBody": "{playerName} is reopening his recruitment after committing to {oldSchool}. No new destination announced here.",
+      "body": "{playerName} is reopening his recruitment after committing to {oldSchool}."
+    },
+    {
+      "id": "postseason.heisman.eventcopy.2",
+      "family": "postseason.heisman",
+      "originalBody": "{school}'s {playerName} is the Heisman Trophy winner. The Heisman decision is final.",
+      "body": "{school}'s {playerName} is the Heisman Trophy winner."
+    },
+    {
+      "id": "postseason.heisman.eventcopy.4",
+      "family": "postseason.heisman",
+      "originalBody": "{school}'s {playerName} receives the Heisman Trophy. The Heisman decision is final.",
+      "body": "{school}'s {playerName} receives the Heisman Trophy."
+    },
+    {
+      "id": "postseason.heisman.eventcopy.6",
+      "family": "postseason.heisman",
+      "originalBody": "{school}'s {playerName} has won the Heisman. The Heisman decision is final.",
+      "body": "{school}'s {playerName} has won the Heisman."
+    },
+    {
+      "id": "postseason.heisman.eventcopy.8",
+      "family": "postseason.heisman",
+      "originalBody": "{school}'s {playerName} earns the Heisman Trophy. The Heisman decision is final.",
+      "body": "{school}'s {playerName} earns the Heisman Trophy."
+    },
+    {
+      "id": "postseason.heisman.eventcopy.10",
+      "family": "postseason.heisman",
+      "originalBody": "{school}'s {playerName} is awarded the Heisman Trophy. The Heisman decision is final.",
+      "body": "{school}'s {playerName} is awarded the Heisman Trophy."
+    },
+    {
+      "id": "buzz.pick-2.compact.2",
+      "family": "buzz.pick-2",
+      "originalBody": "I said {pick}, and I meant it. {lineContext}",
+      "body": "I'm picking {pick}. {lineContext}"
+    },
+    {
+      "id": "review.title-debate.retrospective.8",
+      "family": "review.title-debate",
+      "originalBody": "{winner} settled the championship against {loser}, {score}. Let's give the teams the full-season evaluation they earned.",
+      "body": "{winner}, national champion. {score} over {loser} in the title game."
+    },
+    {
+      "id": "draft.top-ten.eventcopy.9",
+      "family": "draft.top-ten",
+      "originalBody": "TOP 10: The top-ten selection is {position} {playerName}, {school}. Pick {draftPick} to the {nflTeam}.",
+      "body": "TOP 10: The {nflTeam} select {position} {playerName} from {school} at No. {draftPick}."
+    },
+    {
+      "id": "draft.irrelevant.eventcopy.1",
+      "family": "draft.irrelevant",
+      "originalBody": "MR. IRRELEVANT: The last name called is {position} {playerName} from {school}. The {nflTeam} make pick {draftPick}, the final selection.",
+      "body": "MR. IRRELEVANT: The last name called is {position} {playerName} from {school}. The {nflTeam} make pick {draftPick}."
+    },
+    {
+      "id": "draft.irrelevant.eventcopy.2",
+      "family": "draft.irrelevant",
+      "originalBody": "MR. IRRELEVANT: The final pick is {position} {playerName} from {school}. The {nflTeam} make pick {draftPick}, the final selection.",
+      "body": "MR. IRRELEVANT: The final pick is {position} {playerName} from {school}. The {nflTeam} make pick {draftPick}."
+    },
+    {
+      "id": "draft.irrelevant.eventcopy.3",
+      "family": "draft.irrelevant",
+      "originalBody": "MR. IRRELEVANT: The final selection is {position} {playerName} from {school}. The {nflTeam} make pick {draftPick}, the final selection.",
+      "body": "MR. IRRELEVANT: The final selection is {position} {playerName} from {school}. The {nflTeam} make pick {draftPick}."
+    },
+    {
+      "id": "draft.irrelevant.eventcopy.4",
+      "family": "draft.irrelevant",
+      "originalBody": "MR. IRRELEVANT: The draft ends with {position} {playerName} from {school}. The {nflTeam} make pick {draftPick}, the final selection.",
+      "body": "MR. IRRELEVANT: The draft ends with {position} {playerName} from {school}. The {nflTeam} make pick {draftPick}."
+    },
+    {
+      "id": "draft.irrelevant.eventcopy.5",
+      "family": "draft.irrelevant",
+      "originalBody": "MR. IRRELEVANT: The closing selection is {position} {playerName} from {school}. The {nflTeam} make pick {draftPick}, the final selection.",
+      "body": "MR. IRRELEVANT: The closing selection is {position} {playerName} from {school}. The {nflTeam} make pick {draftPick}."
+    },
+    {
+      "id": "draft.irrelevant.eventcopy.6",
+      "family": "draft.irrelevant",
+      "originalBody": "MR. IRRELEVANT: The last call goes to {position} {playerName} from {school}. The {nflTeam} make pick {draftPick}, the final selection.",
+      "body": "MR. IRRELEVANT: The last call goes to {position} {playerName} from {school}. The {nflTeam} make pick {draftPick}."
+    },
+    {
+      "id": "draft.irrelevant.eventcopy.7",
+      "family": "draft.irrelevant",
+      "originalBody": "MR. IRRELEVANT: The board closes with {position} {playerName} from {school}. The {nflTeam} make pick {draftPick}, the final selection.",
+      "body": "MR. IRRELEVANT: The board closes with {position} {playerName} from {school}. The {nflTeam} make pick {draftPick}."
+    },
+    {
+      "id": "draft.irrelevant.eventcopy.8",
+      "family": "draft.irrelevant",
+      "originalBody": "MR. IRRELEVANT: The last selection is {position} {playerName} from {school}. The {nflTeam} make pick {draftPick}, the final selection.",
+      "body": "MR. IRRELEVANT: The last selection is {position} {playerName} from {school}. The {nflTeam} make pick {draftPick}."
+    },
+    {
+      "id": "draft.irrelevant.eventcopy.9",
+      "family": "draft.irrelevant",
+      "originalBody": "MR. IRRELEVANT: The final name off the board is {position} {playerName} from {school}. The {nflTeam} make pick {draftPick}, the final selection.",
+      "body": "MR. IRRELEVANT: The final name off the board is {position} {playerName} from {school}. The {nflTeam} make pick {draftPick}."
+    },
+    {
+      "id": "draft.irrelevant.eventcopy.10",
+      "family": "draft.irrelevant",
+      "originalBody": "MR. IRRELEVANT: The last pick goes to {position} {playerName} from {school}. The {nflTeam} make pick {draftPick}, the final selection.",
+      "body": "MR. IRRELEVANT: The last pick goes to {position} {playerName} from {school}. The {nflTeam} make pick {draftPick}."
+    },
+    {
+      "id": "portal.entrant.recruitcopy.1",
+      "family": "portal.entrant",
+      "originalBody": "{position} {playerName} is in the transfer portal{originDetail}. No new destination is confirmed.",
+      "body": "{position} {playerName} is in the transfer portal{originDetail}."
+    },
+    {
+      "id": "portal.entrant.recruitcopy.2",
+      "family": "portal.entrant",
+      "originalBody": "{position} {playerName} has entered the transfer pool{originDetail}. No new destination is confirmed.",
+      "body": "{position} {playerName} has entered the transfer pool{originDetail}."
+    },
+    {
+      "id": "portal.entrant.recruitcopy.3",
+      "family": "portal.entrant",
+      "originalBody": "{position} {playerName} is listed among portal entrants{originDetail}. No new destination is confirmed.",
+      "body": "{position} {playerName} is listed among portal entrants{originDetail}."
+    },
+    {
+      "id": "portal.entrant.recruitcopy.4",
+      "family": "portal.entrant",
+      "originalBody": "{position} {playerName} is on the transfer-portal list{originDetail}. No new destination is confirmed.",
+      "body": "{position} {playerName} is on the transfer-portal list{originDetail}."
+    },
+    {
+      "id": "portal.entrant.recruitcopy.5",
+      "family": "portal.entrant",
+      "originalBody": "{position} {playerName} is a portal entrant{originDetail}. No new destination is confirmed.",
+      "body": "{position} {playerName} is a portal entrant{originDetail}."
+    },
+    {
+      "id": "portal.entrant.recruitcopy.7",
+      "family": "portal.entrant",
+      "originalBody": "{position} {playerName} is in the pool of transfer recruits{originDetail}. No new destination is confirmed.",
+      "body": "{position} {playerName} is in the pool of transfer recruits{originDetail}."
+    },
+    {
+      "id": "portal.entrant.recruitcopy.8",
+      "family": "portal.entrant",
+      "originalBody": "{position} {playerName} has a transfer-portal entry{originDetail}. No new destination is confirmed.",
+      "body": "{position} {playerName} has a transfer-portal entry{originDetail}."
+    },
+    {
+      "id": "portal.entrant.recruitcopy.9",
+      "family": "portal.entrant",
+      "originalBody": "{position} {playerName} is part of the portal class{originDetail}. No new destination is confirmed.",
+      "body": "{position} {playerName} is part of the portal class{originDetail}."
+    },
+    {
+      "id": "roster.commit.cot104.5f65e3197221cb55",
+      "family": "roster.commit",
+      "originalBody": "What is confirmed: {school} is {playerName}'s choice. No playing-time promise to attach to that.",
+      "body": "{playerName} has chosen {school}. A commitment gives this class a name to build around; signing is still ahead."
+    },
+    {
+      "id": "roster.major.cot104.2f83d5d005445672",
+      "family": "roster.major",
+      "originalBody": "What is confirmed: {school} is 5-star {prospectType}{position} {playerName}'s choice. No playing-time promise to attach to that.",
+      "body": "5-star {prospectType}{position} {playerName} has chosen {school}. That's a major commitment for this class."
+    },
+    {
+      "id": "carry.training.eventcopy.10",
+      "family": "carry.training",
+      "originalBody": "A quieter offseason note: {area} improved for {position} {playerName} at {school} during {period}.",
+      "body": "{position} {playerName} improved {area} at {school} during {period}."
+    },
+    {
+      "id": "carry.departure.eventcopy.2",
+      "family": "carry.departure",
+      "originalBody": "{position} {playerName} is no longer with {school} after {period}. No new destination announced.",
+      "body": "{position} {playerName} is no longer with {school} after {period}."
+    },
+    {
+      "id": "carry.departure-portal.eventcopy.3",
+      "family": "carry.departure-portal",
+      "originalBody": "Portal watch: {school}'s former {position} {playerName} entered after {period}. No new destination yet.",
+      "body": "Portal watch: {school}'s former {position} {playerName} entered after {period}."
+    }
+  ]
+}

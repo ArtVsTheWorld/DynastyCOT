@@ -116,11 +116,11 @@ notesui::Runtime gapCoreUi(gapui::corePrograms()),gapHubUi(gapui::hubPrograms())
 // An overhaul's unrelated screen must not disable the unchanged weekly panel.
 notesui::Runtime gapWeeklyUi(gapui::weeklyPrograms()),gapTopPlayersUi(gapui::topPlayersPrograms());
 notesui::Runtime gapAioTopPlayersUi(gapui::aioTopPlayersPrograms());
-notesui::Runtime draftOvrStrategyUi(draftovrui::strategyPrograms()),draftOvrRowsUi(draftovrui::rowPrograms());
+notesui::Runtime draftOvrStrategyUi(draftovrui::strategyPrograms()),draftOvrCurrentStrategyUi(draftovrui::currentStrategyPrograms()),draftOvrRowsUi(draftovrui::rowPrograms());
 notesui::Runtime aioCurrency0(aiocurrencyui::group0()),aioCurrency1(aiocurrencyui::group1()),aioCurrency2(aiocurrencyui::group2()),aioCurrency3(aiocurrencyui::group3());
 notesui::Runtime aioNotesUi(aiorecruitnotesui::programs());
 notesui::Runtime analyticsRowUi(analyticsactions::hubRowPrograms()),analyticsCurrentRowUi(analyticsactions::currentRowPrograms());
-const std::array<notesui::Runtime*,57> cardUiBanks={&playerControlUi,&playerCardUi,&playerTemplateUi,&playerSkillUi,&playerHubUi,&playerSliderUi,&playerInGameUi,&playerRecruitUi,&playerFormationUi,&playerLegacyOvrUi,&playerNilUi,&playerBlueprintUi,&playerPracticeUi,&playerNilEmbeddedUi,&playerKickerUi,&playerIndividualPanelUi,&playerComparisonPanelUi,&playerImpactPanelUi,&playerLineupPanelUi,&playerTrenchPanelUi,&playerInjuryScreenUi,&currencyIconUi,&currencySlotUi,&currencyCellUi,&gapCoreUi,&gapHubUi,&gapRecruitUi,&gapTeamSelectUi,&draftOvrStrategyUi,&draftOvrRowsUi,&currencyTopbarUi,&currencyRecruitingUi,&currencyBudgetUi,&currencyAnimationUi,&currencyBudgetArtUi,&currencyRecruitDetailUi,&currencyRecruitEditorUi,&aioCurrency0,&aioCurrency1,&aioCurrency2,&aioCurrency3,&playerBlueprintAioUi,&gapWeeklyUi,&gapTopPlayersUi,&gapAioTopPlayersUi,&aioNotesUi,&analyticsMainUi,&analyticsCurrentUi,&analyticsCleanupUi,&analyticsCurrentCleanupUi,&analyticsHintsUi,&playerTeamModuleUi,&analyticsRefreshUi,&analyticsCurrentRefreshUi,&analyticsCurrentHintsUi,&analyticsRowUi,&analyticsCurrentRowUi};
+const std::array<notesui::Runtime*,58> cardUiBanks={&playerControlUi,&playerCardUi,&playerTemplateUi,&playerSkillUi,&playerHubUi,&playerSliderUi,&playerInGameUi,&playerRecruitUi,&playerFormationUi,&playerLegacyOvrUi,&playerNilUi,&playerBlueprintUi,&playerPracticeUi,&playerNilEmbeddedUi,&playerKickerUi,&playerIndividualPanelUi,&playerComparisonPanelUi,&playerImpactPanelUi,&playerLineupPanelUi,&playerTrenchPanelUi,&playerInjuryScreenUi,&currencyIconUi,&currencySlotUi,&currencyCellUi,&gapCoreUi,&gapHubUi,&gapRecruitUi,&gapTeamSelectUi,&draftOvrStrategyUi,&draftOvrCurrentStrategyUi,&draftOvrRowsUi,&currencyTopbarUi,&currencyRecruitingUi,&currencyBudgetUi,&currencyAnimationUi,&currencyBudgetArtUi,&currencyRecruitDetailUi,&currencyRecruitEditorUi,&aioCurrency0,&aioCurrency1,&aioCurrency2,&aioCurrency3,&playerBlueprintAioUi,&gapWeeklyUi,&gapTopPlayersUi,&gapAioTopPlayersUi,&aioNotesUi,&analyticsMainUi,&analyticsCurrentUi,&analyticsCleanupUi,&analyticsCurrentCleanupUi,&analyticsHintsUi,&playerTeamModuleUi,&analyticsRefreshUi,&analyticsCurrentRefreshUi,&analyticsCurrentHintsUi,&analyticsRowUi,&analyticsCurrentRowUi};
 bool cardBankEnabled(size_t bank){const auto selected=enhancements::options();const auto* runtime=cardUiBanks[bank];
     if(runtime==&analyticsMainUi||runtime==&analyticsCurrentUi)return nativeanalytics::opened;
     if(runtime==&analyticsRowUi||runtime==&analyticsCurrentRowUi)return true;
@@ -134,7 +134,7 @@ bool cardBankEnabled(size_t bank){const auto selected=enhancements::options();co
     if(runtime==&currencySlotUi||runtime==&currencyRecruitingUi||runtime==&currencyRecruitDetailUi||runtime==&currencyRecruitEditorUi)return true;
     if(runtime==&currencyIconUi||runtime==&currencyCellUi||runtime==&currencyTopbarUi||runtime==&currencyBudgetUi||runtime==&currencyAnimationUi||runtime==&currencyBudgetArtUi)return selected.dollars;
     if(runtime==&playerSkillUi&&selected.dollars)return true;
-    if(runtime==&draftOvrStrategyUi||runtime==&draftOvrRowsUi)return selected.roster;
+    if(runtime==&draftOvrStrategyUi||runtime==&draftOvrCurrentStrategyUi||runtime==&draftOvrRowsUi)return selected.roster;
     return selected.roster||selected.team||selected.colors;
 }
 std::array<std::atomic<bool>,cardUiBanks.size()> cardUiFailed{};

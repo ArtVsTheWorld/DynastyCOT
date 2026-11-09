@@ -5,9 +5,12 @@ export function canonicalTopic(e){
  return null;
 }
 export function deduplicateConversations(stories,events=[]){
- const eventMap=new Map(events.map(e=>[e.id,e])),kept=new Set(),seen=new Set();
+ const eventMap=new Map(events.map(e=>[e.id,e])),kept=new Set(),seen=new Set(),predictionReplies=new Set();
  for(const p of stories){const topic=p.canonicalTopic??canonicalTopic(eventMap.get(p.eventId)),body=bodyKey(p.body),key=p.replyTo&&topic&&['fan','player','recruit'].includes(p.voice)?'reaction|'+p.handle+'|'+topic:body&&p.handle&&!p.coverageExempt&&p.voice!=='nflDraft'?'text|'+p.handle+'|'+body:null;
-  if(key&&seen.has(key))continue;if(key)seen.add(key);kept.add(p.id);
+  // One account need not repeat the same matchup reaction beneath each desk.
+  // Keep its first real parent; never move a reply to another conversation.
+  const prediction=p.replyTo&&/^buzz\.pick-reply/.test(p.templateFamily??'')?p.handle+'|'+p.thread:null;
+  if(key&&seen.has(key)||prediction&&predictionReplies.has(prediction))continue;if(key)seen.add(key);if(prediction)predictionReplies.add(prediction);kept.add(p.id);
  }
  // Remove descendants when an equivalent parent was rejected; never reparent a reply.
  let changed=true;while(changed){changed=false;for(const p of stories)if(kept.has(p.id)&&p.replyTo&&!kept.has(p.replyTo)){kept.delete(p.id);changed=true;}}

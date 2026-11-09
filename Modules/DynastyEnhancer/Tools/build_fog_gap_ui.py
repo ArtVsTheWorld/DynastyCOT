@@ -241,6 +241,18 @@ def weekly_school_suffix(a):
     text_label(a,3,0,2,0,'weeklyRiskNext','weeklyRiskText')
     a.label('weeklyRiskNext');a.reg(4);a.raw(0x50);a.store(4);a.branch('weeklyRiskLoop',0x99)
     a.label('weeklyRiskDone')
+    # Native Draw puts the "+N more players" explanation in mcDescription.
+    # Bound it to the actual row highlight; retain its text and native colors.
+    path(a,1,'mcDescription');a.store(0);a.missing(0,'weeklyFooterDone')
+    for parts in [('mcHighlight','_width'),('mcHighlight','_x'),('mcDescription','_x')]:
+        path(a,1,*parts);a.raw(0x44);a.string('number');a.raw(0x66);a.branch('weeklyFooterDone',0xB8)
+    path(a,1,'mcHighlight','_width');path(a,1,'mcHighlight','_x');a.raw(0x47)
+    path(a,1,'mcDescription','_x');a.raw(0x0B);a.number(12);a.raw(0x0B);a.store(3)
+    a.reg(3);a.number(0);a.raw(0x67);a.branch('weeklyFooterDone',0xB8)
+    a.empty_object(2);a.reg(2);a.string('resizeWidth');a.reg(3);a.raw(0x4F)
+    a.reg(2);a.string('resize');a.global_object('art_styleguide','Font','RESIZE_SCALEDOWN');a.raw(0x4F)
+    a.reg(2);a.number(1);a.reg(0);a.call('SetExtraInfo')
+    a.label('weeklyFooterDone')
     a.ret()
 
 

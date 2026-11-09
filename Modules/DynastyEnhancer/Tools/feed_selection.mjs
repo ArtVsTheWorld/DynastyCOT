@@ -7,19 +7,30 @@ const order=(a,b)=>b.priority-a.priority||a.id.localeCompare(b.id);
 // Editorial order is independent of flavor engagement. Rotate categories and
 // accounts while preserving major news and deterministic same-edition order.
 export function editorialRoots(roots){
- const buckets=new Map(),counts=new Map(),accounts=new Map(),families=new Map(),forms=new Map(),out=[];
+ const buckets=new Map(),counts=new Map(),accounts=new Map(),families=new Map(),forms=new Map(),topics=new Map(),endings=new Map(),out=[];
+ const prediction=p=>/^buzz\.pick-[0-9]+$/.test(p.templateFamily??'')||/^playoff\..*pick/.test(p.templateFamily??'');
  for(const p of roots){const key=(p.category??'news')+'|'+(p.templateFamily??''),list=buckets.get(key)??[];list.push(p);buckets.set(key,list);}
  for(const list of buckets.values())list.sort(order);
  let last=null,lastPost=null;
  while(buckets.size){let best=null,group=null,bestScore=-Infinity;
   for(const [key,list] of buckets){const p=list[0],category=p.category??'news',similar=p.variety&&lastPost?.variety?(p.variety.structure===lastPost.variety.structure?36:p.variety.opening===lastPost.variety.opening?18:0):0,
    diversity=(p.templateFamily?(families.get(p.templateFamily)??0)*12:0)+(p.variety?(forms.get(p.variety.structure)??0)*20:0),essential=p.essentialNews||p.coverageExempt||p.guaranteedUserDraft||(p.priority??0)>=108,
-   score=(p.priority??80)-(counts.get(category)??0)*4-(accounts.get(p.handle)??0)*7-(category===last?24:0)-similar-Math.min(essential?10:180,diversity);
+   // The same matchup prediction remains available, but three desks making
+   // equivalent picks cannot crowd out a local result or a different angle.
+   localNews=(p.scopes?.includes('team')&&(['results','upsets','cfp','awards'].includes(category)||category==='championship'&&/^buzz\.(?:final|team-champion|team-final-loss)$/.test(p.templateFamily??''))?45:0),
+   anglePenalty=prediction(p)?(topics.get(p.thread??p.id)??0)*100:0,
+   endingPenalty=p.variety?.ending?(endings.get(p.variety.ending)??0)*15:0,
+   score=(p.priority??80)+localNews-(counts.get(category)??0)*4-(accounts.get(p.handle)??0)*7-(category===last?24:0)-similar-Math.min(essential?10:180,diversity)-anglePenalty-endingPenalty;
    if(score>bestScore||score===bestScore&&p.id<best.id){best=p;group=key;bestScore=score;}}
   out.push(best);const category=best.category??'news';counts.set(category,(counts.get(category)??0)+1);accounts.set(best.handle,(accounts.get(best.handle)??0)+1);
-  if(best.templateFamily)families.set(best.templateFamily,(families.get(best.templateFamily)??0)+1);if(best.variety)forms.set(best.variety.structure,(forms.get(best.variety.structure)??0)+1);last=category;lastPost=best;
+  if(prediction(best))topics.set(best.thread??best.id,(topics.get(best.thread??best.id)??0)+1);
+  if(best.templateFamily)families.set(best.templateFamily,(families.get(best.templateFamily)??0)+1);if(best.variety){forms.set(best.variety.structure,(forms.get(best.variety.structure)??0)+1);endings.set(best.variety.ending,(endings.get(best.variety.ending)??0)+1);}last=category;lastPost=best;
   buckets.get(group).shift();if(!buckets.get(group).length)buckets.delete(group);
- }return out;
+ }
+ // Draft announcements form one chronology, regardless of flavor variety.
+ // Leave the non-draft slots and attached conversations in their own order.
+ const draft=out.filter(p=>p.voice==='nflDraft'&&p.draftPick>0).sort((a,b)=>a.draftPick-b.draftPick||a.id.localeCompare(b.id));let index=0;
+ return out.map(p=>p.voice==='nflDraft'&&p.draftPick>0?draft[index++]:p);
 }
 const bucketFor=p=>p.primaryScope&&p.scopes.includes(p.primaryScope)?p.primaryScope:p.scopes.includes('team')?'team':p.scopes.includes('conference')||p.scopes.includes('relevant')?'conference':'national';
 // Order a real conversation with its parent immediately before the replies.
@@ -103,6 +114,6 @@ export function buildCatalog(active,history=[]){
     const old=byWeek.get(f.key);if(!old||f===active||(f.sourceModifiedMs??0)>(old.sourceModifiedMs??0))byWeek.set(f.key,f);
   }
   const displayKeys=['id','author','handle','body','stamp','category','voice','replyTo','imageLibrary','imageValue','uniformTeamLogo','likes','transaction','draftPick','draftRound','publication','priority','essentialNews','coverageExempt','budgetProtected'];
-  const weeks=[...byWeek.values()].sort(comparePublication).map(f=>({publicationLabel:publicationLabel(f),...Object.fromEntries(['format','engineVersion','key','leagueId','userTeamIndex','season','phase','week','conference','publication','reconstructed'].map(k=>[k,f[k]])),stories:f.stories.map(p=>Object.fromEntries(displayKeys.filter(k=>p[k]!==undefined).map(k=>[k,p[k]]))),sidebar:editionSidebar(f),views:{...scopeViews(f.stories,f),...(f.scopeOptions?discoveryViews(conversationOrder(f.stories),f.scopeOptions):{})}}));
+  const weeks=[...byWeek.values()].sort(comparePublication).map(f=>({publicationLabel:publicationLabel(f),...Object.fromEntries(['format','engineVersion','key','leagueId','userTeamIndex','season','phase','week','conference','publication','reconstructed'].map(k=>[k,f[k]])),stories:f.stories.map(p=>Object.fromEntries(displayKeys.filter(k=>p[k]!==undefined).map(k=>[k,p[k]]))),sidebar:editionSidebar(f),views:f.editorialVersion===1&&f.views?f.views:{...scopeViews(f.stories,f),...(f.scopeOptions?discoveryViews(conversationOrder(f.stories),f.scopeOptions):{})}}));
   return {...active,catalogVersion:2,activeWeekKey:active.key,weeks};
 }

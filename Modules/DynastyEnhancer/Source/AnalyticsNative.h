@@ -384,7 +384,7 @@ void __fastcall colHook(void* object,void* out,int id,int col){CallGuard cotCall
         // every position, independent of that selected week or Season view.
         for(const auto& [row,label]:proxy.labels)if(label=="Roster"&&proxy.keys.count(row)&&proxy.keys.at(row).rfind("ANALYTICS_",0)!=0)nativeWeekDefault=proxy.keys.at(row);
         reinterpret_cast<void(__fastcall*)(void*,int)>((*reinterpret_cast<void***>(out))[1])(out,static_cast<int>(weeks.size()));
-        for(size_t i=0;i<weeks.size();++i){auto label=weeks[i].week==analytics::SeasonWeek?std::string("Season"):(weeks[i].type=="RegularSeason"?std::string():weeks[i].type+" ")+"Week "+std::to_string(weeks[i].week);textField(out,static_cast<unsigned>(i),"display",label);textField(out,static_cast<unsigned>(i),"key","ANALYTICS_WEEK:"+std::to_string(i));set(out,static_cast<unsigned>(i),"isDefault",weeks[i].year==seasonYear&&weeks[i].week==selectedWeek&&weeks[i].type==selectedType,3);}
+        for(size_t i=0;i<weeks.size();++i){auto label=analytics::weekLabel(weeks[i].week,weeks[i].type);textField(out,static_cast<unsigned>(i),"display",label);textField(out,static_cast<unsigned>(i),"key","ANALYTICS_WEEK:"+std::to_string(i));set(out,static_cast<unsigned>(i),"isDefault",weeks[i].year==seasonYear&&weeks[i].week==selectedWeek&&weeks[i].type==selectedType,3);}
     }
     note({{"event","native_analytics_filters"},{"type",type},{"choices",type==28?teams.size():weeks.size()}});
 }

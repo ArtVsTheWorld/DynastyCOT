@@ -385,4 +385,11 @@ for native in [0x303030,0xF3F0E7,0xA0A0A0,0x303030]:
     run(weekly_school_suffix,receiver,scale=1,colors=False)
     assert row['mData']['display']==label(91,1) and row['mData']['ExtraInfo']['fontColor']==native
 
-print('Passed: eight exact native gap callbacks; modern hub binding frame/args/StatDisplay and real-stat preservation; native four-slot late-accessor frames and nested local scratch isolation; every grade boundary and independent fog/colors; canonical hidden values; award/stat discrimination; Playing Time-only mask; unchanged sources; deterministic bounded bytecode and no provider polling.')
+# The original footer copy remains intact; only its native scale-down bounds change.
+footer=text('+10 more players. View MySchool screen in Recruiting for more details')
+footer['_x']=500
+receiver={'mData':{'ExtraInfo':{}},'mcHighlight':{'_x':0,'_width':1200},'mcDescription':footer}
+run(weekly_school_suffix,receiver,scale=1,colors=False)
+assert footer['mData']['display'].startswith('+10 more players')
+assert footer['mData']['ExtraInfo']['resizeWidth']==688 and footer['mData']['ExtraInfo']['fontColor']==0x123456
+print('Passed: exact native gap callbacks; every grade boundary and independent fog/colors, native focus/gray colors; footer fitted inside actual row bounds; unchanged values and no provider polling.')

@@ -1,4 +1,5 @@
 import {pffRankings} from './pff_rankings.mjs';
+import {sameLeague} from './league_identity.mjs';
 // Consume the exact native menu model, never a second approximation of it.
 const finite=x=>typeof x==='number'&&Number.isFinite(x);
 const sample=(r,season)=>finite(r.grade)&&r.grade>=0&&r.grade<=100&&finite(r.snaps)&&(['K','P'].includes(r.group)?r.opportunities>=(season?8:2):r.snaps>=(season?200:20))&&(!season||r.gradedGames>=3);
@@ -18,11 +19,11 @@ export function freezePublishedPff(events,s,feed){
 }
 export function pffEvents(s,previous=null){
  const a=s.playerAnalytics,candidate=previous?.playerAnalytics;
- const old=candidate?.leagueId===s.leagueId&&candidate.year===s.season.CurrentYear&&candidate.season===s.season.CurrentSeasonYear&&candidate.modelVersion===a?.modelVersion?candidate:null;
- if(!a||a.format!==1||typeof a.modelVersion!=='string'||!Array.isArray(a.weekly)||!Array.isArray(a.seasonRows)||a.leagueId!==s.leagueId||a.year!==s.season.CurrentYear||a.season!==s.season.CurrentSeasonYear||s.reconstructed||s.season.CurrentStage!=='NFLSeason'||/preseason|offseason/i.test(s.season.CurrentWeekType)||!released(s,a))return [];
+ const old=sameLeague(candidate?.leagueId,s.leagueId)&&candidate.year===s.season.CurrentYear&&candidate.season===s.season.CurrentSeasonYear&&candidate.modelVersion===a?.modelVersion?candidate:null;
+ if(!a||a.format!==1||typeof a.modelVersion!=='string'||!Array.isArray(a.weekly)||!Array.isArray(a.seasonRows)||!sameLeague(a.leagueId,s.leagueId)||a.year!==s.season.CurrentYear||a.season!==s.season.CurrentSeasonYear||s.reconstructed||s.season.CurrentStage!=='NFLSeason'||/preseason|offseason/i.test(s.season.CurrentWeekType)||!released(s,a))return [];
  const teams=new Map(s.teams.filter(t=>t.id!==255).map(t=>[t.id,t])),players=new Map(s.players.map(p=>[p.id,p]));
  const valid=r=>teams.has(r.team)&&players.get(r.player)?.team===r.team;
- const oldRows=old?.modelVersion===a.modelVersion&&old.leagueId===a.leagueId&&old.year===a.year&&Array.isArray(old.seasonRows)?new Map(old.seasonRows.map(r=>[r.player,r])):new Map();
+ const oldRows=old?.modelVersion===a.modelVersion&&sameLeague(old.leagueId,a.leagueId)&&old.year===a.year&&Array.isArray(old.seasonRows)?new Map(old.seasonRows.map(r=>[r.player,r])):new Map();
  const season=a.seasonRows.filter(r=>valid(r)&&sample(r,true)),weekly=a.weekly.filter(r=>valid(r)&&sample(r,false));
  const comparable=(p,r)=>p&&p.team===r.team&&p.group===r.group;
  const changed=r=>{const p=oldRows.get(r.player);return !comparable(p,r)||p.grade!==r.grade||p.snaps!==r.snaps||p.gradedGames!==r.gradedGames;};

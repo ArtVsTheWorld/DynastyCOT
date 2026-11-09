@@ -8,6 +8,8 @@ The second callback is shared `SpreadsheetProvider.GetRowData` (descriptor0x108a
 
 The generated `Source/DraftOvrUiPrograms.h` exposes `draftovrui::strategyPrograms()` and `draftovrui::rowPrograms()`. Both retain exact native register frames (3 and6); extra scratch values use function-local variables. Root gates the two banks on Roster Fog so turning it off restores original native bodies. Grade labels use the shared selected scale. The adapter preserves native font colors rather than overriding selected or disabled rows.
 
+0.1.16 additionally recognizes AIO 1.4.1's relocated `PlayersLeavingStrategy._GetTeamModule`: descriptor `0xb0050`, the same 207-byte body/hash as stock, independently verified in that class's pool at `0xaf0c0`. `currentStrategyPrograms()` uses its own runtime bank; it is not mixed with stock definitions in a bank that requires all siblings to match. There are still two callback kinds, with three verified definitions across stock/AIO. Native registers, instruction fingerprints and fog gating are retained. This source/fixture verification still requires live Draft Results acceptance with the active overhaul.
+
 Verification:
 
 ```

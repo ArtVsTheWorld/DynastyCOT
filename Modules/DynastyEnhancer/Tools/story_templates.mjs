@@ -92,6 +92,10 @@ const originalTemplates=new Map(Object.entries(contentPack.families).flatMap(([f
 for(const patch of refresh.overrides){const old=originalTemplates.get(patch.id);if(!old||old.family!==patch.family||old.t.body!==patch.originalBody)throw Error('Stale editorial patch '+patch.id);old.t.body=patch.body;}
 for(const [family,lines] of Object.entries(refresh.families)){if(!contentPack.families[family])throw Error('Unknown editorial family '+family);contentPack.families[family].push(...lines);}
 contentPack.revision=refresh.revision+'+'+pffPack.revision;
+const seasonReview=JSON.parse(fs.readFileSync(new URL('../Content/Runtime/season-fixes-pack.json',import.meta.url),'utf8'));
+const reviewedTemplates=new Map(Object.entries(contentPack.families).flatMap(([family,ts])=>ts.map(t=>[t.id,{family,t}])));
+for(const patch of seasonReview.overrides){const old=reviewedTemplates.get(patch.id);if(!old||old.family!==patch.family||old.t.body!==patch.originalBody)throw Error('Stale season-review patch '+patch.id);old.t.body=patch.body;}
+contentPack.revision+='+'+seasonReview.revision;
 // Apply after the exact originalBody checks above. Editing the source packs
 // or normalizing first would weaken those reviewed editorial patch guards.
 for(const variants of Object.values(contentPack.families))for(const template of variants)template.body=socialDisplayText(template.body);
