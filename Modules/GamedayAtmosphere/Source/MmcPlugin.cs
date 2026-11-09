@@ -104,14 +104,33 @@ namespace DynamicGamedayAtmosphere
                 return LaunchProgress.CandidateNames(names.ToArray())+(unreadable>0?" | Process names unreadable: "+unreadable:"");
             }catch(Exception error){return "name scan unavailable ("+LaunchDiagnostics.OneLine(error.Message)+")";}
         }
+        // Shared with the bundled GDA adapter, including already-released COT.
+        // Claim only; no threads, file extraction or game access in this method.
+        private static bool TryClaimWatcher(out bool otherCopy){
+            otherCopy=false;if(Interlocked.CompareExchange(ref watching,1,0)!=0)return false;
+            bool first=false;watcherMutex=new Mutex(false,"Local\\Ace.DynamicGamedayAtmosphere.MMC."+Process.GetCurrentProcess().Id,out first);
+            if(first)return true;
+            watcherMutex.Dispose();watcherMutex=null;otherCopy=true;return false;
+        }
+#if STANDALONE_GAMEDAY
+        private static string LegacyStandaloneIssue(){
+            string old=Path.Combine(PluginsFolder,"DynamicGamedayAtmosphere.dll");
+            if(File.Exists(old))return "An older Gameday standalone DLL is still installed: "+old+". Close MMC/game and move that DLL outside Plugins. Keep its settings/history folders.";
+            foreach(var assembly in AppDomain.CurrentDomain.GetAssemblies())
+                if(assembly!=typeof(AttendanceAction).Assembly&&assembly.GetName().Name=="DynamicGamedayAtmosphere")return "An older Gameday standalone is already loaded. Close MMC/game and remove the older plugin DLL before using this one. Settings/history stay in place.";
+            return null;
+        }
+#endif
         private static void Start(ILogger logger)
         {
             // Registration can start the watcher before MMC supplies its logger.
             // Later launch callbacks must still make that logger available.
             if(logger!=null)Interlocked.Exchange(ref hostLogger,logger);
-            if(Interlocked.CompareExchange(ref watching,1,0)!=0)return;
-            bool first=false;watcherMutex=new Mutex(false,"Local\\Ace.DynamicGamedayAtmosphere.MMC."+Process.GetCurrentProcess().Id,out first);
-            if(!first)return;
+#if STANDALONE_GAMEDAY
+            string legacy=LegacyStandaloneIssue();if(legacy!=null){Note(logger,legacy);return;}
+#endif
+            bool otherCopy;
+            if(!TryClaimWatcher(out otherCopy)){if(otherCopy)Note(logger,"Another copy of Gameday Atmosphere already provides this module in this MMC process. This copy will not start a second runtime. Use one Gameday provider and keep versions matched.");return;}
             new Thread(()=>
             {
                 var attempted=new LaunchClaims();var errors=new LaunchBackoff();var progress=new LaunchProgress();var clock=Stopwatch.StartNew();
@@ -132,7 +151,7 @@ namespace DynamicGamedayAtmosphere
                     using(var reader=new StreamReader(input))defaults=reader.ReadToEnd();
                     // An Update 2 runtime still uses the loose settings file.
                     // Never move its settings out from under a running game.
-                    bool moving=File.Exists(Path.Combine(PluginsFolder,"DynamicGamedayAtmosphere.ini"))||File.Exists(Path.Combine(PluginsFolder,"DynamicAttendance.ini"))||PluginStorage.NeedsReset(PluginsFolder,defaults)||PluginStorage.NeedsRelocation(PluginsFolder)||PluginStorage.NeedsRuntimeRetirement(PluginsFolder);
+                    bool moving=File.Exists(Path.Combine(PluginsFolder,"DynamicGamedayAtmosphere.ini"))||File.Exists(Path.Combine(PluginsFolder,"DynamicAttendance.ini"))||PluginStorage.NeedsRelocation(PluginsFolder)||PluginStorage.NeedsRuntimeRetirement(PluginsFolder);
                     bool noted=false;
                     while(moving){
                         watcherStep="wait for the running game before migrating settings";
@@ -141,16 +160,15 @@ namespace DynamicGamedayAtmosphere
                         if(!noted){Note(logger,"Close the game once to prepare settings and retire previous runtime files. The running game's files are preserved until then.");noted=true;}
                         Thread.Sleep(1000);
                     }
-                    watcherStep="prepare or reset DGA settings";watcherFile=PluginStorage.SettingsFile(PluginsFolder);string resetBackup=PluginStorage.Ensure(PluginsFolder,defaults);
+                    watcherStep="preserve or prepare DGA settings";watcherFile=PluginStorage.SettingsFile(PluginsFolder);PluginStorage.EnsurePreserving(PluginsFolder,defaults);
                     watcherStep="archive previous runtime files outside MMC's plugin scan";watcherFile=PluginStorage.DataFolder(PluginsFolder);
                     try{
-                        int retiredRuntimeFiles=PluginStorage.RetirePreviousRuntimes(PluginsFolder);
+                        int retiredRuntimeFiles=PluginStorage.RetirePreviousRuntimes(PluginsFolder)+PluginStorage.RetireLooseRuntimeFiles(PluginsFolder);
                         if(retiredRuntimeFiles>0)Note(logger,"Archived "+retiredRuntimeFiles+" previous runtime/helper files outside MMC's plugin scan. Settings, logs and crowd history stay in "+DataFolder+". A scan warning from this first upgrade startup clears after reopening MMC.");
                     }catch(Exception cleanupError){
                         Note(logger,"Previous runtime cleanup incomplete; direct loading will continue. "+LaunchDiagnostics.Failure(0,watcherStep,watcherFile,cleanupError)+" | Close MMC and the game before retrying cleanup. Old DLL scan warnings may remain until those files can be archived.");
                     }
-                    if(resetBackup!=null)Note(logger,"Update 3 settings reset: all previous DGA values replaced with current defaults. Original INI saved at "+resetBackup+". This reset runs once; later custom settings are preserved.");
-                    Note(logger,"Settings: "+PluginStorage.SettingsFile(PluginsFolder)+". Former loose DGA files, if present, are preserved in its Backups folder.");
+                    Note(logger,"Settings: "+PluginStorage.SettingsFile(PluginsFolder)+". Existing choices are kept without a reset or retune; legacy INIs remain unchanged.");
                     watcherStep="extract diagnostics tool";watcherFile=Path.Combine(DataFolder,"Tools","DgaDiagnostics.exe");Extract("DgaDiagnostics.exe",false);
                     Note(logger,"DGA "+BuildInfo.Version+" launch watcher started | MMC PID "+Process.GetCurrentProcess().Id+" | MMC permissions: "+mmcElevation+". Live atmosphere supports verified offline Dynasty and basic Play Now matches. Season turnout and travel plans remain Dynasty-only.");
 #if DIRECT_RUNTIME_LOADING

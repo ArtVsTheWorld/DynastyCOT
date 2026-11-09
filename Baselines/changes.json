@@ -748,8 +748,8 @@
     },
     {
       "path": "Modules/GamedayAtmosphere/Source/MmcPlugin.cs",
-      "sha256": "d17074159fdbe59f1f0235ebea3de2bbd732f08014109fef1e64932525ae5815",
-      "reason": "Describe the explicit offline Dynasty/basic Play Now atmosphere admission accurately; retain direct loader and helper integrity behavior."
+      "sha256": "213829b16e389cb3dcae91d7b5b87de35a0500d1d79e77e665927d10e3e50f94",
+      "reason": "Standalone Gameday packaging: retain existing settings/history, share bundled watcher ownership, and archive exact legacy helper files outside Plugins"
     },
     {
       "path": "Modules/GamedayAtmosphere/Source/MotionSoundPairing.h",
@@ -770,6 +770,11 @@
       "path": "Modules/GamedayAtmosphere/Source/NativeStartingAttendance.h",
       "sha256": "d03499204a89db37a30e8a4adeed519bb14abb54c33fb9f2276599792a2dcefe",
       "reason": "COT feedback: strict AIO loader relocations, compact constrained NIL labels and Highest NIL grade display; current audible shake pairing and state travel fallback"
+    },
+    {
+      "path": "Modules/GamedayAtmosphere/Source/PluginStorage.cs",
+      "sha256": "4393613591e505e901fa1a0c182e40f0b29b8f7c03ccf5b231b404a59c7a6528",
+      "reason": "Standalone Gameday packaging: retain existing settings/history, share bundled watcher ownership, and archive exact legacy helper files outside Plugins"
     },
     {
       "path": "Modules/GamedayAtmosphere/Source/Product.json",

@@ -10,7 +10,7 @@ namespace DynamicGamedayAtmosphere {
         public static string FindPluginsFolder(string assemblyFile){
             for(var dir=new DirectoryInfo(Path.GetDirectoryName(Path.GetFullPath(assemblyFile)));dir!=null;dir=dir.Parent)
                 if(String.Equals(dir.Name,"Plugins",StringComparison.OrdinalIgnoreCase))return dir.FullName;
-            throw new IOException("Install DynamicGamedayAtmosphere.dll in MMC's Plugins folder.");
+            throw new IOException("Install GamedayAtmosphere.dll in MMC's Plugins folder.");
         }
         public static string RuntimeRoot(string plugins){
             var dir=new DirectoryInfo(Path.GetFullPath(plugins));
@@ -40,6 +40,14 @@ namespace DynamicGamedayAtmosphere {
             }
             return count;
         }
+        // Only exact legacy runtime/helper names; never settings or history.
+        public static int RetireLooseRuntimeFiles(string plugins){
+            int count=0;foreach(string file in LooseHelpers(plugins)){
+                if((File.GetAttributes(file)&FileAttributes.ReparsePoint)!=0)continue;
+                Retire(file,Path.Combine(RuntimeRoot(plugins),"Retired","Loose"));++count;
+            }
+            return count;
+        }
         public static string DataFolder(string plugins){return Path.Combine(plugins,"DynamicGamedayAtmosphere");}
         public static string SettingsFile(string plugins){return Path.Combine(DataFolder(plugins),"DynamicGamedayAtmosphere.ini");}
         static void Retire(string path,string folder){
@@ -60,7 +68,7 @@ namespace DynamicGamedayAtmosphere {
             foreach(string file in Directory.GetFiles(plugins)){
                 string name=Path.GetFileName(file);
                 if(String.Equals(name,"LoadDynamicGamedayAtmosphere.exe",StringComparison.OrdinalIgnoreCase)||String.Equals(name,"LoadDynamicAttendance.exe",StringComparison.OrdinalIgnoreCase)||String.Equals(name,"DgaDiagnostics.exe",StringComparison.OrdinalIgnoreCase)||
-                   Regex.IsMatch(name,@"^(DynamicGamedayAtmosphereNative|DynamicAttendanceNative)-\d+\.\d+\.\d+\.dll$",RegexOptions.IgnoreCase))yield return file;
+                   Regex.IsMatch(name,@"^(DynamicGamedayAtmosphereNative|GamedayAtmosphereNative|DynamicAttendanceNative)-\d+\.\d+\.\d+\.dll$",RegexOptions.IgnoreCase))yield return file;
             }
         }
         public static bool NeedsRelocation(string plugins){foreach(string file in LooseHelpers(plugins)){if(File.Exists(file))return true;}return false;}
@@ -71,6 +79,20 @@ namespace DynamicGamedayAtmosphere {
             if(SettingsMigration.Number(existing,"General","ConfigVersion",1)>SettingsMigration.Number(defaults,"General","ConfigVersion",1))return false;
             int required=SettingsMigration.Number(defaults,"General","SettingsResetVersion",0);
             return required>0&&SettingsMigration.Number(existing,"General","SettingsResetVersion",0)<required;
+        }
+        // Current distribution paths never reset or retune existing choices.
+        // Legacy flat INIs are copied byte-for-byte; originals remain available.
+        public static void EnsurePreserving(string plugins,string defaults){
+            string data=DataFolder(plugins),destination=SettingsFile(plugins);
+            SettingsIo.Run("create DGA settings folder",null,data,null,()=>Directory.CreateDirectory(data));
+            if(File.Exists(destination))return;
+            string source=ExistingSettings(plugins),temp=Path.Combine(data,"settings-"+Guid.NewGuid().ToString("N")+".tmp");Exception failure=null;
+            try{
+                if(source!=null)SettingsIo.Run("copy existing DGA settings unchanged",source,temp,null,()=>File.Copy(source,temp,false));
+                else SettingsIo.Run("write initial DGA defaults",null,temp,null,()=>File.WriteAllText(temp,defaults,Encoding.Unicode));
+                SettingsIo.Run("activate initial DGA settings",temp,destination,null,()=>File.Move(temp,destination));
+            }catch(Exception error){failure=error;throw;}
+            finally{SettingsIo.Cleanup(temp,failure);}
         }
         public static string Ensure(string plugins,string defaults){
             string data=DataFolder(plugins),destination=SettingsFile(plugins);
