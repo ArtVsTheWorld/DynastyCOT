@@ -6,6 +6,7 @@
 #include <atomic>
 #include <chrono>
 #include "CallbackTiming.h"
+#include "OfflineMatchScope.h"
 #include <cstdint>
 #include <cstdio>
 #include <cstring>
@@ -120,6 +121,7 @@ std::atomic<uint64_t> logWriteFailures{0};
 std::atomic<bool> debugLog{false};
 std::mutex historyMutex;attendance::History gameHistory;attendance::MatchLifecycle matchLifecycle;
 std::atomic<bool> shownComeback{false},shownUpset{false},contextReady{false};
+std::atomic<int> contextGameMode{-1};
 std::atomic<int> busMixStrength{100};std::atomic<float> busMaximumBoost{30};
 std::mutex atmosphereMutex;
 attendance::energy::Tracker playTracker;
@@ -520,7 +522,7 @@ void sparseCameraTick(){
     A actual=attendance::sustained::at<A>(attendance::sustained::at<A>(image+attendance::bindings::MatchWrapper)+16);
     A config=attendance::sustained::at<A>(image+0xf63f9f0);
     bool offline=actual&&actual==wanted.match&&attendance::sustained::at<A>(actual)==image+0xb47e908&&config&&
-        attendance::sustained::at<unsigned char>(config+0x84)==0&&attendance::sustained::at<int>(image+0xd9eb808)==14&&attendance::sustained::at<int>(image+0xf3fddbc)==3;
+        attendance::sustained::at<unsigned char>(config+0x84)==0&&attendance::scope::matchMode(attendance::sustained::at<int>(image+0xd9eb808))&&attendance::sustained::at<int>(image+0xf3fddbc)==3;
     lease.match=offline?actual:0;
     EmptyWorld empty;bool silence=emptyMode2020&&emptyWorld(empty);
     if(silence)lease.match=empty.match;
@@ -913,7 +915,7 @@ const char* __fastcall pauseMenuText(A tile,A key,A){
         unsigned char online=1,paused=0,replaying=1;A pause=at<A>(image+attendance::bindings::PauseFlag);
         A replay=at<A>(image+attendance::bindings::ReplayManager);
         c.offlineDynasty=configuration&&read(configuration+0x84,&online,1)&&online==0&&
-            at<int>(image+0xd9eb808)==14&&at<int>(image+0xf3fddbc)==3&&
+            attendance::scope::matchMode(at<int>(image+0xd9eb808))&&at<int>(image+0xf3fddbc)==3&&
             c.match==audioMatch.load()&&at<A>(c.match)==image+attendance::bindings::MatchVtable;
         c.paused=read(pause,&paused,1)&&paused==1;
         c.replay=at<A>(replay)!=image+attendance::bindings::ReplayVtable||!read(replay+0x38,&replaying,1)||replaying!=0||replaySuspendsAtmosphere.load();
@@ -951,11 +953,13 @@ bool preparePauseMenu(){
     return true;
 }
 void observeWorldExit(){
-    if(at<int>(image+0xd9eb808)==14&&at<int>(image+0xf3fddbc)==3)return;
+    auto offline=[](){A configuration=at<A>(image+0xf63f9f0);return configuration&&
+        attendance::scope::offlineMatch(at<int>(image+0xd9eb808),at<int>(image+0xf3fddbc),at<unsigned char>(configuration+0x84));};
+    if(offline())return;
     std::lock_guard<std::mutex> guard(historyMutex);
-    // Recheck under the lock so a delayed worker observation cannot mark a
-    // freshly joined game as belonging to the world that was just left.
-    if(at<int>(image+0xd9eb808)!=14||at<int>(image+0xf3fddbc)!=3)matchLifecycle.leave();
+    // Main-menu Practice shares mode 17 with Play Now. It must retire the
+    // match lease even when the game retains or later reuses match memory.
+    if(!offline())matchLifecycle.leave();
 }
 // These small expression objects belong to the synchronous native evaluator
 // calling our hook, in THIS process. A bounded SEH-protected copy avoids a
@@ -1102,7 +1106,7 @@ attendance::audio::Wanted audioWanted(){
     if(!emptyMode2020&&enabled&&audioSetting&&mode!=2&&std::atomic_load(&settings)->enabled&&wanted.match){
         ++audioWorldSnapshots;
         A wrapper=at<A>(image+attendance::bindings::MatchWrapper),actual=at<A>(wrapper+16),configuration=at<A>(image+0xf63f9f0);
-        wanted.active=wanted.match==actual&&configuration&&at<unsigned char>(configuration+0x84)!=1&&at<A>(actual)==image+0xb47e908&&at<int>(image+0xd9eb808)==14&&at<int>(image+0xf3fddbc)==3;
+        wanted.active=wanted.match==actual&&configuration&&at<unsigned char>(configuration+0x84)==0&&at<A>(actual)==image+0xb47e908&&attendance::scope::matchMode(at<int>(image+0xd9eb808))&&at<int>(image+0xf3fddbc)==3;
     }
     wanted.remaining=(100-(std::clamp)(activeLoss.load(),0,100))*0.01f;
     wanted.arrivalFraction=(100-(std::clamp)(arrivalMissing.load(),0,100))*0.01f;
@@ -1153,9 +1157,13 @@ void sustainedNote(const char* message){
 
 bool entityValid(A p){return at<A>(p)==image+0xb485368&&at<A>(at<A>(p+0x38)+8)==image+0xf50ab30;}
 bool emptyWorld(EmptyWorld& world){
-    // Empty stadiums use the verified shared native crowd layout in any
-    // actual game mode. Normal DGA formulas remain Dynasty-only.
-    if(at<int>(image+0xd9eb808)!=14)return false;
+    // Empty stadiums use the verified shared layout in supported offline
+    // matches. Dynasty starting-attendance formulas retain their own scope.
+    int nativeMode=at<int>(image+0xd9eb808);
+    if(nativeMode!=14){
+        A configuration=at<A>(image+0xf63f9f0);
+        if(!configuration||!attendance::scope::offlineMatch(nativeMode,at<int>(image+0xf3fddbc),at<unsigned char>(configuration+0x84)))return false;
+    } // Preserve the existing mode-14 visual-only 2020 override scope.
     A states=at<A>(image+attendance::bindings::GameStates),wrapper=at<A>(image+attendance::bindings::MatchWrapper);
     world.match=at<A>(wrapper+16);world.phase=at<int>(states+0xa0);
     world.home=at<int>(image+0xd9fba20);world.away=at<int>(image+0xd9fba24);
@@ -1195,9 +1203,9 @@ void __fastcall attendanceUpdate(A entity){
 }
 bool option(unsigned key,int width,int& value);
 bool gameState(attendance::State& s,A& match){
-    if(at<int>(image+0xd9eb808)!=14||at<int>(image+0xf3fddbc)!=3)return false;
+    if(!attendance::scope::matchMode(at<int>(image+0xd9eb808))||at<int>(image+0xf3fddbc)!=3)return false;
     A configuration=at<A>(image+0xf63f9f0);
-    if(!configuration||at<unsigned char>(configuration+0x84)==1)return false;
+    if(!configuration||at<unsigned char>(configuration+0x84)!=0)return false;
     A states=at<A>(image+attendance::bindings::GameStates),wrapper=at<A>(image+attendance::bindings::MatchWrapper),clockManager=at<A>(image+attendance::bindings::ClockManager);
     match=at<A>(wrapper+16);
     if(at<A>(match)!=image+0xb47e908||at<A>(states)!=image+0xb47f790||at<A>(clockManager)!=image+0xb47eec8)return false;
@@ -1238,7 +1246,7 @@ A __fastcall appearanceGenerate(A component){
     std::shared_ptr<const attendance::visitors::GeneratedAppearance> previous;
     std::shared_ptr<attendance::visitors::GeneratedAppearance> generated;
     {std::lock_guard<std::mutex> guard(generatedCrowdMutex);for(auto& entry:generatedCrowds)if(entry&&entry->component==component){previous=entry;entry.reset();break;}}
-    if(enabled&&dynamicAwayFans&&!emptyMode2020&&!appearanceRestoreFailed)try{
+    if(attendance::scope::dynasty(at<int>(image+0xd9eb808))&&enabled&&dynamicAwayFans&&!emptyMode2020&&!appearanceRestoreFailed)try{
         auto applied=std::atomic_load(&crowdFixture);
         int home=at<int>(image+0xd9fba20),away=at<int>(image+0xd9fba24);
         if(applied->owns(home,away)){
@@ -1993,8 +2001,8 @@ bool context(attendance::State& s){
     using Neutral=bool(__fastcall*)();
     s.neutral=reinterpret_cast<Neutral>(image+attendance::bindings::NeutralGetter)();
     s.rivalry=rivalry!=1023;s.rivalryEvent=s.rivalry?rivalry:-1;
-    bool conference=false;shownConferenceKnown=conferenceBinding&&attendance::nativecontext::conference(image,s.neutral,s.rivalry,conference);
-    attendance::postseason(s,attendance::playoffBowl(s.bowl),conference);
+    bool conference=false;bool dynasty=attendance::scope::dynasty(at<int>(image+0xd9eb808));shownConferenceKnown=dynasty&&conferenceBinding&&attendance::nativecontext::conference(image,s.neutral,s.rivalry,conference);
+    attendance::postseason(s,dynasty&&attendance::playoffBowl(s.bowl),conference);
     int team0=at<int>(image+0xd9fba20),team1=at<int>(image+0xd9fba24);
     if(team0<0||team0>=2047||team1<0||team1>=2047)return false;
     s.team0=team0;s.team1=team1;
@@ -2002,7 +2010,7 @@ bool context(attendance::State& s){
     if(option(0x9f4be400,2,kickoff)&&kickoff>=0&&kickoff<1440){s.night=kickoff>=1140;shownKickoffMinutes=kickoff;}else shownKickoffMinutes=-1;
     s.plannedStadium=at<int>(weather+0x358);
     auto initial=std::atomic_load(&initialApplied);
-    s.startingAttendance=!s.playoff&&!s.conferenceChampionship&&s.bowl==127&&initial->owns(team0,team1)&&initial->launch.stadium==at<int>(weather+0x358);
+    s.startingAttendance=dynasty&&!s.playoff&&!s.conferenceChampionship&&s.bowl==127&&initial->owns(team0,team1)&&initial->launch.stadium==at<int>(weather+0x358);
     if(s.startingAttendance){s.night=initial->result.night;s.plannedKickoff=initial->result.kickoff;s.plannedFill=initial->result.fillPercent;s.plannedPeak=initial->result.attendance;s.plannedCapacity=initial->launch.capacity;s.plannedStadium=initial->launch.stadium;s.plannedWeek=initial->seed.week;s.plannedYear=initial->seed.year;s.exceptionalOpening=initial->result.exceptional;}
     // This native reader supplies HomeTeamRank/AwayTeamRank to the game UI.
     using Rank=int(__fastcall*)(A,int);
@@ -2018,7 +2026,7 @@ bool context(attendance::State& s){
 bool guardedContext(attendance::State& s){__try{return context(s);}__except(EXCEPTION_EXECUTE_HANDLER){return false;}}
 void showContext(const attendance::Settings& c,const attendance::State& s){
     bool matchupChanged=!contextReady||shownRank0!=s.rank0||shownRank1!=s.rank1||shownTeam0!=s.team0||shownTeam1!=s.team1||shownRivalry!=s.rivalry||shownNeutral!=s.neutral||shownPlayoff!=s.playoff||shownConference!=s.conferenceChampionship||shownPrecipitation!=s.precipitation;
-    contextReady=true;auto retained=s;applySessionPlan(retained,audioMatch.load());publishSessionPlan(audioMatch.load(),retained);
+    contextReady=true;contextGameMode=at<int>(image+0xd9eb808);auto retained=s;applySessionPlan(retained,audioMatch.load());publishSessionPlan(audioMatch.load(),retained);
     if(matchupChanged){
         auto rankText=[](int rank){return rank>0?std::to_string(rank):std::string("unknown/unranked, raw ")+std::to_string(rank);};
         log("matchup","Matchup: home team ID "+std::to_string(s.team0)+" (rank "+rankText(s.rank0)+"); away team ID "+std::to_string(s.team1)+" (rank "+rankText(s.rank1)+"); rivalry "+(s.rivalry?"yes":"no")+"; neutral venue "+(s.neutral?"yes":"no")+"; conference championship "+(s.conferenceChampionship?"yes":"no")+"; postseason "+(s.playoff?"yes":"no")+"; weather "+(s.precipitation==1?"rain":s.precipitation==2?"snow":"dry")+".");
@@ -2936,6 +2944,16 @@ attendance::arrivals::Settings arrivalSettings(){
     return {arrivalEnabled.load(),arrivalStart.load(),arrivalLateStart.load(),arrivalFinish.load(),arrivalLateFinish.load(),arrivalBigBonus.load(),arrivalWeatherPenalty.load()};
 }
 void beginAttendanceHistory(attendance::State& s,bool midgame){
+    if(attendance::scope::playNow(at<int>(image+0xd9eb808))){
+        // Session-only plan. Never resume or append a resident Dynasty archive.
+        s.variationSeed=static_cast<unsigned>(GetTickCount64()^lastMatch);
+        attendanceSeed=s.variationSeed;publishSessionPlan(lastMatch,s);
+        {std::lock_guard<std::mutex> guard(timelineMutex);attendanceArchive.active=0;}
+        bootstrapPending=false;
+        log("play-now","Basic offline atmosphere: native starting attendance and visitor appearance; live matchup/score/weather; no Dynasty turnout, travel or saved history.");
+        return;
+    }
+
     attendance::timeline::Point saved;bool matched=false;
     uint64_t sourceGame=0;auto fixture=std::atomic_load(&crowdFixture);
     if(midgame&&fixture->owns(s.team0,s.team1)){
@@ -2981,6 +2999,12 @@ bool ordinarySessionAcknowledgement(A match,const attendance::State& s){
 bool replayPresentation(){
     attendance::timing::Scope measured(replayCrowdTimings);
     auto replay=replaySnapshot();
+    if(attendance::scope::playNow(at<int>(image+0xd9eb808))){
+        attendance::State current;A match=0;
+        replayLoss=-1;replayWasActive=false;replayRestorePending=false;
+        replaySuspendsAtmosphere=gameState(current,match)&&replayBinding&&(!replay.valid||replay.active);
+        return replaySuspendsAtmosphere;
+    }
     attendance::State s;A match=0;
     if(replay.active||replayWasActive||replayRestorePending){
         // Never restore or replay an old scene before the current match has
@@ -3068,6 +3092,7 @@ void __fastcall replayUpdate(A entity){
     }
 }
 void recordAttendance(){
+    if(!attendance::scope::dynasty(at<int>(image+0xd9eb808)))return;
     static uint64_t last=0;static int loss=-1,missing=-1;auto now=GetTickCount64();
     if(now-last<250&&loss==activeLoss.load()&&missing==arrivalMissing.load())return;
     attendance::State s;A match=0;if(mode!=0||!std::atomic_load(&settings)->enabled||!contextReady||replayWasActive||!gameState(s,match)||match!=lastMatch)return;
@@ -3150,16 +3175,17 @@ void decision(){
     const auto generation=entityGeneration.load();
     bool newMatch=false;
     auto signal=std::atomic_load(&resumeSignal);bool openingAcknowledgement=ordinaryOpeningAcknowledgement(match,s);bool sessionAcknowledgement=ordinarySessionAcknowledgement(match,s);int previousResumeGame=resumeTracker.game;bool previousResumeKnown=resumeTracker.seen;
-    bool nativeResume=resumeTracker.observe(*signal,s,now,sessionAcknowledgement);
+    bool nativeResume=attendance::scope::dynasty(at<int>(image+0xd9eb808))&&resumeTracker.observe(*signal,s,now,sessionAcknowledgement);
     if(sessionAcknowledgement&&!nativeResume&&previousResumeKnown&&resumeTracker.game!=previousResumeGame)
         log("new-game",openingAcknowledgement?"Midgame Save confirmed the new game; keeping the prepared opening crowd.":"Midgame Save announced this game's first played snap after simulation; keeping the original seating baseline and attendance history.");
     int team0=at<int>(image+0xd9fba20),team1=at<int>(image+0xd9fba24);
+    bool changedContextMode=contextReady&&contextGameMode.load()!=at<int>(image+0xd9eb808);
     bool changedTeams=contextReady&&team0>0&&team0<2047&&team1>0&&team1<2047&&(team0!=shownTeam0||team1!=shownTeam1);
     auto replay=replaySnapshot();
     bool restartedRecording=attendance::timeline::recordingRestarted(replay.valid,replay.recording,lastRecordingTime,s,departureModel.previous);
     if(!pregame&&!nativeResume&&!changedTeams&&!restartedRecording)carryPreparedOpening(match,s);
     {std::lock_guard<std::mutex> guard(historyMutex);newMatch=matchLifecycle.needsReset(match,pregame);}
-    newMatch=newMatch||nativeResume||changedTeams||restartedRecording;
+    newMatch=newMatch||nativeResume||changedTeams||changedContextMode||restartedRecording;
     bool newSession=!lastMatch||newMatch||generation!=lastGeneration;
     if(newSession){
         bool first=!lastMatch||newMatch;
@@ -3183,7 +3209,7 @@ void decision(){
     if(!contextReady)return;
     s.rank0=shownRank0;s.rank1=shownRank1;s.rivalry=shownRivalry;s.playoff=shownPlayoff;s.conferenceChampionship=shownConference;s.precipitation=shownPrecipitation;
     s.neutral=shownNeutral;s.team0=shownTeam0;s.team1=shownTeam1;s.bowl=shownBowl;applySessionPlan(s,match);
-    {std::lock_guard<std::mutex> guard(timelineMutex);if(!attendanceArchive.active)bootstrapPending=true;}
+    {std::lock_guard<std::mutex> guard(timelineMutex);if(attendance::scope::dynasty(at<int>(image+0xd9eb808))&&!attendanceArchive.active)bootstrapPending=true;}
     if(bootstrapPending)beginAttendanceHistory(s,!pregame&&((nativeResume&&signal->applied)||s.quarter>1||s.homeScore||s.awayScore||s.seconds<s.quarterSeconds*0.95f));
     s.variationSeed=attendanceSeed;
     attendance::energy::Play detail;detail.game=s;

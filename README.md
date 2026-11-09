@@ -28,6 +28,8 @@ Find the options under **Beyond the Field** in Dynasty settings. Social Media an
 
 Bands and verified military crowd groups retain their protection. Neutral-site crowd appearance stays native. Find the module under **User Settings > Gameday Atmosphere**.
 
+The new **basic offline Play Now** path uses live-match crowd reactions and departures. Starting attendance and visiting-fan appearance stay native; Dynasty travel, season plans and saved crowd history are not used. Its final live check is still pending in this release candidate.
+
 ## Expanded Practice
 
 ![Expanded Practice drive](docs/images/expanded-practice.png)
@@ -36,7 +38,7 @@ Bands and verified military crowd groups retain their protection. Neutral-site c
 - Start from a chosen spot, switch sides and check session statistics.
 - Drive modes track downs, field position and scores through the normal practice screen. Default Practice remains available.
 
-Enter Dynasty practice and use its pause-menu controls.
+Enter offline Dynasty practice or main-menu Practice and use the pause-menu Mode control.
 
 ## Extra Settings
 

@@ -15,6 +15,7 @@ int main(){
     constexpr A image=0x10000000;std::vector<void*> pages;
     auto global=[&](A rva,A value,bool integer=false){A p=(image+rva)&~A(0xffff);bool exists=false;for(auto v:pages)if(addr(*static_cast<char*>(v))==p)exists=true;if(!exists){auto v=VirtualAlloc(reinterpret_cast<void*>(p),65536,MEM_RESERVE|MEM_COMMIT,PAGE_READWRITE);assert(reinterpret_cast<A>(v)==p);pages.push_back(v);}if(integer)put(image+rva,static_cast<int>(value));else put(image+rva,value);};
     std::vector<A> wrapper(4),match(0x200/8),replay(0x80/8),settings(0x500/8),owner(2),data(0x300/8),views(4*0x68/8),view(0x800/8),foreign(0x800/8);
+    std::vector<A> configuration(0x100/8);global(0xf63f9f0,addr(configuration[0]));
     std::vector<A> gameStates(0x200/8);put(addr(gameStates[0])+0xa0,1);global(bindings::GameStates,addr(gameStates[0]));
     unsigned char paused=0;match[0]=image+0xb47e908;wrapper[2]=addr(match[0]);
     replay[0]=image+bindings::ReplayVtable;settings[0]=image+bindings::CameraSettingsVtable;
@@ -71,6 +72,16 @@ int main(){
         put(addr(gameStates[0])+0xa0,1);
     }
     auto skipped=[&](A target,A currentMatch,unsigned epoch,uint64_t now){output=source;auto count=r.changed();r.tick(target,output.data(),cue,currentMatch,epoch,now);assert(output==source&&r.changed()==count&&view==original);};
+    for(int nativeMode:{14,17}){
+        global(0xd9eb808,nativeMode,true);
+        for(unsigned char practice:{static_cast<unsigned char>(1),static_cast<unsigned char>(2)}){
+            put(addr(configuration[0])+0x84,practice);skipped(addr(view[0]),cue.match,2,2000);
+        }
+        put(addr(configuration[0])+0x84,static_cast<unsigned char>(0));
+        output=source;auto beforeScope=r.changed();r.tick(addr(view[0]),output.data(),cue,cue.match,2,2000);assert(output!=source&&r.changed()==beforeScope+1);
+        global(0xf3fddbc,4,true);skipped(addr(view[0]),cue.match,2,2000);global(0xf3fddbc,3,true);
+    }
+    global(0xd9eb808,14,true);
     paused=1;skipped(addr(view[0]),cue.match,2,2000);paused=0;
     put(addr(replay[0])+0x38,static_cast<unsigned char>(1));skipped(addr(view[0]),cue.match,2,2000);put(addr(replay[0])+0x38,static_cast<unsigned char>(0));
     skipped(addr(view[0]),cue.match,3,2000);skipped(addr(view[0]),cue.match+8,2,2000);skipped(addr(view[0]),cue.match,2,2800);

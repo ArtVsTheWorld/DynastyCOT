@@ -20,6 +20,8 @@ try {
         Run-Check 'ExportHooks'
         & $Python Tools/test_hooks.py
         if($LASTEXITCODE -ne 0){throw 'Native hook checks failed'}
+        & $Python Tools/test_hooks.py --main-menu
+        if($LASTEXITCODE -ne 0){throw 'Main-menu native hook checks failed'}
         if($BaselineImage) {
             & $Python Tools/native_tools.py fixtures $BaselineImage
             if($LASTEXITCODE -ne 0){throw 'Native reference fixture generation failed'}

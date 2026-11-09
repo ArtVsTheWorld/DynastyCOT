@@ -39,6 +39,10 @@ if($RecruitNotesUi){
  if($LASTEXITCODE -ne 0){throw 'Dynasty topbar dollar checks failed'}
  & python (Join-Path $fogRoot 'Tests/currency_recruiting_ui_test.py')
  if($LASTEXITCODE -ne 0){throw 'Recruiting currency display checks failed'}
+ & python (Join-Path $fogRoot 'Tests/currency_class_isolation_test.py')
+ if($LASTEXITCODE -ne 0){throw 'Recruiting currency class isolation checks failed'}
+ & python (Join-Path $fogRoot 'Tests/analytics_return_dispatch_test.py')
+ if($LASTEXITCODE -ne 0){throw 'Analytics card return dispatch checks failed'}
  & python (Join-Path $fogRoot 'Tests/currency_recruitdetail_ui_test.py')
  if($LASTEXITCODE -ne 0){throw 'Recruiting scholarship detail currency checks failed'}
  & python (Join-Path $fogRoot 'Tests/currency_recruiteditor_ui_test.py')

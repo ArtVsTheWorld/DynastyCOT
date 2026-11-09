@@ -1,5 +1,6 @@
 #pragma once
 #include "DirectorShake.h"
+#include "OfflineMatchScope.h"
 #include "GameBindings.h"
 #include "NativeRead.h"
 #include <windows.h>
@@ -32,7 +33,9 @@ class Runtime {
     static bool read(uintptr_t p,void* out,size_t size){SIZE_T n=0;return p>=0x10000&&ReadProcessMemory(GetCurrentProcess(),reinterpret_cast<void*>(p),out,size,&n)&&n==size;}
     template<class T>static T at(uintptr_t p){return attendance::nativeValue<T>(p,read);}
     bool world(const Cue& c,uintptr_t view)const{
-        if(at<uintptr_t>(at<uintptr_t>(image_+bindings::MatchWrapper)+16)!=c.match||at<uintptr_t>(c.match)!=image_+0xb47e908||at<int>(image_+0xd9eb808)!=14||at<int>(image_+0xf3fddbc)!=3)return false;
+        if(at<uintptr_t>(at<uintptr_t>(image_+bindings::MatchWrapper)+16)!=c.match||at<uintptr_t>(c.match)!=image_+0xb47e908||!attendance::scope::matchMode(at<int>(image_+0xd9eb808))||at<int>(image_+0xf3fddbc)!=3)return false;
+        auto configuration=at<uintptr_t>(image_+0xf63f9f0);
+        if(!configuration||at<unsigned char>(configuration+0x84)!=0)return false;
         if(at<uintptr_t>(view)!=image_+bindings::CameraVtable)return false;
         auto pause=at<uintptr_t>(image_+bindings::PauseFlag),replay=at<uintptr_t>(image_+bindings::ReplayManager);
         if(!pause||at<unsigned char>(pause)||at<uintptr_t>(replay)!=image_+bindings::ReplayVtable||at<unsigned char>(replay+0x38))return false;

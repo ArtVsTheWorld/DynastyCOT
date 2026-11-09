@@ -37,7 +37,7 @@
       "sourceCandidate": "0.8.21",
       "defaultPracticeMode": "native",
       "displayName": "Expanded Practice",
-      "description": "Practice full drives or play a scrimmage with changing possession. Choose a starting spot, switch sides and check session stats."
+      "description": "Practice full drives or play a scrimmage in Dynasty or main-menu Practice. Choose a starting spot, switch sides and check session stats."
     }
   ],
   "pending": [
@@ -50,6 +50,6 @@
     "repository": "ArtVsTheWorld/DynastyCOT",
     "visibility": "public",
     "prerelease": false,
-    "compatibilityNotes": "Offline Dynasty. AIO 1.4.1 and its TeamBuilder patch have targeted adapters; unknown native programs are rejected. Exact game/overhaul combinations and the renamed runtime loading path still require fresh-launch live acceptance. Updates are optional; keep a backup and your previous installer."
+    "compatibilityNotes": "Offline Dynasty, offline main-menu Practice, and a basic offline Play Now atmosphere path awaiting live acceptance. AIO 1.4.1 and its TeamBuilder patch have targeted adapters; unknown native programs are rejected. Exact game/overhaul combinations and the renamed runtime loading path still require fresh-launch live acceptance. Updates are optional; keep a backup and your previous installer."
   }
 }

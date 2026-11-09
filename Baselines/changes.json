@@ -18,8 +18,8 @@
     },
     {
       "path": "Modules/DrivePractice/Plugin/NativeRuntime.cs",
-      "sha256": "4a197d5440d3e64d16b698d489bde65db51027a8e3ae743dd5037974a68d24b4",
-      "reason": "COT hub clock scope, fresh practice picker and recruit star account presentation"
+      "sha256": "a90e8a783c696aa3fc6d69deef41ef42b1adca88810b0c4d356318b533819396",
+      "reason": "Add verified offline main-menu practice mode 17 alongside Dynasty mode 14; preserve native fingerprints, exact offline and bound-match guards; execute hook regressions in both contexts."
     },
     {
       "path": "Modules/DrivePractice/Plugin/PracticeAction.cs",
@@ -27,14 +27,34 @@
       "reason": "1.0 branded source-built runtime names, direct verified loading and preserved data/hook contracts"
     },
     {
+      "path": "Modules/DrivePractice/Plugin/PracticeRunner.cs",
+      "sha256": "cf22965c121eb1359560b095e498cf08ee91adc4364a57c75d5c5d92a0c1041b",
+      "reason": "Add verified offline main-menu practice mode 17 alongside Dynasty mode 14; preserve native fingerprints, exact offline and bound-match guards; execute hook regressions in both contexts."
+    },
+    {
       "path": "Modules/DrivePractice/Plugin/RuntimeFiles.cs",
       "sha256": "7ca18dab9ff8dcb8045ddf6584436a60542f98af4b0ec10a7d6bc3801a2f5715",
       "reason": "1.0 branded source-built runtime names, direct verified loading and preserved data/hook contracts"
     },
     {
+      "path": "Modules/DrivePractice/Test.ps1",
+      "sha256": "5f9078c0cfe3cebf817496ced76a493af8272c6d288abe919ff0235e1b376626",
+      "reason": "Add verified offline main-menu practice mode 17 alongside Dynasty mode 14; preserve native fingerprints, exact offline and bound-match guards; execute hook regressions in both contexts."
+    },
+    {
+      "path": "Modules/DrivePractice/Tools/ModeChecks.cs",
+      "sha256": "1fc4d571b3b3b4ea06487dd7cffa2d20b9c9e6db7296100080f22be55de66781",
+      "reason": "Add verified offline main-menu practice mode 17 alongside Dynasty mode 14; preserve native fingerprints, exact offline and bound-match guards; execute hook regressions in both contexts."
+    },
+    {
       "path": "Modules/DrivePractice/Tools/test_hooks.py",
-      "sha256": "574c218dc013fa35492c197b8df34521a3cf13486847a9f3c54ea1371bc4d005",
-      "reason": "COT hub clock scope, fresh practice picker and recruit star account presentation"
+      "sha256": "00bf204d4e7e102108b0cd7083e82e2d6e330d1ef5cb97cea89b8bcadc896c95",
+      "reason": "Add verified offline main-menu practice mode 17 alongside Dynasty mode 14; preserve native fingerprints, exact offline and bound-match guards; execute hook regressions in both contexts."
+    },
+    {
+      "path": "Modules/DrivePractice/docs/native-layout.json",
+      "sha256": "d41073c7e87a62383c24b63c534816e46a9d958a20f4b9ab17b8bf47262edd32",
+      "reason": "Add verified offline main-menu practice mode 17 alongside Dynasty mode 14; preserve native fingerprints, exact offline and bound-match guards; execute hook regressions in both contexts."
     },
     {
       "path": "Modules/DynastyEnhancer/Content/Runtime/national-account-avatars.json",
@@ -233,8 +253,8 @@
     },
     {
       "path": "Modules/DynastyEnhancer/Source/RecruitingFog.cpp",
-      "sha256": "b2b11f1141e1bce18a1e3ddc4062bf8cb1eb7c629fe821d6b0f03d726f9981aa",
-      "reason": "1.0 branded source-built runtime names, direct verified loading and preserved data/hook contracts"
+      "sha256": "2b481bf27cb987ee65384ebe4d8a70fb9f6734db5b1ee866efb6410dddb7f7dc",
+      "reason": "1.0 prepublication fix: isolate linked recruiting currency classes and avoid unrelated Analytics-card identity walks; retain NIL and native guards"
     },
     {
       "path": "Modules/DynastyEnhancer/Source/RuntimeFeed.h",
@@ -248,8 +268,8 @@
     },
     {
       "path": "Modules/DynastyEnhancer/Source/build-recruiting-fog.ps1",
-      "sha256": "b2acdf3abce4621b04fb87d66372c1a1bdd693b0cc08586b642401ca9e703e10",
-      "reason": "1.0 branded source-built runtime names, direct verified loading and preserved data/hook contracts"
+      "sha256": "b8acc5884cc3ac1d21691d1590cda7874509ec7a0dbd5032b9cd2d5254e41df0",
+      "reason": "1.0 prepublication fix: isolate linked recruiting currency classes and avoid unrelated Analytics-card identity walks; retain NIL and native guards"
     },
     {
       "path": "Modules/DynastyEnhancer/Source/build.ps1",
@@ -693,13 +713,18 @@
     },
     {
       "path": "Modules/GamedayAtmosphere/Source/Build.ps1",
-      "sha256": "e5779ee0b849dae95ea8121aae55186bd504a97d4760a773ac59a59df6095c3f",
-      "reason": "1.0 branded source-built runtime names, direct verified loading and preserved data/hook contracts"
+      "sha256": "56489bea8b32e75cc6f903be6366dd699e7351ccf0fc2127f804fd35f92bd60c",
+      "reason": "Add explicit offline Play Now live-match atmosphere with native starting attendance/visitor appearance; isolate Dynasty seeds, plans and persistent histories; preserve offline checks, fingerprints and native ownership."
     },
     {
       "path": "Modules/GamedayAtmosphere/Source/DgaDiagnostics.cs",
       "sha256": "8f5812429f3eb15fbd1792cec6f03aed768f09edc01a69935f91f16f6730a645",
       "reason": "Retain prior COT integration; 0.1.6 Gameday Atmosphere branding and appended stable-ID visitor-strength control, new-plan-only odds preference with existing native/neutral/protected/history gates retained."
+    },
+    {
+      "path": "Modules/GamedayAtmosphere/Source/DirectorShakeRuntime.h",
+      "sha256": "adb0d9bbf225864e3f7ef3aa854ccc12642f2ef5ff253a101e282a71272f9194",
+      "reason": "Add explicit offline Play Now live-match atmosphere with native starting attendance/visitor appearance; isolate Dynasty seeds, plans and persistent histories; preserve offline checks, fingerprints and native ownership."
     },
     {
       "path": "Modules/GamedayAtmosphere/Source/DynamicGamedayAtmosphere.ini",
@@ -718,8 +743,8 @@
     },
     {
       "path": "Modules/GamedayAtmosphere/Source/MmcPlugin.cs",
-      "sha256": "898a25339e458601683dcf6dc89b28af27debec11205a9c63692adf887ccd761",
-      "reason": "Retain prior COT integration; 0.1.6 Gameday Atmosphere branding and appended stable-ID visitor-strength control, new-plan-only odds preference with existing native/neutral/protected/history gates retained."
+      "sha256": "d17074159fdbe59f1f0235ebea3de2bbd732f08014109fef1e64932525ae5815",
+      "reason": "Describe the explicit offline Dynasty/basic Play Now atmosphere admission accurately; retain direct loader and helper integrity behavior."
     },
     {
       "path": "Modules/GamedayAtmosphere/Source/MotionSoundPairing.h",
@@ -728,8 +753,8 @@
     },
     {
       "path": "Modules/GamedayAtmosphere/Source/NativeRuntime.cpp",
-      "sha256": "4db9e7304ba28f3c381591322cd1004bc52f18da8874d9adbc684eca2d0cf8c6",
-      "reason": "RC013 native Analytics roster-card/action/return, delayed week visibility, safe filter transitions, isolated full-card fog adapters, glyph repair, installer footer and winning visitor departures"
+      "sha256": "9e58617829e85058c49e84a8682b94a38ed3119c5fa22b46a23f023e81b6230e",
+      "reason": "Add explicit offline Play Now live-match atmosphere; keep existing mode-14 visual-only 2020 override eligibility; isolate Dynasty seeds/history and retain fingerprints/ownership."
     },
     {
       "path": "Modules/GamedayAtmosphere/Source/NativeSettingsMenu.h",
@@ -785,6 +810,11 @@
       "path": "Modules/GamedayAtmosphere/Tests/ConfigurationOptions.inc",
       "sha256": "49790fa5b73200cd70e84e8c3ee8d6e6d8fd9c70a9f580da650280313047f570",
       "reason": "Retain prior COT integration; 0.1.6 Gameday Atmosphere branding and appended stable-ID visitor-strength control, new-plan-only odds preference with existing native/neutral/protected/history gates retained."
+    },
+    {
+      "path": "Modules/GamedayAtmosphere/Tests/DirectorShakeRuntimeTests.cpp",
+      "sha256": "6f118e45da8583a932b5ff0329ecd4942c5d9f049b4efd60b3463f58b0200cd8",
+      "reason": "Verify new explicit configuration guard and both offline Dynasty/Play Now camera scopes; reject practice and online sessions while preserving the full camera regression suite."
     },
     {
       "path": "Modules/GamedayAtmosphere/Tests/HostChecks.cs",

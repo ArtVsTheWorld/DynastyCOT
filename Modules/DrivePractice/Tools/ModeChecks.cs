@@ -30,6 +30,12 @@ class ModeChecks
         var after=new NativeSnapshot{Possession=1,NativeDown=1,Ball=70,PlayEvents=new[]{80}};
         Check(empty.Record(1,before,after,0,PracticeMode.DefaultPractice)==0 && empty.LastPlay==-1 && empty.Teams[0].Plays==0 && empty.Teams[1].DownStops==0,"Native practice neither records a drive nor grants stop points");
         Check(empty.Record(1,before,after,0,PracticeMode.DrivePractice)==2 && empty.Teams[0].Plays==1,"Default practice must not consume the first actual drive result");
+        foreach(int nativeMode in new[]{-1,0,1,13,14,15,16,17,18})
+            foreach(int nativeSession in new[]{0,1,2,3,4})
+                foreach(bool practice in new[]{false,true})
+                    Check(NativeRuntime.OfflinePracticeEligible(nativeMode,nativeSession,practice)==
+                        ((nativeMode==14 || nativeMode==17) && nativeSession==3 && practice),
+                        "Only verified offline Dynasty/main-menu practice is eligible");
         const long image=0x140000000,data=0x200000000;
         foreach(byte[] hook in new[]{NativeRuntime.BuildGate(image,data,0),NativeRuntime.BuildGate(image,data,1),NativeRuntime.BuildGate(image,data,2),NativeRuntime.BuildTrace(image,data),NativeRuntime.BuildHudEntry(image,data),NativeRuntime.BuildLineGuard(image,data),NativeRuntime.BuildStatsVisibility(image,data),NativeRuntime.BuildSessionStats(image,data),NativeRuntime.BuildReturnGuard(image,data),NativeRuntime.BuildPlayCallTick(image,data),NativeRuntime.BuildPracticePlayCallUi(image,data),NativeRuntime.BuildInitialPlayCallTick(image,data),NativeRuntime.BuildInitialSetupTick(image,data),NativeRuntime.BuildModeDispatch(image,data),NativeRuntime.BuildModeText(image,data),NativeRuntime.BuildEarlyPlayCall(image,data)})
             Check(hook.Length<=1024,"A hook must not overwrite the next trampoline slot");

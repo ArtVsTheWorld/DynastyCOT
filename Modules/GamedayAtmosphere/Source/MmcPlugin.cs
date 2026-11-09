@@ -152,7 +152,7 @@ namespace DynamicGamedayAtmosphere
                     if(resetBackup!=null)Note(logger,"Update 3 settings reset: all previous DGA values replaced with current defaults. Original INI saved at "+resetBackup+". This reset runs once; later custom settings are preserved.");
                     Note(logger,"Settings: "+PluginStorage.SettingsFile(PluginsFolder)+". Former loose DGA files, if present, are preserved in its Backups folder.");
                     watcherStep="extract diagnostics tool";watcherFile=Path.Combine(DataFolder,"Tools","DgaDiagnostics.exe");Extract("DgaDiagnostics.exe",false);
-                    Note(logger,"DGA "+BuildInfo.Version+" launch watcher started | MMC PID "+Process.GetCurrentProcess().Id+" | MMC permissions: "+mmcElevation+". Automatic crowd departures are restricted to the verified offline Dynasty game layout.");
+                    Note(logger,"DGA "+BuildInfo.Version+" launch watcher started | MMC PID "+Process.GetCurrentProcess().Id+" | MMC permissions: "+mmcElevation+". Live atmosphere supports verified offline Dynasty and basic Play Now matches. Season turnout and travel plans remain Dynasty-only.");
 #if DIRECT_RUNTIME_LOADING
                     Note(logger,"Single-DLL install: runtime loading is handled directly by the MMC plugin. No loader EXE is needed. Generated native runtime: "+RuntimeFolder+"; settings/history/logs: "+DataFolder+".");
 #elif EXTERNAL_RUNTIME_LOADER

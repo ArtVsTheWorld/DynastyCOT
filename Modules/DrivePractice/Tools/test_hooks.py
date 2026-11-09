@@ -1,6 +1,7 @@
 """Execute DLL-generated x64 gates locally with native calls replaced by mocks."""
 
-import ctypes as c, struct
+import ctypes as c, struct, sys
+SCOPE_MODE=17 if "--main-menu" in sys.argv else 14
 
 from pathlib import Path
 
@@ -40,6 +41,10 @@ q(B+0xf85f700,wrapper);q(wrapper+16,match);q(B+0xf85f5f0,states)
 
 q(D+16,match);i(states+0xa0,1);i(states+0xa4,4)
 
+configuration=M+0x9000
+q(B+0xf63f9f0,configuration)
+c.c_ubyte.from_address(configuration+0x84).value=1
+
 checks=0
 
 epilogue=bytes.fromhex('4883c4285e5bc3')
@@ -60,7 +65,7 @@ for gate in range(3):
 
     for enabled in [0,1]:
 
-      for mode in [13,14]:
+      for mode in [13,14,17,18]:
 
        for kind in [3,4]:
 
@@ -74,7 +79,7 @@ for gate in range(3):
 
           c.WINFUNCTYPE(None)(M)()
 
-          active=enabled==1 and mode==14 and kind==3 and bound==match
+          active=enabled==1 and mode in (14,17) and kind==3 and bound==match
 
           assert get(telemetry)==(1 if active or flag==0 else 2),(gate,enabled,mode,kind,bound,flag)
 
@@ -86,7 +91,7 @@ put(M+0x100,Path('Evidence/Gate2.bin').read_bytes())
 
 put(M,bytes.fromhex('53564883ec28')+imm('48bb',obj)+bytes.fromhex('33f6')+jump(M+0x100))
 
-put(B+skips[2],ending(1));i(D,1);q(D+16,match);i(B+0xd9eb808,14);i(B+0xf3fddbc,3);q(states+0x50,play)
+put(B+skips[2],ending(1));i(D,1);q(D+16,match);i(B+0xd9eb808,SCOPE_MODE);i(B+0xf3fddbc,3);q(states+0x50,play)
 
 for phase in [1,3,4]:
 
@@ -120,7 +125,7 @@ put(B+0x5d5d090,bytes.fromhex('488b02488981680100008b4208898170010000c3'))
 
 put(M+0x100,Path('Evidence/Gate0.bin').read_bytes());put(M,bytes.fromhex('53564883ec28')+imm('48bb',obj)+bytes.fromhex('33f6')+jump(M+0x100))
 
-put(B+skips[0],ending(1));i(D,1);i(D+4,1);q(D+16,match);i(D+24,19);i(B+0xd9eb808,14);i(B+0xf3fddbc,3)
+put(B+skips[0],ending(1));i(D,1);i(D+4,1);q(D+16,match);i(D+24,19);i(B+0xd9eb808,SCOPE_MODE);i(B+0xf3fddbc,3)
 
 f(D+32,0);f(D+36,35);f(D+40,0);i(D+44,3);f(D+48,42)
 
@@ -190,7 +195,7 @@ for enabled in [0,1]:
 
  for hud in [0,1]:
 
-  for mode in [13,14]:
+  for mode in [13,14,17,18]:
 
    for kind in [3,4]:
 
@@ -212,7 +217,7 @@ for enabled in [0,1]:
 
          put(M,entry);c.WINFUNCTYPE(None)(M)()
 
-         active=enabled==hud==practice==1 and mode==14 and kind==3 and bound==match and not paused and requested==20 and phase in [1,3,4]
+         active=enabled==hud==practice==1 and mode in (14,17) and kind==3 and bound==match and not paused and requested==20 and phase in [1,3,4]
 
          assert get(telemetry)==({1:2,3:3,4:4}[phase] if active else requested)
 
@@ -232,7 +237,7 @@ put(B+0x4ff781e,b'\xe8'+struct.pack('<i',0x5d5d040-0x4ff781e-5)+b'\xc3')
 
 for enabled in [0,1]:
 
- for mode in [13,14]:
+ for mode in [13,14,17,18]:
 
   for kind in [3,4]:
 
@@ -252,7 +257,7 @@ for enabled in [0,1]:
 
      f(M+0xc000,13);put(M,entry);c.WINFUNCTYPE(None)(M)()
 
-     active=enabled==1 and mode==14 and kind==3 and bound==match and practice_caller
+     active=enabled==1 and mode in (14,17) and kind==3 and bound==match and practice_caller
 
      assert c.c_float.from_address(match+0x1c0).value==(44 if active else 13)
 
@@ -268,7 +273,7 @@ expression=M+0xd000;q(expression,M+0xd100);q(D+120,expression)
 
 for enabled in [0,1]:
 
- for mode in [13,14]:
+ for mode in [13,14,17,18]:
 
   for kind in [3,4]:
 
@@ -284,7 +289,7 @@ for enabled in [0,1]:
 
       put(M,entry);value=c.WINFUNCTYPE(c.c_int)(M)()
 
-      assert value==int(enabled==practice==1 and mode==14 and kind==3 and bound==match and selected==expression);checks+=1
+      assert value==int(enabled==practice==1 and mode in (14,17) and kind==3 and bound==match and selected==expression);checks+=1
 
 # Run the actual generated native UI row serializer against a mock UI object.
 
@@ -304,7 +309,7 @@ rows=D+4608;put(rows,b'Practice plays\0');put(rows+64,b'7\0');put(rows+96,b'0\0'
 
 put(rows+128,b'Defensive points\0');put(rows+128+64,b'0\0');put(rows+128+96,b'10\0');q(D+144,rows);i(D+152,2)
 
-i(D,1);i(B+0xd9eb808,14);i(B+0xf3fddbc,3);q(D+16,match);c.c_ubyte.from_address(cfg+0x84).value=1
+i(D,1);i(B+0xd9eb808,SCOPE_MODE);i(B+0xf3fddbc,3);q(D+16,match);c.c_ubyte.from_address(cfg+0x84).value=1
 
 put(M+0x100,Path('Evidence/SessionStats.bin').read_bytes())
 
@@ -320,7 +325,7 @@ put(B+0x7b9d930+15,imm('48b8',telemetry)+bytes.fromhex('c70003000000488b5c240848
 
 for disabled in ['enabled','mode','kind','match','practice','rows']:
 
- i(D,1);i(B+0xd9eb808,14);i(B+0xf3fddbc,3);q(D+16,match);c.c_ubyte.from_address(cfg+0x84).value=1;q(D+144,rows)
+ i(D,1);i(B+0xd9eb808,SCOPE_MODE);i(B+0xf3fddbc,3);q(D+16,match);c.c_ubyte.from_address(cfg+0x84).value=1;q(D+144,rows)
 
  if disabled=='enabled':i(D,0)
 
@@ -356,7 +361,7 @@ def practice_scope(disabled=None):
 
  i(D+12012,0);i(D+12016,0)
 
- i(D,1);i(B+0xd9eb808,14);i(B+0xf3fddbc,3);q(D+16,match);c.c_ubyte.from_address(cfg+0x84).value=1
+ i(D,1);i(B+0xd9eb808,SCOPE_MODE);i(B+0xf3fddbc,3);q(D+16,match);c.c_ubyte.from_address(cfg+0x84).value=1
 
  if disabled=='enabled':i(D,0)
 

@@ -37,6 +37,15 @@ def main():
         if doc.get('toVersion')!=version or doc.get('synthetic') is not False or doc.get('liveInstall') is not False or doc.get('rollback') is not True:
             raise ValueError('Branded-runtime upgrade checks must cover this actual source-built candidate')
         evidence['runtimeUpgrade']=select(doc,['checks','fromVersion','toVersion','synthetic','liveInstall','rollback','faultStages','hashProvenRetirement','unknownActiveRejectedBeforeMutation','dataPathsPreserved','publicGda2035','legacyLogMigration','pluginsRootOnlySharedDll'])
+    same_version=ROOT/'Build/same-version-upgrade-verification.json'
+    if same_version.exists():
+        doc=json.loads(same_version.read_text())
+        if doc.get('current',{}).get('version')==version and doc.get('current',{}).get('manifestSha256')==verified.get('manifestSha256'):
+            if doc.get('synthetic') is not False or doc.get('liveInstall') is not False or doc.get('sameVersion') is not True:
+                raise ValueError('Same-version upgrade evidence must use the actual isolated candidate')
+            evidence['sameVersionUpgrade']=select(doc,['checks','sameVersion','faultRollbackStages','manualRollbackRestoresPreviousBinaryHashes','choicesSettingsHistoryPreserved','laterUserDataPreserved','liveInstall','synthetic'])
+            for name in ['previous','current']:
+                evidence['sameVersionUpgrade'][name]=select(doc[name],['version','manifestSha256','payloadSetSha256','hostSha256','nativeFogSha256','archiveSha256'])
     published=ROOT/'Build/updater-published-verification.json'
     if published.exists():
         doc=json.loads(published.read_text())

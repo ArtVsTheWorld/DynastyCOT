@@ -67,7 +67,7 @@ try {
             & ('.\'+$crowdTest+'.exe')
             if($LASTEXITCODE -ne 0){throw ($crowdTest+' failed')}
         }
-        foreach($auditTest in @('NativeMenuReadTests','ConfigurationAuditTests')){
+        foreach($auditTest in @('NativeMenuReadTests','ConfigurationAuditTests','OfflineMatchScopeTests')){
             & $crowdCl /nologo /O2 /MT /W4 /WX /EHsc /std:c++17 @crowdInclude (Join-Path $crowdRoot ('Tests\'+$auditTest+'.cpp')) ('/Fe:'+$auditTest+'.exe') /link @crowdLib
             if($LASTEXITCODE -ne 0){throw ($auditTest+' build failed')}
             & ('.\'+$auditTest+'.exe')

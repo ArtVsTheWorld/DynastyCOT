@@ -32,6 +32,7 @@
 #include "PlayerRatingGrid.h"
 #include "CurrencyUiPrograms.h"
 #include "CurrencyTopbarUiPrograms.h"
+#include "CurrencyClassBanks.h"
 #include "CurrencyBudgetUiPrograms.h"
 #include "AioCurrencyUiPrograms.h"
 #include "AioRecruitNotesUiPrograms.h"
@@ -109,7 +110,8 @@ notesui::Runtime playerTrenchPanelUi(playerplaycallui::trenchPrograms());
 notesui::Runtime playerInjuryScreenUi(playeringameui::injuryPrograms());
 notesui::Runtime currencyIconUi(currencyui::iconPrograms()),currencySlotUi(currencyui::slotPrograms()),currencyCellUi(currencyui::cellPrograms());
 notesui::Runtime currencyTopbarUi(currencytopbarui::programs());
-notesui::Runtime currencyRecruitingUi(currencytopbarui::recruitingPrograms());
+notesui::Runtime currencyRecruitingUi(currencyclassui::recruitingPrograms(0));
+notesui::Runtime currencyRecruitingOfferUi(currencyclassui::recruitingPrograms(1)),currencyRecruitingHoursUi(currencyclassui::recruitingPrograms(2));
 notesui::Runtime currencyBudgetUi(currencybudgetui::corePrograms()),currencyAnimationUi(currencybudgetui::animationPrograms());
 notesui::Runtime currencyBudgetArtUi(currencybudgetui::artPrograms());
 notesui::Runtime currencyRecruitDetailUi(currencyrecruitdetailui::programs());
@@ -122,7 +124,7 @@ notesui::Runtime draftOvrStrategyUi(draftovrui::strategyPrograms()),draftOvrCurr
 notesui::Runtime aioCurrency0(aiocurrencyui::group0()),aioCurrency1(aiocurrencyui::group1()),aioCurrency2(aiocurrencyui::group2()),aioCurrency3(aiocurrencyui::group3());
 notesui::Runtime aioNotesUi(aiorecruitnotesui::programs());
 notesui::Runtime analyticsRowUi(analyticsactions::hubRowPrograms()),analyticsCurrentRowUi(analyticsactions::currentRowPrograms());
-const std::array<notesui::Runtime*,59> cardUiBanks={&playerControlUi,&playerCardUi,&playerTemplateUi,&playerSkillUi,&playerHubUi,&playerSliderUi,&playerInGameUi,&playerRecruitUi,&playerFormationUi,&playerLegacyOvrUi,&playerNilUi,&playerBlueprintUi,&playerPracticeUi,&playerNilEmbeddedUi,&playerKickerUi,&playerIndividualPanelUi,&playerComparisonPanelUi,&playerImpactPanelUi,&playerLineupPanelUi,&playerTrenchPanelUi,&playerInjuryScreenUi,&currencyIconUi,&currencySlotUi,&currencyCellUi,&gapCoreUi,&gapHubUi,&gapRecruitUi,&gapTeamSelectUi,&draftOvrStrategyUi,&draftOvrCurrentStrategyUi,&draftOvrRowsUi,&currencyTopbarUi,&currencyRecruitingUi,&currencyBudgetUi,&currencyAnimationUi,&currencyBudgetArtUi,&currencyRecruitDetailUi,&currencyRecruitEditorUi,&aioCurrency0,&aioCurrency1,&aioCurrency2,&aioCurrency3,&playerBlueprintAioUi,&gapWeeklyUi,&gapTopPlayersUi,&gapAioTopPlayersUi,&aioNotesUi,&analyticsMainUi,&analyticsCurrentUi,&analyticsCleanupUi,&analyticsCurrentCleanupUi,&analyticsHintsUi,&playerTeamModuleUi,&analyticsRefreshUi,&analyticsCurrentRefreshUi,&analyticsCurrentHintsUi,&analyticsRowUi,&analyticsCurrentRowUi,&nilToggleUi};
+const std::array<notesui::Runtime*,61> cardUiBanks={&playerControlUi,&playerCardUi,&playerTemplateUi,&playerSkillUi,&playerHubUi,&playerSliderUi,&playerInGameUi,&playerRecruitUi,&playerFormationUi,&playerLegacyOvrUi,&playerNilUi,&playerBlueprintUi,&playerPracticeUi,&playerNilEmbeddedUi,&playerKickerUi,&playerIndividualPanelUi,&playerComparisonPanelUi,&playerImpactPanelUi,&playerLineupPanelUi,&playerTrenchPanelUi,&playerInjuryScreenUi,&currencyIconUi,&currencySlotUi,&currencyCellUi,&gapCoreUi,&gapHubUi,&gapRecruitUi,&gapTeamSelectUi,&draftOvrStrategyUi,&draftOvrCurrentStrategyUi,&draftOvrRowsUi,&currencyTopbarUi,&currencyRecruitingUi,&currencyBudgetUi,&currencyAnimationUi,&currencyBudgetArtUi,&currencyRecruitDetailUi,&currencyRecruitEditorUi,&aioCurrency0,&aioCurrency1,&aioCurrency2,&aioCurrency3,&playerBlueprintAioUi,&gapWeeklyUi,&gapTopPlayersUi,&gapAioTopPlayersUi,&aioNotesUi,&analyticsMainUi,&analyticsCurrentUi,&analyticsCleanupUi,&analyticsCurrentCleanupUi,&analyticsHintsUi,&playerTeamModuleUi,&analyticsRefreshUi,&analyticsCurrentRefreshUi,&analyticsCurrentHintsUi,&analyticsRowUi,&analyticsCurrentRowUi,&nilToggleUi,&currencyRecruitingOfferUi,&currencyRecruitingHoursUi};
 bool cardBankEnabled(size_t bank){const auto selected=enhancements::options();const auto* runtime=cardUiBanks[bank];
     if(runtime==&nilToggleUi)return selected.dollars;
     if(runtime==&analyticsMainUi||runtime==&analyticsCurrentUi)return nativeanalytics::opened;
@@ -134,7 +136,7 @@ bool cardBankEnabled(size_t bank){const auto selected=enhancements::options();co
     if(runtime==&gapRecruitUi)return selected.recruiting;
     // Currency layout must undo its own prior fit when dollars is switched Off.
     // The suffix retains the real option gate; fresh Off widgets are a no-op.
-    if(runtime==&currencySlotUi||runtime==&currencyRecruitingUi||runtime==&currencyRecruitDetailUi||runtime==&currencyRecruitEditorUi||runtime==&playerSliderUi)return true;
+    if(runtime==&currencySlotUi||runtime==&currencyRecruitingUi||runtime==&currencyRecruitingOfferUi||runtime==&currencyRecruitingHoursUi||runtime==&currencyRecruitDetailUi||runtime==&currencyRecruitEditorUi||runtime==&playerSliderUi)return true;
     if(runtime==&currencyIconUi||runtime==&currencyCellUi||runtime==&currencyTopbarUi||runtime==&currencyBudgetUi||runtime==&currencyAnimationUi||runtime==&currencyBudgetArtUi)return selected.dollars;
     if(runtime==&playerNilUi||runtime==&playerNilEmbeddedUi)return selected.dollars||selected.roster||selected.team||selected.colors;
     if(runtime==&playerSkillUi&&selected.dollars)return true;
@@ -573,8 +575,12 @@ uintptr_t __fastcall notesSetupHook(void* object,void* saved,uintptr_t receiver,
     const auto* liveHeader=reinterpret_cast<const unsigned char*>(liveDefinition);
     // Native Back can recreate Roster directly, without a navigation request.
     // Admit only the fingerprinted Roster constructor before it rebuilds columns.
-    if(nativeanalytics::cardReturnPending&&nativeanalytics::available())for(auto* bank:{&analyticsMainUi,&analyticsCurrentUi}){
+    if(nativeanalytics::cardReturnPending)for(auto* bank:{&analyticsMainUi,&analyticsCurrentUi}){
         if(!bank->acceptsFrame(liveHeader))continue;
+        // Full player cards invoke many unrelated scripts while this ticket
+        // is armed. Validate the Dynasty only for a possible return frame;
+        // the fresh scope check still precedes admission and restoration.
+        if(!nativeanalytics::available())break;
         try{const auto selected=enhancements::options();const auto index=bank->beforeInvoke(object,read,false,true,unsigned(selected.scale),selected.colors,selected.roster,selected.team,selected.dollars,unsigned(selected.teamScale));
             if(index==0||bank->ownsInvocation(object,0,read)){nativeanalytics::resumeCard();break;}}
         catch(const std::exception& error){note({{"event","analytics_return_frame_refused"},{"reason",error.what()}});}

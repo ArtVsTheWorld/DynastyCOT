@@ -116,7 +116,7 @@ namespace SituationalPractice
                 for(int i=0;i<Sites.Length;i++)
                     if(!Equal(Read(image+Sites[i],Originals[i].Length),Originals[i]))
                         throw new InvalidOperationException("Conflicting or unsupported code at "+Sites[i].ToString("x")+". No hooks installed.");
-                log("Required native code and Dynasty practice layout verified; whole-EXE hash is not required.");
+                log("Required native code and offline practice layout verified; whole-EXE hash is not required.");
                 data=VirtualAllocEx(handle,IntPtr.Zero,new UIntPtr(16384),0x3000,4).ToInt64();
                 code=VirtualAllocEx(handle,IntPtr.Zero,new UIntPtr(20480),0x3000,4).ToInt64();
                 if(data==0||code==0)throw new InvalidOperationException("Cannot allocate runtime.");
@@ -179,15 +179,29 @@ namespace SituationalPractice
                 r.Dispose();
             } finally {if(r.handle!=IntPtr.Zero){CloseHandle(r.handle);r.handle=IntPtr.Zero;r.game.Dispose();}}
         }
+        // The observed main-menu practice mode is 17; Dynasty is 14. Both
+        // require the native offline session (3), practice config and bound match.
+        internal static bool OfflinePracticeEligible(int mode,int session,bool practice)
+        {return (mode==14 || mode==17) && session==3 && practice;}
+        private static void EmitOfflinePracticeScope(Emitter b,long image,bool configuration=false)
+        {
+            b.H("48b8");b.Q(image+0xd9eb808);b.H("83380e7409"); // short JE skips only CMP(17) + near JNE(6 bytes)
+            b.H("833811");b.J("0f85","native");
+            b.H("48b8");b.Q(image+0xf3fddbc);b.H("833803");b.J("0f85","native");
+            if(configuration){
+                b.H("48b8");b.Q(image+0xf63f9f0);b.H("488b004885c0");b.J("0f84","native");
+                b.H("80b88400000001");b.J("0f85","native");
+            }
+        }
         public NativeSnapshot Snapshot()
         {
             long configuration=Long(image+0xf63f9f0);
-            if(Int(image+0xd9eb808)!=14 || Int(image+0xf3fddbc)!=3 || configuration==0 || Read(configuration+0x84,1)[0]!=1)
-                throw new InvalidOperationException("Waiting for offline Dynasty practice.");
+            if(!OfflinePracticeEligible(Int(image+0xd9eb808),Int(image+0xf3fddbc),configuration!=0 && Read(configuration+0x84,1)[0]==1))
+                throw new InvalidOperationException("Waiting for offline Dynasty or main-menu practice.");
             long wrapper=Long(image+0xf85f700), states=Long(image+0xf85f5f0);
-            if(wrapper==0 || states==0)throw new InvalidOperationException("Waiting for an offline Dynasty session.");
+            if(wrapper==0 || states==0)throw new InvalidOperationException("Waiting for an offline practice session.");
             long match=Long(wrapper+16);
-            if(match==0)throw new InvalidOperationException("Waiting for an offline Dynasty session.");
+            if(match==0)throw new InvalidOperationException("Waiting for an offline practice session.");
             long play=Long(states+0x50);
             return new NativeSnapshot {Match=match,States=states,Phase=Int(states+0xa0),
                 Possession=Int(match+0x1c8),NativeDown=Int(match+0x1d0),Ball=Float(match+0x16c)+50,Line=Float(match+0x1c0)+50,
@@ -502,10 +516,7 @@ namespace SituationalPractice
             b.H("41833a01");b.J("0f85","native");
             b.H("41837a5001");b.J("0f85","native");
             b.H("83fa14");b.J("0f85","native");
-            b.H("48b8");b.Q(image+0xd9eb808);b.H("83380e");b.J("0f85","native");
-            b.H("48b8");b.Q(image+0xf3fddbc);b.H("833803");b.J("0f85","native");
-            b.H("48b8");b.Q(image+0xf63f9f0);b.H("488b004885c0");b.J("0f84","native");
-            b.H("80b88400000001");b.J("0f85","native");
+            EmitOfflinePracticeScope(b,image,true);
             b.H("48b8");b.Q(image+0xf85f700);b.H("488b004885c0");b.J("0f84","native");
             b.H("488b4010493b4210");b.J("0f85","native");
             // The native pause manager's first byte is the active pause flag.
@@ -525,8 +536,7 @@ namespace SituationalPractice
             var b=new Emitter();b.H("9c50415249ba");b.Q(data);
             b.H("41833a01");b.J("0f85","native");
             b.H("493b4a10");b.J("0f85","native");
-            b.H("48b8");b.Q(image+0xd9eb808);b.H("83380e");b.J("0f85","native");
-            b.H("48b8");b.Q(image+0xf3fddbc);b.H("833803");b.J("0f85","native");
+            EmitOfflinePracticeScope(b,image);
             // Suppress only the practice controller's unconditional target reset.
             // Normal first-down, goal-to-go and scenario line setters still run.
             b.H("48b8");b.Q(image+0x4ff7823);b.H("4839442418");b.J("0f85","native");
@@ -545,10 +555,7 @@ namespace SituationalPractice
             if(menu){b.J("0f84","menuEnabled");b.H("4183ba");b.I(12368);b.H("01");}
             b.J("0f85","native");
             if(menu)b.Label("menuEnabled");
-            b.H("48b8");b.Q(image+0xd9eb808);b.H("83380e");b.J("0f85","native");
-            b.H("48b8");b.Q(image+0xf3fddbc);b.H("833803");b.J("0f85","native");
-            b.H("48b8");b.Q(image+0xf63f9f0);b.H("488b004885c0");b.J("0f84","native");
-            b.H("80b88400000001");b.J("0f85","native");
+            EmitOfflinePracticeScope(b,image,true);
             b.H("48b8");b.Q(image+0xf85f700);b.H("488b004885c0");b.J("0f84","native");
             b.H("488b4010493b4210");b.J("0f85","native");return b;
         }
@@ -925,8 +932,7 @@ namespace SituationalPractice
         {
             var b=new Emitter(); b.H("9c50415249ba"); b.Q(data);
             b.H("49895a0841833a01"); b.J("0f85","native");
-            b.H("48b8"); b.Q(image+0xd9eb808); b.H("83380e"); b.J("0f85","native");
-            b.H("48b8"); b.Q(image+0xf3fddbc); b.H("833803"); b.J("0f85","native");
+            EmitOfflinePracticeScope(b,image);
             b.H("48b8"); b.Q(image+0xf85f700); b.H("488b004885c0"); b.J("0f84","native");
             b.H("488b4010493b4210"); b.J("0f85","native");
             if(index==0) {
