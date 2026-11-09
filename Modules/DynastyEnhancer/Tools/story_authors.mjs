@@ -11,6 +11,9 @@ export function authorRegistry(saved={}){
  const entries=structuredClone(saved),handles=new Map(Object.entries(entries).map(([k,v])=>[v.handle.toLowerCase(),k]));
  return {entries,get(s,role,team,player,persona=0){
   const person=['player','recruit'].includes(role),family=person?'person':role==='analyst'&&persona===6?'pff':role;
+  // Personal accounts require a real subject; never mint an anonymous athlete
+  // or replace a missing ID with a team/national account key.
+  if(person&&(!player||player.id==null||!['string','number'].includes(typeof player.id)||typeof player.id==='string'&&!player.id.trim()||typeof player.id==='number'&&(!Number.isInteger(player.id)||player.id<0)||typeof player.name!=='string'||!player.name.trim()))return null;
   const key=`${s.leagueId}:${family}:${person?player.id:['analyst','model','cfp','nflDraft'].includes(role)?'national':team?.id??'national'}${!person&&persona?':'+persona:''}`;
   const recruitClass=person?s.recruitStatuses?.find(r=>r.player===player.id)?.recruitClass:null;
   const classLabel=recruitClass?.startsWith('Transfer_')?'Transfer ':recruitClass?.startsWith('JuniorCollege_')?'JUCO ':'';

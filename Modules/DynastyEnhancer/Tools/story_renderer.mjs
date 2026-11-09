@@ -70,7 +70,11 @@ function renderPass(s,events,{authors={},history=[],sameWeek=null,onTemplates=nu
   ({role,persona}=editorialAssignment(s,e,family,role,team,persona,coverage));
   if(!budget.allows(e,role,{reply:!!replyTo,published:sameStories.has(e.id+':'+suffix)}))return null;
   const publishedAccount=sameStories.get(e.id+':'+suffix);if(publishedAccount){role=publishedAccount.voice;const desk=analystPersona(publishedAccount.author);if(role==='analyst'&&desk>=0)persona=desk;}
-  const account=registry.get(s,role,team,player,persona),id=e.id+':'+suffix;
+  // A previously published personal main post can be revisited through a
+  // reporter branch that deliberately did not pass a speaker. Resolve only
+  // the event's actual player after restoring its published voice.
+  if(['player','recruit'].includes(role)){player??=players.get(e.playerId)??null;if(!player)return null;}
+  const account=registry.get(s,role,team,player,persona),id=e.id+':'+suffix;if(!account)return null;
   const style=['player','recruit'].includes(role)?personalVoice(account,player):null;
   const filled={recruitRankDetail:recruitRankDetail(values,e.id,{excludeNational:family==='preseason.recruit.watch'}),starDescription:Number.isInteger(values.stars)?values.stars+'-star ':'',...values,...(values.position?{position:publicPosition(values.position)}:{}),...(parent?{parentHandle:parent.handle}:{})};
   if(role==='player'&&player&&typeof filled.playerName==='string'){const subject=(playersByName.get(filled.playerName)??[]).find(p=>p.team===player.team||p.team===255&&['offers','recruiting'].includes(e.category)&&e.teamIds.includes(player.team));if(subject&&subject.id!==player.id)filled.playerName=subject.firstName||subject.name.trim().split(/\s+/)[0];}

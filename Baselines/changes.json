@@ -578,8 +578,8 @@
     },
     {
       "path": "Modules/DynastyEnhancer/Tools/story_authors.mjs",
-      "sha256": "1ebf87256e480854f239e80a027b990e8aa0b3ccde810f893012649637e53ee6",
-      "reason": "0.1.14: released native production and position-relative grades with prestige uncertainty; same-model optional PFF publications and preserved history"
+      "sha256": "487d4092b9bc47dc3f59c3532d014fbc58b8eda6bf85df0d851b2a7741feb4ae",
+      "reason": "Prevent null player author dereference after restoring a published personal voice; preserve real account identity and unchanged published wording, retain teamless national reporting."
     },
     {
       "path": "Modules/DynastyEnhancer/Tools/story_conversations.mjs",
@@ -598,8 +598,8 @@
     },
     {
       "path": "Modules/DynastyEnhancer/Tools/story_renderer.mjs",
-      "sha256": "96e91e8138ee976f0d49dcf482244fb6ef4b81e4568c06d5e46801d83c8909ec",
-      "reason": "0.1.16 bounded season-review fixes and source/fixture verification; retain native scopes, fingerprints, published identities/history, four-module selection and helper verification."
+      "sha256": "a2154a0b11e2082b487e794934adbdd45c0a0cdf2296f799b908aadb16634e55",
+      "reason": "Prevent null player author dereference after restoring a published personal voice; preserve real account identity and unchanged published wording, retain teamless national reporting."
     },
     {
       "path": "Modules/DynastyEnhancer/Tools/story_templates.mjs",
