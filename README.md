@@ -14,8 +14,9 @@
 
 - **A livelier Social Media feed:** results, rankings, recruiting, awards and more, with reporters, team accounts, players and fans. Browse For You, National, conference, team and topic filters, or return to past editions. National shows up to 300 cards; extra wording choices add variety without increasing the weekly post budget.
 - **More uncertainty when building your team:** separate recruiting, roster and team fog options let you see less exact information. Recruiting Notes keep a recruit's developing profile together.
+- **Recruit interest choices:** Default keeps the normal game display. Recruit Feedback replaces exact bars/ranks with broad standings; Rank Only hides the bars. Previously scouted, off-board and uncommitted prospects get a scouting-progress icon.
 - **Choose how ratings look:** use letter grades, descriptive words such as GOOD, or the other included scales. Rating colors are optional. Compact money labels turn long amounts into readable $K/$M values.
-- **Player Analytics:** browse a selected team's weekly and season performance grades, snaps and player cards. These are mod-calculated, PFF-style grades from available Dynasty statistics, not official PFF grades. Only completed weeks contribute. National Analytics and the Player Stats shortcut are not included.
+- **Player Analytics:** browse a selected team's weekly and season performance grades, snaps and player cards. Gridiron Performance Index (GPI) provides mod-calculated grades from available Dynasty statistics. Only completed weeks contribute. National Analytics and the Player Stats shortcut are not included.
 
 Beyond the Field fog, rating styles, colors and money formatting apply inside Dynasty; main-menu and Play Now displays stay native. Find the options under **Beyond the Field** in Dynasty settings. Social Media and fog start on; rating colors and dollar formatting start off. Published posts, accounts and history survive updates.
 

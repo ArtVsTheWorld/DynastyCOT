@@ -40,7 +40,7 @@ void __fastcall sourceColumnFallback(void* object,void* output,int id){++sourceC
 void testSourceColumns(void* output){
     using namespace nativeanalytics;const auto previous=sourceColumns;sourceColumns=sourceColumnFallback;void* marker=reinterpret_cast<void*>(0x23456);
     opened=true;disabled=false;source=-1;collected=Json::object();sourceColumnHook(marker,output,0);
-    check(source==-1&&collected.size()==8&&collected["5"]["display"]=="PFF GRADE"&&collected["6"]["display"]=="CLASSIFICATION"&&sourceColumnCalls==0,"Pre-BeginUpdate Roster schema did not expose Analytics columns");
+    check(source==-1&&collected.size()==8&&collected["5"]["display"]=="GPI GRADE"&&collected["6"]["display"]=="CLASSIFICATION"&&sourceColumnCalls==0,"Pre-BeginUpdate Roster schema did not expose Analytics columns");
     source=0;collected=Json::object();sourceColumnHook(marker,output,0);check(collected.size()==8&&collected["2"]["display"]=="Name"&&sourceColumnCalls==0,"Bound Roster schema did not expose Analytics columns");
     auto native=[&](int id){const int before=sourceColumnCalls;collected=Json::object();sourceColumnHook(marker,output,id);check(sourceColumnCalls==before+1&&collected.empty()&&sourceColumnArgs==std::array<uintptr_t,3>{0x23456,reinterpret_cast<uintptr_t>(output),static_cast<uintptr_t>(id)},"Unowned Roster schema did not forward exact native arguments once");};
     native(1);native(-1);opened=false;native(0);opened=true;disabled=true;native(0);disabled=false;sourceColumns=previous;
@@ -309,7 +309,7 @@ void testNationalCap(const Json& dataset){
     }
     const auto original=busy;auto national=analytics::teamPage(busy,analytics::NationalTeam,0,1,"RegularSeason");auto complete=analytics::teamPage(busy,14,0,1,"RegularSeason");
     check(national["rows"].size()==400&&complete["rows"].size()==455,"National cap truncated a team roster or failed to bound National");
-    check(national["rows"].front()["playerKey"]=="5:449"&&national["rows"].back()["playerKey"]=="5:50","National did not preselect the highest400 PFF grades");
+    check(national["rows"].front()["playerKey"]=="5:449"&&national["rows"].back()["playerKey"]=="5:50","National did not preselect the highest400 GPI grades");
     std::set<std::string> eligible;for(const auto& row:national["rows"]){eligible.insert(row["playerKey"].get<std::string>());check(row["grade"].is_number()&&row["name"].get<std::string>().rfind("Z-high-",0)==0,"Low-grade alphabet-first or ungraded row displaced a National leader");}
     for(int column:{2,3,4,5,6,7})for(bool descending:{false,true}){auto sorted=national;analytics::sortPage(sorted,column,descending);std::set<std::string> actual;for(const auto& row:sorted["rows"])actual.insert(row["playerKey"].get<std::string>());check(actual==eligible,"User sort changed National's preselected400 identities");}
     check(analytics::teamPage(dataset,analytics::NationalTeam,0,1,"RegularSeason")["rows"].size()==2,"Sparse National view was padded or lost eligible rows");
@@ -364,9 +364,9 @@ int main(int argc,char** argv){using namespace fixture;using namespace fixture::
   corroborated["records"]["10:0"]={{"key","10:0"},{"type","SeasonStats[]"},{"capacity",150},{"v",{{"Member0","11:0"}}}};
   corroborated["records"]["11:0"]={{"key","11:0"},{"type","SeasonOffensiveStats"},{"capacity",150},{"v",{{"SEAS_YEAR",0},{"DOWNSPLAYED",60},{"YEARBYYEARTEAMINDEX",14}}}};
   auto verifiedCoverage=analytics::live::socialSummary(corroborated).at("coverage");
-  check(verifiedCoverage.at("scheduleComplete")==true&&std::find(verifiedCoverage.at("positions").begin(),verifiedCoverage.at("positions").end(),"QB")!=verifiedCoverage.at("positions").end(),"Reconciled participation cannot enter PFF rankings");
+  check(verifiedCoverage.at("scheduleComplete")==true&&std::find(verifiedCoverage.at("positions").begin(),verifiedCoverage.at("positions").end(),"QB")!=verifiedCoverage.at("positions").end(),"Reconciled participation cannot enter GPI rankings");
   corroborated["records"]["11:0"]["v"]["DOWNSPLAYED"]=61;auto incompleteCoverage=analytics::live::socialSummary(corroborated).at("coverage");
-  check(std::find(incompleteCoverage.at("positions").begin(),incompleteCoverage.at("positions").end(),"QB")==incompleteCoverage.at("positions").end(),"Missing game-cache participation can create a false PFF leader");
+  check(std::find(incompleteCoverage.at("positions").begin(),incompleteCoverage.at("positions").end(),"QB")==incompleteCoverage.at("positions").end(),"Missing game-cache participation can create a false GPI leader");
   auto changed=raw;changed["records"]["5:0"]["v"]["OverallRating"]=10;changed["records"]["5:0"]["v"]["TraitDevelopment"]="Normal";changed["records"]["7:0"]["v"]["GAMERATING"]=0;
   check(analytics::live::dataset(changed)["rows"][0]["analytics"]==grade,"Hidden/native ratings influence production grade");
   changed=raw;changed["records"]["7:0"]["v"].erase("PASSINTS");check(analytics::live::dataset(changed)["rows"][0]["analytics"]["grade"].is_null(),"Missing stats were fabricated");
@@ -392,7 +392,7 @@ int main(int argc,char** argv){using namespace fixture;using namespace fixture::
   analyticscardtests::run(check,[](void** out,void* arg,void*& result){return playerCard(out,arg,result);});
   check(recordKey("5:0")=="000A0000","Native player-reference packing changed");bool rejected=false;try{recordKey("5:131072");}catch(...){rejected=true;}check(rejected,"Out-of-range record accepted");
   void* vt[]={nullptr,reinterpret_cast<void*>(reserve),nullptr,reinterpret_cast<void*>(accept<bool>),reinterpret_cast<void*>(accept<int>),reinterpret_cast<void*>(scalar),reinterpret_cast<void*>(accept<const char*>)};struct Target{void** vt;}target{vt};
-  collected=Json::object();columnHook(nullptr,&target,0);check(collected.size()==8&&collected["5"]["display"]=="PFF GRADE"&&collected["6"]["display"]=="CLASSIFICATION","Native columns missing production grades/classification");
+  collected=Json::object();columnHook(nullptr,&target,0);check(collected.size()==8&&collected["5"]["display"]=="GPI GRADE"&&collected["6"]["display"]=="CLASSIFICATION","Native columns missing production grades/classification");
   void* cvt[]={nullptr,reinterpret_cast<void*>(colsCount),reinterpret_cast<void*>(colAt)};Target cols{cvt};collected=Json::object();rowHook(nullptr,&target,7,0,&cols);check(reserved==6&&collected["3"]["display"].is_string(),"Native row collector ABI changed");
   encodePrefix=encodeValue=encodeSuffix=encode;collected=Json::object();keyHook(nullptr,&target,7,0);check(encoded.size()==3&&encoded[0]==255&&encoded[1]==(5u<<17)&&encoded[2]==255,"Native serial-key identity changed");
   nativeSort=sortFallback;check(sortHook(nullptr,7,5)&&forwarded==2,"Native sort refresh does not use valid donor column");check(page["rows"].back()["grade"].is_null(),"N/A sorts before real production grades");

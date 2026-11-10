@@ -4,8 +4,8 @@ import {comparePublication} from './publication_timeline.mjs';
 import {nativeViewIds} from './feed_visibility.mjs';
 import {templateFeatures,varietyMemory,rememberVariety,repetitionCost,structuralNeighbors,nearUse,globalNearUse} from './story_variety.mjs';
 export const contentPack=JSON.parse(fs.readFileSync(new URL('../Content/Runtime/first-pack.json',import.meta.url),'utf8'));
-const pffPack=JSON.parse(fs.readFileSync(new URL('../Content/Runtime/pff-pack.json',import.meta.url),'utf8'));
-Object.assign(contentPack.families,pffPack.families);
+const gpiPack=JSON.parse(fs.readFileSync(new URL('../Content/Runtime/gpi-pack.json',import.meta.url),'utf8'));
+Object.assign(contentPack.families,gpiPack.families);
 const expansion=JSON.parse(fs.readFileSync(new URL('../Content/Runtime/analysis-pack.json',import.meta.url),'utf8'));
 Object.assign(contentPack.families,expansion.families);contentPack.revision=expansion.revision;
 const preseason=JSON.parse(fs.readFileSync(new URL('../Content/Runtime/preseason-pack.json',import.meta.url),'utf8'));
@@ -91,7 +91,7 @@ const refresh=JSON.parse(fs.readFileSync(new URL('../Content/Runtime/editorial01
 const originalTemplates=new Map(Object.entries(contentPack.families).flatMap(([family,ts])=>ts.map(t=>[t.id,{family,t}])));
 for(const patch of refresh.overrides){const old=originalTemplates.get(patch.id);if(!old||old.family!==patch.family||old.t.body!==patch.originalBody)throw Error('Stale editorial patch '+patch.id);old.t.body=patch.body;}
 for(const [family,lines] of Object.entries(refresh.families)){if(!contentPack.families[family])throw Error('Unknown editorial family '+family);contentPack.families[family].push(...lines);}
-contentPack.revision=refresh.revision+'+'+pffPack.revision;
+contentPack.revision=refresh.revision+'+'+gpiPack.revision;
 const seasonReview=JSON.parse(fs.readFileSync(new URL('../Content/Runtime/season-fixes-pack.json',import.meta.url),'utf8'));
 const reviewedTemplates=new Map(Object.entries(contentPack.families).flatMap(([family,ts])=>ts.map(t=>[t.id,{family,t}])));
 for(const patch of seasonReview.overrides){const old=reviewedTemplates.get(patch.id);if(!old||old.family!==patch.family||old.t.body!==patch.originalBody)throw Error('Stale season-review patch '+patch.id);old.t.body=patch.body;}

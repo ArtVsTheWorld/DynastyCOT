@@ -17,6 +17,7 @@ inline Options decodeOptions(const nlohmann::json& saved,uint32_t league){
     Options selected;selected.social=saved.at("socialMedia").get<bool>();selected.recruiting=saved.at("recruitingFog").get<bool>();selected.roster=saved.at("rosterFog").get<bool>();
     selected.scale=GradeScale(integer(format==1?"gradeScale":"playerGradeScale",format==1?3:4));
     selected.teamScale=format==1?selected.scale:GradeScale(integer("teamGradeScale",4));
+    if(saved.contains("recruitInterestDisplay"))selected.interest=RecruitInterestDisplay(integer("recruitInterestDisplay",2));
     selected.colors=saved.value("ratingColors",false);selected.team=saved.value("teamFog",true);selected.dollars=saved.value("dollarValues",false);return selected;
 }
 // Shared by the two native payloads in this process. No game database fields
@@ -60,7 +61,7 @@ public:
     void bind(const std::string& identity){
         size_t consumed=0;const auto number=std::stoull(identity,&consumed);if(consumed!=identity.size()||!number||number>=UINT32_MAX)throw std::runtime_error("Invalid enhancement Dynasty identity");
         Options selected;
-        {std::lock_guard<std::mutex> guard(mutex);if(ready&&league==number)return;ready=false;currentOptionsLeague=0;currentOptions=selected.packed();shared.publish(static_cast<uint32_t>(number),selected);}
+        {std::lock_guard<std::mutex> guard(mutex);if(ready&&league==number)return;ready=false;currentOptionsLeague=0;currentRecruitInterest=unsigned(selected.interest);currentOptions=selected.packed();shared.publish(static_cast<uint32_t>(number),selected);}
         // Pending edits belong to their original profile even if its write
         // fails during a Dynasty switch. The next worker pass can retry them.
         flush();std::lock_guard<std::mutex> ioGuard(ioMutex);
@@ -70,20 +71,20 @@ public:
             std::ifstream input(file);nlohmann::json saved;input>>saved;
             selected=decodeOptions(saved,static_cast<uint32_t>(number));
         }
-        std::lock_guard<std::mutex> guard(mutex);league=static_cast<uint32_t>(number);selectedProfile=selected;ready=true;dirty=false;++revision;currentOptions=selected.packed();currentOptionsLeague=league;shared.publish(league,selected);
+        std::lock_guard<std::mutex> guard(mutex);league=static_cast<uint32_t>(number);selectedProfile=selected;currentRecruitInterest=unsigned(selected.interest);ready=true;dirty=false;++revision;currentOptions=selected.packed();currentOptionsLeague=league;shared.publish(league,selected);
     }
     bool change(unsigned index,int value){
-        std::lock_guard<std::mutex> guard(mutex);if(!ready||index>7||value<0||value>((index==3||index==7)?4:1))return false;
-        auto next=selectedProfile;if(index==0)next.social=value!=0;else if(index==1)next.recruiting=value!=0;else if(index==2)next.roster=value!=0;else if(index==3)next.scale=GradeScale(value);else if(index==4)next.colors=value!=0;else if(index==5)next.team=value!=0;else if(index==6)next.dollars=value!=0;else next.teamScale=GradeScale(value);
-        if(next.packed()==selectedProfile.packed())return true;
-        selectedProfile=next;currentOptions=next.packed();++revision;dirty=true;shared.publish(league,next);return true;
+        std::lock_guard<std::mutex> guard(mutex);if(!ready||index>8||value<0||value>((index==3||index==7)?4:index==8?2:1))return false;
+        auto next=selectedProfile;if(index==0)next.social=value!=0;else if(index==1)next.recruiting=value!=0;else if(index==2)next.roster=value!=0;else if(index==3)next.scale=GradeScale(value);else if(index==4)next.colors=value!=0;else if(index==5)next.team=value!=0;else if(index==6)next.dollars=value!=0;else if(index==7)next.teamScale=GradeScale(value);else next.interest=RecruitInterestDisplay(value);
+        if(next.packed()==selectedProfile.packed()&&next.interest==selectedProfile.interest)return true;
+        selectedProfile=next;currentRecruitInterest=unsigned(next.interest);currentOptions=next.packed();++revision;dirty=true;shared.publish(league,next);return true;
     }
     void flush(){
         std::lock_guard<std::mutex> ioGuard(ioMutex);
         uint32_t id=0;unsigned serial=0;Options value;
         {std::lock_guard<std::mutex> guard(mutex);if(!dirty)return;id=league;serial=revision;value=selectedProfile;}
         std::filesystem::create_directories(root);const auto file=root/(std::to_string(id)+".json"),temp=root/(std::to_string(id)+".tmp");
-        nlohmann::json saved={{"format",2},{"league",id},{"socialMedia",value.social},{"recruitingFog",value.recruiting},{"rosterFog",value.roster},{"teamFog",value.team},{"dollarValues",value.dollars},{"playerGradeScale",unsigned(value.scale)},{"teamGradeScale",unsigned(value.teamScale)},{"ratingColors",value.colors}};
+        nlohmann::json saved={{"format",2},{"league",id},{"socialMedia",value.social},{"recruitingFog",value.recruiting},{"rosterFog",value.roster},{"teamFog",value.team},{"dollarValues",value.dollars},{"playerGradeScale",unsigned(value.scale)},{"teamGradeScale",unsigned(value.teamScale)},{"ratingColors",value.colors},{"recruitInterestDisplay",unsigned(value.interest)}};
         {std::ofstream out(temp,std::ios::binary|std::ios::trunc);out<<saved.dump(2);out.flush();if(!out)throw std::runtime_error("Cannot write Dynasty Enhancement settings");}
         if(!MoveFileExW(temp.c_str(),file.c_str(),MOVEFILE_REPLACE_EXISTING|MOVEFILE_WRITE_THROUGH))throw std::runtime_error("Cannot commit Dynasty Enhancement settings");
         std::lock_guard<std::mutex> guard(mutex);if(league==id&&revision==serial)dirty=false;

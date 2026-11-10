@@ -58,8 +58,8 @@
     },
     {
       "path": "Modules/DynastyEnhancer/Content/Runtime/national-account-avatars.json",
-      "sha256": "094e2cbc3e147be44f01bd9fc86ed17ad013d81f0522c933c8f07e1573334c8e",
-      "reason": "0.1.14: released native production and position-relative grades with prestige uncertainty; same-model optional PFF publications and preserved history"
+      "sha256": "c3434bf3de079d4b2744502e454fdc8d55e0c65c668ca802537c7c24cdfe2e05",
+      "reason": "GPI branding: current account/handle/native G icon, analytics labels and archived-header display projection; retain existing publication/account keys, statistics, grading model and academic GPA"
     },
     {
       "path": "Modules/DynastyEnhancer/Source/AioCurrencyUiPrograms.h",
@@ -67,19 +67,24 @@
       "reason": "1.0 branded source-built runtime names, direct verified loading and preserved data/hook contracts"
     },
     {
+      "path": "Modules/DynastyEnhancer/Source/Analytics.NOTICES.txt",
+      "sha256": "94e22d8fdebb3754cd15f9a8392156978500f392f3e173834e76406dec23ddf3",
+      "reason": "GPI branding: current account/handle/native G icon, analytics labels and archived-header display projection; retain existing publication/account keys, statistics, grading model and academic GPA"
+    },
+    {
       "path": "Modules/DynastyEnhancer/Source/AnalyticsModel.h",
-      "sha256": "dfbca339f2d0dd407f98c7a36bf6d55a7461cda58939fa4f5a24ae2501404cca",
-      "reason": "0.1.14: released native production and position-relative grades with prestige uncertainty; same-model optional PFF publications and preserved history"
+      "sha256": "05916530099be2bea47f4b4ff3790ce25d0fc1872048ad00487a9a41dddcf009",
+      "reason": "GPI branding: current account/handle/native G icon, analytics labels and archived-header display projection; retain existing publication/account keys, statistics, grading model and academic GPA"
     },
     {
       "path": "Modules/DynastyEnhancer/Source/AnalyticsNative.h",
-      "sha256": "4f633a1711db49e5851ff866a61f8fc83c0c6f1b168de4cce1a6c51bff855a51",
-      "reason": "0.1.16 bounded season-review fixes and source/fixture verification; retain native scopes, fingerprints, published identities/history, four-module selection and helper verification."
+      "sha256": "9173ec285e8f0a6d003d44b6fd092355bfde750d559afabd44f915081cd934c6",
+      "reason": "GPI branding: current account/handle/native G icon, analytics labels and archived-header display projection; retain existing publication/account keys, statistics, grading model and academic GPA"
     },
     {
       "path": "Modules/DynastyEnhancer/Source/AnalyticsPage.h",
-      "sha256": "e9b8bf856acc4bd372c555220ab4fc541caf431696868d9fb2624e4fa17be69d",
-      "reason": "0.1.16 bounded season-review fixes and source/fixture verification; retain native scopes, fingerprints, published identities/history, four-module selection and helper verification."
+      "sha256": "1bd758be229c40a594266ae17fa7ce5a8008723335a48eb9ba0727c42fb7599a",
+      "reason": "GPI branding: current account/handle/native G icon, analytics labels and archived-header display projection; retain existing publication/account keys, statistics, grading model and academic GPA"
     },
     {
       "path": "Modules/DynastyEnhancer/Source/CurrencyBudgetUiPrograms.h",
@@ -123,23 +128,23 @@
     },
     {
       "path": "Modules/DynastyEnhancer/Source/EnhancementOptions.h",
-      "sha256": "305cc24a90dd9069d9259bc6353202340c7fdea7bad15ff906273f0b37ea98bc",
-      "reason": "Scope effective fog/colors/dollar presentation to the active matching offline Dynasty; retain saved choices and initial creation settings; avoid per-label RPM, file reads or ownership walks."
+      "sha256": "65d160011edd93b83a04018ca2049c6a93dad24ee866e78b9f2ff0501da3471c",
+      "reason": "Scope effective fog/colors/dollar presentation to the active matching offline Dynasty; retain saved choices and initial creation settings; avoid per-label RPM, file reads or ownership walks. Private recruiting preview: additive per-Dynasty Native/Recruit Feedback/Rank Only option, relative stable tiers, guarded native scouting-history observation and off-board Target icon presentation. Existing shared-v4 options, GPI, currency, saves and published history retained. No installation or publication. Private 1.0.5 package: source-integrated full/small-card Recruit Feedback and native off-board scouting icon; immediate native UI scouting refresh. Focused tests added to source build. Live helpers excluded; clean-package stability pending. 1.0.7: initial recruit interest preference uses the native/default display; user-facing Default label; saved numeric choices preserved and tested."
     },
     {
       "path": "Modules/DynastyEnhancer/Source/EnhancementOptionsRuntime.h",
-      "sha256": "624d6049590c5ccabbfd6b1617aeb03b07565a75f212c4be1be84907f5c140bf",
-      "reason": "Scope effective fog/colors/dollar presentation to the active matching offline Dynasty; retain saved choices and initial creation settings; avoid per-label RPM, file reads or ownership walks."
+      "sha256": "58549ff4bcbdba7ce3d99cc12e5557f5499e37da3891b9451bf77add1bf3d916",
+      "reason": "Scope effective fog/colors/dollar presentation to the active matching offline Dynasty; retain saved choices and initial creation settings; avoid per-label RPM, file reads or ownership walks. Private recruiting preview: additive per-Dynasty Native/Recruit Feedback/Rank Only option, relative stable tiers, guarded native scouting-history observation and off-board Target icon presentation. Existing shared-v4 options, GPI, currency, saves and published history retained. No installation or publication. Private 1.0.5 package: source-integrated full/small-card Recruit Feedback and native off-board scouting icon; immediate native UI scouting refresh. Focused tests added to source build. Live helpers excluded; clean-package stability pending."
     },
     {
       "path": "Modules/DynastyEnhancer/Source/EnhancementSettingsMenu.h",
-      "sha256": "4f2440bdae8d5c60fa6b7d64f694fa9641b6ae2450b9f9cb7e34feace04659b4",
-      "reason": "RC013 native Analytics roster-card/action/return, delayed week visibility, safe filter transitions, isolated full-card fog adapters, glyph repair, installer footer and winning visitor departures"
+      "sha256": "a8a454bcdc6145741e2e5ce426c112041bad1e9423593cd7fe6cb781f5f0ef81",
+      "reason": "RC013 native Analytics roster-card/action/return, delayed week visibility, safe filter transitions, isolated full-card fog adapters, glyph repair, installer footer and winning visitor departures Private recruiting preview: additive per-Dynasty Native/Recruit Feedback/Rank Only option, relative stable tiers, guarded native scouting-history observation and off-board Target icon presentation. Existing shared-v4 options, GPI, currency, saves and published history retained. No installation or publication. Private 1.0.5 package: source-integrated full/small-card Recruit Feedback and native off-board scouting icon; immediate native UI scouting refresh. Focused tests added to source build. Live helpers excluded; clean-package stability pending. 1.0.7: initial recruit interest preference uses the native/default display; user-facing Default label; saved numeric choices preserved and tested."
     },
     {
       "path": "Modules/DynastyEnhancer/Source/FeedData.h",
-      "sha256": "55bd2348186f2865a53c7afebf25e8888eb6971ce3dc4c26285268b4a42540fa",
-      "reason": "0.1.15: reviewed PFF editorial pack, verified position boards and weekly grade honors; National Social capacity 300"
+      "sha256": "21268878cce4fc2eff4923206886d8a39d6cc8717c13d4542aad963d56ebaba9",
+      "reason": "GPI branding: current account/handle/native G icon, analytics labels and archived-header display projection; retain existing publication/account keys, statistics, grading model and academic GPA"
     },
     {
       "path": "Modules/DynastyEnhancer/Source/FeedRefresh.h",
@@ -153,8 +158,8 @@
     },
     {
       "path": "Modules/DynastyEnhancer/Source/LiveTables.h",
-      "sha256": "6f62a8b1bee603906ccd435e8afe6efeb61e1ddd925babd297953a2772f95d1d",
-      "reason": "1.0 branded source-built runtime names, direct verified loading and preserved data/hook contracts"
+      "sha256": "e8bdfca777d7389176337837e558ac9494493a9caafcbee220e2e0bf6c7d5276",
+      "reason": "1.0 branded source-built runtime names, direct verified loading and preserved data/hook contracts Private recruiting preview: additive per-Dynasty Native/Recruit Feedback/Rank Only option, relative stable tiers, guarded native scouting-history observation and off-board Target icon presentation. Existing shared-v4 options, GPI, currency, saves and published history retained. No installation or publication. Private 1.0.5 package: source-integrated full/small-card Recruit Feedback and native off-board scouting icon; immediate native UI scouting refresh. Focused tests added to source build. Live helpers excluded; clean-package stability pending."
     },
     {
       "path": "Modules/DynastyEnhancer/Source/MmcPlugin.cs",
@@ -253,8 +258,8 @@
     },
     {
       "path": "Modules/DynastyEnhancer/Source/RecruitingFog.cpp",
-      "sha256": "c3929d102319aeaf900144910042fe23b9b5cc808f054bd2a8f43e8d7c307dbc",
-      "reason": "Position Changes projected OVR display-only native adapter; preserve existing NIL/navigation and indexed dispatch; live grade leak reproduced and corrected, speed acceptance inconclusive"
+      "sha256": "dd641e3ef7b3c213ad94053528e14b597d06ce933bb43e160802c2d7328189a3",
+      "reason": "Position Changes projected OVR display-only native adapter; preserve existing NIL/navigation and indexed dispatch; live grade leak reproduced and corrected, speed acceptance inconclusive Private recruiting preview: additive per-Dynasty Native/Recruit Feedback/Rank Only option, relative stable tiers, guarded native scouting-history observation and off-board Target icon presentation. Existing shared-v4 options, GPI, currency, saves and published history retained. No installation or publication. Private 1.0.5 package: source-integrated full/small-card Recruit Feedback and native off-board scouting icon; immediate native UI scouting refresh. Focused tests added to source build. Live helpers excluded; clean-package stability pending. Private 1.0.6: bounded exact startup preflight and corrected native Prospect List interest projection; retains GPI, NIL and hook ownership."
     },
     {
       "path": "Modules/DynastyEnhancer/Source/RuntimeFeed.h",
@@ -268,8 +273,8 @@
     },
     {
       "path": "Modules/DynastyEnhancer/Source/build-recruiting-fog.ps1",
-      "sha256": "45453964b411c64ab0cab21f0b0709b44856925310cc1d36305ad68400aebe00",
-      "reason": "Position Changes projected OVR display-only native adapter; preserve existing NIL/navigation and indexed dispatch; live grade leak reproduced and corrected, speed acceptance inconclusive"
+      "sha256": "15b8aba430dc3fd2aa577c153666dac9e4f9b14249e5bec080f4997a341de1d2",
+      "reason": "Position Changes projected OVR display-only native adapter; preserve existing NIL/navigation and indexed dispatch; live grade leak reproduced and corrected, speed acceptance inconclusive Private 1.0.5 package: source-integrated full/small-card Recruit Feedback and native off-board scouting icon; immediate native UI scouting refresh. Focused tests added to source build. Live helpers excluded; clean-package stability pending."
     },
     {
       "path": "Modules/DynastyEnhancer/Source/build.ps1",
@@ -283,8 +288,8 @@
     },
     {
       "path": "Modules/DynastyEnhancer/Tests/EnhancementOptionsTests.h",
-      "sha256": "1d0b0e9c7c25f2eac32738dc4cd6e4917c2f1b2e03474c2ee7497bc6f463412b",
-      "reason": "1.0 branded source-built runtime names, direct verified loading and preserved data/hook contracts"
+      "sha256": "7df8fbe352631ae28a68688e4a0d0bb6a321d51e58caa594a7adbcbbf3cfc07c",
+      "reason": "1.0 branded source-built runtime names, direct verified loading and preserved data/hook contracts Private recruiting preview: additive per-Dynasty Native/Recruit Feedback/Rank Only option, relative stable tiers, guarded native scouting-history observation and off-board Target icon presentation. Existing shared-v4 options, GPI, currency, saves and published history retained. No installation or publication. Private 1.0.5 package: source-integrated full/small-card Recruit Feedback and native off-board scouting icon; immediate native UI scouting refresh. Focused tests added to source build. Live helpers excluded; clean-package stability pending. 1.0.7: initial recruit interest preference uses the native/default display; user-facing Default label; saved numeric choices preserved and tested."
     },
     {
       "path": "Modules/DynastyEnhancer/Tests/NativeSocialMediaTests.cpp",
@@ -433,8 +438,8 @@
     },
     {
       "path": "Modules/DynastyEnhancer/Tests/template_performance.test.mjs",
-      "sha256": "425e7b69718be73b7714f87fbd38bc3141a5288526c249e6b85203874fc1206b",
-      "reason": "0.1.15: reviewed PFF editorial pack, verified position boards and weekly grade honors; National Social capacity 300"
+      "sha256": "bac483bcf1abb06ca8f598004d0e0e4afdbd809acd86bf0a52b31fe7658d3b22",
+      "reason": "GPI branding: current account/handle/native G icon, analytics labels and archived-header display projection; retain existing publication/account keys, statistics, grading model and academic GPA"
     },
     {
       "path": "Modules/DynastyEnhancer/Tests/transactions_editorial.test.mjs",
@@ -518,8 +523,8 @@
     },
     {
       "path": "Modules/DynastyEnhancer/Tools/feed_engine.mjs",
-      "sha256": "bee28c18a12c04d48ae4922016b462b9fc5f67bb130430b66742ff14ec0adce1",
-      "reason": "0.1.14: released native production and position-relative grades with prestige uncertainty; same-model optional PFF publications and preserved history"
+      "sha256": "23148c9e3d92359a495fa9935ad9f2b2f0443ee43017c78cbf515dbf18c1c4d4",
+      "reason": "GPI branding: current account/handle/native G icon, analytics labels and archived-header display projection; retain existing publication/account keys, statistics, grading model and academic GPA"
     },
     {
       "path": "Modules/DynastyEnhancer/Tools/feed_selection.mjs",
@@ -568,8 +573,8 @@
     },
     {
       "path": "Modules/DynastyEnhancer/Tools/runtime_lifecycle.mjs",
-      "sha256": "6eebef8b1b2367bc9d53745eb0aa22d404035a30afb3b87ebd8951e5a6dd4dcc",
-      "reason": "0.1.14: released native production and position-relative grades with prestige uncertainty; same-model optional PFF publications and preserved history"
+      "sha256": "6e3d945653ad4df7a8e9494839a4e39275c23f3f3ff37e429a70de56d22d55dc",
+      "reason": "GPI branding: current account/handle/native G icon, analytics labels and archived-header display projection; retain existing publication/account keys, statistics, grading model and academic GPA"
     },
     {
       "path": "Modules/DynastyEnhancer/Tools/social_discovery.mjs",
@@ -578,8 +583,8 @@
     },
     {
       "path": "Modules/DynastyEnhancer/Tools/story_authors.mjs",
-      "sha256": "487d4092b9bc47dc3f59c3532d014fbc58b8eda6bf85df0d851b2a7741feb4ae",
-      "reason": "Prevent null player author dereference after restoring a published personal voice; preserve real account identity and unchanged published wording, retain teamless national reporting."
+      "sha256": "92db54b63dbd5c232ab978fd8643a312f5b30dad416544dbba2d59950fafdf7e",
+      "reason": "GPI branding: current account/handle/native G icon, analytics labels and archived-header display projection; retain existing publication/account keys, statistics, grading model and academic GPA"
     },
     {
       "path": "Modules/DynastyEnhancer/Tools/story_conversations.mjs",
@@ -593,8 +598,8 @@
     },
     {
       "path": "Modules/DynastyEnhancer/Tools/story_events.mjs",
-      "sha256": "5550802440802513c9127471b522320d0be3435054a235db19f2cc12cbec2a6f",
-      "reason": "0.1.14: released native production and position-relative grades with prestige uncertainty; same-model optional PFF publications and preserved history"
+      "sha256": "3f7c022f465c5fb5abf7ef12d45d2ec9b0769a45fb34c5067f5dc3f5cd62a7cd",
+      "reason": "GPI branding: current account/handle/native G icon, analytics labels and archived-header display projection; retain existing publication/account keys, statistics, grading model and academic GPA"
     },
     {
       "path": "Modules/DynastyEnhancer/Tools/story_renderer.mjs",
@@ -603,8 +608,8 @@
     },
     {
       "path": "Modules/DynastyEnhancer/Tools/story_templates.mjs",
-      "sha256": "dee18ebfa9547640d81e55455336d9eed4952f0a1d0a0e67c9aef758edb31d3d",
-      "reason": "0.1.16 bounded season-review fixes and source/fixture verification; retain native scopes, fingerprints, published identities/history, four-module selection and helper verification."
+      "sha256": "36be2489e700c3d3bfbf9397219fdf86715ca229f83b41ab1a983f94b7c9cc71",
+      "reason": "GPI branding: current account/handle/native G icon, analytics labels and archived-header display projection; retain existing publication/account keys, statistics, grading model and academic GPA"
     },
     {
       "path": "Modules/DynastyEnhancer/Tools/voice_style.mjs",

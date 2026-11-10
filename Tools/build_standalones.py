@@ -4,7 +4,7 @@ import argparse,datetime,hashlib,json,re,shutil,subprocess,zipfile
 from build_package import clean_adapter,analytics_build_id
 ROOT=Path(__file__).resolve().parents[1]
 DEFS={
- 'BeyondTheField':('DynastyEnhancer','Beyond the Field','1.0.3','DynastyEnhancer.LaunchAction',['DynastyEnhancer.dll','PlayerAnalytics.dll']),
+ 'BeyondTheField':('DynastyEnhancer','Beyond the Field','1.0.7','DynastyEnhancer.LaunchAction',['DynastyEnhancer.dll','PlayerAnalytics.dll']),
  'ExtraSettings':('ExtraDynastySettings','Extra Settings','0.2.10','OfflineDynastySettings.CombinedSettingsAction',['OfflineDynastySettings.dll','DynastyPlayClock.dll','OfflinePlaycall.dll']),
  'ExpandedPractice':('DrivePractice','Expanded Practice','0.8.21','SituationalPractice.PracticeAction',['SituationalPractice.dll']),
 }
@@ -29,9 +29,12 @@ def build_social(work,inputs):
  subprocess.run([*common,'/DCOT_ANALYTICS_BUILD_ID='+build_id+'ull','/DSOCIAL_READ_ONLY_FEED','/DSOCIAL_DUAL_DROPDOWN','/LD',str(src/'NativeSocialMedia.cpp'),'/Fe:'+str(output),'/link',*(f'/LIBPATH:{x}' for x in libs),'/INCREMENTAL:NO'],cwd=work,check=True)
  test=work/'NativeSocialMediaTests.exe'
  (de/'Tests').mkdir()
- for name in ['NativeSocialMediaTests.cpp','SocialTextTests.h']:shutil.copyfile(ROOT/'Modules/DynastyEnhancer/Tests'/name,de/'Tests'/name)
+ for name in ['NativeSocialMediaTests.cpp','SocialTextTests.h','GpiBrandTests.cpp']:shutil.copyfile(ROOT/'Modules/DynastyEnhancer/Tests'/name,de/'Tests'/name)
  subprocess.run([*common,'/DCOT_ANALYTICS_BUILD_ID='+build_id+'ull','/DSOCIAL_READ_ONLY_FEED','/DSOCIAL_DUAL_DROPDOWN',str(de/'Tests/NativeSocialMediaTests.cpp'),'/Fe:'+str(test),'/link',*(f'/LIBPATH:{x}' for x in libs)],cwd=work,check=True)
  subprocess.run([str(test)],cwd=work,check=True)
+ brand_test=work/'GpiBrandTests.exe'
+ subprocess.run([*common,str(de/'Tests/GpiBrandTests.cpp'),'/Fe:'+str(brand_test),'/link',*(f'/LIBPATH:{x}' for x in libs)],cwd=work,check=True)
+ subprocess.run([str(brand_test)],cwd=work,check=True)
  return output,dict(originalHeaderSha256=hashlib.sha256(old).hexdigest(),generatedHeaderSha256=sha(p),replacement='dynasty-enhancer.json -> beyond-the-field.json',analyticsBuildId=build_id,nativeTests='passed')
 def main():
  p=argparse.ArgumentParser();p.add_argument('--mmc-sdk',required=True);p.add_argument('--module',choices=DEFS,action='append');a=p.parse_args();sdk=Path(a.mmc_sdk).resolve()
@@ -60,6 +63,16 @@ def main():
    native,branding=build_social(work,inputs);payload['COT-Runtime/DynastyEnhancer/BeyondTheFieldNative-v103.dll']=native.read_bytes()
    # Keep the tested native pair together rather than importing old fog bytes.
    payload['COT-Runtime/DynastyEnhancer/BeyondTheFieldRecruitFog-v1.dll']=(ROOT/inputs['fogNative']).read_bytes()
+   # Generator/content must come from the current source, not the comparison
+   # bundle. Remove obsolete managed filenames from the new embedded payload;
+   # saved account/publication keys and user-data paths stay unchanged.
+   scoped='COT-Runtime/DynastyEnhancer/'
+   payload={path:content for path,content in payload.items() if not path.startswith((scoped+'Tools/',scoped+'Content/Runtime/'))}
+   for folder,pattern in [('Tools','*.mjs'),('Content/Runtime','*.json')]:
+    for source in sorted((ROOT/'Modules/DynastyEnhancer'/folder).glob(pattern)):
+     if source.name=='audit_rc016_checkpoint.mjs':continue
+     payload[scoped+folder+'/'+source.name]=source.read_bytes()
+   payload['LICENSES/PlayerAnalytics-NOTICES.txt']=(ROOT/'Modules/DynastyEnhancer/Source/Analytics.NOTICES.txt').read_bytes()
    payload['COT-Runtime/DynastyEnhancer/beyond-the-field.json']=payload.pop('COT-Runtime/DynastyEnhancer/dynasty-enhancer.json')
    src=ROOT/'Modules/DynastyEnhancer/Source';adapter=clean_adapter((src/'MmcRecruitingPlugin.cs').read_text(encoding='utf-8'))
    adapter=adapter.replace('Path.Combine(PluginsFolder,"DynastyEnhancer","Runtime-v103")','Path.Combine(DynastyCOTStandalone.Runtime.Mmc,"COT-Runtime","DynastyEnhancer")').replace('dynasty-enhancer.json','beyond-the-field.json').replace('DynastyEnhancer.payload-sha256.txt','BeyondTheField.payload-sha256.txt')
@@ -101,7 +114,9 @@ namespace DynastyCOTStandalone {public sealed class Entry:ExecutionAction {stati
   docs=ROOT/'Packaging/Standalone'/name
   for file in ['README.txt','FEATURES.md']:shutil.copyfile(docs/file,stage/file)
   tracked=[path for path in source_list if not path.is_relative_to(work)]+[Path(__file__),docs/'README.txt',docs/'FEATURES.md']
-  if name=='BeyondTheField':tracked += [ROOT/rel for rel in inputs['sourceHashes']]+[ROOT/'cot.build-inputs.json',ROOT/'Modules/DynastyEnhancer/Tools/build_position_changes_ui.py']
+  if name=='BeyondTheField':
+   tracked += [ROOT/rel for rel in inputs['sourceHashes']]+[ROOT/'cot.build-inputs.json',ROOT/'Modules/DynastyEnhancer/Tests/GpiBrandTests.cpp']
+   tracked += [p for folder,pattern in [('Tools','*.mjs'),('Content/Runtime','*.json')] for p in (ROOT/'Modules/DynastyEnhancer'/folder).glob(pattern) if p.name!='audit_rc016_checkpoint.mjs']
   result=dict(name=name,module=module,title=title,version=version,stage=str(stage),work=str(work),dll=str(output),dllSha256=sha(output),referenceArchiveSha256=sha(reference),payload=json.loads(payload_manifest.read_text(encoding='utf-8')),branding=branding,sourceHashes={str(x.relative_to(ROOT).as_posix()):sha(x) for x in tracked},sdk=str(sdk),installed=False,published=False)
   (ROOT/'Build'/('current-standalone-'+name+'.json')).write_text(json.dumps(result,indent=2)+'\n',encoding='utf-8');results.append(result)
  print('Built standalones:',', '.join(x['name'] for x in results))

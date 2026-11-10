@@ -4,8 +4,8 @@ Want one feature? Download its standalone ZIP. Want the collection? Download Dyn
 
 | Module | Standalone repository | Current standalone |
 |---|---|---|
-| Beyond the Field | [BeyondTheField](https://github.com/ArtVsTheWorld/BeyondTheField) | 1.0.2 stable |
-| Gameday Atmosphere | [DynamicGamedayAtmosphere](https://github.com/ArtVsTheWorld/DynamicGamedayAtmosphere) | 2.1.9 / Update 4 |
+| Beyond the Field | [BeyondTheField](https://github.com/ArtVsTheWorld/BeyondTheField) | 1.0.7 stable |
+| Gameday Atmosphere | [DynamicGamedayAtmosphere](https://github.com/ArtVsTheWorld/DynamicGamedayAtmosphere) | 2.1.11 / Update 4 |
 | Extra Settings | [offline-dynasty-settings](https://github.com/ArtVsTheWorld/offline-dynasty-settings) | 0.2.10 stable |
 | Expanded Practice | [drive-based-practice](https://github.com/ArtVsTheWorld/drive-based-practice) | 0.8.21 stable |
 

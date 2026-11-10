@@ -8,7 +8,7 @@ import {editorialRoots,conversationOrder,buildCatalog,publishWeek} from '../Tool
 import {deduplicateConversations} from '../Tools/conversation_topics.mjs';
 import {contentPack,chooseTemplate} from '../Tools/story_templates.mjs';
 import {renderStories} from '../Tools/story_renderer.mjs';
-import {pffEvents,pffObservation} from '../Tools/pff_events.mjs';
+import {gpiEvents,gpiObservation} from '../Tools/gpi_events.mjs';
 test('native 32-bit LeagueID aliases match without broadening Dynasty isolation',()=>{
  assert.ok(sameLeague(-1552061962,2742905334));assert.equal(canonicalLeagueId(-1552061962),2742905334);
  for(const id of [undefined,null,'2742905334',NaN,Infinity,2742905334.5,-1552061963,7037872630,-5847029258])assert.ok(!sameLeague(-1552061962,id));
@@ -64,9 +64,9 @@ test('every leader alternative composes sole and tied leaders without a dangling
   for(const c of candidates){assert.ok(!/\bin in\b|\blead in[.,;:]|\bhe leads[.,;:]|which shares the lead in the group|for Ohio State, (?:leads|shares)/i.test(c.body),c.body);}
  }
 });
-test('PFF accepts native signed/unsigned attachment, then suppresses unchanged samples',()=>{
+test('GPI accepts native signed/unsigned attachment, then suppresses unchanged samples',()=>{
  const s={leagueId:-1552061962,userTeamIndex:1,season:{CurrentYear:0,CurrentSeasonYear:2026,CurrentWeek:8,CurrentWeekType:'RegularSeason',CurrentStage:'NFLSeason'},teams:[{id:1,name:'Ohio State'}],players:[{id:'p1',team:1,name:'Longfirstname Longlastname-Suffix',position:'LT'}]};
  s.playerAnalytics={format:1,modelVersion:'0.2.0-production',leagueId:2742905334,year:0,season:2026,week:7,weekType:'RegularSeason',weekly:[],seasonRows:[{player:'p1',team:1,group:'OL',grade:89.4,snaps:600,gradedGames:7}]};
- assert.ok(pffEvents(s).length);const prior={playerAnalytics:pffObservation(s)};assert.deepEqual(pffEvents(s,prior),[]);
- for(const key of ['year','season','leagueId']){const bad=structuredClone(s);bad.playerAnalytics[key]++;assert.deepEqual(pffEvents(bad),[]);}
+ assert.ok(gpiEvents(s).length);const prior={playerAnalytics:gpiObservation(s)};assert.deepEqual(gpiEvents(s,prior),[]);
+ for(const key of ['year','season','leagueId']){const bad=structuredClone(s);bad.playerAnalytics[key]++;assert.deepEqual(gpiEvents(bad),[]);}
 });

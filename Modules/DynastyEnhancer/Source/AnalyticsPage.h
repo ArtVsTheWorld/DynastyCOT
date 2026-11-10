@@ -146,7 +146,7 @@ inline Json teamPage(const Json& data,int teamIndex,int year,int week,const std:
         row["classification"]=row.at("grade").is_number()?classification(row.at("grade").get<double>()):"N/A";
         result["rows"].push_back(std::move(row));
     }
-    // Fix National eligibility by PFF grade before any user column sorting.
+    // Fix National eligibility by performance grade before any user column sorting.
     // Every native page path calls this builder; team rosters remain complete.
     sortPage(result,5,true);
     if(national&&result["rows"].size()>NationalRowLimit){auto& rows=result["rows"];rows.erase(rows.begin()+NationalRowLimit,rows.end());}

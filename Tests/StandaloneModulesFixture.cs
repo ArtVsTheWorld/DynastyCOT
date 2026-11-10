@@ -46,7 +46,15 @@ class StandaloneModulesFixture {
   }
   var gameday=Assembly.LoadFile(Path.Combine(root,"Plugins","GamedayAtmosphere.dll"));var atmosphere=gameday.GetType("DynamicGamedayAtmosphere.AttendanceAction",true);
   if(mode=="claim"){object[] parameters={false};Check((bool)Call(atmosphere,"TryClaimWatcher",parameters),"Gameday can independently claim alongside the other three");}
-  if(mode=="files"){Call(atmosphere,"Extract","GamedayAtmosphereNative-2.1.9.dll",false);Check(File.Exists(Path.Combine(root,"DGA-Runtime","Runtime-2.1.9","GamedayAtmosphereNative-2.1.9.dll")),"Gameday runtime coexists outside Plugins");}
+  if(mode=="files"){
+   string resource=gameday.GetManifestResourceNames().Single(x=>x.StartsWith("Attendance.GamedayAtmosphereNative-",StringComparison.Ordinal)&&x.EndsWith(".dll",StringComparison.Ordinal));
+   string file=resource.Substring("Attendance.".Length);
+   string folder=(string)atmosphere.GetProperty("RuntimeFolder",BindingFlags.Static|BindingFlags.Public|BindingFlags.NonPublic).GetValue(null,null);
+   Check(Path.GetFullPath(folder).StartsWith(root+"\\",StringComparison.OrdinalIgnoreCase)&&!Path.GetFullPath(folder).StartsWith(Path.Combine(root,"Plugins")+"\\",StringComparison.OrdinalIgnoreCase),"Gameday extraction stays in isolated fixture outside Plugins");
+   Call(atmosphere,"Extract",file,false);string native=Path.Combine(folder,file);
+   Check(File.Exists(native),"Gameday runtime coexists outside Plugins");
+   using(var stream=gameday.GetManifestResourceStream(resource))using(var hash=SHA256.Create())Check(Hash(native)==BitConverter.ToString(hash.ComputeHash(stream)).Replace("-","").ToLowerInvariant(),"Exact current Gameday embedded runtime");
+  }
   Console.WriteLine("PASS "+checks+" "+mode);return 0;
  }catch(Exception error){Console.Error.WriteLine(error);return 1;}}
 }

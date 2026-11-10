@@ -5,8 +5,8 @@ const clean=x=>String(x??'').normalize('NFKD').replace(/[^A-Za-z0-9]/g,'');
 const nameKey=name=>{const parts=String(name??'').trim().split(/\s+/).filter(p=>!['jr','sr','ii','iii','iv'].includes(clean(p).toLowerCase()));return [clean(parts[0]),clean(parts.at(-1))].join('|').toLowerCase();};
 const firstNames=['Maya','Jordan','Cameron','Alex','Riley','Morgan','Taylor','Casey','Aisha','Javier','Priya','Andre','Mei','Diego','Imani','Nadia','Omar','Elena','Darius','Sofia','Malik','Hannah','Luis','Simone','Rohan','Gabriela','Kenji','Amara','Isaiah','Naomi','Ethan','Valeria'];
 const surnames=['Wells','Bennett','Reed','Lawson','Brooks','Ellis','Grant','Hayes','Cole','Parker','Miles','West','Lane','Stone','Ford','Davis','Nguyen','Patel','Rodriguez','Chen','Washington','Martinez','Okafor','Hassan','Kim','Santiago','Robinson','Ali','Nakamura','Shah','Rivera','Williams','Ortiz','Thompson','Park','Campbell','Santos','Jackson','Flores','Mensah'];
-const analysts=[['ESPNCFB','ESPNCFB'],['Jake Whitmore','JakeWhitmoreCFB'],['Marcus Bennett','MBennettSports'],['Tina Brooks','TinaBrooksCFB'],['David Ellison','DavidEllisonFB'],['Chris Maddox','ChrisMaddoxCFB'],['PFF','PFF_College']];
-export const analystPersona=author=>analysts.findIndex(([name])=>name===author);
+const analysts=[['ESPNCFB','ESPNCFB'],['Jake Whitmore','JakeWhitmoreCFB'],['Marcus Bennett','MBennettSports'],['Tina Brooks','TinaBrooksCFB'],['David Ellison','DavidEllisonFB'],['Chris Maddox','ChrisMaddoxCFB'],['GPI','GPIndex']];
+export const analystPersona=author=>author==='PFF'?6:analysts.findIndex(([name])=>name===author);
 export function authorRegistry(saved={}){
  const entries=structuredClone(saved),handles=new Map(Object.entries(entries).map(([k,v])=>[v.handle.toLowerCase(),k]));
  return {entries,get(s,role,team,player,persona=0){
@@ -15,6 +15,11 @@ export function authorRegistry(saved={}){
   // or replace a missing ID with a team/national account key.
   if(person&&(!player||player.id==null||!['string','number'].includes(typeof player.id)||typeof player.id==='string'&&!player.id.trim()||typeof player.id==='number'&&(!Number.isInteger(player.id)||player.id<0)||typeof player.name!=='string'||!player.name.trim()))return null;
   const key=`${s.leagueId}:${family}:${person?player.id:['analyst','model','cfp','nflDraft'].includes(role)?'national':team?.id??'national'}${!person&&persona?':'+persona:''}`;
+  // Retain the existing account/publication key and personality. Only the
+  // current profile branding changes; archived publications remain untouched.
+  if(role==='analyst'&&persona===6&&entries[key]){
+   handles.delete(entries[key].handle.toLowerCase());entries[key].author='GPI';entries[key].handle='@GPIndex';handles.set('@gpindex',key);
+  }
   const recruitClass=person?s.recruitStatuses?.find(r=>r.player===player.id)?.recruitClass:null;
   const classLabel=recruitClass?.startsWith('Transfer_')?'Transfer ':recruitClass?.startsWith('JuniorCollege_')?'JUCO ':'';
   const displayName=person?(role==='recruit'?recruitAccountName(player,classLabel):player.name):null;

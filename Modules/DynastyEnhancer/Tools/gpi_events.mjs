@@ -1,4 +1,4 @@
-import {pffRankings} from './pff_rankings.mjs';
+import {gpiRankings} from './gpi_rankings.mjs';
 import {sameLeague} from './league_identity.mjs';
 // Consume the exact native menu model, never a second approximation of it.
 const finite=x=>typeof x==='number'&&Number.isFinite(x);
@@ -7,17 +7,17 @@ const stage=t=>({PreSeason:0,Preseason:0,RegularSeason:1,PostSeason:2,Postseason
 const released=(s,a)=>Number.isInteger(a.week)&&a.week>=0&&stage(a.weekType)>=0&&(stage(a.weekType)<stage(s.season.CurrentWeekType)||stage(a.weekType)===stage(s.season.CurrentWeekType)&&a.week<s.season.CurrentWeek);
 // Store only comparable qualified observations, rather than another full
 // roster/capture in every publication. This is history, never a native write.
-export function pffObservation(s){
+export function gpiObservation(s){
  const a=s.playerAnalytics;if(!a||!Array.isArray(a.seasonRows))return null;
  return {modelVersion:a.modelVersion,leagueId:a.leagueId,year:a.year,season:a.season,week:a.week,weekType:a.weekType,
   seasonRows:a.seasonRows.filter(r=>sample(r,true)).map(({player,team,group,grade,snaps,gradedGames})=>({player,team,group,grade,snaps,gradedGames}))};
 }
-export function freezePublishedPff(events,s,feed){
+export function freezePublishedGpi(events,s,feed){
  if(!feed||feed.leagueId!==s.leagueId||feed.userTeamIndex!==s.userTeamIndex||feed.season!==s.season.CurrentSeasonYear||feed.phase!==s.season.CurrentWeekType||feed.week!==s.season.CurrentWeek)return events;
  const published=new Set((feed.stories??[]).map(p=>p.eventId)),old=(feed.events??[]).filter(e=>e.facts?.family?.startsWith('pff.')&&published.has(e.id));
  return old.length?[...events.filter(e=>!e.facts?.family?.startsWith('pff.')),...old]:events;
 }
-export function pffEvents(s,previous=null){
+export function gpiEvents(s,previous=null){
  const a=s.playerAnalytics,candidate=previous?.playerAnalytics;
  const old=sameLeague(candidate?.leagueId,s.leagueId)&&candidate.year===s.season.CurrentYear&&candidate.season===s.season.CurrentSeasonYear&&candidate.modelVersion===a?.modelVersion?candidate:null;
  if(!a||a.format!==1||typeof a.modelVersion!=='string'||!Array.isArray(a.weekly)||!Array.isArray(a.seasonRows)||!sameLeague(a.leagueId,s.leagueId)||a.year!==s.season.CurrentYear||a.season!==s.season.CurrentSeasonYear||s.reconstructed||s.season.CurrentStage!=='NFLSeason'||/preseason|offseason/i.test(s.season.CurrentWeekType)||!released(s,a))return [];
@@ -38,7 +38,7 @@ export function pffEvents(s,previous=null){
   selected.push({id:`pff:${kind}:${row.player}`,category:'analytics',facts:values,options:{team:row.team,player:row.player,national,priority:row.team===s.userTeamIndex?88:81,eventWeek:s.season.CurrentWeek}});usedTeams.add(row.team);usedPlayers.add(row.player);
  };
  const sort=(a,b)=>b.grade-a.grade||b.snaps-a.snaps||a.player.localeCompare(b.player);
- for(const event of pffRankings(s,a,old)){
+ for(const event of gpiRankings(s,a,old)){
   const board=event.facts.family==='pff.position-top-three',related=[event.options.team,...event.options.relatedTeams];if(selected.length>=4||!board&&related.some(t=>usedTeams.has(t)))continue;
   selected.push(event);if(!board)related.forEach(t=>usedTeams.add(t));if(event.options.player)usedPlayers.add(event.options.player);
  }

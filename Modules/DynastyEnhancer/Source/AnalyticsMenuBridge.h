@@ -50,7 +50,7 @@ bool tilesFor(void* self,void** out,void* panel,const std::string& p,const std::
     auto original=std::to_string(coordinate-1);Alias alias{aliasVt,original.c_str()};result=tiles(self,out,panel,&alias);uintptr_t span[2]{};
     if(!out||!*out||!read(reinterpret_cast<uintptr_t>(*out)+0x18,span,16)||span[1]<span[0]||span[1]-span[0]>128)return true;
     for(uintptr_t at=span[0];at<span[1];at+=8){void* tile=nullptr;if(!read(at,&tile,8)||!tile)continue;tileText(tile,"Coordinates",c.c_str());
-        if(coordinate==6){tileText(tile,"Id","PLAYER_ANALYTICS");tileText(tile,"Text0","Player Analytics");tileText(tile,"Text1",api&&api->available()?"PFF-style production grades, snaps and season averages":"Preparing current Dynasty grades - please wait");tileText(tile,"NavigationId","PLAYER_ANALYTICS");tileBool(tile,"isInteractive",true);}
+        if(coordinate==6){tileText(tile,"Id","PLAYER_ANALYTICS");tileText(tile,"Text0","Player Analytics");tileText(tile,"Text1",api&&api->available()?"GPI performance grades, snaps and season averages":"Preparing current Dynasty grades - please wait");tileText(tile,"NavigationId","PLAYER_ANALYTICS");tileBool(tile,"isInteractive",true);}
     }return true;
 }
 }

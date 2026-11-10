@@ -15,6 +15,7 @@
 #include "../Vendor/json.hpp"
 #include "RecruitingGradePolicy.h"
 #include "EnhancementSettingsMenu.h"
+#include "RecruitingStartup.h"
 #include "EnhancementCreationScope.h"
 #include "DynastyPresentationScope.h"
 #include "RecruitingUiResponse.h"
@@ -58,6 +59,8 @@
 #include "PlayerAbilityDescriptions.h"
 #include "PlayerPresentationPolicy.h"
 #include "PositionChangesUiPrograms.h"
+#include "RecruitingFeaturesRuntime.h"
+#include "PreviouslyScoutedGrid.h"
 #endif
 
 namespace recruitingfog::runtime {
@@ -464,6 +467,7 @@ unsigned __fastcall colorLengthHook(void* object){
     if(!disabled){
         const auto definition=*reinterpret_cast<const uintptr_t*>(static_cast<const unsigned char*>(object)+0x58);
         const auto* h=reinterpret_cast<const unsigned char*>(definition);
+        recruitingfog::features::beforeInvoke(object,read,true);
 #if !defined(PLAYER_FOG_PREVIEW) || defined(PLAYER_FOG_COLORS)
         attachPlayerGridUi(object,true,h);
 #endif
@@ -501,8 +505,11 @@ void __fastcall classRowsHook(void* source,void* target,int form,int row,void* c
         sink.schema=playerfog::gridStateSchema(gridState);
         if(playerfog::gridColumns(sink,columns)){CallGuard guard;{playerperf::Sample nativePerformance(playerperf::nativeRows);originalClassRows(source,&sink,form,row,columns);}rosterCells+=sink.changed;return;}
     }
-    CallGuard guard;if(disabled||!classGridColumns(columns)){originalClassRows(source,target,form,row,columns);return;}
-    ClassGridSink sink{classGridTable,target,source,form,row,classGridLabel};originalClassRows(source,&sink,form,row,columns);classGridFlush(&sink);
+    CallGuard guard;if(disabled){originalClassRows(source,target,form,row,columns);return;}
+    features::GridSink marker{features::gridTable,target,{}};void* rendered=enhancements::presentationAllowed()?static_cast<void*>(&marker):target;
+    if(!classGridColumns(columns))originalClassRows(source,rendered,form,row,columns);
+    else{ClassGridSink sink{classGridTable,rendered,source,form,row,classGridLabel};originalClassRows(source,&sink,form,row,columns);classGridFlush(&sink);}
+    if(rendered==&marker)try{features::gridFlush(marker,base,source,form,row);}catch(...){for(const auto& text:marker.text)features::gridPut(&marker,text.row,text.key.c_str(),text.value.c_str(),6);}
 }
 void __fastcall rosterColumnsHook(void* source,void* target,int form){
     if(!disabled&&nativeanalytics::opened&&form==0){nativeanalytics::columnHook(source,target,form);return;}
@@ -569,6 +576,7 @@ template<size_t Index>void __fastcall playerMapHook(void* source,void* target){
 const PlayerMap mapHooks[]={playerMapHook<0>,playerMapHook<1>};
 uintptr_t __fastcall notesSetupHook(void* object,void* saved,uintptr_t receiver,uintptr_t parent,uintptr_t super){
     CallGuard guard;
+    if(!disabled)recruitingfog::features::beforeInvoke(object,read);
     {
     playerperf::Sample performance(playerperf::scriptAdapters);
 #if !defined(PLAYER_FOG_PREVIEW) || defined(PLAYER_FOG_COLORS)
@@ -609,6 +617,11 @@ template<size_t Index>void* __fastcall detailHook(void* object,void** out,uintpt
         try{const auto stats=enhancements::options().recruiting?applyPlayingTime(value,detailSurfaces[Index],static_cast<unsigned>(first),reinterpret_cast<uintptr_t>(object)):PlayingTimeStats{};
 #if defined(RECRUIT_NOTES_UI)
             if constexpr(Index==detailCount-1){
+                UiResponse prospectView(read,4096);features::prospectResponse(prospectView,value,
+                    [&](uintptr_t at,const char* key,const char* text){reinterpret_cast<void(__fastcall*)(void*,const char*,const char*)>(base+0x25a3e60)(reinterpret_cast<void*>(at),key,text);},
+                    [&](uintptr_t at,const char* key,bool flag){reinterpret_cast<void(__fastcall*)(void*,const char*,bool)>(base+0x2bf6720)(reinterpret_cast<void*>(at),key,flag);},
+                    [](uintptr_t at,double number){features::writeUiNumber(at,number);},
+                    [&](uintptr_t at,const std::vector<uintptr_t>& order){features::reorderUi(at,order,read);});
                 const auto cache=resumeCache.current(base,read);UiResponse view(read);std::map<std::string,uintptr_t> fields;
                 if(cache&&view.members(value,fields)&&fields.count("recordKey")&&fields.count("firstName")&&fields.count("lastName")){
                     double id=0;std::string firstName,lastName;
@@ -639,6 +652,11 @@ void* __fastcall getterHook(void* object,void** out){
         try{
             UiResponse view(read);
 #if defined(RECRUIT_NOTES_UI)
+            UiResponse interestView(read,1024);recruitingfog::features::response(interestView,value,
+                [&](uintptr_t at,const char* key,const char* text){reinterpret_cast<void(__fastcall*)(void*,const char*,const char*)>(base+0x25a3e60)(reinterpret_cast<void*>(at),key,text);},
+                [&](uintptr_t at,const char* key,bool flag){reinterpret_cast<void(__fastcall*)(void*,const char*,bool)>(base+0x2bf6720)(reinterpret_cast<void*>(at),key,flag);},
+                [](uintptr_t at,double number){recruitingfog::features::writeUiNumber(at,number);},
+                [&](uintptr_t at,const std::vector<uintptr_t>& order){recruitingfog::features::reorderUi(at,order,read);});
             const auto cached=resumeCache.current(base,read);bool notesLoading=false;
             const auto notesCount=appendRecruitNotes(view,value,[&](uintptr_t at,const char* key,const char* text){
                 reinterpret_cast<void(__fastcall*)(void*,const char*,const char*)>(base+0x25a3e60)(reinterpret_cast<void*>(at),key,text);
@@ -720,6 +738,7 @@ DWORD stop(){
     for(const auto* bank:cardUiBanks)retainedPlayerUi=retainedPlayerUi||bank->ownerCount();
     if(retainedPlayerUi){note({{"event","player_ui_restart_required"},{"reason","Native player UI retains a copied script definition"}});return 4;}
 #endif
+    for(const auto* bank:features::banks)if(bank->ownerCount())return 4;
     if(notesUi.ownerCount()){note({{"event","notes_ui_restart_required"},{"reason","The game can retain cloned Notes definitions; use a clean restart"}});return 4;}
 #endif
     disabled=true;
@@ -785,7 +804,14 @@ DWORD WINAPI worker(void*){
         note({{"event","player_fog_preview_active"},{"reader",false},{"installedFilesChanged",false}});
         while(!disabled){flush();Sleep(200);}flush();return 0;
 #endif
-        installEnhancementSettings(true);
+        const auto startupBegan=GetTickCount64();
+        if(!startup::awaitVerified([]{return disabled.load();},[]{
+            try{installEnhancementSettings(true);return startup::Result{startup::State::Ready,{}};}
+            catch(const std::exception& error){const std::string reason=error.what();
+                const bool initializing=reason=="Unsupported Dynasty settings list code"||reason=="Unsupported Dynasty settings writer code";
+                return startup::Result{initializing?startup::State::Waiting:startup::State::Rejected,reason};}
+        },[&](const std::string& reason){note({{"event","recruiting_startup_waiting"},{"reason",reason}});flush();},[]{Sleep(250);})){flush();return 0;}
+        note({{"event","recruiting_startup_verified"},{"elapsedMs",GetTickCount64()-startupBegan}});
         std::array<unsigned char,32> actual{};uintptr_t current=0;
 #if defined(RECRUIT_NOTES_UI)
         // Reject an unsupported/occupied player surface before Notes definitions
@@ -802,7 +828,7 @@ DWORD WINAPI worker(void*){
         for(size_t i=0;i<detailCount;++i){const auto& gate=playingTimeGates[i];detailOriginal[i]=reinterpret_cast<DetailGetter>(base+gate.rva);if(!replace(reinterpret_cast<void*>(detailOriginal[i]),reinterpret_cast<void*>(hooks[i]),gate.vtable,gate.slot))throw std::runtime_error("Playing-time getter ownership changed");detailInstalled[i]=true;}
 #if defined(RECRUIT_NOTES_UI)
         if(!read(base+scriptSetupRva,actual.data(),scriptSetupPrefix.size())||memcmp(actual.data(),scriptSetupPrefix.data(),scriptSetupPrefix.size())||!read(base+scriptTableRva+scriptSetupSlot,&current,8)||current!=base+scriptSetupRva)throw std::runtime_error("Unsupported or already-owned script invocation setup");
-        notesUi.prepare();playerUi.prepare();modernPlayerUi.prepare();for(auto* bank:cardUiBanks)bank->prepare();originalScriptSetup=reinterpret_cast<ScriptSetup>(current);
+        notesUi.prepare();playerUi.prepare();modernPlayerUi.prepare();for(auto* bank:cardUiBanks)bank->prepare();features::prepare();originalScriptSetup=reinterpret_cast<ScriptSetup>(current);
         if(!replace(reinterpret_cast<void*>(originalScriptSetup),reinterpret_cast<void*>(notesSetupHook),scriptTableRva,scriptSetupSlot))throw std::runtime_error("Notes invocation setup ownership changed");
         notesSetupInstalled=true;
         constexpr unsigned char colorLengthPrefix[]={0x48,0x8b,0x41,0x58,0x8b,0x40,0x18,0xc3};
@@ -817,6 +843,9 @@ DWORD WINAPI worker(void*){
         if(!replace(reinterpret_cast<void*>(originalClassRows),reinterpret_cast<void*>(classRowsHook),classTableRva,0x68))throw std::runtime_error("Class grid provider ownership changed");classRowsInstalled=true;
         installRosterProviders();
         try{nativeanalytics::install(base);}catch(const std::exception& error){note({{"event","native_analytics_unavailable"},{"reason",error.what()}});}
+        uintptr_t keyOwner=0;if(read(base+classTableRva+0x78,&keyOwner,8)){
+            HMODULE keyModule=nullptr;if(keyOwner==base+classKeyRva||(GetModuleHandleExW(GET_MODULE_HANDLE_EX_FLAG_FROM_ADDRESS|GET_MODULE_HANDLE_EX_FLAG_UNCHANGED_REFCOUNT,reinterpret_cast<LPCWSTR>(keyOwner),&keyModule)&&keyModule==self)){features::rowKeyAddress=keyOwner;features::rowKeyTableAddress=base+classTableRva+0x78;}
+        }
         note({{"event","recruit_notes_ui_prepared"},{"methods",notesUi.methodCount()},{"attachment","live invocation setup"},{"unload","clean restart required after entry"}});
 #endif
 #if defined(RECRUIT_NOTES_PROBE)
@@ -850,6 +879,7 @@ DWORD WINAPI worker(void*){
                     if(read(base+0xf55c998,&league,4)&&dynasty::live::activeSession(base,query)==binding){haveSettingsContext=true;enhancementSettings.bind(std::to_string(league));}
                     enhancementSettings.flush();lastSettingsError.clear();
                 }catch(const std::exception& error){if(haveSettingsContext&&lastSettingsError!=error.what()){lastSettingsError=error.what();note({{"event","enhancement_settings_deferred"},{"reason",lastSettingsError}});}}
+                try{auto report=features::tick(base,read);if(!report.is_null())note(std::move(report));}catch(const std::exception& error){note({{"event","scouted_indicator_deferred"},{"reason",error.what()}});}
                 try{auto report=resumeCache.tick(base,folder,read);if(!report.is_null())note(std::move(report));}
                 catch(const std::exception& error){resumeCache.request();note({{"event","recruit_resume_deferred"},{"reason",error.what()}});}
             }

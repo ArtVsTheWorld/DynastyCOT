@@ -25,6 +25,8 @@ if($PlayerFogColors){if(-not $RecruitNotesUi){throw 'Player colors require UI su
 if($PlayerFogPerf){if(-not $RecruitNotesUi){throw 'Player profiling requires UI support'};$fogFlags+='/DPLAYER_FOG_PERF'}
 if($PresentationPreview){if(-not $RecruitNotesUi -or $PlayerFogPreview -or $RecruitNotesProbe){throw 'Presentation-only preview requires UI support and no other preview/probe mode'};$fogFlags+='/DPLAYER_PRESENTATION_PREVIEW'}
 if($RecruitNotesUi){
+ & powershell.exe -NoProfile -ExecutionPolicy Bypass -File (Join-Path $fogRoot 'Tests/Test-RecruitInterest.ps1')
+ if($LASTEXITCODE -ne 0){throw 'Recruit interest and scouting-history checks failed'}
  & python (Join-Path $fogRoot 'Tests/rc016_native_ui_test.py')
  if($LASTEXITCODE -ne 0){throw 'RC016 AIO Notes, redraw/edit and monetary layout checks failed'}
  & python (Join-Path $fogRoot 'Tests/analytics_actions_ui_test.py')

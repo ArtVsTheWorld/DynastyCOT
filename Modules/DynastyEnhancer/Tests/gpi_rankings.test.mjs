@@ -1,7 +1,7 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
-import {pffRankings} from '../Tools/pff_rankings.mjs';
-import {pffEvents} from '../Tools/pff_events.mjs';
+import {gpiRankings} from '../Tools/gpi_rankings.mjs';
+import {gpiEvents} from '../Tools/gpi_events.mjs';
 import {detectEvents} from '../Tools/story_events.mjs';
 import {renderStories} from '../Tools/story_renderer.mjs';
 import {freshEditorialEvents} from '../Tools/editorial_policy.mjs';
@@ -23,39 +23,39 @@ export function rankingFixture(){
  s.playerAnalytics=a;return s;
 }
 test('position Top 3 contains exact eligible players/grades and weekly players are unique highest qualifiers',()=>{
- const s=rankingFixture(),events=pffRankings(s,s.playerAnalytics),board=events.find(e=>e.facts.family==='pff.position-top-three');assert.ok(board);
+ const s=rankingFixture(),events=gpiRankings(s,s.playerAnalytics),board=events.find(e=>e.facts.family==='pff.position-top-three');assert.ok(board);
  assert.equal(board.facts.position,'RG');assert.deepEqual(board.facts.leaderboard.map(r=>r.team),[5,4,3]);assert.equal(board.facts.topThree.split('\n').length,3);
  assert.equal(events.find(e=>e.facts.family==='pff.offensive-player-of-week').options.player,'p1-0');
  assert.equal(events.find(e=>e.facts.family==='pff.defensive-player-of-week').options.player,'p3-16');
- const saved=structuredClone(s);assert.deepEqual(pffRankings(s,s.playerAnalytics),events);assert.deepEqual(s,saved);
+ const saved=structuredClone(s);assert.deepEqual(gpiRankings(s,s.playerAnalytics),events);assert.deepEqual(s,saved);
 });
 test('unit weeks use snap-weighted complete lineups and never promote an incomplete runner-up',()=>{
- const s=rankingFixture();s.playerAnalytics.week=7;const events=pffRankings(s,s.playerAnalytics);
+ const s=rankingFixture();s.playerAnalytics.week=7;const events=gpiRankings(s,s.playerAnalytics);
  const off=events.find(e=>e.facts.family==='pff.offense-of-week'),def=events.find(e=>e.facts.family==='pff.defense-of-week');assert.equal(off.options.team,1);assert.equal(def.options.team,3);
  assert.equal(off.facts.teamGrade,'89.0');assert.equal(def.facts.teamGrade,'87.3');
  const bad=structuredClone(s);bad.playerAnalytics.weekly=bad.playerAnalytics.weekly.filter(r=>!(r.team===5&&r.position==='LT'));
- assert.ok(pffRankings(bad,bad.playerAnalytics).every(e=>e.facts.family!=='pff.offense-of-week'));
+ assert.ok(gpiRankings(bad,bad.playerAnalytics).every(e=>e.facts.family!=='pff.offense-of-week'));
 });
 test('ties are labeled inside a three-player board, but an ambiguous cutoff/winner is omitted',()=>{
  const s=rankingFixture();s.playerAnalytics.coverage.positions=['RG'];s.playerAnalytics.seasonRows.forEach(r=>{if(r.position==='RG'&&[4,5].includes(r.team))r.grade=90;});
- let events=pffRankings(s,s.playerAnalytics),board=events.find(e=>e.facts.family==='pff.position-top-three');assert.match(board.facts.topThree,/T1\./);
+ let events=gpiRankings(s,s.playerAnalytics),board=events.find(e=>e.facts.family==='pff.position-top-three');assert.match(board.facts.topThree,/T1\./);
  s.playerAnalytics.seasonRows.find(r=>r.position==='RG'&&r.team===2).grade=79;
- assert.ok(pffRankings(s,s.playerAnalytics).every(e=>e.facts.family!=='pff.position-top-three'));
+ assert.ok(gpiRankings(s,s.playerAnalytics).every(e=>e.facts.family!=='pff.position-top-three'));
  const tied=rankingFixture();tied.playerAnalytics.weekly.find(r=>r.player==='p2-0').grade=99;tied.playerAnalytics.weekly.find(r=>r.player==='p4-16').grade=98;
- assert.ok(pffRankings(tied,tied.playerAnalytics).every(e=>!['pff.offensive-player-of-week','pff.defensive-player-of-week'].includes(e.facts.family)));
+ assert.ok(gpiRankings(tied,tied.playerAnalytics).every(e=>!['pff.offensive-player-of-week','pff.defensive-player-of-week'].includes(e.facts.family)));
 });
 test('unverified/missing/duplicate/foreign data cannot create national grade honors',()=>{
  for(const change of [a=>delete a.coverage,a=>a.coverage.scheduleComplete=false,a=>a.coverage.fbsTeams.push(77),a=>a.coverage.weeklyTeams=[],a=>a.weekly.push(a.weekly[0]),a=>a.seasonRows[0].team=255,a=>a.weekly[0].grade=null]){
-  const s=rankingFixture();change(s.playerAnalytics);assert.deepEqual(pffRankings(s,s.playerAnalytics),[]);
+  const s=rankingFixture();change(s.playerAnalytics);assert.deepEqual(gpiRankings(s,s.playerAnalytics),[]);
  }
  const s=rankingFixture();s.playerAnalytics.coverage.positions=s.playerAnalytics.coverage.positions.filter(p=>p!=='LT');
- assert.ok(pffRankings(s,s.playerAnalytics).every(e=>!['pff.offensive-player-of-week','pff.offense-of-week'].includes(e.facts.family)));
- s.playerAnalytics.week=s.season.CurrentWeek;assert.deepEqual(pffEvents(s),[]);
+ assert.ok(gpiRankings(s,s.playerAnalytics).every(e=>!['pff.offensive-player-of-week','pff.offense-of-week'].includes(e.facts.family)));
+ s.playerAnalytics.week=s.season.CurrentWeek;assert.deepEqual(gpiEvents(s),[]);
 });
 test('structured posts share the four-root budget, preserve all related teams, and do not become native awards',()=>{
  const s=rankingFixture(),events=detectEvents(s).filter(e=>e.facts.family?.startsWith('pff.')),posts=renderStories(s,events).stories;
  assert.ok(events.length<=4&&posts.length<=4);assert.ok(events.some(e=>e.facts.family==='pff.position-top-three'));
- for(const p of posts){assert.equal(p.author,'PFF');assert.equal(p.handle,'@PFF_College');assert.equal(p.category,'analytics');assert.ok(!p.replyTo&&!p.essentialNews&&!p.coverageExempt);assert.ok([...p.body].length<=280&&Buffer.byteLength(p.body)<=512);}
+ for(const p of posts){assert.equal(p.author,'GPI');assert.equal(p.handle,'@GPIndex');assert.equal(p.category,'analytics');assert.ok(!p.replyTo&&!p.essentialNews&&!p.coverageExempt);assert.ok([...p.body].length<=280&&Buffer.byteLength(p.body)<=512);}
  const board=events.find(e=>e.facts.family==='pff.position-top-three');assert.deepEqual(board.teamIds,[5,4,3]);
  const publication={leagueId:10,userTeamIndex:2,season:2027,phase:'RegularSeason',week:9},feed={...publication,week:8,events,stories:posts};
  assert.ok(!freshEditorialEvents(events,publication,[feed]).some(e=>e.facts.family==='pff.position-top-three'));
@@ -69,13 +69,13 @@ test('long Top 3 boards use native school abbreviations/initials; impossible boa
  const s=rankingFixture();s.playerAnalytics.coverage.positions=['RG'];
  for(const t of s.teams)t.name='University of Western Metropolitan State with a Very Long Name';
  for(const p of s.players){p.firstName='ChristopherAlexander';p.lastName='WashingtonAnderson';p.name=p.firstName+' '+p.lastName;}
- const board=pffRankings(s,s.playerAnalytics).find(e=>e.facts.family==='pff.position-top-three');assert.ok(board);assert.match(board.facts.topThree,/C\. WashingtonAnderson \(S5\)/);
+ const board=gpiRankings(s,s.playerAnalytics).find(e=>e.facts.family==='pff.position-top-three');assert.ok(board);assert.match(board.facts.topThree,/C\. WashingtonAnderson \(S5\)/);
  for(const t of s.teams)delete t.shortName;
- assert.ok(pffRankings(s,s.playerAnalytics).every(e=>e.facts.family!=='pff.position-top-three'));
+ assert.ok(gpiRankings(s,s.playerAnalytics).every(e=>e.facts.family!=='pff.position-top-three'));
 });
 test('narrow native positions retain explicit board labels instead of claiming a broader group lead',()=>{
  const s=rankingFixture();s.season.CurrentWeek=17;s.playerAnalytics.coverage.positions=['FS'];
- const board=pffRankings(s,s.playerAnalytics).find(e=>e.facts.family==='pff.position-top-three');assert.equal(board.facts.position,'Free Safety');
+ const board=gpiRankings(s,s.playerAnalytics).find(e=>e.facts.family==='pff.position-top-three');assert.equal(board.facts.position,'Free Safety');
  const e=detectEvents(s).find(e=>e.facts.family==='pff.position-top-three'),posts=renderStories(s,[e]).stories;
  assert.ok(posts[0].body.includes('Free Safety'));assert.ok(!posts[0].body.includes('the S grade board'));
 });

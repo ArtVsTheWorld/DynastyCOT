@@ -17,6 +17,7 @@ void* inputTable[]={nullptr,reinterpret_cast<void*>(count),nullptr,reinterpret_c
 inline void run(){
     using namespace enhancements;
     require(Options{}.packed()==defaultOptions&&Options{}.scale==GradeScale::PlusMinus&&Options{}.team,"New default scale/team fog differs");
+    require(Options{}.interest==RecruitInterestDisplay::Native,"New interest profiles must default to the native display");
     require(!Options{}.dollars,"Dollar conversion must default Off");
     require(Options{}.social&&Options{}.recruiting&&Options{}.roster&&Options{}.team&&!Options{}.colors&&defaultOptions==591,"Requested enhancement defaults differ");
     for(unsigned bits=0;bits<256;++bits)require(Options::unpack(bits).packed()==bits,"Option bit packing lost an independent control");
@@ -48,12 +49,16 @@ inline void run(){
         auto input=valid;input[key]=bad;bool rejected=false;try{decodeOptions(input,1001);}catch(const std::exception&){rejected=true;}
         require(rejected,"Non-boolean toggle was silently coerced");
     }
+    require(decodeOptions(valid,1001).interest==RecruitInterestDisplay::Native,"Profiles without a saved interest choice must use Default without altering old controls");
+    for(const Json bad:std::vector<Json>{-1,3,1.5,true,nullptr,"1"}){auto saved=valid;saved["recruitInterestDisplay"]=bad;bool rejected=false;try{decodeOptions(saved,1001);}catch(const std::exception&){rejected=true;}require(rejected,"Malformed interest mode was silently accepted");}
+    for(int mode=0;mode<3;++mode){auto saved=valid;saved["recruitInterestDisplay"]=mode;require(unsigned(decodeOptions(saved,1001).interest)==unsigned(mode),"Interest mode did not decode");}
     Options selected;selected.scale=GradeScale::Descriptive;selected.colors=false;
     Output output{outputTable,{}};output.rows[9]={{"label","Existing Commissioner Settings"},{"foreign",123}};
     menu::append(&output,10,selected,true);
-    require(output.rows[9]["foreign"]==123&&output.rows.size()==10,"Enhancement section overwrote existing or foreign rows");
-    require(output.rows[10]["label"]=="Beyond the Field"&&output.rows[17]["label"]=="Rating Colors"&&output.rows[15]["label"]=="Player Grade Scale"&&output.rows[16]["label"]=="Team Grade Scale","Beyond the Field row ordering differs");
-    require(output.rows[15]["numItems"]==5&&output.rows[16]["numItems"]==5&&output.rows[15]["isDefault"]==3&&output.rows[17]["isDefault"]==0&&output.rows[18]["label"]=="Dollar Values"&&output.rows[18]["isDefault"]==0,"Option choices/defaults differ");
+    require(output.rows[13]["Display0"]=="Default"&&output.rows[13]["Display1"]=="Recruit Feedback"&&output.rows[13]["Display2"]=="Rank Only"&&output.rows[13]["isDefault"]==0,"Interest labels/default changed or saved numeric IDs moved");
+    require(output.rows[9]["foreign"]==123&&output.rows.size()==11,"Enhancement section overwrote existing or foreign rows");
+    require(output.rows[10]["label"]=="Beyond the Field"&&output.rows[18]["label"]=="Rating Colors"&&output.rows[16]["label"]=="Player Grade Scale"&&output.rows[17]["label"]=="Team Grade Scale","Beyond the Field row ordering differs");
+    require(output.rows[16]["numItems"]==5&&output.rows[17]["numItems"]==5&&output.rows[16]["isDefault"]==3&&output.rows[18]["isDefault"]==0&&output.rows[19]["label"]=="Dollar Values"&&output.rows[19]["isDefault"]==0,"Option choices/defaults differ");
     {
         // Native, Offline Dynasty Settings and AIO-shaped sections. Deliberately
         // write some header fields out of order and revisit one after later rows.
@@ -70,13 +75,13 @@ inline void run(){
         menu::text(&sink,4,"description","Other mod section");
         require(reordered.rows.empty(),"Buffered provider leaked partial rows before section placement");
         require(menu::emit(sink,selected,true)==4,"Enhancements were not inserted after the Commissioner section");
-        require(reordered.reserved==20&&reordered.rows.size()==20,"Settings insertion lost rows or reservation capacity");
-        require(reordered.rows[4]["label"]=="Beyond the Field"&&reordered.rows[7]["label"]=="Roster Fog"&&reordered.rows[8]["label"]=="Team Fog"&&reordered.rows[11]["label"]=="Rating Colors"&&reordered.rows[12]["label"]=="Dollar Values"&&reordered.rows[13]["label"]=="Game Settings"&&reordered.rows[16]["label"]=="Team Settings"&&reordered.rows[18]["label"]=="Playoff Customization","Foreign section order changed or native Team Settings stayed above Beyond the Field");
+        require(reordered.reserved==21&&reordered.rows.size()==21,"Settings insertion lost rows or reservation capacity");
+        require(reordered.rows[4]["label"]=="Beyond the Field"&&reordered.rows[8]["label"]=="Roster Fog"&&reordered.rows[9]["label"]=="Team Fog"&&reordered.rows[12]["label"]=="Rating Colors"&&reordered.rows[13]["label"]=="Dollar Values"&&reordered.rows[14]["label"]=="Game Settings"&&reordered.rows[17]["label"]=="Team Settings"&&reordered.rows[19]["label"]=="Playoff Customization","Foreign section order changed or native Team Settings stayed above Beyond the Field");
         for(const unsigned row:{1,2,3,5,6,8,10}){
-            const auto mapped=row+(row>=4?9:0);
+            const auto mapped=row+(row>=4?10:0);
             require(reordered.rows[mapped]["key"]==900+int(row)&&reordered.rows[mapped]["label"]=="Row "+std::to_string(row)&&reordered.rows[mapped]["isInteractive"]==(row!=6)&&reordered.rows[mapped]["step"]==0.5f,"Provider row values, types or setting keys were altered by insertion");
         }
-        require(reordered.rows[13]["description"]=="Other mod section","Late write to a header was lost");
+        require(reordered.rows[14]["description"]=="Other mod section","Late write to a header was lost");
         Output fallback{outputTable,{}};menu::Collector unknown{menu::collectorTable,&fallback,0,0,{}};
         menu::integer(&unknown,0,"key",88);menu::text(&unknown,0,"label","Unknown section");menu::text(&unknown,0,"linkage","madden.ultimatecareer.component.ListCategoryHeader");
         require(menu::emit(unknown,selected,true)==1&&fallback.rows[0]["key"]==88&&fallback.rows[1]["label"]=="Beyond the Field","Unknown provider section was displaced");
@@ -115,17 +120,18 @@ inline void run(){
     Input in{inputTable,{{10,9},{menu::firstKey,0},{menu::firstKey+3,2},{menu::firstKey+4,0},{0x1001,3},{menu::firstKey+8,0}}};
     std::vector<std::pair<unsigned,int>> changes;
     const auto consumed=menu::consume(&in,[&](unsigned key,int value){changes.emplace_back(key,value);return true;});
-    require(consumed==3&&changes==std::vector<std::pair<unsigned,int>>{{0,0},{3,2},{4,0}},"Settings writer consumed another mod's keys");
+    require(consumed==4&&changes==std::vector<std::pair<unsigned,int>>{{0,0},{3,2},{4,0},{8,0}},"Settings writer consumed another mod's keys");
     const auto root=std::filesystem::current_path()/("enhancement-options-test-"+std::to_string(GetCurrentProcessId())+"-"+std::to_string(GetTickCount64()));
     require(!std::filesystem::exists(root),"Options fixture already exists");
     OptionStore store;store.configure(root);store.bind("1001");require(options().packed()==defaultOptions,"New Dynasty did not get enabled defaults");
     for(const auto* id:{"0","4294967295"}){bool rejected=false;try{store.bind(id);}catch(const std::exception&){rejected=true;}require(rejected,"Settings accepted an invalid Dynasty identity");}
     require(store.availableFor(1001)&&!store.availableFor(1002),"Settings menu admitted a different Dynasty identity");
     require(store.change(0,0)&&store.change(1,0)&&store.change(2,0)&&store.change(3,1)&&store.change(4,0)&&store.change(5,0)&&store.change(6,1),"Valid options were rejected");
-    const auto first=options().packed();require(!store.change(8,1)&&!store.change(1,2)&&!store.change(3,5)&&!store.change(4,-1),"Invalid options were accepted");
+    require(store.change(8,0)&&options().interest==RecruitInterestDisplay::Native,"Interest preference rejected");
+    const auto first=options().packed();require(!store.change(9,1)&&!store.change(8,3)&&!store.change(1,2)&&!store.change(3,5)&&!store.change(4,-1),"Invalid options were accepted");
     require(options().packed()==first,"Invalid setting changed the active profile");
     store.bind("1002");require(options().packed()==defaultOptions&&!options().dollars,"Preferences leaked into another Dynasty");
-    store.change(3,3);store.change(4,1);store.flush();store.bind("1001");require(options().packed()==first,"Preferences did not survive a Dynasty switch");
+    store.change(3,3);store.change(4,1);store.flush();store.bind("1001");require(options().packed()==first&&options().interest==RecruitInterestDisplay::Native,"Preferences did not survive a Dynasty switch");
     OptionStore reloaded;reloaded.configure(root);reloaded.bind("1002");require(options().scale==GradeScale::Descriptive&&options().colors,"Reload did not restore the other Dynasty independently");
     SharedOptions reader;reader.open();Options shared;uint32_t league=0;
     require(reader.read(shared,&league)&&league==1002&&shared.packed()==options().packed(),"Combined native payload settings do not agree");
@@ -157,6 +163,6 @@ inline void run(){
     for(const auto id:{1001,1002})std::filesystem::remove(root/L"DynastyEnhancementSettings"/(std::to_string(id)+".json"));
     std::filesystem::remove(root/L"DynastyEnhancementSettings");std::filesystem::remove(root);
     currentOptions=39;
-    std::cout<<"Passed: eight independent options, five scales, native section/foreign rows, bounded private-key writer, per-Dynasty persistence and combined-payload sharing.\n";
+    std::cout<<"Passed: nine independent options, five scales, native section/foreign rows, bounded private-key writer, per-Dynasty persistence and combined-payload sharing.\n";
 }
 }

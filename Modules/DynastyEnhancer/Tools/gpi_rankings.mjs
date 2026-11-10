@@ -1,16 +1,16 @@
 // These are COT grade-board honors, not native awards or proprietary film grades.
 const offense=new Set(['QB','RB','WR','TE','OL']),defense=new Set(['DL','LB','CB','S']);
-export const pffPosition=p=>({LE:'LEDG',RE:'REDG',LOLB:'SAM',MLB:'MIKE',ROLB:'WILL'}[p]??p);
+export const gpiPosition=p=>({LE:'LEDG',RE:'REDG',LOLB:'SAM',MLB:'MIKE',ROLB:'WILL'}[p]??p);
 const fit=s=>[...s].length<=248&&Buffer.byteLength(s,'utf8')<=440;
 const gradeOrder=(a,b)=>b.grade-a.grade||b.snaps-a.snaps||a.player.localeCompare(b.player);
 const uniqueWinner=rows=>{const sorted=[...rows].sort((a,b)=>b.grade-a.grade);return sorted.length&&(!sorted[1]||sorted[0].grade!==sorted[1].grade)?sorted[0]:null;};
 const positionGroup=p=>p==='QB'?'QB':['HB','FB'].includes(p)?'RB':['LT','LG','C','RG','RT'].includes(p)?'OL':['LEDG','REDG','DT'].includes(p)?'DL':['SAM','MIKE','WILL'].includes(p)?'LB':['FS','SS'].includes(p)?'S':p;
 const boardPosition=p=>({FS:'Free Safety',SS:'Strong Safety',LEDG:'Left Edge',REDG:'Right Edge',SAM:'SAM Linebacker',MIKE:'MIKE Linebacker',WILL:'WILL Linebacker'}[p]??p);
-export function pffRankings(s,a,old=null){
+export function gpiRankings(s,a,old=null){
  const c=a.coverage;if(c?.format!==1||!c.scheduleComplete||!Array.isArray(c.fbsTeams)||!Array.isArray(c.weeklyTeams)||!Array.isArray(c.positions)||!Array.isArray(c.trackedPositions))return [];
  const teams=new Map(s.teams.filter(t=>c.fbsTeams.includes(t.id)).map(t=>[t.id,t])),players=new Map(s.players.map(p=>[p.id,p]));
  if(!teams.size||!c.weeklyTeams.length||c.fbsTeams.some(id=>!teams.has(id))||c.weeklyTeams.some(id=>!teams.has(id)))return [];
- const valid=r=>{const p=players.get(r.player);return teams.has(r.team)&&p?.team===r.team&&p.rosterEligible!==false&&pffPosition(p.position)===pffPosition(r.position)&&positionGroup(pffPosition(r.position))===r.group&&Number.isFinite(r.grade)&&r.grade>=0&&r.grade<=100&&Number.isFinite(r.snaps)&&r.snaps>0;};
+ const valid=r=>{const p=players.get(r.player);return teams.has(r.team)&&p?.team===r.team&&p.rosterEligible!==false&&gpiPosition(p.position)===gpiPosition(r.position)&&positionGroup(gpiPosition(r.position))===r.group&&Number.isFinite(r.grade)&&r.grade>=0&&r.grade<=100&&Number.isFinite(r.snaps)&&r.snaps>0;};
  const weekly=a.weekly.filter(valid),season=a.seasonRows.filter(valid);
  // Never silently remove a malformed/duplicated candidate from a national field.
  if(weekly.length!==a.weekly.length||season.length!==a.seasonRows.length||weekly.some(r=>!c.weeklyTeams.includes(r.team))||new Set(weekly.map(r=>r.player)).size!==weekly.length||new Set(season.map(r=>r.player)).size!==season.length)return [];
@@ -21,7 +21,7 @@ export function pffRankings(s,a,old=null){
  const positions=['QB','HB','FB','WR','TE','LT','LG','C','RG','RT','LEDG','REDG','DT','SAM','MIKE','WILL','CB','FS','SS','K','P'];
  for(let i=0;i<positions.length;i++){
   const position=positions[(s.season.CurrentWeek+i)%positions.length];if(!c.positions.includes(position))continue;
-  const rows=season.filter(r=>pffPosition(r.position)===position&&r.gradedGames>=3&&(['K','P'].includes(r.group)?r.opportunities>=8:r.snaps>=200)).sort(gradeOrder);
+  const rows=season.filter(r=>gpiPosition(r.position)===position&&r.gradedGames>=3&&(['K','P'].includes(r.group)?r.opportunities>=8:r.snaps>=200)).sort(gradeOrder);
   if(rows.length<3||rows[3]?.grade===rows[2].grade)continue;
   const leaders=rows.slice(0,3);
   const makeList=compact=>leaders.map((r,i)=>{const p=players.get(r.player),t=teams.get(r.team),rank=1+leaders.filter(other=>other.grade>r.grade).length,tied=leaders.filter(other=>other.grade===r.grade).length>1;

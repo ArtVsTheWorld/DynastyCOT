@@ -11,7 +11,7 @@ import {buildCatalog} from './feed_selection.mjs';
 import {refreshAccountPresentation} from './account_presentation.mjs';
 import {recoverWeek} from './recover_weeks.mjs';
 import {publicPoll} from './public_polls.mjs';
-import {pffObservation} from './pff_events.mjs';
+import {gpiObservation} from './gpi_events.mjs';
 export function scopeKey(s){return `${s.leagueId}/${s.userTeamIndex}/${s.season.CurrentSeasonYear}/${s.season.CurrentWeekType}`;}
 const pair=o=>`${o.team}:${o.player}`;
 export function updateRuntime(s,state={format:1,editions:[]},{archives=[]}={}){
@@ -71,7 +71,7 @@ export function updateRuntime(s,state={format:1,editions:[]},{archives=[]}={}){
   s.seasonStaffMoves=observedStaffMoves([...archives,...editions.filter(e=>e.week<week).map(e=>e.feed)],s.season.CurrentSeasonYear);
   const recruitGames=observeRecruitGames(s,state.recruitGameLedger);s.recruitGameRecords=recruitGames.records;
   const feed=buildFeed(s,previous?.snapshot??null,{authors,history:[...archives,...editions.filter(e=>e.week<week).map(e=>e.feed)],sameWeek:same?.feed??null,onAuthors:value=>{authors=value;}});
-  const snapshot={format:2,sourceKind:'runtime',leagueId:s.leagueId,season:s.season,userTeamIndex:s.userTeamIndex,sha256:s.sha256,playerAnalytics:pffObservation(s),
+  const snapshot={format:2,sourceKind:'runtime',leagueId:s.leagueId,season:s.season,userTeamIndex:s.userTeamIndex,sha256:s.sha256,playerAnalytics:gpiObservation(s),
     draftBoard:s.draftBoard,undraftedSignings:s.undraftedSignings,recentDraftClass:s.recentDraftClass,transactionObservation:transactionObservation(s),transactionBaseline:s.transactionBaseline,delayedNILChanges:s.delayedNILChanges,postseasonPublications:s.postseasonPublications,seasonEndPublications:s.seasonEndPublications,milestoneTotals:totals,milestoneBaseline:s.milestoneBaseline,publicPoll:{key:poll.key,ranks:poll.ranks},players:s.players.filter(p=>p.team!==255).map(p=>({id:p.id,team:p.team,injury:p.injury,injuryYear:p.injuryYear,injuryWeek:p.injuryWeek,injuryType:p.injuryType,minInjury:p.minInjury,maxInjury:p.maxInjury,injurySeverity:p.injurySeverity})),records:s.records??[],recordBaseline:s.recordBaseline,recordBaselineVersion:1,pregameGames:s.pregameGames,commitmentChanges:s.commitmentChanges,commitments:s.commitments,offers:s.offers,offerEvents:s.newOffers,commitmentEvents:s.newCommitments,recruitingObservationVersion:1,recruitingCatchup:s.recruitingCatchup,midweekBaseline};
   const entry={scope,week,key:weekKey(s),snapshot,feed};
   const updated=[...editions.filter(e=>e.week!==week).map(e=>({...e,feed:refreshAccountPresentation(e.feed,s)})),entry].sort((a,b)=>a.week-b.week);

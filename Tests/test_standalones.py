@@ -42,6 +42,9 @@ with zipfile.ZipFile(reference) as z:
    elif name=='BeyondTheField' and path.endswith('/BeyondTheFieldNative-v103.dll'):check(meta['branding']['nativeTests']=='passed','Branded native configuration source build and tests')
    elif name=='BeyondTheField' and path.endswith('/BeyondTheFieldRecruitFog-v1.dll'):
     inputs=json.loads((ROOT/'cot.build-inputs.json').read_text());check(sha(ROOT/inputs['fogNative'])==digest==inputs['nativeHashes']['fogNative'],'Matched freshly source-built fog payload')
+   elif name=='BeyondTheField' and path.startswith(('COT-Runtime/DynastyEnhancer/Tools/','COT-Runtime/DynastyEnhancer/Content/Runtime/')):
+    relative=path.removeprefix('COT-Runtime/DynastyEnhancer/');check(sha(ROOT/'Modules/DynastyEnhancer'/relative)==digest,'Current source-built GPI generator/content payload')
+   elif name=='BeyondTheField' and path=='LICENSES/PlayerAnalytics-NOTICES.txt':check(sha(ROOT/'Modules/DynastyEnhancer/Source/Analytics.NOTICES.txt')==digest,'Current analytics notices')
    else:check(old[path]==digest,'Payload parity with released COT: '+path)
  package=BASE/'COT102';z.extractall(package)
 for mode in ['claim','conflict']:fixture(mode,seed(mode))
@@ -71,6 +74,6 @@ result=installer('UninstallAll');check(result.returncode==0,'COT uninstall succe
 fixture('files',root)
 for relative,contents in data.items():check((root/relative).read_bytes()==contents,'Rematerialization preserves data')
 for name in NAMES:check((root/f'Plugins/{name}.dll').exists(),'Bundle uninstall leaves independent DLL')
-report=dict(format=1,checks=checks,gamedayDllSha256=GAMEDAY['dllSha256'],modules={name:dict(version=meta['version'],dllSha256=meta['dllSha256'],sourceHashes=meta['sourceHashes'],payload=meta['payload'],branding=meta['branding']) for name,meta in META.items() if name in selected},fixtureRoot=str(BASE),reverseCotSwitchRequiresNativeBackup=switch_issue,liveAcceptance='targeted-live-display-confirmed; packaged-clean-launch-pending',installedIntoLiveMmc=False,published=False)
+report=dict(format=1,checks=checks,gamedayDllSha256=GAMEDAY['dllSha256'],modules={name:dict(version=meta['version'],dllSha256=meta['dllSha256'],sourceHashes=meta['sourceHashes'],payload=meta['payload'],branding=meta['branding']) for name,meta in META.items() if name in selected},fixtureRoot=str(BASE),reverseCotSwitchRequiresNativeBackup=switch_issue,liveAcceptance='Recruiting adapters user-verified in temporary live preview; integrated clean-package stability and mode/persistence acceptance pending',installedIntoLiveMmc=False,published=False)
 (BASE/'results.log').write_text('\n'.join(logs),encoding='utf-8');(ROOT/'Build/standalones-verification.json').write_text(json.dumps(report,indent=2)+'\n',encoding='utf-8')
 print('PASS',checks,'standalone integration checks; reverse-switch native backup required:',switch_issue)

@@ -8,6 +8,8 @@
 
 namespace enhancements {
 enum class GradeScale : unsigned {Letters, PlusMinus, STier, Descriptive, Blind};
+enum class RecruitInterestDisplay:unsigned {Native,Feedback,RankOnly};
+inline std::atomic<unsigned> currentRecruitInterest{0};
 struct Options {
     bool social=true,recruiting=true,roster=true;
     GradeScale scale=GradeScale::PlusMinus;
@@ -15,6 +17,9 @@ struct Options {
     bool team=true;
     bool dollars=false;
     GradeScale teamScale=GradeScale::PlusMinus;
+    RecruitInterestDisplay interest=RecruitInterestDisplay::Native;
+    // Interest is owned by the recruiting UI payload; keep the shared v4
+    // rating/social bit layout intact for the independently loaded GPI payload.
     // Retain the existing toggle bits; the extra player-scale bit and team
     // scale occupy previously unused bits. Shared payload protocol is v4.
     constexpr unsigned packed()const{return unsigned(social)|(unsigned(recruiting)<<1)|(unsigned(roster)<<2)|((unsigned(scale)&3)<<3)|(unsigned(colors)<<5)|(unsigned(team)<<6)|(unsigned(dollars)<<7)|((unsigned(scale)&4)<<6)|(unsigned(teamScale)<<9);}
@@ -26,7 +31,7 @@ inline std::atomic<unsigned> currentOptions{defaultOptions};
 inline std::atomic<uint32_t> currentOptionsLeague{0};
 using PresentationGuard=bool(*)();
 inline std::atomic<PresentationGuard> presentationGuard{nullptr};
-inline Options configuredOptions(){return Options::unpack(currentOptions.load(std::memory_order_relaxed));}
+inline Options configuredOptions(){auto value=Options::unpack(currentOptions.load(std::memory_order_relaxed));value.interest=RecruitInterestDisplay(currentRecruitInterest.load(std::memory_order_relaxed));return value;}
 inline bool presentationAllowed(){auto guard=presentationGuard.load(std::memory_order_acquire);return !guard||guard();}
 // Keep the saved profile independent of its current presentation scope. Leaving
 // Dynasty never changes or publishes the user's choices to another profile.

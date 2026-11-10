@@ -29,26 +29,27 @@ inline void* collectorTable[]={nullptr,reinterpret_cast<void*>(reserve),nullptr,
 inline void append(void* out,unsigned row,Options selected,bool interactive){
     put(out,row,"label","Beyond the Field",6);put(out,row,"key",firstKey-1,4);
     put(out,row,"linkage","madden.ultimatecareer.component.ListCategoryHeader",6);++row;
-    constexpr const char* names[]={"Social Media Feed","Recruiting Fog","Roster Fog","Team Fog","Player Grade Scale","Team Grade Scale","Rating Colors","Dollar Values"};
+    constexpr const char* names[]={"Social Media Feed","Recruiting Fog","Interest Display","Roster Fog","Team Fog","Player Grade Scale","Team Grade Scale","Rating Colors","Dollar Values"};
     constexpr const char* descriptions[]={
         "Weekly Dynasty news and reactions. COT HS Game posts use saved mod-generated recruit results, not native high school records. Saved for this Dynasty.",
         "Replace recruit ratings with grades and hide Playing Time grades. Notes and college background labels remain available when Off.",
+        "Default bars, broad Recruit Feedback, or rankings without bars. Recruiting Fog must be On; Blind hides interest completely.",
         "Replace active-player ratings with grades throughout menus and gameplay. Edit Player ratings remain unchanged.",
         "Replace team Overall, Offense and Defense ratings with the selected grade scale.",
         "Player and recruit ratings: A, A+-, S, Descriptive, or Blind. Blind hides ratings with a dash and native text colors.",
         "Team Overall, Offense and Defense: A, A+-, S, Descriptive, or Blind. Independent of player grades.",
         "Color grades or numerical ratings using the selected scale. Off uses standard text colors.",
         "Display NIL and Dynasty points as dollars at $4,000 per point. Presentation only; budgets and negotiations are unchanged."};
-    const int values[]={selected.social?1:0,selected.recruiting?1:0,selected.roster?1:0,selected.team?1:0,int(selected.scale),int(selected.teamScale),selected.colors?1:0,selected.dollars?1:0};
-    constexpr unsigned keys[]={0,1,2,5,3,7,4,6};
-    for(unsigned i=0;i<8;++i,++row){
+    const int values[]={selected.social?1:0,selected.recruiting?1:0,int(selected.interest),selected.roster?1:0,selected.team?1:0,int(selected.scale),int(selected.teamScale),selected.colors?1:0,selected.dollars?1:0};
+    constexpr unsigned keys[]={0,1,8,2,5,3,7,4,6};
+    for(unsigned i=0;i<9;++i,++row){
         put(out,row,"linkage","madden.component.SettingsToggleHorizontal",6);put(out,row,"key",firstKey+int(keys[i]),4);
         put(out,row,"label",names[i],6);put(out,row,"description",descriptions[i],6);
-        const bool scaleRow=i==4||i==5;
-        const int count=scaleRow?5:2;put(out,row,"numItems",count,4);put(out,row,"isDefault",values[i],4);put(out,row,"isInteractive",interactive,3);
+        const bool scaleRow=i==5||i==6;
+        const bool interestRow=i==2;const int count=scaleRow?5:interestRow?3:2;put(out,row,"numItems",count,4);put(out,row,"isDefault",values[i],4);put(out,row,"isInteractive",interactive&&(!interestRow||selected.recruiting),3);
         constexpr const char* scales[]={"A","A+-","S","Descriptive","Blind"};
         for(int j=0;j<count;++j){const auto display="Display"+std::to_string(j),value="Value"+std::to_string(j);
-            put(out,row,display.c_str(),scaleRow?scales[j]:j?"On":"Off",6);put(out,row,value.c_str(),j,4);}
+            put(out,row,display.c_str(),scaleRow?scales[j]:interestRow?(j==0?"Default":j==1?"Recruit Feedback":"Rank Only"):j?"On":"Off",6);put(out,row,value.c_str(),j,4);}
     }
 }
 inline unsigned insertionRow(const Collector& sink){
@@ -71,7 +72,7 @@ inline unsigned insertionRow(const Collector& sink){
     return sink.next; // Never displace an unrecognized provider's section.
 }
 inline unsigned emit(const Collector& sink,Options selected,bool interactive){
-    const unsigned at=insertionRow(sink),extra=sink.next?9:0;
+    const unsigned at=insertionRow(sink),extra=sink.next?10:0;
     if(sink.reserved)reinterpret_cast<void(__fastcall*)(void*,unsigned)>((*reinterpret_cast<void***>(sink.target))[1])(sink.target,(std::max)(sink.reserved,sink.next)+extra);
     for(const auto& field:sink.fields){
         const auto row=field.row+(field.row>=at?extra:0);
@@ -90,7 +91,7 @@ template<class Change>inline unsigned consume(void* source,Change change){
     const auto count=reinterpret_cast<int(__fastcall*)(void*)>(table[1])(source);if(count<0||count>1024)return 0;
     unsigned changed=0;
     for(int row=0;row<count;++row){const auto get=reinterpret_cast<int(__fastcall*)(void*,int,const char*)>(table[3]);
-        const int key=get(source,row,"key");if(key<firstKey||key>=firstKey+8)continue;
+        const int key=get(source,row,"key");if(key<firstKey||key>=firstKey+9)continue;
         const int value=get(source,row,"value");if(change(unsigned(key-firstKey),value))++changed;
     }return changed;
 }

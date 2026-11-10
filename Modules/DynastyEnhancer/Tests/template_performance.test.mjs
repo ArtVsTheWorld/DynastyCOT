@@ -32,7 +32,7 @@ test('compact copy is a fallback until richer copy has been used recently',()=>{
 });
 
 test('every configured story family has at least eight distinct authored choices',()=>{
- // The five structured PFF boards/honors use the user's three-form proposal.
+ // The five structured GPI boards/honors use the user's three-form proposal.
  // Their strict factual schemas are tested separately; do not pad them to eight.
  const structured=new Set(['pff.position-top-three','pff.offensive-player-of-week','pff.defensive-player-of-week','pff.offense-of-week','pff.defense-of-week']);
  for(const [family,lines] of Object.entries(contentPack.families))assert.ok(new Set(lines.map(t=>t.body)).size>=(structured.has(family)?3:8),family);

@@ -35,7 +35,7 @@ inline bool compatible(const std::string& g,const std::string& type) {
     if(g=="K"||g=="P")return type=="GameKickingStats";
     return false;
 }
-// Authored production weights, not EA values or PFF's proprietary film grading.
+// Authored GPI production weights based on tracked statistics, not film grading.
 inline double points(const Json& s,const std::string& g) {
     auto v=[&](const char* k){return stat(s,k);};
     if(g=="QB")return .10*v("PASSYARDS")+2*v("PASSCOMPLETED")-1.2*v("PASSATTEMPTS")+

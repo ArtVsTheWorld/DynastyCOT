@@ -8,8 +8,9 @@
 #include <string_view>
 #include "FeedRefresh.h"
 #include "SocialText.h"
+#include "AnalyticsBrand.h"
 namespace social {
-struct FeedPost {std::string author,handle,body,stamp;int imageLibrary=79,imageValue=598;std::string category,voice,replyTo;bool transaction=false;int likes=-1,uniformTeamLogo=-1,draftPick=-1,draftRound=0;int bodyHeight=0;double priority=0;bool important=false;std::string displayAuthor,displayLikes,displayStamp;FeedPost(std::string a,std::string h,std::string b,std::string s,int l=79,int v=598):author(std::move(a)),handle(std::move(h)),body(std::move(b)),stamp(std::move(s)),imageLibrary(l),imageValue(v){displayAuthor=author+" ("+handle+")";};};
+struct FeedPost {std::string author,handle,body,stamp;int imageLibrary=79,imageValue=598;std::string category,voice,replyTo;bool transaction=false;int likes=-1,uniformTeamLogo=-1,draftPick=-1,draftRound=0;int bodyHeight=0;double priority=0;bool important=false;std::string displayAuthor,displayLikes,displayStamp;FeedPost(std::string a,std::string h,std::string b,std::string s,int l=79,int v=598):author(std::move(a)),handle(std::move(h)),body(std::move(b)),stamp(std::move(s)),imageLibrary(l),imageValue(v){analytics::brand::display(*this);displayAuthor=author+" ("+handle+")";};};
 inline std::string compactCount(int value){
     if(value<1000)return std::to_string(value);
     const int unit=value>=999950?1000000:1000;const auto tenths=(static_cast<long long>(value)*10+unit/2)/unit;
