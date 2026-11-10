@@ -1,4 +1,4 @@
-# Gameday Atmosphere 2.1.11 — Play Now replay hotfix
+# Gameday Atmosphere 2.1.11 â€” Play Now replay hotfix
 
 Compared with the previous public standalone release, **2.1.9**.
 
