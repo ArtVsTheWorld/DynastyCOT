@@ -1,6 +1,6 @@
 {
   "Format": 1,
-  "Version": "1.1.0-rc1",
+  "Version": "1.1.0",
   "Modules": [
     {
       "Id": "BeyondTheField",
@@ -1011,6 +1011,26 @@
       "Sha256": "9a4eb5f1c29c6a2e93852ead46b999e284a6a5ca8bab4d4e241d587d025a52de"
     },
     {
+      "Path": "LICENSES/Aces-CFB-Toolkit-MIT.txt",
+      "Module": "Core",
+      "Sha256": "3e3d3545f4473d06a364d3a7777e70a7e31d638e0604fe052ea393a50de1b0b5"
+    },
+    {
+      "Path": "LICENSES/Node-v24.18.0.txt",
+      "Module": "Core",
+      "Sha256": "148eacf7863ef4329224a29398623077200a27194aa075569faf4a0a85566ca5"
+    },
+    {
+      "Path": "LICENSES/PlayerAnalytics-NOTICES.txt",
+      "Module": "BeyondTheField",
+      "Sha256": "94e22d8fdebb3754cd15f9a8392156978500f392f3e173834e76406dec23ddf3"
+    },
+    {
+      "Path": "LICENSES/nlohmann-json-MIT.txt",
+      "Module": "Core",
+      "Sha256": "61e08da79c44061654015ce6b0c4061c23ee1dd18237fbf09e9bfda3c0ea2831"
+    },
+    {
       "Path": "COT-Runtime/DynastyEnhancer/BeyondTheFieldNative-v103.dll",
       "Module": "BeyondTheField",
       "Sha256": "2937d7e379f490ece1064eb7fa3e9af14d730bea2480c8405c75ffb86bad7883"
@@ -1064,6 +1084,11 @@
       "Path": "COT-Runtime/DynastyEnhancer/Tools/story_templates.mjs",
       "Module": "BeyondTheField",
       "Sha256": "dee18ebfa9547640d81e55455336d9eed4952f0a1d0a0e67c9aef758edb31d3d"
+    },
+    {
+      "Path": "LICENSES/PlayerAnalytics-NOTICES.txt",
+      "Module": "Core",
+      "Sha256": "3346fbfb6e136bd0e9720cf23a8f76a349ac61209ba5cc3d83f6547cdeb0f5b4"
     },
     {
       "Path": "COT-Runtime/DynastyEnhancer/BeyondTheFieldNative-v103.dll",

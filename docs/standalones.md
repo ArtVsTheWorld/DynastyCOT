@@ -1,6 +1,6 @@
 # Standalone downloads and compatibility
 
-Want one feature? Download its standalone ZIP. Want several? Use the Dynasty COT installer. The new collection installer (private 1.1.0-rc1 candidate) manages those same standalone DLLs; the old 1.0.x bundle uses the legacy host. All are built from this integration workspace; the standalone repositories are download/help front doors with exact source pins, not separate development forks.
+Want one feature? Download its standalone ZIP. Want several? Use the Dynasty COT installer. The [collection installer 1.1.0](https://github.com/ArtVsTheWorld/DynastyCOT/releases/tag/v1.1.0) manages those same standalone DLLs; the old 1.0.x bundle uses the legacy host. All are built from this integration workspace; the standalone repositories are download/help front doors with exact source pins, not separate development forks.
 
 | Module | Standalone repository | Current standalone |
 |---|---|---|

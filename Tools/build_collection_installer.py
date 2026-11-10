@@ -13,5 +13,5 @@ def main():
  report=dict(version=version,exe=str(output),sha256=sha(output),work=str(work),catalogSha256=sha(catalog),sources={p.relative_to(ROOT).as_posix():sha(p) for p in sources},embeddedModuleDlls=False,installsStandaloneDlls=True,installedIntoLiveMmc=False,published=False)
  (ROOT/'Build/current-collection-setup.json').write_text(json.dumps(report,indent=2)+'\n',encoding='utf-8')
  (output.with_name(output.stem+'-SHA256.txt')).write_text(sha(output)+'  '+output.name+'\n',encoding='utf-8')
- print('Built private lightweight installer:',output)
+ print('Built lightweight installer:',output)
 if __name__=='__main__':main()

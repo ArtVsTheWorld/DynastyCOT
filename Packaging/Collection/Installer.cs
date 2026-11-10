@@ -72,7 +72,13 @@ namespace DynastyCOT.Collection {
    string receipt=Paths.Resolve(plan.Root,"Plugins/DynastyCOT/installed-files.json");if(!File.Exists(receipt))throw new IOException("The old COT host has no installed-files receipt. Restore/repair its receipt before migration so rollback can preserve its matching program files.");
    var doc=Json.Read<Dictionary<string,object>>(receipt);object format,raw;if(!doc.TryGetValue("format",out format)||!(format is int)||(int)format!=1||!doc.TryGetValue("files",out raw)||Json.Array(raw)==null)throw new IOException("Invalid older COT receipt.");
    foreach(var item in Json.Array(raw)){var row=item as Dictionary<string,object>;if(row==null||!row.ContainsKey("path")||!(row["path"] is string)||!row.ContainsKey("sha256")||!(row["sha256"] is string))throw new IOException("Invalid old COT file record.");string path=((string)row["path"]).Replace('\\','/'),hash=(string)row["sha256"];Paths.Relative(path);ReleaseRules.Hash(hash);
-    if(!ProgramPath(path))continue;string file=Paths.Resolve(plan.Root,path);if(!File.Exists(file))throw new IOException("Old COT program file is missing: "+path+". Repair the old install before migration.");
+    if(!ProgramPath(path))continue;string file=Paths.Resolve(plan.Root,path);if(!File.Exists(file)){
+     // Released COT receipts also describe lazily extracted GDA resources.
+     // A known host can recreate its own matching native/diagnostic cache;
+     // preserve the original absence instead of treating it as damage.
+     bool embedded=System.Text.RegularExpressions.Regex.IsMatch(path,@"^DGA-Runtime/Runtime-\d+[.]\d+[.]\d+/(?:DgaDiagnostics[.]exe|(?:DynamicGamedayAtmosphere|GamedayAtmosphere)Native-\d+[.]\d+[.]\d+[.]dll)$")&&Catalog.Programs.Any(x=>x.Module=="GamedayAtmosphere"&&x.Path==path&&x.Sha256==hash)&&plan.Inventory.Plugins.Any(x=>x.Module=="Core"&&x.Known);
+     if(!embedded)throw new IOException("Old COT program file is missing: "+path+". Repair the old install before migration.");Add(plan,path,null,"Runtime",true);continue;
+    }
     string actual=Paths.HashFile(file);if(!Catalog.Programs.Any(x=>x.Path.Equals(path,StringComparison.OrdinalIgnoreCase)&&x.Sha256==actual))throw new IOException("Old COT program file is unrecognized: "+path+". No program files were changed.");Add(plan,path,null,"Runtime",true);
    }
    foreach(var module in Catalog.Modules.Where(x=>plan.Inventory.LegacyEnabled[x.Id]&&x.Id!="GamedayAtmosphere")){
@@ -80,7 +86,7 @@ namespace DynastyCOT.Collection {
     if(!covered)throw new IOException("Old COT receipt is missing the matching program files for "+module.Title+". Repair that receipt before migration so rollback remains complete.");
    }
   }
-  internal static bool ProgramPath(string path){return path.StartsWith("COT-Runtime/",StringComparison.Ordinal)&&((path.EndsWith(".dll")||path.EndsWith(".exe"))||path.StartsWith("COT-Runtime/DynastyEnhancer/Tools/")&&path.EndsWith(".mjs")||path.StartsWith("COT-Runtime/DynastyEnhancer/Content/Runtime/")&&path.EndsWith(".json"))||path.StartsWith("DGA-Runtime/Runtime-")&&(path.EndsWith(".dll")||path.EndsWith(".exe"))||new[]{"Plugins/OfflineDynastySettings/OfflineDynastySettings.Persistence.exe","Plugins/OfflineDynastySettings/ExtraSettings.Persistence.exe","Plugins/SituationalPractice/SituationalPractice.Runtime.exe","Plugins/SituationalPractice/ExpandedPractice.Runtime.exe"}.Contains(path);}
+  internal static bool ProgramPath(string path){return path.StartsWith("COT-Runtime/",StringComparison.Ordinal)&&((path.EndsWith(".dll")||path.EndsWith(".exe"))||path.StartsWith("COT-Runtime/DynastyEnhancer/Tools/")&&path.EndsWith(".mjs")||path.StartsWith("COT-Runtime/DynastyEnhancer/Content/Runtime/")&&path.EndsWith(".json"))||path.StartsWith("DGA-Runtime/Runtime-")&&(path.EndsWith(".dll")||path.EndsWith(".exe"))||System.Text.RegularExpressions.Regex.IsMatch(path,@"^LICENSES/[^/]+[.]txt$")||new[]{"Plugins/OfflineDynastySettings/OfflineDynastySettings.Persistence.exe","Plugins/OfflineDynastySettings/ExtraSettings.Persistence.exe","Plugins/SituationalPractice/SituationalPractice.Runtime.exe","Plugins/SituationalPractice/ExpandedPractice.Runtime.exe"}.Contains(path);}
   void Finish(Plan plan){plan.Summary=String.Join(Environment.NewLine,plan.Operations.Select(x=>(x.Deferred?"Back up for old-COT rollback: ":x.After==null?"Remove duplicate/plugin: ":x.Before==null?"Install: ":"Update: ")+x.Path));}
   internal List<Plugin> Review(Plan plan){return plan.Inventory.Plugins.Where(x=>!x.Known&&plan.Operations.Any(o=>o.Path.Equals(x.Path,StringComparison.OrdinalIgnoreCase))).ToList();}
   bool Allowed(Operation op){

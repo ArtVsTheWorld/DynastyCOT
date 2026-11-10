@@ -55,9 +55,9 @@ def main():
     elif path.startswith(('COT-Runtime/','DGA-Runtime/')) or path.endswith('.Persistence.exe') or path.startswith('Plugins/SituationalPractice/') and path.endswith('.exe'):programs[(path,digest)]=row
  def program_path(path):
   cot_runtime=path.startswith('COT-Runtime/') and (path.endswith(('.dll','.exe')) or path.startswith('COT-Runtime/DynastyEnhancer/Tools/') and path.endswith('.mjs') or path.startswith('COT-Runtime/DynastyEnhancer/Content/Runtime/') and path.endswith('.json'))
-  return cot_runtime or path.startswith('DGA-Runtime/Runtime-') and path.endswith(('.dll','.exe')) or path.startswith('Plugins/OfflineDynastySettings/') and path.endswith('.Persistence.exe') or path.startswith('Plugins/SituationalPractice/') and path.endswith('.Runtime.exe')
+  return cot_runtime or bool(re.fullmatch(r'LICENSES/[^/]+[.]txt',path)) or path.startswith('DGA-Runtime/Runtime-') and path.endswith(('.dll','.exe')) or path.startswith('Plugins/OfflineDynastySettings/') and path.endswith('.Persistence.exe') or path.startswith('Plugins/SituationalPractice/') and path.endswith('.Runtime.exe')
  programs={key:row for key,row in programs.items() if program_path(row['Path'])}
- doc=dict(Format=1,Version='1.1.0-rc1',Modules=modules,KnownPlugins=list(known.values()),Programs=list(programs.values()))
+ doc=dict(Format=1,Version='1.1.0',Modules=modules,KnownPlugins=list(known.values()),Programs=list(programs.values()))
  output=ROOT/'Packaging/Collection/catalog.json';output.write_text(json.dumps(doc,indent=2)+'\n',encoding='utf-8')
  print('Pinned four exact standalone ZIP/DLLs;',len(known),'known plugin hashes;',len(programs),'program-only rollback references. No installs/network.')
 if __name__=='__main__':main()

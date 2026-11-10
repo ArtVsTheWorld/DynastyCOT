@@ -11,7 +11,7 @@ Dynasty COT is the collection hub and optional installer for four independent Co
 | Extra Settings | [ZIP and release notes](https://github.com/ArtVsTheWorld/offline-dynasty-settings/releases) | 0.2.10 |
 | Expanded Practice | [ZIP and release notes](https://github.com/ArtVsTheWorld/drive-based-practice/releases) | 0.8.21 |
 
-**Collection installer:** the new **1.1.0-rc1** installer is in private testing; it is not yet a public download. [How the collection installer works](docs/collection-installer.md). It installs the exact standalone DLLs you choose, without a separate DynastyCOT.dll. The [older 1.0.x bundle releases](https://github.com/ArtVsTheWorld/DynastyCOT/releases) remain available for existing users and rollback; they use the previous host design.
+**Collection installer:** [Download Dynasty COT 1.1.0](https://github.com/ArtVsTheWorld/DynastyCOT/releases/download/v1.1.0/DynastyCOT-Setup-1.1.0.exe) · [Release notes and integrity files](https://github.com/ArtVsTheWorld/DynastyCOT/releases/tag/v1.1.0). [How the collection installer works](docs/collection-installer.md). It installs the exact standalone DLLs you choose, without a separate DynastyCOT.dll. The [older 1.0.x bundle releases](https://github.com/ArtVsTheWorld/DynastyCOT/releases) remain available for existing users and rollback; they use the previous host design.
 
 ## Beyond the Field
 
@@ -62,7 +62,7 @@ Open **Dynasty > League Settings > Game Settings**. Start a new game after chang
 
 **Drag and drop:** close the game and MMC Mod Manager. Download a module's ZIP and put its DLL directly in your versioned Mod Manager's Plugins folder. Each ZIP includes a short README and full feature list. Matching support files are embedded. Move older duplicate DLLs outside Plugins; keep their settings/history folders.
 
-**Collection installer (new private candidate):**
+**Collection installer:**
 
 1. Open setup. It tries to find MMC automatically. If needed, choose **Find exe** and select **MMCModManager.exe** inside the versioned Mod Manager folder.
 2. Check the modules you want, then choose **Install / Update**. It downloads only selected modules that need changing. Unchecked modules stay installed as they are; **Remove** provides selected/full removal.
@@ -72,7 +72,7 @@ Open **Dynasty > League Settings > Game Settings**. Start a new game after chang
 
 **Backups** restores prior plugin versions. A one-time migration from older COT backs up its host and matching program files before replacing it with standalones. Keep every enabled old-COT module selected during that conversion, or explicitly remove an unwanted module first. Unknown plugin copies require review of their exact paths/hashes. Settings, accounts and published history stay in place.
 
-Use a writable Mod Manager folder, preferably outside Program Files: the modules need to prepare their support files and save settings/history. Setup reports permissions and real running-process errors without changing Windows permissions. [Migration, logs, rollback and private-test checklist](docs/collection-installer.md).
+Use a writable Mod Manager folder, preferably outside Program Files: the modules need to prepare their support files and save settings/history. Setup reports permissions and real running-process errors without changing Windows permissions. [Migration, logs, rollback and testing checklist](docs/collection-installer.md).
 
 ## Compatibility and data
 
