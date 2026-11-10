@@ -1,10 +1,10 @@
 """Source-build remaining one-DLL standalone distributions; never install/publish."""
 from pathlib import Path
 import argparse,datetime,hashlib,json,re,shutil,subprocess,zipfile
-from build_package import clean_adapter
+from build_package import clean_adapter,analytics_build_id
 ROOT=Path(__file__).resolve().parents[1]
 DEFS={
- 'BeyondTheField':('DynastyEnhancer','Beyond the Field','1.0.2','DynastyEnhancer.LaunchAction',['DynastyEnhancer.dll','PlayerAnalytics.dll']),
+ 'BeyondTheField':('DynastyEnhancer','Beyond the Field','1.0.3','DynastyEnhancer.LaunchAction',['DynastyEnhancer.dll','PlayerAnalytics.dll']),
  'ExtraSettings':('ExtraDynastySettings','Extra Settings','0.2.10','OfflineDynastySettings.CombinedSettingsAction',['OfflineDynastySettings.dll','DynastyPlayClock.dll','OfflinePlaycall.dll']),
  'ExpandedPractice':('DrivePractice','Expanded Practice','0.8.21','SituationalPractice.PracticeAction',['SituationalPractice.dll']),
 }
@@ -54,7 +54,12 @@ def main():
   def emit(file,text):
    path=generated/file;path.write_text(text,encoding='utf-8',newline='\n');return path
   if name=='BeyondTheField':
+   analytics_build_id(inputs['socialNative'],inputs['fogNative'])
+   for key in ['socialNative','fogNative']:
+    if sha(ROOT/inputs[key])!=inputs['nativeHashes'][key]:raise ValueError('Source-built native integrity differs: '+key)
    native,branding=build_social(work,inputs);payload['COT-Runtime/DynastyEnhancer/BeyondTheFieldNative-v103.dll']=native.read_bytes()
+   # Keep the tested native pair together rather than importing old fog bytes.
+   payload['COT-Runtime/DynastyEnhancer/BeyondTheFieldRecruitFog-v1.dll']=(ROOT/inputs['fogNative']).read_bytes()
    payload['COT-Runtime/DynastyEnhancer/beyond-the-field.json']=payload.pop('COT-Runtime/DynastyEnhancer/dynasty-enhancer.json')
    src=ROOT/'Modules/DynastyEnhancer/Source';adapter=clean_adapter((src/'MmcRecruitingPlugin.cs').read_text(encoding='utf-8'))
    adapter=adapter.replace('Path.Combine(PluginsFolder,"DynastyEnhancer","Runtime-v103")','Path.Combine(DynastyCOTStandalone.Runtime.Mmc,"COT-Runtime","DynastyEnhancer")').replace('dynasty-enhancer.json','beyond-the-field.json').replace('DynastyEnhancer.payload-sha256.txt','BeyondTheField.payload-sha256.txt')
@@ -96,6 +101,7 @@ namespace DynastyCOTStandalone {public sealed class Entry:ExecutionAction {stati
   docs=ROOT/'Packaging/Standalone'/name
   for file in ['README.txt','FEATURES.md']:shutil.copyfile(docs/file,stage/file)
   tracked=[path for path in source_list if not path.is_relative_to(work)]+[Path(__file__),docs/'README.txt',docs/'FEATURES.md']
+  if name=='BeyondTheField':tracked += [ROOT/rel for rel in inputs['sourceHashes']]+[ROOT/'cot.build-inputs.json',ROOT/'Modules/DynastyEnhancer/Tools/build_position_changes_ui.py']
   result=dict(name=name,module=module,title=title,version=version,stage=str(stage),work=str(work),dll=str(output),dllSha256=sha(output),referenceArchiveSha256=sha(reference),payload=json.loads(payload_manifest.read_text(encoding='utf-8')),branding=branding,sourceHashes={str(x.relative_to(ROOT).as_posix()):sha(x) for x in tracked},sdk=str(sdk),installed=False,published=False)
   (ROOT/'Build'/('current-standalone-'+name+'.json')).write_text(json.dumps(result,indent=2)+'\n',encoding='utf-8');results.append(result)
  print('Built standalones:',', '.join(x['name'] for x in results))

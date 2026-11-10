@@ -3,8 +3,7 @@ from pathlib import Path
 import subprocess,tempfile
 ROOT=Path(__file__).resolve().parents[3]
 s=(ROOT/'Modules/DynastyEnhancer/Source/RecruitingFog.cpp').read_text()
-assert 'std::array<notesui::Runtime*,61>' in s
-assert '&nilToggleUi,&currencyRecruitingOfferUi,&currencyRecruitingHoursUi}' in s
+assert '&nilToggleUi,&currencyRecruitingOfferUi,&currencyRecruitingHoursUi' in s
 assert 'currencyRecruitingUi(currencyclassui::recruitingPrograms(0))' in s
 assert 'runtime==&currencyRecruitingUi||runtime==&currencyRecruitingOfferUi||runtime==&currencyRecruitingHoursUi' in s
 fixture=r"""

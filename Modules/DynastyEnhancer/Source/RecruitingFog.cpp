@@ -57,6 +57,7 @@
 #include "PlayerPracticeUiPrograms.h"
 #include "PlayerAbilityDescriptions.h"
 #include "PlayerPresentationPolicy.h"
+#include "PositionChangesUiPrograms.h"
 #endif
 
 namespace recruitingfog::runtime {
@@ -125,7 +126,8 @@ notesui::Runtime draftOvrStrategyUi(draftovrui::strategyPrograms()),draftOvrCurr
 notesui::Runtime aioCurrency0(aiocurrencyui::group0()),aioCurrency1(aiocurrencyui::group1()),aioCurrency2(aiocurrencyui::group2()),aioCurrency3(aiocurrencyui::group3());
 notesui::Runtime aioNotesUi(aiorecruitnotesui::programs());
 notesui::Runtime analyticsRowUi(analyticsactions::hubRowPrograms()),analyticsCurrentRowUi(analyticsactions::currentRowPrograms());
-const std::array<notesui::Runtime*,61> cardUiBanks={&playerControlUi,&playerCardUi,&playerTemplateUi,&playerSkillUi,&playerHubUi,&playerSliderUi,&playerInGameUi,&playerRecruitUi,&playerFormationUi,&playerLegacyOvrUi,&playerNilUi,&playerBlueprintUi,&playerPracticeUi,&playerNilEmbeddedUi,&playerKickerUi,&playerIndividualPanelUi,&playerComparisonPanelUi,&playerImpactPanelUi,&playerLineupPanelUi,&playerTrenchPanelUi,&playerInjuryScreenUi,&currencyIconUi,&currencySlotUi,&currencyCellUi,&gapCoreUi,&gapHubUi,&gapRecruitUi,&gapTeamSelectUi,&draftOvrStrategyUi,&draftOvrCurrentStrategyUi,&draftOvrRowsUi,&currencyTopbarUi,&currencyRecruitingUi,&currencyBudgetUi,&currencyAnimationUi,&currencyBudgetArtUi,&currencyRecruitDetailUi,&currencyRecruitEditorUi,&aioCurrency0,&aioCurrency1,&aioCurrency2,&aioCurrency3,&playerBlueprintAioUi,&gapWeeklyUi,&gapTopPlayersUi,&gapAioTopPlayersUi,&aioNotesUi,&analyticsMainUi,&analyticsCurrentUi,&analyticsCleanupUi,&analyticsCurrentCleanupUi,&analyticsHintsUi,&playerTeamModuleUi,&analyticsRefreshUi,&analyticsCurrentRefreshUi,&analyticsCurrentHintsUi,&analyticsRowUi,&analyticsCurrentRowUi,&nilToggleUi,&currencyRecruitingOfferUi,&currencyRecruitingHoursUi};
+notesui::Runtime positionChangesUi(positionchangesui::programs());
+const std::array<notesui::Runtime*,62> cardUiBanks={&playerControlUi,&playerCardUi,&playerTemplateUi,&playerSkillUi,&playerHubUi,&playerSliderUi,&playerInGameUi,&playerRecruitUi,&playerFormationUi,&playerLegacyOvrUi,&playerNilUi,&playerBlueprintUi,&playerPracticeUi,&playerNilEmbeddedUi,&playerKickerUi,&playerIndividualPanelUi,&playerComparisonPanelUi,&playerImpactPanelUi,&playerLineupPanelUi,&playerTrenchPanelUi,&playerInjuryScreenUi,&currencyIconUi,&currencySlotUi,&currencyCellUi,&gapCoreUi,&gapHubUi,&gapRecruitUi,&gapTeamSelectUi,&draftOvrStrategyUi,&draftOvrCurrentStrategyUi,&draftOvrRowsUi,&currencyTopbarUi,&currencyRecruitingUi,&currencyBudgetUi,&currencyAnimationUi,&currencyBudgetArtUi,&currencyRecruitDetailUi,&currencyRecruitEditorUi,&aioCurrency0,&aioCurrency1,&aioCurrency2,&aioCurrency3,&playerBlueprintAioUi,&gapWeeklyUi,&gapTopPlayersUi,&gapAioTopPlayersUi,&aioNotesUi,&analyticsMainUi,&analyticsCurrentUi,&analyticsCleanupUi,&analyticsCurrentCleanupUi,&analyticsHintsUi,&playerTeamModuleUi,&analyticsRefreshUi,&analyticsCurrentRefreshUi,&analyticsCurrentHintsUi,&analyticsRowUi,&analyticsCurrentRowUi,&nilToggleUi,&currencyRecruitingOfferUi,&currencyRecruitingHoursUi,&positionChangesUi};
 bool cardBankEnabled(size_t bank){const auto selected=enhancements::options();const auto* runtime=cardUiBanks[bank];
     if(runtime==&nilToggleUi)return selected.dollars;
     if(runtime==&analyticsMainUi||runtime==&analyticsCurrentUi)return nativeanalytics::opened;

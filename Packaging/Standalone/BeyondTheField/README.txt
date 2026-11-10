@@ -1,4 +1,4 @@
-BEYOND THE FIELD by Ace - 1.0.2 standalone release
+BEYOND THE FIELD by Ace - 1.0.3 standalone release
 Dynasty news, scouting uncertainty and player performance grades. COT is optional.
 
 INSTALL
@@ -29,6 +29,8 @@ Package setup: Standalone-Runtime/DynastyEnhancer/Logs/package.log under MMC.
 Native/generator: COT-Runtime/DynastyEnhancer under MMC.
 Launcher: Plugins/DynastyEnhancer/Logs/BeyondTheField-launcher.log.
 
-See FEATURES.md. Ace reported the standalone release working on November 9, 2026.
-Other game/overhaul combinations still need their own checks.
+Position Changes projections now follow your player grade/fog setting. Existing
+settings, published posts and history are retained. The display correction was
+confirmed live; a clean-package Back/reopen speed improvement is not confirmed.
+See FEATURES.md. Other game/overhaul combinations still need their own checks.
 Third-party notices are embedded and prepared under MMC/LICENSES.

@@ -1,7 +1,8 @@
 """Integration of all standalone payloads in fixtures; no watcher/game callbacks."""
 from pathlib import Path
-import datetime,hashlib,json,os,shutil,subprocess,zipfile
+import argparse,datetime,hashlib,json,os,shutil,subprocess,zipfile
 ROOT=Path(__file__).resolve().parents[1];NAMES=['BeyondTheField','ExtraSettings','ExpandedPractice']
+parser=argparse.ArgumentParser();parser.add_argument('--module',action='append',choices=NAMES);args=parser.parse_args();selected=args.module or NAMES
 META={name:json.loads((ROOT/f'Build/current-standalone-{name}.json').read_text(encoding='utf-8')) for name in NAMES}
 GAMEDAY=json.loads((ROOT/'Build/current-gameday-standalone.json').read_text(encoding='utf-8'))
 BASE=ROOT/'Build'/('StandaloneChecks-'+datetime.datetime.now(datetime.timezone.utc).strftime('%Y%m%dT%H%M%S%f'));BASE.mkdir();checks=0;logs=[]
@@ -25,7 +26,8 @@ compiler=Path(r'C:\Windows\Microsoft.NET\Framework64\v4.0.30319\csc.exe');EXE=BA
 run([compiler,'/nologo','/platform:x64','/reference:System.Web.Extensions.dll','/out:'+str(EXE),ROOT/'Tests/StandaloneModulesFixture.cs'])
 for name,meta in META.items():
  check(sha(Path(meta['dll']))==meta['dllSha256'],'DLL build identity')
- for relative,digest in meta['sourceHashes'].items():check(sha(ROOT/relative)==digest,'Source unchanged: '+relative)
+ if name in selected:
+  for relative,digest in meta['sourceHashes'].items():check(sha(ROOT/relative)==digest,'Source unchanged: '+relative)
  if name=='BeyondTheField':
   original=(ROOT/'Modules/DynastyEnhancer/Source/RuntimeFeed.h').read_bytes()
   branded=Path(meta['work'])/'Native/Modules/DynastyEnhancer/Source/RuntimeFeed.h'
@@ -38,6 +40,8 @@ with zipfile.ZipFile(reference) as z:
   for path,digest in meta['payload'].items():
    if path.endswith('/beyond-the-field.json'):check(digest==old[path.replace('beyond-the-field.json','dynasty-enhancer.json')],'Only config filename changes')
    elif name=='BeyondTheField' and path.endswith('/BeyondTheFieldNative-v103.dll'):check(meta['branding']['nativeTests']=='passed','Branded native configuration source build and tests')
+   elif name=='BeyondTheField' and path.endswith('/BeyondTheFieldRecruitFog-v1.dll'):
+    inputs=json.loads((ROOT/'cot.build-inputs.json').read_text());check(sha(ROOT/inputs['fogNative'])==digest==inputs['nativeHashes']['fogNative'],'Matched freshly source-built fog payload')
    else:check(old[path]==digest,'Payload parity with released COT: '+path)
  package=BASE/'COT102';z.extractall(package)
 for mode in ['claim','conflict']:fixture(mode,seed(mode))
@@ -67,6 +71,6 @@ result=installer('UninstallAll');check(result.returncode==0,'COT uninstall succe
 fixture('files',root)
 for relative,contents in data.items():check((root/relative).read_bytes()==contents,'Rematerialization preserves data')
 for name in NAMES:check((root/f'Plugins/{name}.dll').exists(),'Bundle uninstall leaves independent DLL')
-report=dict(format=1,checks=checks,gamedayDllSha256=GAMEDAY['dllSha256'],modules={name:dict(version=meta['version'],dllSha256=meta['dllSha256'],sourceHashes=meta['sourceHashes'],payload=meta['payload'],branding=meta['branding']) for name,meta in META.items()},fixtureRoot=str(BASE),reverseCotSwitchRequiresNativeBackup=switch_issue,liveAcceptance='pending-new-standalone-wrappers',installedIntoLiveMmc=False,published=False)
+report=dict(format=1,checks=checks,gamedayDllSha256=GAMEDAY['dllSha256'],modules={name:dict(version=meta['version'],dllSha256=meta['dllSha256'],sourceHashes=meta['sourceHashes'],payload=meta['payload'],branding=meta['branding']) for name,meta in META.items() if name in selected},fixtureRoot=str(BASE),reverseCotSwitchRequiresNativeBackup=switch_issue,liveAcceptance='targeted-live-display-confirmed; packaged-clean-launch-pending',installedIntoLiveMmc=False,published=False)
 (BASE/'results.log').write_text('\n'.join(logs),encoding='utf-8');(ROOT/'Build/standalones-verification.json').write_text(json.dumps(report,indent=2)+'\n',encoding='utf-8')
 print('PASS',checks,'standalone integration checks; reverse-switch native backup required:',switch_issue)

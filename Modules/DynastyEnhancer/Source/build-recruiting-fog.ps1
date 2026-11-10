@@ -65,6 +65,8 @@ if($RecruitNotesUi){
  if($LASTEXITCODE -ne 0){throw 'Budget and offer currency display checks failed'}
  & python (Join-Path $fogRoot 'Tests/draft_ovr_ui_test.py')
  if($LASTEXITCODE -ne 0){throw 'Stock Draft Results OVR presentation checks failed'}
+ & python (Join-Path $fogRoot 'Tests/position_changes_ui_test.py')
+ if($LASTEXITCODE -ne 0){throw 'Projected Position Changes OVR presentation checks failed'}
  & python (Join-Path $fogRoot 'Tests/fog_gap_ui_test.py')
  if($LASTEXITCODE -ne 0){throw 'Reported rating gap checks failed'}
  & python (Join-Path $fogRoot 'Tests/currency_ui_test.py')

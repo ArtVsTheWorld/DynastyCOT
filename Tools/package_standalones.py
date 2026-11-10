@@ -21,7 +21,7 @@ def main():
    if z.namelist()!=names or z.testzip():raise ValueError('Archive verification failed')
    for file in names:
     if z.read(file)!=(stage/file).read_bytes():raise ValueError('Archive bytes differ')
-  evidence=dict(format=1,name=name,version=meta['version'],sourceRepository='https://github.com/ArtVsTheWorld/DynastyCOT',sourceRevision=revision,archiveSha256=sha(archive),dllSha256=meta['dllSha256'],sourceHashes=meta['sourceHashes'],payload=meta['payload'],nativeBranding=meta['branding'],integrationChecks=report['checks'],installedIntoLiveMmc=False,liveAcceptance='pending-new-standalone-wrapper',files=names)
+  evidence=dict(format=1,name=name,version=meta['version'],sourceRepository='https://github.com/ArtVsTheWorld/DynastyCOT',sourceRevision=revision,archiveSha256=sha(archive),dllSha256=meta['dllSha256'],sourceHashes=meta['sourceHashes'],payload=meta['payload'],nativeBranding=meta['branding'],integrationChecks=report['checks'],installedIntoLiveMmc=False,liveAcceptance=report.get('liveAcceptance','pending-new-standalone-wrapper'),files=names)
   (release/(archive.stem+'-verification.json')).write_text(json.dumps(evidence,indent=2)+'\n',encoding='utf-8')
   (release/(archive.stem+'-SHA256.txt')).write_text(sha(archive)+'  '+archive.name+'\n',encoding='utf-8')
   print('Verified three-file ZIP:',archive.name)
