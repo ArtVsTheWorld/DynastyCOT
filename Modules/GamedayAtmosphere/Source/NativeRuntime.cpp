@@ -981,7 +981,7 @@ attendance::replaypresentation::View replayPresentationView(){
 bool replayPresentationAllowed(){
     if(attendance::energy::clockManagementType(replaySnapType.load()))return false;
     if(!enabled||mode==2||!extraReplays||!replayPresentationInstalled||replayPresentationFailed||!pauseBinding||!replayBinding)return false;
-    if(replayValue<int>(image+0xd9eb808)!=14||replayValue<int>(image+0xf3fddbc)!=3)return false;
+    if(!attendance::scope::matchMode(replayValue<int>(image+0xd9eb808))||replayValue<int>(image+0xf3fddbc)!=3)return false;
     A states=replayValue<A>(image+attendance::bindings::GameStates);
     if(replayValue<A>(states)!=image+attendance::bindings::GameStatesVtable||replayValue<int>(states+0xa0)!=4)return false;
     A configuration=replayValue<A>(image+0xf63f9f0),wrapper=replayValue<A>(image+attendance::bindings::MatchWrapper);
@@ -999,7 +999,7 @@ bool writeReplayBoolean(A address,bool value=true){
     __except(EXCEPTION_EXECUTE_HANDLER){replayPresentationFailed=true;return false;}
 }
 void recordReplaySelection(A node,int family,int native,int output,bool allowed,int phase){
-    if(!enabled||mode!=0||at<int>(image+0xd9eb808)!=14||at<int>(image+0xf3fddbc)!=3)return;
+    if(!enabled||mode!=0||!attendance::scope::matchMode(at<int>(image+0xd9eb808))||at<int>(image+0xf3fddbc)!=3)return;
     A wrapper=at<A>(image+attendance::bindings::MatchWrapper),match=at<A>(wrapper+16);
     if(at<A>(match)!=image+attendance::bindings::MatchVtable)return;
     attendance::replaytrace::Record r;r.node=node;r.at=GetTickCount64();r.family=family;r.phase=phase;r.native=native;r.output=output;r.allowed=allowed;

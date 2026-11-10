@@ -21,7 +21,7 @@ def seed(name):
  shutil.copyfile(META['dll'],root/'Plugins/GamedayAtmosphere.dll');return root
 def fixture(case,root):
  global checks
- output=run([EXE,case,root,BASE,META['sdk'],META['version']]);checks+=int(output.strip().split()[-1])
+ output=run([EXE,case,root,BASE,META['sdk'],META['version'],META['runtimeVersion']]);checks+=int(output.strip().split()[-1])
 compiler=Path(r'C:\Windows\Microsoft.NET\Framework64\v4.0.30319\csc.exe');EXE=BASE/'GamedayStandaloneFixture.exe'
 run([compiler,'/nologo','/platform:x64','/out:'+str(EXE),ROOT/'Tests/GamedayStandaloneFixture.cs'])
 check(sha(Path(META['dll']))==META['dllSha256'],'Exact source-built managed DLL')
@@ -30,7 +30,10 @@ reference=ROOT/'Release/DynastyCOT-1.0.2.zip'
 check(sha(reference)==META['referenceArchiveSha256'],'Reference bundle unchanged')
 with zipfile.ZipFile(reference) as archive:
  manifest=json.loads(archive.read('package-manifest.json'));embedded={x['path']:x['sha256'] for x in manifest['embedded']}
- for item in META['resources']:check(embedded['resource:'+item['name']]==item['sha256'],'Resource equals released engine/defaults/tool')
+ for item in META['resources']:
+  if item['name'].endswith('.dll') and META.get('nativeSourceBuilt'):
+   check(item['sha256']==META['nativeSha256'],'Source-built native payload identity')
+  else:check(embedded['resource:'+item['name']]==item['sha256'],'Unchanged released defaults/diagnostics')
  # Confirm published COT really uses this same named guard; no execution needed.
  bundle=archive.read('Plugins/DynastyCOT.dll')
  check('Local\\Ace.DynamicGamedayAtmosphere.MMC.'.encode('utf-16le') in bundle,'Published COT shared OS guard')
@@ -47,9 +50,11 @@ def install(action):
  run(['powershell.exe','-NoProfile','-ExecutionPolicy','Bypass','-File',package/'Install.ps1','-MmcRoot',root,'-PackageRoot',package,'-Fixture','-FixtureRoot',BASE,'-Action',action],env=environment)
  for path,contents in preserved.items():check(path.exists() and path.read_bytes()==contents,'COT '+action+' preserved '+str(path.relative_to(root)))
 install('Install');fixture('extract',root)
-native=root/'DGA-Runtime/Runtime-2.1.9/GamedayAtmosphereNative-2.1.9.dll'
+native=root/f"DGA-Runtime/Runtime-{META['runtimeVersion']}/GamedayAtmosphereNative-{META['runtimeVersion']}.dll"
 check(sha(native)==META['resources'][0]['sha256'],'Released COT native cache matches standalone')
-install('UninstallAll');check(not native.exists(),'Bundle removed its owned cache')
+install('UninstallAll')
+if META['runtimeVersion']=='2.1.9':check(not native.exists(),'Bundle removed its owned cache')
+else:check(native.exists() and sha(native)==META['nativeSha256'],'Bundle uninstall preserves independently versioned standalone cache')
 fixture('extract',root);check(sha(native)==META['resources'][0]['sha256'],'Standalone rematerializes native after bundle uninstall')
 for path,contents in preserved.items():check(path.read_bytes()==contents,'Rematerialization preserved '+str(path.relative_to(root)))
 # Existing storage/settings/direct-loader unit tests run without touching game.
@@ -65,7 +70,7 @@ for name,files in {
 }.items():
  exe=regression/(name+'.exe');run([compiler,'/nologo','/platform:x64','/out:'+str(exe),tests/(name+'.cs'),*(source/name for name in files)])
  run([exe]);check(True,name+' passed')
-report=dict(format=1,module=META['module'],version=META['version'],checks=checks,dllSha256=META['dllSha256'],sourceHashes=META['sourceHashes'],referenceArchiveSha256=META['referenceArchiveSha256'],fixtureRoot=str(BASE),cases=['resource parity','MMC branding','fresh/current/legacy/future settings preservation','existing history preservation','cached resource integrity and repair','native runtime outside Plugins','legacy DLL detection','both bundled/standalone guard orders','duplicate assembly guard','released COT install/uninstall/cache recovery','settings/storage/direct loader regression suites'],liveGameAcceptance='pending',installedIntoLiveMmc=False,published=False)
+report=dict(format=1,module=META['module'],version=META['version'],checks=checks,dllSha256=META['dllSha256'],sourceHashes=META['sourceHashes'],referenceArchiveSha256=META['referenceArchiveSha256'],fixtureRoot=str(BASE),cases=['resource parity','MMC branding','fresh/current/legacy/future settings preservation','existing history preservation','cached resource integrity and repair','native runtime outside Plugins','legacy DLL detection','both bundled/standalone guard orders','duplicate assembly guard','released COT install/uninstall/cache recovery','settings/storage/direct loader regression suites'],liveGameAcceptance=META.get('liveGameAcceptance','pending'),installedIntoLiveMmc=False,published=False)
 (BASE/'results.log').write_text('\n'.join(log),encoding='utf-8')
 (ROOT/'Build/gameday-standalone-verification.json').write_text(json.dumps(report,indent=2)+'\n',encoding='utf-8')
 print('PASS',checks,'standalone checks including 4 existing regression suites; no live install/game calls')

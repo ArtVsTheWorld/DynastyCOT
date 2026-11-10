@@ -1,17 +1,16 @@
-# Gameday Atmosphere 2.1.9 - Update 4
+# Gameday Atmosphere 2.1.11 — Play Now replay hotfix
 
-Compared with the last published standalone release, **v2.0.35 (Update 3 Hotfix)**.
+Compared with the previous public standalone release, **2.1.9**.
 
-- **Traveling supporters:** new visitor sections and scattered groups use fanbase demand, distance and matchup appeal. Big fanbases handle long trips better; strong home crowds resist takeovers. Main visitor blocks mix in some home fans rather than becoming one solid block.
-- **Visiting Fan Strength:** a 0-200% control, with 100% using the normal model. It affects new plans, while existing plans and protected groups stay intact.
-- **More natural late crowds:** winning visitors can still leave during a blowout, at a slower rate than the losing home crowd.
-- **Sound and shake:** added shake requests accompanying crowd sound. Scoring cheers receive priority, background roar weakens with a growing home deficit, and away supporters have their own reactions.
-- **Basic offline Play Now:** arrivals, departures, sound and shake work without requiring Dynasty's travel/season calculations. With arrivals enabled, fresh games use a 75% opening crowd model; visiting-fan appearance remains native.
-- **Touchdown presentation:** extra replay requests skip touchdowns so native touchdown presentation remains in control. Other eligible extra replays stay optional.
-- **Simpler installation:** put `GamedayAtmosphere.dll` in Plugins. Matching runtime files are embedded; the external loader EXE is unnecessary. Existing settings/history are retained without a reset or retune.
+- Fixed a replay eligibility check that admitted Dynasty but left offline Play Now out. With **Additional Replays** and **Full-Screen Big Play Replays** enabled, qualifying non-touchdown big plays in Play Now can use the added replay coverage.
+- Replay diagnostics now admit offline Play Now too, so those decisions can be checked when troubleshooting.
+- Existing crowd behavior, sound, camera shake, replay thresholds and saved settings/history are retained.
+- Touchdown presentation remains controlled by the game. The unsuccessful private touchdown experiment and temporary timing helpers are **not included**. This release does not guarantee a replay after every touchdown.
 
-The ZIP contains only the DLL, a short README and a complete code-checked feature list. Move the old `DynamicGamedayAtmosphere.dll` outside Plugins and keep its data folder. Use one Gameday provider; disable COT's Gameday module if using this standalone alongside its other features.
+**Update:** close both MMC and the game, then replace `Plugins/GamedayAtmosphere.dll` with the DLL from the ZIP. Keep your settings/history folders. Restart both applications. Use one Gameday provider; disable COT's Gameday module when using this standalone for the feature. The ZIP contains the DLL, README.txt and FEATURES.md; matching support files are embedded.
 
-Validation: 90 packaging/storage/guard checks including four existing regression suites, plus all-four standalone coexistence fixtures. Ace reported the standalone packaging working. This does not certify every game build, stadium or overhaul. The crowd engine is the same 2.1.9 engine shipped with COT 1.0.2.
+**Verification:** the production replay-root tests exercise Dynasty and Play Now, nested gain comparisons, blocked scopes/options, and unchanged touchdown predicates/shortcuts/insets. Replay, scope, menu and isolated managed packaging/storage/duplicate-provider checks pass. Settings and history remain byte-for-byte intact in upgrade fixtures. A 20-yard non-touchdown Play Now completion showed both full-screen and inset replays in the private test; the clean production ZIP was not live-installed during this publishing step. Other game/mod combinations remain unverified.
 
-Source comparison: old tag `v2.0.35`, commit `193662a9af440ef9cdc6903171e1a30b8acb0164`; current maintained source is pinned in `source-release.json`. User-facing changes were checked against `AwayCrowd.h`, `VisitorPlans.h`, `SettingsMenuOptions.inc`, `NativeRuntime.cpp`, `ReactionAudioRuntime.h` and `MajorReplay.h`, not inferred from version numbers. Existing arrival, turnout, Fuller Crowds, halftime, 2020 Mode and general replay features are retained rather than presented as new.
+Version 2.1.10 was reserved for private touchdown tests. Public 2.1.11 uses a distinct native filename/cache so it cannot reuse that private runtime. No change to native fingerprints, ownership checks or supported offline scope.
+
+Rollback: close MMC and the game and restore the 2.1.9 plugin DLL. Keep the existing data folders. The prior release remains available on GitHub.

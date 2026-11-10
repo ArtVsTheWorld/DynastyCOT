@@ -8,7 +8,7 @@ ROOT=Path(__file__).resolve().parents[1]
 GH=Path(r'C:\Apps\CFB 27\Working\Teambuilder Import Plugin\PublishingTools\gh-2.103.3\bin\gh.exe')
 MODULES={
  'BeyondTheField':dict(repo='BeyondTheField',local='Dynasty-Enhancer',title='Beyond the Field',version='1.0.3',baseline='v1.0.2',preview=False,path='DynastyEnhancer',releaseTitle='Beyond the Field 1.0.3 - Position Changes fix',summary='Dynasty Social Media, scouting fog, clearer ratings/money labels and team Player Analytics.'),
- 'GamedayAtmosphere':dict(repo='DynamicGamedayAtmosphere',local='DynamicGamedayAtmosphere',title='Gameday Atmosphere',version='2.1.9',baseline='v2.0.35',preview=False,path='GamedayAtmosphere',summary='Crowd arrivals and exits, traveling supporters, reactive sound and camera shake.'),
+ 'GamedayAtmosphere':dict(repo='DynamicGamedayAtmosphere',local='DynamicGamedayAtmosphere',title='Gameday Atmosphere',version='2.1.11',baseline='v2.1.9',preview=False,path='GamedayAtmosphere',releaseTitle='Gameday Atmosphere 2.1.11 - Play Now replay hotfix',summary='Crowd arrivals and exits, traveling supporters, reactive sound and camera shake.'),
  'ExtraSettings':dict(repo='offline-dynasty-settings',local='offline-dynasty-settings',title='Extra Settings',version='0.2.10',baseline='v0.2.1',preview=False,path='ExtraDynastySettings',summary='Separate offensive/defensive playcall controls and clocks saved for each Dynasty.'),
  'ExpandedPractice':dict(repo='drive-based-practice',local='drive-based-practice',title='Expanded Practice',version='0.8.21',baseline='v0.8.18',preview=False,path='DrivePractice',summary='Default Practice, full drives and scrimmages in offline Dynasty or main-menu Practice.'),
 }
@@ -37,6 +37,7 @@ def main():
   baseline=run(['git','rev-parse',module['baseline']+'^{commit}'],cwd=folder).stdout.strip() if module['baseline'] else None
   download=f'https://github.com/{repo}/releases/download/{tag}/{archive.name}'
   status='**Standalone preview:** the new wrapper still needs clean-launch live acceptance.' if module['preview'] else ('Position Changes display fix confirmed with a targeted live adapter; the packaged build passed offline checks. Clean-package performance acceptance remains pending.' if name=='BeyondTheField' else 'Stable standalone release. Ace reported it working in-game; other setups still need their own checks.')
+  if name=='GamedayAtmosphere':status='Play Now replay eligibility hotfix; crowd policies retained. Production package passed offline checks; touchdown presentation remains native and is not guaranteed.'
   readme=f'''# {module['title']}
 
 **By Ace.** {module['summary']}

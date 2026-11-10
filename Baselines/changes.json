@@ -758,8 +758,8 @@
     },
     {
       "path": "Modules/GamedayAtmosphere/Source/NativeRuntime.cpp",
-      "sha256": "ef788fb9ae5d2e1f4ad8508eb1ec22cdb7b3c624ab44547b4c569b4e25fc5639",
-      "reason": "Keep non-touchdown additions and all replay option gates; exclude touchdowns and retain Play Now 75-percent opening."
+      "sha256": "8af51dbd1d8f4972162af15e407ec9055afec6ac8383b74f8bdff6622b99e950",
+      "reason": "Gameday Atmosphere 2.1.11: admit supported offline Play Now in replay root eligibility and diagnostic scope; retain all native checks and original touchdown exclusion. Public hotfix excludes private TD experiments."
     },
     {
       "path": "Modules/GamedayAtmosphere/Source/NativeSettingsMenu.h",
@@ -778,8 +778,8 @@
     },
     {
       "path": "Modules/GamedayAtmosphere/Source/Product.json",
-      "sha256": "7fe4a05c77c6626011dcc628c8120a359bc08da93c4310952eeb76facf4df61c",
-      "reason": "Retain prior COT integration; 0.1.6 Gameday Atmosphere branding and appended stable-ID visitor-strength control, new-plan-only odds preference with existing native/neutral/protected/history gates retained."
+      "sha256": "f49cc5032c78f44e2e1112f11b7156718fc2c54704067a121fddaf033c35b3e3",
+      "reason": "Gameday Atmosphere 2.1.11: admit supported offline Play Now in replay root eligibility and diagnostic scope; retain all native checks and original touchdown exclusion. Public hotfix excludes private TD experiments."
     },
     {
       "path": "Modules/GamedayAtmosphere/Source/ReactionAudioRuntime.h",

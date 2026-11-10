@@ -47,7 +47,8 @@ By Ace. A standalone crowd and stadium-atmosphere mod for offline Dynasty and ba
 ## Replays, settings and empty stands
 
 - Request extra replays after eligible non-touchdown plays: full-screen big plays, ordinary-play insets and defensive highlights have separate controls. The game chooses the available clips.
-- Touchdown replay/celebration presentation remains native; the mod does not promote, suppress or request extra touchdown sequences.
+- Touchdown replay/celebration presentation remains native; the mod does not promote, suppress or request extra touchdown sequences. Touchdown replays can still be inconsistent.
+- Added replay eligibility now admits supported offline Play Now as well as Dynasty. Additional Replays and Full-Screen Big Play Replays must be enabled for the added full-screen gain coverage.
 - Slow Sim has no play-selection screen, so it gets no added play-selection inset.
 - Show crowd fullness beside Resume in the pause menu.
 - 2020 Mode empties the stands and quiets crowd, band, drum and PA sound while retaining quieter individual voices and open-stadium ambience.
@@ -59,4 +60,4 @@ By Ace. A standalone crowd and stadium-atmosphere mod for offline Dynasty and ba
 - Play Now retains native visiting-fan appearance. It does not use Dynasty travel/season plans or write Dynasty crowd history.
 - Offline modes only. Practice, online play and general Road to Glory support are not claimed.
 - Stadium layouts, native presentation, available data, exact game version and other mods can affect results. Unknown native layouts and foreign hook ownership remain rejected.
-- The crowd engine matches released COT 1.0.2; Ace reported the standalone packaging working; other game/mod setups still need their own live acceptance. No new FPS benchmark or universal overhaul compatibility is claimed.
+- Version 2.1.11 retains the released crowd policies and corrects the replay eligibility gate for offline Play Now. A 20-yard non-touchdown Play Now completion showed both replay types during private testing; the clean release package is offline-verified. No new FPS benchmark or universal compatibility is claimed.

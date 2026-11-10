@@ -16,6 +16,7 @@ class GamedayStandaloneFixture {
   string root=Path.GetFullPath(args[1]),parent=Path.GetFullPath(args[2]).TrimEnd('\\')+"\\",sdk=args[3];
   Check(root.StartsWith(parent,StringComparison.OrdinalIgnoreCase)&&File.Exists(Path.Combine(root,".cot-fixture")),"Marked isolated fixture required");
   AppDomain.CurrentDomain.AssemblyResolve+=(s,e)=>{string path=Path.Combine(sdk,new AssemblyName(e.Name).Name+".dll");return File.Exists(path)?Assembly.LoadFrom(path):null;};
+  string runtime=args.Length>5?args[5]:"2.1.9";
   string plugins=Path.Combine(root,"Plugins"),dll=Path.Combine(plugins,"GamedayAtmosphere.dll");
   var assembly=Assembly.LoadFile(dll);var action=assembly.GetType("DynamicGamedayAtmosphere.AttendanceAction",true);var storage=assembly.GetType("DynamicGamedayAtmosphere.PluginStorage",true);
   string mutex="Local\\Ace.DynamicGamedayAtmosphere.MMC."+Process.GetCurrentProcess().Id;
@@ -68,7 +69,7 @@ class GamedayStandaloneFixture {
    byte[] chosen=Bytes(ini);Call(action,"Extract","DynamicGamedayAtmosphere.ini",true);Same(ini,chosen);
    foreach(string name in names.Where(x=>!x.EndsWith(".ini"))){
     string leaf=name.Substring("Attendance.".Length);Call(action,"Extract",leaf,false);
-    string target=leaf.EndsWith(".dll")?Path.Combine(root,"DGA-Runtime","Runtime-2.1.9",leaf):Path.Combine(data,"Tools",leaf);
+    string target=leaf.EndsWith(".dll")?Path.Combine(root,"DGA-Runtime","Runtime-"+runtime,leaf):Path.Combine(data,"Tools",leaf);
     byte[] expected;using(var input=assembly.GetManifestResourceStream(name))using(var buffer=new MemoryStream()){input.CopyTo(buffer);expected=buffer.ToArray();}
     Same(target,expected);DateTime modified=File.GetLastWriteTimeUtc(target);Call(action,"Extract",leaf,false);Check(File.GetLastWriteTimeUtc(target)==modified,"Identical runtime not rewritten");
     File.WriteAllText(target,"damaged cache");Call(action,"Extract",leaf,false);Same(target,expected);
@@ -77,7 +78,7 @@ class GamedayStandaloneFixture {
    foreach(string name in histories)Check(File.ReadAllText(Path.Combine(data,"History",name))=="keep existing "+name,"History preserved: "+name);
    Same(ini,chosen);
   }else if(args[0]=="extract"){
-   Call(action,"Extract","GamedayAtmosphereNative-2.1.9.dll",false);Call(action,"Extract","DgaDiagnostics.exe",false);
+   Call(action,"Extract","GamedayAtmosphereNative-"+runtime+".dll",false);Call(action,"Extract","DgaDiagnostics.exe",false);
   }else throw new Exception("Unknown case");
   Console.WriteLine("PASS "+args[0]+" "+count);return 0;
  }catch(Exception error){Console.Error.WriteLine(error);return 1;}}

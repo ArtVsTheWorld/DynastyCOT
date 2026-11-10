@@ -1,5 +1,5 @@
-GAMEDAY ATMOSPHERE by Ace - 2.1.9 / Update 4
-Based on the crowd engine in Dynasty COT 1.0.2. COT is not required.
+GAMEDAY ATMOSPHERE by Ace - 2.1.11 / Update 4 replay hotfix
+COT is not required. Includes the offline Play Now replay eligibility fix.
 
 INSTALL
 1. Close the game and MMC Mod Manager.
@@ -31,3 +31,9 @@ folders if using COT or preserving your settings/history for later.
 
 See FEATURES.md for the full feature list and mode limits. The standalone
 packaging was reported working by Ace; other setups still need their own checks.
+
+REPLAY HOTFIX
+Enable Additional Replays and Full-Screen Big Play Replays for added big-play
+coverage in offline Play Now. Your saved options remain unchanged. Touchdown
+replays remain controlled by the game; this does not guarantee every TD replay.
+Restart MMC AND the game when updating, including from the private 2.1.10 test.
