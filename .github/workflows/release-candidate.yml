@@ -1,10 +1,10 @@
 # Manual only. No pull-request code executes on the prepared private-input runner.
-name: Build test candidate
+name: Legacy 1.0.x bundle candidate
 on:
   workflow_dispatch:
     inputs:
       build:
-        description: Build on the prepared Windows COT runner
+        description: Reproduce the legacy single-host bundle (new collection setup uses docs/collection-installer.md)
         type: boolean
         default: false
       publish:

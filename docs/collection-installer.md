@@ -1,0 +1,63 @@
+# Dynasty COT collection installer
+
+The 1.1.0-rc1 candidate is private and not published. It manages the same four standalone DLLs; it does not install a new DynastyCOT.dll or change any module's native hooks/helpers. The individual ZIPs remain usable without this installer.
+
+## What the user sees
+
+- Four compact module cards, their installed/selected versions and plain descriptions.
+- A detected MMC location and modern executable picker for MMCModManager.exe.
+- One **Install / Update** button. Checked modules are considered; unchecked modules stay as they are. Already-current files are kept without redownloading them.
+- **Check for updates** lists versions and notes from each module's own repository. Choose a version for one or more modules, then choose Done and Install / Update. No startup checking, automatic module download, forced update, token or account login.
+- **Remove** offers selected or full module removal. **Backups** restores a previous operation. **Details** shows activity/errors. Settings/history are kept.
+
+The installer is a small online download manager, not another all-in-one payload. Fetching a new version requires Internet access; removal and restoring an existing collection backup do not. ZIP downloads require the right repository/version, GitHub's SHA-256 asset digest, matching release integrity metadata, exact size and three-file layout, the matching DLL hash and its managed assembly identity. The initial four versions are pinned in the shipped catalog. Catalog resources are verified before use. HTTPS redirects are limited to GitHub release hosts; downloaded programs are never executed by setup.
+
+## Switching from standalone downloads
+
+An existing current DLL is adopted without rewriting it. Older copies, renamed copies with a recognized module identity and recognized legacy/native DLLs are detected in Plugins, including subfolders. The selected module ends with one canonical DLL directly under Plugins. Only the selected module is updated; the other three do not need to be redownloaded.
+
+Recognized copies are backed up before replacement. Unrecognized copies require approval for their exact path/hash. If a file changes after review, setup stops. It does not guess at unrelated plugins or rewrite module settings, account records, published wording, saves, generated histories or crowd plans.
+
+## Switching from older COT
+
+Download the new collection installer once from the COT front door when it is released. The old 1.0.x updater only understands bundle updates and cannot perform this conversion itself.
+
+The old host supplies several modules through one DLL. Setup reads its existing module choices and preselects enabled modules. All enabled modules must be selected for conversion; otherwise setup stops and explains which ones are missing. Use Remove first if you intentionally want to retire one.
+
+Conversion backs up the old host and its known matching program files, then installs the exact selected standalone DLLs and removes the old host from the plugin scan. External program-file snapshots matter: the standalone DLLs prepare matching support files at their next startup. A collection rollback can restore the older host's matching files as well as the host DLL. Program hashes from verified future module releases are retained in backup journals, including rolled-back transactions, so a later module update does not require a new installer just to restore an old migration. Real user-data paths are excluded from that restore.
+
+Missing/malformed old receipts, unrecognized old runtime bytes and linked paths stop migration for review; they are not silently overwritten. Repair an incomplete older installation before converting it. Old COT backups are retained in Plugins/DynastyCOT/Backups. To use an older bundle's own restore flow, first restore the collection migration backup so the standalones and old host are not mixed.
+
+## Backups, restore and logs
+
+Collection-managed state lives outside the recursive plugin scan:
+
+- `COT-Collection/installed.json`: module versions/hashes recorded by the manager.
+- `COT-Collection/Backups/<transaction>/`: journal and verified `.bak` copies.
+- `COT-Collection/Logs/setup.log`: completed collection operations.
+- `COT-Collection/Modules/<module>/`: README/features for modules fetched by setup.
+
+Downloaded ZIPs and verified staging DLLs are cached under `%LOCALAPPDATA%/DynastyCOT/Downloads`. They are not active plugins. Existing module logs and data remain in their current paths; see the standalone READMEs.
+
+Close MMC and the game before file changes. A running-process warning is based on actual MMC/game processes, not old plugin files. A writable Mod Manager folder outside Program Files is recommended; modules need write access for their own support files and user data too. Setup does not change Windows permissions.
+
+Every changed file has before/after hashes and a verified backup before mutation. Replacements/journal writes are atomic. Failed operations restore previous managed files. An interrupted install blocks new changes until its backup is restored. Restore validates every path, backup hash and current file before writing; later edits or out-of-order backups stop the operation. Restore newer collection backups first. An explicitly selected downgrade requires confirmation.
+
+## Private acceptance checklist
+
+1. Fresh writable MMC fixture: select one module, then several. Confirm only those canonical DLLs appear directly in Plugins, with no DynastyCOT.dll.
+2. Existing standalone install: all four installed versions should be detected. Adopting current versions should not redownload them. Use drag-and-drop again afterward; no extra host should become necessary.
+3. Older COT: check the enabled module preselection and migration explanation. Convert, launch and verify modules/settings/history. Restore that migration and confirm the older host has its matching runtime and no duplicate standalone DLLs.
+4. Check updates, inspect per-module notes, keep an older version and update just Gameday Atmosphere. Confirm Beyond the Field is not downloaded or rewritten.
+5. Remove one module and restore it. Remove all and restore. Confirm settings/accounts/history remain, then verify native activation in MMC/game.
+6. Check scaling, the file picker, permission errors and the process warning on another user's setup. Offline tests and successful detection do not establish live-game compatibility.
+
+Automated file/network/layout evidence is supplied beside the private installer. A real MMC/game migration-and-rollback acceptance run and other users' permissions/scaling remain live-review items.
+
+## Build and maintain
+
+1. Build/test/publish each standalone module from this workspace with the existing module tooling. Each standalone repository continues to pin this source revision.
+2. Update the four pinned versions in `Tools/build_collection_catalog.py`, using the verified ZIPs/evidence in Release. Run that tool to produce the catalog of exact artifacts and program-only migration hashes. No SDKs, assets, saves or generated history belong in the public source/catalog.
+3. Run `python Tools/build_collection_installer.py` to compile the lightweight EXE. It embeds the catalog and app icon, not the module DLLs.
+4. Run `python Tests/test_collection_installer.py` for isolated filesystem, failure/rollback, selection and actual-window layout checks. Run `python Tests/test_collection_downloads.py --network` explicitly for anonymous public discovery/download and fixture-only install/version-change/rollback.
+5. Review the source/artifact hashes and live acceptance before publishing the installer. The legacy bundle build remains available to reproduce older 1.0.x releases; it is not the new collection install path.

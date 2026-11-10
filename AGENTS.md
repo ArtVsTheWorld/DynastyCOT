@@ -1,7 +1,7 @@
 # Dynasty COT development
 
 - Author is Ace. Work only inside this repository unless the user authorizes installation.
-- The approved architecture is one MMC host with four optional modules, retaining existing runtime designs initially.
+- The approved architecture is a collection hub/optional installer for the four independently selectable standalone DLLs. New collection installs do not install DynastyCOT.dll. Preserve old host migration/rollback and the modules' existing runtime contracts.
 - User decisions: ALL offensive play clock modes and defensive clock durations are per Dynasty; use a validated LeagueID, never save filenames. New Dynasties default to offensive On and defensive 15 seconds.
 - Do not import global clock choices into every Dynasty or persist values when no validated Dynasty is active.
 - Dynasty Enhancer is unreleased: legacy Enhancer SETTINGS migration is unnecessary. History is separate and remains preserved.

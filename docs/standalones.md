@@ -1,6 +1,6 @@
 # Standalone downloads and compatibility
 
-Want one feature? Download its standalone ZIP. Want the collection? Download Dynasty COT. All are built from this integration workspace; the standalone repositories are download/help front doors with exact source pins, not separate development forks.
+Want one feature? Download its standalone ZIP. Want several? Use the Dynasty COT installer. The new collection installer (private 1.1.0-rc1 candidate) manages those same standalone DLLs; the old 1.0.x bundle uses the legacy host. All are built from this integration workspace; the standalone repositories are download/help front doors with exact source pins, not separate development forks.
 
 | Module | Standalone repository | Current standalone |
 |---|---|---|
@@ -65,3 +65,11 @@ Gameday notes compare source against v2.0.35; Extra Settings against v0.2.1; Exp
 5. Confirm Dynasty and basic Play Now crowd/noise/shake behavior, plus native touchdown presentation. Crowd effects in Practice should remain absent.
 
 Ace confirmed all four standalone releases verified working on November 9, 2026. The three preview releases were promoted to stable without changing their tested ZIP/DLL bytes. Enclosed build-time preview labels remain historical; current release notes and repository status record this acceptance.
+
+## New collection installer
+
+The optional collection manager and drag-and-drop downloads use identical standalone DLLs and the same data paths. Changing installation methods does not reset settings/accounts/history or add a second feature provider. The manager adopts an already-current DLL without downloading or rewriting it. It retires recognized duplicate copies transactionally; unrecognized copies require exact-path/hash review.
+
+Updates are selected per module from its public repository. The manager checks ZIP/DLL hashes and archive layout before changing files. Checking for updates does not download module ZIPs. No GitHub credentials are included. Backups and removal work without a network connection; first installation and fetching new versions require Internet access.
+
+When migrating the older single-host COT, every enabled module must be accounted for before the host is removed. Its matching program files are backed up as well, because new standalone support-file preparation may replace them later. User-data folders and legacy backups are kept. Restore newer collection transactions before older ones; setup refuses to overwrite unrelated later edits. See [collection migration and acceptance](collection-installer.md).

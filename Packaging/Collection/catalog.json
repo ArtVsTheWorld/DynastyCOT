@@ -1,0 +1,1889 @@
+{
+  "Format": 1,
+  "Version": "1.1.0-rc1",
+  "Modules": [
+    {
+      "Id": "BeyondTheField",
+      "LegacyId": "DynastyEnhancer",
+      "Title": "Beyond the Field",
+      "Description": "Dynasty news, recruiting feedback and scouting fog. Choose rating styles, clearer money labels and GPI player grades.",
+      "Repository": "ArtVsTheWorld/BeyondTheField",
+      "Aliases": [
+        "DynastyEnhancer",
+        "PlayerAnalytics"
+      ],
+      "Current": {
+        "Module": "BeyondTheField",
+        "Version": "1.0.7",
+        "Tag": "v1.0.7",
+        "ArchiveName": "BeyondTheField-1.0.7.zip",
+        "ArchiveUrl": "https://github.com/ArtVsTheWorld/BeyondTheField/releases/download/v1.0.7/BeyondTheField-1.0.7.zip",
+        "ArchiveSha256": "e708e343d2ec9ca6495b970613156c6e64ba808dd07ac2bf241dbcb53a031d6f",
+        "DllSha256": "3010841ff7f6575f1fadd974d5e806bd3982a651c3f20b0a471383c14c590812",
+        "ArchiveBytes": 38002868,
+        "ProofUrl": "https://github.com/ArtVsTheWorld/BeyondTheField/releases/download/v1.0.7/BeyondTheField-1.0.7-verification.json",
+        "PageUrl": "https://github.com/ArtVsTheWorld/BeyondTheField/releases/tag/v1.0.7",
+        "Notes": "# Beyond the Field 1.0.7 \u2014 Recruiting feedback and GPI\n\nChanges since the published 1.0.3 release:\n\n- **Choose how recruit interest looks.** Default keeps the normal game display and is the initial choice. Recruit Feedback replaces exact interest bars/rank numbers with broad standings: Favorite, Contender, In the Mix, Outside Looking In and Long Shot. Schools are grouped by standing, then alphabetically within a group; multiple schools can share a tier. Existing movement arrows remain. Rank Only hides the bars but keeps real rankings. Recruiting Fog must be enabled; Blind hides interest altogether.\n- **Find prospects you already scouted.** Off-board, uncommitted prospects show their scouting-progress icon in the Target column. It updates after further scouting/removal without needing to flip pages. Names, active-board markers and commitment logos stay intact. This quality-of-life feature is always on.\n- **Cleaner recruiting cards.** Full Overview labels align under Influence; Prospect List cards show the same broad standings instead of Interest Unknown. Recruit Feedback and Blind hide the misleading Projected Cutoff divider. Default/Rank Only retain it. Real lockout notices and the game's recruiting rules remain unchanged.\n- **GPI branding.** Player Analytics and its fictional Social Media account now use Gridiron Performance Index (GPI), @GPIndex and the G icon. Grade calculations, completed-week restrictions and weekly feed budgets are unchanged. Existing account identities and published history are preserved.\n- **More reliable startup.** BTF waits briefly for the exact supported native settings code instead of permanently stopping during early game initialization. Unsupported code/hook owners still fail safely.\n- Keeps the Position Changes fix, edited Current NIL formatting, player-card fog/colors, capitalized grades and faster Back navigation. Settings, saves, accounts and published history stay in place. Saved interest choices are preserved; Default applies when no choice has been saved.\n\n**Install/update:** close the game and MMC, then replace only BeyondTheField.dll in the versioned Mod Manager's Plugins folder. Keep all data folders. Use one BTF provider; disable bundled BTF in COT if using this standalone. Matching support files are embedded. To roll back, close MMC/game and restore your saved older DLL; retain settings/history.\n\n**Verification:** Ace installed 1.0.6, restarted MMC/game and reported it working. 1.0.7 adds the Default preference/label change, verified with settings/menu/persistence regressions. Recruiting response, emitted UI, startup, native composition, existing-data and standalone/COT coexistence checks passed; integrity evidence ships beside the ZIP. Successful tests do not certify every game/overhaul combination.\n\n**Known limits:** the full Overview header's stage-progress hiding remains a live-review item. An earlier Windows graphics timeout/game hang has unresolved causality; this release does not claim to fix it. Save/reload, multi-coach and other overhaul combinations need their own acceptance checks. No touchdown replay experiment is included.\n",
+        "Compatibility": "Offline scope and native protections stay in each module. Use one provider of each feature. Read the module release notes for known limits.",
+        "Prerelease": false
+      }
+    },
+    {
+      "Id": "GamedayAtmosphere",
+      "LegacyId": "GamedayAtmosphere",
+      "Title": "Gameday Atmosphere",
+      "Description": "Fans arrive, cheer, travel and leave as games develop. Tune crowd sound, camera shake and visiting support.",
+      "Repository": "ArtVsTheWorld/DynamicGamedayAtmosphere",
+      "Aliases": [
+        "DynamicGamedayAtmosphere",
+        "DynamicAttendance"
+      ],
+      "Current": {
+        "Module": "GamedayAtmosphere",
+        "Version": "2.1.11",
+        "Tag": "v2.1.11",
+        "ArchiveName": "GamedayAtmosphere-2.1.11.zip",
+        "ArchiveUrl": "https://github.com/ArtVsTheWorld/DynamicGamedayAtmosphere/releases/download/v2.1.11/GamedayAtmosphere-2.1.11.zip",
+        "ArchiveSha256": "3463fec476cd4dfe08f96dc9a9050e4486658a744c330e334d20e2e8c3625417",
+        "DllSha256": "6657871da9629498c31d60e97140111801cb9e0da8fd3cb015a0575fcd89af9f",
+        "ArchiveBytes": 763343,
+        "ProofUrl": "https://github.com/ArtVsTheWorld/DynamicGamedayAtmosphere/releases/download/v2.1.11/GamedayAtmosphere-2.1.11-verification.json",
+        "PageUrl": "https://github.com/ArtVsTheWorld/DynamicGamedayAtmosphere/releases/tag/v2.1.11",
+        "Notes": "# Gameday Atmosphere 2.1.11 \u2014 Play Now replay hotfix\n\nCompared with the previous public standalone release, **2.1.9**.\n\n- Fixed a replay eligibility check that admitted Dynasty but left offline Play Now out. With **Additional Replays** and **Full-Screen Big Play Replays** enabled, qualifying non-touchdown big plays in Play Now can use the added replay coverage.\n- Replay diagnostics now admit offline Play Now too, so those decisions can be checked when troubleshooting.\n- Existing crowd behavior, sound, camera shake, replay thresholds and saved settings/history are retained.\n- Touchdown presentation remains controlled by the game. The unsuccessful private touchdown experiment and temporary timing helpers are **not included**. This release does not guarantee a replay after every touchdown.\n\n**Update:** close both MMC and the game, then replace `Plugins/GamedayAtmosphere.dll` with the DLL from the ZIP. Keep your settings/history folders. Restart both applications. Use one Gameday provider; disable COT's Gameday module when using this standalone for the feature. The ZIP contains the DLL, README.txt and FEATURES.md; matching support files are embedded.\n\n**Verification:** the production replay-root tests exercise Dynasty and Play Now, nested gain comparisons, blocked scopes/options, and unchanged touchdown predicates/shortcuts/insets. Replay, scope, menu and isolated managed packaging/storage/duplicate-provider checks pass. Settings and history remain byte-for-byte intact in upgrade fixtures. A 20-yard non-touchdown Play Now completion showed both full-screen and inset replays in the private test; the clean production ZIP was not live-installed during this publishing step. Other game/mod combinations remain unverified.\n\nVersion 2.1.10 was reserved for private touchdown tests. Public 2.1.11 uses a distinct native filename/cache so it cannot reuse that private runtime. No change to native fingerprints, ownership checks or supported offline scope.\n\nRollback: close MMC and the game and restore the 2.1.9 plugin DLL. Keep the existing data folders. The prior release remains available on GitHub.\n",
+        "Compatibility": "Offline scope and native protections stay in each module. Use one provider of each feature. Read the module release notes for known limits.",
+        "Prerelease": false
+      }
+    },
+    {
+      "Id": "ExtraSettings",
+      "LegacyId": "ExtraDynastySettings",
+      "Title": "Extra Settings",
+      "Description": "Set separate offensive and defensive play clocks, playcall limits and cooldowns. Each Dynasty keeps its choices.",
+      "Repository": "ArtVsTheWorld/offline-dynasty-settings",
+      "Aliases": [
+        "OfflineDynastySettings",
+        "DynastyPlayClock",
+        "OfflinePlaycall"
+      ],
+      "Current": {
+        "Module": "ExtraSettings",
+        "Version": "0.2.10",
+        "Tag": "v0.2.10",
+        "ArchiveName": "ExtraSettings-0.2.10.zip",
+        "ArchiveUrl": "https://github.com/ArtVsTheWorld/offline-dynasty-settings/releases/download/v0.2.10/ExtraSettings-0.2.10.zip",
+        "ArchiveSha256": "e0e36cb34265db8172ba32a7bca024f85234ce49a00ddd091f775493b3225255",
+        "DllSha256": "4824cf6e17ed00400f3ab0c2a806e6b44453bbcd0a3a355e1351129de7b4dd65",
+        "ArchiveBytes": 79287,
+        "ProofUrl": "https://github.com/ArtVsTheWorld/offline-dynasty-settings/releases/download/v0.2.10/ExtraSettings-0.2.10-verification.json",
+        "PageUrl": "https://github.com/ArtVsTheWorld/offline-dynasty-settings/releases/tag/v0.2.10",
+        "Notes": "# Extra Settings 0.2.10 - standalone release\n\nCompared with the last published standalone release, **v0.2.1**.\n\n- **A clearer name:** Offline Dynasty Settings is now Extra Settings.\n- **Clocks belong to each Dynasty:** offensive and defensive clock choices save by verified LeagueID. New Dynasties begin with offensive On and defensive 15 seconds. Old global files are retained, but their choices are not copied into every Dynasty.\n- **Shorter defensive choices:** 3 and 5 seconds join 15, 20, 30, 45 and 60 seconds, plus Off. Offensive On, Off At Playcall, Off and 60 Seconds remain available.\n- **Settings and menu compatibility:** retains the current COT game-settings rows and deferred Controller Select bridge, including its exact supported controller/ownership checks.\n- **Safer persistence and diagnostics:** the settings-saving helper is checked against a compiled-in SHA256, and old preference/log files stay in the module's data folder.\n- **One-DLL download:** place `ExtraSettings.dll` in Plugins. Its matching helper is embedded and prepared automatically; settings are not shipped as defaults that overwrite your choices.\n\nOffensive/defensive playcall cooldowns and limits are retained features, not new additions in this release. Find everything under Dynasty > League Settings > Game Settings; start a fresh game after changing gameplay options.\n\nRemove old `OfflineDynastySettings.dll`, `DynastyPlayClock.dll` and `OfflinePlaycall.dll` copies from Plugins, keeping all data folders. If keeping COT, disable its Extra Settings module before using the standalone. Current Beyond the Field and Expanded Practice retain the corresponding shared-menu/controller contracts; older or modified hooks can be rejected.\n\nValidation: all-four packaging/coexistence and COT install/uninstall fixtures passed; 86 per-Dynasty profile checks cover all 32 clock pairs, isolation/reload/invalid data/backups, and 54 preference/launch-coordinator checks passed. The helper matches COT 1.0.2 byte-for-byte. **Ace reported all four standalone releases verified working on November 9, 2026.** No live installation was performed for this build.\n\nSource comparison: old tag `v0.2.1`, commit `51f48a5dac0ed23fb542597aa96d7b4ac2d8a31c`; current maintained source is pinned in `source-release.json`. Checked changes include `DynastyClockProfiles.cs`, `ClockPreferences.cs`, `GameSettingsMenuRows.cs`, `ControllerSelect.cs`, `PersistenceController.cs` and `RuntimeFiles.cs`.\n\nStable promotion: the ZIP and DLL are unchanged from the tested preview. Enclosed preview labels describe the build-time status. Acceptance is user-reported for the tested setup; other game/overhaul combinations are not automatically certified.\n",
+        "Compatibility": "Offline scope and native protections stay in each module. Use one provider of each feature. Read the module release notes for known limits.",
+        "Prerelease": false
+      }
+    },
+    {
+      "Id": "ExpandedPractice",
+      "LegacyId": "DrivePractice",
+      "Title": "Expanded Practice",
+      "Description": "Run full drives or scrimmages in Dynasty or main-menu Practice. Choose your starting spot and switch sides.",
+      "Repository": "ArtVsTheWorld/drive-based-practice",
+      "Aliases": [
+        "SituationalPractice"
+      ],
+      "Current": {
+        "Module": "ExpandedPractice",
+        "Version": "0.8.21",
+        "Tag": "v0.8.21",
+        "ArchiveName": "ExpandedPractice-0.8.21.zip",
+        "ArchiveUrl": "https://github.com/ArtVsTheWorld/drive-based-practice/releases/download/v0.8.21/ExpandedPractice-0.8.21.zip",
+        "ArchiveSha256": "9b85ce8b05e230713e61ab039067005a52145876d5b81d8781d1ed989a55ae05",
+        "DllSha256": "790f7555b6bb0a2ca5331705ef10449490037e40919036ce6e716a1368376891",
+        "ArchiveBytes": 67114,
+        "ProofUrl": "https://github.com/ArtVsTheWorld/drive-based-practice/releases/download/v0.8.21/ExpandedPractice-0.8.21-verification.json",
+        "PageUrl": "https://github.com/ArtVsTheWorld/drive-based-practice/releases/tag/v0.8.21",
+        "Notes": "# Expanded Practice 0.8.21 - standalone release\n\nCompared with the last published standalone release, **v0.8.18**.\n\n- **A clearer name:** Drive-Based Practice is now Expanded Practice.\n- **Main-menu Practice support:** use Default Practice, Drive Practice or Scrimmage in supported offline main-menu Practice as well as Dynasty Practice. Native offline/practice eligibility remains checked.\n- **Updated native compatibility:** the runtime uses the current supported game layout, with exact bridge handling for current Extra Settings and the COT practice contracts. Unknown hook owners are still rejected.\n- **Play-selection transitions:** the current native flow completes requested picker transitions before the next pre-snap step, including supported possession/reset situations.\n- **Verified runtime and better reports:** a matching helper is SHA256-checked before launch; game-session duplicate ownership, launch/exit observation and diagnostic reports remain enabled.\n- **One-DLL download:** put `ExpandedPractice.dll` in Plugins. The matching runtime helper is embedded and prepared automatically. Existing module data is retained.\n\nDefault Practice, full-drive downs/distance, Scrimmage possession changes, scores, session stats, re-spotting, side switching and the first-down line are retained features. They are not all new in 0.8.21. Kicking sequences and a normal running game clock are not supported practice features.\n\nMove old `SituationalPractice.dll` outside Plugins and keep its data. Disable COT's Expanded Practice module if using the standalone beside COT. Use matched current modules: older practice helpers may not satisfy Beyond the Field's exact hook contract or Extra Settings' controller bridge.\n\nValidation: the practice regression suites passed, including drive/defense/opponent/session/scrimmage/mode/start/first-down/diagnostics checks. The shared practice contract passed 5,009 ownership/mutation checks, and all-four package/coexistence fixtures passed. The helper matches COT 1.0.2 byte-for-byte. **Ace reported all four standalone releases verified working on November 9, 2026.** No live game was patched during these tests.\n\nSource comparison: old tag `v0.8.18`, commit `0b3998949a63c842f02d0f05da4c5f66ecb22ad0`; current maintained source is pinned in `source-release.json`. Checked changes include `NativeRuntime.cs`, `NativeCompatibility.cs`, `DynastyControllerCompatibility.cs`, `PracticeRunner.cs`, `PracticeAction.cs` and `RuntimeFiles.cs`. Core drive/scoring policies are retained rather than advertised as newly introduced.\n\nStable promotion: the ZIP and DLL are unchanged from the tested preview. Enclosed preview labels describe the build-time status. Acceptance is user-reported for the tested setup; other game/overhaul combinations are not automatically certified.\n",
+        "Compatibility": "Offline scope and native protections stay in each module. Use one provider of each feature. Read the module release notes for known limits.",
+        "Prerelease": false
+      }
+    }
+  ],
+  "KnownPlugins": [
+    {
+      "Path": "Plugins/BeyondTheField.dll",
+      "Module": "BeyondTheField",
+      "Sha256": "ea0c9f1aa02ec3e57c8588fe0ec2561f52eb2c5c6d012ca9eb02adf9d344fdda"
+    },
+    {
+      "Path": "Plugins/BeyondTheField.dll",
+      "Module": "BeyondTheField",
+      "Sha256": "3118b70ebc4c68cf621dd74844b19f47f453ace33f7c981bb5ca60aaa1fc3dfb"
+    },
+    {
+      "Path": "Plugins/BeyondTheField.dll",
+      "Module": "BeyondTheField",
+      "Sha256": "dc48b0da94be4f9033b23e937e97ec4f1c7a09b9d96ccf78e60e3842333d00b9"
+    },
+    {
+      "Path": "Plugins/BeyondTheField.dll",
+      "Module": "BeyondTheField",
+      "Sha256": "2042d8aa97cef959afeffa5606a30c97d7d7e69fa4e7194298590683377ad45e"
+    },
+    {
+      "Path": "Plugins/BeyondTheField.dll",
+      "Module": "BeyondTheField",
+      "Sha256": "49cc6bfeee47d680ca8cea5333b49e6aaafbcf5b899a9fa04a1c97658d1ef67a"
+    },
+    {
+      "Path": "Plugins/BeyondTheField.dll",
+      "Module": "BeyondTheField",
+      "Sha256": "3010841ff7f6575f1fadd974d5e806bd3982a651c3f20b0a471383c14c590812"
+    },
+    {
+      "Path": "Plugins/GamedayAtmosphere.dll",
+      "Module": "GamedayAtmosphere",
+      "Sha256": "6657871da9629498c31d60e97140111801cb9e0da8fd3cb015a0575fcd89af9f"
+    },
+    {
+      "Path": "Plugins/GamedayAtmosphere.dll",
+      "Module": "GamedayAtmosphere",
+      "Sha256": "61eb018fa4b4c9fef0fde87ede19b3fae0cd2eebc55ae16735ff611922b5a6d5"
+    },
+    {
+      "Path": "Plugins/ExtraSettings.dll",
+      "Module": "ExtraSettings",
+      "Sha256": "4824cf6e17ed00400f3ab0c2a806e6b44453bbcd0a3a355e1351129de7b4dd65"
+    },
+    {
+      "Path": "Plugins/ExpandedPractice.dll",
+      "Module": "ExpandedPractice",
+      "Sha256": "790f7555b6bb0a2ca5331705ef10449490037e40919036ce6e716a1368376891"
+    },
+    {
+      "Path": "Plugins/DynastyCOT.dll",
+      "Module": "Core",
+      "Sha256": "b96a73d2dd6f5e59ea9b8f89dad04f14c8d7162a0b37f1be46e1e35d99fffadf"
+    },
+    {
+      "Path": "Plugins/DynastyCOT.dll",
+      "Module": "Core",
+      "Sha256": "380d1e5be7dfcd8c08ccf3107b18b18b38fdefca45f34aa971aadfce2eeb19a9"
+    },
+    {
+      "Path": "Plugins/DynastyCOT.dll",
+      "Module": "Core",
+      "Sha256": "0932ea6be737ecd1eff33f14f04e4e8761abdcdb6a92f26e5d8af102a6e6f7d0"
+    },
+    {
+      "Path": "Plugins/DynastyCOT.dll",
+      "Module": "Core",
+      "Sha256": "7fd9af5acdb47716e32b5f9748fcb5935047618f784d3d3b3487f38ebbce5a99"
+    },
+    {
+      "Path": "Plugins/DynastyCOT.dll",
+      "Module": "Core",
+      "Sha256": "ed20b7269c893806d201a304e2161c52e4d019b29853b3068f9c7c58d238ad8b"
+    },
+    {
+      "Path": "Plugins/DynastyCOT.dll",
+      "Module": "Core",
+      "Sha256": "655a7b250fbfd1835c3c66aec6d7e8fe771ad1c2262b3fb057a262c1ff9993fb"
+    },
+    {
+      "Path": "Plugins/DynastyCOT.dll",
+      "Module": "Core",
+      "Sha256": "935816f9a64132e79ac40ee4de5bb4f40bcb8a92035aadcf9e92fc9bd8c5042f"
+    },
+    {
+      "Path": "Plugins/DynastyCOT.dll",
+      "Module": "Core",
+      "Sha256": "4a6994f20ba23e96a852c7f14bb450b4421acf615751f57be52fd4b0f1274c6f"
+    },
+    {
+      "Path": "Plugins/DynastyCOT.dll",
+      "Module": "Core",
+      "Sha256": "b4e91a7622479b31c7a60af2f73724a72eb5c3c90842ee6afe94260cf9049d3c"
+    },
+    {
+      "Path": "Plugins/DynastyCOT.dll",
+      "Module": "Core",
+      "Sha256": "32b2912b39f9e4ea1dbe157b8c8e5e0b9d33f834e8454a9840899de4ea1f860a"
+    },
+    {
+      "Path": "Plugins/DynastyCOT.dll",
+      "Module": "Core",
+      "Sha256": "580514f02aa9bbf08f847a84c6d3c696884b2a191fcef37f2b36e0eb393de03c"
+    },
+    {
+      "Path": "Plugins/DynastyCOT.dll",
+      "Module": "Core",
+      "Sha256": "8c34e730dafb50f0f7ac16ad49446ec8b13e3a6ecad0817847eba9dcf108a157"
+    },
+    {
+      "Path": "Plugins/DynastyCOT.dll",
+      "Module": "Core",
+      "Sha256": "61e4110b3c7645f14ddf855056def10dbe6696b2be39858ae7d6dd6961ccf000"
+    },
+    {
+      "Path": "Plugins/DynastyCOT.dll",
+      "Module": "Core",
+      "Sha256": "7c31bb184e87724149a81c04ce1d907b7bfede5df0abea4f2997880d3f27735d"
+    },
+    {
+      "Path": "Plugins/DynastyCOT.dll",
+      "Module": "Core",
+      "Sha256": "b25d95d7d249913c95e621e989f40bfe476cbb8a927cef4073b417c7387f0ac5"
+    },
+    {
+      "Path": "Plugins/DynastyCOT.dll",
+      "Module": "Core",
+      "Sha256": "1e1e01369c74798cf69572e796d2af67b09cd01f2d0ffb8ca2dc34967d12efc8"
+    },
+    {
+      "Path": "Plugins/DynastyCOT.dll",
+      "Module": "Core",
+      "Sha256": "48b9195c82fe1cbb140609e9ea1a12918782216b03327996641721c21f23e0fc"
+    },
+    {
+      "Path": "Plugins/DynastyCOT.dll",
+      "Module": "Core",
+      "Sha256": "b1678a9656978121339ff444497ba73445bf80025172a7be9d173c5f37f15464"
+    },
+    {
+      "Path": "Plugins/DynastyCOT.dll",
+      "Module": "Core",
+      "Sha256": "0ac825a2b6fcf53c189746456dea8655bb8d03d920a43a2f2540ffa368e15ee0"
+    },
+    {
+      "Path": "Plugins/DynastyCOT.dll",
+      "Module": "Core",
+      "Sha256": "63d639817071c4a65086c10e8825215cf3f54bed43a39dc2511bb30e4012d51a"
+    },
+    {
+      "Path": "Plugins/DynamicGamedayAtmosphere.dll",
+      "Module": "GamedayAtmosphere",
+      "Sha256": "c53da1d108df11fe881a63cc701264fbd3fb0207f90b188026293f8cba132a35"
+    },
+    {
+      "Path": "Plugins/DynamicGamedayAtmosphere/Runtime-2.0.35/DynamicGamedayAtmosphereNative-2.0.35.dll",
+      "Module": "GamedayAtmosphere",
+      "Sha256": "1e809a8149a6674c4437b1ffeaad85ed5beb4b38e9daf236d701ffefb610cb7f"
+    },
+    {
+      "Path": "Plugins/OfflineDynastySettings.dll",
+      "Module": "ExtraSettings",
+      "Sha256": "79aa4453d0a0a8bbf809a1df62b64e3596cfaeab78bb523a814bf07038d4289d"
+    },
+    {
+      "Path": "Plugins/SituationalPractice.dll",
+      "Module": "ExpandedPractice",
+      "Sha256": "bd1614d6f8e666836e90335415207e46261f864c3f15bd02d1893eaca7f1bcbf"
+    },
+    {
+      "Path": "Plugins/DynastyCOT.dll",
+      "Module": "Core",
+      "Sha256": "c65fd2fb322d8e615941208625e2f979dde1d36434d15b11aceb7ad789147881"
+    }
+  ],
+  "Programs": [
+    {
+      "Path": "COT-Runtime/DynastyEnhancer/BeyondTheFieldNative-v103.dll",
+      "Module": "BeyondTheField",
+      "Sha256": "993088be6a81def931ae542e2c40beb3bf6c894675f3ff2343bd351213d9c43f"
+    },
+    {
+      "Path": "COT-Runtime/DynastyEnhancer/BeyondTheFieldRecruitFog-v1.dll",
+      "Module": "BeyondTheField",
+      "Sha256": "a8518f780f497464f0cc197c8aafc52e7f28c45804a18fe85588c7548fcb23e5"
+    },
+    {
+      "Path": "COT-Runtime/DynastyEnhancer/Content/Runtime/account-refresh-pack.json",
+      "Module": "BeyondTheField",
+      "Sha256": "62676753939b8b0dc83ac9ad61d164840d1f7fc128036b5967ff037b0bbdd3d8"
+    },
+    {
+      "Path": "COT-Runtime/DynastyEnhancer/Content/Runtime/analysis-pack.json",
+      "Module": "BeyondTheField",
+      "Sha256": "29db5b444e9d96b597f5689d24e0d8513abb7ed7ae8829d4dc46674bec33107f"
+    },
+    {
+      "Path": "COT-Runtime/DynastyEnhancer/Content/Runtime/analytics-variety-pack.json",
+      "Module": "BeyondTheField",
+      "Sha256": "790597b3318f9e70dfc816af3118563853298c7657d638d609f538b3d5b01214"
+    },
+    {
+      "Path": "COT-Runtime/DynastyEnhancer/Content/Runtime/archive-provenance.json",
+      "Module": "BeyondTheField",
+      "Sha256": "fc62252c4137ab4e30b0135a53dd909a8ddec7a2e5e65e77fae2fe865f3b1848"
+    },
+    {
+      "Path": "COT-Runtime/DynastyEnhancer/Content/Runtime/beyond-field-pack.json",
+      "Module": "BeyondTheField",
+      "Sha256": "14967911fb0948ed5c5fafa1a993b79f89aa16a8570b52863585da4bb8590f56"
+    },
+    {
+      "Path": "COT-Runtime/DynastyEnhancer/Content/Runtime/buzz-variety-pack.json",
+      "Module": "BeyondTheField",
+      "Sha256": "c17c46c2477e35bdf012a4b99caae05ee6b8f30425b8ec8daff9e91bc4a987fc"
+    },
+    {
+      "Path": "COT-Runtime/DynastyEnhancer/Content/Runtime/compact-variety-pack.json",
+      "Module": "BeyondTheField",
+      "Sha256": "c8e952f4aa187f75fd1d6b9c3a9b3a48d8b5b0f88ce0eb89cf849980fe0cecfa"
+    },
+    {
+      "Path": "COT-Runtime/DynastyEnhancer/Content/Runtime/context-pack.json",
+      "Module": "BeyondTheField",
+      "Sha256": "808460142ae43d95afe68d8003336a98722f61564cc737f89171df5e1f010eeb"
+    },
+    {
+      "Path": "COT-Runtime/DynastyEnhancer/Content/Runtime/cycle-pack.json",
+      "Module": "BeyondTheField",
+      "Sha256": "f2afd7cfb1655664f8631abc441a0d21c9480f94f46fd4825957a6cef0b161ed"
+    },
+    {
+      "Path": "COT-Runtime/DynastyEnhancer/Content/Runtime/cycle-variety-pack.json",
+      "Module": "BeyondTheField",
+      "Sha256": "b526ccb629b526fe4478d9cf4a8eab097a543c4e8f42914334a3fba9edffa9f8"
+    },
+    {
+      "Path": "COT-Runtime/DynastyEnhancer/Content/Runtime/editorial-variety-pack.json",
+      "Module": "BeyondTheField",
+      "Sha256": "d80666b24110334e05ec84a685a27e3da864c70e931ed25528980c238ec92ddf"
+    },
+    {
+      "Path": "COT-Runtime/DynastyEnhancer/Content/Runtime/editorial011-pack.json",
+      "Module": "BeyondTheField",
+      "Sha256": "f158fae35b2af0448afda448fc6882db45cff93d42d239451e6b347b6caedd84"
+    },
+    {
+      "Path": "COT-Runtime/DynastyEnhancer/Content/Runtime/event-variety-pack.json",
+      "Module": "BeyondTheField",
+      "Sha256": "cc5824b51598c48426a0ed4b1e7805a456802c70301389fea42df36cbcc7fa3a"
+    },
+    {
+      "Path": "COT-Runtime/DynastyEnhancer/Content/Runtime/fan-variety-pack.json",
+      "Module": "BeyondTheField",
+      "Sha256": "c0b0b054b8b2d8d27c36c045359be2248013e3fcf993c6f810675f8e88380da7"
+    },
+    {
+      "Path": "COT-Runtime/DynastyEnhancer/Content/Runtime/final-cycle-variety-pack.json",
+      "Module": "BeyondTheField",
+      "Sha256": "58d7042d63a0012ff5a73b4ada8c64d6717717d53d8fd6d7a14df9ea461e2424"
+    },
+    {
+      "Path": "COT-Runtime/DynastyEnhancer/Content/Runtime/first-pack.json",
+      "Module": "BeyondTheField",
+      "Sha256": "a1427894fc2e1b0e58304bc8e90dc534e6e179830d5d169257b04c319f5aa766"
+    },
+    {
+      "Path": "COT-Runtime/DynastyEnhancer/Content/Runtime/gpi-pack.json",
+      "Module": "BeyondTheField",
+      "Sha256": "fcaa334ac2da5005f73af8bb955c584e3d29a68f920565b0f1e63de24ff52b93"
+    },
+    {
+      "Path": "COT-Runtime/DynastyEnhancer/Content/Runtime/history-analysis-pack.json",
+      "Module": "BeyondTheField",
+      "Sha256": "1f9f859fd3575b14bb8c749036128fbe88575febed0accf7f935571a0f1723c1"
+    },
+    {
+      "Path": "COT-Runtime/DynastyEnhancer/Content/Runtime/matchup-season-pack.json",
+      "Module": "BeyondTheField",
+      "Sha256": "90119315fe107f522e6654816a0ef3918064e56f62142bdc0df93efea1f9a3a1"
+    },
+    {
+      "Path": "COT-Runtime/DynastyEnhancer/Content/Runtime/matchup-variety-pack.json",
+      "Module": "BeyondTheField",
+      "Sha256": "fdb9ff9784354287290fa7b5d018b940a190b68d0c2b8f0943e4ba3c4dccbbfc"
+    },
+    {
+      "Path": "COT-Runtime/DynastyEnhancer/Content/Runtime/national-account-avatars.json",
+      "Module": "BeyondTheField",
+      "Sha256": "c3434bf3de079d4b2744502e454fdc8d55e0c65c668ca802537c7c24cdfe2e05"
+    },
+    {
+      "Path": "COT-Runtime/DynastyEnhancer/Content/Runtime/nfl-teams.json",
+      "Module": "BeyondTheField",
+      "Sha256": "82e119285a08a37439cf06e22723705006cad2ff0b65ddab7dedf6c76a90983d"
+    },
+    {
+      "Path": "COT-Runtime/DynastyEnhancer/Content/Runtime/offseason-carryover-pack.json",
+      "Module": "BeyondTheField",
+      "Sha256": "769a106b4c30ac787d31bbfe80e447e10531b109e26267f229a496014b730346"
+    },
+    {
+      "Path": "COT-Runtime/DynastyEnhancer/Content/Runtime/offseason-discourse-pack.json",
+      "Module": "BeyondTheField",
+      "Sha256": "5feb4d61d82631745ec0ab37ec2b5cde1c4f8cab52c3542487f3e0dd211668b4"
+    },
+    {
+      "Path": "COT-Runtime/DynastyEnhancer/Content/Runtime/opening-variety-pack.json",
+      "Module": "BeyondTheField",
+      "Sha256": "7e13d7cee1d686b70dca8e2d3a8971030665ca389c549771d013238b7ea06e02"
+    },
+    {
+      "Path": "COT-Runtime/DynastyEnhancer/Content/Runtime/perspectives-pack.json",
+      "Module": "BeyondTheField",
+      "Sha256": "ed3bc3e4292aa47ad05c89cecf09f37dd7148e46ee4d2ae575a91c2909b46f30"
+    },
+    {
+      "Path": "COT-Runtime/DynastyEnhancer/Content/Runtime/playoff-desk-pack.json",
+      "Module": "BeyondTheField",
+      "Sha256": "f8587d11cd06907bc09243c349adc5930df56d2051d47f651cf2985e477d3f0f"
+    },
+    {
+      "Path": "COT-Runtime/DynastyEnhancer/Content/Runtime/portal-draft-pack.json",
+      "Module": "BeyondTheField",
+      "Sha256": "558c47867b77316405d318c5311b2e5b2241a6718f177074b597b3c3516c7471"
+    },
+    {
+      "Path": "COT-Runtime/DynastyEnhancer/Content/Runtime/portrait-ranges.json",
+      "Module": "BeyondTheField",
+      "Sha256": "0ded1178e7d11071b6a6b7f0c8b1cb14a04a6465af322a24d5e38ef85b461e0c"
+    },
+    {
+      "Path": "COT-Runtime/DynastyEnhancer/Content/Runtime/postseason-pack.json",
+      "Module": "BeyondTheField",
+      "Sha256": "23e5a7795f472099db30f00a2a59629c4bd52cd94a6479dbe19b344b3769eb18"
+    },
+    {
+      "Path": "COT-Runtime/DynastyEnhancer/Content/Runtime/preseason-pack.json",
+      "Module": "BeyondTheField",
+      "Sha256": "1926a3b5557f58937f51a086d04fcea3986317f98c4e416a794a647f0b57c26a"
+    },
+    {
+      "Path": "COT-Runtime/DynastyEnhancer/Content/Runtime/race-variety-pack.json",
+      "Module": "BeyondTheField",
+      "Sha256": "68657bc40402d24a133ee413e8c6a9102ac2176907029d3dfcad3e5644ccee5c"
+    },
+    {
+      "Path": "COT-Runtime/DynastyEnhancer/Content/Runtime/reaction-variety-pack.json",
+      "Module": "BeyondTheField",
+      "Sha256": "6216de70655c4fe096be37037341b2f3a53cc06fe5fe86a46594fb5da69c018c"
+    },
+    {
+      "Path": "COT-Runtime/DynastyEnhancer/Content/Runtime/recruiting-variety-pack.json",
+      "Module": "BeyondTheField",
+      "Sha256": "05fa7fe4b9b5766fd1a65ced12135189639cf3e207737ecaadf933d04e8c747b"
+    },
+    {
+      "Path": "COT-Runtime/DynastyEnhancer/Content/Runtime/reporter-variety-pack.json",
+      "Module": "BeyondTheField",
+      "Sha256": "fa5e83c13378a32dd60585dd5a446496c603299a754429fdf07aed3439ee18ff"
+    },
+    {
+      "Path": "COT-Runtime/DynastyEnhancer/Content/Runtime/retrospective-variety-pack.json",
+      "Module": "BeyondTheField",
+      "Sha256": "e6884c115de16f8f8ca6d782cb2ead9b7863f3d78cd599ec5c2d7419f53091f8"
+    },
+    {
+      "Path": "COT-Runtime/DynastyEnhancer/Content/Runtime/review-corrections-pack.json",
+      "Module": "BeyondTheField",
+      "Sha256": "ec5b9e206b8cb3c34e921c444eba6271098f48d90d48f5000f0820327a71587c"
+    },
+    {
+      "Path": "COT-Runtime/DynastyEnhancer/Content/Runtime/season-fixes-pack.json",
+      "Module": "BeyondTheField",
+      "Sha256": "5f57c91c75df72dc5839c394c7a12e4bd87070b89c8aff5c319847962af22913"
+    },
+    {
+      "Path": "COT-Runtime/DynastyEnhancer/Content/Runtime/season-launch-pack.json",
+      "Module": "BeyondTheField",
+      "Sha256": "8058d81d13ad62ed105bc14ebe824ec1b4b94a7af5c5e5323af9c89378348126"
+    },
+    {
+      "Path": "COT-Runtime/DynastyEnhancer/Content/Runtime/season-review-pack.json",
+      "Module": "BeyondTheField",
+      "Sha256": "eec52e97353f4ed2f99cc7fec613a1834846d73573b6228657a76ae1f80260e7"
+    },
+    {
+      "Path": "COT-Runtime/DynastyEnhancer/Content/Runtime/supplied-draft-order.json",
+      "Module": "BeyondTheField",
+      "Sha256": "3b523612d6327ee20ce6beb622c4095c0e4f026af8daec29a96a066250372599"
+    },
+    {
+      "Path": "COT-Runtime/DynastyEnhancer/Content/Runtime/team-logo-variants.json",
+      "Module": "BeyondTheField",
+      "Sha256": "1b91178509a196fab64abc34ea09933d486242abe6ee7ec10a94f405eeca66eb"
+    },
+    {
+      "Path": "COT-Runtime/DynastyEnhancer/Content/Runtime/transactions-pack.json",
+      "Module": "BeyondTheField",
+      "Sha256": "028d6ba7773b1c5e249ef72f4851aca751cb3936633525db5ec105d03325e52e"
+    },
+    {
+      "Path": "COT-Runtime/DynastyEnhancer/Content/Runtime/voice-variety-pack.json",
+      "Module": "BeyondTheField",
+      "Sha256": "b89870fc4f2a28bab862905246c329d31fc5c944cce726ac4890168091e8994b"
+    },
+    {
+      "Path": "COT-Runtime/DynastyEnhancer/Tools/account_presentation.mjs",
+      "Module": "BeyondTheField",
+      "Sha256": "e84412eebf4f9c362648d3e9e190d838ea95613dc21e858c2c3a643ea4d17996"
+    },
+    {
+      "Path": "COT-Runtime/DynastyEnhancer/Tools/advanced_analytics.mjs",
+      "Module": "BeyondTheField",
+      "Sha256": "5516246b53989a28f64ba4ec598e0a93cb23fed10511ac14710e5b7e64492883"
+    },
+    {
+      "Path": "COT-Runtime/DynastyEnhancer/Tools/audit_editorial.mjs",
+      "Module": "BeyondTheField",
+      "Sha256": "6849a39006b510c782425e1a066abb1a288efc349f3baf513f36bdfdc820bcff"
+    },
+    {
+      "Path": "COT-Runtime/DynastyEnhancer/Tools/audit_template_paths.mjs",
+      "Module": "BeyondTheField",
+      "Sha256": "88099fc887ebd944e0e3c56ff81ba3b85c864ac0279ae43146bf2e5552b4df0e"
+    },
+    {
+      "Path": "COT-Runtime/DynastyEnhancer/Tools/audit_world_news.mjs",
+      "Module": "BeyondTheField",
+      "Sha256": "980bea0ac7353b651f9b9b0c96ca74d75b9eb45786657ee13cb2b53ba6eae964"
+    },
+    {
+      "Path": "COT-Runtime/DynastyEnhancer/Tools/backfill_week.mjs",
+      "Module": "BeyondTheField",
+      "Sha256": "7de81af73e469d950439c2328e5618a1d69178056c6807ee604c82da0147d0f9"
+    },
+    {
+      "Path": "COT-Runtime/DynastyEnhancer/Tools/benchmark_templates.mjs",
+      "Module": "BeyondTheField",
+      "Sha256": "c7e9f21f19b1d2c049d69931f9bf66d2ad087d41212fa507764a1b3d96e52db1"
+    },
+    {
+      "Path": "COT-Runtime/DynastyEnhancer/Tools/betting_model.mjs",
+      "Module": "BeyondTheField",
+      "Sha256": "3df4eaf4a249ca4ae56f8bed2ccdd7a3f7ea35888d1f56d227e29d611437df03"
+    },
+    {
+      "Path": "COT-Runtime/DynastyEnhancer/Tools/box_score_stories.mjs",
+      "Module": "BeyondTheField",
+      "Sha256": "2416b75ef64d7a8d9d68685e22b806980c274aa4a1401300515caab9baf32470"
+    },
+    {
+      "Path": "COT-Runtime/DynastyEnhancer/Tools/calendar_events.mjs",
+      "Module": "BeyondTheField",
+      "Sha256": "9c1c764ab8c02d435176c1889a73f802006f4ae21b051564f8ae7d0282d10f6a"
+    },
+    {
+      "Path": "COT-Runtime/DynastyEnhancer/Tools/casual_events.mjs",
+      "Module": "BeyondTheField",
+      "Sha256": "56ce48860ab8c432f5cc68be2c4210aa04f242accf7517fa6211f8e75a651be5"
+    },
+    {
+      "Path": "COT-Runtime/DynastyEnhancer/Tools/clean_language.mjs",
+      "Module": "BeyondTheField",
+      "Sha256": "6db1143f8bcb2698534a74f8dc336d0e17376f6cf1fd2e670d95f5077fb0c3e8"
+    },
+    {
+      "Path": "COT-Runtime/DynastyEnhancer/Tools/conference_context.mjs",
+      "Module": "BeyondTheField",
+      "Sha256": "d825391efeb317430e910abee120da5d86391920ae5ccef778e089b159bea44b"
+    },
+    {
+      "Path": "COT-Runtime/DynastyEnhancer/Tools/conference_language.mjs",
+      "Module": "BeyondTheField",
+      "Sha256": "a7ea570a95d32814723e3e4d1523a388f15ef26f80d8a8680736d0aa0c5a07f0"
+    },
+    {
+      "Path": "COT-Runtime/DynastyEnhancer/Tools/context_analytics.mjs",
+      "Module": "BeyondTheField",
+      "Sha256": "782536176fad1bb7f911704349ef80efec2df9562ab6b5bdc85a65f1f98531d4"
+    },
+    {
+      "Path": "COT-Runtime/DynastyEnhancer/Tools/conversation_topics.mjs",
+      "Module": "BeyondTheField",
+      "Sha256": "37b144e700bb5511813831075e49fb2380654b1db38e5ee026b704126f5f0719"
+    },
+    {
+      "Path": "COT-Runtime/DynastyEnhancer/Tools/correct_waiting_archive.mjs",
+      "Module": "BeyondTheField",
+      "Sha256": "2065f65cc068f06db380807c257ee056c00d332dc73332347c1eb1b1b64bddad"
+    },
+    {
+      "Path": "COT-Runtime/DynastyEnhancer/Tools/deep_analytics.mjs",
+      "Module": "BeyondTheField",
+      "Sha256": "34dbc97dd573cf53317277e0c022bccf5d7c311b0eefccff1db34ac3d6ec4466"
+    },
+    {
+      "Path": "COT-Runtime/DynastyEnhancer/Tools/draft_discourse.mjs",
+      "Module": "BeyondTheField",
+      "Sha256": "bec27e98df19fc40086789bd2ca9e1c16f8690559576e75e7e24272d178049af"
+    },
+    {
+      "Path": "COT-Runtime/DynastyEnhancer/Tools/draft_results.mjs",
+      "Module": "BeyondTheField",
+      "Sha256": "f077ccec8e57b52e5c49d93fb6eed79ae440d9d1563829f18bdc5c907b23b0c9"
+    },
+    {
+      "Path": "COT-Runtime/DynastyEnhancer/Tools/edition_sidebar.mjs",
+      "Module": "BeyondTheField",
+      "Sha256": "4bd11eefedaeb3e763c464f1ea25ec2b07bdfa61562db850253cc116baa86eed"
+    },
+    {
+      "Path": "COT-Runtime/DynastyEnhancer/Tools/editorial_policy.mjs",
+      "Module": "BeyondTheField",
+      "Sha256": "c2540b5520bad97d123a0f7d913f06a431af344a6c6d8191009f2c6e3d45dd5a"
+    },
+    {
+      "Path": "COT-Runtime/DynastyEnhancer/Tools/export_draft_results.mjs",
+      "Module": "BeyondTheField",
+      "Sha256": "14d0348afe1c840ea1823f95fd4196e140fe5e6998e73a46be5fc988815e8082"
+    },
+    {
+      "Path": "COT-Runtime/DynastyEnhancer/Tools/export_emoji_probe.mjs",
+      "Module": "BeyondTheField",
+      "Sha256": "1bf475c6abdcc528689a2f20338b2b0d79b429b25cfc1773a75ab73515e3245e"
+    },
+    {
+      "Path": "COT-Runtime/DynastyEnhancer/Tools/export_feed.mjs",
+      "Module": "BeyondTheField",
+      "Sha256": "85f464e8594a0e70b245b7144d5b709608d2796b81fa5d9aeca7d4c6d9dcc75a"
+    },
+    {
+      "Path": "COT-Runtime/DynastyEnhancer/Tools/export_runtime.mjs",
+      "Module": "BeyondTheField",
+      "Sha256": "0d6d32526f7dbed86f3ec08d12312898bcdb0d4e1dd23120aabaeb15128e9350"
+    },
+    {
+      "Path": "COT-Runtime/DynastyEnhancer/Tools/fan_events.mjs",
+      "Module": "BeyondTheField",
+      "Sha256": "8abe0ff11c0ef305aaade6e1156a45820e0a89363f83f81bfe3702007aff5b2a"
+    },
+    {
+      "Path": "COT-Runtime/DynastyEnhancer/Tools/feed_engine.mjs",
+      "Module": "BeyondTheField",
+      "Sha256": "23148c9e3d92359a495fa9935ad9f2b2f0443ee43017c78cbf515dbf18c1c4d4"
+    },
+    {
+      "Path": "COT-Runtime/DynastyEnhancer/Tools/feed_selection.mjs",
+      "Module": "BeyondTheField",
+      "Sha256": "32e4b8c7fb3fd90c56b35c1f797e3c8fbeb224218e69cc767acb2c315e9b977e"
+    },
+    {
+      "Path": "COT-Runtime/DynastyEnhancer/Tools/feed_visibility.mjs",
+      "Module": "BeyondTheField",
+      "Sha256": "f4e0bb956d994fcf944efc4843ad53949555491f4113c68ac89459dbde92260f"
+    },
+    {
+      "Path": "COT-Runtime/DynastyEnhancer/Tools/football_context.mjs",
+      "Module": "BeyondTheField",
+      "Sha256": "d1ab123f3c7e8af0597a276f85af5c83b505c4b0ec5b739714c8422effa65b41"
+    },
+    {
+      "Path": "COT-Runtime/DynastyEnhancer/Tools/gpi_events.mjs",
+      "Module": "BeyondTheField",
+      "Sha256": "94cb733efb6b8f1104d78072c024f5e4ccaa0b6d6ed4293b1268fe536849d070"
+    },
+    {
+      "Path": "COT-Runtime/DynastyEnhancer/Tools/gpi_rankings.mjs",
+      "Module": "BeyondTheField",
+      "Sha256": "c9a8805795c778e36eaceea66dd13cce070992ebf18bff9490efab5bc97cae45"
+    },
+    {
+      "Path": "COT-Runtime/DynastyEnhancer/Tools/heisman_context.mjs",
+      "Module": "BeyondTheField",
+      "Sha256": "dd11f14023328046dbf53e7c4f2be98aa4e0cad70ab09985d2e3b0865aa05fe9"
+    },
+    {
+      "Path": "COT-Runtime/DynastyEnhancer/Tools/history_milestones.mjs",
+      "Module": "BeyondTheField",
+      "Sha256": "c60a8c2ccfa313665a8f70aeb6ca2777a6484679f2b39ca30654b7c8ca8c688d"
+    },
+    {
+      "Path": "COT-Runtime/DynastyEnhancer/Tools/history_store.mjs",
+      "Module": "BeyondTheField",
+      "Sha256": "990a52941bfa8dbeeab7c45d7a67419ce6e1dba9f82aacdb340eeaaec7ab353d"
+    },
+    {
+      "Path": "COT-Runtime/DynastyEnhancer/Tools/injury_timetables.mjs",
+      "Module": "BeyondTheField",
+      "Sha256": "04252c6de2b7e675bbf1ade6990a380b46a20c69c74cd0d7556ccf5b0ce99d66"
+    },
+    {
+      "Path": "COT-Runtime/DynastyEnhancer/Tools/inspect_runtime.mjs",
+      "Module": "BeyondTheField",
+      "Sha256": "1e1454ac25f6a8840d3051a39cd018bcf1de9c257827113d239d3a3110207910"
+    },
+    {
+      "Path": "COT-Runtime/DynastyEnhancer/Tools/late_season_events.mjs",
+      "Module": "BeyondTheField",
+      "Sha256": "09815958e128051eefd87a1591adef291a2d8c09d88b0019b07d2ef5b43c91cb"
+    },
+    {
+      "Path": "COT-Runtime/DynastyEnhancer/Tools/league_identity.mjs",
+      "Module": "BeyondTheField",
+      "Sha256": "37f096f784409e28f05da33bd0654f0123e9a7b8b96d5cdf81f00b80ac942bc1"
+    },
+    {
+      "Path": "COT-Runtime/DynastyEnhancer/Tools/matchup_events.mjs",
+      "Module": "BeyondTheField",
+      "Sha256": "9911e95e5a246c8bab8996c589c49f1e6db2697064cc5d9a88651887a21cee4f"
+    },
+    {
+      "Path": "COT-Runtime/DynastyEnhancer/Tools/merge_runtime_history.mjs",
+      "Module": "BeyondTheField",
+      "Sha256": "a651a3871b3dc8e852dfca22b1070a54b1a34f032be30cd8f3c3e82140b33942"
+    },
+    {
+      "Path": "COT-Runtime/DynastyEnhancer/Tools/national_editorial.mjs",
+      "Module": "BeyondTheField",
+      "Sha256": "17250bba392d6362e10fa8dc7fd11a0a7e2faab7b91ae26686a8c5bb2824e7e3"
+    },
+    {
+      "Path": "COT-Runtime/DynastyEnhancer/Tools/news_cycles.mjs",
+      "Module": "BeyondTheField",
+      "Sha256": "0b8f963936eb1fa195653c0e85eede7b6ff70b62b28c4413b81631f9ece95a03"
+    },
+    {
+      "Path": "COT-Runtime/DynastyEnhancer/Tools/normalize_dynasty.mjs",
+      "Module": "BeyondTheField",
+      "Sha256": "e4e3966ec84e99640f3c4007629ad09e2d5263e569aaa02105676656f0e47781"
+    },
+    {
+      "Path": "COT-Runtime/DynastyEnhancer/Tools/offseason_carry_events.mjs",
+      "Module": "BeyondTheField",
+      "Sha256": "574cff9a547414d582b2eef90ea3592cac12da5b30f4200f6dfc40f4e1755b5e"
+    },
+    {
+      "Path": "COT-Runtime/DynastyEnhancer/Tools/offseason_ledger.mjs",
+      "Module": "BeyondTheField",
+      "Sha256": "486aba19685565f2d591c8d9076f617e8be4337721950f0719a54e21e229eb88"
+    },
+    {
+      "Path": "COT-Runtime/DynastyEnhancer/Tools/offseason_ledger_store.mjs",
+      "Module": "BeyondTheField",
+      "Sha256": "02af9bb0014333c137ceb4a672fbf048c2add1cb903434c06dd6ea916918cbba"
+    },
+    {
+      "Path": "COT-Runtime/DynastyEnhancer/Tools/offseason_recruiting.mjs",
+      "Module": "BeyondTheField",
+      "Sha256": "e8db68ebe8991500ac3db66666a4d4c41dcc6d14573d5da0a096055f572f8089"
+    },
+    {
+      "Path": "COT-Runtime/DynastyEnhancer/Tools/player_references.mjs",
+      "Module": "BeyondTheField",
+      "Sha256": "db05bd5ff3a042a48ea37b3697f2d604aafb114b3e98b19248dae0dfab70c564"
+    },
+    {
+      "Path": "COT-Runtime/DynastyEnhancer/Tools/players_leaving_events.mjs",
+      "Module": "BeyondTheField",
+      "Sha256": "a75dd8c953e31f57b486bb832e83685d643136e84f51d12f4b90e6d701301edf"
+    },
+    {
+      "Path": "COT-Runtime/DynastyEnhancer/Tools/playoff_events.mjs",
+      "Module": "BeyondTheField",
+      "Sha256": "f4d8658438c558253ab1a67724501b5b6119701bba461455e65cca134b17301b"
+    },
+    {
+      "Path": "COT-Runtime/DynastyEnhancer/Tools/postseason_buzz.mjs",
+      "Module": "BeyondTheField",
+      "Sha256": "901c45f7980303b3c9fc3fc4518483482c73457b8af7ab4160f5b9e1189b4033"
+    },
+    {
+      "Path": "COT-Runtime/DynastyEnhancer/Tools/postseason_events.mjs",
+      "Module": "BeyondTheField",
+      "Sha256": "1b563999951392a5b9c728636cf56ebd8bdae744ba3f8f9ad05702964143b7b3"
+    },
+    {
+      "Path": "COT-Runtime/DynastyEnhancer/Tools/postseason_timing.mjs",
+      "Module": "BeyondTheField",
+      "Sha256": "335f225cf0cc2e76006944dc908b128dff1986aa17ec179c59e6aae268236658"
+    },
+    {
+      "Path": "COT-Runtime/DynastyEnhancer/Tools/preseason_events.mjs",
+      "Module": "BeyondTheField",
+      "Sha256": "592a4a92f1b42f1e27245f934176cc92cc60a14ebe67af55f3097b554e81b6df"
+    },
+    {
+      "Path": "COT-Runtime/DynastyEnhancer/Tools/prose_cleanup.mjs",
+      "Module": "BeyondTheField",
+      "Sha256": "eb68633bdfb651c5bf32a85c1d8a21fc4bfd8f817902b9fb9af03c4b2f34cabb"
+    },
+    {
+      "Path": "COT-Runtime/DynastyEnhancer/Tools/public_polls.mjs",
+      "Module": "BeyondTheField",
+      "Sha256": "8fe2715349ce7f36f71117277473b9a2e3787fa3a6a22ea779c6ceaf3122397e"
+    },
+    {
+      "Path": "COT-Runtime/DynastyEnhancer/Tools/publication_policy.mjs",
+      "Module": "BeyondTheField",
+      "Sha256": "8647238c9dee5ee7ae5ed89d3fcc1880a89cd15a63861f62e23726af0e930e8e"
+    },
+    {
+      "Path": "COT-Runtime/DynastyEnhancer/Tools/publication_timeline.mjs",
+      "Module": "BeyondTheField",
+      "Sha256": "c332029bfd688311d25c479367c732ddf711ab6a768300f0eb5edb132a0f85bd"
+    },
+    {
+      "Path": "COT-Runtime/DynastyEnhancer/Tools/read_dynasty.mjs",
+      "Module": "BeyondTheField",
+      "Sha256": "1280a4e92b2f48a2ca474e8762c4035b9db29df6a1bab0791f199004cfb9feff"
+    },
+    {
+      "Path": "COT-Runtime/DynastyEnhancer/Tools/read_runtime.mjs",
+      "Module": "BeyondTheField",
+      "Sha256": "3fc3a3fe86915e8563fdf7f58ade81665461c67b26dbf1ffc92ef5ad91afaebb"
+    },
+    {
+      "Path": "COT-Runtime/DynastyEnhancer/Tools/recover_weeks.mjs",
+      "Module": "BeyondTheField",
+      "Sha256": "d9337b88001eea82e813a879945913933179ab2dd2776a049407e4320b94e530"
+    },
+    {
+      "Path": "COT-Runtime/DynastyEnhancer/Tools/recruit_account_name.mjs",
+      "Module": "BeyondTheField",
+      "Sha256": "eebdca760af0e2aa827db657015acdcacc0750c97823154a5770a9b676cd1da9"
+    },
+    {
+      "Path": "COT-Runtime/DynastyEnhancer/Tools/recruit_context.mjs",
+      "Module": "BeyondTheField",
+      "Sha256": "84f5f21206ffa98787454f50185db601f359f0cafbcdf06644a5d3f68b042a7a"
+    },
+    {
+      "Path": "COT-Runtime/DynastyEnhancer/Tools/recruit_game_records.mjs",
+      "Module": "BeyondTheField",
+      "Sha256": "3d80f32854b5630b9925262d22d5b65fd730e4be419f123da1b751674c662cd1"
+    },
+    {
+      "Path": "COT-Runtime/DynastyEnhancer/Tools/recruit_ranks.mjs",
+      "Module": "BeyondTheField",
+      "Sha256": "5736aa2fdfda1c892fecc2e2675153baf0aab24c2cfb755d5db283c1ad16330a"
+    },
+    {
+      "Path": "COT-Runtime/DynastyEnhancer/Tools/recruit_resume_data.mjs",
+      "Module": "BeyondTheField",
+      "Sha256": "176d60692b78efdabf2a3b7400a3cf97d468cf1a3b1e765bab24dd9b3c4ea15f"
+    },
+    {
+      "Path": "COT-Runtime/DynastyEnhancer/Tools/render_voice_review.mjs",
+      "Module": "BeyondTheField",
+      "Sha256": "20c8ebe9601e60effb16606f7d04324bc45905e3d2b1920518bbcc09a47911f0"
+    },
+    {
+      "Path": "COT-Runtime/DynastyEnhancer/Tools/repair_recruiting_archive.mjs",
+      "Module": "BeyondTheField",
+      "Sha256": "f2426ff4fc341a14ee5134dc44e52fd962a0c20d4e7327ebc9641ae4bf4570b1"
+    },
+    {
+      "Path": "COT-Runtime/DynastyEnhancer/Tools/resume_runtime.mjs",
+      "Module": "BeyondTheField",
+      "Sha256": "c1e4f4e3385a67bfacec5495b3ae652c0121975e3918959eda38cbb0a1c6d79a"
+    },
+    {
+      "Path": "COT-Runtime/DynastyEnhancer/Tools/review_completed_corpus.mjs",
+      "Module": "BeyondTheField",
+      "Sha256": "33b107376df758841a26d2a5dd4c137092f82c8da37338985aab28a30579aa18"
+    },
+    {
+      "Path": "COT-Runtime/DynastyEnhancer/Tools/review_recruit_resumes.mjs",
+      "Module": "BeyondTheField",
+      "Sha256": "3cc5767f78a6ffa15038b18b459b3576bbff36882e627cb511a8569790629d22"
+    },
+    {
+      "Path": "COT-Runtime/DynastyEnhancer/Tools/runtime_archive.mjs",
+      "Module": "BeyondTheField",
+      "Sha256": "b3ff534903ce9459acae1d520612dcdc78d708703b3b1014d35be98105102c36"
+    },
+    {
+      "Path": "COT-Runtime/DynastyEnhancer/Tools/runtime_lifecycle.mjs",
+      "Module": "BeyondTheField",
+      "Sha256": "6e3d945653ad4df7a8e9494839a4e39275c23f3f3ff37e429a70de56d22d55dc"
+    },
+    {
+      "Path": "COT-Runtime/DynastyEnhancer/Tools/season_context.mjs",
+      "Module": "BeyondTheField",
+      "Sha256": "29c3f710b3b1d267fe18745b952ff92b7ae0c785a4c6db5adab6e58b835b97cf"
+    },
+    {
+      "Path": "COT-Runtime/DynastyEnhancer/Tools/season_ending_events.mjs",
+      "Module": "BeyondTheField",
+      "Sha256": "68faeb9efa4ff2c54a2e7edf70faa23ffae381f4adb07784709cfb7320695967"
+    },
+    {
+      "Path": "COT-Runtime/DynastyEnhancer/Tools/season_launch_events.mjs",
+      "Module": "BeyondTheField",
+      "Sha256": "46d77ebb748cfd1074660a982376ab1173a1bd637cc84435512c9513573c4105"
+    },
+    {
+      "Path": "COT-Runtime/DynastyEnhancer/Tools/season_review_events.mjs",
+      "Module": "BeyondTheField",
+      "Sha256": "119a015934468342c1f7159287b1e9b91835347365a524005a21720882a7d6af"
+    },
+    {
+      "Path": "COT-Runtime/DynastyEnhancer/Tools/season_storylines.mjs",
+      "Module": "BeyondTheField",
+      "Sha256": "6a846b7b4d0162aa4db8c109578f15031ab68aec426cfebcdfe6608121fe6a06"
+    },
+    {
+      "Path": "COT-Runtime/DynastyEnhancer/Tools/social_discovery.mjs",
+      "Module": "BeyondTheField",
+      "Sha256": "e142691c1b258304522f04d6e6821e3ce0db71a8a527f99f335a4781db85268d"
+    },
+    {
+      "Path": "COT-Runtime/DynastyEnhancer/Tools/story_authors.mjs",
+      "Module": "BeyondTheField",
+      "Sha256": "92db54b63dbd5c232ab978fd8643a312f5b30dad416544dbba2d59950fafdf7e"
+    },
+    {
+      "Path": "COT-Runtime/DynastyEnhancer/Tools/story_avatars.mjs",
+      "Module": "BeyondTheField",
+      "Sha256": "d98cecd63cc1436f098299f536002345bfacdf32b53111967f563601c689ef61"
+    },
+    {
+      "Path": "COT-Runtime/DynastyEnhancer/Tools/story_conversations.mjs",
+      "Module": "BeyondTheField",
+      "Sha256": "5aaa229a61273d7b574df53c55a431627faf2ba49d61a7a2437b618f30fdd28c"
+    },
+    {
+      "Path": "COT-Runtime/DynastyEnhancer/Tools/story_engagement.mjs",
+      "Module": "BeyondTheField",
+      "Sha256": "50528c857444900b539d6548e1d8c85d399b3fadbddf3e1e22171583bd64ddb9"
+    },
+    {
+      "Path": "COT-Runtime/DynastyEnhancer/Tools/story_events.mjs",
+      "Module": "BeyondTheField",
+      "Sha256": "3f7c022f465c5fb5abf7ef12d45d2ec9b0769a45fb34c5067f5dc3f5cd62a7cd"
+    },
+    {
+      "Path": "COT-Runtime/DynastyEnhancer/Tools/story_renderer.mjs",
+      "Module": "BeyondTheField",
+      "Sha256": "a2154a0b11e2082b487e794934adbdd45c0a0cdf2296f799b908aadb16634e55"
+    },
+    {
+      "Path": "COT-Runtime/DynastyEnhancer/Tools/story_templates.mjs",
+      "Module": "BeyondTheField",
+      "Sha256": "36be2489e700c3d3bfbf9397219fdf86715ca229f83b41ab1a983f94b7c9cc71"
+    },
+    {
+      "Path": "COT-Runtime/DynastyEnhancer/Tools/story_variety.mjs",
+      "Module": "BeyondTheField",
+      "Sha256": "2d516bf5085eb5c90ef6b3f91b363b9c65097d2bd4e51a8216307dcde809bf79"
+    },
+    {
+      "Path": "COT-Runtime/DynastyEnhancer/Tools/team_analytics.mjs",
+      "Module": "BeyondTheField",
+      "Sha256": "d16fd2a9599acbd551134a3953f1ff1650972dd56c94cb32bcfcfac6bb43168f"
+    },
+    {
+      "Path": "COT-Runtime/DynastyEnhancer/Tools/team_record.mjs",
+      "Module": "BeyondTheField",
+      "Sha256": "3a499485859a2dd33dacee4b1cd22d3805b4ea2feab07f2af678debc6557c948"
+    },
+    {
+      "Path": "COT-Runtime/DynastyEnhancer/Tools/training_profile.mjs",
+      "Module": "BeyondTheField",
+      "Sha256": "5497572d081312e474ba33fb2d9a5f4a8cc1a597f770d81c0e40d35c8af4839b"
+    },
+    {
+      "Path": "COT-Runtime/DynastyEnhancer/Tools/transaction_events.mjs",
+      "Module": "BeyondTheField",
+      "Sha256": "d448f862720ac10d64a5c9946296bcf7ba474e066cec4cd587dde44b069712d1"
+    },
+    {
+      "Path": "COT-Runtime/DynastyEnhancer/Tools/verify_rollover.mjs",
+      "Module": "BeyondTheField",
+      "Sha256": "4cd3432d7f6c86872d64a5d796e9040e9de3014c08c274034ece7b46819ffe4a"
+    },
+    {
+      "Path": "COT-Runtime/DynastyEnhancer/Tools/voice_style.mjs",
+      "Module": "BeyondTheField",
+      "Sha256": "0cc737ce8b16fe9f1df9e483d4a840b4fba9e908c1249551871012c8f30645b8"
+    },
+    {
+      "Path": "COT-Runtime/DynastyEnhancer/Tools/weekly_budget.mjs",
+      "Module": "BeyondTheField",
+      "Sha256": "d6186722c428df9dd55244e1f2a33fbf5f201436ddaad80c7e47c6d078c335ab"
+    },
+    {
+      "Path": "COT-Runtime/DynastyEnhancer/Tools/weekly_coverage.mjs",
+      "Module": "BeyondTheField",
+      "Sha256": "170b57c429c0c85eb63a25fa017577da6bb2a74f310b3a19bb27a1b28af5c212"
+    },
+    {
+      "Path": "COT-Runtime/DynastyEnhancer/Tools/world_events.mjs",
+      "Module": "BeyondTheField",
+      "Sha256": "cec5aa2c4d7b441431320789d626d1d6941209a85f91437bfcc5c2306c715784"
+    },
+    {
+      "Path": "COT-Runtime/Shared/node.exe",
+      "Module": "BeyondTheField",
+      "Sha256": "9a4eb5f1c29c6a2e93852ead46b999e284a6a5ca8bab4d4e241d587d025a52de"
+    },
+    {
+      "Path": "COT-Runtime/DynastyEnhancer/BeyondTheFieldNative-v103.dll",
+      "Module": "BeyondTheField",
+      "Sha256": "2937d7e379f490ece1064eb7fa3e9af14d730bea2480c8405c75ffb86bad7883"
+    },
+    {
+      "Path": "COT-Runtime/DynastyEnhancer/BeyondTheFieldRecruitFog-v1.dll",
+      "Module": "BeyondTheField",
+      "Sha256": "938c564eec950197b914b71a488ee6cb3a27c7afa9c955b7ebdbd444d619d621"
+    },
+    {
+      "Path": "COT-Runtime/DynastyEnhancer/Content/Runtime/national-account-avatars.json",
+      "Module": "BeyondTheField",
+      "Sha256": "094e2cbc3e147be44f01bd9fc86ed17ad013d81f0522c933c8f07e1573334c8e"
+    },
+    {
+      "Path": "COT-Runtime/DynastyEnhancer/Content/Runtime/pff-pack.json",
+      "Module": "BeyondTheField",
+      "Sha256": "654402a6a23bd10c84080153c0f7e84667be5365153c4485eea996691db982b4"
+    },
+    {
+      "Path": "COT-Runtime/DynastyEnhancer/Tools/feed_engine.mjs",
+      "Module": "BeyondTheField",
+      "Sha256": "bee28c18a12c04d48ae4922016b462b9fc5f67bb130430b66742ff14ec0adce1"
+    },
+    {
+      "Path": "COT-Runtime/DynastyEnhancer/Tools/pff_events.mjs",
+      "Module": "BeyondTheField",
+      "Sha256": "5a3f3e2af059d3fd85e568d0ee46d124ceaf9b4a2bfe0c8ec550c0c92ec833c1"
+    },
+    {
+      "Path": "COT-Runtime/DynastyEnhancer/Tools/pff_rankings.mjs",
+      "Module": "BeyondTheField",
+      "Sha256": "5b21ff1668f20340acd893e30504ea3b36857d8355b8304992fe9b051947b27f"
+    },
+    {
+      "Path": "COT-Runtime/DynastyEnhancer/Tools/runtime_lifecycle.mjs",
+      "Module": "BeyondTheField",
+      "Sha256": "6eebef8b1b2367bc9d53745eb0aa22d404035a30afb3b87ebd8951e5a6dd4dcc"
+    },
+    {
+      "Path": "COT-Runtime/DynastyEnhancer/Tools/story_authors.mjs",
+      "Module": "BeyondTheField",
+      "Sha256": "487d4092b9bc47dc3f59c3532d014fbc58b8eda6bf85df0d851b2a7741feb4ae"
+    },
+    {
+      "Path": "COT-Runtime/DynastyEnhancer/Tools/story_events.mjs",
+      "Module": "BeyondTheField",
+      "Sha256": "5550802440802513c9127471b522320d0be3435054a235db19f2cc12cbec2a6f"
+    },
+    {
+      "Path": "COT-Runtime/DynastyEnhancer/Tools/story_templates.mjs",
+      "Module": "BeyondTheField",
+      "Sha256": "dee18ebfa9547640d81e55455336d9eed4952f0a1d0a0e67c9aef758edb31d3d"
+    },
+    {
+      "Path": "COT-Runtime/DynastyEnhancer/BeyondTheFieldNative-v103.dll",
+      "Module": "BeyondTheField",
+      "Sha256": "4d834634387febc4ade469c003f060d961108929b0d352dd6d4f56d574f41a2d"
+    },
+    {
+      "Path": "COT-Runtime/DynastyEnhancer/BeyondTheFieldRecruitFog-v1.dll",
+      "Module": "BeyondTheField",
+      "Sha256": "fe23087240fea47d07eec8e965c199a89cf769e4c7d50103d58ba1885c756637"
+    },
+    {
+      "Path": "COT-Runtime/DynastyEnhancer/BeyondTheFieldNative-v103.dll",
+      "Module": "BeyondTheField",
+      "Sha256": "273e212004d3711370f0032427fc56531f4702094dcdb335f5b8bea0d10e024d"
+    },
+    {
+      "Path": "COT-Runtime/DynastyEnhancer/BeyondTheFieldRecruitFog-v1.dll",
+      "Module": "BeyondTheField",
+      "Sha256": "bf48ba8a9b90c08aba3505df8423480c0a2c199de36773f83ea894258fcc52b6"
+    },
+    {
+      "Path": "COT-Runtime/DynastyEnhancer/BeyondTheFieldNative-v103.dll",
+      "Module": "BeyondTheField",
+      "Sha256": "c9cba6ba0c8e130a415f83260d99982786a905c2f62a1d97ee51b76d6231166b"
+    },
+    {
+      "Path": "COT-Runtime/DynastyEnhancer/BeyondTheFieldRecruitFog-v1.dll",
+      "Module": "BeyondTheField",
+      "Sha256": "38ad9bb21a31d1457c912d2f45031e3d12a9c5ec4cd376b23b020cc18fe8b7e8"
+    },
+    {
+      "Path": "COT-Runtime/DynastyEnhancer/BeyondTheFieldNative-v103.dll",
+      "Module": "BeyondTheField",
+      "Sha256": "cbea329673f43948ca334cff2d7315674e8c6958ea2d0fe40bbe68a6f1cd75a0"
+    },
+    {
+      "Path": "COT-Runtime/DynastyEnhancer/BeyondTheFieldRecruitFog-v1.dll",
+      "Module": "BeyondTheField",
+      "Sha256": "0e4606c7590e21890e2b44365f65be13eec8ad58a4d0d7d39897174026461406"
+    },
+    {
+      "Path": "Plugins/OfflineDynastySettings/ExtraSettings.Persistence.exe",
+      "Module": "ExtraSettings",
+      "Sha256": "487866904791fce302d069a52a42f36cbd87a43a63f14b5c846b65c3ee346afa"
+    },
+    {
+      "Path": "Plugins/SituationalPractice/ExpandedPractice.Runtime.exe",
+      "Module": "ExpandedPractice",
+      "Sha256": "8302c107effe759a28444890c2fafb9e847e7719f34c5d42842928fa71e7e0b1"
+    },
+    {
+      "Path": "COT-Runtime/DynastyEnhancer/DynastyEnhancerNative-v103.dll",
+      "Module": "BeyondTheField",
+      "Sha256": "98eb6be284633711dc1ad06a57d1e703f86ff7bc278cc86d5886db522199d07d"
+    },
+    {
+      "Path": "COT-Runtime/DynastyEnhancer/DynastyEnhancerRecruitFog-v1.dll",
+      "Module": "BeyondTheField",
+      "Sha256": "51df5783db8b83ea8a069720ba87c7f3af75eafc632a7161d8090c01209d733b"
+    },
+    {
+      "Path": "COT-Runtime/DynastyEnhancer/LoadDynastyEnhancer.exe",
+      "Module": "BeyondTheField",
+      "Sha256": "276ca4ba85d8d133ef6cabd50d8d2edb22f1571961d56bf1469ee011162a93ef"
+    },
+    {
+      "Path": "COT-Runtime/DynastyEnhancer/Tools/account_presentation.mjs",
+      "Module": "BeyondTheField",
+      "Sha256": "370510726783d2e9dacac19c8da9a9ab8f3c85be08a6890c4e2704dfe07920c0"
+    },
+    {
+      "Path": "COT-Runtime/DynastyEnhancer/Tools/betting_model.mjs",
+      "Module": "BeyondTheField",
+      "Sha256": "3543ba8867d71f930009e1bb75ff2c7f50d0df712c2d3865914f1ebd011998b1"
+    },
+    {
+      "Path": "COT-Runtime/DynastyEnhancer/Tools/conversation_topics.mjs",
+      "Module": "BeyondTheField",
+      "Sha256": "ac2740049cae20d098cdabe8e92e7623d573ada5898aad6646c908ad2d6674f8"
+    },
+    {
+      "Path": "COT-Runtime/DynastyEnhancer/Tools/draft_results.mjs",
+      "Module": "BeyondTheField",
+      "Sha256": "86197a1242c1788e3f2ee3139ab297086d0f6b188a1d461bd168ec316290f8f5"
+    },
+    {
+      "Path": "COT-Runtime/DynastyEnhancer/Tools/editorial_policy.mjs",
+      "Module": "BeyondTheField",
+      "Sha256": "f45361b855638d40b1b719073f866d05cf4fc144548bb02b690745474cf074c9"
+    },
+    {
+      "Path": "COT-Runtime/DynastyEnhancer/Tools/export_runtime.mjs",
+      "Module": "BeyondTheField",
+      "Sha256": "b8c43cb94453d02888857d8d2b1f8d91b93f18a7db348b296643fb32fd21b724"
+    },
+    {
+      "Path": "COT-Runtime/DynastyEnhancer/Tools/feed_engine.mjs",
+      "Module": "BeyondTheField",
+      "Sha256": "5379aea03de338dee3163f6784120dc0c43783a6a1e4deaf0be9bf40db6dcde1"
+    },
+    {
+      "Path": "COT-Runtime/DynastyEnhancer/Tools/feed_selection.mjs",
+      "Module": "BeyondTheField",
+      "Sha256": "80d885256c2e598c5a8f04ba3c478763378c4911c7c1bc293c1453fbaa717855"
+    },
+    {
+      "Path": "COT-Runtime/DynastyEnhancer/Tools/history_store.mjs",
+      "Module": "BeyondTheField",
+      "Sha256": "160eda6c8b6d74f7dabe53d39dc213584de25f74645b6b02478935b602354450"
+    },
+    {
+      "Path": "COT-Runtime/DynastyEnhancer/Tools/national_editorial.mjs",
+      "Module": "BeyondTheField",
+      "Sha256": "a162bf53c622a8a8f2cce507ef7811cdcfdf09652912679acc355093c558c4d3"
+    },
+    {
+      "Path": "COT-Runtime/DynastyEnhancer/Tools/news_cycles.mjs",
+      "Module": "BeyondTheField",
+      "Sha256": "bc8783aa4658eead9daf792f492a6a6f8c0b319de3c9d26b3fa402894f876f81"
+    },
+    {
+      "Path": "COT-Runtime/DynastyEnhancer/Tools/normalize_dynasty.mjs",
+      "Module": "BeyondTheField",
+      "Sha256": "ea1eb85655b009d1c84190e9f2d1be54d45383149d068e361eaff5e8adc5178f"
+    },
+    {
+      "Path": "COT-Runtime/DynastyEnhancer/Tools/prose_cleanup.mjs",
+      "Module": "BeyondTheField",
+      "Sha256": "d93fe9c1f84e1f783d852217bfab187c42835c1e3c0c5dee1be3a93d04aad103"
+    },
+    {
+      "Path": "COT-Runtime/DynastyEnhancer/Tools/read_runtime.mjs",
+      "Module": "BeyondTheField",
+      "Sha256": "37f5df479df9e156bdac00bc43a8edffa03795f303fd5cceb9504f46ae4f3a5c"
+    },
+    {
+      "Path": "COT-Runtime/DynastyEnhancer/Tools/runtime_archive.mjs",
+      "Module": "BeyondTheField",
+      "Sha256": "74285695693034ff36412999b4647af2c1b5c64b1d1379ecfd5fd65c4f0b32f6"
+    },
+    {
+      "Path": "COT-Runtime/DynastyEnhancer/Tools/runtime_lifecycle.mjs",
+      "Module": "BeyondTheField",
+      "Sha256": "e414a31facd6f072c4b8fbaafca9297646eaf46be3550ba9a669015e12384a17"
+    },
+    {
+      "Path": "COT-Runtime/DynastyEnhancer/Tools/social_discovery.mjs",
+      "Module": "BeyondTheField",
+      "Sha256": "a7fdf17d05af0a32e7d5d4159965a9236d028e02b4292b80046e7f2d4ba34fa2"
+    },
+    {
+      "Path": "COT-Runtime/DynastyEnhancer/Tools/story_authors.mjs",
+      "Module": "BeyondTheField",
+      "Sha256": "5da53553e48614ee83ed6c3bd851640f9fd434e86f112c34ad3c87ba5b41bc63"
+    },
+    {
+      "Path": "COT-Runtime/DynastyEnhancer/Tools/story_conversations.mjs",
+      "Module": "BeyondTheField",
+      "Sha256": "6238dfdf43b561c2e5cfa03c314024c661c2242c3e212a35b5042c03793baff8"
+    },
+    {
+      "Path": "COT-Runtime/DynastyEnhancer/Tools/story_engagement.mjs",
+      "Module": "BeyondTheField",
+      "Sha256": "1bef261c26763633ec215d8c4c509b6d4eab0b03a994f51b1b9ff05e87c5edc0"
+    },
+    {
+      "Path": "COT-Runtime/DynastyEnhancer/Tools/story_events.mjs",
+      "Module": "BeyondTheField",
+      "Sha256": "64aca8b09108c1e24775087fb0956bb339ab4999a2c2302109819f3191b100e9"
+    },
+    {
+      "Path": "COT-Runtime/DynastyEnhancer/Tools/story_renderer.mjs",
+      "Module": "BeyondTheField",
+      "Sha256": "c1a5598363f57f0a7563fda85b5ccc760e61b6b6deb3aacda8b0faebb6dc24b1"
+    },
+    {
+      "Path": "COT-Runtime/DynastyEnhancer/Tools/story_templates.mjs",
+      "Module": "BeyondTheField",
+      "Sha256": "bfcc67b58b6aee1176156ea6e2b00801c2878fe27dd89b6a918c5ce81f7b487c"
+    },
+    {
+      "Path": "COT-Runtime/DynastyEnhancer/Tools/voice_style.mjs",
+      "Module": "BeyondTheField",
+      "Sha256": "fe64af44201e9b076d852e42ad05912fa5898cafedf742d4c48dfe359edbfb62"
+    },
+    {
+      "Path": "COT-Runtime/DynastyEnhancer/Tools/weekly_coverage.mjs",
+      "Module": "BeyondTheField",
+      "Sha256": "3634a74686aedd6ac181f865ead1ec15b3cdbace930edabe1a017497217b48b9"
+    },
+    {
+      "Path": "COT-Runtime/DynastyEnhancer/Tools/world_events.mjs",
+      "Module": "BeyondTheField",
+      "Sha256": "2708c031fed13c5983c7b1e0cb1ada5ba7908be5eb4b32e2bf5dd46ca2982046"
+    },
+    {
+      "Path": "COT-Runtime/DynastyEnhancer/Content/Runtime/national-account-avatars.json",
+      "Module": "BeyondTheField",
+      "Sha256": "8a1b80a483616260ba63b47156882597f82701037a3fe3fae1d08af27625fb0a"
+    },
+    {
+      "Path": "Plugins/OfflineDynastySettings/OfflineDynastySettings.Persistence.exe",
+      "Module": "ExtraSettings",
+      "Sha256": "1bd1159b30ce45ae64276cf1dce90483421f48c95b614618bc068e67cb9d1235"
+    },
+    {
+      "Path": "Plugins/SituationalPractice/SituationalPractice.Runtime.exe",
+      "Module": "ExpandedPractice",
+      "Sha256": "34819b831804360cef64fbf0eb79905dfb97bb966d4320631e551e44b559ca4b"
+    },
+    {
+      "Path": "DGA-Runtime/Runtime-2.1.9/DynamicGamedayAtmosphereNative-2.1.9.dll",
+      "Module": "GamedayAtmosphere",
+      "Sha256": "547004f2c54152be1a59992c39eb1ee221cf63bc21d1a20465675199590cd6b1"
+    },
+    {
+      "Path": "DGA-Runtime/Runtime-2.1.9/DgaDiagnostics.exe",
+      "Module": "GamedayAtmosphere",
+      "Sha256": "85c7a912f3c2a5816e71f78c022fcff446048be19f5b8f30aa964933dddb372b"
+    },
+    {
+      "Path": "COT-Runtime/DynastyEnhancer/DynastyEnhancerNative-v103.dll",
+      "Module": "BeyondTheField",
+      "Sha256": "1a755afd44feadcfe171f38b7b3a1e4986325e883bac0e1beaa8d65344d1e6e8"
+    },
+    {
+      "Path": "COT-Runtime/DynastyEnhancer/DynastyEnhancerRecruitFog-v1.dll",
+      "Module": "BeyondTheField",
+      "Sha256": "49379c2d770aba335b4c29dfe0b02ab3b64b0ffbee38b85822de95b940d338a8"
+    },
+    {
+      "Path": "COT-Runtime/DynastyEnhancer/LoadDynastyEnhancer.exe",
+      "Module": "BeyondTheField",
+      "Sha256": "c8401c659cf4875e02f59d782a279da7202c86a7acbe3f23ec49c077231678b7"
+    },
+    {
+      "Path": "COT-Runtime/DynastyEnhancer/Tools/editorial_policy.mjs",
+      "Module": "BeyondTheField",
+      "Sha256": "61826314b0ed1f028879b2ab3e7f39be904fc184bb70773945ac4b9421807fe7"
+    },
+    {
+      "Path": "COT-Runtime/DynastyEnhancer/Tools/feed_engine.mjs",
+      "Module": "BeyondTheField",
+      "Sha256": "dc21bb97ce4789606ee29e529ba6b9985989c91636180ed4404431fab712a791"
+    },
+    {
+      "Path": "COT-Runtime/DynastyEnhancer/Tools/feed_selection.mjs",
+      "Module": "BeyondTheField",
+      "Sha256": "61d47f51fc160e05ba19d6eef892147045a06035a3824c2ff6cdf515bab4d84c"
+    },
+    {
+      "Path": "COT-Runtime/DynastyEnhancer/Tools/national_editorial.mjs",
+      "Module": "BeyondTheField",
+      "Sha256": "b38f9f03a4e416d05b4068a85d5c4147e475c748ff6768eeffbef5ad89cc10a7"
+    },
+    {
+      "Path": "COT-Runtime/DynastyEnhancer/Tools/normalize_dynasty.mjs",
+      "Module": "BeyondTheField",
+      "Sha256": "92f116f0c0e931fa8081393042746dfbaf4b62bc5ee755f3a6d42cc7c01a9d0d"
+    },
+    {
+      "Path": "COT-Runtime/DynastyEnhancer/Tools/runtime_lifecycle.mjs",
+      "Module": "BeyondTheField",
+      "Sha256": "335809238e69348a113c0ab0c3aa8ba44ab5124421f2f08e6a25f1f9ca562202"
+    },
+    {
+      "Path": "COT-Runtime/DynastyEnhancer/Tools/story_authors.mjs",
+      "Module": "BeyondTheField",
+      "Sha256": "702c22c6e603331c6f50845ee90a205a587ee2f2cd8e322ace580ea013e4b607"
+    },
+    {
+      "Path": "COT-Runtime/DynastyEnhancer/Tools/story_conversations.mjs",
+      "Module": "BeyondTheField",
+      "Sha256": "522a3a7f8a7a375678ceed62e250590384e0f0230bc875e8d02655eb3e4611a4"
+    },
+    {
+      "Path": "COT-Runtime/DynastyEnhancer/Tools/story_events.mjs",
+      "Module": "BeyondTheField",
+      "Sha256": "0e60f033c481ec09221824324d5c634a0a9b0d65a4bcb3fd1d07051979a85404"
+    },
+    {
+      "Path": "COT-Runtime/DynastyEnhancer/Tools/story_renderer.mjs",
+      "Module": "BeyondTheField",
+      "Sha256": "1277c32b5b68dff6fa099fd4c7e51bddd7b884d32bce6abd067923e7be0c811c"
+    },
+    {
+      "Path": "COT-Runtime/DynastyEnhancer/Tools/story_templates.mjs",
+      "Module": "BeyondTheField",
+      "Sha256": "a4d230aae1e5c0cac8099bdcc0288c3cfbe055f078b64487de06c69dc901d24e"
+    },
+    {
+      "Path": "COT-Runtime/DynastyEnhancer/Tools/story_variety.mjs",
+      "Module": "BeyondTheField",
+      "Sha256": "86b17c7fff2639942b831dbe0a9aaf8585a9b5e675f688344d3d17e69c9fcd3b"
+    },
+    {
+      "Path": "COT-Runtime/DynastyEnhancer/Tools/voice_style.mjs",
+      "Module": "BeyondTheField",
+      "Sha256": "ccd375ea1171ba5249085cecb28be842d1feb0c2f43d4fc2b4861b8dc743aeb3"
+    },
+    {
+      "Path": "COT-Runtime/DynastyEnhancer/Tools/weekly_budget.mjs",
+      "Module": "BeyondTheField",
+      "Sha256": "3508b46a6a4db36d01a7cdc9ce8e37fb87191582a4ef70d86ae90ae8aa6db6a7"
+    },
+    {
+      "Path": "Plugins/OfflineDynastySettings/OfflineDynastySettings.Persistence.exe",
+      "Module": "ExtraSettings",
+      "Sha256": "f5552283f0818c554625a435a67993cc8d99907149c3091192e41c70efc2efa1"
+    },
+    {
+      "Path": "Plugins/SituationalPractice/SituationalPractice.Runtime.exe",
+      "Module": "ExpandedPractice",
+      "Sha256": "734a8b32d2ab09fa9ca94abd29ec7541e525cf82c382bf2841572faa4d292b26"
+    },
+    {
+      "Path": "DGA-Runtime/Runtime-2.1.9/DynamicGamedayAtmosphereNative-2.1.9.dll",
+      "Module": "GamedayAtmosphere",
+      "Sha256": "6b9d9509423065cba1a4ded673b6a69f9400bb482ed9c0d95a77a1922b7721f4"
+    },
+    {
+      "Path": "DGA-Runtime/Runtime-2.1.9/DgaDiagnostics.exe",
+      "Module": "GamedayAtmosphere",
+      "Sha256": "377bed3f1111bff74bbf55d44921b05da9a6f77952b069131a9c8ff1f8fe4f47"
+    },
+    {
+      "Path": "COT-Runtime/DynastyEnhancer/DynastyEnhancerNative-v103.dll",
+      "Module": "BeyondTheField",
+      "Sha256": "b791b4aeceb477f965c3c112520912ed5be4e830a7cdfa635561b37b60cd9766"
+    },
+    {
+      "Path": "COT-Runtime/DynastyEnhancer/DynastyEnhancerRecruitFog-v1.dll",
+      "Module": "BeyondTheField",
+      "Sha256": "accc75d41e0ceb45940c86e8b3ec3f53e0693d937a90c27f564952de0325d4d3"
+    },
+    {
+      "Path": "COT-Runtime/DynastyEnhancer/LoadDynastyEnhancer.exe",
+      "Module": "BeyondTheField",
+      "Sha256": "d1f2c727a1f6eb3370e20d96cf9af207784a7244b3ff6a4361a629cb1014bb7a"
+    },
+    {
+      "Path": "COT-Runtime/DynastyEnhancer/Tools/feed_visibility.mjs",
+      "Module": "BeyondTheField",
+      "Sha256": "3742e3fb5d1508c865a36b7c70f486bac578219beab2e71c2de22bbc0a971233"
+    },
+    {
+      "Path": "COT-Runtime/DynastyEnhancer/Tools/story_renderer.mjs",
+      "Module": "BeyondTheField",
+      "Sha256": "2a43e76a56ff08c893e8e4e3c88fcec462248ddff25fc8395daf4bae7050559d"
+    },
+    {
+      "Path": "COT-Runtime/DynastyEnhancer/Tools/story_templates.mjs",
+      "Module": "BeyondTheField",
+      "Sha256": "709c19e4ccc468440b12cb17735330c90e43cad1d5bec7dcb04951bc7b8dad09"
+    },
+    {
+      "Path": "COT-Runtime/DynastyEnhancer/DynastyEnhancerNative-v103.dll",
+      "Module": "BeyondTheField",
+      "Sha256": "8c647e3cec4c580d4c89e3b8e34cca93ec30841c4b6f3e6bf1ea16178cb90891"
+    },
+    {
+      "Path": "COT-Runtime/DynastyEnhancer/DynastyEnhancerRecruitFog-v1.dll",
+      "Module": "BeyondTheField",
+      "Sha256": "f70c8c614c4628071b888371f98dc14626fda0c8eb6ca17fa9134d1cc4d077bb"
+    },
+    {
+      "Path": "COT-Runtime/DynastyEnhancer/LoadDynastyEnhancer.exe",
+      "Module": "BeyondTheField",
+      "Sha256": "4b11522407b0e16c52a801ce28a7d581091c1b10e6c32a2d0e124e69fbe48767"
+    },
+    {
+      "Path": "COT-Runtime/DynastyEnhancer/DynastyEnhancerNative-v103.dll",
+      "Module": "BeyondTheField",
+      "Sha256": "6936c3c9238b17afccce2a8d5ea50f315334b1c1fb77fac01c7047e27f23fc35"
+    },
+    {
+      "Path": "COT-Runtime/DynastyEnhancer/DynastyEnhancerRecruitFog-v1.dll",
+      "Module": "BeyondTheField",
+      "Sha256": "443cec3df4ed8de397cdfbc8056f50132edcaed8fb53950eded023321e7dbf78"
+    },
+    {
+      "Path": "COT-Runtime/DynastyEnhancer/LoadDynastyEnhancer.exe",
+      "Module": "BeyondTheField",
+      "Sha256": "ddf149b80cb7bf74b6a5951f645101ee3d1cc302fc9b2460a73a3bd0abbde22c"
+    },
+    {
+      "Path": "COT-Runtime/DynastyEnhancer/Tools/prose_cleanup.mjs",
+      "Module": "BeyondTheField",
+      "Sha256": "045d119ce725c59456878cddb627f13760b4dc10c5869391c45e88cfc7f8a969"
+    },
+    {
+      "Path": "COT-Runtime/DynastyEnhancer/Tools/story_renderer.mjs",
+      "Module": "BeyondTheField",
+      "Sha256": "5ecc101d508225c7b6f37bad70532980b21eb43b03d3c3fdcbcd3f54c0b7e994"
+    },
+    {
+      "Path": "COT-Runtime/DynastyEnhancer/Tools/story_templates.mjs",
+      "Module": "BeyondTheField",
+      "Sha256": "f5b60346b5193d94bd2a49279b8bdc74736293464ec262c17b2fdba8f346d86f"
+    },
+    {
+      "Path": "DGA-Runtime/Runtime-2.1.9/DynamicGamedayAtmosphereNative-2.1.9.dll",
+      "Module": "GamedayAtmosphere",
+      "Sha256": "e44abda8ca1216892c0eb50a1d2e27e0ca30e3760de681cbf39fb228f4497ad1"
+    },
+    {
+      "Path": "DGA-Runtime/Runtime-2.1.9/DgaDiagnostics.exe",
+      "Module": "GamedayAtmosphere",
+      "Sha256": "da4ed79cefe43e72eadc3590eb117f34b00165148f97a8cae305a74ba1ebaece"
+    },
+    {
+      "Path": "COT-Runtime/DynastyEnhancer/DynastyEnhancerNative-v103.dll",
+      "Module": "BeyondTheField",
+      "Sha256": "a3a9f65956487813c09bb81fa74d8a81d39a2a375a0e61082a90080a2c05e06e"
+    },
+    {
+      "Path": "COT-Runtime/DynastyEnhancer/DynastyEnhancerRecruitFog-v1.dll",
+      "Module": "BeyondTheField",
+      "Sha256": "bb653c1443fb4b3cd810126ccd2bc0a14cecf20c403235aeab6acf47311c441c"
+    },
+    {
+      "Path": "COT-Runtime/DynastyEnhancer/LoadDynastyEnhancer.exe",
+      "Module": "BeyondTheField",
+      "Sha256": "5ae7cd180520636b3888e130729ae328edae5c2d28f0fc1c05e7c8f9dff3d640"
+    },
+    {
+      "Path": "COT-Runtime/DynastyEnhancer/Tools/editorial_policy.mjs",
+      "Module": "BeyondTheField",
+      "Sha256": "ee15729162377a7acbb588f4f05c84cad8235d1a058ba7c65c16bd63816bd363"
+    },
+    {
+      "Path": "COT-Runtime/DynastyEnhancer/Tools/pff_events.mjs",
+      "Module": "BeyondTheField",
+      "Sha256": "5a2441593dc7b11c6364e779c3ce206aa2e1394ddde23000e894fd8fb50aa472"
+    },
+    {
+      "Path": "COT-Runtime/DynastyEnhancer/Tools/read_runtime.mjs",
+      "Module": "BeyondTheField",
+      "Sha256": "c0695e64a6e56cb0d9d2c2437fb049a3727328f4683a3fa27341a26a2a9be548"
+    },
+    {
+      "Path": "COT-Runtime/DynastyEnhancer/Tools/story_authors.mjs",
+      "Module": "BeyondTheField",
+      "Sha256": "1ebf87256e480854f239e80a027b990e8aa0b3ccde810f893012649637e53ee6"
+    },
+    {
+      "Path": "COT-Runtime/DynastyEnhancer/Tools/story_templates.mjs",
+      "Module": "BeyondTheField",
+      "Sha256": "e2feae213d0785238abed2b0b6af1bd8e5f214284fae1f6fcc62a771281657f5"
+    },
+    {
+      "Path": "COT-Runtime/DynastyEnhancer/Content/Runtime/pff-pack.json",
+      "Module": "BeyondTheField",
+      "Sha256": "584f70e6e8a3c9e22a2dec9fdb2d917b212108e759db7d484f2f665df7001308"
+    },
+    {
+      "Path": "COT-Runtime/DynastyEnhancer/DynastyEnhancerNative-v103.dll",
+      "Module": "BeyondTheField",
+      "Sha256": "9d50e2eaf1fadc912d12de66061bdc0fee82a6ff3ead8353572341740cd42d06"
+    },
+    {
+      "Path": "COT-Runtime/DynastyEnhancer/DynastyEnhancerRecruitFog-v1.dll",
+      "Module": "BeyondTheField",
+      "Sha256": "ad36a38c649fed76e594df4765a1117d3e694eeee711fabac968859a18607ae5"
+    },
+    {
+      "Path": "COT-Runtime/DynastyEnhancer/LoadDynastyEnhancer.exe",
+      "Module": "BeyondTheField",
+      "Sha256": "c6c973886905250ebc6f3535ae2bf5b830ae88432ada079d09a02e16c1ed96df"
+    },
+    {
+      "Path": "COT-Runtime/DynastyEnhancer/Tools/normalize_dynasty.mjs",
+      "Module": "BeyondTheField",
+      "Sha256": "9ec7fdc6c50b64c5790da9509df205bea13e31cd797351360182766c5a21be69"
+    },
+    {
+      "Path": "COT-Runtime/DynastyEnhancer/Tools/pff_events.mjs",
+      "Module": "BeyondTheField",
+      "Sha256": "fb302054f3a61966c1f73726446a8a57d6901ce0a643d45196518ee5e7069c00"
+    },
+    {
+      "Path": "COT-Runtime/DynastyEnhancer/DynastyEnhancerNative-v103.dll",
+      "Module": "BeyondTheField",
+      "Sha256": "80fb332547116f90099f79d855b544f02256b0475b464df07236a17a7920ed24"
+    },
+    {
+      "Path": "COT-Runtime/DynastyEnhancer/DynastyEnhancerRecruitFog-v1.dll",
+      "Module": "BeyondTheField",
+      "Sha256": "52e4d40a85a76f2f35ff84ed00f1e73269fecb821d4fc9ff5aeec46e9ee18ab9"
+    },
+    {
+      "Path": "COT-Runtime/DynastyEnhancer/LoadDynastyEnhancer.exe",
+      "Module": "BeyondTheField",
+      "Sha256": "80263947679be242e6b78a7cd0f74513799c113808650e4ff9b1076208fb4dac"
+    },
+    {
+      "Path": "COT-Runtime/DynastyEnhancer/Tools/story_renderer.mjs",
+      "Module": "BeyondTheField",
+      "Sha256": "96e91e8138ee976f0d49dcf482244fb6ef4b81e4568c06d5e46801d83c8909ec"
+    },
+    {
+      "Path": "Plugins/OfflineDynastySettings/OfflineDynastySettings.Persistence.exe",
+      "Module": "ExtraSettings",
+      "Sha256": "763a448871c0a2083309e4bb10a1b680e9e14a17b31101faa31b04621b3a59d3"
+    },
+    {
+      "Path": "Plugins/SituationalPractice/SituationalPractice.Runtime.exe",
+      "Module": "ExpandedPractice",
+      "Sha256": "3d90dcd5abee6e2bc23ebeeb92ae720088f72fd9006aa9d971786f428d94646c"
+    },
+    {
+      "Path": "DGA-Runtime/Runtime-2.1.9/DynamicGamedayAtmosphereNative-2.1.9.dll",
+      "Module": "GamedayAtmosphere",
+      "Sha256": "b69fe791648c1ec8a8603560caacc1026ae84752b7b4d70b9af23b7d16571745"
+    },
+    {
+      "Path": "DGA-Runtime/Runtime-2.1.9/DgaDiagnostics.exe",
+      "Module": "GamedayAtmosphere",
+      "Sha256": "8cf05a084f23a51dc78baa034de2d630710c6e3591203ed82c3b4ffa8db51462"
+    },
+    {
+      "Path": "COT-Runtime/DynastyEnhancer/DynastyEnhancerNative-v103.dll",
+      "Module": "BeyondTheField",
+      "Sha256": "4e2b8ea7442e883fc979d6ccef2e64587fe625912206d2b6e415aefec5e85cca"
+    },
+    {
+      "Path": "COT-Runtime/DynastyEnhancer/DynastyEnhancerRecruitFog-v1.dll",
+      "Module": "BeyondTheField",
+      "Sha256": "84203dd8d04172f4faa54e32927dc17d8b2cc9261357bf61cdc0c62caca0692d"
+    },
+    {
+      "Path": "COT-Runtime/DynastyEnhancer/LoadDynastyEnhancer.exe",
+      "Module": "BeyondTheField",
+      "Sha256": "cadd9abe160cf02129a48acf16e9e456ae010b59af872febcd7a37cf09208307"
+    },
+    {
+      "Path": "COT-Runtime/DynastyEnhancer/DynastyEnhancerNative-v103.dll",
+      "Module": "BeyondTheField",
+      "Sha256": "2a9aec5415afb03fecdeedbfeca1a9b9a0a3651ed073c55bf0acfd66bcc8debd"
+    },
+    {
+      "Path": "COT-Runtime/DynastyEnhancer/DynastyEnhancerRecruitFog-v1.dll",
+      "Module": "BeyondTheField",
+      "Sha256": "1da28ee0a589c2243cb199bb4c52397d4e5497c300c8e48a499c7276dcae01a3"
+    },
+    {
+      "Path": "COT-Runtime/DynastyEnhancer/LoadDynastyEnhancer.exe",
+      "Module": "BeyondTheField",
+      "Sha256": "d4c4b5fea1de1017bb7b74c39f835238d18820e1e7cb2209f55084ce54292d03"
+    },
+    {
+      "Path": "Plugins/OfflineDynastySettings/OfflineDynastySettings.Persistence.exe",
+      "Module": "ExtraSettings",
+      "Sha256": "0dcfe1244950cb4c01d95b265c38ec79f0266131446e7eaf2e03b66b78a6281e"
+    },
+    {
+      "Path": "Plugins/SituationalPractice/SituationalPractice.Runtime.exe",
+      "Module": "ExpandedPractice",
+      "Sha256": "587df816b1140ba0b73ac5e58c1480e0a0d54d3a7a15a53c3b68a9f1b270f3dc"
+    },
+    {
+      "Path": "DGA-Runtime/Runtime-2.1.9/DynamicGamedayAtmosphereNative-2.1.9.dll",
+      "Module": "GamedayAtmosphere",
+      "Sha256": "64506cadfb7d39c87dcbef53f7cba7760077a3092d46ea898bb949bcc220ae46"
+    },
+    {
+      "Path": "DGA-Runtime/Runtime-2.1.9/DgaDiagnostics.exe",
+      "Module": "GamedayAtmosphere",
+      "Sha256": "d1051bb389ea329b92b3d079dd4e4557896ceeb4d9cd6a39a503e10d04a939eb"
+    },
+    {
+      "Path": "COT-Runtime/DynastyEnhancer/DynastyEnhancerNative-v103.dll",
+      "Module": "BeyondTheField",
+      "Sha256": "206f85681c89bd76f4bef3d15e0416eefcdda72973089756d68fd520da9d3ebb"
+    },
+    {
+      "Path": "COT-Runtime/DynastyEnhancer/DynastyEnhancerRecruitFog-v1.dll",
+      "Module": "BeyondTheField",
+      "Sha256": "4a3e5f07fb72a99ed57ff1a2458b1686054fb3cc4cf5d3b4f76af0e4e17d8589"
+    },
+    {
+      "Path": "COT-Runtime/DynastyEnhancer/LoadDynastyEnhancer.exe",
+      "Module": "BeyondTheField",
+      "Sha256": "a87cc1acb11f03ebb33b044ac29456bd52b73a79c46c356f7fa1850bcfb34f51"
+    },
+    {
+      "Path": "COT-Runtime/DynastyEnhancer/Tools/feed_engine.mjs",
+      "Module": "BeyondTheField",
+      "Sha256": "8ce097fe674c999a0cea1016bbd616ea52d08b07bd247082a25c53ff6f448ef8"
+    },
+    {
+      "Path": "COT-Runtime/DynastyEnhancer/Tools/story_authors.mjs",
+      "Module": "BeyondTheField",
+      "Sha256": "20706ba756bd05e61e18c2ab302cd0e183ddd15f439b87238118be7407502f3c"
+    },
+    {
+      "Path": "Plugins/OfflineDynastySettings/OfflineDynastySettings.Persistence.exe",
+      "Module": "ExtraSettings",
+      "Sha256": "d6eb4bc98237dfed89f24e74d4668ffa46ece9318f05052a8e532e09c6db4667"
+    },
+    {
+      "Path": "Plugins/SituationalPractice/SituationalPractice.Runtime.exe",
+      "Module": "ExpandedPractice",
+      "Sha256": "989b75ccd38067d26a767763ae7a8591da4429dee981684b0b38818bb6a5fad1"
+    },
+    {
+      "Path": "DGA-Runtime/Runtime-2.1.9/DynamicGamedayAtmosphereNative-2.1.9.dll",
+      "Module": "GamedayAtmosphere",
+      "Sha256": "738e4e0ed60364878a1800992fe89d61d9ef01efda6853ddf13dfe1bd2410fd8"
+    },
+    {
+      "Path": "DGA-Runtime/Runtime-2.1.9/DgaDiagnostics.exe",
+      "Module": "GamedayAtmosphere",
+      "Sha256": "9de3ffd04b8b7c8e5cd4d5ac93c0979139568f343189eabfcdcd88873f86e72d"
+    },
+    {
+      "Path": "COT-Runtime/DynastyEnhancer/DynastyEnhancerNative-v103.dll",
+      "Module": "BeyondTheField",
+      "Sha256": "b59ee88303d9acf4c44165ef1f62ef11d229ff1fbb4f0f3f957a0b90de6630fd"
+    },
+    {
+      "Path": "COT-Runtime/DynastyEnhancer/DynastyEnhancerRecruitFog-v1.dll",
+      "Module": "BeyondTheField",
+      "Sha256": "2d78b5822166e7fe634dc9d957c89a6045297ad5715b1fe68a495008788329dc"
+    },
+    {
+      "Path": "COT-Runtime/DynastyEnhancer/LoadDynastyEnhancer.exe",
+      "Module": "BeyondTheField",
+      "Sha256": "3f4d36713a3beefde0d1e3d3840e419729d8ad25845aeefb7c5221e811146593"
+    },
+    {
+      "Path": "COT-Runtime/DynastyEnhancer/DynastyEnhancerNative-v103.dll",
+      "Module": "BeyondTheField",
+      "Sha256": "6f15ab725bb241f6f19fb09fc8a3a04c02cb38cfac35e3e82caddf64e2e3eb4f"
+    },
+    {
+      "Path": "COT-Runtime/DynastyEnhancer/DynastyEnhancerRecruitFog-v1.dll",
+      "Module": "BeyondTheField",
+      "Sha256": "6007c31045cfe36e7d139443db38fd1cd75e0754fd6b10e4474df533c8a93b5e"
+    },
+    {
+      "Path": "COT-Runtime/DynastyEnhancer/LoadDynastyEnhancer.exe",
+      "Module": "BeyondTheField",
+      "Sha256": "a19276059fbe191da176ba1a8d5cb9bdca916805064e40580e83dcbe09c6c4a6"
+    },
+    {
+      "Path": "COT-Runtime/DynastyEnhancer/Tools/editorial_policy.mjs",
+      "Module": "BeyondTheField",
+      "Sha256": "341326626ec18c6293f931bbe3906951b6d82e3f48af4eb55e965e9ef9373421"
+    },
+    {
+      "Path": "COT-Runtime/DynastyEnhancer/Tools/feed_selection.mjs",
+      "Module": "BeyondTheField",
+      "Sha256": "7852b5a04cf211bb2a1fd3a7152ea49eb9a34dcfa2e1b76823e533ef511ec55e"
+    },
+    {
+      "Path": "COT-Runtime/DynastyEnhancer/Tools/story_conversations.mjs",
+      "Module": "BeyondTheField",
+      "Sha256": "225d31af2b52739feb19a255d199a1d72bf7d907960850fbb8a9978074628995"
+    },
+    {
+      "Path": "COT-Runtime/DynastyEnhancer/Tools/story_renderer.mjs",
+      "Module": "BeyondTheField",
+      "Sha256": "e0cc715db51d51bd1fce9971164eaa301d7fd29788c0485d413536cfb835006f"
+    },
+    {
+      "Path": "COT-Runtime/DynastyEnhancer/Tools/story_templates.mjs",
+      "Module": "BeyondTheField",
+      "Sha256": "4b7115d9be0e351a087b2e41768216a0b8ade983f77c4ac0d76bd54a05ef116c"
+    },
+    {
+      "Path": "COT-Runtime/DynastyEnhancer/Tools/story_variety.mjs",
+      "Module": "BeyondTheField",
+      "Sha256": "532e26ffa8923d7f3b2537541e50f0fe2b69cc76984319b51b7494912214bdba"
+    },
+    {
+      "Path": "COT-Runtime/DynastyEnhancer/Tools/weekly_coverage.mjs",
+      "Module": "BeyondTheField",
+      "Sha256": "160f2d4486243648551f70aaf54bfbb4321bebdbec7e874d4c3fa3432c061fa3"
+    },
+    {
+      "Path": "Plugins/OfflineDynastySettings/OfflineDynastySettings.Persistence.exe",
+      "Module": "ExtraSettings",
+      "Sha256": "77e638fb5d9fccdd75bdac6dcf67bc091c6b2a6ef7fb6bc3fec4d818eea765a0"
+    },
+    {
+      "Path": "Plugins/SituationalPractice/SituationalPractice.Runtime.exe",
+      "Module": "ExpandedPractice",
+      "Sha256": "7ecfe8f39413c6d8cbec37bdb19aedfcaf4509f5fb5e221236beffc50215c8b8"
+    },
+    {
+      "Path": "DGA-Runtime/Runtime-2.1.9/DynamicGamedayAtmosphereNative-2.1.9.dll",
+      "Module": "GamedayAtmosphere",
+      "Sha256": "3b24a923fbd3396999fb8534bb191356b49e4fe5b4bbfb2422d83814493ba226"
+    },
+    {
+      "Path": "DGA-Runtime/Runtime-2.1.9/DgaDiagnostics.exe",
+      "Module": "GamedayAtmosphere",
+      "Sha256": "100460388ed3d642c6a79f9eb8d743cb043cafd421eff3e08cf7aee3fddbc845"
+    },
+    {
+      "Path": "COT-Runtime/DynastyEnhancer/DynastyEnhancerNative-v103.dll",
+      "Module": "BeyondTheField",
+      "Sha256": "5deec2e2eb43d94cca1605dd8de73a7ed8584ffc8fc59fb55daa398dfdee95d5"
+    },
+    {
+      "Path": "COT-Runtime/DynastyEnhancer/DynastyEnhancerRecruitFog-v1.dll",
+      "Module": "BeyondTheField",
+      "Sha256": "7300f10d4a19239a2d1e39baada95e02d421368d44436d4ac3ca5ce22e3bbcd5"
+    },
+    {
+      "Path": "COT-Runtime/DynastyEnhancer/LoadDynastyEnhancer.exe",
+      "Module": "BeyondTheField",
+      "Sha256": "af6d137890cace391102ae4340d4dff924e7263451d0087675d83dd72916a206"
+    },
+    {
+      "Path": "Plugins/OfflineDynastySettings/OfflineDynastySettings.Persistence.exe",
+      "Module": "ExtraSettings",
+      "Sha256": "1fc3b622fd49d3e62fb87ca9314fda8d170c93f800fc1d54c5349de7aca4a6dd"
+    },
+    {
+      "Path": "Plugins/SituationalPractice/SituationalPractice.Runtime.exe",
+      "Module": "ExpandedPractice",
+      "Sha256": "26ec68bd138061c088bbc9ac151945d941bf79c428eaf5927a8b1f2a1691b9e4"
+    },
+    {
+      "Path": "DGA-Runtime/Runtime-2.1.9/DynamicGamedayAtmosphereNative-2.1.9.dll",
+      "Module": "GamedayAtmosphere",
+      "Sha256": "19f3243884d829ba6163e7fdfc40df8adcd53a4387c41f8fc75ca90b15877e91"
+    },
+    {
+      "Path": "DGA-Runtime/Runtime-2.1.9/DgaDiagnostics.exe",
+      "Module": "GamedayAtmosphere",
+      "Sha256": "37a43212b4fea58725a747cb2b72ed8d4e8a730b46db3dd20db6cf89963f44f3"
+    },
+    {
+      "Path": "COT-Runtime/DynastyEnhancer/DynastyEnhancerNative-v103.dll",
+      "Module": "BeyondTheField",
+      "Sha256": "706d8aec37b70e21376e66d8db760303f35300b9073369212c1992d8c6be6edb"
+    },
+    {
+      "Path": "COT-Runtime/DynastyEnhancer/DynastyEnhancerRecruitFog-v1.dll",
+      "Module": "BeyondTheField",
+      "Sha256": "cb89496cf7ff2049dd43c5098718c30ee307e56b02088d63d73357ee4159719f"
+    },
+    {
+      "Path": "COT-Runtime/DynastyEnhancer/LoadDynastyEnhancer.exe",
+      "Module": "BeyondTheField",
+      "Sha256": "39ab8e37112ad3150f1968b1648051a4911dd95d296909b938a623edc8d9d437"
+    },
+    {
+      "Path": "COT-Runtime/DynastyEnhancer/Tools/feed_selection.mjs",
+      "Module": "BeyondTheField",
+      "Sha256": "7b267f5a295281a0bdec019b37f52311a22bc4b04aae4303833fe572fe08f718"
+    },
+    {
+      "Path": "COT-Runtime/DynastyEnhancer/Tools/story_renderer.mjs",
+      "Module": "BeyondTheField",
+      "Sha256": "753985be536750dc8c8e6fe6a4c5027b0b189b10f8c9dc1f45e0052d51b4be2f"
+    },
+    {
+      "Path": "COT-Runtime/DynastyEnhancer/DynastyEnhancerNative-v103.dll",
+      "Module": "BeyondTheField",
+      "Sha256": "75cc29e3d32691c83f77bc84c445398bc1ff3f8f7ce35a71a013f7082340a09f"
+    },
+    {
+      "Path": "COT-Runtime/DynastyEnhancer/DynastyEnhancerRecruitFog-v1.dll",
+      "Module": "BeyondTheField",
+      "Sha256": "adf1f27d9006836b06fac761d071990ad2d8dd2bbd40d3db4153f4790443d549"
+    },
+    {
+      "Path": "COT-Runtime/DynastyEnhancer/LoadDynastyEnhancer.exe",
+      "Module": "BeyondTheField",
+      "Sha256": "0d2f9378146ff7d95ebb3172c251128f3d05e4e5c2777248040e3a1b3fa41845"
+    },
+    {
+      "Path": "COT-Runtime/DynastyEnhancer/Tools/feed_selection.mjs",
+      "Module": "BeyondTheField",
+      "Sha256": "365b03adb8ae54bd8e85f584429449e1f6ba4cf05f86ee97145b36021b509e98"
+    },
+    {
+      "Path": "COT-Runtime/DynastyEnhancer/DynastyEnhancerNative-v103.dll",
+      "Module": "BeyondTheField",
+      "Sha256": "1d6283ed2b05e9b60fd4fddb07d0538216efd55a01730bfb0d3881538a8b134a"
+    },
+    {
+      "Path": "COT-Runtime/DynastyEnhancer/DynastyEnhancerRecruitFog-v1.dll",
+      "Module": "BeyondTheField",
+      "Sha256": "385ec0ce3b33730c7fc77ce17cf215078e154c3c4c80f2381d76f2ba3d5ac68b"
+    },
+    {
+      "Path": "COT-Runtime/DynastyEnhancer/LoadDynastyEnhancer.exe",
+      "Module": "BeyondTheField",
+      "Sha256": "e26d325c8f22f6b06d1febd3d191ccd03e1ee59bf106419f3af33f265164bd17"
+    },
+    {
+      "Path": "COT-Runtime/DynastyEnhancer/BeyondTheFieldNative-v103.dll",
+      "Module": "BeyondTheField",
+      "Sha256": "7a5e75e31bc4216598ae85c2c4315b076e55ea134ed866bfc712e3a63e4425b2"
+    },
+    {
+      "Path": "DGA-Runtime/Runtime-2.1.9/GamedayAtmosphereNative-2.1.9.dll",
+      "Module": "GamedayAtmosphere",
+      "Sha256": "551d30139d0e3571cab1f217493d79fe97e6fffc24c6365d3a60b5cdcee82904"
+    },
+    {
+      "Path": "DGA-Runtime/Runtime-2.1.9/DgaDiagnostics.exe",
+      "Module": "GamedayAtmosphere",
+      "Sha256": "897eb1b0e1327b37f750bdc1d44e34368861c9ca51a40c938f62a066df9feab6"
+    },
+    {
+      "Path": "Plugins/OfflineDynastySettings/OfflineDynastySettings.Persistence.exe",
+      "Module": "ExtraSettings",
+      "Sha256": "e67bad29394d52a4ddf0f7511d752181bbe2a9be1d293da7dfad972fc9624286"
+    },
+    {
+      "Path": "Plugins/SituationalPractice/SituationalPractice.Runtime.exe",
+      "Module": "ExpandedPractice",
+      "Sha256": "a4c2c37d4bded491d70d447bd85b5ff91615e3926bd92eb2226deb6201e17500"
+    }
+  ]
+}
