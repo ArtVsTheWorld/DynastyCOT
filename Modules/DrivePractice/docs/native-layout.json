@@ -303,69 +303,73 @@
       "Plugin/NativeRuntime.cs:1042"
     ],
     "0x25a3e60": [
-      "Plugin/NativeCompatibility.cs:64",
+      "Plugin/NativeCompatibility.cs:66",
       "Plugin/NativeRuntime.cs:96"
     ],
     "0x2ad9200": [
-      "Plugin/NativeCompatibility.cs:27",
+      "Plugin/NativeCompatibility.cs:29",
       "Plugin/NativeRuntime.cs:674"
     ],
     "0x2eb4c30": [
       "Plugin/DynastyControllerCompatibility.cs:45"
     ],
     "0x34875e0": [
-      "Plugin/NativeCompatibility.cs:28"
+      "Plugin/NativeCompatibility.cs:30"
     ],
     "0x35c24b0": [
-      "Plugin/NativeCompatibility.cs:25"
+      "Plugin/NativeCompatibility.cs:27"
     ],
     "0x35e3330": [
-      "Plugin/NativeCompatibility.cs:29"
+      "Plugin/NativeCompatibility.cs:31"
     ],
     "0x35e33f2": [
       "Plugin/PracticeRunner.cs:216"
     ],
     "0x35e4850": [
-      "Plugin/NativeCompatibility.cs:30",
+      "Plugin/NativeCompatibility.cs:32",
       "Plugin/NativeRuntime.cs:895",
       "Plugin/NativeRuntime.cs:896",
       "Plugin/NativeRuntime.cs:948",
       "Plugin/NativeRuntime.cs:949"
     ],
     "0x35ff940": [
-      "Plugin/NativeCompatibility.cs:31",
-      "Plugin/NativeRuntime.cs:96"
-    ],
-    "0x3601240": [
-      "Plugin/NativeCompatibility.cs:32",
-      "Plugin/NativeRuntime.cs:96"
-    ],
-    "0x3601860": [
       "Plugin/NativeCompatibility.cs:33",
       "Plugin/NativeRuntime.cs:96"
     ],
+    "0x3601240": [
+      "Plugin/NativeCompatibility.cs:34",
+      "Plugin/NativeCompatibility.cs:75",
+      "Plugin/NativeRuntime.cs:96"
+    ],
+    "0x360128b": [
+      "Plugin/NativeCompatibility.cs:101"
+    ],
+    "0x3601860": [
+      "Plugin/NativeCompatibility.cs:35",
+      "Plugin/NativeRuntime.cs:96"
+    ],
     "0x3601e2f": [
-      "Plugin/NativeCompatibility.cs:20"
+      "Plugin/NativeCompatibility.cs:22"
     ],
     "0x3601e34": [
-      "Plugin/NativeCompatibility.cs:34"
+      "Plugin/NativeCompatibility.cs:36"
     ],
     "0x36a1450": [
-      "Plugin/NativeCompatibility.cs:35",
+      "Plugin/NativeCompatibility.cs:37",
       "Plugin/NativeRuntime.cs:96",
       "Plugin/NativeRuntime.cs:851",
       "Plugin/NativeRuntime.cs:955"
     ],
     "0x377e340": [
-      "Plugin/NativeCompatibility.cs:36",
+      "Plugin/NativeCompatibility.cs:38",
       "Plugin/NativeRuntime.cs:96"
     ],
     "0x3f0a300": [
-      "Plugin/NativeCompatibility.cs:37",
+      "Plugin/NativeCompatibility.cs:39",
       "Plugin/NativeRuntime.cs:597"
     ],
     "0x4ff6fc0": [
-      "Plugin/NativeCompatibility.cs:38"
+      "Plugin/NativeCompatibility.cs:40"
     ],
     "0x4ff70be": [
       "Plugin/NativeRuntime.cs:96"
@@ -378,7 +382,7 @@
       "Plugin/NativeRuntime.cs:98"
     ],
     "0x4ff7400": [
-      "Plugin/NativeCompatibility.cs:39"
+      "Plugin/NativeCompatibility.cs:41"
     ],
     "0x4ff7456": [
       "Plugin/NativeRuntime.cs:96"
@@ -387,18 +391,18 @@
       "Plugin/NativeRuntime.cs:98"
     ],
     "0x4ff76e0": [
-      "Plugin/NativeCompatibility.cs:40"
+      "Plugin/NativeCompatibility.cs:42"
     ],
     "0x4ff7823": [
       "Plugin/NativeRuntime.cs:542"
     ],
     "0x4ff8c10": [
-      "Plugin/NativeCompatibility.cs:41",
+      "Plugin/NativeCompatibility.cs:43",
       "Plugin/NativeRuntime.cs:683"
     ],
     "0x5d12420": [
-      "Plugin/NativeCompatibility.cs:42",
-      "Plugin/NativeCompatibility.cs:73",
+      "Plugin/NativeCompatibility.cs:44",
+      "Plugin/NativeCompatibility.cs:76",
       "Plugin/NativeRuntime.cs:719",
       "Plugin/NativeRuntime.cs:749",
       "Plugin/NativeRuntime.cs:856"
@@ -407,89 +411,89 @@
       "Plugin/DynastyControllerCompatibility.cs:33"
     ],
     "0x5d4d900": [
-      "Plugin/NativeCompatibility.cs:43",
+      "Plugin/NativeCompatibility.cs:45",
       "Plugin/NativeRuntime.cs:96"
     ],
     "0x5d4daff": [
       "Plugin/NativeRuntime.cs:580"
     ],
     "0x5d4e130": [
-      "Plugin/NativeCompatibility.cs:65",
+      "Plugin/NativeCompatibility.cs:67",
       "Plugin/NativeRuntime.cs:96"
     ],
     "0x5d5d000": [
-      "Plugin/NativeCompatibility.cs:44",
+      "Plugin/NativeCompatibility.cs:46",
       "Plugin/NativeRuntime.cs:764",
       "Plugin/NativeRuntime.cs:837",
       "Plugin/NativeRuntime.cs:944"
     ],
     "0x5d5d040": [
-      "Plugin/NativeCompatibility.cs:45",
+      "Plugin/NativeCompatibility.cs:47",
       "Plugin/NativeRuntime.cs:96",
       "Plugin/NativeRuntime.cs:765",
       "Plugin/NativeRuntime.cs:838",
       "Plugin/NativeRuntime.cs:945"
     ],
     "0x5d5d090": [
-      "Plugin/NativeCompatibility.cs:46",
+      "Plugin/NativeCompatibility.cs:48",
       "Plugin/NativeRuntime.cs:96",
       "Plugin/NativeRuntime.cs:766",
       "Plugin/NativeRuntime.cs:839",
       "Plugin/NativeRuntime.cs:946"
     ],
     "0x5d5d9f0": [
-      "Plugin/NativeCompatibility.cs:61",
+      "Plugin/NativeCompatibility.cs:63",
       "Plugin/NativeRuntime.cs:888"
     ],
     "0x5d5e570": [
-      "Plugin/NativeCompatibility.cs:47"
+      "Plugin/NativeCompatibility.cs:49"
     ],
     "0x5d5e7e6": [
       "Plugin/NativeRuntime.cs:572"
     ],
     "0x5d70550": [
-      "Plugin/NativeCompatibility.cs:48"
+      "Plugin/NativeCompatibility.cs:50"
     ],
     "0x5d707a1": [
       "Plugin/PracticeRunner.cs:215"
     ],
     "0x5d74320": [
-      "Plugin/NativeCompatibility.cs:49"
+      "Plugin/NativeCompatibility.cs:51"
     ],
     "0x5d75e26": [
       "Plugin/NativeRuntime.cs:573"
     ],
     "0x5f0d5c0": [
-      "Plugin/NativeCompatibility.cs:50",
+      "Plugin/NativeCompatibility.cs:52",
       "Plugin/NativeRuntime.cs:686"
     ],
     "0x5fe1bd0": [
-      "Plugin/NativeCompatibility.cs:26"
+      "Plugin/NativeCompatibility.cs:28"
     ],
     "0x7a9abf0": [
       "Plugin/DynastyControllerCompatibility.cs:66",
       "Plugin/DynastyControllerCompatibility.cs:66"
     ],
     "0x7b82380": [
-      "Plugin/NativeCompatibility.cs:51",
+      "Plugin/NativeCompatibility.cs:53",
       "Plugin/NativeRuntime.cs:114",
       "Plugin/NativeRuntime.cs:665"
     ],
     "0x7b82504": [
-      "Plugin/NativeCompatibility.cs:20"
+      "Plugin/NativeCompatibility.cs:22"
     ],
     "0x7b82509": [
-      "Plugin/NativeCompatibility.cs:52"
+      "Plugin/NativeCompatibility.cs:54"
     ],
     "0x7b836b0": [
-      "Plugin/NativeCompatibility.cs:24"
+      "Plugin/NativeCompatibility.cs:26"
     ],
     "0x7b9d930": [
-      "Plugin/NativeCompatibility.cs:53",
+      "Plugin/NativeCompatibility.cs:55",
       "Plugin/NativeRuntime.cs:96"
     ],
     "0x7baf6d0": [
-      "Plugin/NativeCompatibility.cs:54",
+      "Plugin/NativeCompatibility.cs:56",
       "Plugin/NativeRuntime.cs:593",
       "Plugin/NativeRuntime.cs:695",
       "Plugin/NativeRuntime.cs:724",
@@ -497,18 +501,18 @@
       "Plugin/NativeRuntime.cs:876"
     ],
     "0x7baf940": [
-      "Plugin/NativeCompatibility.cs:55"
+      "Plugin/NativeCompatibility.cs:57"
     ],
     "0x7baf970": [
       "Plugin/NativeRuntime.cs:96",
       "Plugin/NativeRuntime.cs:875"
     ],
     "0x7bce8f0": [
-      "Plugin/NativeCompatibility.cs:62",
+      "Plugin/NativeCompatibility.cs:64",
       "Plugin/NativeRuntime.cs:96"
     ],
     "0x7c1b8c0": [
-      "Plugin/NativeCompatibility.cs:63",
+      "Plugin/NativeCompatibility.cs:65",
       "Plugin/NativeRuntime.cs:792"
     ],
     "0x7fae660": [
@@ -518,7 +522,7 @@
       "Plugin/DynastyControllerCompatibility.cs:59"
     ],
     "0xae3a190": [
-      "Plugin/NativeCompatibility.cs:56",
+      "Plugin/NativeCompatibility.cs:58",
       "Plugin/NativeRuntime.cs:684"
     ],
     "0xb32a410": [
@@ -558,19 +562,19 @@
       "Plugin/NativeRuntime.cs:307"
     ],
     "0xbab7020": [
-      "Plugin/NativeCompatibility.cs:57",
-      "Plugin/NativeRuntime.cs:907"
-    ],
-    "0xbab7030": [
-      "Plugin/NativeCompatibility.cs:58",
-      "Plugin/NativeRuntime.cs:907"
-    ],
-    "0xbab7040": [
       "Plugin/NativeCompatibility.cs:59",
       "Plugin/NativeRuntime.cs:907"
     ],
-    "0xbab7050": [
+    "0xbab7030": [
       "Plugin/NativeCompatibility.cs:60",
+      "Plugin/NativeRuntime.cs:907"
+    ],
+    "0xbab7040": [
+      "Plugin/NativeCompatibility.cs:61",
+      "Plugin/NativeRuntime.cs:907"
+    ],
+    "0xbab7050": [
+      "Plugin/NativeCompatibility.cs:62",
       "Plugin/NativeRuntime.cs:910"
     ],
     "0xbaced38": [

@@ -85,7 +85,8 @@ class BoundedAssembler(Assembler):
     def reg(self,n):assert 0<=n<self.limit,(n,self.limit);super().reg(n)
     def store(self,n):assert 0<=n<self.limit,(n,self.limit);super().store(n)
 for off,argc,regs,flags,size,expected,newregs,suffix in [*SPECS,*KICKER_SPECS,*INJURY_SPECS]:
-    a=BoundedAssembler(newregs);suffix(a);a.finish()
+    a=BoundedAssembler(newregs);a.code.extend(bytes(size));suffix(a);bounded=a.finish()
+    assert len(bounded.code)<=32768,(hex(off),len(bounded.code))
 print('Passed:5 in-game player label paths,101 boundaries each, hidden/invalid/absent fields, recycled players, native focus colors and non-rating playcall statistics.')
 
 # Actual pre-snap substitution shape: five visible player rows include the

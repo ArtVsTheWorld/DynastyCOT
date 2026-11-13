@@ -131,6 +131,7 @@ namespace DynastyCOTStandalone {public sealed class Entry:ExecutionAction {stati
   if (docs/'LICENSES.txt').exists():tracked.append(docs/'LICENSES.txt')
   if name!='BeyondTheField':tracked+=helper_sources
   if name=='BeyondTheField':
+   tracked += [p for p in src.iterdir() if p.suffix in ['.h','.cpp','.cs']]
    tracked += [ROOT/rel for rel in inputs['sourceHashes']]+[ROOT/'cot.build-inputs.json',*[p for p in (ROOT/'Modules/DynastyEnhancer/Tests').iterdir() if p.suffix in ['.cpp','.h']]]
    tracked += [p for folder,pattern in [('Tools','*.mjs'),('Content/Runtime','*.json')] for p in (ROOT/'Modules/DynastyEnhancer'/folder).glob(pattern) if p.name!='audit_rc016_checkpoint.mjs']
   result=dict(name=name,module=module,title=title,version=version,stage=str(stage),work=str(work),dll=str(output),dllSha256=sha(output),referenceArchiveSha256=sha(reference),payload=json.loads(payload_manifest.read_text(encoding='utf-8')),branding=branding,sourceHashes={str(x.relative_to(ROOT).as_posix()):sha(x) for x in tracked},sdk=str(sdk),installed=False,published=False)

@@ -10,7 +10,7 @@ test('major recruiting reports can exceed the routine allowance without hiding d
  const stories=Array.from({length:12},(_,i)=>({...post('major'+i,'recruiting'),priority:120}));const f=publishWeek({leagueId:1,userTeamIndex:1,season:2027,phase:'RegularSeason',week:5,key:'x',stories});assert.equal(f.views.team.length,12);assert.ok(f.posts.length>7);
 });
 test('complete local view preserves both separately published account posts',()=>{
- const stories=[post('a'),{...post('b'),body:'Distinct story a'}],f=publishWeek({season:2027,phase:'RegularSeason',week:2,key:'x',stories});assert.equal(f.stories.length,2);assert.equal(f.posts.length,2);
+ const stories=[post('a'),{...post('b'),body:'Distinct story a'}],f=publishWeek({season:2027,phase:'RegularSeason',week:2,key:'x',stories},{publishedIds:new Set(stories.map(p=>p.id))});assert.equal(f.stories.length,2);assert.equal(f.posts.length,2);
 });
 test('an available local recap, performance and preview precede unrelated recruiting flavor',()=>{
  const locals=['results','player-stats','schedule'].map((c,i)=>({...post('l'+i,c),priority:70})),pool=[...Array.from({length:50},(_,i)=>({...post('r'+i,'recruiting','national'),priority:100})),...locals,...Array.from({length:30},(_,i)=>post('n'+i,'analytics','national'))];const chosen=curate(pool);assert.ok(locals.every(p=>chosen.some(q=>q.id===p.id)));

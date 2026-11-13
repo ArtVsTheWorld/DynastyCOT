@@ -368,15 +368,16 @@ def badge_suffix(a):
     # Pause Injury Report uses legacy skillValue data. It owns this private
     # marker; forward it only to that screen's attribute-label renderer. The
     # native module defaults roster=false even for these active players.
-    done='injuryAttributesDone'
-    path(a,1,'mData');a.raw(0x76,0x49);a.branch(done)
-    path(a,1,'mData','ExtraInfo');a.raw(0x76,0x49);a.branch(done)
-    path(a,1,'mData','ExtraInfo','DEInjuryPlayerRatings');a.raw(0x73,0x66);a.branch(done,0xB8)
-    path(a,1,'mcInfoSlotAttributes');a.store(17);a.missing(17,done)
-    path(a,17,'mData');a.raw(0x76,0x49);a.branch(done)
-    path(a,17,'mData','ExtraInfo');a.raw(0x76,0x49);a.branch(done)
-    path(a,17,'mData','ExtraInfo');a.string('DEInjuryPlayerRatings');a.raw(0x73,0x4F)
-    a.label(done)
+    for marker,done in [('DEInjuryPlayerRatings','injuryAttributesDone'),
+                        ('DEDepthChartPlayerRatings','depthAttributesDone')]:
+        path(a,1,'mData');a.raw(0x76,0x49);a.branch(done)
+        path(a,1,'mData','ExtraInfo');a.raw(0x76,0x49);a.branch(done)
+        path(a,1,'mData','ExtraInfo',marker);a.raw(0x73,0x66);a.branch(done,0xB8)
+        path(a,1,'mcInfoSlotAttributes');a.store(17);a.missing(17,done)
+        path(a,17,'mData');a.raw(0x76,0x49);a.branch(done)
+        path(a,17,'mData','ExtraInfo');a.raw(0x76,0x49);a.branch(done)
+        path(a,17,'mData','ExtraInfo');a.string(marker);a.raw(0x73,0x4F)
+        a.label(done)
     path(a, 1, 'mcStat'); a.store(17)
     # Shared PlayerModule may show NIL/stat values. Only an already-converted
     # exact grade is recolored; this adapter never converts its numeric values.
@@ -510,6 +511,7 @@ def attribute_slots_suffix(a):
     path(a,1,'mData','ExtraInfo');a.string('AttributesData');a.reg(3);a.raw(0x47,0x4E);a.store(4);a.missing(4,'slotsNext')
     path(a,4,'isFullyScouted');a.raw(0x73,0x66);a.branch('slotsNext',0xB8)
     path(a,4,'ratingValue');a.store(5)
+    path(a,1,'mData','ExtraInfo','DEDepthChartPlayerRatings');a.raw(0x73,0x66);a.branch('slotsInjuryRating')
     path(a,1,'mData','ExtraInfo','DEInjuryPlayerRatings');a.raw(0x73,0x66);a.branch('slotsInjuryRating')
     a.reg(5);a.raw(0x44);a.string('number');a.raw(0x66);a.branch('slotsExistingGrade',0xB8)
     path(a,1,'mData','ExtraInfo','DEFormationPlayerRatings');a.raw(0x73,0x66);a.branch('slotsNext',0xB8)

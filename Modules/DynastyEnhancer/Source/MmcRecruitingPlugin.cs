@@ -26,7 +26,7 @@ namespace DynastyEnhancer {
   private static int watching;
   private static Mutex watcherMutex;
   public static string PluginsFolder {get{return Path.GetDirectoryName(typeof(LaunchAction).Assembly.Location);}}
-  public static string RuntimeFolder {get{return Path.Combine(PluginsFolder,"DynastyEnhancer","Runtime-v103");}}
+  public static string RuntimeFolder {get{return Path.Combine(Ace.DynastyCOT.UserStorage.Folder("BeyondTheField"),"Runtime-"+typeof(LaunchAction).Assembly.GetName().Version.ToString(3));}}
   public LaunchAction(){using(var host=Process.GetCurrentProcess())if(String.Equals(host.ProcessName,"MMCModManager",StringComparison.OrdinalIgnoreCase))Start();}
   public override Action<ILogger,PluginManagerType,CancellationToken> PreLaunchAction {get{return (log,type,token)=>Start();}}
   public override Action<ILogger,PluginManagerType,CancellationToken> PostLaunchAction {get{return (log,type,token)=>Start();}}
@@ -49,14 +49,14 @@ namespace DynastyEnhancer {
   }
   public static string ConfigurationIssue(){
    try{
-    var config=new JavaScriptSerializer().Deserialize<Dictionary<string,object>>(File.ReadAllText(Path.Combine(RuntimeFolder,"dynasty-enhancer.json")));
+    var config=new JavaScriptSerializer().Deserialize<Dictionary<string,object>>(File.ReadAllText(Path.Combine(Ace.DynastyCOT.UserStorage.Folder("BeyondTheField"),"dynasty-enhancer.json")));
     foreach(var key in new[]{"node","exporter"}){object value;if(!config.TryGetValue(key,out value)||!(value is string))return "Missing configuration field: "+key;
-     var path=(string)value;if(!Path.IsPathRooted(path))path=Path.Combine(RuntimeFolder,path);if(!File.Exists(path))return "Configured "+key+" is unavailable: "+path;}
+     var path=(string)value;if(key=="node"&&path=="../Shared/node.exe")path=Path.Combine(RuntimeFolder,"Shared","node.exe");else if(key=="exporter"&&path=="Tools/export_runtime.mjs")path=Path.Combine(RuntimeFolder,"Tools","export_runtime.mjs");else if(!Path.IsPathRooted(path))path=Path.Combine(Ace.DynastyCOT.UserStorage.Folder("BeyondTheField"),path);if(!File.Exists(path))return "Configured "+key+" is unavailable: "+path;}
     return "";
    }catch(Exception error){return "Runtime configuration unavailable: "+error.Message;}
   }
   private static void Note(string message){
-   var folder=Path.Combine(PluginsFolder,"DynastyEnhancer","Logs");Directory.CreateDirectory(folder);
+   var folder=Path.Combine(Ace.DynastyCOT.UserStorage.Folder("BeyondTheField"),"Logs");Directory.CreateDirectory(folder);
    var path=Path.Combine(folder,"BeyondTheField-launcher.log");
    if(File.Exists(path)&&new FileInfo(path).Length>1024*1024){if(File.Exists(path+".1"))File.Delete(path+".1");File.Move(path,path+".1");}
    File.AppendAllText(path,DateTimeOffset.Now.ToString("O")+" | "+message+Environment.NewLine);

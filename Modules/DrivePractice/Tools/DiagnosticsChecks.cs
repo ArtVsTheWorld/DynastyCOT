@@ -25,12 +25,13 @@ class DiagnosticsChecks
         string root=Path.GetFullPath(Path.Combine("Evidence","DiagnosticsChecks-"+Guid.NewGuid().ToString("N")));
         Directory.CreateDirectory(root);
         string pluginDirectory=Path.Combine(root,"MMC folder with spaces","Plugins");
-        string portableFolder=Path.Combine(pluginDirectory,"SituationalPractice");
+        typeof(Ace.DynastyCOT.UserStorage).GetField("current",System.Reflection.BindingFlags.Static|System.Reflection.BindingFlags.NonPublic).SetValue(null,new Ace.DynastyCOT.UserStore(Path.Combine(root,"Ace","DynastyCOT")));
+        string portableFolder=Ace.DynastyCOT.UserStorage.Folder("ExpandedPractice");
         Check(BuildIdentity.FolderForAssembly(Path.Combine(pluginDirectory,"SituationalPractice.dll"))==portableFolder,"Plugin did not resolve its sibling data folder");
         Check(BuildIdentity.FolderForAssembly(Path.Combine(portableFolder,"SituationalPractice.Runtime.exe"))==portableFolder,"Runtime created a nested data folder");
         Check(BuildIdentity.FolderForAssembly(Path.Combine(pluginDirectory,"renamed-plugin.DLL"))==portableFolder,"Data location depends on the plugin file name");
         string relocated=Path.Combine(root,"Moved MMC","Plugins");
-        Check(BuildIdentity.FolderForAssembly(Path.Combine(relocated,"SituationalPractice.dll"))==Path.Combine(relocated,"SituationalPractice"),"Relocating MMC did not relocate runtime storage");
+        Check(BuildIdentity.FolderForAssembly(Path.Combine(relocated,"SituationalPractice.dll"))==portableFolder,"MMC copies must share per-user data");
         string ratePath=Path.Combine(root,"rate.log");
         var rate=new SafeFileLog(ratePath);
         Exception failure=Failure();

@@ -74,7 +74,7 @@
     {
       "path": "Modules/DrivePractice/Tools/DiagnosticsChecks.cs",
       "sha256": "39ebbde42fcb732a58ade2e86dea31c4d8a316d72b3f34f68d4c06c66765c585",
-      "reason": "Authorized per-user storage migration: shared LocalAppData module data; versioned verified program caches; legacy sources read-only, destination wins with conflict archive. Native scopes, hook fingerprints, ownership and helper hash/lease checks retained. Private tests only."
+      "reason": "Release-readiness provenance and approved integrated regression coverage"
     },
     {
       "path": "Modules/DrivePractice/Tools/ModeChecks.cs",
@@ -89,12 +89,12 @@
     {
       "path": "Modules/DrivePractice/docs/native-layout.json",
       "sha256": "1138365443dc2f33e5712b4c2c0f8f0206d7844b1ed4cc979e3d72cd4c5ba8ea",
-      "reason": "Bounded private integration follow-up: reveal-safe dash completion, neutral Notes presentation, verified injury naming, native-anchored seating, postseason support capture, bounded fumble latency, eligible crowd bed handoff, and exact Extensions pregame comparison normalization."
+      "reason": "Release-readiness provenance and approved integrated regression coverage"
     },
     {
       "path": "Modules/DrivePractice/docs/updating.md",
       "sha256": "60397201f90865d3a87cfaebf24119014eb5b47e0c88df63b571ba42ee7c79dc",
-      "reason": "Bounded private integration follow-up: reveal-safe dash completion, neutral Notes presentation, verified injury naming, native-anchored seating, postseason support capture, bounded fumble latency, eligible crowd bed handoff, and exact Extensions pregame comparison normalization."
+      "reason": "Release-readiness provenance and approved integrated regression coverage"
     },
     {
       "path": "Modules/DynastyEnhancer/Content/Runtime/account-refresh-pack.json",
@@ -444,7 +444,7 @@
     {
       "path": "Modules/DynastyEnhancer/Source/MmcRecruitingPlugin.cs",
       "sha256": "06d8c49aba937bb03a04cebc13ef9d77a0f90caa30d7580e172e69b12b5809ef",
-      "reason": "Authorized per-user storage migration: shared LocalAppData module data; versioned verified program caches; legacy sources read-only, destination wins with conflict archive. Native scopes, hook fingerprints, ownership and helper hash/lease checks retained. Private tests only."
+      "reason": "Release-readiness provenance and approved integrated regression coverage"
     },
     {
       "path": "Modules/DynastyEnhancer/Source/NativeMapValue.h",
@@ -914,7 +914,7 @@
     {
       "path": "Modules/DynastyEnhancer/Tests/editorial_selection.test.mjs",
       "sha256": "6a34c170ccc4e0e3d815d6217f584cfaa9212c44f0434f3d15975b964bafad91",
-      "reason": "Private medium/sparse reaction calibration, snap-qualified spring boo policy and bounded verified background priority; season-long expectation freshness, cross-account/matchup repetition limits and non-tautological milestone wording"
+      "reason": "Release-readiness provenance and approved integrated regression coverage"
     },
     {
       "path": "Modules/DynastyEnhancer/Tests/enhancement_grade_scales_test.py",
@@ -944,7 +944,7 @@
     {
       "path": "Modules/DynastyEnhancer/Tests/matchup_season.test.mjs",
       "sha256": "f8c7165088f29c340101a4e284f148d556ca1cff1acb47e331baeec92d4709a2",
-      "reason": "Bounded supporter/recruit/recovery private pass; verified source baselines retained."
+      "reason": "Release-readiness provenance and approved integrated regression coverage"
     },
     {
       "path": "Modules/DynastyEnhancer/Tests/news_cycles.test.mjs",
@@ -964,7 +964,7 @@
     {
       "path": "Modules/DynastyEnhancer/Tests/player_ingame_ui_test.py",
       "sha256": "e198b2e5916e75e6da3a5039c72b8f44cf9d67d6891daeb4cdb891c336553107",
-      "reason": "Private spring initialization-mask and targeted small-boo delivery corrections; compact exact-fingerprint bank6 presentation adapter without raising runtime limits"
+      "reason": "Release-readiness provenance and approved integrated regression coverage"
     },
     {
       "path": "Modules/DynastyEnhancer/Tests/portal_draft.test.mjs",
@@ -984,7 +984,7 @@
     {
       "path": "Modules/DynastyEnhancer/Tests/recover_weeks.test.mjs",
       "sha256": "6b457cb6142411a82fdd8710fe5559fce363e675c9dcad86d664e76f83c184b3",
-      "reason": "Bounded supporter/recruit/recovery private pass; verified source baselines retained."
+      "reason": "Release-readiness provenance and approved integrated regression coverage"
     },
     {
       "path": "Modules/DynastyEnhancer/Tests/runtime_archive.test.mjs",
@@ -1009,7 +1009,7 @@
     {
       "path": "Modules/DynastyEnhancer/Tests/template_performance.test.mjs",
       "sha256": "bc7a0b23c399f92caf9c28aeb8396224e54f6f069d49dbbad47824e272af560e",
-      "reason": "Private bounded follow-up: actual-school spring demand; controlled audio masking evidence and result-owned mix focus; supporter allegiance/voices; stable refresh; hot-loop caching; verified plain GDA support packaging and transactional installer"
+      "reason": "Release-readiness provenance and approved integrated regression coverage"
     },
     {
       "path": "Modules/DynastyEnhancer/Tests/transactions_editorial.test.mjs",
@@ -1094,17 +1094,17 @@
     {
       "path": "Modules/DynastyEnhancer/Tools/build_player_card_ui.py",
       "sha256": "f56706985a9abf40ee27cb4f483d47f401760691958785618d41bbfe32d81e72",
-      "reason": "Private in-game Depth Chart live-card fix: exact native screen marks its legacy six-attribute presentation; existing fog/grade/color policy, source values and indexed dispatch remain intact."
+      "reason": "Release-readiness provenance and approved integrated regression coverage"
     },
     {
       "path": "Modules/DynastyEnhancer/Tools/build_player_hub_ui.py",
       "sha256": "358c5278cb111907edddf00802bccae7d65c767f3ea958ebc28986a5b6fd4594",
-      "reason": "Private Extensions spring cohesion: verified fixture context, one native fanbase, capped turnout and score-independent exits, both-offense reactions, scoped backward-readable history, fresh preseason publications, hub accuracy labels; preserve existing guards and released fixes."
+      "reason": "Release-readiness provenance and approved integrated regression coverage"
     },
     {
       "path": "Modules/DynastyEnhancer/Tools/build_player_ingame_ui.py",
       "sha256": "8cfa93bad28c6d6a780fd17a42ceef6822ad81cbb66a15bf7ad5ebb075f286ac",
-      "reason": "Private spring initialization-mask and targeted small-boo delivery corrections; compact exact-fingerprint bank6 presentation adapter without raising runtime limits"
+      "reason": "Release-readiness provenance and approved integrated regression coverage"
     },
     {
       "path": "Modules/DynastyEnhancer/Tools/build_player_nil_ui.py",
@@ -1359,7 +1359,7 @@
     {
       "path": "Modules/DynastyEnhancer/Tools/recruit_notes_vm.py",
       "sha256": "cdfa6a83c5ccbabb5892ab53735f00b03db81b753d2af6022be927636ef5799a",
-      "reason": "Private Weekly Strategy report, matchup and focus-picker rating presentation; indexed dispatch beyond 64 asset banks, retaining one-word path for smaller sets."
+      "reason": "Release-readiness provenance and approved integrated regression coverage"
     },
     {
       "path": "Modules/DynastyEnhancer/Tools/recruit_ranks.mjs",
@@ -2524,7 +2524,7 @@
     {
       "path": "Modules/GamedayAtmosphere/Tests/PopulationReactionsTests.cpp",
       "sha256": "90ed0ee2de2d1a148f7cb2e2615fe3da104d60c679c61026bb9d9cb252b79fbf",
-      "reason": "Private medium/sparse reaction calibration, snap-qualified spring boo policy and bounded verified background priority; season-long expectation freshness, cross-account/matchup repetition limits and non-tautological milestone wording"
+      "reason": "Release-readiness provenance and approved integrated regression coverage"
     },
     {
       "path": "Modules/GamedayAtmosphere/Tests/ProtectedFanBudgetRuntimeTests.cpp",
@@ -2539,7 +2539,7 @@
     {
       "path": "Modules/GamedayAtmosphere/Tests/ReactionPaletteTests.cpp",
       "sha256": "d5816206c7ee0a834c121505f1009dd6f53e2f3de9b6d67ae925c7b8aeccbdf8",
-      "reason": "Private medium/sparse reaction calibration, snap-qualified spring boo policy and bounded verified background priority; season-long expectation freshness, cross-account/matchup repetition limits and non-tautological milestone wording"
+      "reason": "Release-readiness provenance and approved integrated regression coverage"
     },
     {
       "path": "Modules/GamedayAtmosphere/Tests/ReactionRuntimeTests.cpp",
@@ -2589,7 +2589,7 @@
     {
       "path": "Modules/GamedayAtmosphere/Tests/SettingsTests.cs",
       "sha256": "9f36d2024569e8a531a06385675bb461522b1aad4bc636fb5fd043ce39a79991",
-      "reason": "Private Gameday 2.1.17: restore replay threshold slider with default/reset 12 while retaining saved values and control IDs; cache exact seeded noise-grid hashes and invariant geometry/normalization work; skip unused neutral scoring; legacy diagnostic polling once per second. Prior AppData storage, visitor/attendance tuning, Broadcast Universe guards, native fingerprints/scopes/ownership and TD exclusions retained."
+      "reason": "Release-readiness provenance and approved integrated regression coverage"
     },
     {
       "path": "Modules/GamedayAtmosphere/Tests/StartingAttendanceLaunchHookTests.cpp",

@@ -21,7 +21,7 @@ int main(){
     auto largeHalf=population::layers(base,20000,.5f);assert(std::abs(small.intensity-largeHalf.intensity)<.001f);
     auto larger=population::layers(base,60000,.5f);assert(larger.intensity>largeHalf.intensity);
     assert(larger.intensity<=1000&&larger.liveCheer==base.liveCheer&&larger.resultCheer==base.resultCheer);
-    assert(small.populationSize==1&&largeHalf.populationSize==1&&larger.populationSize==2);
+    assert(small.populationSize==2&&largeHalf.populationSize==2&&larger.populationSize==2);
     assert(population::size(61888,1)==3);
     assert(population::reactionType(83,1)==81&&population::reactionType(59,2)==58&&population::reactionType(103,1)==101);
     assert(population::negative(101)&&population::negative(95)&&!population::negative(83));

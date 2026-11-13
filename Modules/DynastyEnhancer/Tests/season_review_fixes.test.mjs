@@ -53,7 +53,7 @@ test('catalog uses immutable published selections and does not rerank prior edit
 });
 test('finite corrections preserve IDs, guarded family metadata and good rivalry humor',()=>{
  const lines=Object.values(contentPack.families).flat();assert.equal(new Set(lines.map(t=>t.id)).size,lines.length);
- assert.equal(Object.keys(contentPack.families).length,594,'Existing coverage families disappeared');assert.equal(lines.length,8037,'A wording correction removed or added variants');
+ assert.equal(Object.keys(contentPack.families).length,600,'Existing coverage families disappeared');assert.equal(lines.length,8093,'A wording correction removed or added variants');
  assert.ok(lines.some(t=>/Please respect our privacy/.test(t.body)));
  assert.ok(!lines.some(t=>/I said \{pick\}, and I meant it|\{area\} improved for|he \{lead\}\./.test(t.body)));
 });

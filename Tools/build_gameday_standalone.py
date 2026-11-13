@@ -25,13 +25,13 @@ def main():
     numeric=a.version.split('-')[0]+'.0'
     text=text.replace('DynamicGamedayAtmosphere.BuildInfo.AssemblyVersion',json.dumps(numeric)).replace('[assembly: PluginVersion(DynamicGamedayAtmosphere.BuildInfo.Version)]','[assembly: PluginVersion('+json.dumps(a.version)+')]')
     adapter.write_text(text,encoding='utf-8',newline='\n')
-    sources=[adapter,built/'BuildInfo.cs',*(src/name for name in ['LaunchDiagnostics.cs','PluginSettings.cs','PluginStorage.cs','ManagedRuntimeLoader.cs'])]
+    sources=[ROOT/'Core/UserStorage.cs',adapter,built/'BuildInfo.cs',*(src/name for name in ['LaunchDiagnostics.cs','PluginSettings.cs','PluginStorage.cs','ManagedRuntimeLoader.cs'])]
     output=stage/'GamedayAtmosphere.dll';compiler=Path(r'C:\Windows\Microsoft.NET\Framework64\v4.0.30319\csc.exe')
     command=[str(compiler),'/nologo','/target:library','/platform:x64','/optimize+','/define:DIRECT_RUNTIME_LOADING;STANDALONE_GAMEDAY','/out:'+str(output),'/reference:'+str(sdk/'FrostyCore.dll'),'/reference:'+str(sdk/'FrostySdk.dll')]
     subprocess.run([*command,*(f'/resource:{file},{name}' for file,name in resources),*(str(x) for x in sources)],check=True)
     docs=ROOT/'Packaging/Standalone/GamedayAtmosphere'
     for name in ['README.txt','FEATURES.md']:shutil.copyfile(docs/name,stage/name)
-    tracked=[src/'MmcPlugin.cs',src/'PluginStorage.cs',src/'PluginSettings.cs',src/'ManagedRuntimeLoader.cs',src/'LaunchDiagnostics.cs',docs/'README.txt',docs/'FEATURES.md',Path(__file__).resolve()]
+    tracked=[ROOT/'Core/UserStorage.cs',src/'MmcPlugin.cs',src/'PluginStorage.cs',src/'PluginSettings.cs',src/'ManagedRuntimeLoader.cs',src/'LaunchDiagnostics.cs',docs/'README.txt',docs/'FEATURES.md',Path(__file__).resolve()]
     result=dict(format=1,module='GamedayAtmosphere',version=a.version,runtimeVersion=runtime,stage=str(stage),work=str(work),dll=str(output),dllSha256=sha(output),referenceVersion='1.0.2',referenceArchiveSha256=sha(reference),resources=[dict(name=name,sha256=sha(file)) for file,name in resources],sourceHashes={x.relative_to(ROOT).as_posix():sha(x) for x in tracked},sdk=str(sdk),installed=False,published=False)
     (ROOT/'Build/current-gameday-standalone.json').write_text(json.dumps(result,indent=2)+'\n',encoding='utf-8')
     print('Built one-DLL Gameday standalone stage:',stage)

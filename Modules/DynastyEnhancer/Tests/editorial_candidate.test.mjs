@@ -12,11 +12,14 @@ const pack=JSON.parse(fs.readFileSync(new URL('../Content/Runtime/editorial011-p
 const seasonFixes=new Map(JSON.parse(fs.readFileSync(new URL('../Content/Runtime/season-fixes-pack.json',import.meta.url),'utf8')).overrides.map(p=>[p.id,p]));
 const templates=new Map(Object.entries(contentPack.families).flatMap(([f,ts])=>ts.map(t=>[t.id,{f,t}])));
 
+const milestoneFixes=new Map(JSON.parse(fs.readFileSync(new URL('../Content/Runtime/milestone-fixes-pack.json',import.meta.url))).overrides.map(p=>[p.id,p]));
+const specificityFixes=new Map(JSON.parse(fs.readFileSync(new URL('../Content/Runtime/editorial-specificity.json',import.meta.url))).overrides.map(p=>[p.id,p]));
+const reviewedText=(id,body)=>socialDisplayText(specificityFixes.get(id)?.body??body).replace(/^(?:FINAL|RIVALRY FINAL|RECRUITING UPDATE)[ :|]+/,'').replace(/; (?=[A-Z])/g,'. ');
 test('one bounded editorial expansion: 120 primary alternatives and 30 targeted exceptions',()=>{
  assert.equal(Object.values(pack.families).flat().length,150);assert.equal(Object.keys(pack.families).length,30);
  for(const [f,ts] of Object.entries(pack.families).slice(0,20)){assert.equal(ts.length,6,f);assert.equal(new Set(ts.map(t=>templateFeatures(t).structure)).size,6,f);}
  assert.equal(new Set(Object.values(pack.families).flat().map(t=>t.id)).size,150);
- for(const patch of pack.overrides){const fix=seasonFixes.get(patch.id);if(fix){assert.equal(fix.originalBody,patch.body);assert.equal(fix.family,patch.family);}assert.equal(templates.get(patch.id).f,patch.family);assert.equal(templates.get(patch.id).t.body,socialDisplayText(fix?.body??patch.body));assert.ok(patch.originalBody);}
+ for(const patch of pack.overrides){const fix=seasonFixes.get(patch.id);if(fix){assert.equal(fix.originalBody,patch.body);assert.equal(fix.family,patch.family);}assert.equal(templates.get(patch.id).f,patch.family);assert.equal(templates.get(patch.id).t.body,reviewedText(patch.id,milestoneFixes.get(patch.id)?.body??fix?.body??patch.body));assert.ok(patch.originalBody);}
  assert.equal(NATIONAL_CARD_LIMIT,300);
 });
 test('reviewed copy corrects opponent attribution, complete result sentences and timing',()=>{

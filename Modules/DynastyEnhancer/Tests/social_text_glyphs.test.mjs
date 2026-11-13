@@ -5,6 +5,9 @@ import {socialDisplayText} from '../Tools/prose_cleanup.mjs';
 import {contentPack,chooseTemplate} from '../Tools/story_templates.mjs';
 import {renderStories} from '../Tools/story_renderer.mjs';
 
+const milestoneFixes=new Map(JSON.parse(fs.readFileSync(new URL('../Content/Runtime/milestone-fixes-pack.json',import.meta.url))).overrides.map(p=>[p.id,p]));
+const specificityFixes=new Map(JSON.parse(fs.readFileSync(new URL('../Content/Runtime/editorial-specificity.json',import.meta.url))).overrides.map(p=>[p.id,p]));
+const reviewedText=(id,body)=>socialDisplayText(specificityFixes.get(id)?.body??body).replace(/^(?:FINAL|RIVALRY FINAL|RECRUITING UPDATE)[ :|]+/,'').replace(/; (?=[A-Z])/g,'. ');
 test('only the confirmed unsupported arrow changes; names, native punctuation and line breaks survive',()=>{
  for(const [before,after] of [
   ['Ranking movement: 5 → 3','Ranking movement: 5 to 3'],
@@ -22,7 +25,7 @@ test('runtime glyph repair follows editorial originalBody guards without changin
  for(const lines of Object.values(contentPack.families))for(const t of lines)assert.ok(!t.body.includes('\u2192'),t.id);
  const patch=JSON.parse(fs.readFileSync(new URL('editorial011-pack.json',folder))),lookup=new Map(Object.entries(contentPack.families).flatMap(([family,lines])=>lines.map(t=>[t.id,{family,t}])));
  const fixes=new Map(JSON.parse(fs.readFileSync(new URL('season-fixes-pack.json',folder))).overrides.map(p=>[p.id,p]));
- for(const override of patch.overrides){const fix=fixes.get(override.id);if(fix)assert.equal(fix.originalBody,override.body);const actual=lookup.get(override.id);assert.equal(actual.family,override.family);assert.equal(actual.t.body,socialDisplayText(fix?.body??override.body));}
+ for(const override of patch.overrides){const fix=fixes.get(override.id);if(fix)assert.equal(fix.originalBody,override.body);const actual=lookup.get(override.id);assert.equal(actual.family,override.family);assert.equal(actual.t.body,reviewedText(override.id,milestoneFixes.get(override.id)?.body??fix?.body??override.body));}
  const loader=fs.readFileSync(new URL('../Tools/story_templates.mjs',import.meta.url),'utf8');assert.ok(loader.indexOf('old.t.body!==patch.originalBody')<loader.indexOf('template.body=socialDisplayText(template.body)'));
  for(const [file,bytes] of raw)assert.ok(bytes.equals(fs.readFileSync(new URL(file,folder))));
 });

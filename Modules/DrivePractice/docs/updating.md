@@ -115,3 +115,7 @@ The helper EXE is separately shipped and verified against a SHA-256 compiled int
 No executable resource is extracted. Install by merging the runtime folder, never
 replacing/deleting it: it also contains settings, logs and diagnostic history.
 `Tools/Install-Package.ps1` copies only the release program files; README stays outside Plugins.
+
+## Extensions pregame coexistence
+
+The private compatibility path pins Extensions 0.3.0 anygame.dll SHA-256 170633be325803b94b0389c39d9ace4ce20c676993b46e533fa14d6fafe690a0 and entry RVA 0xe620 within that module (not the game image). Only the CALL at game RVA 0x360128b is normalized in a local comparison copy, after its mov-rax/jmp-rax relay, destination owner and 96 live entry bytes match. The complete surrounding 1,561-byte region still uses its original hash. Unknown wrappers fail closed. No foreign wrapper or original call chain is replaced.

@@ -22,17 +22,17 @@ int main(){
  }
  collect(palette::lineup(play,play+1,1));collect(palette::situationType({play,103,situational::Event::AwayShowboat},critical,snap.game,play,1));}
  for(int id=1;id<112;++id)if(catalog::usable(id)){if(!reached.count(id))std::fprintf(stderr,"Missing selector %d\n",id);assert(reached.count(id));}assert(reached.size()==80);
- assert(population::size(128000,.25f)==1&&population::size(128000,.50f)==2);
- assert(population::size(61888,.90f)==3&&population::size(6060,1)==1);
- assert(palette::tier(snap,snap.game)==1&&palette::tier(critical,snap.game)==2);
+ assert(population::size(128000,.25f)==2&&population::size(128000,.50f)==2);
+ assert(population::size(61888,.90f)==3&&population::size(6060,1)==2);
+ assert(palette::tier(snap,snap.game)==2&&palette::tier(critical,snap.game)==2);
  // A packed venue must not promote a routine play into a maximum reaction.
  for(bool negative:{false,true})for(uint64_t play=1;play<=100;++play){
   for(auto event:{live::Event::BrokenTackle,live::Event::CompletedPass,live::Event::TackleForLoss}){
    int small=palette::liveType({event,play,0,5},snap,snap.game,play,1,negative);
-   assert(small%4==1&&population::reactionType(small,3)==small);
+   assert(small%4==2&&population::reactionType(small,3)==small);
   }
   energy::Outcome gain;gain.firstDown=true;gain.yards=10;
-  assert(palette::resultType(gain,snap,snap.game,true,play,1,negative)%4==1);
+  assert(palette::resultType(gain,snap,snap.game,true,play,1,negative)%4==2);
   gain.yards=25;assert(palette::resultType(gain,snap,snap.game,true,play,1,negative)%4==3);
   gain={};gain.event=energy::Event::ThirdStop;
   assert(palette::resultType(gain,critical,critical.game,false,play,1,negative)%4==2);

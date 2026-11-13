@@ -8,8 +8,8 @@ test('sim 2 to 4 recovers publication Week 3 from completed Week 2 games and pre
  assert.ok(recovered.feed.stories.every(p=>!p.replyTo&&!['official','player','recruit','fan','model'].includes(p.voice)));assert.ok(recovered.feed.stories.some(p=>p.body.includes('300')));assert.ok(!recovered.feed.stories.some(p=>/Heisman|injur|AP poll|scholarship/i.test(p.body)));
  assert.deepEqual(updateRuntime(structuredClone(s),b.state).catalog,b.catalog);
 });
-test('no first-observation invented editions; only same-phase known gaps; empty or unpublished game weeks stay absent',()=>{
- const s=fixture();s.season.CurrentWeek=4;assert.deepEqual(updateRuntime(structuredClone(s)).catalog.weeks.map(e=>e.week),[4]);
+test('first observation recovers only verified completed same-phase games; empty or unpublished weeks stay absent',()=>{
+ const s=fixture();s.season.CurrentWeek=4;assert.deepEqual(updateRuntime(structuredClone(s)).catalog.weeks.map(e=>e.week),[3,4]);
  assert.equal(recoverWeek(s,0),null);s.games[0].published=false;assert.equal(recoverWeek(s,3),null);s.season.CurrentWeekType='BowlSeason1';assert.equal(recoverWeek(s,3),null);
 });
 test('recovered editions cannot masquerade as observed recruiting or injury baselines after a rewind',()=>{
@@ -18,6 +18,6 @@ test('recovered editions cannot masquerade as observed recruiting or injury base
 });
 
 test('runtime sources and packs use valid UTF-8; generated scores never contain replacement glyphs',async()=>{
- const fs=await import('node:fs/promises'),decoder=new TextDecoder('utf-8',{fatal:true});for(const folder of ['Tools','Content/Runtime'])for(const name of await fs.readdir(folder))if(/\.(mjs|json)$/.test(name))decoder.decode(await fs.readFile(folder+'/'+name));
+ const fs=await import('node:fs/promises'),decoder=new TextDecoder('utf-8',{fatal:true});for(const folder of ['Tools','Content/Runtime'])for(const name of await fs.readdir(new URL('../'+folder+'/',import.meta.url)))if(/\.(mjs|json)$/.test(name))decoder.decode(await fs.readFile(new URL('../'+folder+'/'+name,import.meta.url)));
  const s=fixture();s.season.CurrentWeek=4;const r=recoverWeek(s,3);assert.ok(r.feed.stories.every(p=>!p.body.includes('\uFFFD')));assert.ok(r.feed.stories.some(p=>p.body.includes('31\u20137')));
 });

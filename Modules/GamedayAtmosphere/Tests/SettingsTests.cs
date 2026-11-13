@@ -41,7 +41,7 @@ class SettingsTests {
    Check(GetPrivateProfileInt("Arrivals","ModerateStartPercent",0,next)==0&&GetPrivateProfileInt("Arrivals","FinishPercentOfQuarter",0,next)==50&&GetPrivateProfileInt("Arrivals","LateSchoolFinishPercentOfQuarter",0,next)==75);
    Check(GetPrivateProfileInt("General","AttendanceBalanceVersion",0,next)==9);
    Check(GetPrivateProfileInt("Retention","MaximumDeparturePerQuarter",0,next)==45);
-   Check(GetPrivateProfileInt("Replays","Enabled",0,next)==1&&GetPrivateProfileInt("Replays","FullScreenMinimumYards",0,next)==15);
+   Check(GetPrivateProfileInt("Replays","Enabled",0,next)==1&&GetPrivateProfileInt("Replays","FullScreenMinimumYards",0,next)==12);
    Check(GetPrivateProfileInt("Replays","InsetAfterRoutinePlays",0,next)==1&&GetPrivateProfileInt("Replays","FullScreenBigPlays",0,next)==1);
    Check(GetPrivateProfileInt("Replays","DefensiveHighlights",0,next)==1&&GetPrivateProfileInt("General","ReplayBalanceVersion",0,next)==1);
    SettingsMigration.Ensure(next,old,defaults);Check(File.ReadAllText(next)==fresh);
@@ -171,7 +171,7 @@ class SettingsTests {
    string replaySettings=File.ReadAllText(next);SettingsMigration.Ensure(next,old,defaults);Check(File.ReadAllText(next)==replaySettings);
    foreach(int cutoff in new[]{20,25}){
     File.WriteAllText(next,"[General]\nConfigVersion=1\nAudioBalanceVersion=13\n[Replays]\nFullScreenMinimumYards="+cutoff+"\nDefensiveHighlights=0\n");SettingsMigration.Ensure(next,old,defaults);
-    Check(GetPrivateProfileInt("Replays","FullScreenMinimumYards",0,next)==(cutoff==20?15:cutoff)&&GetPrivateProfileInt("Replays","DefensiveHighlights",1,next)==0);
+    Check(GetPrivateProfileInt("Replays","FullScreenMinimumYards",0,next)==(cutoff==20?12:cutoff)&&GetPrivateProfileInt("Replays","DefensiveHighlights",1,next)==0);
     Check(GetPrivateProfileInt("General","ReplayBalanceVersion",0,next)==1);string tunedReplays=File.ReadAllText(next);SettingsMigration.Ensure(next,old,defaults);Check(File.ReadAllText(next)==tunedReplays);
    }
    File.WriteAllText(next,"[General]\nConfigVersion=1\nReplayBalanceVersion=99\n[Replays]\nFullScreenMinimumYards=20\n");SettingsMigration.Ensure(next,old,defaults);

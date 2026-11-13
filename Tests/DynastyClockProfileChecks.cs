@@ -8,7 +8,7 @@ internal static class DynastyClockProfileChecks {
     static void Check(bool condition,string name){if(!condition)throw new Exception(name);checks++;}
     static void Reject(Action action,string name){try{action();}catch(InvalidDataException){checks++;return;}throw new Exception("Accepted "+name);}
     static int Main(string[] args) {
-        string root=Path.GetFullPath(args[0]);Directory.CreateDirectory(root);
+        string root=Path.GetFullPath(args[0]);Directory.CreateDirectory(root);typeof(Ace.DynastyCOT.UserStorage).GetField("current",System.Reflection.BindingFlags.NonPublic|System.Reflection.BindingFlags.Static).SetValue(null,new Ace.DynastyCOT.UserStore(Path.Combine(root,"Ace","DynastyCOT")));
         string folder=Path.Combine(root,Guid.NewGuid().ToString("N"));
         Directory.CreateDirectory(folder);
         // Legacy global choices deliberately do not seed per-Dynasty defaults.

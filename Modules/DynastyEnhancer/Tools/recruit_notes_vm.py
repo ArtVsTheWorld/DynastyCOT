@@ -19,8 +19,9 @@ class ScriptFunction:
 
 
 class Machine:
-    def __init__(self, globals_, pool):
+    def __init__(self, globals_, pool, max_steps=10000):
         self.globals, self.pool = globals_, pool
+        self.max_steps=max_steps
         self.depth = 0
 
     def invoke(self, function, receiver, args):
@@ -78,7 +79,7 @@ class Machine:
             return value
 
         try:
-            for _ in range(10000):
+            for _ in range(self.max_steps):
                 if pc == end:
                     if stack:
                         raise AssertionError(f'Unbalanced implicit return: {stack!r}')

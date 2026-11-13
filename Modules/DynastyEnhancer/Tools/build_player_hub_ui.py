@@ -45,6 +45,9 @@ ATTRIBUTE_NAMES=(
     'Medium Route Running','Deep Route Running','Release','Jumping','Carrying',
     'Ball Carrier Vision','Break Tackle','Trucking','Stiff Arm','Spin Move',
     'Juke Move','Throw Power','Short Accuracy','Medium Accuracy','Deep Accuracy',
+    # Native hub QB comparison captions differ from the roster's full names.
+    # These are attribute identities, never a generic "accuracy" stat match.
+    'Throw Acc Short','Throw Acc Mid','Throw Acc Deep',
     'Throw on Run','Throw Under Pressure','Break Sack','Play Action',
     'Pass Block','Pass Block Power','Pass Block Finesse','Run Block',
     'Run Block Power','Run Block Finesse','Lead Block','Impact Blocking',

@@ -18,6 +18,8 @@ def seed(name):
  root=BASE/name;(root/'Plugins').mkdir(parents=True);(root/'.cot-fixture').write_text('isolated');(root/'MMCModManager.exe').write_bytes(b'fixture; never executed')
  for module in NAMES:shutil.copyfile(META[module]['dll'],root/f'Plugins/{module}.dll')
  shutil.copyfile(GAMEDAY['dll'],root/'Plugins/GamedayAtmosphere.dll')
+ for rel in GAMEDAY.get('supportFiles',{}):
+  target=root/rel;target.parent.mkdir(parents=True,exist_ok=True);shutil.copyfile(Path(GAMEDAY['stage'])/rel,target)
  return root
 def fixture(mode,root):
  global checks
@@ -41,10 +43,11 @@ with zipfile.ZipFile(reference) as z:
    if path.endswith('/beyond-the-field.json'):check(digest==old[path.replace('beyond-the-field.json','dynasty-enhancer.json')],'Only config filename changes')
    elif name=='BeyondTheField' and path.endswith('/BeyondTheFieldNative-v103.dll'):check(meta['branding']['nativeTests']=='passed','Branded native configuration source build and tests')
    elif name=='BeyondTheField' and path.endswith('/BeyondTheFieldRecruitFog-v1.dll'):
-    inputs=json.loads((ROOT/'cot.build-inputs.json').read_text());check(sha(ROOT/inputs['fogNative'])==digest==inputs['nativeHashes']['fogNative'],'Matched freshly source-built fog payload')
+    inputs=json.loads((ROOT/'cot.build-inputs.json').read_text());check(digest==meta['branding']['fogSha256'] and meta['branding']['fogSourceBuilt'],'Matched freshly source-built fog payload')
    elif name=='BeyondTheField' and path.startswith(('COT-Runtime/DynastyEnhancer/Tools/','COT-Runtime/DynastyEnhancer/Content/Runtime/')):
     relative=path.removeprefix('COT-Runtime/DynastyEnhancer/');check(sha(ROOT/'Modules/DynastyEnhancer'/relative)==digest,'Current source-built GPI generator/content payload')
    elif name=='BeyondTheField' and path=='LICENSES/PlayerAnalytics-NOTICES.txt':check(sha(ROOT/'Modules/DynastyEnhancer/Source/Analytics.NOTICES.txt')==digest,'Current analytics notices')
+   elif path.endswith(('ExtraSettings.Persistence.exe','ExpandedPractice.Runtime.exe')):check(digest==sha(Path(meta['work'])/Path(path).name),'Fresh source-built helper payload')
    else:check(old[path]==digest,'Payload parity with released COT: '+path)
  package=BASE/'COT102';z.extractall(package)
 for mode in ['claim','conflict']:fixture(mode,seed(mode))
@@ -74,6 +77,6 @@ result=installer('UninstallAll');check(result.returncode==0,'COT uninstall succe
 fixture('files',root)
 for relative,contents in data.items():check((root/relative).read_bytes()==contents,'Rematerialization preserves data')
 for name in NAMES:check((root/f'Plugins/{name}.dll').exists(),'Bundle uninstall leaves independent DLL')
-report=dict(format=1,checks=checks,gamedayDllSha256=GAMEDAY['dllSha256'],modules={name:dict(version=meta['version'],dllSha256=meta['dllSha256'],sourceHashes=meta['sourceHashes'],payload=meta['payload'],branding=meta['branding']) for name,meta in META.items() if name in selected},fixtureRoot=str(BASE),reverseCotSwitchRequiresNativeBackup=switch_issue,liveAcceptance='Recruiting adapters user-verified in temporary live preview; integrated clean-package stability and mode/persistence acceptance pending',installedIntoLiveMmc=False,published=False)
+report=dict(format=1,checks=checks,gamedayDllSha256=GAMEDAY['dllSha256'],modules={name:dict(version=meta['version'],dllSha256=meta['dllSha256'],sourceHashes=meta['sourceHashes'],payload=meta['payload'],branding=meta['branding']) for name,meta in META.items() if name in selected},fixtureRoot=str(BASE),reverseCotSwitchRequiresNativeBackup=switch_issue,liveAcceptance='Storage change has offline verification only; clean-package live game acceptance pending',installedIntoLiveMmc=False,published=False)
 (BASE/'results.log').write_text('\n'.join(logs),encoding='utf-8');(ROOT/'Build/standalones-verification.json').write_text(json.dumps(report,indent=2)+'\n',encoding='utf-8')
 print('PASS',checks,'standalone integration checks; reverse-switch native backup required:',switch_issue)

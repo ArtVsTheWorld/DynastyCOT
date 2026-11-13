@@ -5,18 +5,19 @@ using System.Runtime.InteropServices;
 class ClockHelperChecks {
  static int checks;static void Check(bool ok,string text){if(!ok)throw new Exception(text);checks++;}
  static int Main(string[] args){
-  IntPtr data=Marshal.AllocHGlobal(16384);
+  IntPtr data=Marshal.AllocHGlobal(65536);
   try{
-   Marshal.Copy(new byte[16384],0,data,16384);
+   Marshal.Copy(new byte[65536],0,data,65536);
    string folder=Path.Combine(Path.GetFullPath(args[1]),"Helper-"+Guid.NewGuid().ToString("N"));Directory.CreateDirectory(folder);
    Assembly a=Assembly.LoadFrom(Path.GetFullPath(args[0]));
+   a.GetType("Ace.DynastyCOT.UserStorage",true).GetField("current",BindingFlags.Static|BindingFlags.NonPublic).SetValue(null,Activator.CreateInstance(a.GetType("Ace.DynastyCOT.UserStore",true),new object[]{Path.Combine(folder,"Ace","DynastyCOT")}));
    Type h=a.GetType("OfflineDynastySettings.PersistenceHelper",true),c=a.GetType("OfflineDynastySettings.PersistenceContext",true);
    object context=Activator.CreateInstance(c);
    c.GetProperty("ClockData").SetValue(context,data.ToInt64(),null);c.GetProperty("PluginFolder").SetValue(context,folder,null);
    h.GetField("context",BindingFlags.Static|BindingFlags.NonPublic).SetValue(null,context);
    MethodInfo save=h.GetMethod("SaveDynastyClocks",BindingFlags.Static|BindingFlags.NonPublic);
    object[] call={GetCurrentProcess(),(uint)0};
-   string path=Path.Combine(folder,"OfflineDynastySettings","DynastyClocks.json");
+   string path=Path.Combine(folder,"Ace","DynastyCOT","ExtraSettings","DynastyClocks.json");
    save.Invoke(null,call);Check(!File.Exists(path),"unchanged revision wrote defaults");
    Marshal.WriteInt64(data,0x1100,unchecked((long)(101UL|(3UL<<32)|(5UL<<40))));
    Marshal.WriteInt64(data,0x1108,unchecked((long)(202UL|(2UL<<32))));
@@ -36,6 +37,12 @@ class ClockHelperChecks {
    rejected=false;try{save.Invoke(null,call);}catch(TargetInvocationException e){rejected=e.InnerException is InvalidDataException;}
    Check(rejected&&(uint)call[1]==4&&File.ReadAllText(path)==second,"invalid table changed storage or acknowledgement");
    Check(!File.Exists(Path.Combine(folder,"DynastyPlayClock.ini"))&&!File.Exists(Path.Combine(folder,"DefensivePlayClock.ini")),"helper wrote old global clocks");
+   c.GetProperty("SplitData").SetValue(context,data.ToInt64()+32768,null);
+   var defense=h.GetMethod("SaveDefense",BindingFlags.NonPublic|BindingFlags.Static);object[] dc={GetCurrentProcess(),(uint)0};
+   string defenseFile=Path.Combine(folder,"Ace","DynastyCOT","ExtraSettings","OfflinePlaycallSettings","dynasties.json");
+   Marshal.WriteInt32(data,32768+0x2000,101);Marshal.WriteInt32(data,32768+0x2004,2);Marshal.WriteInt32(data,32768+0x2008,5);Marshal.WriteInt32(data,32768+0x1800,2);defense.Invoke(null,dc);
+   Check(File.Exists(defenseFile)&&File.ReadAllText(defenseFile).Contains("101")&&(uint)dc[1]==2,"Playcall helper did not persist to shared user folder");
+   Check(!Directory.Exists(Path.Combine(folder,"OfflinePlaycallSettings")),"Playcall helper wrote to legacy Plugins path");
    Console.WriteLine("PASS: "+checks+" detached clock-helper checks; stable snapshots, failed-save retry, backups and invalid-table rejection. Self-process only.");return 0;
   }catch(Exception e){Console.Error.WriteLine(e);return 1;}finally{Marshal.FreeHGlobal(data);}
  }
