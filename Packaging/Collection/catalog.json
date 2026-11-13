@@ -18,9 +18,9 @@
         "Tag": "v1.0.23",
         "ArchiveName": "BeyondTheField-1.0.23.zip",
         "ArchiveUrl": "https://github.com/ArtVsTheWorld/BeyondTheField/releases/download/v1.0.23/BeyondTheField-1.0.23.zip",
-        "ArchiveSha256": "85faff90cacf1bf99c5da270f19ab0d842a2e418eb7c25a883e86e229ec66790",
-        "DllSha256": "f946461f8e88674436dd9ef356c7e083f6a1fd06a5d2c100441d603045efd188",
-        "ArchiveBytes": 38175147,
+        "ArchiveSha256": "0a3e6f94c76c3c388e5c9226be01f5da71bb5acc1eb659d5f7c000d5e6b3dcfd",
+        "DllSha256": "0155244919e88ab804b338ccdd857204fd990dcf0d3148e9a2948cb3a1363381",
+        "ArchiveBytes": 38175263,
         "ProofUrl": "https://github.com/ArtVsTheWorld/BeyondTheField/releases/download/v1.0.23/BeyondTheField-1.0.23-verification.json",
         "PageUrl": "https://github.com/ArtVsTheWorld/BeyondTheField/releases/tag/v1.0.23",
         "Notes": "# BeyondTheField 1.0.23\n\nChanges since public 1.0.7\n\n- Choose separate grade scales for recruiting, rosters and teams, including Off and Blind\n- Use optional Athletic Measurables and interest-display choices independently of Recruiting Fog\n- Recruit Notes load more reliably and offer shorter, more varied observations, coherent ATH secondary roles and improved new prospect backgrounds\n- Previously saved Notes keep their data while technical labels are hidden; compact transfer labels retain year and redshirt status\n- Confirmed signing news now follows the actual signing school, including recruits whose interest list still names another leader\n- Fans and official accounts have more personality, clearer rivalry references and cleaner grammar; unchanged preseason stories and milestone repetition are reduced\n- Social Media reuses unchanged work and handles available historical editions more efficiently without increasing weekly post budgets\n- GPI Season matches the weekly grade when a player has only one graded game\n- Fog covers additional depth-chart, hub and supported Dynasty Extensions report/drill displays; money formatting and navigation fixes remain\n- Settings and history move safely to shared AppData, helping installs in protected folders\n\nFull multi-coach active-school selection and private Notes ownership remain unsupported outside the verified Owner-school perspective. Saved backgrounds are not rerolled. Installed-menu acceptance is still required.\n\nInstall or update: close MMC/game, back up the previous DLL and replace it in Plugins. Keep settings and history. Restore that DLL to roll back.\n",
@@ -71,9 +71,9 @@
         "Tag": "v0.2.11",
         "ArchiveName": "ExtraSettings-0.2.11.zip",
         "ArchiveUrl": "https://github.com/ArtVsTheWorld/offline-dynasty-settings/releases/download/v0.2.11/ExtraSettings-0.2.11.zip",
-        "ArchiveSha256": "bce8b5e56881d50cfc0df845703ed78ba6c392d5d3c4c21245e7bda737c7c00a",
-        "DllSha256": "417a740e436a9ca1ca495e96a353b2fb9dfa3935b2ff6cd0d8e4956910d41a28",
-        "ArchiveBytes": 90350,
+        "ArchiveSha256": "00e2cd1507cebe54ce9049f9563a3aef0d70c3813bb0064e40edfecc8834cc9f",
+        "DllSha256": "2552a90870e9f88748e1287713966356e2b1abc7a9329cbfc19c440d6a4f9d3a",
+        "ArchiveBytes": 90372,
         "ProofUrl": "https://github.com/ArtVsTheWorld/offline-dynasty-settings/releases/download/v0.2.11/ExtraSettings-0.2.11-verification.json",
         "PageUrl": "https://github.com/ArtVsTheWorld/offline-dynasty-settings/releases/tag/v0.2.11",
         "Notes": "# ExtraSettings 0.2.11\n\nChanges since public 0.2.10\n\n- Settings, diagnostics and verified runtime files now use shared AppData, so a protected MMC folder does not stop normal saving\n- Different MMC copies share your existing choices; legacy files are preserved and explicit AppData preferences take priority\n- Keeps per-Dynasty clocks, separate offensive/defensive playcall controls and existing compatibility checks\n\nOffline Dynasty only. Check persistence after a clean restart; other game layouts still require their own verification.\n\nInstall or update: close MMC/game, back up the previous DLL and replace it in Plugins. Keep settings and history. Restore that DLL to roll back.\n",
@@ -96,9 +96,9 @@
         "Tag": "v0.8.23",
         "ArchiveName": "ExpandedPractice-0.8.23.zip",
         "ArchiveUrl": "https://github.com/ArtVsTheWorld/drive-based-practice/releases/download/v0.8.23/ExpandedPractice-0.8.23.zip",
-        "ArchiveSha256": "3d4a300ab062221e9892f35ba749c10cbc58a701a0603b6541f976da6652f345",
-        "DllSha256": "8a7521defb83730024320224e4d6ab152917cdaed50f90797d7e698d0ea19847",
-        "ArchiveBytes": 78022,
+        "ArchiveSha256": "591338ba578cf3dae729a81e9843fbeaf293cccbeab19ebbb1d99b76016a4b70",
+        "DllSha256": "856275e583c83d8fdc9e9d697f6bd48f0fb0d28081418a1b4d58e4b834925185",
+        "ArchiveBytes": 78021,
         "ProofUrl": "https://github.com/ArtVsTheWorld/drive-based-practice/releases/download/v0.8.23/ExpandedPractice-0.8.23-verification.json",
         "PageUrl": "https://github.com/ArtVsTheWorld/drive-based-practice/releases/tag/v0.8.23",
         "Notes": "# ExpandedPractice 0.8.23\n\nChanges since public 0.8.21\n\n- Avoids the confirmed Dynasty Extensions pregame controller-hook conflict on the supported layout\n- Settings, diagnostics and verified runtime files now use shared AppData, including when MMC is installed in a protected folder\n- Keeps Default, Drive and Scrimmage modes, session statistics and existing native safety checks\n\nOnly the exact supported Dynasty Extensions/controller layout is covered. Check both practice entry routes after a clean restart.\n\nInstall or update: close MMC/game, back up the previous DLL and replace it in Plugins. Keep settings and history. Restore that DLL to roll back.\n",
@@ -337,6 +337,21 @@
       "Path": "Plugins/ExpandedPractice.dll",
       "Module": "ExpandedPractice",
       "Sha256": "8a7521defb83730024320224e4d6ab152917cdaed50f90797d7e698d0ea19847"
+    },
+    {
+      "Path": "Plugins/BeyondTheField.dll",
+      "Module": "BeyondTheField",
+      "Sha256": "0155244919e88ab804b338ccdd857204fd990dcf0d3148e9a2948cb3a1363381"
+    },
+    {
+      "Path": "Plugins/ExtraSettings.dll",
+      "Module": "ExtraSettings",
+      "Sha256": "2552a90870e9f88748e1287713966356e2b1abc7a9329cbfc19c440d6a4f9d3a"
+    },
+    {
+      "Path": "Plugins/ExpandedPractice.dll",
+      "Module": "ExpandedPractice",
+      "Sha256": "856275e583c83d8fdc9e9d697f6bd48f0fb0d28081418a1b4d58e4b834925185"
     }
   ],
   "Programs": [
@@ -2199,6 +2214,26 @@
       "Path": "Plugins/SituationalPractice/ExpandedPractice.Runtime.exe",
       "Module": "ExpandedPractice",
       "Sha256": "bc0da9beaeb1291acbf6b6f8d9145cf8fe96e69b0fb9823ffd71b74c3f71317f"
+    },
+    {
+      "Path": "COT-Runtime/DynastyEnhancer/BeyondTheFieldNative-v103.dll",
+      "Module": "BeyondTheField",
+      "Sha256": "09d5e4e8354bf197714306927a2133805c2754ce866cca783f3d3ea5211f4f95"
+    },
+    {
+      "Path": "COT-Runtime/DynastyEnhancer/BeyondTheFieldRecruitFog-v1.dll",
+      "Module": "BeyondTheField",
+      "Sha256": "e2c3eb7fe604e586c98ccb91df490e50cafd09ca3d79b5e2e32a6e176122f5a6"
+    },
+    {
+      "Path": "Plugins/OfflineDynastySettings/ExtraSettings.Persistence.exe",
+      "Module": "ExtraSettings",
+      "Sha256": "a92c8c67d3663ccf86e625a2f22497b393e58e9c339911043fbe75441e3a698e"
+    },
+    {
+      "Path": "Plugins/SituationalPractice/ExpandedPractice.Runtime.exe",
+      "Module": "ExpandedPractice",
+      "Sha256": "d7ff7369f3e4a58523843654e65a99c010d339aa8b5f96e07f793f7367f397f7"
     }
   ]
 }
