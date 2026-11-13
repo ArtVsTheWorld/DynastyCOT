@@ -1,63 +1,58 @@
-# Gameday Atmosphere - key features
+# Gameday Atmosphere by Ace
 
-By Ace. A standalone crowd and stadium-atmosphere mod for offline Dynasty and basic offline Play Now. It does not require Beyond the Field, Extra Settings, Expanded Practice or the COT installer.
+Optional stadium atmosphere for supported offline Dynasty and basic offline Play Now. Other COT modules are not required.
 
-## Crowd turnout and arrivals
+## Attendance and crowd movement
 
-- Dynasty turnout considers available program support, recent performance, opponent, rankings, venue, weather and game context. Missing information uses supported fallbacks.
-- Fans arrive after kickoff instead of all appearing at once. Some schools have later arrival patterns; weather, night games, rivalries and big matchups can affect the opening.
-- Choose Default or Fuller Crowds. Fuller Crowds affects fresh regular-season Dynasty plans; existing limits and special-game rules still apply.
-- Adjust ordinary and late-arriving kickoff crowds, the big-game bonus and when arrivals finish.
-- Fans temporarily leave their seats around halftime and return in the second half. Adjust the strength of these breaks.
+- Dynasty turnout considers available program demand, season performance, opponent appeal, venue, weather and supported game context
+- Poor seasons can leave noticeably emptier stands; special events help without always erasing weak demand
+- Supported low-demand fixtures have attendance caps, with guarded opener, rivalry, major-game, senior-night or night-game exceptions as appropriate
+- Fans arrive after kickoff, take temporary halftime seat breaks and leave at different rates as the game develops
+- Tune arrival timing, kickoff fullness, break strength, departure strength, Fan Patience and Beat the Traffic
+- Winning visiting supporters can still leave during a blowout, more slowly than the losing home crowd
+- Replay clocks do not drive live crowd movement
+- Saved fixture plans and departures preserve continuity; the crowd-regeneration setting applies only when explicitly chosen
 
 ## Visiting supporters
 
-- Visiting sections and smaller traveling groups reflect fanbase demand, distance and matchup appeal. Large fanbases handle distance better; strong home support resists takeovers.
-- Available city locations support geographic distance. State-based fallbacks are weaker; completely unknown locations stay neutral.
-- Main visiting blocks are less uniform, with home fans mixed in and visitors scattered in smaller groups.
-- Visiting Fan Strength ranges from 0-200%, with 100% using the normal model. Changes affect new plans, not saved crowds. Neutral-site appearance keeps its native rules.
-- Bands and recognized military crowd groups are protected during ordinary crowd changes.
+- Separate regional travel, national support and home ticket demand shape the visiting contingent
+- Verified prestige gives established national programs more long-distance support; current results affect excitement without instantly erasing that following
+- Great-circle city distances use weaker state fallbacks when necessary; unknown geography stays neutral, and FCS regions use supported regional estimates
+- New eligible non-neutral plans start between 3% and 35% visitors; larger shares require weak home demand and a qualifying strong visitor
+- The protected late-game visitor floor represents a small family/friends contingent without refilling departed seats
+- A tapered increase helps low ordinary visiting shares without similarly inflating already healthy support
+- A visiting-dominated main section keeps irregular edges and home pockets, plus scattered parties of 1-8 weighted toward 2-4
+- Supported neutral Dynasty fixtures, including verified championship launches, use dynamic fanbase/prestige splits bounded to 30/70 in either direction while preserving EA turnout
+- Visiting Fan Strength ranges from 0-200%, with 100% as the normal model; changes affect new plans, not old saved crowds
 
-## Departures and continuity
+## Spring games
 
-- Score, time and supported matchup/weather context affect fans leaving early. Fan Patience offers Automatic, Normal, Patient Fans and Bad Weather choices.
-- Tune normal departure strength. Beat the Traffic adds special late exits when the home team is badly behind.
-- Home and visiting fans leave at different rates. Winning visitors can still thin during a blowout, more slowly than the losing home crowd.
-- Saved Dynasty crowd plans/history support continuity and save/resume matching. Switching between current standalone and COT does not create a fresh crowd-history profile.
-- Replay playback suspends live crowd changes so the live plan is not driven by the replay clock.
+- Recognize verified Dynasty Extensions spring fixtures, including supported TeamBuilder identities, without treating the practice stand-in as an ordinary FCS opponent
+- Use the actual school's colors throughout the ordinary crowd, retaining protected special groups
+- Estimate exhibition turnout from actual-school audience/venue inputs, stable engagement and modest variation, with time/weather/roof effects and a 60% ceiling
+- Preserve intentionally empty stadiums, native empty seats, culling and the corrected occupied-seat baseline
+- A permanent post-halftime wave, temporary breaks and gradual second-half departures are score independent
+- Spring reactions favor successful plays and restrained disappointment after meaningful starting-offense failures; audible boo acceptance remains pending
 
-## Crowd sound and energy
+## Sound, shake and replays
 
-- Crowd volume follows the supporters present. Background roar weakens as the home deficit grows; cheers and scoring reactions take priority.
-- Add opening energy, play-selection buildup, close-game tension, upset-watch sounds and overtime atmosphere when the game and crowd qualify.
-- Crowds react to runs, catches, passes in flight, sacks, takeaways, returns, important stops and scoring plays. Recovering your own fumble is not treated as a takeaway.
-- Successful skill moves and qualifying big hits have their own reactions. Some are sound-only; stronger effects require supported events and crowd conditions.
-- Home and visiting supporters respond to good plays and mistakes. Smaller crowds can still make simple reactions without qualifying for stronger shake.
-- Major moments such as a late winner or overtime victory can get larger celebrations. This describes crowd effects, not new player celebration animations.
-- Control crowd sound, extra energy, opening/play-selection/overtime/upset layers, live reactions, skill reactions, pass anticipation and overall volume adjustment.
+- Crowd volume follows modeled supporters present; generally medium reactions are the minimum except genuinely sparse crowds
+- Opening energy, play-selection buildup, pass anticipation, skill moves, big hits, sacks, takeaways, returns, stops and scores have guarded reactions
+- Distinct verified events can coordinate complementary sounds with separate delivery tracking and bounded expiry; generic reactions do not automatically suppress meaningful current events
+- Background roar softens during large home deficits, settles more gently during large home leads and quiets after visiting touchdowns
+- Supported crowd/band/commentary routes retain their protections; no claim that every selected sound is audible in every mix
+- Camera shake requests accompanying sound; tune play-selection, important-down, live-play, touchdown, celebration, camera-specific, visitor and cannon effects
+- Dynamic Camera Effects must be enabled for added shake
+- Separate controls cover extra ordinary-play insets, defensive highlights and full-screen non-touchdown big plays
+- Full-screen replay yardage defaults to 12 and can be changed in-game; the supported Broadcast Universe handoff enables that route without promising every native clip
+- Touchdown presentation remains native; no experimental guarantee of touchdown replays is included
+- Show crowd fullness in the pause menu; 2020 Mode empties stands and quiets stadium layers
 
-## Camera shake
+## Installation and limits
 
-- Added shake requests accompanying crowd sound, including pre-play buildup. The game's Dynamic Camera Effects setting must be On.
-- Tune normal play-selection, important-down, live-play, touchdown and major-celebration shake separately.
-- Adjust Standard, Zoom, All-22, Wide and Broadcast cameras individually. Optional wide player-camera compensation provides extra correction for very wide player-lock views.
-- Visiting-fan reaction shake has its own toggle; turning it off keeps supported crowd sounds. Neutral-site shake has a separate strength control.
-- Supported stadium cannon events can add shake, with their own control. Setting cannon shake to zero keeps its sound.
-
-## Replays, settings and empty stands
-
-- Request extra replays after eligible non-touchdown plays: full-screen big plays, ordinary-play insets and defensive highlights have separate controls. The game chooses the available clips.
-- Touchdown replay/celebration presentation remains native; the mod does not promote, suppress or request extra touchdown sequences. Touchdown replays can still be inconsistent.
-- Added replay eligibility now admits supported offline Play Now as well as Dynasty. Additional Replays and Full-Screen Big Play Replays must be enabled for the added full-screen gain coverage.
-- Slow Sim has no play-selection screen, so it gets no added play-selection inset.
-- Show crowd fullness beside Resume in the pause menu.
-- 2020 Mode empties the stands and quiets crowd, band, drum and PA sound while retaining quieter individual voices and open-stadium ambience.
-- Use in-game controls or the existing INI for tuning. Existing settings are not reset or retuned by this standalone's startup.
-
-## Play Now and practical limits
-
-- Basic offline Play Now includes crowd arrivals/departures, sound and shake. With arrivals enabled, fresh games start at 75% of the available original crowd and continue filling.
-- Play Now retains native visiting-fan appearance. It does not use Dynasty travel/season plans or write Dynasty crowd history.
-- Offline modes only. Practice, online play and general Road to Glory support are not claimed.
-- Stadium layouts, native presentation, available data, exact game version and other mods can affect results. Unknown native layouts and foreign hook ownership remain rejected.
-- Version 2.1.11 retains the released crowd policies and corrects the replay eligibility gate for offline Play Now. A 20-yard non-touchdown Play Now completion showed both replay types during private testing; the clean release package is offline-verified. No new FPS benchmark or universal compatibility is claimed.
+- Copy GamedayAtmosphere.dll into Plugins, or use COT to install the same DLL; matching support prepares automatically in AppData without an injector EXE or manual COT-Support folder
+- Data/settings/history/logs use %LOCALAPPDATA%\Ace\DynastyCOT\GamedayAtmosphere across MMC copies; originals are preserved during legacy migration
+- Bands, recognized military/special groups, native empty seats and culling retain their protections
+- With arrivals enabled, fresh offline Play Now starts at 75% of its available crowd and then fills; its visiting appearance remains native and it does not use Dynasty travel/history
+- Practice and online atmosphere are not supported; exact fingerprints, scope, ownership and integrity checks remain enforced
+- New attendance/shares/layout rules apply to new plans; an existing saved fixture can retain its old plan deliberately

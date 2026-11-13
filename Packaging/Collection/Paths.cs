@@ -17,8 +17,21 @@ namespace DynastyCOT.Collection {
   internal static string HashFile(string file){using(var stream=File.OpenRead(file))using(var sha=SHA256.Create())return BitConverter.ToString(sha.ComputeHash(stream)).Replace("-","").ToLowerInvariant();}
   internal static string Existing(string file){return File.Exists(file)?HashFile(file):null;}
   internal static void Relative(string relative){if(String.IsNullOrWhiteSpace(relative)||Path.IsPathRooted(relative)||relative.IndexOfAny(new[]{':','\0'})>=0||relative.Replace('\\','/').Split('/').Any(x=>x==".."||x=="."||x.Length==0||x.EndsWith(" ")||x.EndsWith(".")))throw new IOException("Unsafe managed path.");}
-  internal static string Resolve(string root,string relative){Relative(relative);string prefix=Path.GetFullPath(root).TrimEnd('\\')+"\\",path=Path.GetFullPath(Path.Combine(prefix,relative.Replace('/','\\')));if(!path.StartsWith(prefix,StringComparison.OrdinalIgnoreCase))throw new IOException("Managed path leaves its MMC folder.");NoLinks(root,path);return path;}
-  internal static void NoLinks(string root,string path){string prefix=Path.GetFullPath(root).TrimEnd('\\');for(string current=path;current!=null&&(current.Equals(prefix,StringComparison.OrdinalIgnoreCase)||current.StartsWith(prefix+"\\",StringComparison.OrdinalIgnoreCase));current=Path.GetDirectoryName(current))if((Directory.Exists(current)||File.Exists(current))&&(File.GetAttributes(current)&FileAttributes.ReparsePoint)!=0)throw new IOException("Linked installation paths are not supported: "+current);}
+  internal static string Resolve(string root,string relative){Relative(relative);
+   if(relative.Replace('\\','/').StartsWith("COT-Collection/",StringComparison.Ordinal)){
+    Ace.DynastyCOT.UserStorage.Current.MigrateCollection(root);
+    string folder=Ace.DynastyCOT.UserStorage.Current.CollectionFolder(root),tail=relative.Replace('\\','/').Substring("COT-Collection/".Length);
+    string target=Path.GetFullPath(Path.Combine(folder,tail.Replace('/',Path.DirectorySeparatorChar)));Ace.DynastyCOT.UserStore.NoLinks(folder,target);return target;
+   }
+string prefix=Path.GetFullPath(root).TrimEnd('\\')+"\\",path=Path.GetFullPath(Path.Combine(prefix,relative.Replace('/','\\')));if(!path.StartsWith(prefix,StringComparison.OrdinalIgnoreCase))throw new IOException("Managed path leaves its MMC folder.");NoLinks(root,path);return path;}
+  internal static void NoLinks(string root,string path){
+   string full=Path.GetFullPath(path),prefix=Path.GetFullPath(root).TrimEnd('\\');
+   if(!full.Equals(prefix,StringComparison.OrdinalIgnoreCase)&&!full.StartsWith(prefix+"\\",StringComparison.OrdinalIgnoreCase)){
+    string user=Ace.DynastyCOT.UserStorage.Current.CollectionFolder(root);
+    if(!full.Equals(user,StringComparison.OrdinalIgnoreCase)&&!full.StartsWith(user+"\\",StringComparison.OrdinalIgnoreCase))throw new IOException("Path leaves its authorized installation/data store.");prefix=user;
+   }
+   Ace.DynastyCOT.UserStore.NoLinks(prefix,full);
+  }
   internal static string ValidateRoot(string value){
    if(String.IsNullOrWhiteSpace(value))throw new IOException("Choose MMCModManager.exe.");string path=Path.GetFullPath(value.Trim()).TrimEnd('\\');if(File.Exists(path)&&Path.GetFileName(path).Equals("MMCModManager.exe",StringComparison.OrdinalIgnoreCase))path=Path.GetDirectoryName(path);
    var children=Directory.Exists(path)?Directory.GetDirectories(path,"MMC_ModManager*").Where(x=>File.Exists(Path.Combine(x,"MMCModManager.exe"))).ToArray():new string[0];
@@ -33,6 +46,6 @@ namespace DynastyCOT.Collection {
    }return failure.Message;
   }
   internal static void Atomic(string file,byte[] bytes){Directory.CreateDirectory(Path.GetDirectoryName(file));string temp=file+"."+Guid.NewGuid().ToString("N")+".tmp";try{using(var stream=new FileStream(temp,FileMode.CreateNew,FileAccess.Write,FileShare.None)){stream.Write(bytes,0,bytes.Length);stream.Flush(true);}if(File.Exists(file))File.Replace(temp,file,null);else File.Move(temp,file);}finally{if(File.Exists(temp))File.Delete(temp);}}
-  internal static void Writable(string root,IEnumerable<string> paths){foreach(string folder in paths.Select(p=>Path.GetDirectoryName(Resolve(root,p))).Distinct(StringComparer.OrdinalIgnoreCase)){string existing=folder;while(!Directory.Exists(existing)){if(File.Exists(existing))throw new IOException("A file blocks the required folder: "+existing);existing=Path.GetDirectoryName(existing);}string probe=Path.Combine(existing,".cot-write-"+Guid.NewGuid().ToString("N"));try{using(var file=new FileStream(probe,FileMode.CreateNew,FileAccess.Write,FileShare.None,4096,FileOptions.DeleteOnClose)){} }catch(UnauthorizedAccessException e){throw new IOException("Windows denied access to "+existing+". Use a writable Mod Manager folder or run setup as administrator if required. No permissions were changed.",e);}}}
+  internal static void Writable(string root,IEnumerable<string> paths){foreach(string relative in paths){string target=Resolve(root,relative);if(Directory.Exists(target))throw new IOException("A folder blocks the required file: "+target+". Move that folder outside Plugins or choose another MMC folder; no files were changed.");if(File.Exists(target)&&(File.GetAttributes(target)&FileAttributes.ReadOnly)!=0)throw new IOException("Read-only installation file: "+target+". Remove its Read-only attribute and retry; no files were changed.");}foreach(string folder in paths.Select(p=>Path.GetDirectoryName(Resolve(root,p))).Distinct(StringComparer.OrdinalIgnoreCase)){string existing=folder;while(!Directory.Exists(existing)){if(File.Exists(existing))throw new IOException("A file blocks the required folder: "+existing);existing=Path.GetDirectoryName(existing);}string probe=Path.Combine(existing,".cot-write-"+Guid.NewGuid().ToString("N"));try{using(var file=new FileStream(probe,FileMode.CreateNew,FileAccess.Write,FileShare.None,4096,FileOptions.DeleteOnClose)){} }catch(UnauthorizedAccessException e){throw new IOException("Windows denied access to "+existing+". Use a writable Mod Manager folder or run setup as administrator if required. No permissions were changed.",e);}}}
  }
 }

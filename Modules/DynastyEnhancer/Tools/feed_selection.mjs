@@ -99,9 +99,9 @@ export function scopeViews(stories,context={}){
  return {all:all.map(p=>p.id),'all:required':local.map(p=>p.id),'all:default':all.map(p=>p.id),'all:expanded':all.map(p=>p.id),national:conversationOrder(stories).map(p=>p.id),conference:conversationOrder(visible.filter(p=>p.scopes.includes('conference'))).map(p=>p.id),'team:required':local.map(p=>p.id),team:conversationOrder(visible.filter(p=>p.scopes.includes('team'))).map(p=>p.id)};
 }
 
-export function publishWeek(feed){
+export function publishWeek(feed,{publishedIds=new Set()}={}){
   const publication={key:feed.key,season:feed.season,phase:feed.phase,week:feed.week};
-  const stories=deduplicateConversations(feed.stories,feed.events).map(p=>({...p,publication,guaranteedUserDraft:p.voice==='nflDraft'&&p.teamIds?.includes(feed.userTeamIndex)}));
+  const stories=deduplicateConversations(feed.stories,feed.events,publishedIds).map(p=>({...p,publication,guaranteedUserDraft:p.voice==='nflDraft'&&p.teamIds?.includes(feed.userTeamIndex)}));
   const views={...scopeViews(stories,feed),...(feed.scopeOptions?discoveryViews(conversationOrder(stories),feed.scopeOptions):{})},map=new Map(stories.map(p=>[p.id,p]));
   return {...feed,editorialVersion:1,stories,views,posts:views.all.map(id=>map.get(id)),publication};
 }

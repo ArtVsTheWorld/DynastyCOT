@@ -1,0 +1,365 @@
+{
+  "revision": "milestone-clarity1",
+  "overrides": [
+    {
+      "family": "history.coach-wins",
+      "id": "history.coach-wins.eventcopy.1",
+      "originalBody": "{coachName} of {school} has reached {threshold} career wins. Total now: {total}.",
+      "body": "{coachName} of {school} reaches {threshold} career wins.{totalDetail}"
+    },
+    {
+      "family": "history.coach-wins",
+      "id": "history.coach-wins.eventcopy.2",
+      "originalBody": "A coaching landmark: {coachName} at {school} has {total} career victories, reaching {threshold}.",
+      "body": "Career milestone for {coachName}: {threshold} wins. He is the head coach at {school}.{totalDetail}"
+    },
+    {
+      "family": "history.coach-wins",
+      "id": "history.coach-wins.eventcopy.3",
+      "originalBody": "The career wins for {school} coach {coachName} are up to {total}. The {threshold}-win milestone is reached.",
+      "body": "{threshold} career wins for {coachName}, head coach at {school}.{totalDetail}"
+    },
+    {
+      "family": "history.coach-wins",
+      "id": "history.coach-wins.eventcopy.4",
+      "originalBody": "{total} career wins for {coachName}, now coaching {school}. That's at least {threshold}.",
+      "body": "At {school}, {coachName} has reached the {threshold}-win career mark.{totalDetail}"
+    },
+    {
+      "family": "history.coach-wins",
+      "id": "history.coach-wins.eventcopy.5",
+      "originalBody": "For {coachName}, the coaching résumé now shows {total} career wins. {threshold}-win milestone reached at {school}.",
+      "body": "{school} coach {coachName} records career victory No. {threshold}.{totalDetail}"
+    },
+    {
+      "family": "history.coach-wins",
+      "id": "history.coach-wins.eventcopy.6",
+      "originalBody": "{school}'s {coachName} has surpassed the {threshold} career-win benchmark, with {total} victories.",
+      "body": "{coachName} of {school} reaches {threshold} career wins.{totalDetail}"
+    },
+    {
+      "family": "history.coach-wins",
+      "id": "history.coach-wins.eventcopy.7",
+      "originalBody": "A mark for {coachName}'s whole career: {total} wins. He's coaching {school} at the {threshold} milestone.",
+      "body": "Career milestone for {coachName}: {threshold} wins. He is the head coach at {school}.{totalDetail}"
+    },
+    {
+      "family": "history.coach-wins",
+      "id": "history.coach-wins.eventcopy.8",
+      "originalBody": "{coachName} has hit {threshold} career wins. The {school} coach is at {total} overall.",
+      "body": "{threshold} career wins for {coachName}, head coach at {school}.{totalDetail}"
+    },
+    {
+      "family": "history.coach-wins",
+      "id": "history.coach-wins.eventcopy.9",
+      "originalBody": "The count isn't limited to {school}: {coachName} has {total} career victories, clearing {threshold}.",
+      "body": "At {school}, {coachName} has reached the {threshold}-win career mark.{totalDetail}"
+    },
+    {
+      "family": "history.coach-wins",
+      "id": "history.coach-wins.eventcopy.10",
+      "originalBody": "Across his coaching career, {coachName} has reached {total} wins. The {school} coach is past {threshold}.",
+      "body": "{school} coach {coachName} records career victory No. {threshold}.{totalDetail}"
+    },
+    {
+      "family": "history.team-wins",
+      "id": "history.team-wins.eventcopy.1",
+      "originalBody": "{school} has reached the {threshold}-win milestone. All-time total: {total}.",
+      "body": "{school} reaches {threshold} all-time wins.{totalDetail}"
+    },
+    {
+      "family": "history.team-wins",
+      "id": "history.team-wins.eventcopy.2",
+      "originalBody": "The {school} win column now reads {total}, reaching the {threshold}-win milestone.",
+      "body": "Program milestone: {threshold} wins in {school} history.{totalDetail}"
+    },
+    {
+      "family": "history.team-wins",
+      "id": "history.team-wins.eventcopy.3",
+      "originalBody": "A landmark for {school}: at least {threshold} wins in program history, {total} in all.",
+      "body": "The {school} all-time win count reaches the {threshold} mark.{totalDetail}"
+    },
+    {
+      "family": "history.team-wins",
+      "id": "history.team-wins.eventcopy.4",
+      "originalBody": "{total} all-time victories for {school}. That's past the {threshold} milestone.",
+      "body": "{threshold} program victories for {school}.{totalDetail}"
+    },
+    {
+      "family": "history.team-wins",
+      "id": "history.team-wins.eventcopy.5",
+      "originalBody": "{school} has joined the {threshold}-win club with {total} victories in its history.",
+      "body": "A program-history marker for {school}: {threshold} wins.{totalDetail}"
+    },
+    {
+      "family": "history.team-wins",
+      "id": "history.team-wins.eventcopy.6",
+      "originalBody": "Add a program milestone for {school}: {threshold} wins reached, {total} total.",
+      "body": "{school} reaches {threshold} all-time wins.{totalDetail}"
+    },
+    {
+      "family": "history.team-wins",
+      "id": "history.team-wins.eventcopy.7",
+      "originalBody": "{school}'s all-time record now includes {total} wins, crossing {threshold}.",
+      "body": "Program milestone: {threshold} wins in {school} history.{totalDetail}"
+    },
+    {
+      "family": "history.team-wins",
+      "id": "history.team-wins.eventcopy.8",
+      "originalBody": "A round-number mark for {school}: {threshold} victories reached. Actual career-program total: {total}.",
+      "body": "The {school} all-time win count reaches the {threshold} mark.{totalDetail}"
+    },
+    {
+      "family": "history.team-wins",
+      "id": "history.team-wins.eventcopy.9",
+      "originalBody": "The historical total for {school} is {total} wins, beyond the {threshold} benchmark.",
+      "body": "{threshold} program victories for {school}.{totalDetail}"
+    },
+    {
+      "family": "history.team-wins",
+      "id": "history.team-wins.eventcopy.10",
+      "originalBody": "It's {total} program wins for {school}, enough to clear the {threshold} milestone.",
+      "body": "A program-history marker for {school}: {threshold} wins.{totalDetail}"
+    },
+    {
+      "family": "history.player-career",
+      "id": "history.player-career.eventcopy.1",
+      "originalBody": "{school}'s {playerName} reaches {threshold} career {metric}. The total is now {total}.",
+      "body": "{school}'s {playerName} reaches {threshold} career {metric}.{totalDetail}"
+    },
+    {
+      "family": "history.player-career",
+      "id": "history.player-career.eventcopy.2",
+      "originalBody": "The career total is now {total} {metric} for {school}'s {playerName}, reaching the {threshold} milestone.",
+      "body": "{threshold} career {metric} for {playerName} of {school}.{totalDetail}"
+    },
+    {
+      "family": "history.player-career",
+      "id": "history.player-career.eventcopy.3",
+      "originalBody": "{school}'s {playerName} reaches {threshold} career {metric}. Current count: {total}.",
+      "body": "Career milestone for {playerName} at {school}: {threshold} {metric}.{totalDetail}"
+    },
+    {
+      "family": "history.player-career",
+      "id": "history.player-career.eventcopy.4",
+      "originalBody": "A career milestone for {playerName} at {school}: {threshold} {metric} reached, {total} in all.",
+      "body": "{playerName} of {school} hits the {threshold} career {metric} mark.{totalDetail}"
+    },
+    {
+      "family": "history.player-career",
+      "id": "history.player-career.eventcopy.5",
+      "originalBody": "{playerName} of {school} hits {threshold} career {metric}. The count stands at {total}.",
+      "body": "The career tally reaches {threshold} {metric} for {school}'s {playerName}.{totalDetail}"
+    },
+    {
+      "family": "history.player-career",
+      "id": "history.player-career.eventcopy.6",
+      "originalBody": "Put a milestone beside {playerName}'s name at {school}: {threshold} career {metric}. Total: {total}.",
+      "body": "{school}'s {playerName} reaches {threshold} career {metric}.{totalDetail}"
+    },
+    {
+      "family": "history.player-career",
+      "id": "history.player-career.eventcopy.7",
+      "originalBody": "{school}'s {playerName} has recorded at least {threshold} career {metric}. The total is now {total}.",
+      "body": "{threshold} career {metric} for {playerName} of {school}.{totalDetail}"
+    },
+    {
+      "family": "history.player-career",
+      "id": "history.player-career.eventcopy.8",
+      "originalBody": "{school}'s {playerName} reaches the {threshold} career {metric} mark, now at {total}.",
+      "body": "Career milestone for {playerName} at {school}: {threshold} {metric}.{totalDetail}"
+    },
+    {
+      "family": "history.player-career",
+      "id": "history.player-career.eventcopy.9",
+      "originalBody": "Another career marker for {school}'s {playerName}: {threshold} {metric} reached, {total} total.",
+      "body": "{playerName} of {school} hits the {threshold} career {metric} mark.{totalDetail}"
+    },
+    {
+      "family": "history.player-career",
+      "id": "history.player-career.eventcopy.10",
+      "originalBody": "A number worth marking for {school}: {playerName} has {total} career {metric}, reaching {threshold}.",
+      "body": "The career tally reaches {threshold} {metric} for {school}'s {playerName}.{totalDetail}"
+    },
+    {
+      "family": "history.player-career",
+      "id": "history.player-career.cot104.146c6bb2c5eb20d9",
+      "originalBody": "Career milestone: {playerName} reaches {threshold} {metric}. Current total: {total}.",
+      "body": "{school}'s {playerName} reaches {threshold} career {metric}.{totalDetail}"
+    },
+    {
+      "family": "history.player-career",
+      "id": "history.player-career.cot104.62144494006d8ea8",
+      "originalBody": "For {school}'s {playerName}, the career count now stands at {total} {metric}, reaching the {threshold} marker.",
+      "body": "{threshold} career {metric} for {playerName} of {school}.{totalDetail}"
+    },
+    {
+      "family": "history.player-career",
+      "id": "history.player-career.cot104.9a7d13c2c04933be",
+      "originalBody": "This is a career count: {playerName}, {total} {metric}, with the {threshold} threshold reached.",
+      "body": "Career milestone for {playerName} at {school}: {threshold} {metric}.{totalDetail}"
+    },
+    {
+      "family": "history.player-career",
+      "id": "history.player-career.cot104.b4b9674f4429a41e",
+      "originalBody": "{threshold} career {metric} reached by {playerName}. The total is {total}.",
+      "body": "{playerName} of {school} hits the {threshold} career {metric} mark.{totalDetail}"
+    },
+    {
+      "family": "history.player-career",
+      "id": "history.player-career.cot104.76a6bfeded64b39f",
+      "originalBody": "An individual milestone at {school}: {playerName} reaches {threshold} career {metric}, now at {total}.",
+      "body": "The career tally reaches {threshold} {metric} for {school}'s {playerName}.{totalDetail}"
+    },
+    {
+      "family": "history.player-career",
+      "id": "history.player-career.cot104.3c57a039e9158646",
+      "originalBody": "Keep this separate from a season total. {playerName} has {total} career {metric}, reaching {threshold}.",
+      "body": "{school}'s {playerName} reaches {threshold} career {metric}.{totalDetail}"
+    },
+    {
+      "family": "history.player-career",
+      "id": "history.player-career.cot104.5262138c2dc532d2",
+      "originalBody": "Career ledger\n{playerName}\nMarker: {threshold} {metric}\nTotal: {total}",
+      "body": "{threshold} career {metric} for {playerName} of {school}.{totalDetail}"
+    },
+    {
+      "family": "history.player-career",
+      "id": "history.player-career.cot104.74dbb4d565072b2e",
+      "originalBody": "{playerName} has a career milestone to note for {school}: {threshold} {metric}, with {total} in all.",
+      "body": "Career milestone for {playerName} at {school}: {threshold} {metric}.{totalDetail}"
+    },
+    {
+      "family": "history.player-career",
+      "id": "history.player-career.cot104.c603cc04abcd5dbf",
+      "originalBody": "Across his career, {playerName}'s {metric} total is {total}. That reaches the {threshold} marker.",
+      "body": "{playerName} of {school} hits the {threshold} career {metric} mark.{totalDetail}"
+    },
+    {
+      "family": "history.player-career",
+      "id": "history.player-career.cot104.16a96ce91707fe9d",
+      "originalBody": "Milestone update — {playerName}, {threshold} career {metric}. Total now {total}.",
+      "body": "The career tally reaches {threshold} {metric} for {school}'s {playerName}.{totalDetail}"
+    },
+    {
+      "family": "history.player-career",
+      "id": "history.player-career.cot104.161f79c93432b98a",
+      "originalBody": "The career story for {playerName} adds a {threshold} {metric} milestone. His total: {total}.",
+      "body": "{school}'s {playerName} reaches {threshold} career {metric}.{totalDetail}"
+    },
+    {
+      "family": "history.player-career",
+      "id": "history.player-career.cot104.be20507ae4cc8cc1",
+      "originalBody": "The figure is career-wide: {playerName} has {total} {metric}, meeting the {threshold} milestone.",
+      "body": "{threshold} career {metric} for {playerName} of {school}.{totalDetail}"
+    },
+    {
+      "family": "history.player-career",
+      "id": "history.player-career.cot104.85e95b49242e8f18",
+      "originalBody": "Reached: {threshold} career {metric}. Player: {playerName}. Total: {total}.",
+      "body": "Career milestone for {playerName} at {school}: {threshold} {metric}.{totalDetail}"
+    },
+    {
+      "family": "history.player-career",
+      "id": "history.player-career.cot104.cf9a70bc551974a4",
+      "originalBody": "A {school} name on the career milestone sheet: {playerName}, {threshold} {metric}, total {total}.",
+      "body": "{playerName} of {school} hits the {threshold} career {metric} mark.{totalDetail}"
+    },
+    {
+      "family": "history.player-career",
+      "id": "history.player-career.cot104.36e0c7926f9dc2df",
+      "originalBody": "The milestone is {threshold}; the actual career total is {total}. {metric} for {playerName}.",
+      "body": "The career tally reaches {threshold} {metric} for {school}'s {playerName}.{totalDetail}"
+    },
+    {
+      "family": "history.player-career",
+      "id": "history.player-career.cot104.bba9ada1f950e538",
+      "originalBody": "{playerName} crosses the {threshold} career {metric} threshold, with a total of {total}.",
+      "body": "{school}'s {playerName} reaches {threshold} career {metric}.{totalDetail}"
+    },
+    {
+      "family": "history.player-career",
+      "id": "history.player-career.cot104.79aa4b954905dbb6",
+      "originalBody": "Another career marker for {playerName}: {threshold} {metric} reached. The count stands at {total}.",
+      "body": "{threshold} career {metric} for {playerName} of {school}.{totalDetail}"
+    },
+    {
+      "family": "history.player-career",
+      "id": "history.player-career.cot104.f9c50320af2f5d7e",
+      "originalBody": "Read this as a career mark for {playerName}: {total} {metric}, reaching {threshold}.",
+      "body": "Career milestone for {playerName} at {school}: {threshold} {metric}.{totalDetail}"
+    },
+    {
+      "family": "history.player-career",
+      "id": "history.player-career.cot104.f59789950a25a0b9",
+      "originalBody": "Career marker logged: {playerName}, {threshold} {metric}. Current count {total}.",
+      "body": "{playerName} of {school} hits the {threshold} career {metric} mark.{totalDetail}"
+    },
+    {
+      "family": "history.player-career",
+      "id": "history.player-career.cot104.a9499207b2615b75",
+      "originalBody": "The {school} career note on {playerName} is a {threshold} {metric} milestone, with {total} accumulated.",
+      "body": "The career tally reaches {threshold} {metric} for {school}'s {playerName}.{totalDetail}"
+    },
+    {
+      "family": "history.player-career",
+      "id": "history.player-career.cot104.95595fd91dd7111c",
+      "originalBody": "A threshold and its total, kept distinct: {playerName} reaches {threshold} career {metric}; total {total}.",
+      "body": "{school}'s {playerName} reaches {threshold} career {metric}.{totalDetail}"
+    },
+    {
+      "family": "history.player-career",
+      "id": "history.player-career.cot104.9e6dfb4d27d2e5ca",
+      "originalBody": "{threshold} is the career {metric} milestone reached by {playerName}. He is at {total}.",
+      "body": "{threshold} career {metric} for {playerName} of {school}.{totalDetail}"
+    },
+    {
+      "family": "history.player-career",
+      "id": "history.player-career.cot104.46e46b1e58114f62",
+      "originalBody": "For the player-history watch, {playerName} has {total} career {metric}, enough to reach {threshold}.",
+      "body": "Career milestone for {playerName} at {school}: {threshold} {metric}.{totalDetail}"
+    },
+    {
+      "family": "history.player-career",
+      "id": "history.player-career.cot104.3805616ce4a62875",
+      "originalBody": "There is no season-only claim in this figure: {playerName}, {total} career {metric}, {threshold} milestone.",
+      "body": "{playerName} of {school} hits the {threshold} career {metric} mark.{totalDetail}"
+    },
+    {
+      "family": "history.player-career",
+      "id": "history.player-career.cot104.cb6026842ccff21c",
+      "originalBody": "{playerName}\nCareer {metric}: {total}\nMilestone reached: {threshold}",
+      "body": "The career tally reaches {threshold} {metric} for {school}'s {playerName}.{totalDetail}"
+    },
+    {
+      "family": "history.player-career",
+      "id": "history.player-career.cot104.7695b7223865b9c0",
+      "originalBody": "The {school} report includes {playerName} reaching a career {metric} milestone of {threshold}. Total: {total}.",
+      "body": "{school}'s {playerName} reaches {threshold} career {metric}.{totalDetail}"
+    },
+    {
+      "family": "history.player-career",
+      "id": "history.player-career.cot104.8adb46d9510efdcc",
+      "originalBody": "The career record shows {total} {metric} for {playerName}. The {threshold} milestone has been reached.",
+      "body": "{threshold} career {metric} for {playerName} of {school}.{totalDetail}"
+    },
+    {
+      "family": "history.player-career",
+      "id": "history.player-career.cot104.4fcf5cc4ce092db2",
+      "originalBody": "Career {metric} milestone for {playerName}: {threshold}, with {total} now recorded.",
+      "body": "Career milestone for {playerName} at {school}: {threshold} {metric}.{totalDetail}"
+    },
+    {
+      "family": "history.player-career",
+      "id": "history.player-career.cot104.544ab9d7965a02eb",
+      "originalBody": "An individual career checkpoint: {playerName} reaches {threshold} {metric}. The running total is {total}.",
+      "body": "{playerName} of {school} hits the {threshold} career {metric} mark.{totalDetail}"
+    },
+    {
+      "family": "history.player-career",
+      "id": "history.player-career.cot104.f2af38a6a7cf6dc5",
+      "originalBody": "For {playerName}, {threshold} is the milestone and {total} is the career {metric} count.",
+      "body": "The career tally reaches {threshold} {metric} for {school}'s {playerName}.{totalDetail}"
+    }
+  ]
+}

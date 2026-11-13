@@ -15,5 +15,14 @@ int main(){
     auto before=moved.data;
     assert(!resolve(L"C:/Unrelated/Runtime-2.1.2/native.dll",moved)&&moved.data==before);
     assert(!resolve(L"C:/MMC/DGA-Runtime/Unrelated/native.dll",moved)&&moved.data==before);
+    assert(resolve(L"C:/Users/Test User/AppData/Local/Ace/DynastyCOT/GamedayAtmosphere/Runtime-2.1.16/native.dll",moved));
+    assert(moved.data==std::filesystem::path(L"C:/Users/Test User/AppData/Local/Ace/DynastyCOT/GamedayAtmosphere")&&moved.plugins.empty());
+    std::filesystem::path origin;
+    assert(originText("DGA-ORIGIN-1\n123\n987654\nC:/Program Files/MMC/Plugins\n",123,987654,origin));
+    assert(origin==std::filesystem::path(L"C:/Program Files/MMC/Plugins"));
+    assert(!originText("DGA-ORIGIN-1\n123\n987654\nC:/Program Files/MMC/Plugins\n",124,987654,origin));
+    assert(!originText("DGA-ORIGIN-1\n123\n987654\nC:/Program Files/MMC/Plugins\n",123,987655,origin));
+    assert(!originText("DGA-ORIGIN-1\n123\n987654\n../Plugins\n",123,987654,origin));
+    assert(!originText(std::string(4097,'a'),123,987654,origin));
     std::cout<<"PASS: native runtime outside recursive plugin scan resolves the original settings/log/history and plugin paths; legacy layout, spaces, case, normalization and unsupported-path rejection.\n";
 }

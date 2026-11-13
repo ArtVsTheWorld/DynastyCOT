@@ -76,21 +76,24 @@ namespace DynamicGamedayAtmosphere
             if(logger!=null)try{logger.Log("[Gameday] "+text+(failure??""),new object[0]);}catch{}
             else if(failure!=null)using(var diagnostic=new DefaultTraceListener())diagnostic.WriteLine("[Gameday] "+text+failure);
         }
-        private static void Extract(string name,bool preserve)
+        private static void Extract(string name,bool preserve){Ace.DynastyCOT.UserStorage.Current.WithModule("GamedayAtmosphere",()=>ExtractCore(name,preserve));}
+        private static void ExtractCore(string name,bool preserve)
         {
             string output=name=="DgaDiagnostics.exe"?Path.Combine(DataFolder,"Tools"):name.EndsWith(".ini",StringComparison.OrdinalIgnoreCase)?DataFolder:RuntimeFolder;
             Directory.CreateDirectory(output);string destination=Path.Combine(output,name);
             if(preserve&&File.Exists(destination))return;
             byte[] bytes;
+
             using(var resource=typeof(AttendanceAction).Assembly.GetManifestResourceStream("Attendance."+name))
             using(var buffer=new MemoryStream())
             { if(resource==null)throw new InvalidOperationException("Missing embedded resource: "+name);resource.CopyTo(buffer);bytes=buffer.ToArray(); }
             using(var hash=SHA256.Create())
             {
                 byte[] expected=hash.ComputeHash(bytes);
+                if(name==BuildInfo.NativeFile&&BitConverter.ToString(expected).Replace("-","").ToLowerInvariant()!=BuildInfo.NativeSha256)throw new IOException("Embedded Gameday runtime failed integrity verification. Re-download the matching plugin; no native load attempted.");
                 if(File.Exists(destination))using(var old=File.OpenRead(destination))
                     if(Convert.ToBase64String(hash.ComputeHash(old))==Convert.ToBase64String(expected))return;
-                File.WriteAllBytes(destination,bytes);
+                Ace.DynastyCOT.UserStore.Atomic(destination,bytes);
                 using(var saved=File.OpenRead(destination))if(Convert.ToBase64String(hash.ComputeHash(saved))!=Convert.ToBase64String(expected))throw new IOException("Extracted runtime hash differs");
             }
         }
@@ -139,6 +142,10 @@ namespace DynamicGamedayAtmosphere
                 string mmcElevation=LaunchDiagnostics.Elevation(Process.GetCurrentProcess().Id);
                 try
                 {
+                    if(Ace.DynastyCOT.UserStorage.Current.NeedsMigration("GamedayAtmosphere",PluginsFolder)){
+                        var games=Process.GetProcessesByName("CollegeFB27");bool running=games.Length!=0;foreach(var game in games)game.Dispose();
+                        if(running)throw new IOException("Close the game once to copy existing Gameday settings/history safely. Original files are retained.");
+                    }
                     Directory.CreateDirectory(RuntimeFolder);
                     watcherStep="extract native runtime";watcherFile=Path.Combine(RuntimeFolder,BuildInfo.NativeFile);Extract(BuildInfo.NativeFile,false);
 #if EXTERNAL_RUNTIME_LOADER
@@ -149,25 +156,8 @@ namespace DynamicGamedayAtmosphere
                     watcherStep="read embedded default settings";watcherFile=null;
                     string defaults;using(var input=typeof(AttendanceAction).Assembly.GetManifestResourceStream("Attendance.DynamicGamedayAtmosphere.ini"))
                     using(var reader=new StreamReader(input))defaults=reader.ReadToEnd();
-                    // An Update 2 runtime still uses the loose settings file.
-                    // Never move its settings out from under a running game.
-                    bool moving=File.Exists(Path.Combine(PluginsFolder,"DynamicGamedayAtmosphere.ini"))||File.Exists(Path.Combine(PluginsFolder,"DynamicAttendance.ini"))||PluginStorage.NeedsRelocation(PluginsFolder)||PluginStorage.NeedsRuntimeRetirement(PluginsFolder);
-                    bool noted=false;
-                    while(moving){
-                        watcherStep="wait for the running game before migrating settings";
-                        var active=Process.GetProcessesByName("CollegeFB27");bool running=active.Length>0;foreach(var process in active)process.Dispose();
-                        if(!running)break;
-                        if(!noted){Note(logger,"Close the game once to prepare settings and retire previous runtime files. The running game's files are preserved until then.");noted=true;}
-                        Thread.Sleep(1000);
-                    }
+                    // The legacy installation is a read-only migration source.
                     watcherStep="preserve or prepare DGA settings";watcherFile=PluginStorage.SettingsFile(PluginsFolder);PluginStorage.EnsurePreserving(PluginsFolder,defaults);
-                    watcherStep="archive previous runtime files outside MMC's plugin scan";watcherFile=PluginStorage.DataFolder(PluginsFolder);
-                    try{
-                        int retiredRuntimeFiles=PluginStorage.RetirePreviousRuntimes(PluginsFolder)+PluginStorage.RetireLooseRuntimeFiles(PluginsFolder);
-                        if(retiredRuntimeFiles>0)Note(logger,"Archived "+retiredRuntimeFiles+" previous runtime/helper files outside MMC's plugin scan. Settings, logs and crowd history stay in "+DataFolder+". A scan warning from this first upgrade startup clears after reopening MMC.");
-                    }catch(Exception cleanupError){
-                        Note(logger,"Previous runtime cleanup incomplete; direct loading will continue. "+LaunchDiagnostics.Failure(0,watcherStep,watcherFile,cleanupError)+" | Close MMC and the game before retrying cleanup. Old DLL scan warnings may remain until those files can be archived.");
-                    }
                     Note(logger,"Settings: "+PluginStorage.SettingsFile(PluginsFolder)+". Existing choices are kept without a reset or retune; legacy INIs remain unchanged.");
                     watcherStep="extract diagnostics tool";watcherFile=Path.Combine(DataFolder,"Tools","DgaDiagnostics.exe");Extract("DgaDiagnostics.exe",false);
                     Note(logger,"DGA "+BuildInfo.Version+" launch watcher started | MMC PID "+Process.GetCurrentProcess().Id+" | MMC permissions: "+mmcElevation+". Live atmosphere supports verified offline Dynasty and basic Play Now matches. Season turnout and travel plans remain Dynasty-only.");
@@ -209,6 +199,7 @@ namespace DynamicGamedayAtmosphere
                                 file=Path.Combine(RuntimeFolder,BuildInfo.NativeFile);
                                 operation="load native runtime directly from MMC plugin";
                                 Note(logger,"Starting direct runtime load | PID "+pid+" | MMC permissions: "+mmcElevation+" | Game permissions: "+LaunchDiagnostics.Elevation(pid)+" | Runtime: "+file);
+                                Ace.DynastyCOT.UserStore.Atomic(Path.Combine(RuntimeFolder,"origin-"+pid+".txt"),Encoding.UTF8.GetBytes("DGA-ORIGIN-1\n"+pid+"\n"+game.StartTime.ToUniversalTime().ToFileTimeUtc()+"\n"+PluginsFolder+"\n"));
                                 ManagedRuntimeLoader.Load(pid,file,text=>Note(logger,text));
                                 Note(logger,"Runtime loaded directly for PID "+pid+". Activation status is in "+Path.Combine(LogsFolder,"DynamicGamedayAtmosphere.log")+".");
 #else

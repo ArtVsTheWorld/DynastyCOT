@@ -41,8 +41,9 @@ import {publicPoll} from './public_polls.mjs';
 export const weekKey=s=>`${s.leagueId}/${s.season.CurrentSeasonYear}/${s.season.CurrentWeekType}/${s.season.CurrentWeek}`;
 const complete=g=>g.published!==false&&['HomeWon','AwayWon','Tie'].includes(g.status);
 const ranked=n=>Number.isInteger(n)&&n>=1&&n<=25;
-export function detectEvents(s,previous=null){
+export function detectEvents(s,previous=null,{gameFactsOnly=false}={}){
   if(s.format!==2||s.gameYear!==27||!s.sourceUnchanged||!/^[a-f0-9]{64}$/.test(s.sha256))throw Error('Invalid Dynasty snapshot');
+  if(gameFactsOnly&&!s.reconstructed)throw Error('Game-only detection requires a reconstruction');
   const year=s.season.CurrentYear,week=s.season.CurrentWeek,phase=s.season.CurrentWeekType;
   if(!Number.isInteger(week)||week<0||week>40)throw Error('Invalid Dynasty week');
   const inSeason=s.season.CurrentStage==='NFLSeason',teams=new Map(s.teams.map(t=>[t.id,t])),players=new Map(s.players.map(p=>[p.id,p]));
@@ -69,7 +70,7 @@ export function detectEvents(s,previous=null){
     events.push({id,category,facts,teamIds,teamContext,playerId:player,personality:p?.personality??null,position:p?.position??null,scopes,eventWeek,priority,thread:thread??id,curated,primaryScope});
   };
   const eligible=s.games.filter(g=>g.year===year&&g.phase===phase);
-  const recent=inSeason?s.games.filter(g=>g.year===year&&phaseIndex(g.phase)>=0&&phaseIndex(g.phase)<=phaseIndex(phase)&&[week-1,week].includes(g.week)&&complete(g)):[];
+  const recent=inSeason?s.games.filter(g=>g.year===year&&g.phase!=='PreSeason'&&phaseIndex(g.phase)>=0&&phaseIndex(g.phase)<=phaseIndex(phase)&&[week-1,week].includes(g.week)&&complete(g)):[];
   const upcoming=inSeason?eligible.filter(g=>g.week===week&&!complete(g)):[];
   for(const g of recent){
     const narrative=gameStory(s,g);
@@ -92,6 +93,7 @@ export function detectEvents(s,previous=null){
     if(Object.keys(stats).length&&impact>=25)emit(`performance:${r.game}:${r.player}:${r.type}`,'player-stats',{gameId:g.id,playerName:p.name,school:teams.get(r.team)?.name,position:p.position,stats,timing:g.week===week?'current':'previous'},
       {player:p.id,team:r.team,national:impact>=75||(rank(r.team)<=25&&impact>=40),eventWeek:g.week,priority:(r.team===s.userTeamIndex?91:65)+Math.min(impact,100)/100,thread:`game:${g.id}`});
   }
+  if(gameFactsOnly)return events;
   if(postseasonTiming(s).standings)for(const t of s.teams){if(!ranked(rank(t.id)))continue;
     const current=rank(t.id),last=poll.comparable?t[poll.lastField]:null;
     emit(`poll:${t.id}`,'polls',{school:t.name,rank:current,pollName:poll.name,previousRank:ranked(last)?last:null,movement:!ranked(last)?'entry':last>current?'up':last<current?'down':'unchanged',...(!poll.comparable?{family:'poll.initial.beat',voice:'beat'}:{})},

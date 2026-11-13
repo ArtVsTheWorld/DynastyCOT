@@ -38,7 +38,11 @@ inline uint32_t bits(const std::vector<unsigned char>& data,uint32_t words,uint3
     return (value<uint32_t>(data,static_cast<size_t>(pos))>>(offset%32))&(width==32?0xffffffffu:(1u<<width)-1);
 }
 struct Field {std::string name;uint32_t id=0,kind=0;unsigned width=0;int minimum=0;Address fallback=0,descriptor=0;std::map<uint32_t,std::string> labels;};
-struct Schema {std::string name;uint32_t capacity=0;std::vector<Field> fields;};
+struct Schema {std::string name;uint32_t capacity=0;std::vector<Field> fields;unsigned arrayWidth=32;int arrayMinimum=0;};
+inline int64_t decodedIntegerArray(uint32_t raw,unsigned width,int minimum){
+    if(width!=32||minimum!=INT32_MIN)throw std::runtime_error("Unsupported integer array encoding");
+    return int64_t(raw)+minimum;
+}
 struct Table {Address address=0,context=0,dataAddress=0,stringBase=0;uint32_t id=0,rows=0,words=0,first=0;bool array=false;Schema* schema=nullptr;std::vector<unsigned char> data,watchMask;std::set<uint32_t> free;};
 inline bool supportedRecordLayout(bool array,uint32_t rows,uint32_t words,uint32_t first){return rows<=131072&&words<=(array?16384u:4096u)&&first<=0x10000;}
 struct SessionBinding {Address service=0,career=0,database=0;bool operator==(const SessionBinding& b)const{return service==b.service&&career==b.career&&database==b.database;}};
@@ -81,8 +85,8 @@ inline std::set<std::string> wanted(const std::string& name){
     if(name=="Franchise")return {"LeagueID","Transfers","FCSTeams"};
     if(name=="FranchiseServer_CareerFlow")return {"IsStageAdvancing","IsStageActive"};
     if(name=="OffseasonStageTypeEnumTableEntry")return {"Value","ShortName","LongName","Description"};
-    if(name=="FranchiseUser")return {"Team","UserEntity","IsRetired","AdminLevel"};
-    if(name=="Team")return {"TeamIndex","DisplayName","LongName","ShortName","NickName","NickNameAlt","Hashtag1","Hashtag2","HeadCoach","TeamSeasonStats","TeamHistoricalData","TeamSeriesHistory","CurrentOffensiveScheme","CurrentDefensiveScheme","ProgramPointsConferencePrestigeGrade","TopClassRank","TopClassConferenceRank","PlayoffStatus","IsTeamBuilder","DepthChart","TEAM_PREVSEASWINS","TEAM_PREVSEASLOSSES","LastSeasonPlayoffRoundReached","PlayoffRoundReached","LastSeasonTransfersSigned","TEAM_LOGO","TEAM_ALT_LOGO","TEAM_LOGO_SMALL_ALT","TEAM_LOGO_ASSETNAME","TEAM_ALT_LOGO_ASSETNAME","TEAM_LOGO_SMALL_ALT_ASSETNAME","TeamBuilderData","MediaPoll_CurrentRank","MediaPoll_LastWeeksRank","CoachesPoll_CurrentRank","CoachesPoll_LastWeeksRank","CFPPoll_CurrentRank","CFPPoll_LastWeeksRank","CurSeasonConfStanding","LastWeekConferenceStanding","ConfWin","ConfLoss","ConfTie","HomeWin","RoadWin","HomeLoss","RoadLoss","HomeTie","RoadTie","Rival1TeamRef","Rival2TeamRef","Rival3TeamRef","RecruitingBoard","ProgramPointsBrandExposureGrade","BrandExposureProgramPoints","City","SchoolPipelineInfluenceList","Stadium","AltStadium","OffensiveCoordinator","DefensiveCoordinator","PrestigeDisplay","TeamPrestige","SeasonWinLossStreak","GameStatRecords","SeasonStatRecords"};
+    if(name=="FranchiseUser")return {"Team","UserEntity","UserIdLower","UserIdUpper","IsRetired","AdminLevel"};
+    if(name=="Team")return {"TeamIndex","DisplayName","LongName","ShortName","NickName","NickNameAlt","Hashtag1","Hashtag2","HeadCoach","TeamSeasonStats","TeamHistoricalData","TeamSeriesHistory","CurrentOffensiveScheme","CurrentDefensiveScheme","ProgramPointsConferencePrestigeGrade","TopClassRank","TopClassConferenceRank","PlayoffStatus","IsTeamBuilder","DepthChart","TEAM_PREVSEASWINS","TEAM_PREVSEASLOSSES","LastSeasonPlayoffRoundReached","PlayoffRoundReached","LastSeasonTransfersSigned","TEAM_LOGO","TEAM_ALT_LOGO","TEAM_LOGO_SMALL_ALT","TEAM_LOGO_ASSETNAME","TEAM_ALT_LOGO_ASSETNAME","TEAM_LOGO_SMALL_ALT_ASSETNAME","TeamBuilderData","MediaPoll_CurrentRank","MediaPoll_LastWeeksRank","CoachesPoll_CurrentRank","CoachesPoll_LastWeeksRank","CFPPoll_CurrentRank","CFPPoll_LastWeeksRank","CurSeasonConfStanding","LastWeekConferenceStanding","ConfWin","ConfLoss","ConfTie","HomeWin","RoadWin","HomeLoss","RoadLoss","HomeTie","RoadTie","Rival1TeamRef","Rival2TeamRef","Rival3TeamRef","RecruitingBoard","CommittedPlayers","ProgramPointsBrandExposureGrade","BrandExposureProgramPoints","City","SchoolPipelineInfluenceList","Stadium","AltStadium","OffensiveCoordinator","DefensiveCoordinator","PrestigeDisplay","TeamPrestige","SeasonWinLossStreak","GameStatRecords","SeasonStatRecords"};
     if(name=="TeamBuilderData")return {"PrimaryLogoURL","SecondaryLogoURL","TertiaryLogoURL"};
     if(name=="Coach")return {"FirstName","LastName","TeamIndex","SeasonsWithTeam","YearsCoaching","DominantArchetype","CareerStats","SeasonStats","CurrentJobSecurityStatus","Position","PrevPosition","PrevTeamIndex","ContractStatus","ContractLength","ContractYearsRemaining","ContractSalary","COACH_CONSECTEAMCONTRACTS","COACH_LASTTEAMFIRED","COACH_LASTTEAMRESIGNED","COACH_FIREREPORTED","COACH_RESIGNREPORTED"};
     if(name=="Stadium")return {"Name","STADIUM_DISPLAYNAME"};
@@ -90,7 +94,7 @@ inline std::set<std::string> wanted(const std::string& name){
     if(name=="Conference")return {"Name","TeamSlots","Divisions","ConferenceEnum","ChampionshipGameType","ConfChampGameName","ChampionshipStadium","GameStatRecords","SeasonStatRecords"};
     if(name=="RecruitTarget")return {"Recruit","ScholarshipStatus","CommittedWeekNumber","ScheduledVisit","CurrentNILOffer"};
     if(name=="Player")return {"TraitDevelopment","FirstName","LastName","Position","Personality","JerseyNum","TeamIndex","PLYR_PORTRAIT","PortraitForceSilhouette","IsNIL","PresentationId","SpeedRating","AccelerationRating","AgilityRating","StrengthRating","AwarenessRating","ThrowPowerRating","ThrowAccuracyShortRating","ThrowAccuracyMidRating","ThrowAccuracyDeepRating","CatchingRating","CatchInTrafficRating","ShortRouteRunningRating","MediumRouteRunningRating","DeepRouteRunningRating","BreakTackleRating","CarryingRating","RunBlockRating","PassBlockRating","BlockSheddingRating","FinesseMovesRating","PowerMovesRating","TackleRating","PlayRecognitionRating","ManCoverageRating","ZoneCoverageRating","KickPowerRating","KickAccuracyRating","OverallRating","Age","SchoolYear","RedshirtStatus","PLYR_CONSECYEARSWITHTEAM","InjuryStatus","InjuryType","InjurySeverity","TotalInjuryDuration","CurrentYearSeasonEndingInjuryWeek","LatestInjuryWeek","LatestInjuryYear","LatestInjuryStage","MinInjuryDuration","MaxInjuryDuration","AbsoluteTransferChance","CurrentNILCompensation","ProspectStarRating","GameStats","CareerStats","HomePipeline","PLYR_HOME_STATE","SeasonStats"};
-    if(name=="SeasonGame")return {"IsPractice","SeasonYear","SeasonWeek","SeasonWeekType","GameStatus","HasBeenPublished","HomeTeam","AwayTeam","HomeScore","AwayScore","HomeScoreQuarter1","HomeScoreQuarter2","HomeScoreQuarter3","HomeScoreQuarter4","HomeScoreOT","AwayScoreQuarter1","AwayScoreQuarter2","AwayScoreQuarter3","AwayScoreQuarter4","AwayScoreOT","GameDateMonth","GameDateDay","DayOfWeek","TimeOfDay","GameOfTheWeekScore","ThanksgivingFlag","ChristmasFlag","NewYearsFlag","HomeTeamStatCache","AwayTeamStatCache","Stadium","BowlGame"};
+    if(name=="SeasonGame")return {"SeasonGameNum","IsPractice","SeasonYear","SeasonWeek","SeasonWeekType","GameStatus","HasBeenPublished","HomeTeam","AwayTeam","HomeScore","AwayScore","HomeScoreQuarter1","HomeScoreQuarter2","HomeScoreQuarter3","HomeScoreQuarter4","HomeScoreOT","AwayScoreQuarter1","AwayScoreQuarter2","AwayScoreQuarter3","AwayScoreQuarter4","AwayScoreOT","GameDateMonth","GameDateDay","DayOfWeek","TimeOfDay","GameOfTheWeekScore","ThanksgivingFlag","ChristmasFlag","NewYearsFlag","HomeTeamStatCache","AwayTeamStatCache","Stadium","BowlGame"};
     if(name=="BowlGame")return {"Name","IsPlayoffBowl","PlayoffBracketSlot"};
     if(name=="Awards")return {"HeismanRanking","WeeklyAwards","AllAmAwards","AnnualAwards"};
     if(name=="CoachAward")return {"AwardType","Period","PeriodIndex","Coach","Team"};
@@ -141,7 +145,13 @@ class Capture {
         if(s.name=="Franchise")selected.insert("HighSchoolTeams");
         if(s.name=="City")selected={"Name","State","CITY_STATE"};
 #endif
-        if(s.name.size()>=2&&s.name.substr(s.name.size()-2)=="[]")return s;
+        if(s.name.size()>=2&&s.name.substr(s.name.size()-2)=="[]"){
+            // Array GetInt (native vtable slot 32) uses schema +e8 width and
+            // +f0 signed minimum. int[] values are NOT record references.
+            // Read-only inspection verified 32 / INT32_MIN in the active DB.
+            if(s.name=="int[]"){s.arrayWidth=memory.at<uint16_t>(address+0xe8);s.arrayMinimum=memory.at<int>(address+0xf0);(void)decodedIntegerArray(0,s.arrayWidth,s.arrayMinimum);}
+            return s;
+        }
         for(Address p=begin;p<end;p+=0x58){auto name=memory.sso(p);if(!selected.empty()&&!selected.count(name))continue;
             auto meta=memory.read(p,0x58);Field f;f.name=name;f.id=static_cast<uint32_t>((p-begin)/0x58);f.kind=value<uint32_t>(meta,0x40);f.width=value<uint16_t>(meta,0x30);f.minimum=value<int>(meta,0x38);f.fallback=value<Address>(meta,0x48);f.descriptor=value<Address>(meta,0x50);
             if(f.kind<1||f.kind>7||f.kind==4||f.kind==6)continue;
@@ -177,7 +187,7 @@ class Capture {
     Json record(Table& t,uint32_t row){
         Json result=Json::object();const auto rowAt=(size_t(t.first)+size_t(row)*t.words)*4;
         if(memory.observation&&!t.array&&!t.watchMask.empty())memory.observation->recordMasked(t.dataAddress+rowAt,std::vector<unsigned char>(t.data.begin()+rowAt,t.data.begin()+rowAt+t.watchMask.size()),t.watchMask);
-        if(t.array){const auto lengthAt=0x20+size_t(row)*4;if(memory.observation)memory.observation->record(t.dataAddress+lengthAt,std::vector<unsigned char>(t.data.begin()+lengthAt,t.data.begin()+lengthAt+4));auto length=value<uint32_t>(t.data,lengthAt);if(length>t.words||length>4096)throw std::runtime_error("Invalid runtime array length");if(memory.observation&&length)memory.observation->record(t.dataAddress+rowAt,std::vector<unsigned char>(t.data.begin()+rowAt,t.data.begin()+rowAt+size_t(length)*4));for(uint32_t i=0;i<length;++i)result["Member"+std::to_string(i)]=reference(t,bits(t.data,t.words,t.first,row,i*32,32));return result;}for(const auto& f:t.schema->fields){uint32_t raw=static_cast<uint32_t>(f.fallback);if(f.width){auto offset=value<uint32_t>(t.data,0x20+size_t(f.id)*4);raw=bits(t.data,t.words,t.first,row,offset,f.width);}
+        if(t.array){const auto lengthAt=0x20+size_t(row)*4;if(memory.observation)memory.observation->record(t.dataAddress+lengthAt,std::vector<unsigned char>(t.data.begin()+lengthAt,t.data.begin()+lengthAt+4));auto length=value<uint32_t>(t.data,lengthAt);if(length>t.words||length>4096)throw std::runtime_error("Invalid runtime array length");if(memory.observation&&length)memory.observation->record(t.dataAddress+rowAt,std::vector<unsigned char>(t.data.begin()+rowAt,t.data.begin()+rowAt+size_t(length)*4));for(uint32_t i=0;i<length;++i)result["Member"+std::to_string(i)]=t.schema->name=="int[]"?Json(decodedIntegerArray(bits(t.data,t.words,t.first,row,i*32,32),t.schema->arrayWidth,t.schema->arrayMinimum)):reference(t,bits(t.data,t.words,t.first,row,i*32,32));return result;}for(const auto& f:t.schema->fields){uint32_t raw=static_cast<uint32_t>(f.fallback);if(f.width){auto offset=value<uint32_t>(t.data,0x20+size_t(f.id)*4);raw=bits(t.data,t.words,t.first,row,offset,f.width);}
             if(f.kind==7){if(!f.width){if(!f.fallback){result[f.name]=nullptr;continue;}auto a=memory.at<Address>(f.fallback+0x10);auto r=memory.at<uint32_t>(f.fallback+0x18);schedule(a,r);result[f.name]=key(table(a),r);}else result[f.name]=reference(t,raw);}
             else if(f.kind==5)result[f.name]=memory.text(f.width?t.stringBase+raw:f.fallback);
             else if(f.kind==3)result[f.name]=decodedEnum(t.schema->name,f.name,raw,f.labels);
@@ -256,11 +266,11 @@ public:
     Json observedTables()const{Json out=Json::array();for(const auto& [a,t]:tables)out.push_back({{"table",a},{"name",t.schema->name},{"data",t.dataAddress},{"size",t.data.size()},{"words",t.words},{"first",t.first},{"rows",t.rows}});return out;}
     // Worker-created proof for small callback-local reads. Preserve packed
     // offsets/masks and their metadata, not unrelated bytes in these rows.
-    Json identityProof(){
+    Json identityProof(bool annualOnly=false){
         Json out=Json::array();std::set<std::string> seen;
         for(const auto& [address,t]:tables){
             const auto& name=t.schema->name;std::set<std::string> selected;
-            if(name=="SeasonInfo")selected={"CurrentSeasonYear","CurrentYear","CurrentWeek","CurrentWeekType","CurrentStage","CurrentOffseasonStage"};
+            if(name=="SeasonInfo"){selected={"CurrentSeasonYear","CurrentYear"};if(!annualOnly)selected.insert({"CurrentWeek","CurrentWeekType","CurrentStage","CurrentOffseasonStage"});}
             else if(name=="Franchise")selected={"LeagueID"};
             else if(name=="FranchiseServer_CareerFlow")selected={"IsStageActive","IsStageAdvancing"};else continue;
             if(!seen.insert(name).second||t.array||!t.rows||t.free.count(0))throw std::runtime_error("Ambiguous draft identity proof");

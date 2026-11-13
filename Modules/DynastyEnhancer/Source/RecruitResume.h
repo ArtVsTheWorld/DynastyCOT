@@ -7,6 +7,7 @@
 #include <map>
 #include <stdexcept>
 #include <string>
+#include <vector>
 
 namespace recruitingfog::resume {
 using Json=nlohmann::json;
@@ -22,7 +23,7 @@ struct Random {
 };
 inline int count(double value){return int(std::lround((std::max)(0.,value)));}
 struct Prospect {
-    std::string identity,name,position,state,town,development,collegeLevel,collegeSchool;int stars=0,stateRank=0;
+    std::string identity,name,position,state,town,development,collegeLevel,collegeSchool;int stars=0,stateRank=0,height=0,nationalRank=0;std::vector<std::string> alternatePositions;
     std::map<std::string,double> ratings;
     double rating(const char* key)const{auto it=ratings.find(key);if(it!=ratings.end())return it->second;auto overall=ratings.find("OverallRating");return overall==ratings.end()?60:overall->second;}
 };
@@ -78,13 +79,13 @@ inline Result generate(const Prospect& p){
     const double state=p.stateRank==0?.5:p.stateRank<=5?.90:p.stateRank<=15?.75:p.stateRank<=30?.55:p.stateRank<=40?.38:.22;
     const double schedule=competition.between(0,1),level=p.collegeLevel.empty()?.50*state+.32*(classification-1)/5.+.18*schedule:p.collegeLevel=="FCS"?.78+.15*schedule:p.collegeLevel=="D2"?.48+.22*schedule:.22+.25*schedule;
     const int schoolGames=10+competition.integer(0,p.collegeLevel.empty()?5:2);
+    const double quality=clamp(.65*(p.stars-1)/4.+.35*(ability-45)/45.,0.,1.);
     const double roleRoll=opportunity.unit();std::string role;
-    if(roleRoll<(p.stars>=4?.002:.025))role="No varsity appearances";
-    else if(roleRoll<(p.stars>=4?.045:.13))role="Reserve";
-    else {
-        const double r=opportunity.unit()+.12*(ability-65)/20.+.04*(p.stars-3)-.10*(level-.5);
-        role=r<.17?"Late-season starter":r<.37?"Shared role":"Regular starter";
-    }
+    const double reserve=(p.stars==5||quality>.78)?.003:quality>.5?.035:.10;
+    if(roleRoll<((p.stars==5||quality>.78)?.0003:.008))role="No varsity appearances";
+    else if(roleRoll<reserve)role="Reserve";
+    else {const double r=opportunity.unit()+.30*quality-.06*(level-.5);
+        role=r<.12?"Late-season starter":r<.35?"Shared role":"Regular starter";}
     int games=schoolGames,starts=schoolGames;double workload=1;
     if(role=="No varsity appearances"){games=0;starts=0;workload=0;}
     else if(role=="Reserve"){games=opportunity.integer(2,schoolGames);starts=0;workload=.10;}
@@ -92,7 +93,18 @@ inline Result generate(const Prospect& p){
     else if(role=="Shared role"){starts=opportunity.integer(2,schoolGames);workload=opportunity.between(.43,.70);}
     // Separate per-position workload and efficiency; adjusted production never
     // becomes a direct algebraic encoding of ability or development.
-    const double effective=games*workload,environment=.5-level;
+    // Native alternates describe suitability, not recorded participation.
+    // Only a subset receives a modeled secondary role, with shared workload.
+    std::string secondary;Random twoWay(p.identity+"|two-way-v4");
+    auto known=[&](const char* k,double floor){auto at=p.ratings.find(k);return at!=p.ratings.end()&&std::isfinite(at->second)&&at->second>=floor;};
+    if(games>0&&p.height>=68&&p.height<=78&&twoWay.unit()<.60)for(const auto& alt:p.alternatePositions){
+        if(alt==p.position)continue;
+        if((alt=="CB"||alt=="FS"||alt=="SS")&&known("SpeedRating",72)&&known("ManCoverageRating",65)&&known("ZoneCoverageRating",65)&&known("PlayRecognitionRating",60)&&known("CatchingRating",55))secondary="DB";
+        if((alt=="WR"||alt=="HB")&&known("SpeedRating",72)&&known("CatchingRating",65)&&known("CarryingRating",60)&&known("AgilityRating",65))secondary=alt;
+        if(!secondary.empty())break;
+    }
+    const double secondaryShare=secondary.empty()?0:twoWay.between(.18,.32);
+    const double effective=games*workload*(1-secondaryShare),environment=.5-level;
     auto r=[&](const char* k){return p.rating(k);};Json stats=Json::object();
     auto put=[&](const char* key,double n){stats[key]=count(n);};
     const auto& pos=p.position;
@@ -162,12 +174,21 @@ inline Result generate(const Prospect& p){
         else if(role=="Reserve")publicData["background"]="Most of his work came in a reserve role.";
         else if(role=="Regular starter")publicData["background"]="Played a full role against the program's schedule.";
     }
+    publicData["productionModelVersion"]=4;if(p.collegeLevel.empty())publicData["heading"]="Previous High School Season (modeled)";
+    if(!secondary.empty()){
+        const auto snaps=count(games*workload*60*secondaryShare);Json secondaryStats;
+        if(secondary=="DB")secondaryStats={{"defensiveSnaps",snaps},{"tackles",count(snaps*twoWay.between(.10,.18))},{"interceptions",count(snaps*twoWay.between(.005,.018))},{"passesDefended",count(snaps*twoWay.between(.025,.05))}};
+        else {const auto touches=count(snaps*twoWay.between(.12,.23));secondaryStats={{"touches",touches},{"yards",count(touches*twoWay.between(6,14))}};}
+        publicData["modeledSecondary"]={{"position",secondary},{"share",secondaryShare},{"stats",secondaryStats}};
+        publicData["background"]="Played both ways at "+p.position+" and "+secondary+". Split the available reps.";
+    }
     addResumeDetails(publicData,p);
     return {publicData,{{"overall",r("OverallRating")},{"positionSkill",ability},{"development",p.development},{"competition",level},{"stateRank",p.stateRank},{"schedule",schedule}}};
 }
 inline void validate(const Json& v){
     if(v.contains("gpa")&&(!v.at("gpa").is_number()||v.at("gpa").get<double>()<2||v.at("gpa").get<double>()>4.5))throw std::runtime_error("Invalid GPA");
     const int games=v.at("games"),starts=v.at("starts");if(games<0||games>15||starts<0||starts>games)throw std::runtime_error("Invalid playing opportunity");
+    if(v.contains("modeledSecondary")){const auto& other=v.at("modeledSecondary");const auto pos=other.at("position").get<std::string>();const double share=other.at("share");if((pos!="DB"&&pos!="WR"&&pos!="HB")||!std::isfinite(share)||share<.18||share>.32||!other.at("stats").is_object())throw std::runtime_error("Invalid modeled secondary role");for(const auto& stat:other.at("stats"))if(!stat.is_number_integer()||stat.get<int>()<0||stat.get<int>()>10000)throw std::runtime_error("Invalid secondary statistic");if(pos=="DB"){const auto& d=other.at("stats");if(d.at("defensiveSnaps").get<int>()>games*65||d.at("tackles")>d.at("defensiveSnaps")||d.at("interceptions")>d.at("defensiveSnaps"))throw std::runtime_error("Invalid secondary opportunity");}}
     const auto& s=v.at("stats");for(auto it=s.begin();it!=s.end();++it)if(!it.value().is_number_integer()||it.value().get<int>()<0||(games==0&&it.value().get<int>()!=0))throw std::runtime_error("Invalid high-school statistic");
     auto bound=[&](const char* a,const char* b){if(s.contains(a)&&s.contains(b)&&s[a].get<int>()>s[b].get<int>())throw std::runtime_error(std::string("Invalid stat relationship: ")+a);};
     bound("passCompletions","passAttempts");bound("passingTD","passCompletions");bound("interceptionsThrown","passAttempts");bound("receptions","targets");bound("receivingTD","receptions");bound("rushingTD","carries");bound("sacks","tacklesForLoss");bound("tacklesForLoss","tackles");bound("forcedFumbles","tackles");bound("fieldGoalsMade","fieldGoalAttempts");bound("extraPointsMade","extraPointAttempts");bound("puntsInside20","punts");bound("passProtectionSnaps","offensiveSnaps");bound("sacksAllowed","passProtectionSnaps");bound("badSnaps","specialTeamsSnaps");

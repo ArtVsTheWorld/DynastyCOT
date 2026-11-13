@@ -11,6 +11,7 @@ inline const char* name(Reason r){
 }
 struct Intent {
     uintptr_t match=0;unsigned epoch=0;uint64_t updated=0;bool active=false;
+    bool spring=false; // One light result route; native playing reactions take precedence.
     Reason reason=Reason::None;int priority=0,offense=-1,size=1;float intensity=0;bool reaction=false,continuous=false;
     uint64_t celebration=0,celebrationUntil=0;int releaseMs=4000;
     uint64_t lineup=0,lineupBegan=0,lineupUntil=0;float layerBoostPercent=0;bool shake=false;

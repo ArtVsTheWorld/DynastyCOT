@@ -1,4 +1,5 @@
 #pragma once
+#include "SpringGame.h"
 #include "AtmosphereRules.h"
 #include "AttendanceContext.h"
 #include "LateTraffic.h"
@@ -200,6 +201,17 @@ struct Model {
     bool observe(const Settings& c,const State& s,const History& h,bool enabled=true,bool authoritative=false){
         if(!valid(s)||(!authoritative&&s.phase!=1&&s.phase!=5&&s.phase!=6))return false;
         float now=elapsedGameTime(s);
+        if(spring::verified(s)){
+            if(!enabled||!c.enabled||c.formulaStrength<=0)return false;
+            if(!seen){length=s.quarterSeconds;seen=true;}
+            if(s.quarterSeconds!=length)return false;
+            // High-water pressure: drill clock/score resets and replay rewinds
+            // cannot restore anyone who has already permanently departed.
+            float target=spring::departureTarget(s)*(std::clamp)(c.formulaStrength,0,100)*.01f;
+            plannedLoss=(std::max)(plannedLoss,static_cast<int>(std::floor(target)));
+            hazard=(std::max)(hazard,-std::log((std::max)(.000001,1-plannedLoss/100.0)));
+            elapsed=(std::max)(elapsed,now);previous=s;priorHistory=h;automatic=true;return true;
+        }
         if(seen&&(now+0.01f<elapsed||s.homeScore<previous.homeScore||s.awayScore<previous.awayScore||s.quarterSeconds!=length))return false;
         trafficQuarterPolicy=enabled&&c.enabled&&c.formulaStrength>0&&c.lateTraffic&&stayFactor(s,h)>0?(std::clamp)(c.lateTrafficQuarterExtra,0,10):0;
         rainyWinQuarterPolicy=enabled&&c.enabled&&c.formulaStrength>0&&stayFactor(s,h)>0;
@@ -290,6 +302,7 @@ struct Model {
     Result settle(const State& s,int currentLoss,int extra=0,int maximumPerQuarter=45){
         Result r;r.loss=currentLoss;
         if(!valid(s))return r;
+        if(spring::verified(s))extra=0;
         const int before=currentLoss;currentLoss=(std::max)(currentLoss,committedLoss);
         int period=(std::min)(4,1+static_cast<int>(elapsedGameTime(s)/s.quarterSeconds+0.00001f));
         if(period!=capPeriod){capPeriod=period;periodStartLoss=currentLoss;}
@@ -320,6 +333,7 @@ struct Model {
     }
 };
 inline const char* reason(const Settings& c,const State& s,const History& h,bool catchup=false,bool traffic=false){
+    if(spring::verified(s))return s.quarter<=2?"spring exhibition; modest score-independent first-half departures":"spring exhibition; permanent halftime wave and score-independent gradual thinning";
     if(h.comeback&&inferiorOpponent(s)<1)return "comeback protection";
     if(competitiveOvertime(s))return "competitive overtime";
     if(h.watchStage>0)return "upset interest is slowing departures";

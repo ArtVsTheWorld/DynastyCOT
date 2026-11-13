@@ -18,7 +18,7 @@ class GamedayStandaloneFixture {
   AppDomain.CurrentDomain.AssemblyResolve+=(s,e)=>{string path=Path.Combine(sdk,new AssemblyName(e.Name).Name+".dll");return File.Exists(path)?Assembly.LoadFrom(path):null;};
   string runtime=args.Length>5?args[5]:"2.1.9";
   string plugins=Path.Combine(root,"Plugins"),dll=Path.Combine(plugins,"GamedayAtmosphere.dll");
-  var assembly=Assembly.LoadFile(dll);var action=assembly.GetType("DynamicGamedayAtmosphere.AttendanceAction",true);var storage=assembly.GetType("DynamicGamedayAtmosphere.PluginStorage",true);
+  var assembly=Assembly.LoadFile(dll);var user=assembly.GetType("Ace.DynastyCOT.UserStorage",true);user.GetField("current",BindingFlags.NonPublic|BindingFlags.Static).SetValue(null,Activator.CreateInstance(assembly.GetType("Ace.DynastyCOT.UserStore",true),new object[]{Path.Combine(Path.GetDirectoryName(root),Path.GetFileName(root)+"-Profile","Ace","DynastyCOT")}));var action=assembly.GetType("DynamicGamedayAtmosphere.AttendanceAction",true);var storage=assembly.GetType("DynamicGamedayAtmosphere.PluginStorage",true);
   string mutex="Local\\Ace.DynamicGamedayAtmosphere.MMC."+Process.GetCurrentProcess().Id;
   if(args[0]=="cot-first"){
    bool first;using(var owner=new Mutex(false,mutex,out first)){
@@ -39,7 +39,8 @@ class GamedayStandaloneFixture {
     var attr=attributes.Single(x=>x.AttributeType.Name==name);string value=(string)attr.ConstructorArguments[0].Value;
     Check(value==(name=="PluginAuthorAttribute"?"Ace":name=="PluginDisplayNameAttribute"?"Gameday Atmosphere":(args.Length>4?args[4]:"1.0.2-standalone-test")),"MMC branding "+name);
    }
-   var names=assembly.GetManifestResourceNames();Check(names.Length==3&&!names.Any(x=>x.Contains("LoadDynamic")),"Exactly engine/defaults/diagnostics resources; no loader EXE");
+   var names=assembly.GetManifestResourceNames();Check((names.Length==3||names.Length==2)&&!names.Any(x=>x.Contains("LoadDynamic")),"Exactly engine/defaults/diagnostics resources; no loader EXE");
+   if(!names.Any(x=>x.EndsWith(".dll"))){string leaf="GamedayAtmosphereNative-"+runtime+".dll",external=Path.Combine(root,"COT-Support","GamedayAtmosphere",runtime,leaf);byte[] original=Bytes(external);Call(action,"Extract",leaf,false);string cached=Path.Combine((string)Call(storage,"DataFolder",plugins),"Runtime-"+runtime,leaf);Same(cached,original);File.WriteAllText(external,"tampered");bool rejected=false;try{Call(action,"Extract",leaf,false);}catch{rejected=true;}Check(rejected,"External native tampering is rejected before loading");Same(cached,original);File.WriteAllBytes(external,original);}
    Check(Call(action,"LegacyStandaloneIssue")==null,"No false legacy conflict");
    string legacy=Path.Combine(plugins,"DynamicGamedayAtmosphere.dll");File.WriteAllText(legacy,"old adapter marker");
    Check(((string)Call(action,"LegacyStandaloneIssue")).Contains("Keep its settings/history"),"Clear old DLL conflict guidance");Same(legacy,System.Text.Encoding.UTF8.GetBytes("old adapter marker"));File.Delete(legacy);
@@ -61,20 +62,21 @@ class GamedayStandaloneFixture {
    foreach(string name in oldHelpers)File.WriteAllText(Path.Combine(plugins,name),"old helper "+name);
    string unrelated=Path.Combine(plugins,"AnotherPlugin.dll");File.WriteAllText(unrelated,"unrelated plugin");
    Check((int)Call(storage,"RetireLooseRuntimeFiles",plugins)==4,"Archive exact loose native/helper names");
-   foreach(string name in oldHelpers)Check(!File.Exists(Path.Combine(plugins,name)),"Old helper outside DLL scan: "+name);
-   Check((int)Call(storage,"RetireLooseRuntimeFiles",plugins)==0,"Archive is idempotent");
+   foreach(string name in oldHelpers)Check(File.Exists(Path.Combine(plugins,name)),"Read-only legacy helper retained: "+name);
+   Check((int)Call(storage,"RetireLooseRuntimeFiles",plugins)==4,"Legacy files remain read-only migration inputs");
    Check(File.ReadAllText(unrelated)=="unrelated plugin","Unrelated plugin unchanged");
-   string[] archived=Directory.GetFiles(Path.Combine(root,"DGA-Runtime","Retired","Loose"));
+   string[] archived=Directory.GetFiles(Path.Combine(data,"Retired","Loose"));
    foreach(string name in oldHelpers)Check(archived.Any(x=>File.ReadAllText(x)=="old helper "+name),"Exact backup bytes retained");
    byte[] chosen=Bytes(ini);Call(action,"Extract","DynamicGamedayAtmosphere.ini",true);Same(ini,chosen);
    foreach(string name in names.Where(x=>!x.EndsWith(".ini"))){
     string leaf=name.Substring("Attendance.".Length);Call(action,"Extract",leaf,false);
-    string target=leaf.EndsWith(".dll")?Path.Combine(root,"DGA-Runtime","Runtime-"+runtime,leaf):Path.Combine(data,"Tools",leaf);
+    string target=leaf.EndsWith(".dll")?Path.Combine(data,"Runtime-"+runtime,leaf):Path.Combine(data,"Tools",leaf);
     byte[] expected;using(var input=assembly.GetManifestResourceStream(name))using(var buffer=new MemoryStream()){input.CopyTo(buffer);expected=buffer.ToArray();}
     Same(target,expected);DateTime modified=File.GetLastWriteTimeUtc(target);Call(action,"Extract",leaf,false);Check(File.GetLastWriteTimeUtc(target)==modified,"Identical runtime not rewritten");
     File.WriteAllText(target,"damaged cache");Call(action,"Extract",leaf,false);Same(target,expected);
    }
-   Check(Directory.GetFiles(plugins,"*Native*.dll",SearchOption.AllDirectories).Length==0,"Native engine outside recursive Plugins scan");
+   foreach(string name in oldHelpers)File.Delete(Path.Combine(plugins,name));
+   Check(Directory.GetFiles(plugins,"*Native*.dll",SearchOption.AllDirectories).Length==0,"Extracted native engine outside recursive Plugins scan");
    foreach(string name in histories)Check(File.ReadAllText(Path.Combine(data,"History",name))=="keep existing "+name,"History preserved: "+name);
    Same(ini,chosen);
   }else if(args[0]=="extract"){

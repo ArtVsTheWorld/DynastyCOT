@@ -18,24 +18,30 @@ struct Options {
     bool dollars=false;
     GradeScale teamScale=GradeScale::PlusMinus;
     RecruitInterestDisplay interest=RecruitInterestDisplay::Native;
-    // Interest is owned by the recruiting UI payload; keep the shared v4
-    // rating/social bit layout intact for the independently loaded GPI payload.
-    // Retain the existing toggle bits; the extra player-scale bit and team
-    // scale occupy previously unused bits. Shared payload protocol is v4.
-    constexpr unsigned packed()const{return unsigned(social)|(unsigned(recruiting)<<1)|(unsigned(roster)<<2)|((unsigned(scale)&3)<<3)|(unsigned(colors)<<5)|(unsigned(team)<<6)|(unsigned(dollars)<<7)|((unsigned(scale)&4)<<6)|(unsigned(teamScale)<<9);}
-    static Options unpack(unsigned bits){return {bool(bits&1),bool(bits&2),bool(bits&4),GradeScale(((bits>>3)&3)|((bits>>6)&4)),bool(bits&32),bool(bits&64),bool(bits&128),GradeScale((bits>>9)&7)};}
-    static bool validBits(unsigned bits){return bits<=4095&&unsigned(unpack(bits).scale)<=4&&unsigned(unpack(bits).teamScale)<=4;}
+    GradeScale recruitingScale=GradeScale::PlusMinus;
+    bool measurables=false;
+    // Protocol v5 extends v4 in unused bits. Old saved profiles inherit the
+    // player scale; both source-built payloads share the resolved bit policy.
+    constexpr unsigned packed()const{return unsigned(social)|(unsigned(recruiting)<<1)|(unsigned(roster)<<2)|((unsigned(scale)&3)<<3)|(unsigned(colors)<<5)|(unsigned(team)<<6)|(unsigned(dollars)<<7)|((unsigned(scale)&4)<<6)|(unsigned(teamScale)<<9)|(unsigned(recruitingScale)<<12)|(1u<<15)|(unsigned(measurables)<<16);}
+    static Options unpack(unsigned bits){Options v{bool(bits&1),bool(bits&2),bool(bits&4),GradeScale(((bits>>3)&3)|((bits>>6)&4)),bool(bits&32),bool(bits&64),bool(bits&128),GradeScale((bits>>9)&7)};v.recruitingScale=bits&(1u<<15)?GradeScale((bits>>12)&7):v.scale;v.measurables=bool(bits&(1u<<15))&&bool(bits&(1u<<16));return v;}
+    static bool validBits(unsigned bits){return bits<131072&&unsigned(unpack(bits).scale)<=4&&unsigned(unpack(bits).teamScale)<=4&&unsigned(unpack(bits).recruitingScale)<=4&&((bits&(1u<<15))||bits<4096);}
 };
 inline constexpr unsigned defaultOptions=Options{}.packed();
 inline std::atomic<unsigned> currentOptions{defaultOptions};
 inline std::atomic<uint32_t> currentOptionsLeague{0};
 using PresentationGuard=bool(*)();
 inline std::atomic<PresentationGuard> presentationGuard{nullptr};
-inline Options configuredOptions(){auto value=Options::unpack(currentOptions.load(std::memory_order_relaxed));value.interest=RecruitInterestDisplay(currentRecruitInterest.load(std::memory_order_relaxed));return value;}
+inline Options configuredOptions(){
+    const auto bits=currentOptions.load(std::memory_order_relaxed),interest=currentRecruitInterest.load(std::memory_order_relaxed);
+    const auto league=currentOptionsLeague.load(std::memory_order_relaxed);
+    thread_local unsigned cachedBits=~0u,cachedInterest=~0u;thread_local uint32_t cachedLeague=0;thread_local Options cached;
+    if(bits!=cachedBits||interest!=cachedInterest||league!=cachedLeague){cached=Options::unpack(bits);cached.interest=RecruitInterestDisplay(interest);cachedBits=bits;cachedInterest=interest;cachedLeague=league;}
+    return cached;
+}
 inline bool presentationAllowed(){auto guard=presentationGuard.load(std::memory_order_acquire);return !guard||guard();}
 // Keep the saved profile independent of its current presentation scope. Leaving
 // Dynasty never changes or publishes the user's choices to another profile.
-inline Options options(){auto selected=configuredOptions();if(presentationAllowed())return selected;auto native=Options::unpack(0);native.social=selected.social;return native;}
+inline Options options(){auto selected=configuredOptions();if(presentationAllowed())return selected;auto native=Options::unpack(0);native.social=selected.social;native.measurables=false;return native;}
 inline const char* gradeLabel(int rating,GradeScale scale){
     if(rating<0||rating>100)return "?";
     if(scale==GradeScale::Blind)return u8"–";

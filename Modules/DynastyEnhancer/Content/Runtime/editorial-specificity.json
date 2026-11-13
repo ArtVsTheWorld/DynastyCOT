@@ -1,0 +1,284 @@
+{
+  "overrides": [
+    {
+      "family": "team.rivalry_win",
+      "id": "team.rivalry_win.voices.1",
+      "originalBody": "Bragging rights secured. {school} {winnerScore}, {opponent} {loserScore}. {hashtag}",
+      "body": "Down goes {opponent}, {winnerScore}-{loserScore}!"
+    },
+    {
+      "family": "team.rivalry_win",
+      "id": "team.rivalry_win.voices.2",
+      "originalBody": "You know what this one means. {school} {winnerScore}, {opponent} {loserScore}. {hashtag}",
+      "body": "That's a {nickname} W! {winnerScore}-{loserScore} over {opponent}."
+    },
+    {
+      "family": "team.rivalry_win",
+      "id": "team.rivalry_win.voices.3",
+      "originalBody": "RIVALRY FINAL: {school} {winnerScore}, {opponent} {loserScore}. {hashtag}",
+      "body": "Bragging rights belong to the {nickname}. We beat {opponent}, {winnerScore}-{loserScore}."
+    },
+    {
+      "family": "team.rivalry_win",
+      "id": "team.rivalry_win.voices.4",
+      "originalBody": "This result means more. {school} {winnerScore}, {opponent} {loserScore}. {hashtag}",
+      "body": "This one means more. {nickname} win {winnerScore}-{loserScore} against {opponent}."
+    },
+    {
+      "family": "team.rivalry_win",
+      "id": "team.rivalry_win.voices.5",
+      "originalBody": "For our students, alumni and everybody who knows this rivalry: {school} {winnerScore}, {opponent} {loserScore}. {hashtag}",
+      "body": "A rivalry win for our people. {opponent} beaten {winnerScore}-{loserScore}."
+    },
+    {
+      "family": "team.rivalry_win",
+      "id": "team.rivalry_win.voices.6",
+      "originalBody": "It's a {nickname} rivalry win! {winnerScore}-{loserScore} against {opponent}. {hashtag}",
+      "body": "Down goes {opponent}, {winnerScore}-{loserScore}!"
+    },
+    {
+      "family": "team.rivalry_win",
+      "id": "team.rivalry_win.voices.7",
+      "originalBody": "Extra sweet. {nickname} {winnerScore}, {opponent} {loserScore}. {hashtag}",
+      "body": "That's a {nickname} W! {winnerScore}-{loserScore} over {opponent}."
+    },
+    {
+      "family": "team.rivalry_win",
+      "id": "team.rivalry_win.voices.8",
+      "originalBody": "Proud to bring this one to the {school} family. {winnerScore}-{loserScore} over {opponent}. {hashtag}",
+      "body": "Bragging rights belong to the {nickname}. We beat {opponent}, {winnerScore}-{loserScore}."
+    },
+    {
+      "family": "team.rivalry_win",
+      "id": "team.rivalry_win.voices.9",
+      "originalBody": "Let the final speak: {school} {winnerScore}, {opponent} {loserScore}. {hashtag}",
+      "body": "This one means more. {nickname} win {winnerScore}-{loserScore} against {opponent}."
+    },
+    {
+      "family": "team.rivalry_win",
+      "id": "team.rivalry_win.voices.10",
+      "originalBody": "A rivalry W for the {nickname}. {winnerScore}-{loserScore} over {opponent}. {hashtag}",
+      "body": "A rivalry win for our people. {opponent} beaten {winnerScore}-{loserScore}."
+    },
+    {
+      "family": "team.win",
+      "id": "team.win.voices.1",
+      "originalBody": "FINAL | {nickname} over {opponent}, {score}. {hashtag}",
+      "body": "A {nickname} win! {score} against {opponent}."
+    },
+    {
+      "family": "team.win",
+      "id": "team.win.voices.2",
+      "originalBody": "{nickname} take it, {score}. {hashtag}",
+      "body": "Our guys got it done against {opponent}. {score}."
+    },
+    {
+      "family": "team.win",
+      "id": "team.win.voices.3",
+      "originalBody": "{score} against {opponent}. For every {nickname} fan who showed up for us. {hashtag}",
+      "body": "Proud of this group. {nickname} over {opponent}, {score}."
+    },
+    {
+      "family": "team.win",
+      "id": "team.win.voices.4",
+      "originalBody": "FINAL: {nickname} beat {opponent}, {score}. {hashtag}",
+      "body": "Enjoy this one, {nickname} fans! We beat {opponent}, {score}."
+    },
+    {
+      "family": "team.win",
+      "id": "team.win.voices.5",
+      "originalBody": "{nickname} over {opponent}. Final: {score}. {hashtag}",
+      "body": "Another W for our guys. {score} over {opponent}."
+    },
+    {
+      "family": "team.win",
+      "id": "team.win.voices.6",
+      "originalBody": "That winning feeling. {score} over {opponent}. {hashtag}",
+      "body": "A {nickname} win! {score} against {opponent}."
+    },
+    {
+      "family": "team.win",
+      "id": "team.win.voices.7",
+      "originalBody": "All smiles for the {nickname}. {score} over {opponent}. {hashtag}",
+      "body": "Our guys got it done against {opponent}. {score}."
+    },
+    {
+      "family": "team.win",
+      "id": "team.win.voices.8",
+      "originalBody": "{opponent} was the challenge. {score} was the answer. Proud of the {nickname}. {hashtag}",
+      "body": "Proud of this group. {nickname} over {opponent}, {score}."
+    },
+    {
+      "family": "team.win",
+      "id": "team.win.voices.9",
+      "originalBody": "A full-team win for the {nickname}. {score} over {opponent}. {hashtag}",
+      "body": "Enjoy this one, {nickname} fans! We beat {opponent}, {score}."
+    },
+    {
+      "family": "team.win",
+      "id": "team.win.voices.10",
+      "originalBody": "We'll take that one. {score} against {opponent}. {hashtag}",
+      "body": "Another W for our guys. {score} over {opponent}."
+    },
+    {
+      "family": "team.narrow_win",
+      "id": "team.narrow_win.voices.1",
+      "originalBody": "Earned every bit of it. {nickname} {score} over {opponent}. {hashtag}",
+      "body": "A close one. A {nickname} win. {score} against {opponent}."
+    },
+    {
+      "family": "team.narrow_win",
+      "id": "team.narrow_win.voices.2",
+      "originalBody": "A close one, and a {nickname} victory. Final vs. {opponent}: {score}. {hashtag}",
+      "body": "Deep breaths, {nickname} fans. We beat {opponent}, {score}."
+    },
+    {
+      "family": "team.narrow_win",
+      "id": "team.narrow_win.voices.3",
+      "originalBody": "FINAL: {score} over {opponent}. Got the job done. {hashtag}",
+      "body": "Our side of that close score is the winning side. {score} over {opponent}."
+    },
+    {
+      "family": "team.narrow_win",
+      "id": "team.narrow_win.voices.4",
+      "originalBody": "Together to the finish. {nickname} win {score} over {opponent}. {hashtag}",
+      "body": "Nothing easy about a close result. Proud to bring home the W against {opponent}, {score}."
+    },
+    {
+      "family": "team.narrow_win",
+      "id": "team.narrow_win.voices.5",
+      "originalBody": "Tight game. Team win. {score} vs. {opponent}. {hashtag}",
+      "body": "We'll take that win! {nickname} {score} against {opponent}."
+    },
+    {
+      "family": "team.narrow_win",
+      "id": "team.narrow_win.voices.6",
+      "originalBody": "Found a way. {nickname} {score} over {opponent}. {hashtag}",
+      "body": "A close one. A {nickname} win. {score} against {opponent}."
+    },
+    {
+      "family": "team.narrow_win",
+      "id": "team.narrow_win.voices.7",
+      "originalBody": "Nothing easy about that one. {score} over {opponent}. {hashtag}",
+      "body": "Deep breaths, {nickname} fans. We beat {opponent}, {score}."
+    },
+    {
+      "family": "team.narrow_win",
+      "id": "team.narrow_win.voices.8",
+      "originalBody": "One hard-earned W. {nickname} {score} against {opponent}. {hashtag}",
+      "body": "Our side of that close score is the winning side. {score} over {opponent}."
+    },
+    {
+      "family": "team.narrow_win",
+      "id": "team.narrow_win.voices.9",
+      "originalBody": "Every point mattered. {nickname} win {score} over {opponent}. {hashtag}",
+      "body": "Nothing easy about a close result. Proud to bring home the W against {opponent}, {score}."
+    },
+    {
+      "family": "team.narrow_win",
+      "id": "team.narrow_win.voices.10",
+      "originalBody": "A win we earned together. {score} over {opponent}. {hashtag}",
+      "body": "We'll take that win! {nickname} {score} against {opponent}."
+    }
+  ],
+  "families": {
+    "casual.rivalries": [
+      {
+        "id": "rival-specific.0",
+        "body": "{rival} could change its logo to a blank square and I would dislike the square.",
+        "when": [
+          "roleFan",
+          "rival"
+        ],
+        "voices": [
+          "rival",
+          "wry"
+        ]
+      },
+      {
+        "id": "rival-specific.1",
+        "body": "My very reasonable football opinion is that {rival} should lose.",
+        "when": [
+          "roleFan",
+          "rival"
+        ],
+        "voices": [
+          "rival",
+          "wry"
+        ]
+      },
+      {
+        "id": "rival-specific.2",
+        "body": "I respect {rival}'s right to be wrong about football.",
+        "when": [
+          "roleFan",
+          "rival"
+        ],
+        "voices": [
+          "rival",
+          "wry"
+        ]
+      },
+      {
+        "id": "rival-specific.3",
+        "body": "We can disagree about a lot. Disliking {rival} is the easy part.",
+        "when": [
+          "roleFan",
+          "rival"
+        ],
+        "voices": [
+          "rival",
+          "wry"
+        ]
+      },
+      {
+        "id": "rival-specific.4",
+        "body": "Nothing personal, {rival}. Actually, it's a little personal.",
+        "when": [
+          "roleFan",
+          "rival"
+        ],
+        "voices": [
+          "rival",
+          "wry"
+        ]
+      },
+      {
+        "id": "rival-specific.5",
+        "body": "Our group chat can argue about anything until somebody mentions {rival}.",
+        "when": [
+          "roleFan",
+          "rival"
+        ],
+        "voices": [
+          "rival",
+          "wry"
+        ]
+      },
+      {
+        "id": "rival-specific.6",
+        "body": "I can be objective about football. {rival} is my one very large exception.",
+        "when": [
+          "roleFan",
+          "rival"
+        ],
+        "voices": [
+          "rival",
+          "wry"
+        ]
+      },
+      {
+        "id": "rival-specific.7",
+        "body": "If hoping {rival} loses is petty, I have made peace with that.",
+        "when": [
+          "roleFan",
+          "rival"
+        ],
+        "voices": [
+          "rival",
+          "wry"
+        ]
+      }
+    ]
+  }
+}

@@ -1,5 +1,7 @@
 ﻿using System;
 using System.Security.Cryptography;
+using System.Diagnostics;
+using System.IO;
 
 namespace SituationalPractice
 {
@@ -64,12 +66,13 @@ namespace SituationalPractice
             new Region(0x25a3e60, 168, "3b8537229ab2aeee3325e5057944c424b3864ef14094bae8da1e0bd2bd142645"),
             new Region(0x5d4e130, 596, "af69acf3614208e7d1d0bc794c6b9891518848a4d3c8a6286f886ad9acf8acf5"),
         };
-        internal static void Verify(Func<long,int,byte[]> read,long image)
+        internal static void Verify(Func<long,int,byte[]> read,long image,Func<long,bool> extensionOwner=null)
         {
             using(var sha=SHA256.Create())foreach(var region in Regions) {
                 byte[] bytes=read(image+region.Rva,region.Length);
                 if(bytes==null || bytes.Length!=region.Length)
                     throw new InvalidOperationException("Cannot read required native code at RVA "+region.Rva.ToString("x")+". No hooks installed.");
+                if(region.Rva==0x3601240)bytes=ExtensionsPregame.Normalize(read,image,bytes,extensionOwner);
                 if(region.Rva==0x5d12420)bytes=DynastyControllerCompatibility.Normalize(read,image,bytes);
                 string actual=BitConverter.ToString(sha.ComputeHash(bytes)).Replace("-","").ToLowerInvariant();
                 if(actual!=region.Hash)
@@ -80,3 +83,27 @@ namespace SituationalPractice
 }
 
 
+
+namespace SituationalPractice {
+ internal static class ExtensionsPregame {
+  internal const string SupportedSha256="170633be325803b94b0389c39d9ace4ce20c676993b46e533fa14d6fafe690a0";
+  static byte[] Original(){return new byte[]{0xe8,0xf0,0xba,0x0,0x0};}
+  static bool Equal(byte[] a,byte[] b){if(a==null||b==null||a.Length!=b.Length)return false;for(int i=0;i<a.Length;++i)if(a[i]!=b[i])return false;return true;}
+  internal static bool Owner(Process game,long destination){
+   foreach(ProcessModule module in game.Modules){if(destination!=module.BaseAddress.ToInt64()+0xe620||module.ModuleMemorySize!=344064)continue;
+    using(var file=File.OpenRead(module.FileName))using(var sha=SHA256.Create())if(BitConverter.ToString(sha.ComputeHash(file)).Replace("-","").ToLowerInvariant()==SupportedSha256)return true;
+   }return false;
+  }
+  internal static byte[] Normalize(Func<long,int,byte[]> read,long image,byte[] region,Func<long,bool> owner){
+   const int offset=0x4b;if(region==null||region.Length!=1561)return region;
+   var actual=new byte[5];Array.Copy(region,offset,actual,0,5);if(Equal(actual,Original()))return region;
+   if(actual[0]!=0xe8||owner==null)throw new InvalidOperationException("Unknown pregame wrapper at RVA 360128b; no hooks installed.");
+   long relay=image+0x360128b+5+BitConverter.ToInt32(actual,1);var code=read(relay,12);
+   if(code==null||code.Length!=12||code[0]!=0x48||code[1]!=0xb8||code[10]!=0xff||code[11]!=0xe0)throw new InvalidOperationException("Unsupported Extensions pregame trampoline; no hooks installed.");
+   long destination=BitConverter.ToInt64(code,2);var expected=Hex("4157415641554154555756534881ecc80000004889ce488d0d97470200e8fe67ffff8b0518da010083f8ff0f85570100008b05e5b2030085c00f8549010000448b1d22ea03008b1dbcb603004585db741f8b057dda010083f8ff74148b158ada");
+   if(!owner(destination)||!Equal(read(destination,expected.Length),expected))throw new InvalidOperationException("Unverified Extensions pregame destination; no hooks installed.");
+   var copy=(byte[])region.Clone();Array.Copy(Original(),0,copy,offset,5);return copy;
+  }
+  static byte[] Hex(string text){var bytes=new byte[text.Length/2];for(int i=0;i<bytes.Length;++i)bytes[i]=Convert.ToByte(text.Substring(i*2,2),16);return bytes;}
+ }
+}

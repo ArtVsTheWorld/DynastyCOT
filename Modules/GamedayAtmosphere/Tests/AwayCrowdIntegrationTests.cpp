@@ -54,7 +54,8 @@ int main(){
     assert(mix.liveCheer==7&&mix.liveType==35&&mix.opponentCheer&&catalog::negative(mix.opponentType)&&mix.opponentSize==1);
     sound.liveType=79;pop.home=500;pop.away=9500;
     mix=visitors::audience(sound,pop,50000,.9f,1000);
-    assert(mix.supporterSize==1&&mix.opponentSize==3&&mix.opponentPositive&&!catalog::negative(mix.opponentType));
+    assert(mix.supporterSize==1&&mix.opponentSize==2&&mix.opponentPositive&&!catalog::negative(mix.opponentType)); // 9,500 modeled supporters, not 42,750 extrapolated seats.
+    assert(population::reactionType(mix.opponentType,mix.opponentSize)==74);
     assert(mix.opponentType==75); // Native rushing-TD cheer, not a generic extra trigger.
     sound.reason=sustained::Reason::Result;sound.intensity=900;sound.priority=5;
     auto quietHome=visitors::layer(sound,{},pop,50000,.9f);assert(quietHome.intensity<200);
@@ -74,6 +75,7 @@ int main(){
     std::stringstream text;timeline::write(text,archive);timeline::Archive restored;assert(timeline::read(text,restored));
     auto got=restored.games.front().points.front();assert(got.homeLoss==point.homeLoss&&got.awayLoss==point.awayLoss&&got.originalAwayShare==point.originalAwayShare);
     std::istringstream lines(text.str());std::string magic,header,row;std::getline(lines,magic);std::getline(lines,header);std::getline(lines,row);
+    for(int n=0;n<4;++n)header.erase(header.rfind(' ')); // strip v8 spring metadata for the legacy v5 fixture
     for(int n=0;n<4;++n)row.erase(row.rfind(' '));magic.replace(0,13,"DGA-HISTORY-5");
     std::stringstream old(magic+"\n"+header+"\n"+row+"\n");assert(timeline::read(old,restored));assert(restored.games.front().points.front().homeLoss==-1);
     using namespace majorreplay;

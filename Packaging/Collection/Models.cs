@@ -54,7 +54,8 @@ namespace DynastyCOT.Collection {
   internal static Uri NetworkUrl(Module module,string value,bool api){
    Uri u;if(!Uri.TryCreate(value,UriKind.Absolute,out u)||u.Scheme!="https"||!String.IsNullOrEmpty(u.UserInfo)||!u.IsDefaultPort)throw new IOException("Updates require an HTTPS GitHub address.");
    var host=api?"api.github.com":"github.com";var prefix=api?"/repos/"+module.Repository+"/":"/"+module.Repository+"/releases/";
-   if(u.Host!=host||!u.AbsolutePath.StartsWith(prefix,StringComparison.Ordinal)||u.Query.Length!=0||u.Fragment.Length!=0)throw new IOException("Release belongs to another repository.");return u;
+   bool releasePage=api&&u.AbsolutePath=="/repos/"+module.Repository+"/releases"&&Regex.IsMatch(u.Query,@"^\?per_page=100&page=[1-9]\d{0,3}$");
+   if(u.Host!=host||!u.AbsolutePath.StartsWith(prefix,StringComparison.Ordinal)||(u.Query.Length!=0&&!releasePage)||u.Fragment.Length!=0)throw new IOException("Release belongs to another repository.");return u;
   }
  }
  internal sealed class Installed {public string Module,Version,Sha256;}
@@ -68,6 +69,7 @@ namespace DynastyCOT.Collection {
   internal string Status(Module module){var list=Plugins.Where(x=>x.Module==module.Id).ToList();if(list.Count>1)return "Duplicate copies found";if(list.Count==1)return "Installed "+list[0].Version+(list[0].Known?"":" (review needed)");return LegacyHost&&LegacyEnabled[module.Id]?"Installed through older COT":"Not installed";}
  }
  internal sealed class PreparedModule {
+  internal Dictionary<string,byte[]> SupportFiles=new Dictionary<string,byte[]>(StringComparer.OrdinalIgnoreCase);
   internal Module Module;internal ModuleRelease Release;internal string Dll;
   internal byte[] Readme,Features;
   internal List<KnownFile> Programs=new List<KnownFile>();

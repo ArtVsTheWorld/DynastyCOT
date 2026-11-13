@@ -9,7 +9,7 @@ namespace recruitingfog::interest {
 enum class Mode:unsigned {Native,Feedback,RankOnly,Blind};
 enum class Standing:unsigned {Favorite,Contender,InTheMix,Outside,LongShot,Unknown};
 inline const char* label(Standing s){constexpr const char* names[]={"FAVORITE","CONTENDER","IN THE MIX","OUTSIDE LOOKING IN","LONG SHOT","INTEREST UNKNOWN"};return names[unsigned(s)<=5?unsigned(s):5];}
-inline unsigned effective(bool recruiting,unsigned scale,unsigned choice){return !recruiting?0:scale==4?3:choice<=2?choice:1;}
+inline unsigned effective(bool recruiting,unsigned scale,unsigned choice){return recruiting&&scale==4?3:choice<=2?choice:0;}
 inline uint64_t mix(uint64_t value){value^=value>>30;value*=0xbf58476d1ce4e5b9ull;value^=value>>27;value*=0x94d049bb133111ebull;return value^(value>>31);}
 struct School {int team=-1;std::string name;double influence=0;Standing standing=Standing::Unknown;unsigned nativeOrder=0;};
 // Relative competitive gaps, not the game's commitment percentage or odds.

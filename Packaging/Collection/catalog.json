@@ -1,6 +1,6 @@
 {
   "Format": 1,
-  "Version": "1.1.0",
+  "Version": "1.1.4",
   "Modules": [
     {
       "Id": "BeyondTheField",
@@ -14,16 +14,16 @@
       ],
       "Current": {
         "Module": "BeyondTheField",
-        "Version": "1.0.7",
-        "Tag": "v1.0.7",
-        "ArchiveName": "BeyondTheField-1.0.7.zip",
-        "ArchiveUrl": "https://github.com/ArtVsTheWorld/BeyondTheField/releases/download/v1.0.7/BeyondTheField-1.0.7.zip",
-        "ArchiveSha256": "e708e343d2ec9ca6495b970613156c6e64ba808dd07ac2bf241dbcb53a031d6f",
-        "DllSha256": "3010841ff7f6575f1fadd974d5e806bd3982a651c3f20b0a471383c14c590812",
-        "ArchiveBytes": 38002868,
-        "ProofUrl": "https://github.com/ArtVsTheWorld/BeyondTheField/releases/download/v1.0.7/BeyondTheField-1.0.7-verification.json",
-        "PageUrl": "https://github.com/ArtVsTheWorld/BeyondTheField/releases/tag/v1.0.7",
-        "Notes": "# Beyond the Field 1.0.7 \u2014 Recruiting feedback and GPI\n\nChanges since the published 1.0.3 release:\n\n- **Choose how recruit interest looks.** Default keeps the normal game display and is the initial choice. Recruit Feedback replaces exact interest bars/rank numbers with broad standings: Favorite, Contender, In the Mix, Outside Looking In and Long Shot. Schools are grouped by standing, then alphabetically within a group; multiple schools can share a tier. Existing movement arrows remain. Rank Only hides the bars but keeps real rankings. Recruiting Fog must be enabled; Blind hides interest altogether.\n- **Find prospects you already scouted.** Off-board, uncommitted prospects show their scouting-progress icon in the Target column. It updates after further scouting/removal without needing to flip pages. Names, active-board markers and commitment logos stay intact. This quality-of-life feature is always on.\n- **Cleaner recruiting cards.** Full Overview labels align under Influence; Prospect List cards show the same broad standings instead of Interest Unknown. Recruit Feedback and Blind hide the misleading Projected Cutoff divider. Default/Rank Only retain it. Real lockout notices and the game's recruiting rules remain unchanged.\n- **GPI branding.** Player Analytics and its fictional Social Media account now use Gridiron Performance Index (GPI), @GPIndex and the G icon. Grade calculations, completed-week restrictions and weekly feed budgets are unchanged. Existing account identities and published history are preserved.\n- **More reliable startup.** BTF waits briefly for the exact supported native settings code instead of permanently stopping during early game initialization. Unsupported code/hook owners still fail safely.\n- Keeps the Position Changes fix, edited Current NIL formatting, player-card fog/colors, capitalized grades and faster Back navigation. Settings, saves, accounts and published history stay in place. Saved interest choices are preserved; Default applies when no choice has been saved.\n\n**Install/update:** close the game and MMC, then replace only BeyondTheField.dll in the versioned Mod Manager's Plugins folder. Keep all data folders. Use one BTF provider; disable bundled BTF in COT if using this standalone. Matching support files are embedded. To roll back, close MMC/game and restore your saved older DLL; retain settings/history.\n\n**Verification:** Ace installed 1.0.6, restarted MMC/game and reported it working. 1.0.7 adds the Default preference/label change, verified with settings/menu/persistence regressions. Recruiting response, emitted UI, startup, native composition, existing-data and standalone/COT coexistence checks passed; integrity evidence ships beside the ZIP. Successful tests do not certify every game/overhaul combination.\n\n**Known limits:** the full Overview header's stage-progress hiding remains a live-review item. An earlier Windows graphics timeout/game hang has unresolved causality; this release does not claim to fix it. Save/reload, multi-coach and other overhaul combinations need their own acceptance checks. No touchdown replay experiment is included.\n",
+        "Version": "1.0.23",
+        "Tag": "v1.0.23",
+        "ArchiveName": "BeyondTheField-1.0.23.zip",
+        "ArchiveUrl": "https://github.com/ArtVsTheWorld/BeyondTheField/releases/download/v1.0.23/BeyondTheField-1.0.23.zip",
+        "ArchiveSha256": "85faff90cacf1bf99c5da270f19ab0d842a2e418eb7c25a883e86e229ec66790",
+        "DllSha256": "f946461f8e88674436dd9ef356c7e083f6a1fd06a5d2c100441d603045efd188",
+        "ArchiveBytes": 38175147,
+        "ProofUrl": "https://github.com/ArtVsTheWorld/BeyondTheField/releases/download/v1.0.23/BeyondTheField-1.0.23-verification.json",
+        "PageUrl": "https://github.com/ArtVsTheWorld/BeyondTheField/releases/tag/v1.0.23",
+        "Notes": "# BeyondTheField 1.0.23\n\nChanges since public 1.0.7\n\n- Choose separate grade scales for recruiting, rosters and teams, including Off and Blind\n- Use optional Athletic Measurables and interest-display choices independently of Recruiting Fog\n- Recruit Notes load more reliably and offer shorter, more varied observations, coherent ATH secondary roles and improved new prospect backgrounds\n- Previously saved Notes keep their data while technical labels are hidden; compact transfer labels retain year and redshirt status\n- Confirmed signing news now follows the actual signing school, including recruits whose interest list still names another leader\n- Fans and official accounts have more personality, clearer rivalry references and cleaner grammar; unchanged preseason stories and milestone repetition are reduced\n- Social Media reuses unchanged work and handles available historical editions more efficiently without increasing weekly post budgets\n- GPI Season matches the weekly grade when a player has only one graded game\n- Fog covers additional depth-chart, hub and supported Dynasty Extensions report/drill displays; money formatting and navigation fixes remain\n- Settings and history move safely to shared AppData, helping installs in protected folders\n\nFull multi-coach active-school selection and private Notes ownership remain unsupported outside the verified Owner-school perspective. Saved backgrounds are not rerolled. Installed-menu acceptance is still required.\n\nInstall or update: close MMC/game, back up the previous DLL and replace it in Plugins. Keep settings and history. Restore that DLL to roll back.\n",
         "Compatibility": "Offline scope and native protections stay in each module. Use one provider of each feature. Read the module release notes for known limits.",
         "Prerelease": false
       }
@@ -40,16 +40,16 @@
       ],
       "Current": {
         "Module": "GamedayAtmosphere",
-        "Version": "2.1.11",
-        "Tag": "v2.1.11",
-        "ArchiveName": "GamedayAtmosphere-2.1.11.zip",
-        "ArchiveUrl": "https://github.com/ArtVsTheWorld/DynamicGamedayAtmosphere/releases/download/v2.1.11/GamedayAtmosphere-2.1.11.zip",
-        "ArchiveSha256": "3463fec476cd4dfe08f96dc9a9050e4486658a744c330e334d20e2e8c3625417",
-        "DllSha256": "6657871da9629498c31d60e97140111801cb9e0da8fd3cb015a0575fcd89af9f",
-        "ArchiveBytes": 763343,
-        "ProofUrl": "https://github.com/ArtVsTheWorld/DynamicGamedayAtmosphere/releases/download/v2.1.11/GamedayAtmosphere-2.1.11-verification.json",
-        "PageUrl": "https://github.com/ArtVsTheWorld/DynamicGamedayAtmosphere/releases/tag/v2.1.11",
-        "Notes": "# Gameday Atmosphere 2.1.11 \u2014 Play Now replay hotfix\n\nCompared with the previous public standalone release, **2.1.9**.\n\n- Fixed a replay eligibility check that admitted Dynasty but left offline Play Now out. With **Additional Replays** and **Full-Screen Big Play Replays** enabled, qualifying non-touchdown big plays in Play Now can use the added replay coverage.\n- Replay diagnostics now admit offline Play Now too, so those decisions can be checked when troubleshooting.\n- Existing crowd behavior, sound, camera shake, replay thresholds and saved settings/history are retained.\n- Touchdown presentation remains controlled by the game. The unsuccessful private touchdown experiment and temporary timing helpers are **not included**. This release does not guarantee a replay after every touchdown.\n\n**Update:** close both MMC and the game, then replace `Plugins/GamedayAtmosphere.dll` with the DLL from the ZIP. Keep your settings/history folders. Restart both applications. Use one Gameday provider; disable COT's Gameday module when using this standalone for the feature. The ZIP contains the DLL, README.txt and FEATURES.md; matching support files are embedded.\n\n**Verification:** the production replay-root tests exercise Dynasty and Play Now, nested gain comparisons, blocked scopes/options, and unchanged touchdown predicates/shortcuts/insets. Replay, scope, menu and isolated managed packaging/storage/duplicate-provider checks pass. Settings and history remain byte-for-byte intact in upgrade fixtures. A 20-yard non-touchdown Play Now completion showed both full-screen and inset replays in the private test; the clean production ZIP was not live-installed during this publishing step. Other game/mod combinations remain unverified.\n\nVersion 2.1.10 was reserved for private touchdown tests. Public 2.1.11 uses a distinct native filename/cache so it cannot reuse that private runtime. No change to native fingerprints, ownership checks or supported offline scope.\n\nRollback: close MMC and the game and restore the 2.1.9 plugin DLL. Keep the existing data folders. The prior release remains available on GitHub.\n",
+        "Version": "2.1.35",
+        "Tag": "v2.1.35",
+        "ArchiveName": "GamedayAtmosphere-2.1.35.zip",
+        "ArchiveUrl": "https://github.com/ArtVsTheWorld/DynamicGamedayAtmosphere/releases/download/v2.1.35/GamedayAtmosphere-2.1.35.zip",
+        "ArchiveSha256": "00fbcabfc031938f45a355356cae0c278fee91d5a305b6d181cdc4f433d269ec",
+        "DllSha256": "5ef0f6fa925d8f2964c502308d5ed853383461a63efe33c8ae94d40198f38ec5",
+        "ArchiveBytes": 852510,
+        "ProofUrl": "https://github.com/ArtVsTheWorld/DynamicGamedayAtmosphere/releases/download/v2.1.35/GamedayAtmosphere-2.1.35-verification.json",
+        "PageUrl": "https://github.com/ArtVsTheWorld/DynamicGamedayAtmosphere/releases/tag/v2.1.35",
+        "Notes": "# GamedayAtmosphere 2.1.35\n\nChanges since public 2.1.11\n\n- Visiting support better separates national following, travel and home ticket demand, with a modest lift for low ordinary visiting shares\n- Main visiting sections have a clearer visiting core, softer edges and small scattered groups\n- Poor home seasons matter more to turnout; supported neutral and championship crowds get dynamic supporter splits while keeping EA attendance\n- Dynasty Extensions spring games use the actual school, its colors and a dedicated exhibition turnout model, including supported TeamBuilder fixtures\n- Spring crowds keep native empty seats, take halftime breaks and gradually thin without reacting to the score\n- Background roar settles during big leads and quiets after visiting touchdowns; event reactions have more focused coordination\n- Replay yardage returns to settings with a 12-yard default, plus the supported Broadcast Universe big-play handoff\n- Crowd preparation reuses calculations and avoids repeated work while preserving saved crowds\n- One plugin DLL installs everything needed; settings and history use shared AppData rather than requiring a writable Plugins folder\n\nExisting fixture history deliberately keeps old plans. Audible spring boos remain pending listening confirmation. Touchdown replays remain native and are not guaranteed. New crowd visuals and live performance still need acceptance.\n\nInstall or update: close MMC/game, back up the previous DLL and replace it in Plugins. Keep settings and history. Restore that DLL to roll back.\n",
         "Compatibility": "Offline scope and native protections stay in each module. Use one provider of each feature. Read the module release notes for known limits.",
         "Prerelease": false
       }
@@ -67,16 +67,16 @@
       ],
       "Current": {
         "Module": "ExtraSettings",
-        "Version": "0.2.10",
-        "Tag": "v0.2.10",
-        "ArchiveName": "ExtraSettings-0.2.10.zip",
-        "ArchiveUrl": "https://github.com/ArtVsTheWorld/offline-dynasty-settings/releases/download/v0.2.10/ExtraSettings-0.2.10.zip",
-        "ArchiveSha256": "e0e36cb34265db8172ba32a7bca024f85234ce49a00ddd091f775493b3225255",
-        "DllSha256": "4824cf6e17ed00400f3ab0c2a806e6b44453bbcd0a3a355e1351129de7b4dd65",
-        "ArchiveBytes": 79287,
-        "ProofUrl": "https://github.com/ArtVsTheWorld/offline-dynasty-settings/releases/download/v0.2.10/ExtraSettings-0.2.10-verification.json",
-        "PageUrl": "https://github.com/ArtVsTheWorld/offline-dynasty-settings/releases/tag/v0.2.10",
-        "Notes": "# Extra Settings 0.2.10 - standalone release\n\nCompared with the last published standalone release, **v0.2.1**.\n\n- **A clearer name:** Offline Dynasty Settings is now Extra Settings.\n- **Clocks belong to each Dynasty:** offensive and defensive clock choices save by verified LeagueID. New Dynasties begin with offensive On and defensive 15 seconds. Old global files are retained, but their choices are not copied into every Dynasty.\n- **Shorter defensive choices:** 3 and 5 seconds join 15, 20, 30, 45 and 60 seconds, plus Off. Offensive On, Off At Playcall, Off and 60 Seconds remain available.\n- **Settings and menu compatibility:** retains the current COT game-settings rows and deferred Controller Select bridge, including its exact supported controller/ownership checks.\n- **Safer persistence and diagnostics:** the settings-saving helper is checked against a compiled-in SHA256, and old preference/log files stay in the module's data folder.\n- **One-DLL download:** place `ExtraSettings.dll` in Plugins. Its matching helper is embedded and prepared automatically; settings are not shipped as defaults that overwrite your choices.\n\nOffensive/defensive playcall cooldowns and limits are retained features, not new additions in this release. Find everything under Dynasty > League Settings > Game Settings; start a fresh game after changing gameplay options.\n\nRemove old `OfflineDynastySettings.dll`, `DynastyPlayClock.dll` and `OfflinePlaycall.dll` copies from Plugins, keeping all data folders. If keeping COT, disable its Extra Settings module before using the standalone. Current Beyond the Field and Expanded Practice retain the corresponding shared-menu/controller contracts; older or modified hooks can be rejected.\n\nValidation: all-four packaging/coexistence and COT install/uninstall fixtures passed; 86 per-Dynasty profile checks cover all 32 clock pairs, isolation/reload/invalid data/backups, and 54 preference/launch-coordinator checks passed. The helper matches COT 1.0.2 byte-for-byte. **Ace reported all four standalone releases verified working on November 9, 2026.** No live installation was performed for this build.\n\nSource comparison: old tag `v0.2.1`, commit `51f48a5dac0ed23fb542597aa96d7b4ac2d8a31c`; current maintained source is pinned in `source-release.json`. Checked changes include `DynastyClockProfiles.cs`, `ClockPreferences.cs`, `GameSettingsMenuRows.cs`, `ControllerSelect.cs`, `PersistenceController.cs` and `RuntimeFiles.cs`.\n\nStable promotion: the ZIP and DLL are unchanged from the tested preview. Enclosed preview labels describe the build-time status. Acceptance is user-reported for the tested setup; other game/overhaul combinations are not automatically certified.\n",
+        "Version": "0.2.11",
+        "Tag": "v0.2.11",
+        "ArchiveName": "ExtraSettings-0.2.11.zip",
+        "ArchiveUrl": "https://github.com/ArtVsTheWorld/offline-dynasty-settings/releases/download/v0.2.11/ExtraSettings-0.2.11.zip",
+        "ArchiveSha256": "bce8b5e56881d50cfc0df845703ed78ba6c392d5d3c4c21245e7bda737c7c00a",
+        "DllSha256": "417a740e436a9ca1ca495e96a353b2fb9dfa3935b2ff6cd0d8e4956910d41a28",
+        "ArchiveBytes": 90350,
+        "ProofUrl": "https://github.com/ArtVsTheWorld/offline-dynasty-settings/releases/download/v0.2.11/ExtraSettings-0.2.11-verification.json",
+        "PageUrl": "https://github.com/ArtVsTheWorld/offline-dynasty-settings/releases/tag/v0.2.11",
+        "Notes": "# ExtraSettings 0.2.11\n\nChanges since public 0.2.10\n\n- Settings, diagnostics and verified runtime files now use shared AppData, so a protected MMC folder does not stop normal saving\n- Different MMC copies share your existing choices; legacy files are preserved and explicit AppData preferences take priority\n- Keeps per-Dynasty clocks, separate offensive/defensive playcall controls and existing compatibility checks\n\nOffline Dynasty only. Check persistence after a clean restart; other game layouts still require their own verification.\n\nInstall or update: close MMC/game, back up the previous DLL and replace it in Plugins. Keep settings and history. Restore that DLL to roll back.\n",
         "Compatibility": "Offline scope and native protections stay in each module. Use one provider of each feature. Read the module release notes for known limits.",
         "Prerelease": false
       }
@@ -92,16 +92,16 @@
       ],
       "Current": {
         "Module": "ExpandedPractice",
-        "Version": "0.8.21",
-        "Tag": "v0.8.21",
-        "ArchiveName": "ExpandedPractice-0.8.21.zip",
-        "ArchiveUrl": "https://github.com/ArtVsTheWorld/drive-based-practice/releases/download/v0.8.21/ExpandedPractice-0.8.21.zip",
-        "ArchiveSha256": "9b85ce8b05e230713e61ab039067005a52145876d5b81d8781d1ed989a55ae05",
-        "DllSha256": "790f7555b6bb0a2ca5331705ef10449490037e40919036ce6e716a1368376891",
-        "ArchiveBytes": 67114,
-        "ProofUrl": "https://github.com/ArtVsTheWorld/drive-based-practice/releases/download/v0.8.21/ExpandedPractice-0.8.21-verification.json",
-        "PageUrl": "https://github.com/ArtVsTheWorld/drive-based-practice/releases/tag/v0.8.21",
-        "Notes": "# Expanded Practice 0.8.21 - standalone release\n\nCompared with the last published standalone release, **v0.8.18**.\n\n- **A clearer name:** Drive-Based Practice is now Expanded Practice.\n- **Main-menu Practice support:** use Default Practice, Drive Practice or Scrimmage in supported offline main-menu Practice as well as Dynasty Practice. Native offline/practice eligibility remains checked.\n- **Updated native compatibility:** the runtime uses the current supported game layout, with exact bridge handling for current Extra Settings and the COT practice contracts. Unknown hook owners are still rejected.\n- **Play-selection transitions:** the current native flow completes requested picker transitions before the next pre-snap step, including supported possession/reset situations.\n- **Verified runtime and better reports:** a matching helper is SHA256-checked before launch; game-session duplicate ownership, launch/exit observation and diagnostic reports remain enabled.\n- **One-DLL download:** put `ExpandedPractice.dll` in Plugins. The matching runtime helper is embedded and prepared automatically. Existing module data is retained.\n\nDefault Practice, full-drive downs/distance, Scrimmage possession changes, scores, session stats, re-spotting, side switching and the first-down line are retained features. They are not all new in 0.8.21. Kicking sequences and a normal running game clock are not supported practice features.\n\nMove old `SituationalPractice.dll` outside Plugins and keep its data. Disable COT's Expanded Practice module if using the standalone beside COT. Use matched current modules: older practice helpers may not satisfy Beyond the Field's exact hook contract or Extra Settings' controller bridge.\n\nValidation: the practice regression suites passed, including drive/defense/opponent/session/scrimmage/mode/start/first-down/diagnostics checks. The shared practice contract passed 5,009 ownership/mutation checks, and all-four package/coexistence fixtures passed. The helper matches COT 1.0.2 byte-for-byte. **Ace reported all four standalone releases verified working on November 9, 2026.** No live game was patched during these tests.\n\nSource comparison: old tag `v0.8.18`, commit `0b3998949a63c842f02d0f05da4c5f66ecb22ad0`; current maintained source is pinned in `source-release.json`. Checked changes include `NativeRuntime.cs`, `NativeCompatibility.cs`, `DynastyControllerCompatibility.cs`, `PracticeRunner.cs`, `PracticeAction.cs` and `RuntimeFiles.cs`. Core drive/scoring policies are retained rather than advertised as newly introduced.\n\nStable promotion: the ZIP and DLL are unchanged from the tested preview. Enclosed preview labels describe the build-time status. Acceptance is user-reported for the tested setup; other game/overhaul combinations are not automatically certified.\n",
+        "Version": "0.8.23",
+        "Tag": "v0.8.23",
+        "ArchiveName": "ExpandedPractice-0.8.23.zip",
+        "ArchiveUrl": "https://github.com/ArtVsTheWorld/drive-based-practice/releases/download/v0.8.23/ExpandedPractice-0.8.23.zip",
+        "ArchiveSha256": "3d4a300ab062221e9892f35ba749c10cbc58a701a0603b6541f976da6652f345",
+        "DllSha256": "8a7521defb83730024320224e4d6ab152917cdaed50f90797d7e698d0ea19847",
+        "ArchiveBytes": 78022,
+        "ProofUrl": "https://github.com/ArtVsTheWorld/drive-based-practice/releases/download/v0.8.23/ExpandedPractice-0.8.23-verification.json",
+        "PageUrl": "https://github.com/ArtVsTheWorld/drive-based-practice/releases/tag/v0.8.23",
+        "Notes": "# ExpandedPractice 0.8.23\n\nChanges since public 0.8.21\n\n- Avoids the confirmed Dynasty Extensions pregame controller-hook conflict on the supported layout\n- Settings, diagnostics and verified runtime files now use shared AppData, including when MMC is installed in a protected folder\n- Keeps Default, Drive and Scrimmage modes, session statistics and existing native safety checks\n\nOnly the exact supported Dynasty Extensions/controller layout is covered. Check both practice entry routes after a clean restart.\n\nInstall or update: close MMC/game, back up the previous DLL and replace it in Plugins. Keep settings and history. Restore that DLL to roll back.\n",
         "Compatibility": "Offline scope and native protections stay in each module. Use one provider of each feature. Read the module release notes for known limits.",
         "Prerelease": false
       }
@@ -282,6 +282,61 @@
       "Path": "Plugins/DynastyCOT.dll",
       "Module": "Core",
       "Sha256": "c65fd2fb322d8e615941208625e2f979dde1d36434d15b11aceb7ad789147881"
+    },
+    {
+      "Path": "Plugins/BeyondTheField.dll",
+      "Module": "BeyondTheField",
+      "Sha256": "a2486d6e60e815e0ebb4918e011315898fc9927ad6e844257d393186be667acd"
+    },
+    {
+      "Path": "Plugins/GamedayAtmosphere.dll",
+      "Module": "GamedayAtmosphere",
+      "Sha256": "0f027694580afe57b3b0054602b587dcd265e2c88103e64f34c403d2ee18113b"
+    },
+    {
+      "Path": "Plugins/GamedayAtmosphereNative-2.1.32.dll",
+      "Module": "GamedayAtmosphere",
+      "Sha256": "1576e1a71f602816e646fc99de44a40009cd20ddeb6b0dc49cb87392dce36bb0"
+    },
+    {
+      "Path": "Plugins/ExtraSettings.dll",
+      "Module": "ExtraSettings",
+      "Sha256": "fd47cae243e02c8f00bed3cb9adf9c411cb51fee6c253ec1f6c9d6aefdf452e3"
+    },
+    {
+      "Path": "Plugins/ExpandedPractice.dll",
+      "Module": "ExpandedPractice",
+      "Sha256": "fb953dfef569bf48434957c8603525ccb161b4cea73001046d22d4a34bf88d40"
+    },
+    {
+      "Path": "Plugins/BeyondTheField.dll",
+      "Module": "BeyondTheField",
+      "Sha256": "8e7ba284e834ce39b6d31da6fa56310c68d6c85de7b769382490041f13ad9ea5"
+    },
+    {
+      "Path": "Plugins/GamedayAtmosphere.dll",
+      "Module": "GamedayAtmosphere",
+      "Sha256": "fc0c3df78e2c85fcb2d6f18e8e54d0294d1ec7f6b13ee0773def0deaddc23c06"
+    },
+    {
+      "Path": "Plugins/BeyondTheField.dll",
+      "Module": "BeyondTheField",
+      "Sha256": "f946461f8e88674436dd9ef356c7e083f6a1fd06a5d2c100441d603045efd188"
+    },
+    {
+      "Path": "Plugins/GamedayAtmosphere.dll",
+      "Module": "GamedayAtmosphere",
+      "Sha256": "5ef0f6fa925d8f2964c502308d5ed853383461a63efe33c8ae94d40198f38ec5"
+    },
+    {
+      "Path": "Plugins/ExtraSettings.dll",
+      "Module": "ExtraSettings",
+      "Sha256": "417a740e436a9ca1ca495e96a353b2fb9dfa3935b2ff6cd0d8e4956910d41a28"
+    },
+    {
+      "Path": "Plugins/ExpandedPractice.dll",
+      "Module": "ExpandedPractice",
+      "Sha256": "8a7521defb83730024320224e4d6ab152917cdaed50f90797d7e698d0ea19847"
     }
   ],
   "Programs": [
@@ -1909,6 +1964,241 @@
       "Path": "Plugins/SituationalPractice/SituationalPractice.Runtime.exe",
       "Module": "ExpandedPractice",
       "Sha256": "a4c2c37d4bded491d70d447bd85b5ff91615e3926bd92eb2226deb6201e17500"
+    },
+    {
+      "Path": "COT-Runtime/DynastyEnhancer/BeyondTheFieldNative-v103.dll",
+      "Module": "BeyondTheField",
+      "Sha256": "de13843a6c8121925ef023cb4c9e20f989bebaf2d323fff1aed802bda8fc61c2"
+    },
+    {
+      "Path": "COT-Runtime/DynastyEnhancer/BeyondTheFieldRecruitFog-v1.dll",
+      "Module": "BeyondTheField",
+      "Sha256": "ef6da4643d15ca2cc369a0dd86e0d41c3d9c4ba734851c54348e4471d441a2eb"
+    },
+    {
+      "Path": "COT-Runtime/DynastyEnhancer/Content/Runtime/editorial-specificity.json",
+      "Module": "BeyondTheField",
+      "Sha256": "539e71ce1d017175ab515a901c41eb452ba3bee83ab2966cccc354edad6cce60"
+    },
+    {
+      "Path": "COT-Runtime/DynastyEnhancer/Content/Runtime/milestone-fixes-pack.json",
+      "Module": "BeyondTheField",
+      "Sha256": "e8a8c0c306bf4aef281916cc5e4b8bf4cf5b4ec739e8f3d43ac57ab068e7a771"
+    },
+    {
+      "Path": "COT-Runtime/DynastyEnhancer/Content/Runtime/perspectives-pack.json",
+      "Module": "BeyondTheField",
+      "Sha256": "c041c65788946d673c2f17ec37fe1ea9795fb0d6d6e7982a90e5ff2b59725f1d"
+    },
+    {
+      "Path": "COT-Runtime/DynastyEnhancer/Content/Runtime/supporter-pack.json",
+      "Module": "BeyondTheField",
+      "Sha256": "38d85976084fbfc8c8436cdd1261426d155da2f7cbf4d615bd1523bebd0031e4"
+    },
+    {
+      "Path": "COT-Runtime/DynastyEnhancer/Tools/conference_language.mjs",
+      "Module": "BeyondTheField",
+      "Sha256": "ac8494a1842c9eb2622e9045856eefbf72ceb0b3b10f3c2d54203a90c084f891"
+    },
+    {
+      "Path": "COT-Runtime/DynastyEnhancer/Tools/conversation_topics.mjs",
+      "Module": "BeyondTheField",
+      "Sha256": "44c699c347a8e1c20f569ebadf492e069523c509a414e1a3761f5a5c68a068a7"
+    },
+    {
+      "Path": "COT-Runtime/DynastyEnhancer/Tools/editorial_policy.mjs",
+      "Module": "BeyondTheField",
+      "Sha256": "587168f1b3d25e307e40c0d1bcb0ab2861e7f31b46fd755394820d231dcb7e58"
+    },
+    {
+      "Path": "COT-Runtime/DynastyEnhancer/Tools/export_runtime.mjs",
+      "Module": "BeyondTheField",
+      "Sha256": "3542f7b0ad336d4e4e0c937262e7dce86099ffcd87b2af8c790135d29e1d107f"
+    },
+    {
+      "Path": "COT-Runtime/DynastyEnhancer/Tools/feed_engine.mjs",
+      "Module": "BeyondTheField",
+      "Sha256": "23f124bb0eb20fdd21bb192da1cdc19e671b65d4161f31335e376b1ed7e64961"
+    },
+    {
+      "Path": "COT-Runtime/DynastyEnhancer/Tools/feed_selection.mjs",
+      "Module": "BeyondTheField",
+      "Sha256": "c1d09808b7dd889dd50934fd9f45921bbb9a7bddaf3bcf122dcba330626dc9b0"
+    },
+    {
+      "Path": "COT-Runtime/DynastyEnhancer/Tools/milestone_text.mjs",
+      "Module": "BeyondTheField",
+      "Sha256": "a635b8f12d9fe151f7aa26a3fdfa58f751100d74a0a9db54ca762b724b4b7bbc"
+    },
+    {
+      "Path": "COT-Runtime/DynastyEnhancer/Tools/normalize_dynasty.mjs",
+      "Module": "BeyondTheField",
+      "Sha256": "33e61b291ba2fe55cf64a8c3c7c2f07d3797254a6e34ad63afd5cd4039703f4d"
+    },
+    {
+      "Path": "COT-Runtime/DynastyEnhancer/Tools/preseason_events.mjs",
+      "Module": "BeyondTheField",
+      "Sha256": "ec3edd56e1238a2b2e2a7589fcfecafd59892eac50d7e48dfa8770429379e41f"
+    },
+    {
+      "Path": "COT-Runtime/DynastyEnhancer/Tools/prose_cleanup.mjs",
+      "Module": "BeyondTheField",
+      "Sha256": "2463657b38d886372f47f8c502745b9c31c77ff03960a70618dadbd80d7c9f13"
+    },
+    {
+      "Path": "COT-Runtime/DynastyEnhancer/Tools/publication_gate.mjs",
+      "Module": "BeyondTheField",
+      "Sha256": "110acacea32aa4e69031c00fce8c9a43afd32251253529eab641093d4bf64228"
+    },
+    {
+      "Path": "COT-Runtime/DynastyEnhancer/Tools/read_runtime.mjs",
+      "Module": "BeyondTheField",
+      "Sha256": "8a9fad9dd939b2eed71142c1de2e99cb4863a6d5970dca8526b08d5656e2622c"
+    },
+    {
+      "Path": "COT-Runtime/DynastyEnhancer/Tools/runtime_wire.mjs",
+      "Module": "BeyondTheField",
+      "Sha256": "e91722ad9c56af2e657ffa222f6852098f7e1fa08225cb37a28ab20502b5b64d"
+    },
+    {
+      "Path": "COT-Runtime/DynastyEnhancer/Tools/season_launch_events.mjs",
+      "Module": "BeyondTheField",
+      "Sha256": "c179ce01d36a5d018d70f2a044e3a763d8b0c13cda7c271a428b062c1448ff5f"
+    },
+    {
+      "Path": "COT-Runtime/DynastyEnhancer/Tools/spring_context.mjs",
+      "Module": "BeyondTheField",
+      "Sha256": "7853640aea943b979c6d79a7c796bef537be9f1c030130a8813be50415819e5f"
+    },
+    {
+      "Path": "COT-Runtime/DynastyEnhancer/Tools/story_events.mjs",
+      "Module": "BeyondTheField",
+      "Sha256": "53305c5cb64a497689d08937b9448422625407725870f0a316a168e92b73a015"
+    },
+    {
+      "Path": "COT-Runtime/DynastyEnhancer/Tools/story_renderer.mjs",
+      "Module": "BeyondTheField",
+      "Sha256": "ba712079ebba6e27c644dd65a251fa95baef30b57cb6a852cae6b67636165884"
+    },
+    {
+      "Path": "COT-Runtime/DynastyEnhancer/Tools/story_templates.mjs",
+      "Module": "BeyondTheField",
+      "Sha256": "6894560c94fbf66e851df0958678f6b0271ace3b30f30aa3eb48623143ad5c65"
+    },
+    {
+      "Path": "COT-Runtime/DynastyEnhancer/Tools/supporter_voice.mjs",
+      "Module": "BeyondTheField",
+      "Sha256": "f26d47450a194bc804494efb9d57e08535b279087b2771a2a43be5d3f2e2bf2c"
+    },
+    {
+      "Path": "COT-Runtime/DynastyEnhancer/Tools/team_language.mjs",
+      "Module": "BeyondTheField",
+      "Sha256": "351fd95216340e3855205ae23f14181fd9815daa2b3cf05cedf6f11a6351907a"
+    },
+    {
+      "Path": "Plugins/OfflineDynastySettings/ExtraSettings.Persistence.exe",
+      "Module": "ExtraSettings",
+      "Sha256": "26bc925d7c55550ae5c11ae29b496391705d899eaeddcdd20920fcb2b198afec"
+    },
+    {
+      "Path": "Plugins/SituationalPractice/ExpandedPractice.Runtime.exe",
+      "Module": "ExpandedPractice",
+      "Sha256": "fbaa0bd76dce5702cbc51427d28f3e3f0cd7a92be5f98734e6793276a5bd08c5"
+    },
+    {
+      "Path": "COT-Runtime/DynastyEnhancer/BeyondTheFieldNative-v103.dll",
+      "Module": "BeyondTheField",
+      "Sha256": "72efe145daf076656d35a6fadc0815d3c051aa6968ff35223db094ee97cd9dcd"
+    },
+    {
+      "Path": "COT-Runtime/DynastyEnhancer/BeyondTheFieldRecruitFog-v1.dll",
+      "Module": "BeyondTheField",
+      "Sha256": "78e863bab8a31dcf020c404682a3a96649cfacd8fd34564899e207a88398acd6"
+    },
+    {
+      "Path": "COT-Runtime/DynastyEnhancer/Tools/export_runtime.mjs",
+      "Module": "BeyondTheField",
+      "Sha256": "f58714fa397ac1789422343e16852c36d2ba81bfc7f9c5907f29a0f9a37e742f"
+    },
+    {
+      "Path": "COT-Runtime/DynastyEnhancer/Tools/feed_engine.mjs",
+      "Module": "BeyondTheField",
+      "Sha256": "f4714645b9eb25721942eab9e73a506908e29e7946135efbd444c853ae4708a1"
+    },
+    {
+      "Path": "COT-Runtime/DynastyEnhancer/Tools/history_store.mjs",
+      "Module": "BeyondTheField",
+      "Sha256": "795e4195c99d7cd97f521236d7bd3a711d68aa2c435801aaa067e3b69b681f23"
+    },
+    {
+      "Path": "COT-Runtime/DynastyEnhancer/Tools/injury_names.mjs",
+      "Module": "BeyondTheField",
+      "Sha256": "9caa0014611bb90bf76fcf8295d5ba108ea691214dcd4eb17606dda31f401821"
+    },
+    {
+      "Path": "COT-Runtime/DynastyEnhancer/Tools/normalize_dynasty.mjs",
+      "Module": "BeyondTheField",
+      "Sha256": "cd1fbcbf62382db8c487238a95a39824c5789b8924b53626c4dade29ee66a2f1"
+    },
+    {
+      "Path": "COT-Runtime/DynastyEnhancer/Tools/read_runtime.mjs",
+      "Module": "BeyondTheField",
+      "Sha256": "19612f5172dc858e050fad9ae999ce9f32e9cae84a73182f7ddc95ffec43206b"
+    },
+    {
+      "Path": "COT-Runtime/DynastyEnhancer/Tools/recover_weeks.mjs",
+      "Module": "BeyondTheField",
+      "Sha256": "b540c29476f1934d1953e6a4109ad808cc77b8171558f6f93b60f7be100d00f0"
+    },
+    {
+      "Path": "COT-Runtime/DynastyEnhancer/Tools/runtime_archive.mjs",
+      "Module": "BeyondTheField",
+      "Sha256": "f78c719a2adbf3233081c1efa7770c39a7de240c4fbeac5b3d4e8fad5d186b3d"
+    },
+    {
+      "Path": "COT-Runtime/DynastyEnhancer/Tools/runtime_lifecycle.mjs",
+      "Module": "BeyondTheField",
+      "Sha256": "971853fec6ccbd419f5cf7f4592c4e45e80a2e809e47739151365cae46c288b2"
+    },
+    {
+      "Path": "COT-Runtime/DynastyEnhancer/Tools/shared_editions.mjs",
+      "Module": "BeyondTheField",
+      "Sha256": "13821b7a0d0361cc2d9cdc7ef2311089ea9e03d4b58a0c75c1cbbef414cb5320"
+    },
+    {
+      "Path": "COT-Runtime/DynastyEnhancer/Tools/signing_ownership.mjs",
+      "Module": "BeyondTheField",
+      "Sha256": "37220455ea1426cfc120ab18e93befbb446a8ce546c35b5b8011f08edb1d30d8"
+    },
+    {
+      "Path": "COT-Runtime/DynastyEnhancer/Tools/story_events.mjs",
+      "Module": "BeyondTheField",
+      "Sha256": "328a2794e9af5abe3b1c8afc09a5a4eca72b6ec40324baa3126e3f2539329fa9"
+    },
+    {
+      "Path": "COT-Runtime/DynastyEnhancer/Tools/story_renderer.mjs",
+      "Module": "BeyondTheField",
+      "Sha256": "4ed96c93cc27a7aadda65f29e40bff9742873b03f3ddb8f4eae1104353072e2f"
+    },
+    {
+      "Path": "DGA-Runtime/Runtime-2.1.35/GamedayAtmosphereNative-2.1.35.dll",
+      "Module": "GamedayAtmosphere",
+      "Sha256": "4a48aa8e3e9e40eca9ef6f3cfe8a883cc698ec688c49b2925aecdf9e34cbee7f"
+    },
+    {
+      "Path": "DGA-Runtime/Runtime-2.1.35/DgaDiagnostics.exe",
+      "Module": "GamedayAtmosphere",
+      "Sha256": "897eb1b0e1327b37f750bdc1d44e34368861c9ca51a40c938f62a066df9feab6"
+    },
+    {
+      "Path": "Plugins/OfflineDynastySettings/ExtraSettings.Persistence.exe",
+      "Module": "ExtraSettings",
+      "Sha256": "bd35754bf04ae847029067359423ef50ebe1f997f02d6418b8893601b8368ce5"
+    },
+    {
+      "Path": "Plugins/SituationalPractice/ExpandedPractice.Runtime.exe",
+      "Module": "ExpandedPractice",
+      "Sha256": "bc0da9beaeb1291acbf6b6f8d9145cf8fe96e69b0fb9823ffd71b74c3f71317f"
     }
   ]
 }

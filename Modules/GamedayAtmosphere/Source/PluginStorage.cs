@@ -15,7 +15,7 @@ namespace DynamicGamedayAtmosphere {
         public static string RuntimeRoot(string plugins){
             var dir=new DirectoryInfo(Path.GetFullPath(plugins));
             if(!String.Equals(dir.Name,"Plugins",StringComparison.OrdinalIgnoreCase)||dir.Parent==null)throw new IOException("Cannot locate MMC's Plugins folder for runtime storage.");
-            return Path.Combine(dir.Parent.FullName,"DGA-Runtime");
+            return Ace.DynastyCOT.UserStorage.Folder("GamedayAtmosphere");
         }
         public static string RuntimeFolder(string plugins,string version){
             if(!Regex.IsMatch(version,@"^\d+\.\d+\.\d+$"))throw new ArgumentException("Invalid runtime version.");
@@ -48,16 +48,16 @@ namespace DynamicGamedayAtmosphere {
             }
             return count;
         }
-        public static string DataFolder(string plugins){return Path.Combine(plugins,"DynamicGamedayAtmosphere");}
+        public static string DataFolder(string plugins){return Ace.DynastyCOT.UserStorage.Folder("GamedayAtmosphere");}
         public static string SettingsFile(string plugins){return Path.Combine(DataFolder(plugins),"DynamicGamedayAtmosphere.ini");}
         static void Retire(string path,string folder){
             if(!File.Exists(path))return;
             SettingsIo.Run("create retired-file backup folder",null,folder,null,()=>Directory.CreateDirectory(folder));
             string saved=Path.Combine(folder,Path.GetFileName(path)+"-"+Guid.NewGuid().ToString("N")+".bak");
-            SettingsIo.Run("archive previous DGA file",path,saved,null,()=>File.Move(path,saved));
+            SettingsIo.Run("archive previous DGA file",path,saved,null,()=>File.Copy(path,saved,false));
         }
         static string ExistingSettings(string plugins){
-            foreach(string path in new[]{SettingsFile(plugins),Path.Combine(plugins,"DynamicGamedayAtmosphere.ini"),Path.Combine(plugins,"DynamicAttendance.ini")})
+            foreach(string path in new[]{SettingsFile(plugins),Path.Combine(plugins,"DynamicGamedayAtmosphere","DynamicGamedayAtmosphere.ini"),Path.Combine(plugins,"DynamicGamedayAtmosphere.ini"),Path.Combine(plugins,"DynamicAttendance.ini")})
                 if(File.Exists(path))return path;
             return null;
         }
@@ -82,13 +82,15 @@ namespace DynamicGamedayAtmosphere {
         }
         // Current distribution paths never reset or retune existing choices.
         // Legacy flat INIs are copied byte-for-byte; originals remain available.
-        public static void EnsurePreserving(string plugins,string defaults){
+        public static void EnsurePreserving(string plugins,string defaults){Ace.DynastyCOT.UserStorage.Current.WithModule("GamedayAtmosphere",()=>EnsurePreservingCore(plugins,defaults));}
+        static void EnsurePreservingCore(string plugins,string defaults){
+            Ace.DynastyCOT.UserStorage.Migrate("GamedayAtmosphere",plugins);
             string data=DataFolder(plugins),destination=SettingsFile(plugins);
             SettingsIo.Run("create DGA settings folder",null,data,null,()=>Directory.CreateDirectory(data));
             if(File.Exists(destination))return;
             string source=ExistingSettings(plugins),temp=Path.Combine(data,"settings-"+Guid.NewGuid().ToString("N")+".tmp");Exception failure=null;
             try{
-                if(source!=null)SettingsIo.Run("copy existing DGA settings unchanged",source,temp,null,()=>File.Copy(source,temp,false));
+                if(source!=null)SettingsIo.Run("copy existing DGA settings unchanged",source,temp,null,()=>Ace.DynastyCOT.UserStore.Atomic(temp,File.ReadAllBytes(source)));
                 else SettingsIo.Run("write initial DGA defaults",null,temp,null,()=>File.WriteAllText(temp,defaults,Encoding.Unicode));
                 SettingsIo.Run("activate initial DGA settings",temp,destination,null,()=>File.Move(temp,destination));
             }catch(Exception error){failure=error;throw;}

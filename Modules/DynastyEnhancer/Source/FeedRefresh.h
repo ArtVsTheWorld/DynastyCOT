@@ -88,12 +88,22 @@ inline Settings settings(const Json& j,const fs::path& folder){
     Settings s{path("save"),path("node"),path("exporter"),folder/L"social-refresh.json"};
     for(const auto& p:{s.save,s.node,s.exporter,path("schema"),path("parser")})if(!fs::is_regular_file(p))throw std::runtime_error("A configured feed dependency is missing");return s;
 }
-inline DWORD exportSave(const Settings& s,const fs::path& output,const fs::path& log,const std::function<bool()>& cancelled){
+inline void writeAtomic(const fs::path& temporary,const fs::path& final,const Json& j);
+struct PublicationGateFiles {
+    fs::path prefix;
+    ~PublicationGateFiles(){if(!prefix.empty()){std::error_code ec;fs::remove(fs::path(prefix.wstring()+L".ready"),ec);fs::remove(fs::path(prefix.wstring()+L".allow"),ec);}}
+};
+inline DWORD exportSave(const Settings& s,const fs::path& output,const fs::path& log,const std::function<bool()>& cancelled,const std::function<bool()>& verifyBeforeCommit={}){
     SECURITY_ATTRIBUTES sa{sizeof(sa),nullptr,TRUE};
     HANDLE stream=CreateFileW(log.c_str(),FILE_APPEND_DATA,FILE_SHARE_READ|FILE_SHARE_WRITE,&sa,OPEN_ALWAYS,FILE_ATTRIBUTE_NORMAL,nullptr);
     HANDLE nullIn=CreateFileW(L"NUL",GENERIC_READ,FILE_SHARE_READ|FILE_SHARE_WRITE,&sa,OPEN_EXISTING,FILE_ATTRIBUTE_NORMAL,nullptr);
     if(stream==INVALID_HANDLE_VALUE||nullIn==INVALID_HANDLE_VALUE){if(stream!=INVALID_HANDLE_VALUE)CloseHandle(stream);if(nullIn!=INVALID_HANDLE_VALUE)CloseHandle(nullIn);throw std::runtime_error("Cannot create exporter log handles");}
+    PublicationGateFiles gate;bool approved=false;
     std::wstring command=quote(s.node.wstring())+L" "+quote(s.exporter.wstring())+L" "+quote(s.config.wstring())+L" "+quote(output.wstring());
+    if(verifyBeforeCommit){LARGE_INTEGER nonce{};QueryPerformanceCounter(&nonce);
+        gate.prefix=fs::path(output.wstring()+L".gate-"+std::to_wstring(GetCurrentProcessId())+L"-"+std::to_wstring(GetTickCount64())+L"-"+std::to_wstring(nonce.QuadPart));
+        command+=L" "+quote(gate.prefix.wstring());
+    }
     SIZE_T attributeBytes=0;InitializeProcThreadAttributeList(nullptr,1,0,&attributeBytes);
     std::vector<unsigned char> storage(attributeBytes);auto attributes=reinterpret_cast<LPPROC_THREAD_ATTRIBUTE_LIST>(storage.data());
     HANDLE inherited[]={stream,nullIn};
@@ -105,15 +115,23 @@ inline DWORD exportSave(const Settings& s,const fs::path& output,const fs::path&
     DeleteProcThreadAttributeList(attributes);
     CloseHandle(stream);CloseHandle(nullIn);if(!launched)throw std::runtime_error("Cannot start save exporter");
     CloseHandle(process.hThread);uint64_t start=GetTickCount64();
-    while(WaitForSingleObject(process.hProcess,100)==WAIT_TIMEOUT){
+    while(WaitForSingleObject(process.hProcess,25)==WAIT_TIMEOUT){
+        if(verifyBeforeCommit&&!approved&&fs::is_regular_file(fs::path(gate.prefix.wstring()+L".ready"))){
+            bool valid=false;try{const auto ready=readJson(fs::path(gate.prefix.wstring()+L".ready"));valid=ready.at("request")==gate.prefix.filename().u8string()&&!cancelled()&&verifyBeforeCommit();}catch(...){valid=false;}
+            if(!valid){TerminateProcess(process.hProcess,ERROR_CANCELLED);WaitForSingleObject(process.hProcess,5000);CloseHandle(process.hProcess);throw std::runtime_error("Dynasty changed before publication commit; history unchanged");}
+            try{const auto allow=fs::path(gate.prefix.wstring()+L".allow");writeAtomic(fs::path(allow.wstring()+L".tmp"),allow,Json{{"format",1},{"request",gate.prefix.filename().u8string()},{"approved",true}});approved=true;}
+            catch(...){TerminateProcess(process.hProcess,ERROR_CANCELLED);WaitForSingleObject(process.hProcess,5000);CloseHandle(process.hProcess);throw;}
+        }
         if(cancelled()||GetTickCount64()-start>60000){TerminateProcess(process.hProcess,ERROR_CANCELLED);WaitForSingleObject(process.hProcess,5000);CloseHandle(process.hProcess);throw std::runtime_error("Save export cancelled or timed out");}
     }
-    DWORD code=1;GetExitCodeProcess(process.hProcess,&code);CloseHandle(process.hProcess);return code;
+    DWORD code=1;GetExitCodeProcess(process.hProcess,&code);CloseHandle(process.hProcess);
+    if(verifyBeforeCommit&&code==0&&!approved)throw std::runtime_error("Generator exited without publication approval");return code;
 }
-inline void writeAtomic(const fs::path& temporary,const fs::path& final,const Json& j){
-    {std::ofstream out(temporary,std::ios::binary|std::ios::trunc);if(!out)throw std::runtime_error("Cannot create refreshed cache");out<<j.dump();out.flush();if(!out)throw std::runtime_error("Cannot finish refreshed cache");}
+inline void writeTextAtomic(const fs::path& temporary,const fs::path& final,const std::string& text){
+    {std::ofstream out(temporary,std::ios::binary|std::ios::trunc);if(!out)throw std::runtime_error("Cannot create refreshed cache");out.write(text.data(),static_cast<std::streamsize>(text.size()));out.flush();if(!out)throw std::runtime_error("Cannot finish refreshed cache");}
     if(!MoveFileExW(temporary.c_str(),final.c_str(),MOVEFILE_REPLACE_EXISTING|MOVEFILE_WRITE_THROUGH))throw std::runtime_error("Cannot publish refreshed cache");
 }
+inline void writeAtomic(const fs::path& temporary,const fs::path& final,const Json& j){writeTextAtomic(temporary,final,j.dump());}
 class Worker {
     Settings config;Watch watch;Json identity;fs::path directory;
     bool enabled=false;uint64_t pollAt=0;std::string lastHash,lastError;

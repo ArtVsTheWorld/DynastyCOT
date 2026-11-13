@@ -59,6 +59,7 @@ int main(){
     assert(!view.fullEligible(passComparison,20));arena.set(yards+8,20);assert(view.fullEligible(passComparison,20));
     arena.set(yards+8,111);assert(!view.fullEligible(passComparison,20));arena.set(yards+8,25);arena.set(yards+0x10,7);assert(!view.fullEligible(passComparison,20));
     assert(!view.fullEligible(passComparison,0)&&!view.fullEligible(passComparison,61));
+    arena.set(yards+0x10,0);for(int gain:{11,12,13}){arena.set(yards+8,gain);assert(view.fullEligible(passComparison,12)==(gain>=12));}
     Address result=arena.allocate(0x10);arena.set(result+8,4);arena.set(result,uint64_t{0xaabbccddeeff0000});
     assert(view.falseBoolean(result));arena.set(result,1);assert(!view.falseBoolean(result));
     assert(view.trueBoolean(result));arena.set(result,2);assert(!view.trueBoolean(result));

@@ -80,4 +80,13 @@ inline Mix mix(float fullness,uint64_t seats,float maximumPercent=30,float stren
  for(unsigned i=0;i<8;++i)out.key[i]=static_cast<int>(std::lround(out.gain[i]*10000));
  out.key[8]=out.mute?1:0;return out;
 }
+// Only continuous bed/chant/student buses are softened. Parent, reactions,
+// anticipation, sweeteners and swells retain their exact net levels. Native
+// quarter-second mixer fades remain in control. Half-dB steps bound churn.
+inline Mix ambient(Mix out,float signalGain){
+ if(!out.valid||out.mute||!std::isfinite(signalGain)||signalGain>=1||signalGain<0)return out;
+ float db=(std::clamp)(.5f*std::round(40*std::log10((std::max)(signalGain,.20f))),-12.f,0.f);
+ for(unsigned child:{1u,2u,4u}){out.gain[child+1]+=db;out.key[child+1]=static_cast<int>(std::lround(out.gain[child+1]*10000));}
+ return out;
+}
 }

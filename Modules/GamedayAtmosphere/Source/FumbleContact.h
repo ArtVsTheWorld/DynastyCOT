@@ -41,10 +41,10 @@ public:
         }
         if(p.game.phase==3&&phase_==1&&ready_){live_=true;began_=now;grounded_=loose_=contact_=ended_=0;owner_=contactOwner_=-1;home_=p.game.homeScore;away_=p.game.awayScore;used_=false;}
         if(live_&&phase_==3&&(p.game.phase==4||p.game.phase==5))ended_=now;
-        bool post=(p.game.phase==4||p.game.phase==5)&&ended_&&now>=ended_&&now-ended_<=750;
+        bool post=(p.game.phase==4||p.game.phase==5)&&ended_&&now>=ended_&&now-ended_<=1500;
         bool active=live_&&p.game.homeScore==home_&&p.game.awayScore==away_&&now>=began_&&now-began_<=45000&&((p.game.phase==3&&!ended_)||post);
         if(active){
-            if(held&&!fumble&&(ball==2||ball==3||ball==9)&&p.offense>=0&&p.offense<=1){if(!contact_||now>contact_+500)loose_=0;owner_=p.offense;grounded_=now;}
+            if(p.game.phase==3&&!loose_&&held&&!fumble&&(ball==2||ball==3||ball==9)&&p.offense>=0&&p.offense<=1){if(!contact_||now>contact_+500)loose_=0;owner_=p.offense;grounded_=now;}
             if(!held&&(ball==0||fumble)&&grounded_&&!loose_)loose_=now;
             if(s.valid){
                 if(s.object!=object_){object_=s.object;baseline_=false;contact_=0;}

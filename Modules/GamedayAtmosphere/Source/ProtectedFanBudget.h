@@ -17,11 +17,12 @@ inline Hidden permanent(const Counts& c,uint64_t home,uint64_t away){
 }
 // A percentage is a TOTAL absence budget, including permanent departures.
 // Protected spectators occupy that budget; bands never enter these counts.
-inline Hidden missing(const Counts& c,Hidden gone,int percent){
+inline Hidden missing(const Counts& c,Hidden gone,int percent,bool familyFloor=false){
     if(!c.valid()||!c.total())return {};
     gone=permanent(c,gone.home,gone.away);
     uint64_t h=c.home-c.homeProtected,a=c.away-c.awayProtected;
     uint64_t target=(std::max)(gone.total(),(std::min)(h+a,c.total()*static_cast<unsigned>((std::clamp)(percent,0,100))/100));
+    if(familyFloor&&c.away){uint64_t keep=(std::min)(c.away-gone.away,(c.total()-target+99)/100);a=(std::min)(a,c.away-keep);target=(std::min)(target,h+a);}
     uint64_t low=(std::max)(gone.home,target>a?target-a:0),high=(std::min)(h,target-gone.away);
     uint64_t home=(std::clamp)(target*c.home/c.total(),low,high);
     return {home,target-home};
@@ -71,9 +72,9 @@ inline bool divide(const std::vector<Layout>& layouts,bool away,uint64_t target,
     return true;
 }
 }
-inline Plan build(const std::vector<Layout>& layouts,Hidden gone,int percent){
+inline Plan build(const std::vector<Layout>& layouts,Hidden gone,int percent,bool familyFloor=false){
     Plan p;if(!totals(layouts,p.fans))return p;
-    p.gone=permanent(p.fans,gone.home,gone.away);p.missing=missing(p.fans,p.gone,percent);
+    p.gone=permanent(p.fans,gone.home,gone.away);p.missing=missing(p.fans,p.gone,percent,familyFloor);
     std::vector<uint64_t> zero(layouts.size()),home,away,homeMissing,awayMissing;
     if(!detail::divide(layouts,false,p.gone.home,zero,home)||!detail::divide(layouts,true,p.gone.away,zero,away)||
        !detail::divide(layouts,false,p.missing.home,home,homeMissing)||!detail::divide(layouts,true,p.missing.away,away,awayMissing))return p;

@@ -1,5 +1,6 @@
 #define WIN32_LEAN_AND_MEAN
 #include "../Source/AwayAppearance.h"
+#include "../Source/AppearanceAdmission.h"
 #include <cassert>
 #include <cstring>
 #include <cstdio>
@@ -43,5 +44,21 @@ int main(){
     plan.share=.25f;auto sparse=appearance(memory,image,c,plan,123,true,false,&occupied);
     assert(sparse.applied&&sparse.occupiedVerified&&sparse.spectators==400&&sparse.occupiedVisitors==100);
     assert(restoreAppearance(memory,image,sparse)&&raw==original);
-    std::puts("PASS: temporary selectors restored after native consumption, persistent generated supporter identity, band/cadet exclusion, unrelated native flag preservation, repeated-fixture isolation, native neutral passthrough and retired-stream rejection; self-process memory only");
+    for(int side:{0,1}){
+        Plan ignored;auto one=appearance(memory,image,c,ignored,123,true,false,&occupied,side);assert(one.applied);
+        for(unsigned i=0;i<1024;++i){if(agents::regular(one.native.type[i])&&!one.native.protectedFan(i))assert(one.desired[i]==side);else assert(one.desired[i]==one.native.side[i]);}
+        assert(restoreAppearance(memory,image,one)&&raw==original);
+    }
+    // Postseason admission reaches the very same native-generation preparation,
+    // preserves native turnout, protected selectors and occupied-only budget.
+    for(unsigned i=0;i<1024;++i){unsigned row=i/32,col=i%32;points[i]={35.f+float(row)*.9f,float(row)*.7f,float(col)*.65f-10.4f,0};raw[10*i]=static_cast<unsigned char>(0x80u|unsigned(col>=16));}
+    original=raw;turnout::Seed ps;ps.home.id=1153;ps.away.id=1193;ps.stadium=615;ps.capacity=65000;ps.ea=65000;ps.bowlFixture=true;ps.regular=false;
+    ps.home.audienceFans=100000;ps.away.audienceFans=75000;ps.home.prestige=ps.away.prestige=8;ps.home.prestigeKnown=ps.away.prestigeKnown=true;
+    turnout::Launch pl;pl.home=ps.home.id;pl.away=ps.away.id;pl.stadium=615;pl.capacity=pl.ea=65000;pl.bowl=47;pl.neutral=true;
+    turnout::CrowdFixture cf{ps,pl,true};assert(appearanceAdmission(cf,1153,1193,true)==AppearanceStage::Prepared);
+    auto pp=attendance::visitors::plan(cf,1153,1193);assert(pp.valid&&!pp.native&&!turnout::turnoutEligible(ps,pl));
+    auto post=appearance(memory,image,c,pp,321,true,false,&occupied);assert(post.applied&&!post.nativeFallback&&post.occupiedVerified&&post.spectators==400&&ps.ea==65000&&pl.ea==65000);
+    for(unsigned i=0;i<1024;++i)if(post.native.protectedGroup(i))assert(post.desired[i]==post.native.side[i]);
+    assert(restoreAppearance(memory,image,post)&&raw==original);
+    std::puts("PASS: native selector preparation/restoration, protected/empty-seat behavior, owned postseason fixture admission through native appearance, unchanged EA turnout, generated identities and retired-stream rejection; self-process memory only");
 }

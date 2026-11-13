@@ -44,6 +44,26 @@ struct Reader {
         else if(!sustained::obtain(result,reinterpret_cast<int(__fastcall*)(A,int,A)>(fn),table,row,col))return false;
         out=static_cast<int>(result);return true;
     }
+    bool namedInteger(A record,const char* name,int& out)const{
+        // Record::GetSchema is the native class/enum-key map. The database
+        // descriptor at Table+8 owns the actual named column order. Do not
+        // feed a database column ordinal back through the class key map.
+        A table=0,schema=0,begin=0,end=0;int row=-1;
+        if(!value(record+0x10,table)||!table||!value(record+0x18,row)||row<0||row>1000000||
+           !value(table+8,schema)||!schema||!value(schema+0x40,begin)||!value(schema+0x48,end)||
+           begin<0x10000||end<begin||(end-begin)%0x58||end-begin>4096*0x58)return false;
+        A getter=method(table,0x100);if(!getter)return false;
+        for(A field=begin;field<end;field+=0x58){
+            std::array<unsigned char,16> raw{};if(!read(field,raw.data(),raw.size()))return false;
+            std::array<char,80> text{};size_t n=0;
+            if(raw[15]&128){A p=0;std::memcpy(&p,raw.data(),8);if(!p)return false;for(;n<79;++n){if(!value(p+n,text[n]))return false;if(!text[n])break;}if(n==79)return false;}
+            else{if(raw[15]>15)return false;n=15-raw[15];std::memcpy(text.data(),raw.data(),n);}
+            if(std::string_view(text.data(),n)!=name)continue;
+            unsigned kind=0;if(!value(field+0x40,kind)||kind!=2)return false;
+            A result=0;if(!sustained::obtain(result,reinterpret_cast<int(__fastcall*)(A,int,A)>(getter),table,row,(field-begin)/0x58))return false;
+            out=static_cast<int>(result);return true;
+        }return false;
+    }
     bool real(A record,int key,float& out)const{
         A table=0,col=0;int row=0;if(!field(record,key,table,row,col))return false;
         // Native table-copy dispatcher860e63f..860e66e uses slot110 for float:
@@ -95,7 +115,10 @@ inline bool team(const Reader& r,A p,Team& t){
     int hw=0,hl=0,rw=0,rl=0;
     if(!r.integer(p,0xd1,t.id)||!r.integer(p,0x182,t.rank)||!r.integer(p,0x9e,t.apRank)||!r.integer(p,0x191,t.toughest)||!r.integer(p,0x180,t.prestige)||
        !r.integer(p,0x7a,hw)||!r.integer(p,0x77,hl)||!r.integer(p,0xec,rw)||!r.integer(p,0xe9,rl))return false;
-    t.wins=hw+rw;t.losses=hl+rl;t.homeGames=hw+hl;return true;
+    t.wins=hw+rw;t.losses=hl+rl;t.homeGames=hw+hl;
+    A prestigeName=0;int prestigeOrdinal=-1;
+    t.prestigeKnown=r.value(r.image+0xbdd3070,prestigeOrdinal)&&prestigeOrdinal==0x180&&r.value(r.image+0xbdd3078,prestigeName)&&sustained::named(prestigeName,"TeamPrestige")&&t.prestige>=0&&t.prestige<=10;
+    return true;
 }
 inline bool school(const Reader& r,A p,Team& t){
     Record tracking(r);
@@ -124,6 +147,7 @@ inline bool crowdIdentity(A image,A manager,A gameRef,Seed& s){
 }
 inline bool capture(A image,A manager,A gameRef,int ea,Seed& s,const Api* custom=nullptr){
     Api api=custom?*custom:Api::engine(image);
+    s.spring=false;s.bowlFixture=s.bowlRelated=s.practiceFixture=false;s.springSchool=s.springSide=s.springNumber=-1;s.springType=-1;s.springNumberKnown=false;s.springRoleEvidence=0;s.springStamp=-1;
     Reader r{image};A vt=0,game=0,league=0,season=0;
     if(!r.value(manager,vt)||vt!=image+StatManagerVtable||!r.value(gameRef,game)||!game||ea<=0)return false;
     Record home(r),away(r),stadium(r),bowl(r),teams(r),array(r),homeVenue(r),alternate(r);
@@ -136,13 +160,42 @@ inline bool capture(A image,A manager,A gameRef,int ea,Seed& s,const Api* custom
        !r.integer(game,0x3e,type,false,true)||!r.integer(game,0x33,practice,true)||!r.related(game,0x15,bowl.p)||
        !r.integer(game,0x3d,s.week)||!r.integer(game,0x3f,s.year)||!r.integer(game,36,homeScore)||!r.integer(game,12,awayScore))return false;
     s.ea=ea;s.resumed=homeScore!=0||awayScore!=0;s.regular=type==1&&!practice&&!bowl.p;
+    s.practiceFixture=practice!=0;s.bowlRelated=bowl.p!=0;
+    s.bowlFixture=bowlFixtureProof(type,s.practiceFixture,s.bowlRelated);
     // Mandatory academy spectators are independent of the turnout formula.
     // Read their school identity even when postseason/resume keeps EA turnout.
     military(r,home.p,s.home);military(r,away.p,s.away);
     s.homeStadium=s.homeAlternate=-1;
     bool homeVenueKnown=r.related(home.p,0x118,homeVenue.p)&&homeVenue.p&&r.integer(homeVenue.p,6,s.homeStadium)&&r.related(home.p,0xb,alternate.p);
     if(homeVenueKnown&&alternate.p)homeVenueKnown=r.integer(alternate.p,6,s.homeAlternate);
-    if(!s.regular||s.resumed)return true;
+    s.springType=type;
+    if(type==0||s.home.id==1502){
+        int number=-1;Record homeSchool(r),awaySchool(r),awayVenue(r);
+        // Spring MySchool grades may legitimately be Incomplete. Identity is
+        // the native owning relation/venue, not the fall grade calculation.
+        bool hs=r.related(home.p,0xa5,homeSchool.p)&&homeSchool.p;
+        bool as=r.related(away.p,0xa5,awaySchool.p)&&awaySchool.p;
+        int awayStadium=-1;bool av=r.related(away.p,0x118,awayVenue.p)&&awayVenue.p&&r.integer(awayVenue.p,6,awayStadium)&&awayStadium==s.stadium;
+        bool hv=homeVenueKnown&&s.homeStadium==s.stadium;
+        s.springRoleEvidence=(hs?1:0)|(as?2:0)|(hv?4:0)|(av?8:0);
+        // These are class keys, read through Record's own field map. Native
+        // Press Box uses the same game key60 and team key15. Verify their
+        // title-update labels before using the stamped launch contract.
+        A label=0;int ordinal=-1;
+        s.springNumberKnown=r.value(image+0xbdd9e50,ordinal)&&ordinal==0x3c&&r.value(image+0xbdd9e58,label)&&
+            sustained::named(label,"SeasonGameNum")&&r.integer(game,0x3c,number);s.springNumber=number;
+        if(number==250&&s.home.id==1502&&r.value(image+0xbdd1960,ordinal)&&ordinal==0xf&&r.value(image+0xbdd1968,label)&&sustained::named(label,"BlacklistUserIdLower"))
+            r.integer(home.p,0xf,s.springStamp);
+        if(s.springNumberKnown){
+            int side=spring::actualSide(type,number,practice!=0,bowl.p!=0,s.home.id,s.away.id,hs||hv,as||av,s.springStamp);
+            // The observed base stamp needs BOTH actual-school tracking and
+            // ownership of this venue. Never infer TeamBuilder identity from
+            // the replaced school or from the stamp alone.
+            if(!spring::baseEvidence(s.springStamp,side,as,av))side=-1;
+            if(side>=0){s.spring=true;s.regular=false;s.springSide=side;s.springSchool=side?s.away.id:s.home.id;}
+        }
+    }
+    if(!s.regular||s.resumed){team(r,home.p,s.home);team(r,away.p,s.away);school(r,home.p,s.home);school(r,away.p,s.away);return true;}
     if(!homeVenueKnown)return false;
     if(!team(r,home.p,s.home)||!team(r,away.p,s.away)||!r.value(manager+0x230,league)||!league||
        !r.related(league,0xd,teams.p)||!teams.p)return false;
@@ -225,7 +278,8 @@ inline bool capturedCapacity(const Seed& seed,Launch& l){
        seed.capacity<1000||seed.capacity>200000)return false;
     l.capacity=seed.capacity;return true;
 }
-inline bool launch(A image,Launch& l,const Seed& seed,const char** failure=nullptr,bool transition=false){
+enum class LaunchUse {Turnout,Supporters};
+inline bool launch(A image,Launch& l,const Seed& seed,const char** failure=nullptr,bool transition=false,LaunchUse use=LaunchUse::Turnout){
     auto fail=[&](const char* reason){if(failure)*failure=reason;return false;};if(failure)*failure=nullptr;
     Reader r{image};A service=0;unsigned h=0,a=0,stadium=0,ea=0,time=0,precip=0,rivalry=1023,bowl=127;
     if(!dynastySetup(image,transition))return fail("Dynasty setup/transition guard");
@@ -236,7 +290,9 @@ inline bool launch(A image,Launch& l,const Seed& seed,const char** failure=nullp
         {0x9f4be400,"gameTimeOfDay",2,&time},{0x9f7c2700,"gameWeatherPrecipitation",1,&precip},
         {0x9f2e6900,"gameRivalryId",2,&rivalry},{0x9e2b2900,"gameBowlId",1,&bowl}};
     for(const auto& field:fields)if(!option(r,service,field.key,field.name,field.width,*field.value))return fail(field.name);
-    if(bowl!=127)return fail("gameBowlId is postseason");
+    if(bowl>127)return fail("gameBowlId range");
+    if(bowl!=127&&(use!=LaunchUse::Supporters||!seed.bowlFixture||!bowlFixtureProof(seed.springType,seed.practiceFixture,seed.bowlRelated)||seed.regular||seed.spring))return fail("gameBowlId is postseason without matching supporter-only fixture proof");
+    l.bowl=static_cast<int>(bowl);
     l.home=static_cast<int>(h);l.away=static_cast<int>(a);l.stadium=static_cast<int>(stadium);l.ea=static_cast<int>(ea);
     if(precip>3)return fail("gameWeatherPrecipitation range");
     // Dynamic severity is a possible forecast, not proof of rain at kickoff.
@@ -256,7 +312,7 @@ inline bool setAttendance(A image,int count,const Api* custom=nullptr,bool trans
     Reader r{image};A service=0,vt=0,set=0;
     if(count<1||count>200000||!dynastySetup(image,transition)||!r.value(image+OptionService,service)||!r.value(service,vt)||vt!=image+OptionVtable||
        !r.value(vt+0x80,set)||set!=image+0x90a1670)return false;
-    unsigned before=0;if(!option(r,service,0x9e1d2500,"gameAttendance",4,before))return false;
+    unsigned before=0,bowl=127;if(!option(r,service,0x9e2b2900,"gameBowlId",1,bowl)||bowl!=127||!option(r,service,0x9e1d2500,"gameAttendance",4,before))return false;
     struct Reference {A type,data;} ref{image+UnsignedType,reinterpret_cast<A>(&count)};
     A okay=0;if(!api.set||!sustained::obtain(okay,api.set,service,bindings::AttendanceOption,reinterpret_cast<A>(&ref))||!okay)return false;
     unsigned after=0;return option(r,service,bindings::AttendanceOption,"gameAttendance",4,after)&&after==static_cast<unsigned>(count);

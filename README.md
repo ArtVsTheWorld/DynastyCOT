@@ -11,19 +11,21 @@ Dynasty COT is the collection hub and optional installer for four independent Co
 | Extra Settings | [ZIP and release notes](https://github.com/ArtVsTheWorld/offline-dynasty-settings/releases) | 0.2.10 |
 | Expanded Practice | [ZIP and release notes](https://github.com/ArtVsTheWorld/drive-based-practice/releases) | 0.8.21 |
 
-**Collection installer:** [Download Dynasty COT 1.1.0](https://github.com/ArtVsTheWorld/DynastyCOT/releases/download/v1.1.0/DynastyCOT-Setup-1.1.0.exe) · [Release notes and integrity files](https://github.com/ArtVsTheWorld/DynastyCOT/releases/tag/v1.1.0). [How the collection installer works](docs/collection-installer.md). It installs the exact standalone DLLs you choose, without a separate DynastyCOT.dll. The [older 1.0.x bundle releases](https://github.com/ArtVsTheWorld/DynastyCOT/releases) remain available for existing users and rollback; they use the previous host design.
+**Collection installer:** [Download Dynasty COT 1.1.0](https://github.com/ArtVsTheWorld/DynastyCOT/releases/download/v1.1.0/DynastyCOT-Setup-1.1.0.exe) Â· [Release notes and integrity files](https://github.com/ArtVsTheWorld/DynastyCOT/releases/tag/v1.1.0). [How the collection installer works](docs/collection-installer.md). It installs the exact standalone DLLs you choose, without a separate DynastyCOT.dll. The [older 1.0.x bundle releases](https://github.com/ArtVsTheWorld/DynastyCOT/releases) remain available for existing users and rollback; they use the previous host design.
+
+> Release preparation: private candidates BTF 1.0.23, GDA 2.1.35, Extra Settings 0.2.11, Expanded Practice 0.8.23 and installer 1.1.4 are under review. The download links above remain the published versions until release acceptance.
 
 ## Beyond the Field
 
 ![Beyond the Field roster and player card](docs/images/beyond-the-field.png)
 
 - **A livelier Social Media feed:** results, rankings, recruiting, awards and more, with reporters, team accounts, players and fans. Browse For You, National, conference, team and topic filters, or return to past editions. National shows up to 300 cards; extra wording choices add variety without increasing the weekly post budget.
-- **More uncertainty when building your team:** separate recruiting, roster and team fog options let you see less exact information. Recruiting Notes keep a recruit's developing profile together.
+- **More uncertainty when building your team:** independent recruiting, roster and team selectors offer Off and five grade scales. Recruiting Notes keep compact football observations and eligible previous-season backgrounds together; optional Athletic Measurables keep uncertainty and reveal gates.
 - **Recruit interest choices:** Default keeps the normal game display. Recruit Feedback replaces exact bars/ranks with broad standings; Rank Only hides the bars. Previously scouted, off-board and uncommitted prospects get a scouting-progress icon.
 - **Choose how ratings look:** use letter grades, descriptive words such as GOOD, or the other included scales. Rating colors are optional. Compact money labels turn long amounts into readable $K/$M values.
 - **Player Analytics:** browse a selected team's weekly and season performance grades, snaps and player cards. Gridiron Performance Index (GPI) provides mod-calculated grades from available Dynasty statistics. Only completed weeks contribute. National Analytics and the Player Stats shortcut are not included.
 
-Beyond the Field fog, rating styles, colors and money formatting apply inside Dynasty; main-menu and Play Now displays stay native. Find the options under **Beyond the Field** in Dynasty settings. Social Media and fog start on; rating colors and dollar formatting start off. Published posts, accounts and history survive updates.
+Beyond the Field fog, rating styles, colors and money formatting apply inside Dynasty; main-menu and Play Now displays stay native. Find the options under **Beyond the Field** in Dynasty settings. Social Media and fog start on; rating colors and dollar formatting start off. Published posts, accounts and history survive updates. Full multi-coach active-school selection/private Notes isolation is not yet supported beyond the verified Owner-school perspective. [Complete feature lists](Packaging/Standalone/BeyondTheField/FEATURES.md).
 
 ## Gameday Atmosphere
 
@@ -34,7 +36,7 @@ Beyond the Field fog, rating styles, colors and money formatting apply inside Dy
 - **More reactive sound and shake:** crowd energy builds before plays and reacts to important moments. Crowd fullness and the score affect background noise; stronger reactions take priority. Shake requests an accompanying crowd sound.
 - **Your choice of atmosphere:** in-game controls cover attendance, sound, shake and replay options. Visiting Fan Strength starts at **100%**; lower or raise it to influence newly generated visiting-crowd plans. Saved plans and history stay intact.
 
-Bands and verified military crowd groups retain their protection. Neutral-site crowd appearance stays native. Find the module under **User Settings > Gameday Atmosphere**.
+Bands and verified military crowd groups retain their protection. Verified Dynasty neutral/championship crowds use supporter-based 30/70–70/30 splits while preserving EA turnout. Spring exhibitions use the actual school’s colors and a dedicated turnout model. Find the module under **User Settings > Gameday Atmosphere**.
 
 The **basic offline Play Now** path adds crowd reactions, sound, shake and departures. With arrivals enabled, fresh games start at 75% of the available crowd, then fans continue arriving. Visiting-fan appearance stays native; Dynasty travel, season plans and saved crowd history are not used. Added replay changes skip touchdowns so the game controls their presentation. Additional Replays remains available for other eligible plays. Ace installed the final build, restarted MMC and the game, and reported the fixes working.
 
@@ -72,13 +74,13 @@ Open **Dynasty > League Settings > Game Settings**. Start a new game after chang
 
 **Backups** restores prior plugin versions. A one-time migration from older COT backs up its host and matching program files before replacing it with standalones. Keep every enabled old-COT module selected during that conversion, or explicitly remove an unwanted module first. Unknown plugin copies require review of their exact paths/hashes. Settings, accounts and published history stay in place.
 
-Use a writable Mod Manager folder, preferably outside Program Files: the modules need to prepare their support files and save settings/history. Setup reports permissions and real running-process errors without changing Windows permissions. [Migration, logs, rollback and testing checklist](docs/collection-installer.md).
+Current candidates keep settings, history, logs and verified support in `%LOCALAPPDATA%\Ace\DynastyCOT`, shared across MMC copies. Installing DLLs into Program Files still requires permission to that folder; normal module saving does not. Setup distinguishes permissions, file locks, collisions and actual running processes without changing Windows permissions. [Migration, logs, rollback and testing checklist](docs/collection-installer.md).
 
 ## Compatibility and data
 
 Beyond the Field and Extra Settings target offline Dynasty. Expanded Practice also supports offline main-menu Practice, and Gameday Atmosphere has a basic offline Play Now path. AIO 1.4.1 and its TeamBuilder patch have targeted adapters; compatibility with every overhaul/version is not guaranteed. Unknown native programs remain rejected. See the [regression checklist](LIVE-ACCEPTANCE.md).
 
-The module DLLs now use the new branding. Older internal IDs and data-folder names remain intentionally unchanged so existing settings, published history and crowd plans keep working. New collection installs place the four selected standalone DLLs in Plugins; they do not install DynastyCOT.dll. Native runtime DLLs stay outside MMC's plugin scan. Logs stay inside module folders. Extra Settings and Expanded Practice retain their verified runtime helpers.
+The module DLLs now use the new branding. Older internal IDs and data-folder names remain intentionally unchanged so existing settings, published history and crowd plans keep working. New collection installs place the four selected standalone DLLs in Plugins; they do not install DynastyCOT.dll. Native runtime DLLs stay outside MMC's plugin scan. Logs stay in the corresponding module’s shared AppData folder. Extra Settings and Expanded Practice retain their verified runtime helpers.
 
 ## Build and contribute
 

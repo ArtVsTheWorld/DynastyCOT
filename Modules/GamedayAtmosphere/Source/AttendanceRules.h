@@ -24,15 +24,18 @@ struct State {
     int plannedKickoff=-1,plannedFill=-1;
     int plannedPeak=0,plannedCapacity=0,plannedStadium=-1,plannedWeek=-1,plannedYear=0;
     bool exceptionalOpening=false;
+    bool spring=false;int springSchool=-1,springDynasty=0,springNumber=-1;
     float mappedPeak=-1; // Refreshed only from the owned whole-layout baseline.
     int rivalryEvent=-1; // Native event identity; not inferred from team slots.
 };
+inline bool springContext(const State& s){return s.spring&&s.springDynasty!=0&&s.springNumber>=0&&(s.springSchool==s.team0||s.springSchool==s.team1);}
 inline bool arrivalPlan(const State& s){
     int cap=s.exceptionalOpening&&s.plannedPeak==s.plannedCapacity&&s.plannedCapacity>=1000?95:80;
     return s.startingAttendance&&s.plannedKickoff>=35&&s.plannedKickoff<=cap&&s.plannedFill>=10&&s.plannedFill<=100;
 }
 inline bool crowdPlan(const State& s){return arrivalPlan(s)&&s.plannedCapacity>=1000&&s.plannedCapacity<=200000&&s.plannedPeak>=1&&s.plannedPeak<=s.plannedCapacity&&s.plannedStadium>=0&&s.plannedStadium<1023&&s.plannedWeek>=0&&s.plannedWeek<=31&&s.plannedYear>=0&&s.plannedYear<=4095;}
 inline void copyCrowdPlan(const State& from,State& to){
+    to.spring=from.spring;to.springSchool=from.springSchool;to.springDynasty=from.springDynasty;to.springNumber=from.springNumber;
     if(!crowdPlan(from))return;
     to.startingAttendance=true;to.night=from.night;to.plannedKickoff=from.plannedKickoff;to.plannedFill=from.plannedFill;
     to.plannedPeak=from.plannedPeak;to.plannedCapacity=from.plannedCapacity;to.plannedStadium=from.plannedStadium;to.plannedWeek=from.plannedWeek;to.plannedYear=from.plannedYear;to.exceptionalOpening=from.exceptionalOpening;
@@ -55,6 +58,7 @@ inline void postseason(State& s,bool cfp,bool conference){s.conferenceChampionsh
 inline bool championship(const State& s){return s.playoff&&!s.conferenceChampionship&&s.bowl==47;}
 inline bool badWeather(const State& s){return s.precipitation==1||s.precipitation==2;}
 inline int lossCeiling(const State& s){
+    if(s.spring)return 60; // Separate one-fanbase model, never competitive visitor/capacity floors.
     int ceiling=(championship(s)?20:s.playoff?40:75)+(badWeather(s)?10:0);
     // A ranked home winner keeps at least 35% of its original crowd. This
     // departure limit survives mismatches/weather; existing exits never refill.

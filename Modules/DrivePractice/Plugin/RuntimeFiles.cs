@@ -3,7 +3,7 @@ using System.IO;
 using System.Security.Cryptography;
 namespace SituationalPractice {
  internal static class RuntimeFiles {
-  internal static string PathIn(string pluginFolder){return Path.Combine(pluginFolder,"SituationalPractice",
+  internal static string PathIn(string pluginFolder){return Path.Combine(Ace.DynastyCOT.UserStorage.Folder("ExpandedPractice"),"Runtime-"+BuildIdentity.Version,
 #if COT_BRANDED_RUNTIME
    "ExpandedPractice.Runtime.exe"
 #else

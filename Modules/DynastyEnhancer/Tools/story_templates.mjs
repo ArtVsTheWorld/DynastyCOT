@@ -1,10 +1,13 @@
 import fs from 'node:fs';
+import {milestoneTotalDetail} from './milestone_text.mjs';
 import {socialDisplayText} from './prose_cleanup.mjs';
 import {comparePublication} from './publication_timeline.mjs';
 import {nativeViewIds} from './feed_visibility.mjs';
 import {templateFeatures,varietyMemory,rememberVariety,repetitionCost,structuralNeighbors,nearUse,globalNearUse} from './story_variety.mjs';
 export const contentPack=JSON.parse(fs.readFileSync(new URL('../Content/Runtime/first-pack.json',import.meta.url),'utf8'));
 const gpiPack=JSON.parse(fs.readFileSync(new URL('../Content/Runtime/gpi-pack.json',import.meta.url),'utf8'));
+const supporterPack=JSON.parse(fs.readFileSync(new URL('../Content/Runtime/supporter-pack.json',import.meta.url),'utf8'));
+Object.assign(contentPack.families,supporterPack.families);
 Object.assign(contentPack.families,gpiPack.families);
 const expansion=JSON.parse(fs.readFileSync(new URL('../Content/Runtime/analysis-pack.json',import.meta.url),'utf8'));
 Object.assign(contentPack.families,expansion.families);contentPack.revision=expansion.revision;
@@ -96,6 +99,9 @@ const seasonReview=JSON.parse(fs.readFileSync(new URL('../Content/Runtime/season
 const reviewedTemplates=new Map(Object.entries(contentPack.families).flatMap(([family,ts])=>ts.map(t=>[t.id,{family,t}])));
 for(const patch of seasonReview.overrides){const old=reviewedTemplates.get(patch.id);if(!old||old.family!==patch.family||old.t.body!==patch.originalBody)throw Error('Stale season-review patch '+patch.id);old.t.body=patch.body;}
 contentPack.revision+='+'+seasonReview.revision;
+const milestones=JSON.parse(fs.readFileSync(new URL('../Content/Runtime/milestone-fixes-pack.json',import.meta.url),'utf8'));
+for(const patch of milestones.overrides){const old=reviewedTemplates.get(patch.id);if(!old||old.family!==patch.family||old.t.body!==patch.originalBody)throw Error('Stale milestone correction '+patch.id);old.t.body=patch.body;}
+contentPack.revision+='+'+milestones.revision;
 // Apply after the exact originalBody checks above. Editing the source packs
 // or normalizing first would weaken those reviewed editorial patch guards.
 for(const variants of Object.values(contentPack.families))for(const template of variants)template.body=socialDisplayText(template.body);
@@ -128,6 +134,7 @@ export function templateHistory(history=[],publication=null,week=null){
 }
 function requiredSlots(t){let cached=slotCache.get(t);if(!cached||cached.body!==t.body){cached={body:t.body,keys:[...new Set([...t.body.matchAll(slots)].map(m=>m[1]))]};slotCache.set(t,cached);}return cached.keys;}
 export function chooseTemplate(family,values,seed,{handle,week,history=[],sameStory,renderKey,transformBody=body=>body,style=null,voice=null,topic='',avoidBodies=new Set(),publication=null,onCandidates=null,usage=null}={}){
+ if(['history.coach-wins','history.team-wins','history.player-career'].includes(family)&&values.totalDetail===undefined)values={...values,totalDetail:milestoneTotalDetail(family,values)};
  const eligible=(contentPack.families[family]??[]).filter(t=>requiredSlots(t).every(k=>values[k]!==null&&values[k]!==undefined)&&(!t.when||t.when.every(k=>values[k]!==null&&values[k]!==undefined&&values[k]!==false&&values[k]!==''))&&(!t.unless||t.unless.every(k=>!values[k])));
  // Publication wording survives content upgrades. Changed verified facts still
  // get a new renderKey and are reconciled normally.
@@ -150,3 +157,15 @@ export function chooseTemplate(family,values,seed,{handle,week,history=[],sameSt
  return repeated;
 }
 function score(seed,id,continuation=false){let n=typeof seed==='number'?seed:2166136261;for(const c of continuation?id:seed+'|'+id){n^=c.codePointAt(0);n=Math.imul(n,16777619);}return n>>>0;}
+
+contentPack.revision+='+supporter-voices1';
+
+const specificity=JSON.parse(fs.readFileSync(new URL('../Content/Runtime/editorial-specificity.json',import.meta.url),'utf8'));
+for(const patch of specificity.overrides){const t=contentPack.families[patch.family]?.find(t=>t.id===patch.id);if(!t||t.body!==patch.originalBody)throw Error('Specificity patch mismatch: '+patch.id);t.body=patch.body;}
+for(const [family,lines] of Object.entries(specificity.families))contentPack.families[family].push(...lines);
+contentPack.revision+='+specificity1';
+
+for(const lines of Object.values(contentPack.families))for(const t of lines){
+ t.body=t.body.replace(/^(?:FINAL|RIVALRY FINAL|RECRUITING UPDATE)[ :|]+/,'');
+ if(!t.body.includes('{statLine}'))t.body=t.body.replace(/; (?=[A-Z])/g,'. ');
+}

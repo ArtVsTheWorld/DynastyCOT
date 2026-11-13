@@ -57,6 +57,7 @@ inline float halftimeReturnWeight(const State& s){
         .2f*smooth(1-(elapsed-timing.lateDelay)/(timing.lastReturn-timing.lateDelay));
 }
 inline HalftimeTarget halftime(const State& s){
+    if(springContext(s))return {0,20.f+static_cast<float>((s.variationSeed^static_cast<unsigned>(s.springSchool*3266489917u))%11)};
     int margin=std::abs(s.homeScore-s.awayScore);
     float wet=badWeather(s)?0.15f:0;
     float patience=!s.neutral&&s.homeScore>s.awayScore?0.30f-0.15f*inferiorOpponent(s):0;

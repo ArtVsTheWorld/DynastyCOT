@@ -3,7 +3,7 @@ using System.IO;
 using System.Security.Cryptography;
 namespace OfflineDynastySettings {
  internal static class RuntimeFiles {
-  internal static string PathIn(string pluginFolder){return Path.Combine(pluginFolder,"OfflineDynastySettings",
+  internal static string PathIn(string pluginFolder){return Path.Combine(Ace.DynastyCOT.UserStorage.Folder("ExtraSettings"),"Runtime-"+DiagnosticLog.Version,
 #if COT_BRANDED_RUNTIME
    "ExtraSettings.Persistence.exe"
 #else

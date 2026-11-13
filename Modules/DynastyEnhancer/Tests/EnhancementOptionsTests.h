@@ -19,12 +19,12 @@ inline void run(){
     require(Options{}.packed()==defaultOptions&&Options{}.scale==GradeScale::PlusMinus&&Options{}.team,"New default scale/team fog differs");
     require(Options{}.interest==RecruitInterestDisplay::Native,"New interest profiles must default to the native display");
     require(!Options{}.dollars,"Dollar conversion must default Off");
-    require(Options{}.social&&Options{}.recruiting&&Options{}.roster&&Options{}.team&&!Options{}.colors&&defaultOptions==591,"Requested enhancement defaults differ");
-    for(unsigned bits=0;bits<256;++bits)require(Options::unpack(bits).packed()==bits,"Option bit packing lost an independent control");
+    require(Options{}.social&&Options{}.recruiting&&Options{}.roster&&Options{}.team&&!Options{}.colors&&(defaultOptions&4095)==591,"Requested enhancement defaults differ");
+    for(unsigned bits=0;bits<256;++bits)require((Options::unpack(bits).packed()&4095)==bits,"Option bit packing lost an independent control");
     for(int n=0;n<=100;++n){
         currentOptions=39;
         require(recruitingfog::display(recruitingfog::Visibility::Revealed,n)==std::string(1,recruitingfog::grade(n)),"Default grade scale changed");
-        for(unsigned scale=0;scale<4;++scale){auto selected=options();selected.scale=GradeScale(scale);currentOptions=selected.packed();
+        for(unsigned scale=0;scale<4;++scale){auto selected=options();selected.scale=selected.recruitingScale=GradeScale(scale);currentOptions=selected.packed();
             const auto expected=gradeLabel(n,GradeScale(scale));require(recruitingfog::display(recruitingfog::Visibility::Revealed,n)==expected,"Configured native grade display ignored its scale");
         }
     }
@@ -39,7 +39,7 @@ inline void run(){
         require(gradeColor(expected)==gradeColor(legacy)&&gradeColor(std::string(expected)+",TrendUp")==gradeColor(expected),"Uppercase descriptive grades changed colors or trend handling");
     }
     const Json valid={{"format",1},{"league",1001},{"socialMedia",true},{"recruitingFog",true},{"rosterFog",true},{"gradeScale",0},{"ratingColors",true}};
-    require(decodeOptions(valid,1001).packed()==103,"Valid profile did not decode");
+    require((decodeOptions(valid,1001).packed()&4095)==103,"Valid profile did not decode");
     auto legacy=valid;legacy.erase("ratingColors");require(!decodeOptions(legacy,1001).colors,"Missing color setting must default Off");
     for(const auto* key:{"format","league","gradeScale"})for(const Json bad:std::vector<Json>{-1,1.5,true,nullptr,"1",Json::array({1})}){
         auto input=valid;input[key]=bad;bool rejected=false;try{decodeOptions(input,1001);}catch(const std::exception&){rejected=true;}
@@ -55,10 +55,10 @@ inline void run(){
     Options selected;selected.scale=GradeScale::Descriptive;selected.colors=false;
     Output output{outputTable,{}};output.rows[9]={{"label","Existing Commissioner Settings"},{"foreign",123}};
     menu::append(&output,10,selected,true);
-    require(output.rows[13]["Display0"]=="Default"&&output.rows[13]["Display1"]=="Recruit Feedback"&&output.rows[13]["Display2"]=="Rank Only"&&output.rows[13]["isDefault"]==0,"Interest labels/default changed or saved numeric IDs moved");
-    require(output.rows[9]["foreign"]==123&&output.rows.size()==11,"Enhancement section overwrote existing or foreign rows");
-    require(output.rows[10]["label"]=="Beyond the Field"&&output.rows[18]["label"]=="Rating Colors"&&output.rows[16]["label"]=="Player Grade Scale"&&output.rows[17]["label"]=="Team Grade Scale","Beyond the Field row ordering differs");
-    require(output.rows[16]["numItems"]==5&&output.rows[17]["numItems"]==5&&output.rows[16]["isDefault"]==3&&output.rows[18]["isDefault"]==0&&output.rows[19]["label"]=="Dollar Values"&&output.rows[19]["isDefault"]==0,"Option choices/defaults differ");
+    require(output.rows[16]["Display0"]=="Default"&&output.rows[16]["Display1"]=="Recruit Feedback"&&output.rows[16]["Display2"]=="Rank Only"&&output.rows[16]["isDefault"]==0,"Interest labels/default changed or saved numeric IDs moved");
+    require(output.rows[9]["foreign"]==123&&output.rows.size()==10,"Enhancement section overwrote existing or foreign rows");
+    require(output.rows[10]["label"]=="Beyond the Field"&&output.rows[12]["label"]=="Recruiting Fog"&&output.rows[13]["label"]=="Roster Fog"&&output.rows[14]["label"]=="Team Fog"&&output.rows[15]["label"]=="Measurables Display"&&output.rows[16]["label"]=="Interest Display"&&output.rows[17]["label"]=="Rating Colors"&&output.rows[18]["label"]=="Dollar Values","Independent selector order differs");
+    require(output.rows[12]["numItems"]==6&&output.rows[13]["isDefault"]==4&&output.rows[15]["isDefault"]==0,"Domain choices/default differ");
     {
         // Native, Offline Dynasty Settings and AIO-shaped sections. Deliberately
         // write some header fields out of order and revisit one after later rows.
@@ -75,13 +75,13 @@ inline void run(){
         menu::text(&sink,4,"description","Other mod section");
         require(reordered.rows.empty(),"Buffered provider leaked partial rows before section placement");
         require(menu::emit(sink,selected,true)==4,"Enhancements were not inserted after the Commissioner section");
-        require(reordered.reserved==21&&reordered.rows.size()==21,"Settings insertion lost rows or reservation capacity");
-        require(reordered.rows[4]["label"]=="Beyond the Field"&&reordered.rows[8]["label"]=="Roster Fog"&&reordered.rows[9]["label"]=="Team Fog"&&reordered.rows[12]["label"]=="Rating Colors"&&reordered.rows[13]["label"]=="Dollar Values"&&reordered.rows[14]["label"]=="Game Settings"&&reordered.rows[17]["label"]=="Team Settings"&&reordered.rows[19]["label"]=="Playoff Customization","Foreign section order changed or native Team Settings stayed above Beyond the Field");
+        require(reordered.reserved==20&&reordered.rows.size()==20,"Settings insertion lost rows or reservation capacity");
+        require(reordered.rows[4]["label"]=="Beyond the Field"&&reordered.rows[7]["label"]=="Roster Fog"&&reordered.rows[8]["label"]=="Team Fog"&&reordered.rows[11]["label"]=="Rating Colors"&&reordered.rows[12]["label"]=="Dollar Values"&&reordered.rows[13]["label"]=="Game Settings"&&reordered.rows[16]["label"]=="Team Settings"&&reordered.rows[18]["label"]=="Playoff Customization","Foreign section order changed or native Team Settings stayed above Beyond the Field");
         for(const unsigned row:{1,2,3,5,6,8,10}){
-            const auto mapped=row+(row>=4?10:0);
+            const auto mapped=row+(row>=4?9:0);
             require(reordered.rows[mapped]["key"]==900+int(row)&&reordered.rows[mapped]["label"]=="Row "+std::to_string(row)&&reordered.rows[mapped]["isInteractive"]==(row!=6)&&reordered.rows[mapped]["step"]==0.5f,"Provider row values, types or setting keys were altered by insertion");
         }
-        require(reordered.rows[14]["description"]=="Other mod section","Late write to a header was lost");
+        require(reordered.rows[13]["description"]=="Other mod section","Late write to a header was lost");
         Output fallback{outputTable,{}};menu::Collector unknown{menu::collectorTable,&fallback,0,0,{}};
         menu::integer(&unknown,0,"key",88);menu::text(&unknown,0,"label","Unknown section");menu::text(&unknown,0,"linkage","madden.ultimatecareer.component.ListCategoryHeader");
         require(menu::emit(unknown,selected,true)==1&&fallback.rows[0]["key"]==88&&fallback.rows[1]["label"]=="Beyond the Field","Unknown provider section was displaced");
@@ -126,12 +126,12 @@ inline void run(){
     OptionStore store;store.configure(root);store.bind("1001");require(options().packed()==defaultOptions,"New Dynasty did not get enabled defaults");
     for(const auto* id:{"0","4294967295"}){bool rejected=false;try{store.bind(id);}catch(const std::exception&){rejected=true;}require(rejected,"Settings accepted an invalid Dynasty identity");}
     require(store.availableFor(1001)&&!store.availableFor(1002),"Settings menu admitted a different Dynasty identity");
-    require(store.change(0,0)&&store.change(1,0)&&store.change(2,0)&&store.change(3,1)&&store.change(4,0)&&store.change(5,0)&&store.change(6,1),"Valid options were rejected");
+    require(store.change(0,0)&&store.change(1,0)&&store.change(2,0)&&store.change(2,1)&&store.change(4,0)&&store.change(5,0)&&store.change(6,1),"Valid options were rejected");
     require(store.change(8,0)&&options().interest==RecruitInterestDisplay::Native,"Interest preference rejected");
-    const auto first=options().packed();require(!store.change(9,1)&&!store.change(8,3)&&!store.change(1,2)&&!store.change(3,5)&&!store.change(4,-1),"Invalid options were accepted");
+    const auto first=options().packed();require(!store.change(9,2)&&!store.change(8,3)&&!store.change(1,6)&&!store.change(3,5)&&!store.change(4,-1),"Invalid options were accepted");
     require(options().packed()==first,"Invalid setting changed the active profile");
     store.bind("1002");require(options().packed()==defaultOptions&&!options().dollars,"Preferences leaked into another Dynasty");
-    store.change(3,3);store.change(4,1);store.flush();store.bind("1001");require(options().packed()==first&&options().interest==RecruitInterestDisplay::Native,"Preferences did not survive a Dynasty switch");
+    store.change(2,4);store.change(4,1);store.flush();store.bind("1001");require(options().packed()==first&&options().interest==RecruitInterestDisplay::Native,"Preferences did not survive a Dynasty switch");
     OptionStore reloaded;reloaded.configure(root);reloaded.bind("1002");require(options().scale==GradeScale::Descriptive&&options().colors,"Reload did not restore the other Dynasty independently");
     SharedOptions reader;reader.open();Options shared;uint32_t league=0;
     require(reader.read(shared,&league)&&league==1002&&shared.packed()==options().packed(),"Combined native payload settings do not agree");
@@ -144,7 +144,7 @@ inline void run(){
         std::ifstream input(file);const std::string after((std::istreambuf_iterator<char>(input)),{});
         require(after==contents,"Invalid settings were overwritten during a failed load");input.close();std::filesystem::remove(file);
     }
-    store.bind("1001");store.change(3,2);
+    store.bind("1001");store.change(2,3);store.change(2,0);
     const auto blocker=root/L"DynastyEnhancementSettings/1001.tmp";
     std::filesystem::create_directory(blocker);
     bool failed=false;try{store.bind("1002");}catch(const std::exception&){failed=true;}
@@ -153,10 +153,10 @@ inline void run(){
     OptionStore recovered;recovered.configure(root);recovered.bind("1001");
     require(options().scale==GradeScale::STier&&!options().roster&&!options().colors&&!options().team&&options().dollars,"Old edits were lost or overwritten by new-Dynasty defaults after retry");
     std::array<std::exception_ptr,2> errors{};
-    std::thread firstWriter([&]{try{for(int i=0;i<64;++i){store.change(3,i%4);store.flush();std::this_thread::yield();}}catch(...){errors[0]=std::current_exception();}});
+    std::thread firstWriter([&]{try{for(int i=0;i<64;++i){store.change(2,i%6);store.flush();std::this_thread::yield();}}catch(...){errors[0]=std::current_exception();}});
     std::thread secondWriter([&]{try{for(int i=0;i<128;++i){store.flush();std::this_thread::yield();}}catch(...){errors[1]=std::current_exception();}});
     firstWriter.join();secondWriter.join();for(const auto& error:errors)if(error)std::rethrow_exception(error);
-    store.change(3,4);store.change(7,2);store.change(4,0);store.flush();
+    store.change(2,5);store.change(5,3);store.change(4,0);store.flush();
     OptionStore concurrent;concurrent.configure(root);concurrent.bind("1002");
     require(options().scale==GradeScale::Blind&&options().teamScale==GradeScale::STier&&!options().colors,"Concurrent writes lost the final independent settings revision");
     require(reader.read(shared,&league)&&league==1002&&shared.scale==GradeScale::Blind&&shared.teamScale==GradeScale::STier,"Shared payload lost independent player/team scales");

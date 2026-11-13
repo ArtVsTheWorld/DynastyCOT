@@ -44,7 +44,7 @@ inline bool writeSides(Address data,const agents::Tags& tags,const std::vector<u
     }__except(EXCEPTION_EXECUTE_HANDLER){return false;}
 }
 struct AppearanceResult {
-    bool applied=false;unsigned positions=0,band=0,visitors=0;
+    bool applied=false,nativeFallback=false;unsigned positions=0,band=0,visitors=0;
     bool occupiedVerified=false;unsigned spectators=0,occupiedVisitors=0;
     Address component=0,map=0,coordinates=0;Stream stream;
     agents::Tags native;std::vector<unsigned char> desired;
@@ -87,9 +87,10 @@ struct GeneratedAppearance {
 // Called only as part of EA's own native generation callback, never from a
 // worker or per-seat visibility callback. Loaded palettes, jerseys and crests
 // remain EA's responsibility, including TeamBuilder assets and neutral designs.
-template<class Read> AppearanceResult appearance(Read read,Address image,Address component,const Plan& plan,unsigned seed,bool homeMilitary=false,bool awayMilitary=false,const std::vector<unsigned char>* occupied=nullptr){
+template<class Read> AppearanceResult appearance(Read read,Address image,Address component,const Plan& plan,unsigned seed,bool homeMilitary=false,bool awayMilitary=false,const std::vector<unsigned char>* occupied=nullptr,int singleSchoolSide=-1){
     AppearanceResult result;
-    if(!plan.valid||plan.native)return result;
+    if(singleSchoolSide<0&&(!plan.valid||plan.native))return result;
+    if(singleSchoolSide>1)return result;
     auto q=[&](Address p){Address v=0;return read(p,&v,sizeof(v))?v:Address(0);};
     if(q(component)!=image+0xb484f98)return result;
     Address map=q(component+0x48);auto tags=property(read,image,map,0xb486033),coords=property(read,image,map,bindings::CrowdPositionKey);
@@ -101,7 +102,10 @@ template<class Read> AppearanceResult appearance(Read read,Address image,Address
     agents::protectStudents(types,homeMilitary,awayMilitary);
     std::vector<unsigned> ordinary;for(unsigned i=0;i<types.type.size();++i)if(agents::regular(types.type[i]))ordinary.push_back(i);
     if(!seats::plausible(positions,ordinary))return result;
-    auto desired=assign(positions,types,plan.share,seed,occupied);if(desired.size()!=tags.count)return result;
+    std::vector<unsigned char> desired;
+    if(singleSchoolSide>=0){desired=types.side;for(unsigned i:ordinary)if(!types.protectedFan(i))desired[i]=static_cast<unsigned char>(singleSchoolSide);}
+    else desired=assign(positions,types,plan.share,seed,occupied,plan.layoutVersion,plan.ceiling==.70,&result.nativeFallback);
+    if(desired.size()!=tags.count)return result;
     auto current=property(read,image,map,0xb486033);
     if(q(component+0x48)!=map||current.value!=tags.value||current.holder!=tags.holder||current.data!=tags.data||current.count!=tags.count)return result;
     if(!writeSides(tags.data,types,desired)){

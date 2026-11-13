@@ -1,9 +1,12 @@
 #include "../Source/SustainedCrowd.h"
+#include "../Source/BackgroundRoar.h"
 #include <cassert>
 #include <cstdio>
 using namespace attendance;
 using namespace attendance::sustained;
 int main(){
+ {State state{1,0,0,1,400,720};Intent bed;bed.active=true;for(int phase:{6,1,3,4,5}){state.phase=phase;auto merged=background::merge(bed,state,80000,.9f);assert(merged.reason==Reason::Background&&merged.continuous);}state.phase=0;assert(background::merge(bed,state,80000,.9f).reason==Reason::None);state.phase=6;assert(background::merge(bed,state,80000,0).reason==Reason::None);}
+
     energy::Settings c;energy::Play p;p.game={4,17,17,1,70,900};p.down=1;p.offense=0;p.toGoal=12;
     energy::Model m;m.score=100;m.anticipation=50;m.heldFraction=1;
     auto choose=[&](uint64_t now=1000){return select(c,p,m,123,4,now,true);};

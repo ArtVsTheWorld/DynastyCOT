@@ -40,14 +40,18 @@ inline void distribute(std::vector<Json*>& rows,const std::string& league,bool s
 inline void calibrateDataset(Json& data,const Json& config){
     const std::string league=data.at("leagueId").dump();std::vector<Json*> weekly;
     std::map<std::tuple<int,int,std::string>,Json> aggregates;std::set<std::pair<std::string,std::string>> seen;
+    std::map<std::tuple<int,int,std::string>,const Json*> lastGraded;
     std::set<int> eligibleTeams;for(const auto& t:data.at("teams"))if(!fcsTeam(t)&&t.at("index")!=255)eligibleTeams.insert(t.at("index").get<int>());
     for(auto& r:data.at("rows")){
+        // Also protect explicit/offline datasets, not only the native adapter.
+        const auto phase=r.value("weekType",std::string());if(phase=="PreSeason"||phase=="Preseason")continue;
         if(!eligibleTeams.count(r.at("teamIndex").get<int>()))continue;
         if(!releasedWeek(data,r.at("year"),r.at("week"),r.at("weekType").get<std::string>()))continue;
         auto& a=r.at("analytics");const bool graded=a.at("grade").is_number();
         if(!graded&&a.value("reason",std::string())!="No kicking attempts"&&a.value("reason",std::string())!="No punts")continue;
         if(!seen.emplace(r.at("playerKey").get<std::string>(),r.at("gameKey").get<std::string>()).second){a["grade"]=nullptr;a["status"]="Duplicate recorded game";continue;}
         if(graded)weekly.push_back(&r);auto key=std::make_tuple(r.at("year").get<int>(),r.at("teamIndex").get<int>(),r.at("playerKey").get<std::string>());
+        if(graded)lastGraded[key]=&r;
         auto found=aggregates.find(key);
         if(found==aggregates.end()){Json sum=r;sum["stats"]=Json::object();sum["week"]=-1;sum["weekType"]="Season";sum["gameKey"]="derived-season";sum["gradedGames"]=0;found=aggregates.emplace(key,std::move(sum)).first;}
         auto& sum=found->second;sum["gradedGames"]=sum.at("gradedGames").get<int>()+(graded?1:0);
@@ -55,8 +59,20 @@ inline void calibrateDataset(Json& data,const Json& config){
     }
     distribute(weekly,league,false);std::vector<Json*> seasons;
     for(auto& entry:aggregates){auto& r=entry.second;r["analytics"]=grade(r,config,league);seasons.push_back(&r);}
-    distribute(seasons,league,true);data["seasonAnalytics"]=Json::array();
+    distribute(seasons,league,true);
+    // Keep the complete season comparison pool and multi-game calculation
+    // unchanged. A sole released graded game reuses its FINAL weekly result,
+    // after weekly percentile, reliability and seeded coverage variation.
+    for(auto& entry:aggregates)if(entry.second.at("gradedGames")==1){
+        auto& a=entry.second["analytics"];const auto& weeklyRow=*lastGraded.at(entry.first);
+        const auto snaps=a.value("snaps",Json(nullptr)),opportunities=a.value("opportunities",Json(nullptr));
+        a=weeklyRow.at("analytics");
+        // No-attempt kicking/punting appearances may still add season snaps.
+        a["snaps"]=snaps;a["opportunities"]=opportunities;
+        a["seasonBasis"]="single released graded game";a["sourceGameKey"]=weeklyRow.at("gameKey");
+    }
+    data["seasonAnalytics"]=Json::array();
     for(const auto& entry:aggregates){const auto& r=entry.second;Json v={{"playerKey",r.at("playerKey")},{"name",r.at("name")},{"position",displayPosition(r.at("position"))},{"teamIndex",r.at("teamIndex")},{"teamName",r.at("teamName")},{"year",r.at("year")},{"gradedGames",r.at("gradedGames")}};v.update(r.at("analytics"));v["classification"]=v.at("grade").is_number()?classification(v.at("grade")):"N/A";data["seasonAnalytics"].push_back(std::move(v));}
-    data["analyticsModelVersion"]=ModelVersion;data["analyticsClock"]=data.value("season",Json());
+    data["analyticsModelVersion"]=ModelVersion;data["seasonAggregationVersion"]=SeasonAggregationVersion;data["analyticsClock"]=data.value("season",Json());
 }
 }

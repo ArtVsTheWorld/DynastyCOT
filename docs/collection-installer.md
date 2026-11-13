@@ -8,9 +8,9 @@ The [1.1.0 installer](https://github.com/ArtVsTheWorld/DynastyCOT/releases/tag/v
 - A detected MMC location and modern executable picker for MMCModManager.exe.
 - One **Install / Update** button. Checked modules are considered; unchecked modules stay as they are. Already-current files are kept without redownloading them.
 - **Check for updates** lists versions and notes from each module's own repository. Choose a version for one or more modules, then choose Done and Install / Update. No startup checking, automatic module download, forced update, token or account login.
-- **Remove** offers selected or full module removal. **Backups** restores a previous operation. **Details** shows activity/errors. Settings/history are kept.
+- **Remove** offers selected or full module removal. **Backups** restores a previous operation. Essential progress/errors remain visible; diagnostic logs are kept behind the scenes. Settings/history are kept.
 
-The installer is a small online download manager, not another all-in-one payload. Fetching a new version requires Internet access; removal and restoring an existing collection backup do not. ZIP downloads require the right repository/version, GitHub's SHA-256 asset digest, matching release integrity metadata, exact size and three-file layout, the matching DLL hash and its managed assembly identity. The initial four versions are pinned in the shipped catalog. Catalog resources are verified before use. HTTPS redirects are limited to GitHub release hosts; downloaded programs are never executed by setup.
+The installer is a small online download manager, not another all-in-one payload. Fetching a new version requires Internet access; removal and restoring an existing collection backup do not. ZIP downloads require the right repository/version, GitHub's SHA-256 asset digest, matching release integrity metadata, exact size and the approved DLL/README/feature-list layout, with an optional license notice, the matching DLL hash and its managed assembly identity. The initial four versions are pinned in the shipped catalog. Catalog resources are verified before use. HTTPS redirects are limited to GitHub release hosts; downloaded programs are never executed by setup.
 
 ## Switching from standalone downloads
 
@@ -30,16 +30,16 @@ Missing/malformed old receipts, unrecognized old runtime bytes and linked paths 
 
 ## Backups, restore and logs
 
-Collection-managed state lives outside the recursive plugin scan:
+Current candidates keep collection-managed state under `%LOCALAPPDATA%/Ace/DynastyCOT/Collection/<MMC identity>/`, outside the plugin scan. Earlier `COT-Collection` receipts/backups are copied without deleting originals. The corresponding contents are:
 
-- `COT-Collection/installed.json`: module versions/hashes recorded by the manager.
-- `COT-Collection/Backups/<transaction>/`: journal and verified `.bak` copies.
-- `COT-Collection/Logs/setup.log`: completed collection operations.
-- `COT-Collection/Modules/<module>/`: README/features for modules fetched by setup.
+- `installed.json`: module versions/hashes recorded by the manager.
+- `Backups/<transaction>/`: journal and verified `.bak` copies.
+- `Logs/setup.log`: completed collection operations.
+- `Modules/<module>/`: README/features for modules fetched by setup.
 
 Downloaded ZIPs and verified staging DLLs are cached under `%LOCALAPPDATA%/DynastyCOT/Downloads`. They are not active plugins. Existing module logs and data remain in their current paths; see the standalone READMEs.
 
-Close MMC and the game before file changes. A running-process warning is based on actual MMC/game processes, not old plugin files. A writable Mod Manager folder outside Program Files is recommended; modules need write access for their own support files and user data too. Setup does not change Windows permissions. A real running-process error names MMC or the game and gives its process ID. Access-denied errors explain permissions; sharing violations explain locked files. Old standalone files are migration inputs, not proof that MMC is open. Do not delete data folders to clear an error.
+Close MMC and the game before file changes. A running-process warning is based on actual MMC/game processes, not old plugin files. Installing/replacing DLLs requires access to Plugins, including elevation when Windows requires it. Current candidates save module data and support in shared AppData, so normal saving does not require write access to Plugins. Setup does not change Windows permissions. A real running-process error names MMC or the game and gives its process ID. Access-denied errors explain permissions; sharing violations explain locked files. Old standalone files are migration inputs, not proof that MMC is open. Do not delete data folders to clear an error.
 
 Every changed file has before/after hashes and a verified backup before mutation. Replacements/journal writes are atomic. Failed operations restore previous managed files. An interrupted install blocks new changes until its backup is restored. Restore validates every path, backup hash and current file before writing; later edits or out-of-order backups stop the operation. Restore newer collection backups first. An explicitly selected downgrade requires confirmation.
 
@@ -61,3 +61,9 @@ Verification metadata is supplied beside the installer. The released 1.0.0, 1.0.
 3. Run `python Tools/build_collection_installer.py` to compile the lightweight EXE. It embeds the catalog and app icon, not the module DLLs.
 4. Run `python Tests/test_released_cot_migration.py` against the locally retained verified 1.0.0/1.0.1/1.0.2 packages and SDK references. It launches no game, manager, generator or helper. Run `python Tests/test_collection_installer.py` for isolated filesystem, failure/rollback, selection and actual-window layout checks. Run `python Tests/test_collection_downloads.py --network` explicitly for anonymous public discovery/download and fixture-only install/version-change/rollback.
 5. Run `python Tools/finalize_collection_installer.py` after all reports pass for the exact EXE/source hashes. Review the source/artifact hashes and live acceptance before publishing the installer. The legacy bundle build remains available to reproduce older 1.0.x releases; it is not the new collection install path.
+
+## Candidate acceptance limits
+
+Only installer-compatible public releases appear in the version picker; a release needs the expected ZIP layout, module identity, GitHub digest and matching integrity metadata. Checking does not install anything. Release notes render safe Markdown without a browser.
+
+Single-owner Dynasty operation is the verified BTF scope. Multi-coach active non-owner selection and private Notes ownership remain implementation limitations, not completed tests. The release-preparation report distinguishes fixture checks from installed-game acceptance.

@@ -7,6 +7,7 @@
 #include <iostream>
 static std::string contents(const std::filesystem::path& p){std::ifstream f(p,std::ios::binary);return {std::istreambuf_iterator<char>(f),{}};}
 int main(){
+ for(const char* tag:{"spring-context","spring-plan","spring-appearance","spring-inactive","crowd-history"})assert(attendance::importantLogTag(tag,"launch evidence"));
  auto folder=std::filesystem::temp_directory_path()/("GamedayLogTest-"+std::to_string(std::chrono::steady_clock::now().time_since_epoch().count()));
  auto path=folder/"Logs"/"atmosphere.log";
  assert(attendance::appendLog(path,"first\n",16)&&contents(path)=="first\n");

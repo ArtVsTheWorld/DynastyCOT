@@ -1,11 +1,13 @@
 // Season-launch stories use active native depth charts and explicit history only.
+import {fallOpeningAfterSpring} from './spring_context.mjs';
 import {hash} from './story_authors.mjs';
 import {titleFutures} from './preseason_events.mjs';
 const ranked=n=>Number.isInteger(n)&&n>=1&&n<=25;
 const done=g=>g.published!==false&&['HomeWon','AwayWon','Tie'].includes(g.status);
 const primaryPositions=['QB','HB','TE','LT','LG','C','RG','RT','LE','RE','LOLB','ROLB','FS','SS'];
 export function seasonLaunchEvents(s){
- const pre=s.season.CurrentStage==='PreSeason'&&s.season.CurrentWeekType==='PreSeason',opening=s.season.CurrentStage==='NFLSeason'&&s.season.CurrentWeekType==='RegularSeason'&&s.season.CurrentWeek===0;
+ if(s.exhibitions?.active)return [];
+ const pre=(s.season.CurrentStage==='PreSeason'&&s.season.CurrentWeekType==='PreSeason')||fallOpeningAfterSpring(s),opening=s.season.CurrentStage==='NFLSeason'&&s.season.CurrentWeekType==='RegularSeason'&&s.season.CurrentWeek===0;
  const aftermath=s.season.CurrentStage==='NFLSeason'&&s.season.CurrentWeekType==='RegularSeason'&&s.season.CurrentWeek<=1;
  if(!pre&&!opening&&!aftermath)return [];
  const teams=new Map(s.teams.filter(t=>t.id!==255).map(t=>[t.id,t])),players=new Map(s.players.map(p=>[p.id,p])),events=[];

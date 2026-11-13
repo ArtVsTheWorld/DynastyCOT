@@ -1,0 +1,409 @@
+{
+  "revision": "supporter-voices1",
+  "families": {
+    "supporter.win": [
+      {
+        "id": "supporter.win.1",
+        "body": "We beat {opponent}. That's my weekend sorted.",
+        "voices": [
+          "excited",
+          "optimistic"
+        ],
+        "angle": "win"
+      },
+      {
+        "id": "supporter.win.2",
+        "body": "Our guys got the win. I can enjoy the rest of the scores now.",
+        "voices": [
+          "optimistic"
+        ],
+        "angle": "win"
+      },
+      {
+        "id": "supporter.win.3",
+        "body": "{nickname} win. I'm allowing myself a little optimism.",
+        "voices": [
+          "optimistic"
+        ],
+        "angle": "win"
+      },
+      {
+        "id": "supporter.win.4",
+        "body": "We won. The group chat is a much nicer place tonight.",
+        "voices": [
+          "wry"
+        ],
+        "angle": "win"
+      },
+      {
+        "id": "supporter.win.5",
+        "body": "Happy with the result. Still want more from us, but I'll take the W.",
+        "voices": [
+          "skeptical"
+        ],
+        "angle": "win"
+      },
+      {
+        "id": "supporter.win.6",
+        "body": "{opponent} in the win column for us. Not every post needs a complaint.",
+        "voices": [
+          "skeptical",
+          "rival"
+        ],
+        "angle": "win"
+      },
+      {
+        "id": "supporter.win.7",
+        "body": "Our {nickname} got it done. Let me be happy about that for a minute.",
+        "voices": [
+          "excited"
+        ],
+        "angle": "win"
+      },
+      {
+        "id": "supporter.win.8",
+        "body": "A win and a little breathing room. Good day to be one of us.",
+        "voices": [
+          "optimistic"
+        ],
+        "angle": "win"
+      }
+    ],
+    "supporter.relief": [
+      {
+        "id": "supporter.relief.1",
+        "body": "We beat {opponent}. You can unclench now.",
+        "voices": [
+          "excited"
+        ],
+        "angle": "relief"
+      },
+      {
+        "id": "supporter.relief.2",
+        "body": "Our {nickname} won. My ability to be normal about a close game remains questionable.",
+        "voices": [
+          "wry"
+        ],
+        "angle": "relief"
+      },
+      {
+        "id": "supporter.relief.3",
+        "body": "Not much between us and {opponent} on the scoreboard. I'll take being on this side of it.",
+        "voices": [
+          "skeptical"
+        ],
+        "angle": "relief"
+      },
+      {
+        "id": "supporter.relief.4",
+        "body": "A close win is still OUR win. Deep breaths.",
+        "voices": [
+          "excited"
+        ],
+        "angle": "relief"
+      },
+      {
+        "id": "supporter.relief.5",
+        "body": "We got the result. I'm celebrating first and worrying about the margin tomorrow.",
+        "voices": [
+          "optimistic"
+        ],
+        "angle": "relief"
+      },
+      {
+        "id": "supporter.relief.6",
+        "body": "We beat {opponent}, {score}. Relief counts as celebration.",
+        "voices": [
+          "excited",
+          "rival"
+        ],
+        "angle": "relief"
+      },
+      {
+        "id": "supporter.relief.7",
+        "body": "Our side of a close score is the winning side. That will do for tonight.",
+        "voices": [
+          "optimistic"
+        ],
+        "angle": "relief"
+      },
+      {
+        "id": "supporter.relief.8",
+        "body": "We edged {opponent}. My confidence is still catching up with my relief.",
+        "voices": [
+          "wry"
+        ],
+        "angle": "relief"
+      }
+    ],
+    "supporter.upset": [
+      {
+        "id": "supporter.upset.1",
+        "body": "WE beat {opponent}. Yes, I'm going to keep saying it.",
+        "voices": [
+          "excited"
+        ],
+        "angle": "upset"
+      },
+      {
+        "id": "supporter.upset.2",
+        "body": "Our {nickname}. Against {opponent}. And WE won. Give me a minute.",
+        "voices": [
+          "excited"
+        ],
+        "angle": "upset"
+      },
+      {
+        "id": "supporter.upset.3",
+        "body": "I'm trying to act like I expected us to beat {opponent}. I did not prepare for this.",
+        "voices": [
+          "wry"
+        ],
+        "angle": "upset"
+      },
+      {
+        "id": "supporter.upset.4",
+        "body": "We beat {opponent} and suddenly I'm available for every football conversation.",
+        "voices": [
+          "rival"
+        ],
+        "angle": "upset"
+      },
+      {
+        "id": "supporter.upset.5",
+        "body": "Our guys pulled that off. The rankings can wait; I'm enjoying this.",
+        "voices": [
+          "optimistic"
+        ],
+        "angle": "upset"
+      },
+      {
+        "id": "supporter.upset.6",
+        "body": "{opponent} can keep the ranking. We'll keep the win.",
+        "voices": [
+          "rival"
+        ],
+        "angle": "upset"
+      },
+      {
+        "id": "supporter.upset.7",
+        "body": "All the sensible predictions, and then our {nickname} went and won it.",
+        "voices": [
+          "skeptical"
+        ],
+        "angle": "upset"
+      },
+      {
+        "id": "supporter.upset.8",
+        "body": "We got {opponent}. Cautious optimism has temporarily left the building.",
+        "voices": [
+          "excited"
+        ],
+        "angle": "upset"
+      }
+    ],
+    "supporter.rivalry": [
+      {
+        "id": "supporter.rivalry.1",
+        "body": "We beat {opponent}. For purely educational reasons, I will be reminding people.",
+        "voices": [
+          "wry",
+          "rival"
+        ],
+        "angle": "rivalry"
+      },
+      {
+        "id": "supporter.rivalry.2",
+        "body": "Our {nickname} won this one. Rivalry conversations are going to be very pleasant for me.",
+        "voices": [
+          "optimistic",
+          "rival"
+        ],
+        "angle": "rivalry"
+      },
+      {
+        "id": "supporter.rivalry.3",
+        "body": "{opponent} fans and I have a lot to discuss. Mostly the part where we won.",
+        "voices": [
+          "rival"
+        ],
+        "angle": "rivalry"
+      },
+      {
+        "id": "supporter.rivalry.4",
+        "body": "We won. I'm sure I'll be perfectly reasonable about this rivalry result.",
+        "voices": [
+          "wry"
+        ],
+        "angle": "rivalry"
+      },
+      {
+        "id": "supporter.rivalry.5",
+        "body": "The bragging rights are ours. I'm going to use them.",
+        "voices": [
+          "excited",
+          "rival"
+        ],
+        "angle": "rivalry"
+      },
+      {
+        "id": "supporter.rivalry.6",
+        "body": "{nickname} over {opponent}. A lovely result to keep bringing up.",
+        "voices": [
+          "rival"
+        ],
+        "angle": "rivalry"
+      },
+      {
+        "id": "supporter.rivalry.7",
+        "body": "Our side gets the win AND the argument. Productive day.",
+        "voices": [
+          "skeptical",
+          "rival"
+        ],
+        "angle": "rivalry"
+      },
+      {
+        "id": "supporter.rivalry.8",
+        "body": "We beat the rival. Suddenly every rival group chat looks inviting.",
+        "voices": [
+          "wry",
+          "rival"
+        ],
+        "angle": "rivalry"
+      }
+    ],
+    "supporter.loss": [
+      {
+        "id": "supporter.loss.1",
+        "body": "We lost to {opponent}. I don't need a neutral voice telling me how to feel about it.",
+        "voices": [
+          "skeptical"
+        ],
+        "angle": "loss"
+      },
+      {
+        "id": "supporter.loss.2",
+        "body": "Our {nickname} lost. I can support them and still be frustrated.",
+        "voices": [
+          "optimistic"
+        ],
+        "angle": "loss"
+      },
+      {
+        "id": "supporter.loss.3",
+        "body": "{opponent} got us. Annoying to type, but that's the result.",
+        "voices": [
+          "skeptical"
+        ],
+        "angle": "loss"
+      },
+      {
+        "id": "supporter.loss.4",
+        "body": "I had a much better post planned for us. Unfortunately, {opponent} won.",
+        "voices": [
+          "wry"
+        ],
+        "angle": "loss"
+      },
+      {
+        "id": "supporter.loss.5",
+        "body": "Another day of caring far too much about our football team.",
+        "voices": [
+          "wry"
+        ],
+        "angle": "loss"
+      },
+      {
+        "id": "supporter.loss.6",
+        "body": "We lost. The {nickname} optimism department is taking a short break.",
+        "voices": [
+          "wry"
+        ],
+        "angle": "loss"
+      },
+      {
+        "id": "supporter.loss.7",
+        "body": "Credit to {opponent}. That's all the generosity I have in me right now.",
+        "voices": [
+          "rival"
+        ],
+        "angle": "loss"
+      },
+      {
+        "id": "supporter.loss.8",
+        "body": "Our guys couldn't get the win. Still our team; still hurts.",
+        "voices": [
+          "optimistic"
+        ],
+        "angle": "loss"
+      }
+    ],
+    "supporter.heavy-loss": [
+      {
+        "id": "supporter.heavy-loss.1",
+        "body": "We lost to {opponent} by a lot. I am not volunteering to discuss the margin.",
+        "voices": [
+          "wry"
+        ],
+        "angle": "heavy-loss"
+      },
+      {
+        "id": "supporter.heavy-loss.2",
+        "body": "Our {nickname} took a heavy loss. No clever explanation from me tonight.",
+        "voices": [
+          "skeptical"
+        ],
+        "angle": "heavy-loss"
+      },
+      {
+        "id": "supporter.heavy-loss.3",
+        "body": "{opponent} beat us comfortably. I wish I had a less accurate sentence.",
+        "voices": [
+          "skeptical"
+        ],
+        "angle": "heavy-loss"
+      },
+      {
+        "id": "supporter.heavy-loss.4",
+        "body": "We were on the wrong end of that score. Supporting this team remains a full-time emotional hobby.",
+        "voices": [
+          "wry"
+        ],
+        "angle": "heavy-loss"
+      },
+      {
+        "id": "supporter.heavy-loss.5",
+        "body": "Our optimism and that final score are having a difficult conversation.",
+        "voices": [
+          "optimistic"
+        ],
+        "angle": "heavy-loss"
+      },
+      {
+        "id": "supporter.heavy-loss.6",
+        "body": "I'm still a {nickname} fan. I'd just appreciate a smaller test of that commitment.",
+        "voices": [
+          "optimistic"
+        ],
+        "angle": "heavy-loss"
+      },
+      {
+        "id": "supporter.heavy-loss.7",
+        "body": "{opponent} got the big win. Our group chat has entered the staring-at-the-wall phase.",
+        "voices": [
+          "wry"
+        ],
+        "angle": "heavy-loss"
+      },
+      {
+        "id": "supporter.heavy-loss.8",
+        "body": "A heavy loss for us. I can be loyal without pretending that feels fine.",
+        "voices": [
+          "skeptical"
+        ],
+        "angle": "heavy-loss"
+      }
+    ]
+  }
+}

@@ -3,6 +3,36 @@
 #include <cstring>
 #include "SeatPattern.h"
 namespace attendance::seats {
+// A generated renderer can already contain native empty positions before its
+// first SceneCrowd::SetVisibility callback. Those callbacks also initialize
+// newly generated model parts with false. Do not let that initialization erase
+// an existing native hidden bit. Uniform allocation defaults are not evidence
+// of a completed audience and still need the native first-input path.
+inline bool retainInitialHidden(const std::vector<unsigned short>& masks,std::vector<unsigned short>& seen){
+    if(masks.size()<512||seen.size()!=masks.size())return false;
+    bool visible=false,hidden=false;
+    for(auto mask:masks){visible=visible||mask==0;hidden=hidden||(mask!=0&&mask!=0xffff);}
+    if(!visible||!hidden)return false;
+    for(size_t i=0;i<masks.size();++i)if(masks[i]!=0xffff)seen[i]|=masks[i];
+    return true;
+}
+// Scene callbacks are not the renderer's sole writer. Native generation and
+// attendance can also finish masks directly. At the FIRST completed native
+// attendance pass, retain those completed masks as well as native hidden bits
+// observed during initialization. Later passes must never recapture departed
+// or temporarily absent spectators as a new original audience.
+inline bool finishInitialMasks(std::vector<unsigned short>& masks,const std::vector<unsigned short>& completed){
+    if(masks.size()!=completed.size()||masks.empty())return false;
+    for(size_t i=0;i<masks.size();++i)masks[i]|=completed[i];
+    return true;
+}
+// Once the completed native baseline identifies an empty position, protect it
+// across every model part. Recoloring can introduce new body/clothing parts;
+// their first callback must not turn an authored empty seat into a spectator.
+inline void freezeEmptyPositions(std::vector<unsigned short>& masks,std::vector<unsigned short>& seen,unsigned short parts){
+    if(!parts||seen.size()!=masks.size())return;
+    for(size_t i=0;i<masks.size();++i)if((masks[i]&parts)==parts){masks[i]=0xffff;seen[i]=0xffff;}
+}
 // Per-match copies of authored position order and original masks. A streamed
 // renderer is not a new attendance target. Reset only for a verified new game.
 class Baselines {

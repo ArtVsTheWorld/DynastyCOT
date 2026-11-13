@@ -65,5 +65,10 @@ int main(){
     prepareVisitorLosses();assert(count().visible==11000&&!sharedFanBudgetApplied);
     arrivalMissing=0;prepareVisitorLosses();assert(!resumeLegacyBudget&&sharedFanBudgetApplied&&count().visible==20000);
     activeLoss=100;prepareVisitorLosses();assert(count().visible==2000&&count().protectedFans==2000);
+    // Spring ignores leading/trailing scoreboard roles and visitor floors.
+    for(int side:{0,1}){fresh();shownSpring=true;add(1,10000,100,side?9900:0,50);activeLoss=50;shownQuarter=4;shownScore0=56;shownScore1=0;
+        prepareVisitorLosses();auto first=count();assert(first.protectedFans==100&&first.gone>4900&&first.gone<=5000);
+        shownScore0=0;shownScore1=56;prepareVisitorLosses();assert(count().gone==first.gone);
+    }shownSpring=false;
     fresh();std::cout<<"PASS: production multi-layout arrivals/halftime/returns/departures, band and native-hole exclusion, duplicate-layout isolation, live/replay separation, fresh-process-equivalent resume and legacy-policy transition; self-process fixtures only\n";
 }

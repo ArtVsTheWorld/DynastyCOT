@@ -88,7 +88,7 @@ int main(){
     auto ccGame=game(4,100,21,42);postseason(ccGame,false,true);assert(restoredConference.resume(ccGame,found));ccGame.conferenceChampionship=false;assert(!restoredConference.resume(ccGame,found));
     // Previous release archives are still readable; they had no conference flag.
     std::stringstream oldWrite;timeline::write(oldWrite,a);std::string magic,row;std::getline(oldWrite,magic);std::getline(oldWrite,row);
-    magic.replace(magic.find("DGA-HISTORY-7"),13,"DGA-HISTORY-2");for(int field=0;field<4;++field)row.erase(row.rfind(' '));
+    magic.replace(magic.find("DGA-HISTORY-8"),13,"DGA-HISTORY-2");for(int n=0;n<4;++n)row.erase(row.rfind(' '));for(int field=0;field<4;++field)row.erase(row.rfind(' '));
     std::string legacyPoints,line;while(std::getline(oldWrite,line)){if(line.empty())continue;for(int extra=0;extra<4;++extra)line.erase(line.rfind(' '));legacyPoints+=line+"\n";}
     std::stringstream legacy(magic+"\n"+row+"\n"+legacyPoints);timeline::Archive legacyArchive;assert(timeline::read(legacy,legacyArchive)&&!legacyArchive.games.front().context.conferenceChampionship);
     // Native and originally empty seats are never filled by historical overrides.

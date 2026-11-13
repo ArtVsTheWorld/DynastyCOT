@@ -373,6 +373,11 @@ int main(int argc,char** argv){using namespace fixture;using namespace fixture::
   changed=raw;changed["records"]["7:0"]["v"]["DOWNSPLAYED"]=0;check(analytics::live::dataset(changed)["rows"][0]["analytics"]["grade"].is_null(),"Zero snaps generated a grade");
   changed=raw;changed["records"]["8:0"]["v"]["GameStatus"]="Scheduled";check(analytics::live::dataset(changed)["rows"][0]["analytics"]["grade"].is_null(),"Unplayed games generated grades");
   changed=raw;changed["records"]["8:0"]["v"]["IsPractice"]=true;check(analytics::live::dataset(changed)["rows"].empty(),"Practice entered Dynasty grades");
+  for(const char* phase:{"PreSeason","Preseason"}){
+    changed=raw;changed["records"]["8:0"]["v"]["SeasonWeekType"]=phase;changed["records"]["8:0"]["v"]["IsPractice"]=false;
+    auto spring=analytics::live::dataset(changed);check(spring["rows"].empty()&&spring["games"].empty()&&spring["seasonAnalytics"].empty(),"Extension exhibition entered weekly/season grades");
+    auto springSummary=analytics::live::socialSummary(changed);check(springSummary["weekly"].empty()&&springSummary["seasonRows"].empty(),"Extension exhibition entered GPI posts");
+  }
   changed=raw;changed["records"]["7:0"]["v"]["OpposingTeam"]="3:2";auto foreign=analytics::live::dataset(changed);check(foreign["rows"].empty()&&foreign["issues"].size()==1,"Foreign opponent entered game stats");
   auto unreleased=result;unreleased["season"]["CurrentWeek"]=1;
   auto hidden=prepareSnapshot(unreleased);check(hidden.weeks.size()==1,"Current week appeared in Analytics filters");

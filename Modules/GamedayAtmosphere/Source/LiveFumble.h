@@ -39,7 +39,7 @@ public:
         if(p.game.phase==3&&phase_==1&&ready_){live_=true;began_=now;ended_=0;armed_=type_!=32;used_=pending_=forced_=sawLoose_=recoveryUsed_=false;fumbler_=recovered_=-1;}
         if(live_&&now>=began_&&now-began_>45000){live_=false;}
         if(live_&&phase_==3&&(p.game.phase==4||p.game.phase==5))ended_=now;
-        bool post=(p.game.phase==4||p.game.phase==5)&&ended_&&now>=ended_&&now-ended_<=750;
+        bool post=(p.game.phase==4||p.game.phase==5)&&ended_&&now>=ended_&&now-ended_<=1500;
         if(live_&&!used_&&contact.id&&contact.owner>=0&&contact.owner<=1&&((p.game.phase==3&&!ended_)||post)){
             used_=pending_=forced_=true;fumbler_=contact.owner;recoveryUsed_=false;
             if(fumbler_==1||p.game.neutral)out={Event::ForcedFumble,++serial_,1-fumbler_,0};

@@ -1388,7 +1388,7 @@
         "voices": [
           "wire"
         ],
-        "body": "Week {awardWeek} award recipient\n{playerName} — {award}"
+        "body": "{playerName} receives {award} honors for Week {awardWeek}."
       },
       {
         "id": "world.award.cot104.14b92961ac9b8dbc",
@@ -7397,7 +7397,7 @@
         "voices": [
           "wire"
         ],
-        "body": "Heisman watch\n{playerName}\n{school}\n{rankChange}"
+        "body": "{playerName} of {school} {rankChange} on the Heisman watch."
       },
       {
         "id": "beat.heisman.cot104.b3b020b51e2ac5c9",
@@ -10800,7 +10800,7 @@
         "voices": [
           "wire"
         ],
-        "body": "Preseason list\n{playerName}\n{school}\n{award}"
+        "body": "{school}'s {playerName} earns preseason recognition: {award}."
       },
       {
         "id": "preseason.honor.beat.cot104.349275a5460554a8",

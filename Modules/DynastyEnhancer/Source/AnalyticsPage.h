@@ -6,6 +6,9 @@
 namespace analytics {
 inline constexpr int NationalTeam=-1,SeasonWeek=-1;
 inline constexpr unsigned NationalRowLimit=400;
+// Separate from ModelVersion: fixing season aggregation must not reseed all
+// existing weekly grades or change their established production model.
+inline constexpr unsigned SeasonAggregationVersion=1;
 // Availability follows captured season/stage progress, never game completion alone.
 // Unknown stages fail closed rather than revealing unfinished weekly grades.
 inline int stageOrder(const std::string& type){
@@ -111,7 +114,7 @@ inline Json teamPage(const Json& data,int teamIndex,int year,int week,const std:
     }
     struct Average{double sum=0;int count=0,snaps=0;std::set<std::string> games,snapGames;};
     std::map<std::string,Average> averages;
-    const bool cachedSeason=season&&data.value("analyticsModelVersion",std::string())==ModelVersion&&data.contains("seasonAnalytics")&&data.value("analyticsClock",Json())==data.value("season",Json());
+    const bool cachedSeason=season&&data.value("analyticsModelVersion",std::string())==ModelVersion&&data.value("seasonAggregationVersion",0u)==SeasonAggregationVersion&&data.contains("seasonAnalytics")&&data.value("analyticsClock",Json())==data.value("season",Json());
     if(cachedSeason)for(const auto& row:data.at("seasonAnalytics"))if(row.at("year")==year&&included(row.at("teamIndex").get<int>()))table[row.at("playerKey").get<std::string>()]=row;
     for(const auto& row:data.at("rows")){
         if(cachedSeason)break;

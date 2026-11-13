@@ -105,7 +105,7 @@ namespace SituationalPractice
             try {
                 if(!install)return;
                 // Only inspect memory here. No EXE hash gate or remote writes.
-                NativeCompatibility.Verify(Read,image);
+                NativeCompatibility.Verify(Read,image,destination=>ExtensionsPregame.Owner(game,destination));
                 firstDownLine=new NativeFirstDownLine(Read,Write,image,log);
                 NativeSnapshot snap=Snapshot();
                 if(Long(snap.Match)!=image+0xb47e908 || Long(snap.States)!=image+0xb47f790)
@@ -142,7 +142,7 @@ namespace SituationalPractice
                 // Freeze threads only for the small patch transaction; always resume.
                 using(var freeze=new FrozenThreads(game,image,Sites,Originals)) {
                     // Recheck ownership after suspension, immediately before writes.
-                    NativeCompatibility.Verify(Read,image);
+                    NativeCompatibility.Verify(Read,image,destination=>ExtensionsPregame.Owner(game,destination));
                     for(int i=0;i<Sites.Length;i++)
                         if(!Equal(Read(image+Sites[i],Originals[i].Length),Originals[i]))
                             throw new InvalidOperationException("Hook location changed before installation. No hooks installed.");

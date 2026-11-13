@@ -18,10 +18,10 @@ def main():
  def run(cmd):
   result=subprocess.run([str(x) for x in cmd],capture_output=True,text=True,encoding='utf-8',errors='replace',env={k:v for k,v in os.environ.items() if k.lower()!='psmodulepath'});logs.append(result.stdout+result.stderr);(work/'results.log').write_text('\n'.join(logs),encoding='utf-8');assert result.returncode==0,result.stdout+result.stderr;return result.stdout
  source=ROOT/'Packaging/Collection';exe=work/'CollectionReleasedMigration.exe';compiler=Path(r'C:\Windows\Microsoft.NET\Framework64\v4.0.30319\csc.exe')
- run([compiler,'/nologo','/platform:x64','/optimize+','/warnaserror+','/out:'+str(exe),'/reference:System.Web.Extensions.dll','/reference:System.IO.Compression.dll',Path(meta['work'])/'CollectionInfo.cs',*[source/name for name in ['Models.cs','Paths.cs','Installer.cs','Downloads.cs']],ROOT/'Tests/CollectionReleasedMigration.cs'])
+ run([compiler,'/nologo','/platform:x64','/optimize+','/warnaserror+','/out:'+str(exe),'/reference:System.Web.Extensions.dll','/reference:System.IO.Compression.dll',Path(meta['work'])/'CollectionInfo.cs',*[source/name for name in ['Models.cs','Paths.cs','Installer.cs','Downloads.cs']],ROOT/'Core/UserStorage.cs',ROOT/'Tests/CollectionReleasedMigration.cs'])
  def helper(mode,root):
   nonlocal checks
-  text=run([exe,mode,ROOT,root,work,sdk]);checks+=int(text.split()[1]);print(text.strip(),flush=True)
+  text=run([exe,mode,ROOT,root,work,sdk,meta.get('artifactRoot',str(ROOT/'Release'))]);checks+=int(text.split()[1]);print(text.strip(),flush=True)
  ids=['DynastyEnhancer','GamedayAtmosphere','ExtraDynastySettings','DrivePractice']
  for version in versions:
   archive=ROOT/f'Release/DynastyCOT-{version}.zip';proof=json.loads((ROOT/f'Release/verification-{version}.json').read_text());assert sha(archive)==proof['archiveSha256'];package=work/('Bundle-'+version)

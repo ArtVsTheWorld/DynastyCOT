@@ -59,7 +59,7 @@ int main(int argc,char** argv){
     std::stringstream disk;timeline::write(disk,live);timeline::Archive roundtrip;assert(timeline::read(disk,roundtrip));
     assert(roundtrip.games[0].resumeReady&&!roundtrip.games[1].resumeReady&&roundtrip.games[2].resumeReady);
     assert(roundtrip.resume(s,found)&&found.temporary==11);
-    auto invalid=disk.str();auto row=invalid.find('\n',invalid.find('\n')+1);invalid.replace(row-1,1,"2");
+    auto invalid=disk.str();auto row=invalid.find('\n',invalid.find('\n')+1);auto ready=row;for(int n=0;n<4;++n)ready=invalid.rfind(' ',ready-1);invalid.replace(ready-1,1,"2");
     std::stringstream invalidReady(invalid);assert(!timeline::read(invalidReady,roundtrip));
     if(argc>1){
         std::ifstream actual(argv[1]);timeline::Archive actualArchive;assert(actual&&timeline::read(actual,actualArchive));

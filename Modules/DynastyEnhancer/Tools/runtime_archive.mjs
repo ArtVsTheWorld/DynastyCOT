@@ -1,4 +1,6 @@
 import path from 'node:path';
+import fs from 'node:fs/promises';
+import {sharedEdition} from './shared_editions.mjs';
 import {PUBLICATION_PHASES,phaseIndex} from './publication_timeline.mjs';
 import {scopeKey} from './runtime_lifecycle.mjs';
 import {buildCatalog} from './feed_selection.mjs';
@@ -8,10 +10,22 @@ import {EDITORIAL_POLICY_VERSION} from './editorial_policy.mjs';
 import {currentPublicationPolicy} from './publication_policy.mjs';
 import {readEditionHistory,writeEditionHistory,atomicJsonFile} from './history_store.mjs';
 export const readHistory=readEditionHistory,writeHistory=writeEditionHistory;
-export async function loadArchives(folder,s){
+export async function loadArchives(folder,s,{crossSchool=false,sharedSchools=[]}={}){
  const seasonFolder=path.join(folder,'RuntimeHistory',String(s.leagueId),String(s.userTeamIndex),String(s.season.CurrentSeasonYear)),archives=[];
  for(const phase of PUBLICATION_PHASES){if(phaseIndex(phase)>=phaseIndex(s.season.CurrentWeekType))continue;
   const state=await readHistory(path.join(seasonFolder,phase,'history.json'),{archiveOnly:true});if(state)archives.push(...state.editions.map(e=>({...e.feed,milestoneObservation:e.snapshot?.milestoneTotals,seasonEndPublications:e.snapshot?.seasonEndPublications,postseasonPublications:e.snapshot?.postseasonPublications})));
+ }
+ if(crossSchool||sharedSchools.length){
+  const leagueFolder=path.join(folder,'RuntimeHistory',String(s.leagueId));
+  let dirs=[];if(crossSchool){try{dirs=await fs.readdir(leagueFolder,{withFileTypes:true});}catch(e){if(e.code!=='ENOENT')throw e;}}else dirs=sharedSchools.map(id=>({name:String(id),isDirectory:()=>true}));
+  // Bounded by native team IDs, current season only, requested only when a
+  // school's current-phase archive is absent. No permanent cache or migration.
+  for(const dir of dirs.filter(d=>d.isDirectory()&&/^\d{1,3}$/.test(d.name)&&Number(d.name)<255&&Number(d.name)!==s.userTeamIndex).sort((a,b)=>Number(a.name)-Number(b.name))){
+   for(const phase of PUBLICATION_PHASES){if(phaseIndex(phase)>phaseIndex(s.season.CurrentWeekType))continue;
+    const state=await readHistory(path.join(leagueFolder,dir.name,String(s.season.CurrentSeasonYear),phase,'history.json'),{archiveOnly:true});
+    for(const e of state?.editions??[]){const recovered=sharedEdition(e.feed,s);if(recovered&&!archives.some(f=>f.key===recovered.key))archives.push(recovered);}
+   }
+  }
  }
  return archives;
 }

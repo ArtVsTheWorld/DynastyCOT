@@ -1,6 +1,8 @@
 #pragma once
 #include "RecruitNotesUiPrograms.h"
 #include <array>
+#include <bitset>
+#include <type_traits>
 #include <atomic>
 #include <mutex>
 #include <fstream>
@@ -187,13 +189,19 @@ public:
 // Dispatch by immutable frame shape before visiting any adapter bank. This is
 // only a candidate index: beforeInvoke still verifies ownership/body hashes.
 template<size_t N>class FrameDispatch {
-    std::array<std::map<FrameKey,uint64_t>,2> matches;
 public:
-    explicit FrameDispatch(const std::array<Runtime*,N>& banks){static_assert(N<=64);for(unsigned fixed=0;fixed<2;++fixed)
-        for(size_t i=0;i<N;++i)for(const auto& key:banks[i]->frameKeys(fixed!=0))matches[fixed][key]|=uint64_t{1}<<i;
+    using Mask=std::conditional_t<(N<=64),uint64_t,std::bitset<N>>;
+private:
+    std::array<std::map<FrameKey,Mask>,2> matches;
+public:
+    explicit FrameDispatch(const std::array<Runtime*,N>& banks){static_assert(N<=128);for(unsigned fixed=0;fixed<2;++fixed)
+        for(size_t i=0;i<N;++i)for(const auto& key:banks[i]->frameKeys(fixed!=0)){
+            if constexpr(N<=64)matches[fixed][key]|=uint64_t{1}<<i;
+            else matches[fixed][key].set(i);
+        }
     }
-    uint64_t candidates(const unsigned char* header,bool fixed=false)const{
-        const auto& index=matches[fixed?1:0];const auto found=index.find(frameKey(header));return found==index.end()?0:found->second;
+    Mask candidates(const unsigned char* header,bool fixed=false)const{
+        const auto& index=matches[fixed?1:0];const auto found=index.find(frameKey(header));return found==index.end()?Mask{}:found->second;
     }
 };
 }

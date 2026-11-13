@@ -427,7 +427,7 @@ namespace OfflinePlaycall
             internal Site(long address, int offset, byte[] original) { Address = address; Offset = offset; Original = original; }
         }
         private static string DefaultStorage()
-        { return Path.Combine(Path.GetDirectoryName(typeof(SplitSettingsAction).Assembly.Location), "OfflinePlaycallSettings", "dynasties.json"); }
+        { return Path.Combine(Ace.DynastyCOT.UserStorage.Folder("ExtraSettings"), "OfflinePlaycallSettings", "dynasties.json"); }
         private static void Log(ILogger logger, string message)
         {
             lock (logLock)

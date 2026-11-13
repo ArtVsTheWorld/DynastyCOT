@@ -1,5 +1,6 @@
 #pragma once
 #include "RecruitingGradePolicy.h"
+#include "AthleticMeasurables.h"
 #include <array>
 #include <cstdint>
 #include <cstring>
@@ -45,20 +46,39 @@ struct ConversionStats {unsigned recruits=0,attributes=0,revealed=0,ranges=0,unk
 
 // Setters are the native UI-value factories. They replace only properties in
 // ScoutingAttributes, never values in the native Player/Recruit tables.
-template<class View,class StringSetter,class BoolSetter>
-ConversionStats convertRecruitingResponse(View& view,uintptr_t root,StringSetter setString,BoolSetter setBool){
-    ConversionStats stats;std::vector<uintptr_t> recruits;
+struct NoSupplement {template<class View>void operator()(View&,const std::map<std::string,uintptr_t>&,std::map<std::string,double>&)const{}};
+template<class View,class StringSetter,class BoolSetter,class Supplement=NoSupplement>
+ConversionStats convertRecruitingResponse(View& view,uintptr_t root,StringSetter setString,BoolSetter setBool,Supplement supplement={}){
+    ConversionStats stats;if(!enhancements::options().recruiting&&!enhancements::options().measurables)return stats;std::vector<uintptr_t> recruits;
     if(!view.array(root,recruits,512)){++stats.unsupported;return stats;}
     for(auto recruit:recruits){
         std::map<std::string,uintptr_t> record;double percent=0;
         if(!view.members(recruit,record)||!record.count("ScoutingAttributes")||!record.count("PercentageScouted")||!view.number(record.at("PercentageScouted"),percent)||percent<0||percent>100){++stats.unsupported;continue;}
         std::vector<uintptr_t> attributes;if(!view.array(record.at("ScoutingAttributes"),attributes,32)){++stats.unsupported;continue;}++stats.recruits;
-        for(auto attribute:attributes){
-            std::map<std::string,uintptr_t> fields;bool slider=false;double low=0,high=0;
-            if(!view.members(attribute,fields)||!fields.count("HaveSlider")||!fields.count("SliderStart")||!fields.count("SliderEnd")||!view.boolean(fields.at("HaveSlider"),slider)||!view.number(fields.at("SliderStart"),low)||!view.number(fields.at("SliderEnd"),high)){++stats.unsupported;continue;}
+        std::map<std::string,double> revealed;
+        const auto selected=enhancements::options();const auto identity=measurables::identity(view,record);
+        struct Attribute {uintptr_t at=0;std::map<std::string,uintptr_t> fields;std::string key;bool slider=false;double low=0,high=0;};
+        std::vector<Attribute> rows;rows.reserve(attributes.size());
+        // Gather the native reveal state once. In particular the dash must
+        // see both inputs before either original value becomes display text.
+        for(auto at:attributes){Attribute row;row.at=at;auto& fields=row.fields;
+            if(!view.members(at,fields)||!fields.count("HaveSlider")||!fields.count("SliderStart")||!fields.count("SliderEnd")||!view.boolean(fields.at("HaveSlider"),row.slider)||!view.number(fields.at("SliderStart"),row.low)||!view.number(fields.at("SliderEnd"),row.high)){++stats.unsupported;continue;}
+            std::string name;if(fields.count("Name"))view.string(fields.at("Name"),name);row.key=measurables::key(name);
+            if(!row.slider&&(row.low>0||percent==100)&&row.low>=0&&row.low<=100&&measurables::physical(row.key))revealed[row.key]=row.low;
+            rows.push_back(std::move(row));
+        }
+        if(percent==100&&selected.measurables&&(!revealed.count("speed")||!revealed.count("acceleration"))){std::map<std::string,double> extra;supplement(view,record,extra);for(const auto& value:extra){bool present=false;for(const auto& row:rows)present|=row.key==value.first;if(!present)revealed.insert(value);}}
+        for(const auto& row:rows){const auto attribute=row.at;const auto slider=row.slider;const auto low=row.low,high=row.high;const auto& key=row.key;
             // This is the native incognito case. Do not turn its sentinel 0
             // into an F, and retain the original hidden-widget behavior.
             if(!slider&&low==0&&percent<100){++stats.unknown;continue;}
+            if(selected.measurables&&measurables::physical(key)&&(!selected.recruiting||selected.recruitingScale!=enhancements::GradeScale::Blind)){
+                auto e=measurables::estimate(key,revealed,identity,percent==100);
+                const auto label=e.value.empty()?std::string("?"):e.value;
+                if(!e.label.empty())setString(attribute,"Name",e.label.c_str());
+                setString(attribute,"SliderStart",label.c_str());setString(attribute,"SliderEnd",label.c_str());setBool(attribute,"HaveSlider",false);++stats.attributes;continue;
+            }
+            if(!selected.recruiting)continue;
             const bool uninformative=slider&&low==0&&high==100&&percent<100;
             auto label=display(uninformative?Visibility::Unknown:slider?Visibility::Range:Visibility::Revealed,low,low,high);
             // The native model copies SliderStart directly into ExtraInfo.Points.

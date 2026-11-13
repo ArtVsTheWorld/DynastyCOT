@@ -1,3 +1,4 @@
+#include "UserRuntimePaths.h"
 #include "../../../Compatibility/PracticeTextSetter.generated.h"
 #define WIN32_LEAN_AND_MEAN
 #include <windows.h>
@@ -773,15 +774,17 @@ void stop(){disabled=true;opened=false;if(uiReady){configureNewsPolish(false);co
 void publishFeed(const Json& data){
     const bool runtime=data.value("sourceKind",std::string())=="runtime";uint32_t league=0;
     if(runtime){const auto& id=data.at("leagueId");if(!id.is_number_integer()||id<INT32_MIN||id>UINT32_MAX)throw std::runtime_error("Invalid runtime feed Dynasty identity");league=static_cast<uint32_t>(id.get<int64_t>());}
-    auto feed=social::decodeFeed(data);std::lock_guard<std::mutex> lock(feedMutex);retiredFeeds.push_back(std::move(latestFeed));latestFeed=std::move(feed);nativeFeedIdentity=runtime;nativeFeedLeague=league;
+    const auto began=GetTickCount64();auto feed=social::decodeFeed(data);const auto decodeMs=GetTickCount64()-began;
+    {std::lock_guard<std::mutex> lock(feedMutex);retiredFeeds.push_back(std::move(latestFeed));latestFeed=std::move(feed);nativeFeedIdentity=runtime;nativeFeedLeague=league;}
+    note({{"event","runtime_ui_publication_timing"},{"decodeMs",decodeMs},{"totalMs",GetTickCount64()-began},{"week",data.at("week")},{"phase",data.at("phase")}});
 }
 void flush(){std::deque<Json> batch;{std::lock_guard<std::mutex> lock(logMutex);batch.swap(messages);}if(batch.empty())return;std::ofstream out(folder/L"social-media.jsonl",std::ios::app);for(const auto& x:batch)out<<x.dump()<<'\n';}
 DWORD WINAPI worker(void*){
     SetThreadPriority(GetCurrentThread(),THREAD_PRIORITY_BELOW_NORMAL);
-    wchar_t path[32768]{};GetModuleFileNameW(module,path,32768);folder=std::filesystem::path(path).parent_path();buildId=std::filesystem::path(path).filename().u8string();base=reinterpret_cast<uintptr_t>(GetModuleHandleW(nullptr));enhancements::requireDynastyPresentation(base);
+    wchar_t path[32768]{};GetModuleFileNameW(module,path,32768);const auto codeFolder=std::filesystem::path(path).parent_path();folder=dynasty::userpaths::data(codeFolder);if(folder.empty()){OutputDebugStringW(L"Beyond the Field: unsupported writable-data location; no hooks changed.\n");return 1;}buildId=std::filesystem::path(path).filename().u8string();base=reinterpret_cast<uintptr_t>(GetModuleHandleW(nullptr));enhancements::requireDynastyPresentation(base);
     try{
         enhancementOptions.open();
-        dynasty::live::FeedWorker refresh;refresh.configure(folder,base);waitingFeed();adoptFeed();
+        dynasty::live::FeedWorker refresh;refresh.configure(folder,base,codeFolder);waitingFeed();adoptFeed();
         for(const auto& g:socialGates){unsigned char bytes[32]{};if(!read(base+g.rva,bytes,32))throw std::runtime_error("Unreadable game code");if(memcmp(bytes,g.bytes,32))cotcompat::practice::normalize(base,g.rva,bytes,g.bytes,32,read);if(memcmp(bytes,g.bytes,32))throw std::runtime_error("Unsupported game code at "+std::to_string(g.rva));}
         for(const auto& b:bindings){uintptr_t pointer=0;if(!read(base+b.vt+b.offset,&pointer,8)||pointer!=base+b.rva)throw std::runtime_error("Native UI slot is owned or unsupported");}
         scriptBody=reinterpret_cast<ScriptBody>(base+0x7c34e10);

@@ -1,5 +1,7 @@
+import {exhibitionContext} from './spring_context.mjs';
 import {phaseIndex} from './publication_timeline.mjs';
 import {teamRecord} from './team_record.mjs';
+import {signingOwnership} from './signing_ownership.mjs';
 // Shared story facts from either a read-only save adapter or a native runtime snapshot.
 export async function normalizeDynasty({records,resolve,array,arraySlots},identity) {
   const season=(await records('SeasonInfo'))[0]?.v,franchise=(await records('Franchise'))[0]?.v;
@@ -8,6 +10,8 @@ export async function normalizeDynasty({records,resolve,array,arraySlots},identi
   for(const {v:u} of await records('FranchiseUser')){if(u.IsRetired)continue;const team=await resolve(u.Team)??await resolve(u.UserEntity);
     if(team&&(userTeamIndex===null||u.AdminLevel==='Owner'))userTeamIndex=team.v.TeamIndex;}
   if(userTeamIndex===null)throw Error('No controlled Dynasty team');
+  const userCoaches=[];
+  for(const {key,v:u} of await records('FranchiseUser')){if(u.IsRetired===true)continue;const team=await resolve(u.Team),entity=await resolve(u.UserEntity);if(team&&entity?.type==='Coach')userCoaches.push({userRecord:key,userIdLower:u.UserIdLower??null,userIdUpper:u.UserIdUpper??null,coachRecord:entity.key,coachName:[entity.v.FirstName,entity.v.LastName].filter(Boolean).join(' '),team:team.v.TeamIndex,retired:false});}
   const stageRows=(await records('OffseasonStageTypeEnumTableEntry')).filter(r=>r.v.NativeValueCode===season.CurrentOffseasonStage);
   const offseasonStageLabel=stageRows.length===1?[stageRows[0].v.ShortName,stageRows[0].v.LongName,stageRows[0].v.Description].filter(v=>typeof v==='string'&&v.trim()).join(' | '):null;
   const finalStatuses=['HomeWon','AwayWon','Tie'];
@@ -77,9 +81,13 @@ export async function normalizeDynasty({records,resolve,array,arraySlots},identi
     for(const st of await array(p.SeasonStats)){if(Number.isInteger(st.v.SEAS_YEAR)&&st.v.SEAS_YEAR>=0&&st.v.SEAS_YEAR<=season.CurrentYear)player.allSeasonStats.push({type:st.type,stats:st.v});if(st.v.SEAS_YEAR===season.CurrentYear&&st.v.YEARBYYEARTEAMINDEX===p.TeamIndex)player.seasonStats.push({type:st.type,stats:st.v});if(season.CurrentYear>0&&st.v.SEAS_YEAR===season.CurrentYear-1)player.previousSeasonStats.push({type:st.type,stats:st.v});}
     players.push(player);playerRefs.set(key,player);rawPlayers.push({key,v:p});
   }
+  const exhibitionRows=[];
   const games=[],postseasonAssignments=[],playoffBracket=[],gameRefs=new Map();
   for(const {key,v:g,capacity} of await records('SeasonGame')){
-    if(capacity<=1||g.IsPractice||g.SeasonYear!==season.CurrentYear)continue;
+    if(!g.IsPractice&&g.SeasonWeekType==='PreSeason'&&g.SeasonYear===season.CurrentYear&&(g.SeasonGameNum===250||['Unplayed','HomeWon','AwayWon','Tie'].includes(g.GameStatus)))exhibitionRows.push({id:key,year:g.SeasonYear,week:g.SeasonWeek,number:g.SeasonGameNum,home:await teamIndex(g.HomeTeam),away:await teamIndex(g.AwayTeam),status:publicStatus(g)});
+    // Dynasty Extensions spring/drill/marker games are PreSeason rows with
+    // IsPractice=false. They are exhibitions, not competitive season facts.
+    if(capacity<=1||g.IsPractice||g.SeasonWeekType==='PreSeason'||g.SeasonYear!==season.CurrentYear)continue;
     const home=await teamIndex(g.HomeTeam),away=await teamIndex(g.AwayTeam);
     const bowl=await resolve(g.BowlGame);
     if(bowl?.type==='BowlGame')postseasonAssignments.push({id:key,slot:bowl.v.PlayoffBracketSlot,year:g.SeasonYear,week:g.SeasonWeek,phase:g.SeasonWeekType,home,away,status:publicStatus(g),published:g.HasBeenPublished??null,homeScore:g.HasBeenPublished===false?null:g.HomeScore,awayScore:g.HasBeenPublished===false?null:g.AwayScore,venue:cleanText(bowl.v.Name),isPlayoff:bowl.v.IsPlayoffBowl===true});
@@ -148,19 +156,28 @@ export async function normalizeDynasty({records,resolve,array,arraySlots},identi
   for(let i=0;i<rawTeams.length;++i){const t=rawTeams[i];if(t.TeamIndex===255)continue;await statRecords(t.GameStatRecords,'school',t.TeamIndex,'game');await statRecords(t.SeasonStatRecords,'school',t.TeamIndex,'season');}
   for(const {key,v:c} of await records('Conference')){await statRecords(c.GameStatRecords,'conference',key,'game');await statRecords(c.SeasonStatRecords,'conference',key,'season');}
   for(const {v:l} of await records('League')){await statRecords(l.PlayerGameStatRecords,'national','national','game');await statRecords(l.PlayerSeasonStatRecords,'national','national','season');}
-  // CommittedPlayers is empty in this build, even after a hard commitment.
-  // Verify the recruit stage and leading school against that school's board;
-  // an offer or a nonzero target week on its own never establishes a commit.
-  const recruitStatuses=[],recruitRefs=new Map();for(const r of await records('Recruit')){
+  // Hard/soft commitments still need their own board corroboration. Signed
+  // ownership instead comes from the native committed-player relationship.
+  const signingProof=await signingOwnership(rawTeams,{resolve,array});
+  const signingDetection={...signingProof.diagnostics,signedRows:0,confirmedPlayers:0,missingMembership:0,conflictingMembership:0,duplicateSignedRows:0};
+  const signedByPlayer=new Map(),recruitStatuses=[],recruitRefs=new Map();for(const r of await records('Recruit')){
     const recruitPlayer=await resolve(r.v.Player);if(recruitPlayer)recruitStatuses.push({player:recruitPlayer.key,recruitClass:r.v.Class??null,stage:r.v.RecruitStage,nationalRank:r.v.NationalRank>0?r.v.NationalRank:null,positionRank:r.v.PositionRank>0?r.v.PositionRank:null,stateRank:r.v.StateRank>0?r.v.StateRank:null,topSchools:(await array(r.v.TopSchoolsList)).slice(0,3).map(x=>x.v.TeamId).filter(id=>teams.some(t=>t.id===id&&id!==255))});
     if(!['HardCommitted','SoftCommitted','Signed'].includes(r.v.RecruitStage))continue;
+    if(r.v.RecruitStage==='Signed'){
+      ++signingDetection.signedRows;const p=await resolve(r.v.Player);const owners=p&&signingProof.owners.get(p.key);
+      if(!owners?.size){++signingDetection.missingMembership;continue;}
+      if(owners.size!==1){++signingDetection.conflictingMembership;continue;}
+      const commit={player:p.key,rank:r.v.NationalRank,stage:'Signed',recruitClass:r.v.Class??null,team:[...owners][0]};
+      if(signedByPlayer.has(p.key))++signingDetection.duplicateSignedRows;else signedByPlayer.set(p.key,{...commit,nilOfferPoints:null});
+      recruitRefs.set(r.key,commit);continue;
+    }
     const p=await resolve(r.v.Player),schools=await array(r.v.TopSchoolsList);
     if(!p||!schools.length)continue;
     const winner=schools[0].v;
     if(schools.slice(1).some(sc=>sc.v.TeamInfluence>=winner.TeamInfluence))continue;
     recruitRefs.set(r.key,{player:p.key,rank:r.v.NationalRank,stage:r.v.RecruitStage,recruitClass:r.v.Class??null,team:winner.TeamId});
   }
-  const signings=[],commitments=[],offers=[],recruitInterests=[],recruitVisits=[];
+  const commitments=[],offers=[],recruitInterests=[],recruitVisits=[];
   for(const t of rawTeams){
     const board=await resolve(t.RecruitingBoard);
     if(board)for(const target of await array(board.v.Recruits)){
@@ -172,9 +189,10 @@ export async function normalizeDynasty({records,resolve,array,arraySlots},identi
         const p=await resolve(r.v.Player);if(p)offers.push({player:p.key,team:t.TeamIndex,rank:r.v.NationalRank});
       }
       if(!commit||commit.team!==t.TeamIndex)continue;
-      if(commit.stage==='Signed')signings.push({...commit,nilOfferPoints:Number.isFinite(target.v.CurrentNILOffer)&&target.v.CurrentNILOffer>=0?target.v.CurrentNILOffer:null});else commitments.push({...commit,week:target.v.CommittedWeekNumber});
+      if(commit.stage==='Signed'){const signed=signedByPlayer.get(commit.player);if(signed)signed.nilOfferPoints=Number.isFinite(target.v.CurrentNILOffer)&&target.v.CurrentNILOffer>=0?target.v.CurrentNILOffer:null;}else commitments.push({...commit,week:target.v.CommittedWeekNumber});
     }
   }
+  const signings=[...signedByPlayer.values()];signingDetection.confirmedPlayers=signings.length;
   const coachingOpenings=[],coachOffers=[];
   const coachIdentity=async ref=>{const c=await resolve(ref);return c?.type==='Coach'?{id:c.key,name:[c.v.FirstName,c.v.LastName].filter(Boolean).join(' '),team:c.v.TeamIndex,position:c.v.Position??null,status:c.v.ContractStatus??null,contract:{length:c.v.ContractLength??null,remaining:c.v.ContractYearsRemaining??null,salaryRaw:c.v.ContractSalary??null,count:c.v.COACH_CONSECTEAMCONTRACTS??null,status:c.v.ContractStatus??null}}:null;};
   for(const {v:h} of await records('StaffHiringEval')){
@@ -195,5 +213,5 @@ export async function normalizeDynasty({records,resolve,array,arraySlots},identi
   }
   const portalEntrants=[];for(const r of await array(franchise.Transfers)){if(r.type!=='Recruit'||!r.v.Class?.startsWith('Transfer_'))continue;const p=await resolve(r.v.Player);if(p)portalEntrants.push(p.key);}
   return {format:2,sourceUnchanged:true,gameYear:27,...identity,leagueId:franchise.LeagueID,
-    season,offseasonStageLabel,userTeamIndex,teams,conferences,players,games,playoffBracket,postseasonAssignments,performances,heisman,annualAwards,allAmericanHonors,coachingOpenings,coachOffers,draftResults,portalEntrants,signings,commitments,offers,recruitInterests,weeklyAwards,records:recordsList,recruitStatuses,recruitVisits,preseasonHonors};
+    season,userCoaches,perspectiveSource:'native-owner-fallback',exhibitions:exhibitionContext(exhibitionRows,season,userTeamIndex),offseasonStageLabel,userTeamIndex,teams,conferences,players,games,playoffBracket,postseasonAssignments,performances,heisman,annualAwards,allAmericanHonors,coachingOpenings,coachOffers,draftResults,portalEntrants,signings,signingDetection,commitments,offers,recruitInterests,weeklyAwards,records:recordsList,recruitStatuses,recruitVisits,preseasonHonors};
 }

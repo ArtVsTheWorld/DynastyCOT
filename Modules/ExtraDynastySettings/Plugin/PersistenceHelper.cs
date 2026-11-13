@@ -154,7 +154,7 @@ namespace OfflineDynastySettings
                 if(cooldown>=0)updated.DefenseCooldowns.Add(key,cooldown);
                 if(limit>=0)updated.DefenseLimits.Add(key,limit);
             }
-            AtomicSave(Path.Combine(context.PluginFolder,"OfflinePlaycallSettings","dynasties.json"),serializer.Serialize(updated),true);
+            AtomicSave(Path.Combine(Ace.DynastyCOT.UserStorage.Folder("ExtraSettings"),"OfflinePlaycallSettings","dynasties.json"),serializer.Serialize(updated),true);
             saved=current; Log("Saved per-dynasty defensive settings; revision " + current + ", dynasties="+seen.Count+".");
         }
         private static void AtomicSave(string path, string contents, bool backup)

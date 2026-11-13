@@ -8,7 +8,7 @@
 #include "EnhancementOptions.h"
 #include "LiveTables.h"
 namespace recruitingfog::features {
-inline notesui::Runtime rowUi(interestui::rows()),progressUi(interestui::progress()),cutoffUi(interestui::cutoff()),scoutUi(interestui::scouts()),rankSortUi(interestui::rankSort()),interestSortUi(interestui::interestSort());
+inline notesui::Runtime rowUi(interestui::rows()),progressUi(interestui::progress()),cutoffUi(interestui::cutoff()),scoutUi(interestui::scouts()),rankSortUi(std::vector<notesui::Program>{}),interestSortUi(std::vector<notesui::Program>{});
 inline notesui::Runtime targetUi(interestui::targets());
 inline notesui::Runtime smallCardUi(interestui::smallCards());
 inline const std::array<notesui::Runtime*,8> banks{{&rowUi,&progressUi,&cutoffUi,&scoutUi,&rankSortUi,&interestSortUi,&targetUi,&smallCardUi}};
@@ -44,7 +44,7 @@ template<class Read>inline int beforeInvoke(void* object,Read read,bool fixedFra
  if(!prepared)return -1;
  const auto definition=*reinterpret_cast<const uintptr_t*>(static_cast<unsigned char*>(object)+0x58);const auto* h=reinterpret_cast<const unsigned char*>(definition);
  static const notesui::FrameDispatch<8> dispatch(banks);const auto candidates=dispatch.candidates(h,fixedFrame);if(!candidates)return -1;
- const auto scoped=active&&enhancements::presentationAllowed();auto selected=enhancements::options();const auto mode=interest::effective(selected.recruiting,unsigned(selected.scale),unsigned(selected.interest));
+ const auto scoped=active&&enhancements::presentationAllowed();auto selected=enhancements::options();const auto mode=interest::effective(selected.recruiting,unsigned(selected.recruitingScale),unsigned(selected.interest));
  for(size_t i=0;i<banks.size();++i)if((candidates&(uint64_t(1)<<i))&&!failed[i]&&(scoped||banks[i]->retainedDefinitionCount()))try{
   const auto scale=i==6?0:mode;const auto result=banks[i]->beforeInvoke(object,read,fixedFrame,scoped,scale,selected.colors,selected.roster,selected.team,selected.dollars,unsigned(selected.teamScale));
   if(result>=0){attached[i].fetch_add(1);return int(i);}
@@ -55,11 +55,11 @@ template<class View,class StringSetter,class BoolSetter,class NumberSetter,class
 inline interest::TransformStats response(View& view,uintptr_t root,StringSetter text,BoolSetter boolean,NumberSetter number,Reorder reorder){
  if(!enhancements::presentationAllowed())return {};requested=true;auto data=std::atomic_load(&published);auto selected=enhancements::options();const auto league=enhancements::currentOptionsLeague.load();
  if(data&&data->league==league){auto previous=std::atomic_load(&freshScouting);auto next=interest::observeScouting(view,root,*data,previous);if(next&&next!=previous&&enhancements::currentOptionsLeague.load()==league&&std::atomic_compare_exchange_strong(&freshScouting,&previous,next))scoutingChanged=true;}
- return interest::transform(view,root,interest::Mode(interest::effective(selected.recruiting,unsigned(selected.scale),unsigned(selected.interest))),data.get(),league,text,boolean,number,reorder);
+ return interest::transform(view,root,interest::Mode(interest::effective(selected.recruiting,unsigned(selected.recruitingScale),unsigned(selected.interest))),data.get(),league,text,boolean,number,reorder);
 }
 template<class View,class StringSetter,class BoolSetter,class NumberSetter,class Reorder>
 inline interest::TransformStats prospectResponse(View& view,uintptr_t root,StringSetter text,BoolSetter boolean,NumberSetter number,Reorder reorder){
  if(!enhancements::presentationAllowed())return {};const auto selected=enhancements::options();const auto league=enhancements::currentOptionsLeague.load();
- return interest::transformSmallCard(view,root,interest::Mode(interest::effective(selected.recruiting,unsigned(selected.scale),unsigned(selected.interest))),league,text,boolean,number,reorder);
+ return interest::transformSmallCard(view,root,interest::Mode(interest::effective(selected.recruiting,unsigned(selected.recruitingScale),unsigned(selected.interest))),league,text,boolean,number,reorder);
 }
 }

@@ -6,12 +6,13 @@
 #include <vector>
 #include <cstdint>
 #include <cmath>
+#include "AthleticMeasurables.h"
 
 namespace recruitingfog {
 inline uint64_t notesHash(const std::string& text){uint64_t hash=14695981039346656037ull;for(unsigned char c:text){hash^=c;hash*=1099511628211ull;}return hash;}
 inline std::string notesKey(std::string text){while(!text.empty()&&text.back()==' ')text.pop_back();for(auto& c:text)c=static_cast<char>(std::tolower(static_cast<unsigned char>(c)));return text;}
 struct NotesObservation {std::string name;double low=0,high=0;bool exact=false;};
-struct NotesProspect {std::string identity,position,tendency,hometown,classification;double progress=0;std::vector<NotesObservation> observations;};
+struct NotesProspect {std::string identity,measurementIdentity,position,tendency,hometown,classification;bool activeTransfer=false;double progress=0;std::vector<NotesObservation> observations;};
 struct NotesLanguage {const char* attribute;const char* strong;const char* developing;};
 inline constexpr NotesLanguage notesLanguage[]={
     {"throw power","There is real zip on his throws, including when he has to reach the far sideline.","The deep and opposite-hash throws will need a closer look before the staff builds around them."},
@@ -109,6 +110,7 @@ template<class View,class StringSetter,class Composer>unsigned appendRecruitNote
         auto text=[&](const char* key){std::string value;if(fields.count(key))view.string(fields.at(key),value);return value;};
         NotesProspect prospect;prospect.position=text("Position");prospect.tendency=text("Tendency");prospect.hometown=text("Hometown");prospect.classification=text("ClassAbbreviation");
         prospect.identity=text("FirstName")+"|"+text("LastName")+"|"+prospect.hometown+"|"+text("State");
+        prospect.measurementIdentity=measurables::identity(view,fields);
         double id=0;if(fields.count("RecordId")&&view.number(fields.at("RecordId"),id)&&id>=0&&id<9007199254740992.0)prospect.identity+="|"+std::to_string(static_cast<uint64_t>(id));
         if(fields.count("PercentageScouted")&&(!view.number(fields.at("PercentageScouted"),prospect.progress)||prospect.progress<0||prospect.progress>100))prospect.progress=0;
         std::vector<uintptr_t> attrs;if(fields.count("ScoutingAttributes")&&view.array(fields.at("ScoutingAttributes"),attrs,32))for(auto attribute:attrs){

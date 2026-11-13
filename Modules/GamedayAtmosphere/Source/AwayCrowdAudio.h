@@ -11,10 +11,11 @@ inline int opposite(int type){
 // existing home response, skill slot, native voices or live camera event.
 inline sustained::Intent audience(sustained::Intent out,const Population& pop,uint64_t positions,float fullness,uint64_t now){
     if(!out.active||!pop.owns(out.match,out.epoch)||!positions||pop.home+pop.away==0)return out;
-    double total=static_cast<double>(pop.home+pop.away);
-    float homeFull=fullness*static_cast<float>(pop.home/total),awayFull=fullness*static_cast<float>(pop.away/total);
-    out.supporterSize=population::size(positions,homeFull);
-    out.opponentSize=population::size(positions,awayFull);
+    // Share of a stadium is not the visiting section's density. Use actual
+    // modeled supporter counts and overall stadium fullness as a conservative
+    // sparsity signal; do not invent alumni locations or section capacity.
+    out.supporterSize=population::sizeForCount(static_cast<double>(pop.home),fullness);
+    out.opponentSize=population::sizeForCount(static_cast<double>(pop.away),fullness);
     uint64_t id=0,until=0;int type=0,source=0;
     if(out.liveCheer&&now<out.liveCheerUntil){id=out.liveCheer;until=out.liveCheerUntil;type=out.liveType;source=1;}
     else if(out.resultCheer&&now<out.resultCheerUntil){id=out.resultCheer;until=out.resultCheerUntil;type=out.resultType;source=2;}
@@ -30,7 +31,7 @@ inline sustained::Intent audience(sustained::Intent out,const Population& pop,ui
     if(!pop.home){out.liveCheer=out.resultCheer=out.celebration=out.extraCheer=0;}
     return out;
 }
-inline sustained::Intent layer(sustained::Intent home,const sustained::Intent& visitor,const Population& pop,uint64_t positions,float fullness){
+inline sustained::Intent layer(sustained::Intent home,const sustained::Intent& visitor,const Population& pop,uint64_t,float fullness){
     if(!pop.owns(home.match,home.epoch))return home;
     bool homeReaction=home.reason==sustained::Reason::Result||home.reason==sustained::Reason::Eruption||home.reason==sustained::Reason::Lineup;
     if(homeReaction)home.intensity*=reactionScale(pop.home,pop.home+pop.away);
@@ -45,7 +46,7 @@ inline sustained::Intent layer(sustained::Intent home,const sustained::Intent& v
     home.continuous=visitor.continuous;home.reaction=visitor.reaction;home.supporting=visitor.supporting;
     home.attackMs=visitor.attackMs;home.releaseMs=visitor.releaseMs;
     home.earnedReaction=visitor.earnedReaction;home.reactionHoldUntil=visitor.reactionHoldUntil;home.reactionUntil=visitor.reactionUntil;
-    float awayFull=fullness*pop.share();home.size=(std::min)(visitor.size,population::size(positions,awayFull));
+    home.size=(std::min)(visitor.size,population::sizeForCount(static_cast<double>(pop.away),fullness));
     return home;
 }
 }

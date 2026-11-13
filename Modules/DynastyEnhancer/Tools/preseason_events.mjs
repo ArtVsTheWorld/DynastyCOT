@@ -1,3 +1,4 @@
+import {preseasonPublicationContext,fallOpeningAfterSpring} from './spring_context.mjs';
 import {hash} from './story_authors.mjs';
 import {rosterStrengths} from './betting_model.mjs';
 const ranked=n=>Number.isInteger(n)&&n>=1&&n<=25;
@@ -9,9 +10,10 @@ export function titleFutures(s,strengths=rosterStrengths(s)){
  return rows.sort((a,b)=>b.probability-a.probability||a.team-b.team).map((r,i)=>({...r,modelRank:i+1,simulated:true}));
 }
 export function preseasonEvents(s,{strengths}={}){
- if(s.season.CurrentWeekType!=='PreSeason'||s.season.CurrentStage!=='PreSeason')return [];
+ if((s.season.CurrentWeekType!=='PreSeason'||s.season.CurrentStage!=='PreSeason')&&!fallOpeningAfterSpring(s))return [];
+ const publicationContext=preseasonPublicationContext(s);
  const teams=new Map(s.teams.filter(t=>t.id!==255).map(t=>[t.id,t])),players=new Map(s.players.map(p=>[p.id,p])),events=[];
- const emit=(id,category,facts,options={})=>events.push({id:'preseason:'+id,category,facts:{preseason:true,...facts},options});
+ const emit=(id,category,facts,options={})=>events.push({id:'preseason:'+id,category,facts:{preseason:true,publicationContext,...facts},options});
  const honors=(s.preseasonHonors??[]).filter(a=>a.year===s.season.CurrentYear&&teams.has(a.team)&&players.get(a.player)?.team===a.team);
  const openingGames=s.games.filter(g=>g.year===s.season.CurrentYear&&g.phase==='RegularSeason'&&g.status==='Unplayed');
  const futures=titleFutures(s,strengths),futureMap=new Map(futures.map(x=>[x.team,x]));
@@ -52,8 +54,10 @@ export function preseasonEvents(s,{strengths}={}){
  const committed=new Set(s.commitments.map(c=>c.player));
  const recruits=(s.recruitStatuses??[]).filter(r=>!committed.has(r.player)&&['Top10','Top5','Top3','Battle'].includes(r.stage)&&r.nationalRank>=1&&r.nationalRank<=100).sort((a,b)=>a.nationalRank-b.nationalRank||a.player.localeCompare(b.player));
  for(const r of recruits){const p=players.get(r.player);if(!p||p.team!==255)continue;const values={playerName:p.name,position:p.position,nationalRank:r.nationalRank,nationalRecruitRank:r.nationalRank,stateRecruitRank:r.stateRank??null,positionRecruitRank:r.positionRank??null,recruitState:p.homeState??null,recruitStars:p.starRating,starDetail:p.starRating?p.starRating+'-star ':''};
-  emit('recruit-watch:'+p.id,'recruiting',{...values,family:'preseason.recruit.watch',voice:'beat'},{player:p.id,national:true,priority:r.nationalRank===1?93:81});
-  if(r.nationalRank<=10)emit('recruit-self:'+p.id,'recruiting',{...values,family:'preseason.recruit.self',voice:'recruit'},{player:p.id,national:true,priority:78});
+  emit('recruit-watch:'+p.id,'recruiting',{...values,recruitStage:r.stage,schools:r.topSchools??[],family:'preseason.recruit.watch',voice:'beat'},{player:p.id,national:true,priority:r.nationalRank===1?93:81});
+  if(r.nationalRank<=10)emit('recruit-self:'+p.id,'recruiting',{...values,recruitStage:r.stage,schools:r.topSchools??[],family:'preseason.recruit.self',voice:'recruit'},{player:p.id,national:true,priority:78});
  }
- return events;
+ // Spring is not the fall launch: real recruiting may continue, unchanged
+ // polls/honors/hype/openers wait for fall. A quiet edition needs no filler.
+ return publicationContext==='spring'?events.filter(e=>e.category==='recruiting'):events;
 }

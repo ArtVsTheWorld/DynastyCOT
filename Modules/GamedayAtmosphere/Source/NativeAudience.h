@@ -95,6 +95,15 @@ inline bool capture(A image,A manager,A gameRef,turnout::Seed& s,const Api* supp
     if(!r.integer(franchise.p,0x1c,s.dynasty))return trace.fail("Franchise LeagueID field unavailable");
     if(!s.dynasty)return trace.fail("Franchise LeagueID is zero");
     if(!r.value(gameRef,game)||!game)return trace.fail("launch game record unavailable");
+    if(s.spring){
+        const bool homeSide=s.springSide==0;auto& actual=homeSide?s.home:s.away;
+        Record school(r);trace.side=homeSide?"spring home actual school":"spring away actual school";
+        if(!r.related(game,homeSide?0x2a:0x12,school.p)||!school.p||!team(r,school.p,actual)||!actual.prestigeKnown||
+           !turnout::native::school(r,school.p,actual))return trace.fail("spring actual-school support/prestige unavailable");
+        if(!program(r,school.p,actual,s.year,api,trace))return false;
+        actual.program.ap=0; // No current competitive poll appeal for an exhibition.
+        return true;
+    }
     trace.side="home";
     if(!r.related(game,0x2a,home.p)||!home.p)return trace.fail("home team record unavailable");
     if(!program(r,home.p,s.home,s.year,api,trace))return false;

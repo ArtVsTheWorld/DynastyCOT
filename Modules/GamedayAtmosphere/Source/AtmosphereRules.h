@@ -34,6 +34,12 @@ struct History {
     bool observe(const Settings& c,const State& s,bool authoritativeQuarter=false){
         if(!valid(s)||(!authoritativeQuarter&&s.phase!=1&&s.phase!=5))return false;
         float now=elapsedGameTime(s);
+        if(springContext(s)){
+            // Native spring situations can rewind clocks/scores. They never
+            // establish competitive comeback/upset protection or rearm waves.
+            seen=true;elapsed=(std::max)(elapsed,now);lastHome=s.homeScore;lastAway=s.awayScore;
+            comeback=released=warningPending=upsetWatch=false;watchStage=0;return true;
+        }
         if(seen&&(now+0.01f<elapsed||s.homeScore<lastHome||s.awayScore<lastAway))return false;
         float crossing=4*s.quarterSeconds-120;
         if(seen&&!warningDone&&s.quarter==4&&s.quarterSeconds>120&&elapsed<crossing&&now>=crossing)warningPending=true;

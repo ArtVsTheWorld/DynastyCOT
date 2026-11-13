@@ -23,22 +23,24 @@ inline std::string identity(const std::string& league,const Json& v){
     const auto birth=v.value("PLYR_BIRTHDATE",int64_t(0));
     return digest(Json::array({league,v.at("PresentationId"),v.at("FirstName"),v.at("LastName"),v.at("PLYR_HOME_TOWN"),v.at("PLYR_HOME_STATE"),birth>0?Json(birth):Json(nullptr)}).dump());
 }
-struct NativeEntry {uint32_t nativeId=0;std::string first,last,identity;bool highSchool=false,juniorCollege=false,redshirt=false;std::string classYear;Prospect prospect;Json saved,actual;};
+struct NativeEntry {uint32_t nativeId=0;std::string first,last,identity,homePipeline;bool highSchool=false,juniorCollege=false,redshirt=false;std::string classYear;Prospect prospect;Json saved,actual;};
 inline std::string nativeClassYear(const std::string& value){
     if(value.find("Freshman")!=std::string::npos)return "FR";if(value.find("Sophomore")!=std::string::npos)return "SO";
     if(value.find("Junior")!=std::string::npos)return "JR";if(value.find("Senior")!=std::string::npos)return "SR";return {};
 }
 inline std::string nativeTransferClass(const NativeEntry& entry){
     if(entry.highSchool||entry.juniorCollege||entry.classYear.empty())return {};
-    return "TR ("+entry.classYear+(entry.redshirt?" RS)":")");
+    // Native recruiting list cards reserve a short fixed-width class cell.
+    // Keep transfer/year/redshirt information without growing into stage text.
+    return "TR "+std::string(entry.redshirt?"RS":"")+entry.classYear;
 }
 inline std::string nativeRecruitClassLabel(const NativeEntry& entry,const char* original){
     if(!original||entry.classYear.empty()||std::string(original).find(entry.classYear)==std::string::npos)return {};
-    if(entry.juniorCollege)return entry.saved.at("competitionClass").get<std::string>()+" ("+entry.classYear+")";
+    if(entry.juniorCollege)return entry.saved.at("competitionClass").get<std::string>()+" "+entry.classYear;
     // Use the same compact transfer label in tables and profile panels.
     return nativeTransferClass(entry);
 }
-struct NativeClass {std::string league;int season=0,relativeYear=0;std::set<std::string> activeSchools;std::map<int,std::string> teams;std::map<uint32_t,NativeEntry> entries;std::map<uint32_t,std::pair<std::string,std::string>> unavailable;};
+struct NativeClass {std::string league;int season=0,relativeYear=0;std::set<std::string> activeSchools;std::map<int,std::string> teams;std::map<uint32_t,NativeEntry> entries;std::map<uint32_t,std::pair<std::string,std::string>> unavailable;std::set<uint32_t> unavailableTransfers;};
 inline NativeClass parseNativeClass(const Json& raw){
     if(raw.at("format")!=1||raw.at("sourceKind")!="runtime")throw std::runtime_error("Not a native resume snapshot");
     NativeClass result;result.league=std::to_string(static_cast<uint32_t>(raw.at("status").at("league").get<int64_t>()));result.season=raw.at("status").at("season").at("CurrentSeasonYear");
@@ -60,16 +62,16 @@ inline NativeClass parseNativeClass(const Json& raw){
         // manufacture a new identity/record when that optional context is absent.
         // Other prospects remain usable and old journal entries stay untouched.
         if(!v.contains("PLYR_HOME_TOWN")||!v.at("PLYR_HOME_TOWN").is_string()||!v.contains("PLYR_HOME_STATE")||!v.at("PLYR_HOME_STATE").is_string()){
-            result.unavailable.emplace(entry.nativeId,std::make_pair(entry.first,entry.last));continue;
+            result.unavailable.emplace(entry.nativeId,std::make_pair(entry.first,entry.last));if(r.at("Class").is_string()&&r.at("Class").get<std::string>().rfind("Transfer_",0)==0)result.unavailableTransfers.insert(entry.nativeId);continue;
         }
         const auto classification=r.at("Class").get<std::string>();entry.juniorCollege=classification.rfind("JuniorCollege_",0)==0;
         entry.classYear=nativeClassYear(classification);
         if(!entry.highSchool&&!entry.juniorCollege){if(entry.classYear.empty())entry.classYear=nativeClassYear(v.value("SchoolYear",std::string()));entry.redshirt=v.value("RedshirtStatus",std::string())=="Previous";}
         {
-            Prospect p;p.identity=identity(result.league,v);p.name=entry.first+" "+entry.last;p.position=v.at("Position");p.state=v.at("PLYR_HOME_STATE");p.town=v.at("PLYR_HOME_TOWN");p.development=v.at("TraitDevelopment");p.stateRank=stateRank(p.state);
+            Prospect p;p.identity=identity(result.league,v);p.name=entry.first+" "+entry.last;p.position=v.at("Position");p.state=v.at("PLYR_HOME_STATE");p.town=v.at("PLYR_HOME_TOWN");p.development=v.at("TraitDevelopment");p.stateRank=stateRank(p.state);p.height=v.value("Height",0);p.nationalRank=r.value("NationalRank",0);for(auto alternateKey:{"AlternatePosition1","AlternatePosition2"}){auto alt=r.value(alternateKey,std::string());if(!alt.empty()&&alt!="Invalid_")p.alternatePositions.push_back(alt);}
             const std::map<std::string,int> stars={{"ONE_STAR",1},{"TWO_STAR",2},{"THREE_STAR",3},{"FOUR_STAR",4},{"FIVE_STAR",5}};const auto star=stars.find(v.value("ProspectStarRating",std::string()));p.stars=star==stars.end()?3:star->second;
             for(auto it=v.begin();it!=v.end();++it)if(it.key().size()>=6&&it.key().substr(it.key().size()-6)=="Rating"&&it.value().is_number())p.ratings[it.key()]=it.value().get<double>();
-            if(!identities.insert(p.identity).second)throw std::runtime_error("Duplicate recruit identity");entry.identity=p.identity;entry.prospect=std::move(p);
+            if(!identities.insert(p.identity).second)throw std::runtime_error("Duplicate recruit identity");entry.homePipeline=v.value("HomePipeline",std::string());entry.identity=p.identity;entry.prospect=std::move(p);
             if(!entry.highSchool&&!entry.juniorCollege)entry.actual=transferSeason(records,v,result.relativeYear,result.teams);
         }
         if(!result.entries.emplace(entry.nativeId,std::move(entry)).second)throw std::runtime_error("Duplicate native recruit serial");

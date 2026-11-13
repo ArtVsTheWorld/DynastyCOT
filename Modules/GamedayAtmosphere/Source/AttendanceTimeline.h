@@ -87,7 +87,8 @@ struct Archive {
             if(sourceGame&&g->id!=sourceGame)continue;
             if(!g->resumeReady)continue;
             if(g->context.team0!=s.team0||g->context.team1!=s.team1||g->context.quarterSeconds!=s.quarterSeconds||g->context.playoff!=s.playoff||g->context.conferenceChampionship!=s.conferenceChampionship||g->context.bowl!=s.bowl||
-                g->context.rivalry!=s.rivalry||g->context.neutral!=s.neutral)continue;
+                g->context.rivalry!=s.rivalry||g->context.neutral!=s.neutral||g->context.spring!=s.spring)continue;
+            if(s.spring&&(g->context.springDynasty!=s.springDynasty||g->context.springSchool!=s.springSchool||g->context.springNumber!=s.springNumber||g->context.plannedYear!=s.plannedYear||g->context.plannedWeek!=s.plannedWeek))continue;
             // Native ranks and weather can refresh while a saved match loads.
             // A fixture-owned source ID removes that ambiguity; legacy callers
             // without ownership still need the stricter historical heuristic.
@@ -149,18 +150,21 @@ inline Bootstrap estimate(const Settings& c,const arrivals::Settings& a,State s,
         half.active=half.lastAbsent>0;half.done=!half.active;
     }
     if(!saved)out.temporary=(std::max)(ar.missing,bathroom);
+    if(spring::verified(s)){ar.missing=0;ar.active=false;ar.done=true;}
     out.history.warningPending=false;out.history.warningDone=s.quarter>=4&&s.seconds<=120;
     for(int q=2;q<=s.quarter&&q<=4;++q)out.history.quarterMask|=1u<<q;
     return out;
 }
 // Text format with explicit fields and bounded reads; never dumps native structs.
 inline void write(std::ostream& f,const Archive& a){
-    f<<"DGA-HISTORY-7 "<<a.games.size()<<'\n'<<std::setprecision(17);
+    f<<"DGA-HISTORY-8 "<<a.games.size()<<'\n'<<std::setprecision(17);
     for(const auto& g:a.games){
         const auto& s=g.context;f<<g.id<<' '<<s.team0<<' '<<s.team1<<' '<<s.quarterSeconds<<' '<<s.playoff<<' '<<s.bowl<<' '<<s.rank0<<' '<<s.rank1<<' '<<s.rivalry<<' '<<s.neutral<<' '<<s.precipitation<<' '<<g.points.size()<<' '<<s.variationSeed<<' '<<s.conferenceChampionship;
         bool plan=crowdPlan(s);f<<' '<<plan<<' '<<s.night;
         if(plan)f<<' '<<s.plannedKickoff<<' '<<s.plannedFill<<' '<<s.plannedPeak<<' '<<s.plannedCapacity<<' '<<s.plannedStadium<<' '<<s.plannedWeek<<' '<<s.plannedYear<<' '<<s.exceptionalOpening;
         f<<' '<<g.resumeReady;
+        f<<' '<<s.spring<<' '<<s.springSchool<<' '<<s.springDynasty<<' '<<s.springNumber;
+        if(s.spring)f<<' '<<s.plannedWeek<<' '<<s.plannedYear;
         f<<'\n';
         for(const auto& p:g.points){const auto& h=p.history;
             f<<p.time<<' '<<p.state.quarter<<' '<<p.state.seconds<<' '<<p.state.homeScore<<' '<<p.state.awayScore<<' '<<p.loss<<' '<<p.temporary<<' '<<p.periodStart<<' '
@@ -168,7 +172,7 @@ inline void write(std::ostream& f,const Archive& a){
     }
 }
 inline bool read(std::istream& f,Archive& target){
-    Archive a;std::string magic;size_t games=0;if(!(f>>magic>>games)||magic.size()!=13||magic.compare(0,12,"DGA-HISTORY-")||magic[12]<'1'||magic[12]>'7'||games>Archive::MaxGames)return false;
+    Archive a;std::string magic;size_t games=0;if(!(f>>magic>>games)||magic.size()!=13||magic.compare(0,12,"DGA-HISTORY-")||magic[12]<'1'||magic[12]>'8'||games>Archive::MaxGames)return false;
     const int version=magic[12]-'0';
     for(size_t i=0;i<games;++i){Game g;size_t count=0;int playoff=0,rivalry=0,neutral=0;
         if(!(f>>g.id>>g.context.team0>>g.context.team1>>g.context.quarterSeconds>>playoff>>g.context.bowl>>g.context.rank0>>g.context.rank1>>rivalry>>neutral>>g.context.precipitation>>count)||!g.id||count>Archive::MaxPoints||g.context.team0<0||g.context.team0>=2047||g.context.team1<0||g.context.team1>=2047||playoff<0||playoff>1||rivalry<0||rivalry>1||neutral<0||neutral>1||g.context.rank0< -1||g.context.rank0>256||g.context.rank1< -1||g.context.rank1>256||g.context.precipitation<0||g.context.precipitation>2||g.context.bowl<0||g.context.bowl>255||!std::isfinite(g.context.quarterSeconds)||g.context.quarterSeconds<60||g.context.quarterSeconds>1200)return false;
@@ -182,6 +186,11 @@ inline bool read(std::istream& f,Archive& target){
             }
         }
         if(version>=5){int ready=0;if(!(f>>ready)||ready<0||ready>1)return false;g.resumeReady=ready!=0;}
+        if(version>=8){auto& s=g.context;int springFlag=0;
+            if(!(f>>springFlag>>s.springSchool>>s.springDynasty>>s.springNumber)||springFlag<0||springFlag>1)return false;
+            s.spring=springFlag!=0;
+            if(s.spring&&(!(f>>s.plannedWeek>>s.plannedYear)||!spring::verified(s)||s.plannedWeek<0||s.plannedWeek>31||s.plannedYear<0||s.plannedYear>4095))return false;
+        }
         g.context.playoff=playoff!=0;g.context.rivalry=rivalry!=0;g.context.neutral=neutral!=0;double last=-1;
         for(size_t j=0;j<count;++j){Point p;p.sharedBudget=false;p.state=g.context;auto& h=p.history;int comeback=0,released=0;
             if(!(f>>p.time>>p.state.quarter>>p.state.seconds>>p.state.homeScore>>p.state.awayScore>>p.loss>>p.temporary>>p.periodStart>>comeback>>released>>h.maxDeficit>>h.bestDeficit>>h.watchStage>>h.comebackSide>>h.maxAwayDeficit>>h.deteriorationSince))return false;

@@ -5,6 +5,7 @@
 #include <cstdint>
 #include <limits>
 #include <numeric>
+#include <unordered_map>
 #include <vector>
 #include "SeatHash.h"
 #include "CrowdVisibility.h"
@@ -27,6 +28,24 @@ inline double noise(double x,double z,double scale=28,int seed=0){
     double a=value(ix,iz),b=value(ix+1,iz),c=value(ix,iz+1),d=value(ix+1,iz+1);
     return (a+(b-a)*tx)*(1-tz)+(c+(d-c)*tx)*tz;
 }
+// A preparation-local cache of grid-corner hashes. Nearby seats interpolate
+// the same corners; reuse those exact values without changing the seeded field.
+class NoiseCache {
+    double scale_;int seed_;std::unordered_map<uint64_t,double> corners_;
+    double value(int a,int b){
+        uint64_t key=(uint64_t(static_cast<uint32_t>(a))<<32)|static_cast<uint32_t>(b);
+        auto found=corners_.find(key);if(found!=corners_.end())return found->second;
+        double v=seed_?random({a,b,seed_}):random({a,b});corners_.emplace(key,v);return v;
+    }
+public:
+    NoiseCache(double scale,int seed):scale_(scale),seed_(seed){}
+    double sample(double x,double z){
+        double gx=x/scale_,gz=z/scale_;int ix=static_cast<int>(std::floor(gx)),iz=static_cast<int>(std::floor(gz));
+        double tx=gx-ix,tz=gz-iz;tx=tx*tx*(3-2*tx);tz=tz*tz*(3-2*tz);
+        double a=value(ix,iz),b=value(ix+1,iz),c=value(ix,iz+1),d=value(ix+1,iz+1);
+        return (a+(b-a)*tx)*(1-tz)+(c+(d-c)*tx)*tz;
+    }
+};
 inline double interpolate(double p,const std::array<double,4>& values){
     if(p<=.125)return values[0];if(p>=.875)return values[3];
     int k=(std::min)(2,static_cast<int>((p-.125)/.25));double t=(p-(.125+k*.25))/.25;t=t*t*(3-2*t);
@@ -60,9 +79,11 @@ inline double distance(const Position& p){
     double x=(std::max)(std::abs(static_cast<double>(p.x))-24.384,0.0),z=(std::max)(std::abs(static_cast<double>(p.z))-54.864,0.0);
     return std::sqrt(x*x+z*z+static_cast<double>(p.y)*p.y);
 }
-inline bool normalize(const std::vector<double>& weights,size_t target,std::vector<double>& probabilities){
+// The builder validates and totals weights while producing them. Reusing that
+// exact sum avoids a second full pass at every one-percent departure level.
+inline bool normalizeWithTotal(const std::vector<double>& weights,size_t target,double total,std::vector<double>& probabilities){
     if(weights.empty()||!target||target>=weights.size())return false;
-    double total=0;for(double w:weights){if(!std::isfinite(w)||w<=0)return false;total+=w;}
+    if(!std::isfinite(total)||total<=0)return false;
     double scale=static_cast<double>(target)/total;size_t previous=0;
     for(unsigned iteration=0;iteration<128;++iteration){
         size_t capped=0;double uncapped=0;
@@ -72,6 +93,10 @@ inline bool normalize(const std::vector<double>& weights,size_t target,std::vect
         scale=static_cast<double>(target-capped)/uncapped;previous=capped;
     }
     return false;
+}
+inline bool normalize(const std::vector<double>& weights,size_t target,std::vector<double>& probabilities){
+    double total=0;for(double w:weights){if(!std::isfinite(w)||w<=0)return false;total+=w;}
+    return normalizeWithTotal(weights,target,total,probabilities);
 }
 // Reject unfamiliar geometry rather than infer a field transform from it.
 // Multiple renderers may cover only part of the bowl, so symmetry is not assumed.
@@ -95,6 +120,8 @@ inline Pattern build(const std::vector<Position>& positions,const std::vector<un
     std::sort(byDepth.begin(),byDepth.end(),[&](unsigned a,unsigned b){double da=distances[a],db=distances[b];return da==db?a<b:da<db;});
     std::vector<double> percentile(positions.size()),logWeight(positions.size()),area(positions.size()),choice(positions.size()),quality(positions.size());
     for(size_t k=0;k<n;++k)percentile[byDepth[k]]=(static_cast<double>(k)+.5)/static_cast<double>(n);
+    const int sectionSeed=static_cast<int>(seed%100000);
+    NoiseCache coarse(28,sectionSeed+11),middle(9,sectionSeed+27),broad(55,sectionSeed+59);
     for(unsigned i:ids){
         const auto& p=positions[i];double x=p.x,y=p.y,z=p.z,depth=percentile[i];
         // One continuous curve avoids density shoulders at seating-zone edges.
@@ -102,26 +129,37 @@ inline Pattern build(const std::vector<Position>& positions,const std::vector<un
         int fx=static_cast<int>(std::floor(x/1.8)),fy=static_cast<int>(std::floor(y)),fz=static_cast<int>(std::floor(z/1.8));
         int32_t rx=rounded(x*100),ry=rounded(y*100),rz=rounded(z*100);
         choice[i]=random({rx,ry,rz,117})<.32?random({rx,ry,rz,71}):random({fx,fy,fz});
-        int sectionSeed=static_cast<int>(seed%100000);
         // Uneven arrival/exit order across the entire bowl, with soft-edged
         // seating areas, families and scattered stragglers still overlapping.
-        area[i]=(.45*(2*noise(x,z,28,sectionSeed+11)-1)+.35*(2*noise(x+97,z-131,9,sectionSeed+27)-1)+
-            .20*(2*noise(x-33,z+51,55,sectionSeed+59)-1))*(.25+.75*std::pow(depth,1.2));
+        area[i]=(.45*(2*coarse.sample(x,z)-1)+.35*(2*middle.sample(x+97,z-131)-1)+
+            .20*(2*broad.sample(x-33,z+51)-1))*(.25+.75*std::pow(depth,1.2));
         quality[i]=desirability(p)-smallGroupGap(p,seed)*(1-smooth((depth-.4)/.3));
     }
     std::vector<unsigned> remaining=ids,order;order.reserve(n);
     std::vector<double> horizontal(n),weights(n),probabilities,probability(positions.size()),score(positions.size());
+    // These geometry-only values do not change over the 100 loss levels.
+    std::vector<unsigned char> zones(n),slots(n);std::vector<double> blends(n);std::array<size_t,4> counts{};
+    for(size_t k=0;k<n;++k){double p=percentile[ids[k]];zones[k]=static_cast<unsigned char>((std::min)(3u,static_cast<unsigned>(p*4)));++counts[zones[k]];
+        if(p<=.125){slots[k]=4;continue;}if(p>=.875){slots[k]=5;continue;}
+        int slot=(std::min)(2,static_cast<int>((p-.125)/.25));double t=(p-(.125+slot*.25))/.25;
+        slots[k]=static_cast<unsigned char>(slot);blends[k]=t*t*(3-2*t);
+    }
+    for(size_t count:counts)if(!count)return result;
     for(unsigned loss=1;loss<=100;++loss){
         size_t target=n-static_cast<uint64_t>(n)*loss/100;
         if(!target){
             std::sort(remaining.begin(),remaining.end(),[&](unsigned a,unsigned b){return score[a]==score[b]?a<b:score[a]<score[b];});
             order.insert(order.end(),remaining.begin(),remaining.end());break;
         }
-        double missing=static_cast<double>(loss)/100,blend=variationBlend(missing);std::array<double,4> sums{};std::array<size_t,4> counts{};
-        for(size_t k=0;k<n;++k){unsigned i=ids[k],zone=(std::min)(3u,static_cast<unsigned>(percentile[i]*4));horizontal[k]=std::exp(4.4*missing*area[i]);sums[zone]+=horizontal[k];++counts[zone];}
-        for(unsigned k=0;k<4;++k){if(!counts[k])return result;sums[k]/=static_cast<double>(counts[k]);}
-        for(size_t k=0;k<n;++k){unsigned i=ids[k];weights[k]=std::exp(2.3*missing*(logWeight[i]+blend*quality[i]))*horizontal[k]/interpolate(percentile[i],sums);}
-        if(!normalize(weights,target,probabilities))return result;
+        double missing=static_cast<double>(loss)/100,blend=variationBlend(missing);std::array<double,4> sums{};
+        for(size_t k=0;k<n;++k){unsigned i=ids[k];horizontal[k]=std::exp(4.4*missing*area[i]);sums[zones[k]]+=horizontal[k];}
+        for(unsigned k=0;k<4;++k)sums[k]/=static_cast<double>(counts[k]);
+        double total=0;
+        for(size_t k=0;k<n;++k){unsigned i=ids[k],slot=slots[k];double divisor=slot==4?sums[0]:slot==5?sums[3]:sums[slot]+(sums[slot+1]-sums[slot])*blends[k];
+            weights[k]=std::exp(2.3*missing*(logWeight[i]+blend*quality[i]))*horizontal[k]/divisor;
+            if(!std::isfinite(weights[k])||weights[k]<=0)return result;total+=weights[k];
+        }
+        if(!normalizeWithTotal(weights,target,total,probabilities))return result;
         for(size_t k=0;k<n;++k)probability[ids[k]]=probabilities[k];
         for(unsigned i:remaining)score[i]=choice[i]/(std::max)(1e-15,probability[i]);
         auto compare=[&](unsigned a,unsigned b){return score[a]==score[b]?a<b:score[a]<score[b];};

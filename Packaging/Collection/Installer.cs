@@ -22,11 +22,9 @@ namespace DynastyCOT.Collection {
     try{assembly=AssemblyName.GetAssemblyName(file).Name;}catch(BadImageFormatException){}catch(FileLoadException){}
     string owner=name.Equals("DynastyCOT",StringComparison.OrdinalIgnoreCase)||assembly=="DynastyCOT"?"Core":null;
     foreach(var m in Catalog.Modules)if(m.Aliases.Concat(new[]{m.Id}).Any(x=>String.Equals(x,name,StringComparison.OrdinalIgnoreCase)||String.Equals(x,assembly,StringComparison.OrdinalIgnoreCase)))owner=m.Id;
-    if(new[]{"BeyondTheFieldNative","BeyondTheFieldRecruitFog","DynastyEnhancerNative","DynastyEnhancerRecruitFog","PlayerAnalyticsNative"}.Any(x=>name.StartsWith(x,StringComparison.OrdinalIgnoreCase)))owner="BeyondTheField";
-    if(new[]{"GamedayAtmosphereNative","DynamicGamedayAtmosphereNative","DynamicAttendanceNative"}.Any(x=>name.StartsWith(x,StringComparison.OrdinalIgnoreCase)))owner="GamedayAtmosphere";
-    var known=Catalog.KnownPlugins.FirstOrDefault(x=>x.Path.Equals(relative,StringComparison.OrdinalIgnoreCase));if(owner==null&&known!=null)owner=known.Module;
-    if(owner==null)continue;
-    string hash=Paths.HashFile(file),version="unknown";try{var v=FileVersionInfo.GetVersionInfo(file).FileVersion;if(v!=null){var parsed=new Version(v);version=parsed.Major+"."+parsed.Minor+"."+Math.Max(0,parsed.Build);}}catch(ArgumentException){}
+    var known=Catalog.KnownPlugins.Concat(Catalog.Programs).FirstOrDefault(x=>x.Path.Equals(relative,StringComparison.OrdinalIgnoreCase));if(owner==null&&known!=null)owner=known.Module;
+    string nativeHash=null;if(owner==null&&assembly==null){nativeHash=Paths.HashFile(file);var identified=Catalog.KnownPlugins.Concat(Catalog.Programs).FirstOrDefault(x=>x.Sha256==nativeHash);if(identified!=null)owner=identified.Module;}if(owner==null)continue;
+    string hash=nativeHash??Paths.HashFile(file),version="unknown";try{var v=FileVersionInfo.GetVersionInfo(file).FileVersion;if(v!=null){var parsed=new Version(v);version=parsed.Major+"."+parsed.Minor+"."+Math.Max(0,parsed.Build);}}catch(ArgumentException){}
     bool trusted=Catalog.KnownPlugins.Concat(Catalog.Programs).Any(x=>x.Module==owner&&x.Sha256==hash)||result.Receipt.Modules.Any(x=>x.Module==owner&&x.Sha256==hash&&x.Version==version);result.Plugins.Add(new Plugin{Path=relative,Module=owner,Sha256=hash,Version=version,Known=trusted});if(owner=="Core")result.LegacyHost=true;
    }}
    foreach(var module in Catalog.Modules)result.LegacyEnabled[module.Id]=true;
@@ -36,6 +34,7 @@ namespace DynastyCOT.Collection {
    }}return result;
   }
   static string Key(Module m){return "Plugins/"+m.FileName;}
+  internal static bool SupportPath(string path,string module,string version){return module=="GamedayAtmosphere"&&path=="COT-Support/"+module+"/"+version+"/GamedayAtmosphereNative-"+version+".dll";}
   void Add(Plan plan,string path,byte[] content,string owner,bool deferred=false){
    if(plan.Operations.Any(x=>x.Path.Equals(path,StringComparison.OrdinalIgnoreCase)))throw new IOException("Duplicate operation.");string file=Paths.Resolve(plan.Root,path),before=Paths.Existing(file),after=content==null?null:Paths.Hash(content);if(!deferred&&before==after)return;
    plan.Operations.Add(new Operation{Path=path,Before=before,After=after,Module=owner,Deferred=deferred});if(content!=null)plan.Content[path]=content;
@@ -47,10 +46,17 @@ namespace DynastyCOT.Collection {
    var prepared=payloads.ToDictionary(x=>x.Module.Id);
    foreach(var entry in selected){var m=Catalog.Get(entry.Key);var target=entry.Value;var current=inventory.Plugins.SingleOrDefault(x=>x.Path.Equals(Key(m),StringComparison.OrdinalIgnoreCase));
     if(current!=null&&current.Version!="unknown"&&ReleaseRules.Numeric(current.Version)>ReleaseRules.Numeric(target.Version)&&(approvedDowngrades==null||!approvedDowngrades.Contains(m.Id)))throw new IOException("Downgrading "+m.Title+" requires choosing and confirming that older version.");
-    if(current==null||current.Sha256!=target.DllSha256){PreparedModule p;if(!prepared.TryGetValue(m.Id,out p)||p.Release.Version!=target.Version||p.Release.ArchiveSha256!=target.ArchiveSha256||Paths.HashFile(p.Dll)!=target.DllSha256)throw new IOException("The selected "+m.Title+" payload has not been verified.");
+    bool supportNeedsRepair=Catalog.Programs.Any(p=>p.Module==m.Id&&SupportPath(p.Path,m.Id,target.Version)&&Paths.Existing(Paths.Resolve(root,p.Path))!=p.Sha256);
+    if(current==null||current.Sha256!=target.DllSha256||supportNeedsRepair){PreparedModule p;if(!prepared.TryGetValue(m.Id,out p)||p.Release.Version!=target.Version||p.Release.ArchiveSha256!=target.ArchiveSha256||Paths.HashFile(p.Dll)!=target.DllSha256)throw new IOException("The selected "+m.Title+" payload has not been verified.");
      Add(plan,Key(m),File.ReadAllBytes(p.Dll),m.Id);Add(plan,"COT-Collection/Modules/"+m.Id+"/README.txt",p.Readme,m.Id);Add(plan,"COT-Collection/Modules/"+m.Id+"/FEATURES.md",p.Features,m.Id);plan.Programs.AddRange(p.Programs);
+     foreach(var support in p.SupportFiles){if(!SupportPath(support.Key,m.Id,target.Version))throw new IOException("Invalid native support path.");Add(plan,support.Key,support.Value,m.Id);}
     }
     foreach(var old in inventory.Plugins.Where(x=>x.Module==m.Id&&!x.Path.Equals(Key(m),StringComparison.OrdinalIgnoreCase)))Add(plan,old.Path,null,m.Id);
+    // Only exact catalogued code paths and bytes are retired. No settings or
+    // arbitrary files sharing a prefix are eligible. Backups live in AppData.
+    foreach(var old in Catalog.Programs.Where(x=>x.Module==m.Id&&x.Path.StartsWith("Plugins/",StringComparison.OrdinalIgnoreCase)).GroupBy(x=>x.Path,StringComparer.OrdinalIgnoreCase)){
+     string actual=Paths.Existing(Paths.Resolve(root,old.Key));if(actual!=null&&old.Any(x=>x.Sha256==actual)&&!plan.Operations.Any(x=>x.Path.Equals(old.Key,StringComparison.OrdinalIgnoreCase)))Add(plan,old.Key,null,m.Id);
+    }
     receipt.Modules.RemoveAll(x=>x.Module==m.Id);receipt.Modules.Add(new Installed{Module=m.Id,Version=target.Version,Sha256=target.DllSha256});
    }
    if(inventory.LegacyHost){foreach(var host in inventory.Plugins.Where(x=>x.Module=="Core"))Add(plan,host.Path,null,"Core");SnapshotLegacyPrograms(plan);}
@@ -61,6 +67,7 @@ namespace DynastyCOT.Collection {
    string root=Paths.ValidateRoot(value);var ids=new HashSet<string>(selected);if(ids.Count==0)throw new IOException("Select modules to remove.");foreach(string id in ids)Catalog.Get(id);
    var inv=Inspect(root);var plan=new Plan{Root=root,Action="Remove selected modules",Inventory=inv};foreach(var plugin in inv.Plugins.Where(x=>ids.Contains(x.Module)))Add(plan,plugin.Path,null,plugin.Module);
    foreach(string id in ids){inv.Receipt.Modules.RemoveAll(x=>x.Module==id);foreach(string name in new[]{"README.txt","FEATURES.md"})Add(plan,"COT-Collection/Modules/"+id+"/"+name,null,id);}
+   foreach(string id in ids)foreach(var support in Catalog.Programs.Where(p=>p.Module==id&&p.Path.StartsWith("COT-Support/"))){string file=Paths.Resolve(root,support.Path);if(Paths.Existing(file)==support.Sha256)Add(plan,support.Path,null,id);}
    if(inv.LegacyHost){var choices=new Dictionary<string,bool>();foreach(var m in Catalog.Modules)choices[m.LegacyId]=inv.LegacyEnabled[m.Id]&&!ids.Contains(m.Id);
     if(choices.Values.Any(x=>x))Add(plan,"Plugins/DynastyCOT/settings.json",Json.Bytes(new{format=1,modules=choices}),"Core");else foreach(var host in inv.Plugins.Where(x=>x.Module=="Core"))Add(plan,host.Path,null,"Core");
    }
@@ -79,10 +86,10 @@ namespace DynastyCOT.Collection {
      bool embedded=System.Text.RegularExpressions.Regex.IsMatch(path,@"^DGA-Runtime/Runtime-\d+[.]\d+[.]\d+/(?:DgaDiagnostics[.]exe|(?:DynamicGamedayAtmosphere|GamedayAtmosphere)Native-\d+[.]\d+[.]\d+[.]dll)$")&&Catalog.Programs.Any(x=>x.Module=="GamedayAtmosphere"&&x.Path==path&&x.Sha256==hash)&&plan.Inventory.Plugins.Any(x=>x.Module=="Core"&&x.Known);
      if(!embedded)throw new IOException("Old COT program file is missing: "+path+". Repair the old install before migration.");Add(plan,path,null,"Runtime",true);continue;
     }
-    string actual=Paths.HashFile(file);if(!Catalog.Programs.Any(x=>x.Path.Equals(path,StringComparison.OrdinalIgnoreCase)&&x.Sha256==actual))throw new IOException("Old COT program file is unrecognized: "+path+". No program files were changed.");Add(plan,path,null,"Runtime",true);
+    string actual=Paths.HashFile(file);if(!Catalog.Programs.Any(x=>x.Path.Equals(path,StringComparison.OrdinalIgnoreCase)&&x.Sha256==actual))throw new IOException("Old COT program file is unrecognized: "+path+". No program files were changed.");if(!plan.Operations.Any(x=>x.Path.Equals(path,StringComparison.OrdinalIgnoreCase)))Add(plan,path,null,"Runtime",true);
    }
    foreach(var module in Catalog.Modules.Where(x=>plan.Inventory.LegacyEnabled[x.Id]&&x.Id!="GamedayAtmosphere")){
-    bool covered=plan.Operations.Any(x=>x.Deferred&&(module.Id=="BeyondTheField"?x.Path.StartsWith("COT-Runtime/DynastyEnhancer/")&&x.Path.EndsWith(".dll"):module.Id=="ExtraSettings"?x.Path.StartsWith("Plugins/OfflineDynastySettings/")&&x.Path.EndsWith(".exe"):x.Path.StartsWith("Plugins/SituationalPractice/")&&x.Path.EndsWith(".exe")));
+    bool covered=plan.Operations.Any(x=>(module.Id=="BeyondTheField"?x.Path.StartsWith("COT-Runtime/DynastyEnhancer/")&&x.Path.EndsWith(".dll"):module.Id=="ExtraSettings"?x.Path.StartsWith("Plugins/OfflineDynastySettings/")&&x.Path.EndsWith(".exe"):x.Path.StartsWith("Plugins/SituationalPractice/")&&x.Path.EndsWith(".exe")));
     if(!covered)throw new IOException("Old COT receipt is missing the matching program files for "+module.Title+". Repair that receipt before migration so rollback remains complete.");
    }
   }
@@ -90,7 +97,8 @@ namespace DynastyCOT.Collection {
   void Finish(Plan plan){plan.Summary=String.Join(Environment.NewLine,plan.Operations.Select(x=>(x.Deferred?"Back up for old-COT rollback: ":x.After==null?"Remove duplicate/plugin: ":x.Before==null?"Install: ":"Update: ")+x.Path));}
   internal List<Plugin> Review(Plan plan){return plan.Inventory.Plugins.Where(x=>!x.Known&&plan.Operations.Any(o=>o.Path.Equals(x.Path,StringComparison.OrdinalIgnoreCase))).ToList();}
   bool Allowed(Operation op){
-   Paths.Relative(op.Path);if(op.Module=="Runtime")return op.Deferred&&ProgramPath(op.Path)&&Catalog.Programs.Any(x=>x.Path.Equals(op.Path,StringComparison.OrdinalIgnoreCase))&&op.After==null;
+   if(op.Path.StartsWith("COT-Support/",StringComparison.Ordinal)){var parts=op.Path.Split('/');return parts.Length==4&&SupportPath(op.Path,op.Module,parts[2])&&System.Text.RegularExpressions.Regex.IsMatch(parts[2],@"^\d+[.]\d+[.]\d+$");}
+   Paths.Relative(op.Path);if(op.After==null&&!op.Deferred&&Catalog.Programs.Any(x=>x.Module==op.Module&&x.Path.Equals(op.Path,StringComparison.OrdinalIgnoreCase)&&x.Sha256==op.Before))return true;if(op.Module=="Runtime")return op.Deferred&&ProgramPath(op.Path)&&Catalog.Programs.Any(x=>x.Path.Equals(op.Path,StringComparison.OrdinalIgnoreCase))&&op.After==null;
    if(op.Path==Paths.State||op.Path=="Plugins/DynastyCOT/settings.json")return op.Module=="Core";
    if(op.Path.StartsWith("COT-Collection/Modules/")){return Catalog.Modules.Any(m=>m.Id==op.Module&&new[]{"COT-Collection/Modules/"+m.Id+"/README.txt","COT-Collection/Modules/"+m.Id+"/FEATURES.md"}.Contains(op.Path));}
    return op.Path.StartsWith("Plugins/",StringComparison.Ordinal)&&op.Path.EndsWith(".dll",StringComparison.OrdinalIgnoreCase)&&(op.Module=="Core"||Catalog.Modules.Any(m=>m.Id==op.Module));
@@ -109,7 +117,7 @@ namespace DynastyCOT.Collection {
      string directory=Paths.Resolve(root,Paths.Backups+"/"+DateTime.UtcNow.ToString("yyyyMMddTHHmmssfff")+"-"+Guid.NewGuid().ToString("N"));Directory.CreateDirectory(directory);
      var journal=new Journal{Root=root,Status="preparing",Action=plan.Action,Created=DateTime.Now.ToString("yyyy-MM-dd HH:mm"),Programs=plan.Programs};
      foreach(var op in plan.Operations){op.Backup=journal.Operations.Count.ToString("D4")+".bak";if(op.Before!=null){File.Copy(Paths.Resolve(root,op.Path),Path.Combine(directory,op.Backup));if(Paths.HashFile(Path.Combine(directory,op.Backup))!=op.Before)throw new IOException("Backup verification failed.");}journal.Operations.Add(op);}Save(directory,journal);journal.Status="installing";Save(directory,journal);
-     try{int count=0;foreach(var op in journal.Operations){if(op.Deferred)continue;progress((op.After==null?"Removing ":"Installing ")+op.Path);if(op.After==null){if(File.Exists(Paths.Resolve(root,op.Path)))File.Delete(Paths.Resolve(root,op.Path));}else Paths.Atomic(Paths.Resolve(root,op.Path),plan.Content[op.Path]);if(Paths.Existing(Paths.Resolve(root,op.Path))!=op.After)throw new IOException("Installed file verification failed.");if(++count==faultAfter)throw new IOException("Injected transaction failure.");}
+     try{int count=0;foreach(var op in journal.Operations){if(op.Deferred)continue;progress((op.After==null?"Removing ":"Installing ")+op.Path);try{if(op.After==null){if(File.Exists(Paths.Resolve(root,op.Path)))File.Delete(Paths.Resolve(root,op.Path));}else Paths.Atomic(Paths.Resolve(root,op.Path),plan.Content[op.Path]);}catch(Exception error){if(!(error is IOException)&&!(error is UnauthorizedAccessException))throw;throw new IOException("Could not "+(op.After==null?"retire":"install")+" file: "+Paths.Resolve(root,op.Path)+". "+error.Message,error);}if(Paths.Existing(Paths.Resolve(root,op.Path))!=op.After)throw new IOException("Installed file verification failed.");if(++count==faultAfter)throw new IOException("Injected transaction failure.");}
       journal.Status="committed";Save(directory,journal);AppendLog(root,plan.Action+" completed; backup "+Path.GetFileName(directory));return directory;
      }catch(Exception failure){try{RestoreCore(directory,journal,true);throw new IOException("Operation failed; previous managed files were restored. "+failure.Message,failure);}catch(IOException restore){if(journal.Status=="rolled_back")throw;journal.Status="restore_failed";Save(directory,journal);throw new IOException("Operation failed and automatic restoration needs attention. Keep backup "+directory+". "+restore.Message,failure);}}
     }finally{mutex.ReleaseMutex();}

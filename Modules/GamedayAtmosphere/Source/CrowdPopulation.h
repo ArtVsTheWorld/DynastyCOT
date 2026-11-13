@@ -10,10 +10,17 @@ inline double occupied(uint64_t positions,float fullness){
 inline float presence(uint64_t positions,float fullness){
     return static_cast<float>(std::sqrt((std::clamp)(occupied(positions,fullness)/packed::LargePositions,0.,1.)));
 }
-inline int size(uint64_t positions,float fullness){double count=occupied(positions,fullness);int tier=count<12000?1:count<36000?2:3;return (std::min)(tier,fullness<.30f?1:fullness<.60f?2:3);}
+inline int sizeForCount(double count,float fullness){
+    // Mapped occupied spectators, not the native attendance/capacity figure.
+    // A small venue can still sound medium when normally attended; a very
+    // sparse large venue remains small even with several thousand spectators.
+    if(!std::isfinite(count)||count<3000||!std::isfinite(fullness)||fullness<.10f)return 1;
+    return count>=36000&&fullness>=.60f?3:2;
+}
+inline int size(uint64_t positions,float fullness){return sizeForCount(occupied(positions,fullness),fullness);}
 inline bool reactionFamily(int type){return catalog::usable(type);}
 inline bool negative(int type){return catalog::negative(type);}
-inline int reactionType(int type,int sizeCode){return catalog::selector(type,sizeCode);}
+inline int reactionType(int type,int sizeCode){if(catalog::usable(type)&&sizeCode>=2)type=(type/4)*4+(std::max)(2,type%4);return catalog::selector(type,sizeCode);}
 // Replace the existing density-presence factor for DGA's added layer intent.
 // Native excitement/cheer peaks, background quieting and volume caps remain
 // with their existing owners. Apply once, before final-play intent capture.

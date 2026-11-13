@@ -6,8 +6,10 @@
 #include <array>
 #include "StartingAttendanceTransition.h"
 #include "MatchupClass.h"
+#include "SpringIdentity.h"
 #include "ShowcaseAttendance.h"
 #include "AudienceModel.h"
+#include "VisitorDemandModel.h"
 
 namespace attendance::turnout {
 // Expected settled turnout, not the number already in their seats at kickoff.
@@ -24,6 +26,7 @@ struct Team {
     float opponentRetention=0; // Evidence-based home support; custom/unmapped defaults to none.
     float latitude=NAN,longitude=NAN; // Loaded City coordinates; optional, never school-ID geography.
     double stateLatitude=NAN,stateLongitude=NAN; // Optional, resolved by verified StateName metadata.
+    bool prestigeKnown=false; // Set only by a verified native TeamPrestige read.
     bool militaryKnown=false,military=false; // Native Team.IsMilitary, not an academy-ID list.
     int recordRow=-1; // Owned native Team row; also available without history/grades.
 };
@@ -31,15 +34,26 @@ struct Seed {
     Team home,away;
     int stadium=-1,homeStadium=-1,homeAlternate=-1,capacity=0,schools=0,week=-1,year=0,ea=0,roof=0;
     bool regular=false,resumed=false,lastHome=false,scheduleKnown=false;
+    bool spring=false;int springSchool=-1,springSide=-1,springNumber=-1;
+    int springType=-1,springRoleEvidence=0,springStamp=-1;bool springNumberKnown=false;bool regenerateCrowd=false;
     uint64_t serial=0,observed=0,dynastyVerifiedAt=0,dynastyGeneration=0;
     int dynasty=0;
+    bool bowlFixture=false; // Supported season type plus an owned native Bowl relationship.
+    bool bowlRelated=false,practiceFixture=false; // Captured proof inputs, also used by diagnostics.
 };
+// CFB27's verified SeasonWeekType retains engine names: RegularSeason=1,
+// Wildcard/Divisional/ConferencePlayoff=2/3/4, SuperBowl(final)=5.
+// Preseason, ProBowl, generic PostSeason, OffSeason and unknown values are not
+// competitive fixture proof. A real owned Bowl relationship is still mandatory.
+inline bool bowlFixtureProof(int type,bool practice,bool bowlRelated){return !practice&&bowlRelated&&type>=1&&type<=5;}
 struct Launch {
     int home=-1,away=-1,stadium=-1,capacity=0,ea=0,minutes=-1,precipitation=-1;
     bool rivalry=false,neutral=false,senior=false,seniorKnown=false;
     bool dynamicWeather=false,weatherKnown=true;int configuredPrecipitation=-1;
     int rivalryEvent=-1;
+    int bowl=127; // Native no-bowl sentinel; never authorize postseason turnout writes.
 };
+inline bool turnoutEligible(const Seed& s,const Launch& l){return s.regular&&!s.resumed&&!s.bowlFixture&&l.bowl==127;}
 struct Result {
     bool applied=false,night=false,exceptional=false,fuller=false;
     int attendance=0,kickoff=55,fillPercent=50;
@@ -49,7 +63,7 @@ struct Result {
     float breakout=0,eventMultiplier=1,openerBoost=0,nightBoost=0,seniorBoost=0,stateBoost=0,academyBoost=0,accessBonus=0,profileBoost=0;
     int showcaseEvent=-1;
     bool audienceModel=false;double audienceFans=0;
-    float opponentRelief=0;
+    float opponentRelief=0,capacityLimit=100;
 };
 inline bool lateArrivalSchool(int team){return team==1212||team==1158||team==1137||team==1156||team==1218||team==1216||team==1223;}
 inline bool fcs(int id){return id>=1500&&id<=1504;}
@@ -66,8 +80,9 @@ inline bool assignStandings(std::vector<Team>& teams){
     int n=static_cast<int>(teams.size());if(n<100||n>256)return false;
     for(int i=0;i<n;++i){if(!grades(teams[i])||teams[i].rank<1||teams[i].rank>n||teams[i].prestige<0||teams[i].prestige>10||teams[i].apRank<0||teams[i].apRank>256||fcs(teams[i].id))return false;
         for(int j=0;j<i;++j)if(teams[i].id==teams[j].id)return false;}
-    for(auto& t:teams){float score=support(t,n);int lower=0,equal=0;
-        for(const auto& other:teams){float delta=support(other,n)-score;if(delta<-.000001f)++lower;else if(std::fabs(delta)<=.000001f)++equal;}
+    std::vector<float> scores;scores.reserve(teams.size());for(const auto& t:teams)scores.push_back(support(t,n));
+    for(size_t at=0;at<teams.size();++at){auto& t=teams[at];float score=scores[at];int lower=0,equal=0;
+        for(float other:scores){float delta=other-score;if(delta<-.000001f)++lower;else if(std::fabs(delta)<=.000001f)++equal;}
         t.standing=(lower+.5f*(equal-1))/(n-1); // Equal inputs receive equal demand, independent of IDs/order.
     }return true;
 }
@@ -143,7 +158,7 @@ inline void applyShowcase(const Seed& s,const Launch& l,Result& r){
 }
 inline Result calculate(const Seed& s,const Launch& l,bool fuller=false){
     Result r;r.attendance=l.ea;
-    if(!s.regular||s.resumed||s.week<0||s.week>31||s.year<0||s.year>4095||s.schools<100||s.schools>512||!validTeam(s.home,s.schools)||!validTeam(s.away,s.schools)||
+    if(!turnoutEligible(s,l)||s.week<0||s.week>31||s.year<0||s.year>4095||s.schools<100||s.schools>512||!validTeam(s.home,s.schools)||!validTeam(s.away,s.schools)||
        s.home.id==s.away.id||l.home!=s.home.id||l.away!=s.away.id||l.stadium!=s.stadium||l.ea!=s.ea||
        l.capacity<1000||l.capacity>200000||l.ea<1||l.ea>l.capacity*2||l.minutes<0||l.minutes>=1440||l.precipitation<0||l.precipitation>3||
        !grades(s.home)||!std::isfinite(s.home.standing)||s.home.standing<0||s.home.standing>1||
@@ -190,7 +205,7 @@ inline Result calculate(const Seed& s,const Launch& l,bool fuller=false){
 }
 // Absolute audience model. Legacy calculation supplies unchanged arrival,
 // identity, event and showcase policies; it is not a fallback peak formula.
-inline Result calculateAudience(const Seed& s,const Launch& l,bool fuller=false){
+inline Result calculateAudienceLegacy(const Seed& s,const Launch& l,bool fuller=false){
     auto r=calculate(s,l,fuller);
     if(!r.applied||!std::isfinite(s.home.audienceFans)||s.home.audienceFans<=0||
        (l.neutral&&(!std::isfinite(s.away.audienceFans)||s.away.audienceFans<=0))){r.applied=false;return r;}
@@ -223,6 +238,45 @@ inline Result calculateAudience(const Seed& s,const Launch& l,bool fuller=false)
     r.exceptional=exceptional(r.percent,r.standing,s.home.id,s.home.rank,s.away.rank,l.neutral,r.night,l.rivalry,s.home.homeGames==0);
     applyShowcase(s,l,r);return r;
 }
+// Shared ticket demand is independent of venue capacity; no visitor rescue bonus.
+inline double homeTicketDemand(const Seed& s,const Launch& l,const Result& legacy){
+ (void)l;double season=visitormodel::season(s.home.prestige,s.home.wins,s.home.losses);
+ double event=(1+legacy.openerBoost*.35)*(1+legacy.nightBoost*.40)*(1+legacy.seniorBoost*.40)*(1+legacy.academyBoost*.4);
+ // Senior day is at most +4%, and all event boosts share a 12% ceiling.
+ event=(std::min)(1.12,event);
+ double appeal=1+(std::clamp)(legacy.appeal,-10.f,10.f)/100.;
+ return s.home.audienceFans*season*event*appeal*(1+legacy.weather/100.)*(1+legacy.variation/100.);
+}
+inline double neutralTicketDemand(const Seed& s,const Launch& l,const Result& r){auto reversed=s;std::swap(reversed.home,reversed.away);return .5*(homeTicketDemand(s,l,r)+homeTicketDemand(reversed,l,r));}
+inline visitormodel::Inputs visitorInputs(const Seed& s,const Launch& l,double tickets,double factor=1){
+ visitormodel::Inputs d;d.homeFans=s.home.audienceFans;d.awayFans=s.away.audienceFans;d.homeTickets=tickets;d.travelFactor=factor;
+ d.homePrestige=s.home.prestigeKnown?s.home.prestige:-1;d.awayPrestige=s.away.prestigeKnown?s.away.prestige:-1;
+ d.homeWins=s.home.wins;d.homeLosses=s.home.losses;d.awayWins=s.away.wins;d.awayLosses=s.away.losses;
+ d.rivalry=l.rivalry;d.neutral=l.neutral;d.fcs=fcs(s.away.id);d.seed=fixtureHash(s,l.neutral);return d;
+}
+inline void applyCapacityLimits(const Seed& s,const Launch& l,Result& r){
+ if(!r.applied||l.neutral||r.showcaseEvent>=0)return;
+ auto random=[&](unsigned salt){uint32_t h=fixtureHash(s)^salt;h^=h>>16;h*=0x7feb352du;h^=h>>15;return (h%10001)/10000.f;};
+ bool opener=s.home.homeGames==0,senior=(l.seniorKnown&&l.senior)||(!l.seniorKnown&&s.scheduleKnown&&s.lastHome);
+ float ceiling=100;
+ if(lateArrivalSchool(s.home.id)&&!opener&&!l.rivalry&&!big(s.home.rank,s.away.rank,false))ceiling=(std::min)(ceiling,65+10*random(0x574fu));
+ if(fcs(s.away.id)&&!opener&&!senior&&!r.night)ceiling=(std::min)(ceiling,75+10*random(0x464353u));
+ if(s.home.prestigeKnown&&s.away.prestigeKnown&&s.home.prestige-s.away.prestige>=6&&!opener&&!senior&&!r.night&&!l.rivalry)ceiling=(std::min)(ceiling,75+10*random(0x505245u));
+ r.capacityLimit=ceiling;if(r.percent>ceiling){r.limits+=ceiling-r.percent;r.percent=ceiling;r.attendance=(std::max)(1,int(std::lround(l.capacity*ceiling/100)));}
+}
+// Final travel-aware composition is supplied by the caller after the same
+// launch checks. Legacy evaluation remains for existing fixture histories.
+inline Result calculateAudience(const Seed& s,const Launch& l,bool fuller=false){
+ auto r=calculateAudienceLegacy(s,l,fuller);if(!r.applied)return r;
+ if(!s.home.prestigeKnown||(!fcs(s.away.id)&&!s.away.prestigeKnown)){r.applied=false;return r;}
+ double tickets=homeTicketDemand(s,l,r);auto c=visitormodel::demand(visitorInputs(s,l,tickets));
+ if(!c.valid){r.applied=false;return r;}
+ r.momentum=static_cast<float>(100*(visitormodel::season(s.home.prestige,s.home.wins,s.home.losses)-1));
+ r.seniorBoost*=.4f;r.stateBoost=0;r.eventMultiplier=(std::min)(1.12f,(1+r.openerBoost*.35f)*(1+r.nightBoost*.4f)*(1+r.seniorBoost)*(1+r.academyBoost*.4f));
+ r.percent=static_cast<float>((std::clamp)(100*(l.neutral?neutralTicketDemand(s,l,r):(c.home+c.visitors))/l.capacity+r.profileBoost,0.,100.));
+ r.attendance=(std::clamp)(static_cast<int>(std::llround(l.capacity*r.percent/100)),1,l.capacity);
+ applyShowcase(s,l,r);applyCapacityLimits(s,l,r);return r;
+}
 // Server simulation calls can interleave with a playable launch. Match the actual
 // launch IDs, native count and stadium; never use a reused match pointer as identity.
 class Seeds {
@@ -246,7 +300,8 @@ inline bool capturedLaunchProof(const Seed& s,const Launch& l,uint64_t now,uint6
     return s.serial&&s.dynastyGeneration==generation&&generation&&s.dynastyVerifiedAt&&s.dynastyVerifiedAt<=s.observed&&now>=s.observed&&
         now-s.dynastyVerifiedAt<=ModeWitness::Lifetime&&s.home.id==l.home&&s.away.id==l.away&&s.stadium==l.stadium&&s.ea==l.ea;
 }
-inline bool transitionProof(const Seed& s,const Launch& l,uint64_t now,uint64_t generation){return s.regular&&!s.resumed&&capturedLaunchProof(s,l,now,generation);}
+inline bool transitionProof(const Seed& s,const Launch& l,uint64_t now,uint64_t generation){return !s.bowlFixture&&l.bowl==127&&(s.regular||(s.spring&&s.dynasty!=0&&s.springSide>=0&&s.springSide<=1&&s.springNumberKnown&&
+    (s.springNumber!=250||spring::launchedStamp(s.springType,s.springNumber,s.home.id,s.springStamp))))&&!s.resumed&&capturedLaunchProof(s,l,now,generation);}
 struct Applied {
     Seed seed;Launch launch;Result result;
     bool owns(int home,int away)const{return result.applied&&launch.home==home&&launch.away==away;}

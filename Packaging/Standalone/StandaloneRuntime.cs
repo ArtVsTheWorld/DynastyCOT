@@ -20,8 +20,8 @@ namespace DynastyCOTStandalone {
   internal static string Mmc {get{return Path.GetDirectoryName(Plugins);}}
   internal static string Resolve(string relative){
    if(String.IsNullOrWhiteSpace(relative)||Path.IsPathRooted(relative)||relative.Contains(":")||relative.Split('/','\\').Any(x=>x==".."))throw new IOException("Unsafe embedded path");
-   string root=Path.GetFullPath(Mmc).TrimEnd('\\')+"\\",path=Path.GetFullPath(Path.Combine(root,relative.Replace('/',Path.DirectorySeparatorChar)));
-   if(!path.StartsWith(root,StringComparison.OrdinalIgnoreCase))throw new IOException("Embedded path escapes MMC");
+   string root=Ace.DynastyCOT.UserStorage.Current.Root.TrimEnd('\\')+"\\",path=Ace.DynastyCOT.UserStorage.Current.Payload(Identity.Module,relative,Identity.Version);
+   if(!path.StartsWith(root,StringComparison.OrdinalIgnoreCase))throw new IOException("Embedded path escapes user storage");
    for(string current=path;current!=null&&current.StartsWith(root,StringComparison.OrdinalIgnoreCase);current=Path.GetDirectoryName(current))
     if((Directory.Exists(current)||File.Exists(current))&&(File.GetAttributes(current)&FileAttributes.ReparsePoint)!=0)throw new IOException("Linked payload paths are not supported: "+current);
    return path;
@@ -51,9 +51,11 @@ namespace DynastyCOTStandalone {
     return result;
    }
   }
-  internal static bool PayloadDiffers(){foreach(var item in Manifest()){string file=Resolve(item.Key);if(!File.Exists(file))return true;using(var input=File.OpenRead(file))if(Hash(input)!=item.Value)return true;}return false;}
+  internal static bool Mutable(string key){return key=="COT-Runtime/DynastyEnhancer/beyond-the-field.json";}
+  internal static bool PayloadDiffers(){foreach(var item in Manifest()){string file=Resolve(item.Key);if(Mutable(item.Key)&&File.Exists(file))continue;if(!File.Exists(file))return true;using(var input=File.OpenRead(file))if(Hash(input)!=item.Value)return true;}return false;}
   // Pure file operation; invoked in tests only beneath marked isolated fixtures.
-  internal static void Prepare(){
+  internal static void Prepare(){Ace.DynastyCOT.UserStorage.Current.WithModule(Identity.Module,PrepareCore);}
+  static void PrepareCore(){
    var manifest=Manifest();
    using(var input=typeof(Runtime).Assembly.GetManifestResourceStream("Standalone.payload.zip"))
    using(var archive=new ZipArchive(input,ZipArchiveMode.Read)){
@@ -61,6 +63,7 @@ namespace DynastyCOTStandalone {
     foreach(var entry in archive.Entries){string expected;if(!manifest.TryGetValue(entry.FullName,out expected))throw new IOException("Unmanifested embedded file");using(var source=entry.Open())if(Hash(source)!=expected)throw new IOException("Embedded payload integrity failure");}
     foreach(var entry in archive.Entries){
      string file=Resolve(entry.FullName),expected=manifest[entry.FullName];
+     if(Mutable(entry.FullName)&&File.Exists(file))continue;
      if(File.Exists(file))using(var old=File.OpenRead(file))if(Hash(old)==expected)continue;
      Directory.CreateDirectory(Path.GetDirectoryName(file));string temporary=file+"."+Guid.NewGuid().ToString("N")+".tmp";
      try{
@@ -77,12 +80,12 @@ namespace DynastyCOTStandalone {
   internal static bool Initialize(){lock(sync){
    if(ready)return true;
    string conflict=Conflict();if(conflict!=null)throw new IOException(conflict);
-   if(PayloadDiffers()){
+   if(PayloadDiffers()||Ace.DynastyCOT.UserStorage.Current.NeedsMigration(Identity.Module,Plugins)){
     var games=Process.GetProcessesByName("CollegeFB27");bool running=games.Length!=0;foreach(var game in games)game.Dispose();
     if(running)throw new IOException("Close the game once so "+Identity.Title+" can prepare its matching runtime files. Existing settings/history are kept.");
    }
    if(owner==null&&!Claim())throw new IOException("Another copy of "+Identity.Title+" already provides this module in this MMC process.");
-   Prepare();ready=true;return true;
+   Ace.DynastyCOT.UserStorage.Migrate(Identity.Module,Plugins);Prepare();ready=true;return true;
   }}
   internal static void Note(string message){try{
    string folder=Resolve("Standalone-Runtime/"+Identity.Module+"/Logs");Directory.CreateDirectory(folder);string file=Path.Combine(folder,"package.log");

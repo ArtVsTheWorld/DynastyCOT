@@ -12,34 +12,69 @@
       "reason": "Retain prior native practice and exact helper/ownership contracts; 0.1.6 user-facing Expanded Practice branding, original UTF-8 source encoding retained, internal IDs/paths unchanged."
     },
     {
+      "path": "Modules/DrivePractice/Plugin/DefenseChoice.cs",
+      "sha256": "75c113bab127bdebaf381826134fdae1b6daccf70ae8295f64a276731bdc8485",
+      "reason": "Approved integrated release-readiness fixes; native contracts and saved data preserved"
+    },
+    {
       "path": "Modules/DrivePractice/Plugin/Diagnostics.cs",
-      "sha256": "cab584ef81da436d3ec458d776e381ce9d98402acb479578ece70dfbdc385804",
-      "reason": "1.0 branded source-built runtime names, direct verified loading and preserved data/hook contracts"
+      "sha256": "de8caf084b15dad98299c38ac2a79ef5926ea78517bcce924261ab07d035b0ac",
+      "reason": "Approved integrated release-readiness fixes; native contracts and saved data preserved"
+    },
+    {
+      "path": "Modules/DrivePractice/Plugin/DriveEngine.cs",
+      "sha256": "732db15387e36cb1aa4fc12c4febde072a3eb0bb6b03dbdb90e6aeefff1c1183",
+      "reason": "Approved integrated release-readiness fixes; native contracts and saved data preserved"
+    },
+    {
+      "path": "Modules/DrivePractice/Plugin/DynastyControllerCompatibility.cs",
+      "sha256": "0386a0c0426de3e39b402f5ff84521e05e44229297dcc80bd8396ac2e432544a",
+      "reason": "Approved integrated release-readiness fixes; native contracts and saved data preserved"
+    },
+    {
+      "path": "Modules/DrivePractice/Plugin/NativeCompatibility.cs",
+      "sha256": "d9ead61c992c016de81d1dc0237946ff289b055834a88f3a3257e5dcd939e5d5",
+      "reason": "Approved integrated release-readiness fixes; native contracts and saved data preserved"
+    },
+    {
+      "path": "Modules/DrivePractice/Plugin/NativeDrivePolicy.cs",
+      "sha256": "56d3e61dac453952c037a75aa5386c9a8b6d887497a2c02036a70e8be709da84",
+      "reason": "Approved integrated release-readiness fixes; native contracts and saved data preserved"
     },
     {
       "path": "Modules/DrivePractice/Plugin/NativeRuntime.cs",
-      "sha256": "a90e8a783c696aa3fc6d69deef41ef42b1adca88810b0c4d356318b533819396",
-      "reason": "Add verified offline main-menu practice mode 17 alongside Dynasty mode 14; preserve native fingerprints, exact offline and bound-match guards; execute hook regressions in both contexts."
+      "sha256": "35567c25978e8f0f3b7988c55f0853d01b59784ed5ab804b139ff5be76b95fd8",
+      "reason": "Approved integrated release-readiness fixes; native contracts and saved data preserved"
     },
     {
       "path": "Modules/DrivePractice/Plugin/PracticeAction.cs",
       "sha256": "214cfb8fa6636b7f98f09a2f551997a265f8707c2ac025bf315a6dcbc41d846a",
-      "reason": "1.0 branded source-built runtime names, direct verified loading and preserved data/hook contracts"
+      "reason": "Approved integrated release-readiness fixes; native contracts and saved data preserved"
     },
     {
       "path": "Modules/DrivePractice/Plugin/PracticeRunner.cs",
-      "sha256": "cf22965c121eb1359560b095e498cf08ee91adc4364a57c75d5c5d92a0c1041b",
-      "reason": "Add verified offline main-menu practice mode 17 alongside Dynasty mode 14; preserve native fingerprints, exact offline and bound-match guards; execute hook regressions in both contexts."
+      "sha256": "0d07a32bd938f516f47222b5b9f9799cc48039e2c076be235c3b27057de9908b",
+      "reason": "Approved integrated release-readiness fixes; native contracts and saved data preserved"
     },
     {
       "path": "Modules/DrivePractice/Plugin/RuntimeFiles.cs",
-      "sha256": "7ca18dab9ff8dcb8045ddf6584436a60542f98af4b0ec10a7d6bc3801a2f5715",
-      "reason": "1.0 branded source-built runtime names, direct verified loading and preserved data/hook contracts"
+      "sha256": "09c5a976a749b1e813f6001d4b79bf5a2439ec37c72cb3ea6e04716173736b2a",
+      "reason": "Approved integrated release-readiness fixes; native contracts and saved data preserved"
+    },
+    {
+      "path": "Modules/DrivePractice/Plugin/SessionStats.cs",
+      "sha256": "96b987e744c3e3e9b61a8e8002f297365cff5a4424aa0b32c744ff2577ea6ed8",
+      "reason": "Approved integrated release-readiness fixes; native contracts and saved data preserved"
     },
     {
       "path": "Modules/DrivePractice/Test.ps1",
       "sha256": "5f9078c0cfe3cebf817496ced76a493af8272c6d288abe919ff0235e1b376626",
       "reason": "Add verified offline main-menu practice mode 17 alongside Dynasty mode 14; preserve native fingerprints, exact offline and bound-match guards; execute hook regressions in both contexts."
+    },
+    {
+      "path": "Modules/DrivePractice/Tools/DiagnosticsChecks.cs",
+      "sha256": "39ebbde42fcb732a58ade2e86dea31c4d8a316d72b3f34f68d4c06c66765c585",
+      "reason": "Authorized per-user storage migration: shared LocalAppData module data; versioned verified program caches; legacy sources read-only, destination wins with conflict archive. Native scopes, hook fingerprints, ownership and helper hash/lease checks retained. Private tests only."
     },
     {
       "path": "Modules/DrivePractice/Tools/ModeChecks.cs",
@@ -53,18 +88,203 @@
     },
     {
       "path": "Modules/DrivePractice/docs/native-layout.json",
-      "sha256": "d41073c7e87a62383c24b63c534816e46a9d958a20f4b9ab17b8bf47262edd32",
-      "reason": "Add verified offline main-menu practice mode 17 alongside Dynasty mode 14; preserve native fingerprints, exact offline and bound-match guards; execute hook regressions in both contexts."
+      "sha256": "1138365443dc2f33e5712b4c2c0f8f0206d7844b1ed4cc979e3d72cd4c5ba8ea",
+      "reason": "Bounded private integration follow-up: reveal-safe dash completion, neutral Notes presentation, verified injury naming, native-anchored seating, postseason support capture, bounded fumble latency, eligible crowd bed handoff, and exact Extensions pregame comparison normalization."
+    },
+    {
+      "path": "Modules/DrivePractice/docs/updating.md",
+      "sha256": "60397201f90865d3a87cfaebf24119014eb5b47e0c88df63b571ba42ee7c79dc",
+      "reason": "Bounded private integration follow-up: reveal-safe dash completion, neutral Notes presentation, verified injury naming, native-anchored seating, postseason support capture, bounded fumble latency, eligible crowd bed handoff, and exact Extensions pregame comparison normalization."
+    },
+    {
+      "path": "Modules/DynastyEnhancer/Content/Runtime/account-refresh-pack.json",
+      "sha256": "62676753939b8b0dc83ac9ad61d164840d1f7fc128036b5967ff037b0bbdd3d8",
+      "reason": "Approved integrated release-readiness fixes; native contracts and saved data preserved"
+    },
+    {
+      "path": "Modules/DynastyEnhancer/Content/Runtime/analysis-pack.json",
+      "sha256": "29db5b444e9d96b597f5689d24e0d8513abb7ed7ae8829d4dc46674bec33107f",
+      "reason": "Approved integrated release-readiness fixes; native contracts and saved data preserved"
+    },
+    {
+      "path": "Modules/DynastyEnhancer/Content/Runtime/analytics-variety-pack.json",
+      "sha256": "790597b3318f9e70dfc816af3118563853298c7657d638d609f538b3d5b01214",
+      "reason": "Approved integrated release-readiness fixes; native contracts and saved data preserved"
+    },
+    {
+      "path": "Modules/DynastyEnhancer/Content/Runtime/buzz-variety-pack.json",
+      "sha256": "c17c46c2477e35bdf012a4b99caae05ee6b8f30425b8ec8daff9e91bc4a987fc",
+      "reason": "Approved integrated release-readiness fixes; native contracts and saved data preserved"
+    },
+    {
+      "path": "Modules/DynastyEnhancer/Content/Runtime/compact-variety-pack.json",
+      "sha256": "c8e952f4aa187f75fd1d6b9c3a9b3a48d8b5b0f88ce0eb89cf849980fe0cecfa",
+      "reason": "Approved integrated release-readiness fixes; native contracts and saved data preserved"
+    },
+    {
+      "path": "Modules/DynastyEnhancer/Content/Runtime/context-pack.json",
+      "sha256": "808460142ae43d95afe68d8003336a98722f61564cc737f89171df5e1f010eeb",
+      "reason": "Approved integrated release-readiness fixes; native contracts and saved data preserved"
+    },
+    {
+      "path": "Modules/DynastyEnhancer/Content/Runtime/cycle-pack.json",
+      "sha256": "f2afd7cfb1655664f8631abc441a0d21c9480f94f46fd4825957a6cef0b161ed",
+      "reason": "Approved integrated release-readiness fixes; native contracts and saved data preserved"
+    },
+    {
+      "path": "Modules/DynastyEnhancer/Content/Runtime/cycle-variety-pack.json",
+      "sha256": "b526ccb629b526fe4478d9cf4a8eab097a543c4e8f42914334a3fba9edffa9f8",
+      "reason": "Approved integrated release-readiness fixes; native contracts and saved data preserved"
+    },
+    {
+      "path": "Modules/DynastyEnhancer/Content/Runtime/editorial-variety-pack.json",
+      "sha256": "d80666b24110334e05ec84a685a27e3da864c70e931ed25528980c238ec92ddf",
+      "reason": "Approved integrated release-readiness fixes; native contracts and saved data preserved"
+    },
+    {
+      "path": "Modules/DynastyEnhancer/Content/Runtime/event-variety-pack.json",
+      "sha256": "cc5824b51598c48426a0ed4b1e7805a456802c70301389fea42df36cbcc7fa3a",
+      "reason": "Approved integrated release-readiness fixes; native contracts and saved data preserved"
+    },
+    {
+      "path": "Modules/DynastyEnhancer/Content/Runtime/fan-variety-pack.json",
+      "sha256": "c0b0b054b8b2d8d27c36c045359be2248013e3fcf993c6f810675f8e88380da7",
+      "reason": "Approved integrated release-readiness fixes; native contracts and saved data preserved"
+    },
+    {
+      "path": "Modules/DynastyEnhancer/Content/Runtime/final-cycle-variety-pack.json",
+      "sha256": "58d7042d63a0012ff5a73b4ada8c64d6717717d53d8fd6d7a14df9ea461e2424",
+      "reason": "Approved integrated release-readiness fixes; native contracts and saved data preserved"
+    },
+    {
+      "path": "Modules/DynastyEnhancer/Content/Runtime/first-pack.json",
+      "sha256": "a1427894fc2e1b0e58304bc8e90dc534e6e179830d5d169257b04c319f5aa766",
+      "reason": "Approved integrated release-readiness fixes; native contracts and saved data preserved"
+    },
+    {
+      "path": "Modules/DynastyEnhancer/Content/Runtime/history-analysis-pack.json",
+      "sha256": "1f9f859fd3575b14bb8c749036128fbe88575febed0accf7f935571a0f1723c1",
+      "reason": "Approved integrated release-readiness fixes; native contracts and saved data preserved"
+    },
+    {
+      "path": "Modules/DynastyEnhancer/Content/Runtime/matchup-season-pack.json",
+      "sha256": "90119315fe107f522e6654816a0ef3918064e56f62142bdc0df93efea1f9a3a1",
+      "reason": "Approved integrated release-readiness fixes; native contracts and saved data preserved"
+    },
+    {
+      "path": "Modules/DynastyEnhancer/Content/Runtime/matchup-variety-pack.json",
+      "sha256": "fdb9ff9784354287290fa7b5d018b940a190b68d0c2b8f0943e4ba3c4dccbbfc",
+      "reason": "Approved integrated release-readiness fixes; native contracts and saved data preserved"
     },
     {
       "path": "Modules/DynastyEnhancer/Content/Runtime/national-account-avatars.json",
       "sha256": "c3434bf3de079d4b2744502e454fdc8d55e0c65c668ca802537c7c24cdfe2e05",
-      "reason": "GPI branding: current account/handle/native G icon, analytics labels and archived-header display projection; retain existing publication/account keys, statistics, grading model and academic GPA"
+      "reason": "Approved integrated release-readiness fixes; native contracts and saved data preserved"
+    },
+    {
+      "path": "Modules/DynastyEnhancer/Content/Runtime/nfl-teams.json",
+      "sha256": "82e119285a08a37439cf06e22723705006cad2ff0b65ddab7dedf6c76a90983d",
+      "reason": "Approved integrated release-readiness fixes; native contracts and saved data preserved"
+    },
+    {
+      "path": "Modules/DynastyEnhancer/Content/Runtime/offseason-carryover-pack.json",
+      "sha256": "769a106b4c30ac787d31bbfe80e447e10531b109e26267f229a496014b730346",
+      "reason": "Approved integrated release-readiness fixes; native contracts and saved data preserved"
+    },
+    {
+      "path": "Modules/DynastyEnhancer/Content/Runtime/offseason-discourse-pack.json",
+      "sha256": "5feb4d61d82631745ec0ab37ec2b5cde1c4f8cab52c3542487f3e0dd211668b4",
+      "reason": "Approved integrated release-readiness fixes; native contracts and saved data preserved"
+    },
+    {
+      "path": "Modules/DynastyEnhancer/Content/Runtime/opening-variety-pack.json",
+      "sha256": "7e13d7cee1d686b70dca8e2d3a8971030665ca389c549771d013238b7ea06e02",
+      "reason": "Approved integrated release-readiness fixes; native contracts and saved data preserved"
+    },
+    {
+      "path": "Modules/DynastyEnhancer/Content/Runtime/playoff-desk-pack.json",
+      "sha256": "f8587d11cd06907bc09243c349adc5930df56d2051d47f651cf2985e477d3f0f",
+      "reason": "Approved integrated release-readiness fixes; native contracts and saved data preserved"
+    },
+    {
+      "path": "Modules/DynastyEnhancer/Content/Runtime/portal-draft-pack.json",
+      "sha256": "558c47867b77316405d318c5311b2e5b2241a6718f177074b597b3c3516c7471",
+      "reason": "Approved integrated release-readiness fixes; native contracts and saved data preserved"
+    },
+    {
+      "path": "Modules/DynastyEnhancer/Content/Runtime/portrait-ranges.json",
+      "sha256": "0ded1178e7d11071b6a6b7f0c8b1cb14a04a6465af322a24d5e38ef85b461e0c",
+      "reason": "Approved integrated release-readiness fixes; native contracts and saved data preserved"
+    },
+    {
+      "path": "Modules/DynastyEnhancer/Content/Runtime/postseason-pack.json",
+      "sha256": "23e5a7795f472099db30f00a2a59629c4bd52cd94a6479dbe19b344b3769eb18",
+      "reason": "Approved integrated release-readiness fixes; native contracts and saved data preserved"
+    },
+    {
+      "path": "Modules/DynastyEnhancer/Content/Runtime/preseason-pack.json",
+      "sha256": "1926a3b5557f58937f51a086d04fcea3986317f98c4e416a794a647f0b57c26a",
+      "reason": "Approved integrated release-readiness fixes; native contracts and saved data preserved"
+    },
+    {
+      "path": "Modules/DynastyEnhancer/Content/Runtime/race-variety-pack.json",
+      "sha256": "68657bc40402d24a133ee413e8c6a9102ac2176907029d3dfcad3e5644ccee5c",
+      "reason": "Approved integrated release-readiness fixes; native contracts and saved data preserved"
+    },
+    {
+      "path": "Modules/DynastyEnhancer/Content/Runtime/reaction-variety-pack.json",
+      "sha256": "6216de70655c4fe096be37037341b2f3a53cc06fe5fe86a46594fb5da69c018c",
+      "reason": "Approved integrated release-readiness fixes; native contracts and saved data preserved"
+    },
+    {
+      "path": "Modules/DynastyEnhancer/Content/Runtime/recruiting-variety-pack.json",
+      "sha256": "05fa7fe4b9b5766fd1a65ced12135189639cf3e207737ecaadf933d04e8c747b",
+      "reason": "Approved integrated release-readiness fixes; native contracts and saved data preserved"
+    },
+    {
+      "path": "Modules/DynastyEnhancer/Content/Runtime/reporter-variety-pack.json",
+      "sha256": "fa5e83c13378a32dd60585dd5a446496c603299a754429fdf07aed3439ee18ff",
+      "reason": "Approved integrated release-readiness fixes; native contracts and saved data preserved"
+    },
+    {
+      "path": "Modules/DynastyEnhancer/Content/Runtime/retrospective-variety-pack.json",
+      "sha256": "e6884c115de16f8f8ca6d782cb2ead9b7863f3d78cd599ec5c2d7419f53091f8",
+      "reason": "Approved integrated release-readiness fixes; native contracts and saved data preserved"
+    },
+    {
+      "path": "Modules/DynastyEnhancer/Content/Runtime/review-corrections-pack.json",
+      "sha256": "ec5b9e206b8cb3c34e921c444eba6271098f48d90d48f5000f0820327a71587c",
+      "reason": "Approved integrated release-readiness fixes; native contracts and saved data preserved"
+    },
+    {
+      "path": "Modules/DynastyEnhancer/Content/Runtime/season-launch-pack.json",
+      "sha256": "8058d81d13ad62ed105bc14ebe824ec1b4b94a7af5c5e5323af9c89378348126",
+      "reason": "Approved integrated release-readiness fixes; native contracts and saved data preserved"
+    },
+    {
+      "path": "Modules/DynastyEnhancer/Content/Runtime/season-review-pack.json",
+      "sha256": "eec52e97353f4ed2f99cc7fec613a1834846d73573b6228657a76ae1f80260e7",
+      "reason": "Approved integrated release-readiness fixes; native contracts and saved data preserved"
+    },
+    {
+      "path": "Modules/DynastyEnhancer/Content/Runtime/team-logo-variants.json",
+      "sha256": "1b91178509a196fab64abc34ea09933d486242abe6ee7ec10a94f405eeca66eb",
+      "reason": "Approved integrated release-readiness fixes; native contracts and saved data preserved"
+    },
+    {
+      "path": "Modules/DynastyEnhancer/Content/Runtime/transactions-pack.json",
+      "sha256": "028d6ba7773b1c5e249ef72f4851aca751cb3936633525db5ec105d03325e52e",
+      "reason": "Approved integrated release-readiness fixes; native contracts and saved data preserved"
+    },
+    {
+      "path": "Modules/DynastyEnhancer/Content/Runtime/voice-variety-pack.json",
+      "sha256": "b89870fc4f2a28bab862905246c329d31fc5c944cce726ac4890168091e8994b",
+      "reason": "Approved integrated release-readiness fixes; native contracts and saved data preserved"
     },
     {
       "path": "Modules/DynastyEnhancer/Source/AioCurrencyUiPrograms.h",
       "sha256": "a171190e1fd8742eb2540e9d1205a0603a601ea9222607b4a1c2a6767c740d8d",
-      "reason": "1.0 branded source-built runtime names, direct verified loading and preserved data/hook contracts"
+      "reason": "Approved integrated release-readiness fixes; native contracts and saved data preserved"
     },
     {
       "path": "Modules/DynastyEnhancer/Source/Analytics.NOTICES.txt",
@@ -74,92 +294,147 @@
     {
       "path": "Modules/DynastyEnhancer/Source/AnalyticsModel.h",
       "sha256": "05916530099be2bea47f4b4ff3790ce25d0fc1872048ad00487a9a41dddcf009",
-      "reason": "GPI branding: current account/handle/native G icon, analytics labels and archived-header display projection; retain existing publication/account keys, statistics, grading model and academic GPA"
+      "reason": "Approved integrated release-readiness fixes; native contracts and saved data preserved"
     },
     {
       "path": "Modules/DynastyEnhancer/Source/AnalyticsNative.h",
       "sha256": "9173ec285e8f0a6d003d44b6fd092355bfde750d559afabd44f915081cd934c6",
-      "reason": "GPI branding: current account/handle/native G icon, analytics labels and archived-header display projection; retain existing publication/account keys, statistics, grading model and academic GPA"
+      "reason": "Approved integrated release-readiness fixes; native contracts and saved data preserved"
     },
     {
       "path": "Modules/DynastyEnhancer/Source/AnalyticsPage.h",
-      "sha256": "1bd758be229c40a594266ae17fa7ce5a8008723335a48eb9ba0727c42fb7599a",
-      "reason": "GPI branding: current account/handle/native G icon, analytics labels and archived-header display projection; retain existing publication/account keys, statistics, grading model and academic GPA"
+      "sha256": "8184182d21eaa812d37936a55f72d2bf79e93d4664bf5b262953338f02e99f6b",
+      "reason": "Approved integrated release-readiness fixes; native contracts and saved data preserved"
     },
     {
       "path": "Modules/DynastyEnhancer/Source/CurrencyBudgetUiPrograms.h",
       "sha256": "9c0b98ebb22f60931b3154721f460d2d553f83aec0d1c6f875cb24debf21fb11",
-      "reason": "COT 0.1.3: independent Weekly Advance adapters with exact loader-pointer normalization, creation-page per-Dynasty options, requested defaults and fitted dollar prefixes"
+      "reason": "Approved integrated release-readiness fixes; native contracts and saved data preserved"
     },
     {
       "path": "Modules/DynastyEnhancer/Source/CurrencyDisplay.h",
       "sha256": "1374555dd8791b2faebcf225159ba96f523621171c50ba75f1fc997a517944c8",
-      "reason": "COT 0.1.3: independent Weekly Advance adapters with exact loader-pointer normalization, creation-page per-Dynasty options, requested defaults and fitted dollar prefixes"
+      "reason": "Approved integrated release-readiness fixes; native contracts and saved data preserved"
     },
     {
       "path": "Modules/DynastyEnhancer/Source/CurrencyRecruitDetailUiPrograms.h",
       "sha256": "29e846582f4ba12aff409e14e06701da9ce1c48c2fcdb9cbc55a7cc3c224715a",
-      "reason": "COT 0.1.3: independent Weekly Advance adapters with exact loader-pointer normalization, creation-page per-Dynasty options, requested defaults and fitted dollar prefixes"
+      "reason": "Approved integrated release-readiness fixes; native contracts and saved data preserved"
     },
     {
       "path": "Modules/DynastyEnhancer/Source/CurrencyRecruitEditorUiPrograms.h",
       "sha256": "24f97eccb0d11f2eab3e0ae0ceb82e1fe35b9a497e62d5a31d7f557f1d8dad3f",
-      "reason": "Retain prior COT integration; 0.1.6 Beyond the Field: bounded content/selection/voices, native paging, persistent modeled recruit records, supported calendar/draft reference, exact AIO Notes/colors and numeric-preserving money redraw adapters."
+      "reason": "Approved integrated release-readiness fixes; native contracts and saved data preserved"
     },
     {
       "path": "Modules/DynastyEnhancer/Source/CurrencyTopbarUiPrograms.h",
       "sha256": "e1e8bd6ead8ed407aec0dcd68628304e7c5fb0c897523dd45c6f9af527202441",
-      "reason": "COT 0.1.3: independent Weekly Advance adapters with exact loader-pointer normalization, creation-page per-Dynasty options, requested defaults and fitted dollar prefixes"
+      "reason": "Approved integrated release-readiness fixes; native contracts and saved data preserved"
     },
     {
       "path": "Modules/DynastyEnhancer/Source/CurrencyUiPrograms.h",
       "sha256": "0bbda3eb1f9a3708cfe8026f9d6ed74cfa3f0cf4c94fc535e5fdf9f90ec687b7",
-      "reason": "Retain prior COT integration; 0.1.6 Beyond the Field: bounded content/selection/voices, native paging, persistent modeled recruit records, supported calendar/draft reference, exact AIO Notes/colors and numeric-preserving money redraw adapters."
+      "reason": "Approved integrated release-readiness fixes; native contracts and saved data preserved"
+    },
+    {
+      "path": "Modules/DynastyEnhancer/Source/CurrentBindings.h",
+      "sha256": "58a27ba42ae7c0d4646a4cf052037a78bab66d0643408c241b0ea69e7f072fc8",
+      "reason": "Approved integrated release-readiness fixes; native contracts and saved data preserved"
     },
     {
       "path": "Modules/DynastyEnhancer/Source/DraftOvrUiPrograms.h",
       "sha256": "ca09d35587c04d7938ba9edd349126d8b66e6310b1542976f8146f09f7cee144",
-      "reason": "1.0 branded source-built runtime names, direct verified loading and preserved data/hook contracts"
+      "reason": "Approved integrated release-readiness fixes; native contracts and saved data preserved"
+    },
+    {
+      "path": "Modules/DynastyEnhancer/Source/DraftResultsBinding.h",
+      "sha256": "04aba2fe475e99d3d3f27ef8d42395843389f90f9e6ed1415b1bdcfc1885c187",
+      "reason": "Approved integrated release-readiness fixes; native contracts and saved data preserved"
+    },
+    {
+      "path": "Modules/DynastyEnhancer/Source/DraftResultsCapture.h",
+      "sha256": "8f08cea1d20553aa5048ca27d077084a4271f669bff1754d5e66fde75f5dbebc",
+      "reason": "Approved integrated release-readiness fixes; native contracts and saved data preserved"
+    },
+    {
+      "path": "Modules/DynastyEnhancer/Source/DraftResultsRuntime.h",
+      "sha256": "8f66592648f04add48f8dd6ea9138ecb93f53016addf86488344c7b15d79b8a5",
+      "reason": "Approved integrated release-readiness fixes; native contracts and saved data preserved"
     },
     {
       "path": "Modules/DynastyEnhancer/Source/DraftResultsUiPrograms.h",
       "sha256": "df5fdc477cce95577375cba20b3a89d326c18f789682a996dd9161d77f06ddd9",
-      "reason": "1.0 branded source-built runtime names, direct verified loading and preserved data/hook contracts"
+      "reason": "Approved integrated release-readiness fixes; native contracts and saved data preserved"
+    },
+    {
+      "path": "Modules/DynastyEnhancer/Source/DraftResultsWorker.h",
+      "sha256": "e40bea04b25953bebcdb95660bc81993a1bef4bc18302c553e220c2f798b24ac",
+      "reason": "Approved integrated release-readiness fixes; native contracts and saved data preserved"
     },
     {
       "path": "Modules/DynastyEnhancer/Source/EnhancementOptions.h",
-      "sha256": "65d160011edd93b83a04018ca2049c6a93dad24ee866e78b9f2ff0501da3471c",
-      "reason": "Scope effective fog/colors/dollar presentation to the active matching offline Dynasty; retain saved choices and initial creation settings; avoid per-label RPM, file reads or ownership walks. Private recruiting preview: additive per-Dynasty Native/Recruit Feedback/Rank Only option, relative stable tiers, guarded native scouting-history observation and off-board Target icon presentation. Existing shared-v4 options, GPI, currency, saves and published history retained. No installation or publication. Private 1.0.5 package: source-integrated full/small-card Recruit Feedback and native off-board scouting icon; immediate native UI scouting refresh. Focused tests added to source build. Live helpers excluded; clean-package stability pending. 1.0.7: initial recruit interest preference uses the native/default display; user-facing Default label; saved numeric choices preserved and tested."
+      "sha256": "b39f7585826459dd659b683d8ac069ba73cd6cc60d575a8ec017bfc2b23ad8f6",
+      "reason": "Approved integrated release-readiness fixes; native contracts and saved data preserved"
     },
     {
       "path": "Modules/DynastyEnhancer/Source/EnhancementOptionsRuntime.h",
-      "sha256": "58549ff4bcbdba7ce3d99cc12e5557f5499e37da3891b9451bf77add1bf3d916",
-      "reason": "Scope effective fog/colors/dollar presentation to the active matching offline Dynasty; retain saved choices and initial creation settings; avoid per-label RPM, file reads or ownership walks. Private recruiting preview: additive per-Dynasty Native/Recruit Feedback/Rank Only option, relative stable tiers, guarded native scouting-history observation and off-board Target icon presentation. Existing shared-v4 options, GPI, currency, saves and published history retained. No installation or publication. Private 1.0.5 package: source-integrated full/small-card Recruit Feedback and native off-board scouting icon; immediate native UI scouting refresh. Focused tests added to source build. Live helpers excluded; clean-package stability pending."
+      "sha256": "50accfc0344873f53c5bfa9def4af18c083602b6df3e0c79a87f4b3ba0fe5188",
+      "reason": "Approved integrated release-readiness fixes; native contracts and saved data preserved"
     },
     {
       "path": "Modules/DynastyEnhancer/Source/EnhancementSettingsMenu.h",
-      "sha256": "a8a454bcdc6145741e2e5ce426c112041bad1e9423593cd7fe6cb781f5f0ef81",
-      "reason": "RC013 native Analytics roster-card/action/return, delayed week visibility, safe filter transitions, isolated full-card fog adapters, glyph repair, installer footer and winning visitor departures Private recruiting preview: additive per-Dynasty Native/Recruit Feedback/Rank Only option, relative stable tiers, guarded native scouting-history observation and off-board Target icon presentation. Existing shared-v4 options, GPI, currency, saves and published history retained. No installation or publication. Private 1.0.5 package: source-integrated full/small-card Recruit Feedback and native off-board scouting icon; immediate native UI scouting refresh. Focused tests added to source build. Live helpers excluded; clean-package stability pending. 1.0.7: initial recruit interest preference uses the native/default display; user-facing Default label; saved numeric choices preserved and tested."
+      "sha256": "e66a940eb5483a73281599e518cde1f14fc043ba1e8e8e8b1485995b683adf2e",
+      "reason": "Approved integrated release-readiness fixes; native contracts and saved data preserved"
     },
     {
       "path": "Modules/DynastyEnhancer/Source/FeedData.h",
       "sha256": "21268878cce4fc2eff4923206886d8a39d6cc8717c13d4542aad963d56ebaba9",
-      "reason": "GPI branding: current account/handle/native G icon, analytics labels and archived-header display projection; retain existing publication/account keys, statistics, grading model and academic GPA"
+      "reason": "Approved integrated release-readiness fixes; native contracts and saved data preserved"
     },
     {
       "path": "Modules/DynastyEnhancer/Source/FeedRefresh.h",
-      "sha256": "04074bdf6f59d6dfe0cb8f7ebb62e7dadbcf5670851b97bcf5f8edb88f555090",
-      "reason": "Preserve real fractional priorities while bounding National native widgets and retaining compact counters"
+      "sha256": "64b88c095f0d72e99d879290483fc2739cb45e878929e1ae9aa331850ead46e0",
+      "reason": "Approved integrated release-readiness fixes; native contracts and saved data preserved"
     },
     {
       "path": "Modules/DynastyEnhancer/Source/FogGapUiPrograms.h",
       "sha256": "c1bec865ba692bd086d8f3c788f206f3fff18ca9969109d1af7ddb7d1ab0ad8a",
-      "reason": "1.0 branded source-built runtime names, direct verified loading and preserved data/hook contracts"
+      "reason": "Approved integrated release-readiness fixes; native contracts and saved data preserved"
+    },
+    {
+      "path": "Modules/DynastyEnhancer/Source/HubStatsTrace.cpp",
+      "sha256": "6409647326a60f32159db0b8467a6f3ef21144d4a276e4c0ce0ddeb1387fb9c6",
+      "reason": "Approved integrated release-readiness fixes; native contracts and saved data preserved"
+    },
+    {
+      "path": "Modules/DynastyEnhancer/Source/HubStatsTraceCatalog.h",
+      "sha256": "211e9200981bc0924350484f7a1f0308b5b73c54ee1431d7585344cb5488cbba",
+      "reason": "Approved integrated release-readiness fixes; native contracts and saved data preserved"
+    },
+    {
+      "path": "Modules/DynastyEnhancer/Source/HubTab.h",
+      "sha256": "759757e20c1ef50494fdc0188017f7f986bc317dfdc6f75fb7262ac6c93aa08d",
+      "reason": "Approved integrated release-readiness fixes; native contracts and saved data preserved"
+    },
+    {
+      "path": "Modules/DynastyEnhancer/Source/Install-Mmc.ps1",
+      "sha256": "b5a5a599f53b694f34220a6f8279ae2ea9e80e2ebdf339ac232852aa8a9f07f4",
+      "reason": "Approved integrated release-readiness fixes; native contracts and saved data preserved"
+    },
+    {
+      "path": "Modules/DynastyEnhancer/Source/LiveCapture.cpp",
+      "sha256": "a7d3742be5f3fc035fc7a9b7a25548799e808f2de395e631730e9b444604dc7e",
+      "reason": "Approved integrated release-readiness fixes; native contracts and saved data preserved"
     },
     {
       "path": "Modules/DynastyEnhancer/Source/LiveTables.h",
-      "sha256": "e8bdfca777d7389176337837e558ac9494493a9caafcbee220e2e0bf6c7d5276",
-      "reason": "1.0 branded source-built runtime names, direct verified loading and preserved data/hook contracts Private recruiting preview: additive per-Dynasty Native/Recruit Feedback/Rank Only option, relative stable tiers, guarded native scouting-history observation and off-board Target icon presentation. Existing shared-v4 options, GPI, currency, saves and published history retained. No installation or publication. Private 1.0.5 package: source-integrated full/small-card Recruit Feedback and native off-board scouting icon; immediate native UI scouting refresh. Focused tests added to source build. Live helpers excluded; clean-package stability pending."
+      "sha256": "2d808b22dca7597a01853af635be0d65d6cec30f8f0240d20fc4b241cae37cf0",
+      "reason": "Approved integrated release-readiness fixes; native contracts and saved data preserved"
+    },
+    {
+      "path": "Modules/DynastyEnhancer/Source/LoadRuntime.cpp",
+      "sha256": "3753271f22a2147552490ce10128895cab47d04d4d75390ce38a56532b09095d",
+      "reason": "Approved integrated release-readiness fixes; native contracts and saved data preserved"
     },
     {
       "path": "Modules/DynastyEnhancer/Source/MmcPlugin.cs",
@@ -168,103 +443,343 @@
     },
     {
       "path": "Modules/DynastyEnhancer/Source/MmcRecruitingPlugin.cs",
-      "sha256": "1a035ec14f2e9973bc1498fc1a1537a0e29422b8e0b6728efa5d5b35c54d8aac",
-      "reason": "1.0 branded source-built runtime names, direct verified loading and preserved data/hook contracts"
+      "sha256": "06d8c49aba937bb03a04cebc13ef9d77a0f90caa30d7580e172e69b12b5809ef",
+      "reason": "Authorized per-user storage migration: shared LocalAppData module data; versioned verified program caches; legacy sources read-only, destination wins with conflict archive. Native scopes, hook fingerprints, ownership and helper hash/lease checks retained. Private tests only."
+    },
+    {
+      "path": "Modules/DynastyEnhancer/Source/NativeMapValue.h",
+      "sha256": "04c62fc519a340e1c798a213253deec81b3c6ba88f3ead5e8778f88280c77a5a",
+      "reason": "Approved integrated release-readiness fixes; native contracts and saved data preserved"
     },
     {
       "path": "Modules/DynastyEnhancer/Source/NativeSocialMedia.cpp",
-      "sha256": "bb8943c4585d7c917cdf613b9d7344a06696d239515b89854e95edb19c8f79df",
-      "reason": "Scope effective fog/colors/dollar presentation to the active matching offline Dynasty; retain saved choices and initial creation settings; avoid per-label RPM, file reads or ownership walks."
+      "sha256": "58a3965f685cf9fea776749eb1d6d45fd6bd79aa4e1af5ce4f414bbd409dc09b",
+      "reason": "Approved integrated release-readiness fixes; native contracts and saved data preserved"
+    },
+    {
+      "path": "Modules/DynastyEnhancer/Source/NewsAssetDiscovery.h",
+      "sha256": "a998cc7ac6bfe8b1ede5a57e5d878dbc5cee303fcafdabdf24c470277ca88817",
+      "reason": "Approved integrated release-readiness fixes; native contracts and saved data preserved"
+    },
+    {
+      "path": "Modules/DynastyEnhancer/Source/NewsDiscovery.h",
+      "sha256": "823af4b71268517350f66d7db9cf4f57e9c9fd9fb22585d9971787e6f737b356",
+      "reason": "Approved integrated release-readiness fixes; native contracts and saved data preserved"
+    },
+    {
+      "path": "Modules/DynastyEnhancer/Source/NewsDropdowns.h",
+      "sha256": "48940da3fd1ae1419f809b502b3e1e04dfc668fffe4cf8bd333d8acafddd4ba0",
+      "reason": "Approved integrated release-readiness fixes; native contracts and saved data preserved"
+    },
+    {
+      "path": "Modules/DynastyEnhancer/Source/NewsFlow.h",
+      "sha256": "6559fd6c0f2af6a8580daa4992e34c8238cd57665cb9c7c9bce2753be7c7c24f",
+      "reason": "Approved integrated release-readiness fixes; native contracts and saved data preserved"
+    },
+    {
+      "path": "Modules/DynastyEnhancer/Source/NewsLayout.h",
+      "sha256": "c0fd1320af3bac97bb8d58de504254b79ffe36cd309be3793858a017b4e2ddfa",
+      "reason": "Approved integrated release-readiness fixes; native contracts and saved data preserved"
+    },
+    {
+      "path": "Modules/DynastyEnhancer/Source/NewsNavigation.h",
+      "sha256": "aaf4ad241ab3d2a5f9f375168ae920ed4e75256653728a90f27696c5e5e84032",
+      "reason": "Approved integrated release-readiness fixes; native contracts and saved data preserved"
+    },
+    {
+      "path": "Modules/DynastyEnhancer/Source/NewsPolish.h",
+      "sha256": "f25fb90fb4de2593e6eb728f0c87851a53d9dd60c447a3e346818094134695fa",
+      "reason": "Approved integrated release-readiness fixes; native contracts and saved data preserved"
+    },
+    {
+      "path": "Modules/DynastyEnhancer/Source/NewsScopeInput.h",
+      "sha256": "a5b154fb7d280db1fe4358296dd55bf420b7204f61d0417de6af180cf30922ce",
+      "reason": "Approved integrated release-readiness fixes; native contracts and saved data preserved"
+    },
+    {
+      "path": "Modules/DynastyEnhancer/Source/NewsScroll.h",
+      "sha256": "6a0b3b08072f4a1ec9b635e0aa52b58ef15aa0564acf41ac540b7de116a7e1ee",
+      "reason": "Approved integrated release-readiness fixes; native contracts and saved data preserved"
+    },
+    {
+      "path": "Modules/DynastyEnhancer/Source/NewsStyle.h",
+      "sha256": "5e929ee4be1909ce84d2a5ce6c1a851353563d730567d0d41376ed1da88141e8",
+      "reason": "Approved integrated release-readiness fixes; native contracts and saved data preserved"
+    },
+    {
+      "path": "Modules/DynastyEnhancer/Source/Package-DynastyEnhancer.ps1",
+      "sha256": "3f54790ad30416c14678d245c89b00bdf148e336413b760049b43ca9e51bcf5b",
+      "reason": "Approved integrated release-readiness fixes; native contracts and saved data preserved"
+    },
+    {
+      "path": "Modules/DynastyEnhancer/Source/Package-Recruiting.ps1",
+      "sha256": "4b5bbc634a8d486a0ba229831bb9e72d46cbc691fc622ea3e01e1f62533cec26",
+      "reason": "Approved integrated release-readiness fixes; native contracts and saved data preserved"
+    },
+    {
+      "path": "Modules/DynastyEnhancer/Source/Package.ps1",
+      "sha256": "6dd3d94005995c5a3d9f140ddb52e1b3d3bae052e256fab16ee4f05af0e3a967",
+      "reason": "Approved integrated release-readiness fixes; native contracts and saved data preserved"
     },
     {
       "path": "Modules/DynastyEnhancer/Source/PackedChangeWatch.h",
       "sha256": "94203b314e3da2f8ffc99a7c444cad1542260008f282d889b59f005b05357ec1",
-      "reason": "1.0 branded source-built runtime names, direct verified loading and preserved data/hook contracts"
+      "reason": "Approved integrated release-readiness fixes; native contracts and saved data preserved"
+    },
+    {
+      "path": "Modules/DynastyEnhancer/Source/PlayerAbilityDescriptions.h",
+      "sha256": "c495461b2bf42d565111197ac1e482fc1f24c4d9abf1cf6befb95e60c363cb42",
+      "reason": "Approved integrated release-readiness fixes; native contracts and saved data preserved"
+    },
+    {
+      "path": "Modules/DynastyEnhancer/Source/PlayerAbilityPreview.cpp",
+      "sha256": "2f5204c5f8dfed804eb61fae893e3d5a7fb43f83119f5189a59254ca3e971f1e",
+      "reason": "Approved integrated release-readiness fixes; native contracts and saved data preserved"
+    },
+    {
+      "path": "Modules/DynastyEnhancer/Source/PlayerAbilityProbe.cpp",
+      "sha256": "0d6948c45222d3fe5ca034804e4762eab74ae1f5d98a321e497b1837860a56da",
+      "reason": "Approved integrated release-readiness fixes; native contracts and saved data preserved"
     },
     {
       "path": "Modules/DynastyEnhancer/Source/PlayerBlueprintUiPrograms.h",
       "sha256": "b3644061335981ae3b3154ab2c055c62f9c68dd06280791dca42810513b7ea14",
-      "reason": "1.0 branded source-built runtime names, direct verified loading and preserved data/hook contracts"
+      "reason": "Approved integrated release-readiness fixes; native contracts and saved data preserved"
     },
     {
       "path": "Modules/DynastyEnhancer/Source/PlayerCardUiPrograms.h",
-      "sha256": "c2d1f925f37ef8dbe1d9ae47182f229cd71b4978480d67d3e3e9850f3382ebd1",
-      "reason": "1.0 branded source-built runtime names, direct verified loading and preserved data/hook contracts"
+      "sha256": "37cede7887b795020345b66bdfe90dc0fe0202ebb198074f35598984dc513ce6",
+      "reason": "Approved integrated release-readiness fixes; native contracts and saved data preserved"
+    },
+    {
+      "path": "Modules/DynastyEnhancer/Source/PlayerDepthProbe.cpp",
+      "sha256": "20e376163f7cba9aa468e5a2c8e9f5ada20905f2636b4e4c0393e110f7dd61df",
+      "reason": "Approved integrated release-readiness fixes; native contracts and saved data preserved"
+    },
+    {
+      "path": "Modules/DynastyEnhancer/Source/PlayerFogPerformance.h",
+      "sha256": "64b482faa0079b4863ced3d71279390f08c6fdb872c4357c9532170468e5ef82",
+      "reason": "Approved integrated release-readiness fixes; native contracts and saved data preserved"
     },
     {
       "path": "Modules/DynastyEnhancer/Source/PlayerFogUiPrograms.h",
       "sha256": "3d0aadabcde8b19d148464c42715cb388980d4bab3448ac3f0a53f1dc3434c06",
-      "reason": "1.0 branded source-built runtime names, direct verified loading and preserved data/hook contracts"
+      "reason": "Approved integrated release-readiness fixes; native contracts and saved data preserved"
     },
     {
       "path": "Modules/DynastyEnhancer/Source/PlayerFormationUiPrograms.h",
       "sha256": "ea46c1d4fec062d4570007af80eb18a9df9bfd4d5ec8fc6bb3d25cb60a61c7f2",
-      "reason": "1.0 branded source-built runtime names, direct verified loading and preserved data/hook contracts"
+      "reason": "Approved integrated release-readiness fixes; native contracts and saved data preserved"
     },
     {
       "path": "Modules/DynastyEnhancer/Source/PlayerHubUiPrograms.h",
-      "sha256": "2156e8b4eb75bbada49aa4ef52b9e6f5c6328fb325917a1527533747356d02c6",
-      "reason": "1.0 branded source-built runtime names, direct verified loading and preserved data/hook contracts"
+      "sha256": "8fda1966f66268b8527480d63da09a791a56c4be71df844c7c9a4087197b2de1",
+      "reason": "Approved integrated release-readiness fixes; native contracts and saved data preserved"
     },
     {
       "path": "Modules/DynastyEnhancer/Source/PlayerInGameUiPrograms.h",
-      "sha256": "df2f7d3c1ea3a3289ec5b4b351a8e8695bdf2ae8e53c06ffbc15e7892f7db64d",
-      "reason": "1.0 branded source-built runtime names, direct verified loading and preserved data/hook contracts"
+      "sha256": "65eab954315e3da345db20284fa77bd83359c7d6535fd0e5cc1929af4e459872",
+      "reason": "Approved integrated release-readiness fixes; native contracts and saved data preserved"
     },
     {
       "path": "Modules/DynastyEnhancer/Source/PlayerNilUiPrograms.h",
       "sha256": "1b9ee8510ee4cf74ee1bd848b5dc38348706c3de4fa0332762ebe32779e098b8",
-      "reason": "1.0 branded source-built runtime names, direct verified loading and preserved data/hook contracts"
+      "reason": "Approved integrated release-readiness fixes; native contracts and saved data preserved"
     },
     {
       "path": "Modules/DynastyEnhancer/Source/PlayerPlaycallUiPrograms.h",
       "sha256": "596033b802829a913537141b1cf8ba5943322a90404813bffe60f43b872af2c2",
-      "reason": "1.0 branded source-built runtime names, direct verified loading and preserved data/hook contracts"
+      "reason": "Approved integrated release-readiness fixes; native contracts and saved data preserved"
     },
     {
       "path": "Modules/DynastyEnhancer/Source/PlayerPracticeUiPrograms.h",
       "sha256": "3bed62e83e2a5f1af85530264082dd031b5cd45eabf322573483ee5480214044",
-      "reason": "1.0 branded source-built runtime names, direct verified loading and preserved data/hook contracts"
+      "reason": "Approved integrated release-readiness fixes; native contracts and saved data preserved"
+    },
+    {
+      "path": "Modules/DynastyEnhancer/Source/PlayerPresentationPolicy.h",
+      "sha256": "2c406bb003fb804fbdc65584151a94b4b91605706663b926fa93148a0ac3d37b",
+      "reason": "Approved integrated release-readiness fixes; native contracts and saved data preserved"
+    },
+    {
+      "path": "Modules/DynastyEnhancer/Source/PlayerRatingGrid.h",
+      "sha256": "e1239b69616f049d131f6ff6e8402f62f23913fee9f7f324061789285398857d",
+      "reason": "Approved integrated release-readiness fixes; native contracts and saved data preserved"
+    },
+    {
+      "path": "Modules/DynastyEnhancer/Source/PlayerRatingMap.h",
+      "sha256": "6b92499f784f1d15caa386d92b678d44c7ccac414292ad1d23b915b3a0b0fc67",
+      "reason": "Approved integrated release-readiness fixes; native contracts and saved data preserved"
+    },
+    {
+      "path": "Modules/DynastyEnhancer/Source/PlayerRatingResponses.h",
+      "sha256": "b0c4adc96c7116ee4d6324ab7efca4b574b70d248119cb62cf41130f20303e71",
+      "reason": "Approved integrated release-readiness fixes; native contracts and saved data preserved"
     },
     {
       "path": "Modules/DynastyEnhancer/Source/PlayerRecruitUiPrograms.h",
       "sha256": "12f1cc7fbd834a2ffdbc5d8a646cb93d62136b4effc3ac2dbfd9fe2fedf05cfc",
-      "reason": "1.0 branded source-built runtime names, direct verified loading and preserved data/hook contracts"
+      "reason": "Approved integrated release-readiness fixes; native contracts and saved data preserved"
+    },
+    {
+      "path": "Modules/DynastyEnhancer/Source/PlayerRimeProbe.cpp",
+      "sha256": "ea3a4672d3be381e1a09f5e4e988b62e05ea0c3a38ad327830b24fef35b02309",
+      "reason": "Approved integrated release-readiness fixes; native contracts and saved data preserved"
+    },
+    {
+      "path": "Modules/DynastyEnhancer/Source/PlayerTooltipProbe.cpp",
+      "sha256": "762129f7e4dcff3f3bf4c5b59bced43c7aa88fccfea0cd9257d7d1a258304f30",
+      "reason": "Approved integrated release-readiness fixes; native contracts and saved data preserved"
+    },
+    {
+      "path": "Modules/DynastyEnhancer/Source/PlayerUiPreview.cpp",
+      "sha256": "2ff74b39b69a2c853c5a90628e500daeaea9fa278bb5af96a2de52d131a62325",
+      "reason": "Approved integrated release-readiness fixes; native contracts and saved data preserved"
+    },
+    {
+      "path": "Modules/DynastyEnhancer/Source/PlayerUiTrace.cpp",
+      "sha256": "79e333c4e0627e4f938bbe7c85aa781782bc309dc2974b41b96a8a48527113c2",
+      "reason": "Approved integrated release-readiness fixes; native contracts and saved data preserved"
+    },
+    {
+      "path": "Modules/DynastyEnhancer/Source/PlayingTimeGates.h",
+      "sha256": "4f37e377c2177b2061da68eb69ac0460f45410e4d567157dddabe63006445613",
+      "reason": "Approved integrated release-readiness fixes; native contracts and saved data preserved"
+    },
+    {
+      "path": "Modules/DynastyEnhancer/Source/PlayingTimePolicy.h",
+      "sha256": "9f0de4b457c383a125e5c5d1a77be10fb71ab6885168c0cb1fc25275ca36962f",
+      "reason": "Approved integrated release-readiness fixes; native contracts and saved data preserved"
+    },
+    {
+      "path": "Modules/DynastyEnhancer/Source/RecruitClassGrid.h",
+      "sha256": "deae8d761b0a365a6db9913df56d1eea373ef94ad1a7a0fddff965a677e02aeb",
+      "reason": "Approved integrated release-readiness fixes; native contracts and saved data preserved"
+    },
+    {
+      "path": "Modules/DynastyEnhancer/Source/RecruitCollegeBackground.h",
+      "sha256": "c37215f7ab42cc8aebd7523d7ccdc1a060a99d7e19c29c84a3daab639d43ca38",
+      "reason": "Approved integrated release-readiness fixes; native contracts and saved data preserved"
+    },
+    {
+      "path": "Modules/DynastyEnhancer/Source/RecruitCollegeSchools.h",
+      "sha256": "42d47657ed0b7f1206ec536ae65e605356ba87919eee3e954ae464bd1704b470",
+      "reason": "Approved integrated release-readiness fixes; native contracts and saved data preserved"
+    },
+    {
+      "path": "Modules/DynastyEnhancer/Source/RecruitListProbe.cpp",
+      "sha256": "11965bc0f7835cebc3d567dc4342cbd21a77920309456fde1f31c53ad1e42a68",
+      "reason": "Approved integrated release-readiness fixes; native contracts and saved data preserved"
+    },
+    {
+      "path": "Modules/DynastyEnhancer/Source/RecruitNotes.h",
+      "sha256": "5331debf9397bd1d2dccffda43d7a61f395b378133c9bc978962cb2dfb3250c6",
+      "reason": "Approved integrated release-readiness fixes; native contracts and saved data preserved"
+    },
+    {
+      "path": "Modules/DynastyEnhancer/Source/RecruitNotesProse.h",
+      "sha256": "68c7ced767b3bf6d3570e6643230a1f078a115d6dc5462efbd7a4e7052289a91",
+      "reason": "Approved integrated release-readiness fixes; native contracts and saved data preserved"
     },
     {
       "path": "Modules/DynastyEnhancer/Source/RecruitNotesUiPrograms.h",
       "sha256": "709a4d04731ce07718b2baa5339de1e8e0741fcbc6e6531a6bb1f36ab853dd59",
-      "reason": "1.0 branded source-built runtime names, direct verified loading and preserved data/hook contracts"
+      "reason": "Approved integrated release-readiness fixes; native contracts and saved data preserved"
     },
     {
       "path": "Modules/DynastyEnhancer/Source/RecruitNotesUiRuntime.h",
-      "sha256": "15963e10c546015c1dd6bec6496797b0cad80d36bf1b3c4f7fb02370d1761b95",
-      "reason": "RC013 native Analytics roster-card/action/return, delayed week visibility, safe filter transitions, isolated full-card fog adapters, glyph repair, installer footer and winning visitor departures"
+      "sha256": "3231844b32387417ac29e3ee236d5d56fcad6c9748ed1ecaeff67a113cc66309",
+      "reason": "Approved integrated release-readiness fixes; native contracts and saved data preserved"
+    },
+    {
+      "path": "Modules/DynastyEnhancer/Source/RecruitPreviewProbe.cpp",
+      "sha256": "0a51b00cc88c20f938c5ae860416f8e1326fa83cf152dd40fe37962208aafd50",
+      "reason": "Approved integrated release-readiness fixes; native contracts and saved data preserved"
+    },
+    {
+      "path": "Modules/DynastyEnhancer/Source/RecruitResume.h",
+      "sha256": "2a969eda3370c531db06d5309b119cac3e2127d237edb44156075ec32f414c8d",
+      "reason": "Approved integrated release-readiness fixes; native contracts and saved data preserved"
+    },
+    {
+      "path": "Modules/DynastyEnhancer/Source/RecruitResumeAudit.cpp",
+      "sha256": "9daa3abe397d2a22eb6ea55c0a07c6eed1935c985df190fe213ea0047e52ef57",
+      "reason": "Approved integrated release-readiness fixes; native contracts and saved data preserved"
+    },
+    {
+      "path": "Modules/DynastyEnhancer/Source/RecruitResumeCaptureFields.h",
+      "sha256": "6cd5656c3892f04aa50a27dd074997a5ee1fd50032d2524c584d593ab29fee1f",
+      "reason": "Approved integrated release-readiness fixes; native contracts and saved data preserved"
+    },
+    {
+      "path": "Modules/DynastyEnhancer/Source/RecruitResumeMinimal.cpp",
+      "sha256": "286a2e0a289df20d80637bd1c17c6a0fa61fd64b23dd418ce347883a5b64407b",
+      "reason": "Approved integrated release-readiness fixes; native contracts and saved data preserved"
+    },
+    {
+      "path": "Modules/DynastyEnhancer/Source/RecruitResumeNotes.h",
+      "sha256": "690183732899bbc5716fd107bfac6b6558aac1a2fc972b86f2ccf68c792f4bbd",
+      "reason": "Approved integrated release-readiness fixes; native contracts and saved data preserved"
     },
     {
       "path": "Modules/DynastyEnhancer/Source/RecruitResumeRuntime.h",
-      "sha256": "3e4a9b1a78919202e73a28e858f92bed174e6642abcf7cac13aa03959305f847",
-      "reason": "0.1.16 bounded season-review fixes and source/fixture verification; retain native scopes, fingerprints, published identities/history, four-module selection and helper verification."
+      "sha256": "8d22586dd7e537b47f54728e652f2d88cd93d44785178f7269aa6360b461f46d",
+      "reason": "Approved integrated release-readiness fixes; native contracts and saved data preserved"
     },
     {
       "path": "Modules/DynastyEnhancer/Source/RecruitResumeSource.h",
-      "sha256": "d04719afa4930b91fefe06c8acf6229c4e577c2d802911695f1e835d3f921faa",
-      "reason": "0.1.16 bounded season-review fixes and source/fixture verification; retain native scopes, fingerprints, published identities/history, four-module selection and helper verification."
+      "sha256": "684f05b2eaa65f23bbd6c8d34998fbe31a37c54a90e613f3105a9e585e8616ab",
+      "reason": "Approved integrated release-readiness fixes; native contracts and saved data preserved"
+    },
+    {
+      "path": "Modules/DynastyEnhancer/Source/RecruitResumeStateRanks.h",
+      "sha256": "a8d55f461e95b7e07009f0ee1385321a8954a5333226671537ae2f945f236223",
+      "reason": "Approved integrated release-readiness fixes; native contracts and saved data preserved"
     },
     {
       "path": "Modules/DynastyEnhancer/Source/RecruitResumeTools.cpp",
       "sha256": "cdf4baa0cd44084223f3972d48c68e94beee6c2a56273df447f9f4dc6410e355",
-      "reason": "0.1.16 bounded season-review fixes and source/fixture verification; retain native scopes, fingerprints, published identities/history, four-module selection and helper verification."
+      "reason": "Approved integrated release-readiness fixes; native contracts and saved data preserved"
+    },
+    {
+      "path": "Modules/DynastyEnhancer/Source/RecruitTransferStats.h",
+      "sha256": "18addefa67b7becd27d97fe8a8757b362038131674cf87df45c10c55ff35427d",
+      "reason": "Approved integrated release-readiness fixes; native contracts and saved data preserved"
     },
     {
       "path": "Modules/DynastyEnhancer/Source/RecruitingFog.cpp",
-      "sha256": "dd641e3ef7b3c213ad94053528e14b597d06ce933bb43e160802c2d7328189a3",
-      "reason": "Position Changes projected OVR display-only native adapter; preserve existing NIL/navigation and indexed dispatch; live grade leak reproduced and corrected, speed acceptance inconclusive Private recruiting preview: additive per-Dynasty Native/Recruit Feedback/Rank Only option, relative stable tiers, guarded native scouting-history observation and off-board Target icon presentation. Existing shared-v4 options, GPI, currency, saves and published history retained. No installation or publication. Private 1.0.5 package: source-integrated full/small-card Recruit Feedback and native off-board scouting icon; immediate native UI scouting refresh. Focused tests added to source build. Live helpers excluded; clean-package stability pending. Private 1.0.6: bounded exact startup preflight and corrected native Prospect List interest projection; retains GPI, NIL and hook ownership."
+      "sha256": "32b1b88b601507980a3a9fca1d2a7700b02ad7c7501c3eaefae7f6d46045403d",
+      "reason": "Approved integrated release-readiness fixes; native contracts and saved data preserved"
+    },
+    {
+      "path": "Modules/DynastyEnhancer/Source/RecruitingGradePolicy.h",
+      "sha256": "a59123d06af97c775daabc11a90f0567efe6263625e52b80a0911aeab8e00379",
+      "reason": "Approved integrated release-readiness fixes; native contracts and saved data preserved"
+    },
+    {
+      "path": "Modules/DynastyEnhancer/Source/RecruitingUiGates.h",
+      "sha256": "fa04f9dac21c6177fce3973e4522a07afc42c33779c230f627a0b3b9f0cb099e",
+      "reason": "Approved integrated release-readiness fixes; native contracts and saved data preserved"
+    },
+    {
+      "path": "Modules/DynastyEnhancer/Source/RecruitingUiResponse.h",
+      "sha256": "e90439b17f35dadba35e618830bfde427e55a1f0d9a3acd3fe86aacf26d4238a",
+      "reason": "Approved integrated release-readiness fixes; native contracts and saved data preserved"
+    },
+    {
+      "path": "Modules/DynastyEnhancer/Source/RosterViewProbe.cpp",
+      "sha256": "ccad4274f7fe60f7c0039576914bee7985c27694b7f39936fdbbf53de6904856",
+      "reason": "Approved integrated release-readiness fixes; native contracts and saved data preserved"
     },
     {
       "path": "Modules/DynastyEnhancer/Source/RuntimeFeed.h",
-      "sha256": "c0abcd095a5da0d766e8ca1f7799ad379bd9817aa74eafb90aa0ed7ce8d17472",
-      "reason": "1.0 branded source-built runtime names, direct verified loading and preserved data/hook contracts"
+      "sha256": "2ba589b73340a011431ed4d25905a45c47bea4ddee10e0fffd34717cf39b9224",
+      "reason": "Approved integrated release-readiness fixes; native contracts and saved data preserved"
+    },
+    {
+      "path": "Modules/DynastyEnhancer/Source/Startup.h",
+      "sha256": "de5819a907989f822aa97f5c1ec6df18ca5bb720a26e87ab0c525ddc5826c18b",
+      "reason": "Approved integrated release-readiness fixes; native contracts and saved data preserved"
     },
     {
       "path": "Modules/DynastyEnhancer/Source/analytics-baselines.json",
@@ -272,39 +787,69 @@
       "reason": "0.1.14: released native production and position-relative grades with prestige uncertainty; same-model optional PFF publications and preserved history"
     },
     {
+      "path": "Modules/DynastyEnhancer/Source/build-reader.ps1",
+      "sha256": "96440edb89802e4e86f094b1dd734da06ef3c2b1ce372d0cbca18aa19408b338",
+      "reason": "Approved integrated release-readiness fixes; native contracts and saved data preserved"
+    },
+    {
+      "path": "Modules/DynastyEnhancer/Source/build-recruit-list-probe.ps1",
+      "sha256": "3a812324f7369dc02c31cd11bff9f3626e6416b8d20f7d14556c067124131660",
+      "reason": "Approved integrated release-readiness fixes; native contracts and saved data preserved"
+    },
+    {
+      "path": "Modules/DynastyEnhancer/Source/build-recruit-resume-tools.ps1",
+      "sha256": "f863fe2b3703ad3cd5374df8eae2ab64adaab951a042d2756d5689d1126e25a8",
+      "reason": "Approved integrated release-readiness fixes; native contracts and saved data preserved"
+    },
+    {
       "path": "Modules/DynastyEnhancer/Source/build-recruiting-fog.ps1",
       "sha256": "15b8aba430dc3fd2aa577c153666dac9e4f9b14249e5bec080f4997a341de1d2",
-      "reason": "Position Changes projected OVR display-only native adapter; preserve existing NIL/navigation and indexed dispatch; live grade leak reproduced and corrected, speed acceptance inconclusive Private 1.0.5 package: source-integrated full/small-card Recruit Feedback and native off-board scouting icon; immediate native UI scouting refresh. Focused tests added to source build. Live helpers excluded; clean-package stability pending."
+      "reason": "Approved integrated release-readiness fixes; native contracts and saved data preserved"
     },
     {
       "path": "Modules/DynastyEnhancer/Source/build.ps1",
       "sha256": "33e81eab078e6729fb61f9cbc9a96808113751e01d351d310f58627f8d3c150f",
-      "reason": "1.0 branded source-built runtime names, direct verified loading and preserved data/hook contracts"
+      "reason": "Approved integrated release-readiness fixes; native contracts and saved data preserved"
     },
     {
       "path": "Modules/DynastyEnhancer/Tests/CurrencyDisplayTests.h",
       "sha256": "427fa6876fa7eebaef8a3875d6aa854362ac76a4cdf7dec82e4361ca4fb30224",
-      "reason": "COT 0.1.3: independent Weekly Advance adapters with exact loader-pointer normalization, creation-page per-Dynasty options, requested defaults and fitted dollar prefixes"
+      "reason": "Approved integrated release-readiness fixes; native contracts and saved data preserved"
+    },
+    {
+      "path": "Modules/DynastyEnhancer/Tests/DraftResultsWorkerTests.h",
+      "sha256": "d215d74fd8186d4a6e3a4b89f50b786d50b51696d425993dcabafff24d3cbe02",
+      "reason": "Approved integrated release-readiness fixes; native contracts and saved data preserved"
     },
     {
       "path": "Modules/DynastyEnhancer/Tests/EnhancementOptionsTests.h",
-      "sha256": "7df8fbe352631ae28a68688e4a0d0bb6a321d51e58caa594a7adbcbbf3cfc07c",
-      "reason": "1.0 branded source-built runtime names, direct verified loading and preserved data/hook contracts Private recruiting preview: additive per-Dynasty Native/Recruit Feedback/Rank Only option, relative stable tiers, guarded native scouting-history observation and off-board Target icon presentation. Existing shared-v4 options, GPI, currency, saves and published history retained. No installation or publication. Private 1.0.5 package: source-integrated full/small-card Recruit Feedback and native off-board scouting icon; immediate native UI scouting refresh. Focused tests added to source build. Live helpers excluded; clean-package stability pending. 1.0.7: initial recruit interest preference uses the native/default display; user-facing Default label; saved numeric choices preserved and tested."
+      "sha256": "3ce6b34cb8ea1d9313dff1bfb8af801441f8adb016a60214882c23b9edc971b4",
+      "reason": "Approved integrated release-readiness fixes; native contracts and saved data preserved"
+    },
+    {
+      "path": "Modules/DynastyEnhancer/Tests/IndependentGradeOptionsTests.h",
+      "sha256": "0df54e631941c634d0a967dad927cb8a57ec3aa32a89f68d28538f94d30e7019",
+      "reason": "Approved integrated release-readiness fixes; native contracts and saved data preserved"
     },
     {
       "path": "Modules/DynastyEnhancer/Tests/NativeSocialMediaTests.cpp",
-      "sha256": "5864c108d79c3efb26bfdf8b6c68906f96b35dca4ce4a30b51c4227b1d79c94b",
-      "reason": "1.0 branded source-built runtime names, direct verified loading and preserved data/hook contracts"
+      "sha256": "f0caf8997403de390a21648e289c0649a85eb96ec6eb51e723cfa9826e9a2007",
+      "reason": "Approved integrated release-readiness fixes; native contracts and saved data preserved"
     },
     {
       "path": "Modules/DynastyEnhancer/Tests/RecruitResumeExpansionTests.h",
-      "sha256": "ffc9494d5eb2d2fcb279175ae018119134aa2f65344177b9094dd9b218d5e797",
-      "reason": "0.1.16 bounded season-review fixes and source/fixture verification; retain native scopes, fingerprints, published identities/history, four-module selection and helper verification."
+      "sha256": "e0e48144e497dd41e4ace9f746c652e7b21be29baea73115e0dc7baddca119cd",
+      "reason": "Approved integrated release-readiness fixes; native contracts and saved data preserved"
+    },
+    {
+      "path": "Modules/DynastyEnhancer/Tests/RecruitTransferClassTests.h",
+      "sha256": "bc08a3cc472a00277b1cf77e2f17fa6c64a44a124684dfd8ff8b944315d51970",
+      "reason": "Approved integrated release-readiness fixes; native contracts and saved data preserved"
     },
     {
       "path": "Modules/DynastyEnhancer/Tests/RecruitingFogTests.cpp",
       "sha256": "0b369bbdb8f64454e8ab07e1f4f414422b548f926a1c7ad63c43a74750efb5e8",
-      "reason": "RC013 native Analytics roster-card/action/return, delayed week visibility, safe filter transitions, isolated full-card fog adapters, glyph repair, installer footer and winning visitor departures"
+      "reason": "Approved integrated release-readiness fixes; native contracts and saved data preserved"
     },
     {
       "path": "Modules/DynastyEnhancer/Tests/account_refresh.test.mjs",
@@ -359,12 +904,17 @@
     {
       "path": "Modules/DynastyEnhancer/Tests/draft_results_frame_tests.cpp",
       "sha256": "da2bb2a0bb56fd34ce527b467ee3f84380dbd3b532bf7a712d228bcef5d7f8fb",
-      "reason": "0.1.16 bounded season-review fixes and source/fixture verification; retain native scopes, fingerprints, published identities/history, four-module selection and helper verification."
+      "reason": "Approved integrated release-readiness fixes; native contracts and saved data preserved"
+    },
+    {
+      "path": "Modules/DynastyEnhancer/Tests/draft_results_runtime_tests.cpp",
+      "sha256": "0be9df9aff99c6f34b6409cc3a7d8aa7d37ddab007d8f128ab69cb64391db4b4",
+      "reason": "Approved integrated release-readiness fixes; native contracts and saved data preserved"
     },
     {
       "path": "Modules/DynastyEnhancer/Tests/editorial_selection.test.mjs",
-      "sha256": "a4a1c572075fb149a9f11fd1b1483589521cd3354fb739ef189440f67971476b",
-      "reason": "0.1.7: source-level weekly routine budget, complete continuous scope lists, concise native sidebar and header presentation."
+      "sha256": "6a34c170ccc4e0e3d815d6217f584cfaa9212c44f0434f3d15975b964bafad91",
+      "reason": "Private medium/sparse reaction calibration, snap-qualified spring boo policy and bounded verified background priority; season-long expectation freshness, cross-account/matchup repetition limits and non-tautological milestone wording"
     },
     {
       "path": "Modules/DynastyEnhancer/Tests/enhancement_grade_scales_test.py",
@@ -392,6 +942,11 @@
       "reason": "COT 0.1.5 feedback: native focus colors, exact AIO shared overview; separate visitor demand/tickets, deficit bed, scoring audio priority and recorded-TD inset recovery. Workspace only."
     },
     {
+      "path": "Modules/DynastyEnhancer/Tests/matchup_season.test.mjs",
+      "sha256": "f8c7165088f29c340101a4e284f148d556ca1cff1acb47e331baeec92d4709a2",
+      "reason": "Bounded supporter/recruit/recovery private pass; verified source baselines retained."
+    },
+    {
       "path": "Modules/DynastyEnhancer/Tests/news_cycles.test.mjs",
       "sha256": "3c3099799f95e761151c9903f54324367cea2fba42d5b5db87791e1ea6ecd217",
       "reason": "0.1.7: source-level weekly routine budget, complete continuous scope lists, concise native sidebar and header presentation."
@@ -407,14 +962,29 @@
       "reason": "1.0 branded source-built runtime names, direct verified loading and preserved data/hook contracts"
     },
     {
+      "path": "Modules/DynastyEnhancer/Tests/player_ingame_ui_test.py",
+      "sha256": "e198b2e5916e75e6da3a5039c72b8f44cf9d67d6891daeb4cdb891c336553107",
+      "reason": "Private spring initialization-mask and targeted small-boo delivery corrections; compact exact-fingerprint bank6 presentation adapter without raising runtime limits"
+    },
+    {
       "path": "Modules/DynastyEnhancer/Tests/portal_draft.test.mjs",
       "sha256": "4e3710cb1540a81856c22d4ff3bc3e265a77f915b8ec8c2ecd0ddc72585d452d",
       "reason": "0.1.7: source-level weekly routine budget, complete continuous scope lists, concise native sidebar and header presentation."
     },
     {
+      "path": "Modules/DynastyEnhancer/Tests/postseason_decisions.test.mjs",
+      "sha256": "4dc851654049d0b3fd8c5f072913311fe9f434fb2c77e24339a3856a228a92fb",
+      "reason": "Approved integrated release-readiness fixes; native contracts and saved data preserved"
+    },
+    {
       "path": "Modules/DynastyEnhancer/Tests/publication_policy.test.mjs",
       "sha256": "a0cd1a4e2624004a932c9f4145ec60c73f23566e7e065d45ebba41118a350e01",
       "reason": "0.1.7: source-level weekly routine budget, complete continuous scope lists, concise native sidebar and header presentation."
+    },
+    {
+      "path": "Modules/DynastyEnhancer/Tests/recover_weeks.test.mjs",
+      "sha256": "6b457cb6142411a82fdd8710fe5559fce363e675c9dcad86d664e76f83c184b3",
+      "reason": "Bounded supporter/recruit/recovery private pass; verified source baselines retained."
     },
     {
       "path": "Modules/DynastyEnhancer/Tests/runtime_archive.test.mjs",
@@ -438,8 +1008,8 @@
     },
     {
       "path": "Modules/DynastyEnhancer/Tests/template_performance.test.mjs",
-      "sha256": "bac483bcf1abb06ca8f598004d0e0e4afdbd809acd86bf0a52b31fe7658d3b22",
-      "reason": "GPI branding: current account/handle/native G icon, analytics labels and archived-header display projection; retain existing publication/account keys, statistics, grading model and academic GPA"
+      "sha256": "bc7a0b23c399f92caf9c28aeb8396224e54f6f069d49dbbad47824e272af560e",
+      "reason": "Private bounded follow-up: actual-school spring demand; controlled audio masking evidence and result-owned mix focus; supporter allegiance/voices; stable refresh; hot-loop caching; verified plain GDA support packaging and transactional installer"
     },
     {
       "path": "Modules/DynastyEnhancer/Tests/transactions_editorial.test.mjs",
@@ -454,12 +1024,47 @@
     {
       "path": "Modules/DynastyEnhancer/Tools/account_presentation.mjs",
       "sha256": "e84412eebf4f9c362648d3e9e190d838ea95613dc21e858c2c3a643ea4d17996",
-      "reason": "COT hub clock scope, fresh practice picker and recruit star account presentation"
+      "reason": "Approved integrated release-readiness fixes; native contracts and saved data preserved"
+    },
+    {
+      "path": "Modules/DynastyEnhancer/Tools/advanced_analytics.mjs",
+      "sha256": "5516246b53989a28f64ba4ec598e0a93cb23fed10511ac14710e5b7e64492883",
+      "reason": "Approved integrated release-readiness fixes; native contracts and saved data preserved"
+    },
+    {
+      "path": "Modules/DynastyEnhancer/Tools/audit_editorial.mjs",
+      "sha256": "6849a39006b510c782425e1a066abb1a288efc349f3baf513f36bdfdc820bcff",
+      "reason": "Approved integrated release-readiness fixes; native contracts and saved data preserved"
+    },
+    {
+      "path": "Modules/DynastyEnhancer/Tools/audit_template_paths.mjs",
+      "sha256": "88099fc887ebd944e0e3c56ff81ba3b85c864ac0279ae43146bf2e5552b4df0e",
+      "reason": "Approved integrated release-readiness fixes; native contracts and saved data preserved"
+    },
+    {
+      "path": "Modules/DynastyEnhancer/Tools/audit_world_news.mjs",
+      "sha256": "980bea0ac7353b651f9b9b0c96ca74d75b9eb45786657ee13cb2b53ba6eae964",
+      "reason": "Approved integrated release-readiness fixes; native contracts and saved data preserved"
+    },
+    {
+      "path": "Modules/DynastyEnhancer/Tools/backfill_week.mjs",
+      "sha256": "7de81af73e469d950439c2328e5618a1d69178056c6807ee604c82da0147d0f9",
+      "reason": "Approved integrated release-readiness fixes; native contracts and saved data preserved"
+    },
+    {
+      "path": "Modules/DynastyEnhancer/Tools/benchmark_templates.mjs",
+      "sha256": "c7e9f21f19b1d2c049d69931f9bf66d2ad087d41212fa507764a1b3d96e52db1",
+      "reason": "Approved integrated release-readiness fixes; native contracts and saved data preserved"
     },
     {
       "path": "Modules/DynastyEnhancer/Tools/betting_model.mjs",
       "sha256": "3df4eaf4a249ca4ae56f8bed2ccdd7a3f7ea35888d1f56d227e29d611437df03",
-      "reason": "1.0 branded source-built runtime names, direct verified loading and preserved data/hook contracts"
+      "reason": "Approved integrated release-readiness fixes; native contracts and saved data preserved"
+    },
+    {
+      "path": "Modules/DynastyEnhancer/Tools/box_score_stories.mjs",
+      "sha256": "2416b75ef64d7a8d9d68685e22b806980c274aa4a1401300515caab9baf32470",
+      "reason": "Approved integrated release-readiness fixes; native contracts and saved data preserved"
     },
     {
       "path": "Modules/DynastyEnhancer/Tools/build_aio_currency_ui.py",
@@ -488,8 +1093,18 @@
     },
     {
       "path": "Modules/DynastyEnhancer/Tools/build_player_card_ui.py",
-      "sha256": "9acb5ae28c78d180e9407cae5348f418665ea634f83c4e3b934d9cc279fc8ed7",
-      "reason": "1.0 branded source-built runtime names, direct verified loading and preserved data/hook contracts"
+      "sha256": "f56706985a9abf40ee27cb4f483d47f401760691958785618d41bbfe32d81e72",
+      "reason": "Private in-game Depth Chart live-card fix: exact native screen marks its legacy six-attribute presentation; existing fog/grade/color policy, source values and indexed dispatch remain intact."
+    },
+    {
+      "path": "Modules/DynastyEnhancer/Tools/build_player_hub_ui.py",
+      "sha256": "358c5278cb111907edddf00802bccae7d65c767f3ea958ebc28986a5b6fd4594",
+      "reason": "Private Extensions spring cohesion: verified fixture context, one native fanbase, capped turnout and score-independent exits, both-offense reactions, scoped backward-readable history, fresh preseason publications, hub accuracy labels; preserve existing guards and released fixes."
+    },
+    {
+      "path": "Modules/DynastyEnhancer/Tools/build_player_ingame_ui.py",
+      "sha256": "8cfa93bad28c6d6a780fd17a42ceef6822ad81cbb66a15bf7ad5ebb075f286ac",
+      "reason": "Private spring initialization-mask and targeted small-boo delivery corrections; compact exact-fingerprint bank6 presentation adapter without raising runtime limits"
     },
     {
       "path": "Modules/DynastyEnhancer/Tools/build_player_nil_ui.py",
@@ -502,34 +1117,89 @@
       "reason": "RC013 native Analytics roster-card/action/return, delayed week visibility, safe filter transitions, isolated full-card fog adapters, glyph repair, installer footer and winning visitor departures"
     },
     {
+      "path": "Modules/DynastyEnhancer/Tools/clean_language.mjs",
+      "sha256": "6db1143f8bcb2698534a74f8dc336d0e17376f6cf1fd2e670d95f5077fb0c3e8",
+      "reason": "Approved integrated release-readiness fixes; native contracts and saved data preserved"
+    },
+    {
+      "path": "Modules/DynastyEnhancer/Tools/conference_context.mjs",
+      "sha256": "d825391efeb317430e910abee120da5d86391920ae5ccef778e089b159bea44b",
+      "reason": "Approved integrated release-readiness fixes; native contracts and saved data preserved"
+    },
+    {
+      "path": "Modules/DynastyEnhancer/Tools/context_analytics.mjs",
+      "sha256": "782536176fad1bb7f911704349ef80efec2df9562ab6b5bdc85a65f1f98531d4",
+      "reason": "Approved integrated release-readiness fixes; native contracts and saved data preserved"
+    },
+    {
       "path": "Modules/DynastyEnhancer/Tools/conversation_topics.mjs",
-      "sha256": "37b144e700bb5511813831075e49fb2380654b1db38e5ee026b704126f5f0719",
-      "reason": "0.1.16 bounded season-review fixes and source/fixture verification; retain native scopes, fingerprints, published identities/history, four-module selection and helper verification."
+      "sha256": "44c699c347a8e1c20f569ebadf492e069523c509a414e1a3761f5a5c68a068a7",
+      "reason": "Approved integrated release-readiness fixes; native contracts and saved data preserved"
+    },
+    {
+      "path": "Modules/DynastyEnhancer/Tools/correct_waiting_archive.mjs",
+      "sha256": "2065f65cc068f06db380807c257ee056c00d332dc73332347c1eb1b1b64bddad",
+      "reason": "Approved integrated release-readiness fixes; native contracts and saved data preserved"
+    },
+    {
+      "path": "Modules/DynastyEnhancer/Tools/deep_analytics.mjs",
+      "sha256": "34dbc97dd573cf53317277e0c022bccf5d7c311b0eefccff1db34ac3d6ec4466",
+      "reason": "Approved integrated release-readiness fixes; native contracts and saved data preserved"
+    },
+    {
+      "path": "Modules/DynastyEnhancer/Tools/draft_discourse.mjs",
+      "sha256": "bec27e98df19fc40086789bd2ca9e1c16f8690559576e75e7e24272d178049af",
+      "reason": "Approved integrated release-readiness fixes; native contracts and saved data preserved"
     },
     {
       "path": "Modules/DynastyEnhancer/Tools/draft_results.mjs",
       "sha256": "f077ccec8e57b52e5c49d93fb6eed79ae440d9d1563829f18bdc5c907b23b0c9",
-      "reason": "Retain prior COT integration; 0.1.6 Beyond the Field: bounded content/selection/voices, native paging, persistent modeled recruit records, supported calendar/draft reference, exact AIO Notes/colors and numeric-preserving money redraw adapters."
+      "reason": "Approved integrated release-readiness fixes; native contracts and saved data preserved"
     },
     {
       "path": "Modules/DynastyEnhancer/Tools/editorial_policy.mjs",
-      "sha256": "c2540b5520bad97d123a0f7d913f06a431af344a6c6d8191009f2c6e3d45dd5a",
-      "reason": "0.1.15: reviewed PFF editorial pack, verified position boards and weekly grade honors; National Social capacity 300"
+      "sha256": "587168f1b3d25e307e40c0d1bcb0ab2861e7f31b46fd755394820d231dcb7e58",
+      "reason": "Approved integrated release-readiness fixes; native contracts and saved data preserved"
+    },
+    {
+      "path": "Modules/DynastyEnhancer/Tools/export_draft_results.mjs",
+      "sha256": "14d0348afe1c840ea1823f95fd4196e140fe5e6998e73a46be5fc988815e8082",
+      "reason": "Approved integrated release-readiness fixes; native contracts and saved data preserved"
+    },
+    {
+      "path": "Modules/DynastyEnhancer/Tools/export_emoji_probe.mjs",
+      "sha256": "1bf475c6abdcc528689a2f20338b2b0d79b429b25cfc1773a75ab73515e3245e",
+      "reason": "Approved integrated release-readiness fixes; native contracts and saved data preserved"
+    },
+    {
+      "path": "Modules/DynastyEnhancer/Tools/export_feed.mjs",
+      "sha256": "85f464e8594a0e70b245b7144d5b709608d2796b81fa5d9aeca7d4c6d9dcc75a",
+      "reason": "Approved integrated release-readiness fixes; native contracts and saved data preserved"
     },
     {
       "path": "Modules/DynastyEnhancer/Tools/export_runtime.mjs",
-      "sha256": "0d6d32526f7dbed86f3ec08d12312898bcdb0d4e1dd23120aabaeb15128e9350",
-      "reason": "1.0 branded source-built runtime names, direct verified loading and preserved data/hook contracts"
+      "sha256": "f58714fa397ac1789422343e16852c36d2ba81bfc7f9c5907f29a0f9a37e742f",
+      "reason": "Approved integrated release-readiness fixes; native contracts and saved data preserved"
+    },
+    {
+      "path": "Modules/DynastyEnhancer/Tools/fan_events.mjs",
+      "sha256": "8abe0ff11c0ef305aaade6e1156a45820e0a89363f83f81bfe3702007aff5b2a",
+      "reason": "Approved integrated release-readiness fixes; native contracts and saved data preserved"
     },
     {
       "path": "Modules/DynastyEnhancer/Tools/feed_engine.mjs",
-      "sha256": "23148c9e3d92359a495fa9935ad9f2b2f0443ee43017c78cbf515dbf18c1c4d4",
-      "reason": "GPI branding: current account/handle/native G icon, analytics labels and archived-header display projection; retain existing publication/account keys, statistics, grading model and academic GPA"
+      "sha256": "f4714645b9eb25721942eab9e73a506908e29e7946135efbd444c853ae4708a1",
+      "reason": "Approved integrated release-readiness fixes; native contracts and saved data preserved"
     },
     {
       "path": "Modules/DynastyEnhancer/Tools/feed_selection.mjs",
-      "sha256": "32e4b8c7fb3fd90c56b35c1f797e3c8fbeb224218e69cc767acb2c315e9b977e",
-      "reason": "0.1.16 bounded season-review fixes and source/fixture verification; retain native scopes, fingerprints, published identities/history, four-module selection and helper verification."
+      "sha256": "c1d09808b7dd889dd50934fd9f45921bbb9a7bddaf3bcf122dcba330626dc9b0",
+      "reason": "Approved integrated release-readiness fixes; native contracts and saved data preserved"
+    },
+    {
+      "path": "Modules/DynastyEnhancer/Tools/football_context.mjs",
+      "sha256": "d1ab123f3c7e8af0597a276f85af5c83b505c4b0ec5b739714c8422effa65b41",
+      "reason": "Approved integrated release-readiness fixes; native contracts and saved data preserved"
     },
     {
       "path": "Modules/DynastyEnhancer/Tools/grade_scales.py",
@@ -537,94 +1207,309 @@
       "reason": "1.0 branded source-built runtime names, direct verified loading and preserved data/hook contracts"
     },
     {
+      "path": "Modules/DynastyEnhancer/Tools/heisman_context.mjs",
+      "sha256": "dd11f14023328046dbf53e7c4f2be98aa4e0cad70ab09985d2e3b0865aa05fe9",
+      "reason": "Approved integrated release-readiness fixes; native contracts and saved data preserved"
+    },
+    {
+      "path": "Modules/DynastyEnhancer/Tools/history_milestones.mjs",
+      "sha256": "c60a8c2ccfa313665a8f70aeb6ca2777a6484679f2b39ca30654b7c8ca8c688d",
+      "reason": "Approved integrated release-readiness fixes; native contracts and saved data preserved"
+    },
+    {
       "path": "Modules/DynastyEnhancer/Tools/history_store.mjs",
-      "sha256": "990a52941bfa8dbeeab7c45d7a67419ce6e1dba9f82aacdb340eeaaec7ab353d",
-      "reason": "Retain prior COT immutable publication history; 0.1.6 atomic scoped recruit-game sidecar preserves new records across older writers that omit unknown index fields, without rewriting old feed blobs."
+      "sha256": "795e4195c99d7cd97f521236d7bd3a711d68aa2c435801aaa067e3b69b681f23",
+      "reason": "Approved integrated release-readiness fixes; native contracts and saved data preserved"
+    },
+    {
+      "path": "Modules/DynastyEnhancer/Tools/injury_timetables.mjs",
+      "sha256": "04252c6de2b7e675bbf1ade6990a380b46a20c69c74cd0d7556ccf5b0ce99d66",
+      "reason": "Approved integrated release-readiness fixes; native contracts and saved data preserved"
+    },
+    {
+      "path": "Modules/DynastyEnhancer/Tools/inspect_runtime.mjs",
+      "sha256": "1e1454ac25f6a8840d3051a39cd018bcf1de9c257827113d239d3a3110207910",
+      "reason": "Approved integrated release-readiness fixes; native contracts and saved data preserved"
+    },
+    {
+      "path": "Modules/DynastyEnhancer/Tools/late_season_events.mjs",
+      "sha256": "09815958e128051eefd87a1591adef291a2d8c09d88b0019b07d2ef5b43c91cb",
+      "reason": "Approved integrated release-readiness fixes; native contracts and saved data preserved"
+    },
+    {
+      "path": "Modules/DynastyEnhancer/Tools/matchup_events.mjs",
+      "sha256": "9911e95e5a246c8bab8996c589c49f1e6db2697064cc5d9a88651887a21cee4f",
+      "reason": "Approved integrated release-readiness fixes; native contracts and saved data preserved"
+    },
+    {
+      "path": "Modules/DynastyEnhancer/Tools/merge_runtime_history.mjs",
+      "sha256": "a651a3871b3dc8e852dfca22b1070a54b1a34f032be30cd8f3c3e82140b33942",
+      "reason": "Approved integrated release-readiness fixes; native contracts and saved data preserved"
     },
     {
       "path": "Modules/DynastyEnhancer/Tools/national_editorial.mjs",
       "sha256": "17250bba392d6362e10fa8dc7fd11a0a7e2faab7b91ae26686a8c5bb2824e7e3",
-      "reason": "0.1.14: released native production and position-relative grades with prestige uncertainty; same-model optional PFF publications and preserved history"
+      "reason": "Approved integrated release-readiness fixes; native contracts and saved data preserved"
     },
     {
       "path": "Modules/DynastyEnhancer/Tools/news_cycles.mjs",
       "sha256": "0b8f963936eb1fa195653c0e85eede7b6ff70b62b28c4413b81631f9ece95a03",
-      "reason": "0.1.14: released native production and position-relative grades with prestige uncertainty; same-model optional PFF publications and preserved history"
+      "reason": "Approved integrated release-readiness fixes; native contracts and saved data preserved"
     },
     {
       "path": "Modules/DynastyEnhancer/Tools/normalize_dynasty.mjs",
-      "sha256": "e4e3966ec84e99640f3c4007629ad09e2d5263e569aaa02105676656f0e47781",
-      "reason": "0.1.16 bounded season-review fixes and source/fixture verification; retain native scopes, fingerprints, published identities/history, four-module selection and helper verification."
+      "sha256": "cd1fbcbf62382db8c487238a95a39824c5789b8924b53626c4dade29ee66a2f1",
+      "reason": "Approved integrated release-readiness fixes; native contracts and saved data preserved"
+    },
+    {
+      "path": "Modules/DynastyEnhancer/Tools/offseason_carry_events.mjs",
+      "sha256": "574cff9a547414d582b2eef90ea3592cac12da5b30f4200f6dfc40f4e1755b5e",
+      "reason": "Approved integrated release-readiness fixes; native contracts and saved data preserved"
+    },
+    {
+      "path": "Modules/DynastyEnhancer/Tools/offseason_ledger.mjs",
+      "sha256": "486aba19685565f2d591c8d9076f617e8be4337721950f0719a54e21e229eb88",
+      "reason": "Approved integrated release-readiness fixes; native contracts and saved data preserved"
+    },
+    {
+      "path": "Modules/DynastyEnhancer/Tools/offseason_ledger_store.mjs",
+      "sha256": "02af9bb0014333c137ceb4a672fbf048c2add1cb903434c06dd6ea916918cbba",
+      "reason": "Approved integrated release-readiness fixes; native contracts and saved data preserved"
+    },
+    {
+      "path": "Modules/DynastyEnhancer/Tools/offseason_recruiting.mjs",
+      "sha256": "e8db68ebe8991500ac3db66666a4d4c41dcc6d14573d5da0a096055f572f8089",
+      "reason": "Approved integrated release-readiness fixes; native contracts and saved data preserved"
+    },
+    {
+      "path": "Modules/DynastyEnhancer/Tools/player_references.mjs",
+      "sha256": "db05bd5ff3a042a48ea37b3697f2d604aafb114b3e98b19248dae0dfab70c564",
+      "reason": "Approved integrated release-readiness fixes; native contracts and saved data preserved"
+    },
+    {
+      "path": "Modules/DynastyEnhancer/Tools/players_leaving_events.mjs",
+      "sha256": "a75dd8c953e31f57b486bb832e83685d643136e84f51d12f4b90e6d701301edf",
+      "reason": "Approved integrated release-readiness fixes; native contracts and saved data preserved"
+    },
+    {
+      "path": "Modules/DynastyEnhancer/Tools/playoff_events.mjs",
+      "sha256": "f4d8658438c558253ab1a67724501b5b6119701bba461455e65cca134b17301b",
+      "reason": "Approved integrated release-readiness fixes; native contracts and saved data preserved"
+    },
+    {
+      "path": "Modules/DynastyEnhancer/Tools/postseason_buzz.mjs",
+      "sha256": "901c45f7980303b3c9fc3fc4518483482c73457b8af7ab4160f5b9e1189b4033",
+      "reason": "Approved integrated release-readiness fixes; native contracts and saved data preserved"
+    },
+    {
+      "path": "Modules/DynastyEnhancer/Tools/postseason_events.mjs",
+      "sha256": "1b563999951392a5b9c728636cf56ebd8bdae744ba3f8f9ad05702964143b7b3",
+      "reason": "Approved integrated release-readiness fixes; native contracts and saved data preserved"
+    },
+    {
+      "path": "Modules/DynastyEnhancer/Tools/postseason_timing.mjs",
+      "sha256": "335f225cf0cc2e76006944dc908b128dff1986aa17ec179c59e6aae268236658",
+      "reason": "Approved integrated release-readiness fixes; native contracts and saved data preserved"
+    },
+    {
+      "path": "Modules/DynastyEnhancer/Tools/preseason_events.mjs",
+      "sha256": "ec3edd56e1238a2b2e2a7589fcfecafd59892eac50d7e48dfa8770429379e41f",
+      "reason": "Approved integrated release-readiness fixes; native contracts and saved data preserved"
     },
     {
       "path": "Modules/DynastyEnhancer/Tools/prose_cleanup.mjs",
-      "sha256": "eb68633bdfb651c5bf32a85c1d8a21fc4bfd8f817902b9fb9af03c4b2f34cabb",
-      "reason": "0.1.16 bounded season-review fixes and source/fixture verification; retain native scopes, fingerprints, published identities/history, four-module selection and helper verification."
+      "sha256": "2463657b38d886372f47f8c502745b9c31c77ff03960a70618dadbd80d7c9f13",
+      "reason": "Approved integrated release-readiness fixes; native contracts and saved data preserved"
+    },
+    {
+      "path": "Modules/DynastyEnhancer/Tools/public_polls.mjs",
+      "sha256": "8fe2715349ce7f36f71117277473b9a2e3787fa3a6a22ea779c6ceaf3122397e",
+      "reason": "Approved integrated release-readiness fixes; native contracts and saved data preserved"
+    },
+    {
+      "path": "Modules/DynastyEnhancer/Tools/publication_policy.mjs",
+      "sha256": "8647238c9dee5ee7ae5ed89d3fcc1880a89cd15a63861f62e23726af0e930e8e",
+      "reason": "Approved integrated release-readiness fixes; native contracts and saved data preserved"
+    },
+    {
+      "path": "Modules/DynastyEnhancer/Tools/publication_timeline.mjs",
+      "sha256": "c332029bfd688311d25c479367c732ddf711ab6a768300f0eb5edb132a0f85bd",
+      "reason": "Approved integrated release-readiness fixes; native contracts and saved data preserved"
+    },
+    {
+      "path": "Modules/DynastyEnhancer/Tools/read_dynasty.mjs",
+      "sha256": "1280a4e92b2f48a2ca474e8762c4035b9db29df6a1bab0791f199004cfb9feff",
+      "reason": "Approved integrated release-readiness fixes; native contracts and saved data preserved"
     },
     {
       "path": "Modules/DynastyEnhancer/Tools/read_runtime.mjs",
-      "sha256": "3fc3a3fe86915e8563fdf7f58ade81665461c67b26dbf1ffc92ef5ad91afaebb",
-      "reason": "0.1.16 bounded season-review fixes and source/fixture verification; retain native scopes, fingerprints, published identities/history, four-module selection and helper verification."
+      "sha256": "19612f5172dc858e050fad9ae999ce9f32e9cae84a73182f7ddc95ffec43206b",
+      "reason": "Approved integrated release-readiness fixes; native contracts and saved data preserved"
+    },
+    {
+      "path": "Modules/DynastyEnhancer/Tools/recover_weeks.mjs",
+      "sha256": "b540c29476f1934d1953e6a4109ad808cc77b8171558f6f93b60f7be100d00f0",
+      "reason": "Approved integrated release-readiness fixes; native contracts and saved data preserved"
+    },
+    {
+      "path": "Modules/DynastyEnhancer/Tools/recruit_context.mjs",
+      "sha256": "84f5f21206ffa98787454f50185db601f359f0cafbcdf06644a5d3f68b042a7a",
+      "reason": "Approved integrated release-readiness fixes; native contracts and saved data preserved"
+    },
+    {
+      "path": "Modules/DynastyEnhancer/Tools/recruit_notes_vm.py",
+      "sha256": "cdfa6a83c5ccbabb5892ab53735f00b03db81b753d2af6022be927636ef5799a",
+      "reason": "Private Weekly Strategy report, matchup and focus-picker rating presentation; indexed dispatch beyond 64 asset banks, retaining one-word path for smaller sets."
+    },
+    {
+      "path": "Modules/DynastyEnhancer/Tools/recruit_ranks.mjs",
+      "sha256": "5736aa2fdfda1c892fecc2e2675153baf0aab24c2cfb755d5db283c1ad16330a",
+      "reason": "Approved integrated release-readiness fixes; native contracts and saved data preserved"
+    },
+    {
+      "path": "Modules/DynastyEnhancer/Tools/recruit_resume_data.mjs",
+      "sha256": "176d60692b78efdabf2a3b7400a3cf97d468cf1a3b1e765bab24dd9b3c4ea15f",
+      "reason": "Approved integrated release-readiness fixes; native contracts and saved data preserved"
+    },
+    {
+      "path": "Modules/DynastyEnhancer/Tools/render_voice_review.mjs",
+      "sha256": "20c8ebe9601e60effb16606f7d04324bc45905e3d2b1920518bbcc09a47911f0",
+      "reason": "Approved integrated release-readiness fixes; native contracts and saved data preserved"
+    },
+    {
+      "path": "Modules/DynastyEnhancer/Tools/repair_recruiting_archive.mjs",
+      "sha256": "f2426ff4fc341a14ee5134dc44e52fd962a0c20d4e7327ebc9641ae4bf4570b1",
+      "reason": "Approved integrated release-readiness fixes; native contracts and saved data preserved"
+    },
+    {
+      "path": "Modules/DynastyEnhancer/Tools/resume_runtime.mjs",
+      "sha256": "c1e4f4e3385a67bfacec5495b3ae652c0121975e3918959eda38cbb0a1c6d79a",
+      "reason": "Approved integrated release-readiness fixes; native contracts and saved data preserved"
+    },
+    {
+      "path": "Modules/DynastyEnhancer/Tools/review_completed_corpus.mjs",
+      "sha256": "33b107376df758841a26d2a5dd4c137092f82c8da37338985aab28a30579aa18",
+      "reason": "Approved integrated release-readiness fixes; native contracts and saved data preserved"
+    },
+    {
+      "path": "Modules/DynastyEnhancer/Tools/review_recruit_resumes.mjs",
+      "sha256": "3cc5767f78a6ffa15038b18b459b3576bbff36882e627cb511a8569790629d22",
+      "reason": "Approved integrated release-readiness fixes; native contracts and saved data preserved"
     },
     {
       "path": "Modules/DynastyEnhancer/Tools/runtime_archive.mjs",
-      "sha256": "b3ff534903ce9459acae1d520612dcdc78d708703b3b1014d35be98105102c36",
-      "reason": "COT 0.1.4: factual social perspectives, persistent voices, four-edition structure memory, required news retention and frozen publication wording; compact archive metadata and native UI performance; motion-driven sound companions and mixed visitor sections with strong-host travel resistance. Workspace only."
+      "sha256": "f78c719a2adbf3233081c1efa7770c39a7de240c4fbeac5b3d4e8fad5d186b3d",
+      "reason": "Approved integrated release-readiness fixes; native contracts and saved data preserved"
     },
     {
       "path": "Modules/DynastyEnhancer/Tools/runtime_lifecycle.mjs",
-      "sha256": "6e3d945653ad4df7a8e9494839a4e39275c23f3f3ff37e429a70de56d22d55dc",
-      "reason": "GPI branding: current account/handle/native G icon, analytics labels and archived-header display projection; retain existing publication/account keys, statistics, grading model and academic GPA"
+      "sha256": "971853fec6ccbd419f5cf7f4592c4e45e80a2e809e47739151365cae46c288b2",
+      "reason": "Approved integrated release-readiness fixes; native contracts and saved data preserved"
+    },
+    {
+      "path": "Modules/DynastyEnhancer/Tools/season_context.mjs",
+      "sha256": "29c3f710b3b1d267fe18745b952ff92b7ae0c785a4c6db5adab6e58b835b97cf",
+      "reason": "Approved integrated release-readiness fixes; native contracts and saved data preserved"
+    },
+    {
+      "path": "Modules/DynastyEnhancer/Tools/season_ending_events.mjs",
+      "sha256": "68faeb9efa4ff2c54a2e7edf70faa23ffae381f4adb07784709cfb7320695967",
+      "reason": "Approved integrated release-readiness fixes; native contracts and saved data preserved"
+    },
+    {
+      "path": "Modules/DynastyEnhancer/Tools/season_launch_events.mjs",
+      "sha256": "c179ce01d36a5d018d70f2a044e3a763d8b0c13cda7c271a428b062c1448ff5f",
+      "reason": "Approved integrated release-readiness fixes; native contracts and saved data preserved"
+    },
+    {
+      "path": "Modules/DynastyEnhancer/Tools/season_review_events.mjs",
+      "sha256": "119a015934468342c1f7159287b1e9b91835347365a524005a21720882a7d6af",
+      "reason": "Approved integrated release-readiness fixes; native contracts and saved data preserved"
+    },
+    {
+      "path": "Modules/DynastyEnhancer/Tools/season_storylines.mjs",
+      "sha256": "6a846b7b4d0162aa4db8c109578f15031ab68aec426cfebcdfe6608121fe6a06",
+      "reason": "Approved integrated release-readiness fixes; native contracts and saved data preserved"
     },
     {
       "path": "Modules/DynastyEnhancer/Tools/social_discovery.mjs",
       "sha256": "e142691c1b258304522f04d6e6821e3ce0db71a8a527f99f335a4781db85268d",
-      "reason": "Retain prior COT integration; 0.1.6 Beyond the Field: bounded content/selection/voices, native paging, persistent modeled recruit records, supported calendar/draft reference, exact AIO Notes/colors and numeric-preserving money redraw adapters."
+      "reason": "Approved integrated release-readiness fixes; native contracts and saved data preserved"
     },
     {
       "path": "Modules/DynastyEnhancer/Tools/story_authors.mjs",
       "sha256": "92db54b63dbd5c232ab978fd8643a312f5b30dad416544dbba2d59950fafdf7e",
-      "reason": "GPI branding: current account/handle/native G icon, analytics labels and archived-header display projection; retain existing publication/account keys, statistics, grading model and academic GPA"
+      "reason": "Approved integrated release-readiness fixes; native contracts and saved data preserved"
+    },
+    {
+      "path": "Modules/DynastyEnhancer/Tools/story_avatars.mjs",
+      "sha256": "d98cecd63cc1436f098299f536002345bfacdf32b53111967f563601c689ef61",
+      "reason": "Approved integrated release-readiness fixes; native contracts and saved data preserved"
     },
     {
       "path": "Modules/DynastyEnhancer/Tools/story_conversations.mjs",
       "sha256": "5aaa229a61273d7b574df53c55a431627faf2ba49d61a7a2437b618f30fdd28c",
-      "reason": "0.1.14: released native production and position-relative grades with prestige uncertainty; same-model optional PFF publications and preserved history"
+      "reason": "Approved integrated release-readiness fixes; native contracts and saved data preserved"
     },
     {
       "path": "Modules/DynastyEnhancer/Tools/story_engagement.mjs",
       "sha256": "50528c857444900b539d6548e1d8c85d399b3fadbddf3e1e22171583bd64ddb9",
-      "reason": "COT 0.1.4: factual social perspectives, persistent voices, four-edition structure memory, required news retention and frozen publication wording; compact archive metadata and native UI performance; motion-driven sound companions and mixed visitor sections with strong-host travel resistance. Workspace only."
+      "reason": "Approved integrated release-readiness fixes; native contracts and saved data preserved"
     },
     {
       "path": "Modules/DynastyEnhancer/Tools/story_events.mjs",
-      "sha256": "3f7c022f465c5fb5abf7ef12d45d2ec9b0769a45fb34c5067f5dc3f5cd62a7cd",
-      "reason": "GPI branding: current account/handle/native G icon, analytics labels and archived-header display projection; retain existing publication/account keys, statistics, grading model and academic GPA"
+      "sha256": "328a2794e9af5abe3b1c8afc09a5a4eca72b6ec40324baa3126e3f2539329fa9",
+      "reason": "Approved integrated release-readiness fixes; native contracts and saved data preserved"
     },
     {
       "path": "Modules/DynastyEnhancer/Tools/story_renderer.mjs",
-      "sha256": "a2154a0b11e2082b487e794934adbdd45c0a0cdf2296f799b908aadb16634e55",
-      "reason": "Prevent null player author dereference after restoring a published personal voice; preserve real account identity and unchanged published wording, retain teamless national reporting."
+      "sha256": "4ed96c93cc27a7aadda65f29e40bff9742873b03f3ddb8f4eae1104353072e2f",
+      "reason": "Approved integrated release-readiness fixes; native contracts and saved data preserved"
     },
     {
       "path": "Modules/DynastyEnhancer/Tools/story_templates.mjs",
-      "sha256": "36be2489e700c3d3bfbf9397219fdf86715ca229f83b41ab1a983f94b7c9cc71",
-      "reason": "GPI branding: current account/handle/native G icon, analytics labels and archived-header display projection; retain existing publication/account keys, statistics, grading model and academic GPA"
+      "sha256": "6894560c94fbf66e851df0958678f6b0271ace3b30f30aa3eb48623143ad5c65",
+      "reason": "Approved integrated release-readiness fixes; native contracts and saved data preserved"
+    },
+    {
+      "path": "Modules/DynastyEnhancer/Tools/team_analytics.mjs",
+      "sha256": "d16fd2a9599acbd551134a3953f1ff1650972dd56c94cb32bcfcfac6bb43168f",
+      "reason": "Approved integrated release-readiness fixes; native contracts and saved data preserved"
+    },
+    {
+      "path": "Modules/DynastyEnhancer/Tools/training_profile.mjs",
+      "sha256": "5497572d081312e474ba33fb2d9a5f4a8cc1a597f770d81c0e40d35c8af4839b",
+      "reason": "Approved integrated release-readiness fixes; native contracts and saved data preserved"
+    },
+    {
+      "path": "Modules/DynastyEnhancer/Tools/transaction_events.mjs",
+      "sha256": "d448f862720ac10d64a5c9946296bcf7ba474e066cec4cd587dde44b069712d1",
+      "reason": "Approved integrated release-readiness fixes; native contracts and saved data preserved"
+    },
+    {
+      "path": "Modules/DynastyEnhancer/Tools/verify_rollover.mjs",
+      "sha256": "4cd3432d7f6c86872d64a5d796e9040e9de3014c08c274034ece7b46819ffe4a",
+      "reason": "Approved integrated release-readiness fixes; native contracts and saved data preserved"
     },
     {
       "path": "Modules/DynastyEnhancer/Tools/voice_style.mjs",
       "sha256": "0cc737ce8b16fe9f1df9e483d4a840b4fba9e908c1249551871012c8f30645b8",
-      "reason": "0.1.14: released native production and position-relative grades with prestige uncertainty; same-model optional PFF publications and preserved history"
+      "reason": "Approved integrated release-readiness fixes; native contracts and saved data preserved"
     },
     {
       "path": "Modules/DynastyEnhancer/Tools/weekly_coverage.mjs",
       "sha256": "170b57c429c0c85eb63a25fa017577da6bb2a74f310b3a19bb27a1b28af5c212",
-      "reason": "0.1.7: source-level weekly routine budget, complete continuous scope lists, concise native sidebar and header presentation."
+      "reason": "Approved integrated release-readiness fixes; native contracts and saved data preserved"
     },
     {
       "path": "Modules/DynastyEnhancer/Tools/world_events.mjs",
       "sha256": "cec5aa2c4d7b441431320789d626d1d6941209a85f91437bfcc5c2306c715784",
-      "reason": "Retain prior COT integration; 0.1.6 Beyond the Field: bounded content/selection/voices, native paging, persistent modeled recruit records, supported calendar/draft reference, exact AIO Notes/colors and numeric-preserving money redraw adapters."
+      "reason": "Approved integrated release-readiness fixes; native contracts and saved data preserved"
+    },
+    {
+      "path": "Modules/DynastyEnhancer/Vendor/json.hpp",
+      "sha256": "aaf127c04cb31c406e5b04a63f1ae89369fccde6d8fa7cdda1ed4f32dfc5de63",
+      "reason": "Approved integrated release-readiness fixes; native contracts and saved data preserved"
     },
     {
       "path": "Modules/DynastyEnhancer/docs/draft-ovr-native.md",
@@ -642,29 +1527,69 @@
       "reason": "Retain prior per-Dynasty clocks and compatibility IDs; 0.1.6 user-facing Extra Settings branding only."
     },
     {
+      "path": "Modules/ExtraDynastySettings/Plugin/ClockPreferences.cs",
+      "sha256": "6aa1fced77603e0cc9d2b6df1457db6d717e550c7378e4cc58958f038e7c2e26",
+      "reason": "Approved integrated release-readiness fixes; native contracts and saved data preserved"
+    },
+    {
       "path": "Modules/ExtraDynastySettings/Plugin/CombinedClockRuntime.cs",
       "sha256": "ae7e6ef01e5aed42450f0ffdccab9a6c086225595dd96b4d3c432d65ac3dfc4c",
-      "reason": "Per-Dynasty clocks with explicit unknown-identity passthrough and practice exclusion"
+      "reason": "Approved integrated release-readiness fixes; native contracts and saved data preserved"
     },
     {
       "path": "Modules/ExtraDynastySettings/Plugin/CombinedSettingsAction.cs",
       "sha256": "c8ce7a559fc8ca8fadab28ac3597a2222eaf86f782435a8fe41f20c8b79982a5",
-      "reason": "Retain prior per-Dynasty clocks and compatibility IDs; 0.1.6 user-facing Extra Settings branding only."
+      "reason": "Approved integrated release-readiness fixes; native contracts and saved data preserved"
+    },
+    {
+      "path": "Modules/ExtraDynastySettings/Plugin/ControllerSelect.cs",
+      "sha256": "f377451940e8e12c41d9dc270db175ebb2cfba55ca414670b24adf905299e68e",
+      "reason": "Approved integrated release-readiness fixes; native contracts and saved data preserved"
+    },
+    {
+      "path": "Modules/ExtraDynastySettings/Plugin/ControllerSelectCode.cs",
+      "sha256": "81c824ec40c1b509dcf13399e0e5f8763360936775cc330939432d18f3b0c6f5",
+      "reason": "Approved integrated release-readiness fixes; native contracts and saved data preserved"
     },
     {
       "path": "Modules/ExtraDynastySettings/Plugin/DefensivePlayClock.cs",
       "sha256": "477df2cef3048e4883891a996428e8c45b86da6672910d3a5988889b6de2cefd",
-      "reason": "Per-Dynasty clocks with explicit unknown-identity passthrough and practice exclusion"
+      "reason": "Approved integrated release-readiness fixes; native contracts and saved data preserved"
+    },
+    {
+      "path": "Modules/ExtraDynastySettings/Plugin/DiagnosticLog.cs",
+      "sha256": "8cda3f2010550305e75b03b4ad16519fd08c04e1430d4f9239380e94012e9557",
+      "reason": "Approved integrated release-readiness fixes; native contracts and saved data preserved"
+    },
+    {
+      "path": "Modules/ExtraDynastySettings/Plugin/GameSettingsMenuRows.cs",
+      "sha256": "b6497d934d6e09e7b6ea18e9c360b601555a4daed4a9c599eca5febbdd62e989",
+      "reason": "Approved integrated release-readiness fixes; native contracts and saved data preserved"
+    },
+    {
+      "path": "Modules/ExtraDynastySettings/Plugin/LaunchCoordinator.cs",
+      "sha256": "c3401fb6664065d4a50c9ad35b72f30f12a91f4bf11a8a26a729a507cded278d",
+      "reason": "Approved integrated release-readiness fixes; native contracts and saved data preserved"
+    },
+    {
+      "path": "Modules/ExtraDynastySettings/Plugin/PersistenceContracts.cs",
+      "sha256": "8d9563f494999927e7bd1602a4c8d6dcd7d3811d107a947b4282e770acc6070d",
+      "reason": "Approved integrated release-readiness fixes; native contracts and saved data preserved"
+    },
+    {
+      "path": "Modules/ExtraDynastySettings/Plugin/PersistenceController.cs",
+      "sha256": "cc1ec35610acc81a25ad6c0f1b3d523729b6d587d8097594a3cbec68ab51721e",
+      "reason": "Approved integrated release-readiness fixes; native contracts and saved data preserved"
     },
     {
       "path": "Modules/ExtraDynastySettings/Plugin/PersistenceHelper.cs",
-      "sha256": "e665387f7ccd3cda8017501e9ea25f0641081ee50ce505e2a091056eb43032ec",
-      "reason": "COT per-Dynasty clock table, native reads/writes and detached persistence"
+      "sha256": "37bb40d0af0ef803c3afc54c9df3ac2ce1a68ee32467fa051e832f27eb887c68",
+      "reason": "Approved integrated release-readiness fixes; native contracts and saved data preserved"
     },
     {
       "path": "Modules/ExtraDynastySettings/Plugin/RuntimeFiles.cs",
-      "sha256": "8110f0a6898b710cdeced3d58e51753c52a45d474131aeaa5242296df537eefb",
-      "reason": "1.0 branded source-built runtime names, direct verified loading and preserved data/hook contracts"
+      "sha256": "58bc2e13b965e30fb90a08149176a0f8e6b516601102d93eb143a7243176348e",
+      "reason": "Approved integrated release-readiness fixes; native contracts and saved data preserved"
     },
     {
       "path": "Modules/ExtraDynastySettings/Plugin/build.ps1",
@@ -674,12 +1599,27 @@
     {
       "path": "Modules/ExtraDynastySettings/Shared/Clock/DynastyPlayClockAction.cs",
       "sha256": "de77bfb783d4cd59d990438d3609359855eb971df4ab7cd9e9599b478e8d0c10",
-      "reason": "COT hub clock scope, fresh practice picker and recruit star account presentation"
+      "reason": "Approved integrated release-readiness fixes; native contracts and saved data preserved"
     },
     {
       "path": "Modules/ExtraDynastySettings/Shared/Clock/ExtendedClock.cs",
       "sha256": "17bfbae0dcd8778c0f85f03522c70cec1826dae4538ff0f33eb04bbe9fabea00",
-      "reason": "COT per-Dynasty clock table, native reads/writes and detached persistence"
+      "reason": "Approved integrated release-readiness fixes; native contracts and saved data preserved"
+    },
+    {
+      "path": "Modules/ExtraDynastySettings/Shared/Clock/GameLayouts.cs",
+      "sha256": "9d95a19c49eadd06ad7de7541dc499f91e2900578323dbae08d50f16153b53b1",
+      "reason": "Approved integrated release-readiness fixes; native contracts and saved data preserved"
+    },
+    {
+      "path": "Modules/ExtraDynastySettings/Shared/Playcall/SplitHookCode.cs",
+      "sha256": "1766b7a562a2c1d75bca964bc2195de23c8f5d2c91d5eb0215e819f4694fa25a",
+      "reason": "Approved integrated release-readiness fixes; native contracts and saved data preserved"
+    },
+    {
+      "path": "Modules/ExtraDynastySettings/Shared/Playcall/SplitSettingsAction.cs",
+      "sha256": "3a125e8c68184a24a3110da430a9bf3d8a80176a5cd799bccec889e01b16e184",
+      "reason": "Approved integrated release-readiness fixes; native contracts and saved data preserved"
     },
     {
       "path": "Modules/ExtraDynastySettings/Tools/ClockMigrationChecks.cs",
@@ -708,18 +1648,93 @@
     },
     {
       "path": "Modules/GamedayAtmosphere/Source/ArrivalRules.h",
-      "sha256": "b276b84477da212ddebc3b21ec76de557e44a8626df017e9601ce9594317c233",
-      "reason": "Restrict presentation to an owned active Dynasty without changing saved preferences; 75-percent fresh Play Now opening and touchdown-only native replay passthrough."
+      "sha256": "a9395f3d307a1da64d186ef4b28fe5ae513fde3b96a65f9a77e168089e6a5c38",
+      "reason": "Approved integrated release-readiness fixes; native contracts and saved data preserved"
+    },
+    {
+      "path": "Modules/GamedayAtmosphere/Source/AtmosphereMix.h",
+      "sha256": "cbec39c794a17e92b1e2e5f8328a1fef49b5a96ff446ebf00e69734d99fce384",
+      "reason": "Approved integrated release-readiness fixes; native contracts and saved data preserved"
+    },
+    {
+      "path": "Modules/GamedayAtmosphere/Source/AtmosphereRules.h",
+      "sha256": "f90d23ee5660965c0359cc76e7ca70f3ae7ac20cd44db454e2caaeb7912c3799",
+      "reason": "Approved integrated release-readiness fixes; native contracts and saved data preserved"
+    },
+    {
+      "path": "Modules/GamedayAtmosphere/Source/AttendanceAudio.h",
+      "sha256": "f9cc1bbcf6077ce6602d2ce999f61b008bf369b03c7679da222e440661c0f0b0",
+      "reason": "Approved integrated release-readiness fixes; native contracts and saved data preserved"
+    },
+    {
+      "path": "Modules/GamedayAtmosphere/Source/AttendanceContext.h",
+      "sha256": "bdf1fe4d88101970ae5d3140470aafc3576119e1d834757a9e32c538975450d1",
+      "reason": "Approved integrated release-readiness fixes; native contracts and saved data preserved"
+    },
+    {
+      "path": "Modules/GamedayAtmosphere/Source/AttendanceMixer.h",
+      "sha256": "1d6a5b2cb29c16b0db3d42397e49850b1dc24af4b362e8b68f9a761fad6c0930",
+      "reason": "Approved integrated release-readiness fixes; native contracts and saved data preserved"
+    },
+    {
+      "path": "Modules/GamedayAtmosphere/Source/AttendanceRules.h",
+      "sha256": "111b4efaa875bdea6d3aeef1909ba557a4c27b7574a40c8c5f145d5810e25bcd",
+      "reason": "Approved integrated release-readiness fixes; native contracts and saved data preserved"
+    },
+    {
+      "path": "Modules/GamedayAtmosphere/Source/AttendanceTimeline.h",
+      "sha256": "a2a11f0126d819c86eece3d56b71293ac68a98d1af0b20bb127ba72c7a9efdc9",
+      "reason": "Approved integrated release-readiness fixes; native contracts and saved data preserved"
+    },
+    {
+      "path": "Modules/GamedayAtmosphere/Source/AudienceCalibration.h",
+      "sha256": "dfc046744326035fef4d6a2df7a1e95db8ff7418018ef38f32ad3719adff9a12",
+      "reason": "Approved integrated release-readiness fixes; native contracts and saved data preserved"
+    },
+    {
+      "path": "Modules/GamedayAtmosphere/Source/AudienceModel.h",
+      "sha256": "559733767dd6eec051e2a6e921a1b50378f9a9f485f358ada4119610027ac7dd",
+      "reason": "Approved integrated release-readiness fixes; native contracts and saved data preserved"
+    },
+    {
+      "path": "Modules/GamedayAtmosphere/Source/AudienceTurnoutEvidence.h",
+      "sha256": "90cee2139f825a46cb79b21dc50a5c492c7f59305b254655bf880ae5c607fa08",
+      "reason": "Approved integrated release-readiness fixes; native contracts and saved data preserved"
+    },
+    {
+      "path": "Modules/GamedayAtmosphere/Source/AudioIntent.h",
+      "sha256": "3637f4cb106f4352fa6fade8b1af32bd1c459f1feeb835b394b9de3cad507879",
+      "reason": "Approved integrated release-readiness fixes; native contracts and saved data preserved"
+    },
+    {
+      "path": "Modules/GamedayAtmosphere/Source/AudioLevels.h",
+      "sha256": "178a31091a03fda6d86915ee5b8816edc052e4ca6a57827547afaaf1034bfb91",
+      "reason": "Approved integrated release-readiness fixes; native contracts and saved data preserved"
+    },
+    {
+      "path": "Modules/GamedayAtmosphere/Source/AwayAppearance.h",
+      "sha256": "0e587827dd53b72976916564f071b32fa58e6bd90bfa0ecf12691cdc08fe9c17",
+      "reason": "Approved integrated release-readiness fixes; native contracts and saved data preserved"
     },
     {
       "path": "Modules/GamedayAtmosphere/Source/AwayCrowd.h",
-      "sha256": "1bd9c35196fce3aa89098cfbe0e181434270119a5289c8f54360d521be585ba7",
-      "reason": "RC013 native Analytics roster-card/action/return, delayed week visibility, safe filter transitions, isolated full-card fog adapters, glyph repair, installer footer and winning visitor departures"
+      "sha256": "7742c2a0c1628f72bea6a375ee53d630fd9b86a17d6c51a2e8f64353275a263d",
+      "reason": "Approved integrated release-readiness fixes; native contracts and saved data preserved"
+    },
+    {
+      "path": "Modules/GamedayAtmosphere/Source/AwayCrowdAudio.h",
+      "sha256": "7756d07528e8ef0943ed7700c8e0082c21d6b53ae52e5bd6c00eb0594393ed63",
+      "reason": "Approved integrated release-readiness fixes; native contracts and saved data preserved"
+    },
+    {
+      "path": "Modules/GamedayAtmosphere/Source/AwaySoundReactions.h",
+      "sha256": "abb13176b784116e2c924d88643c9f67dce1b29f69b159f5d16a7457b98ece3e",
+      "reason": "Approved integrated release-readiness fixes; native contracts and saved data preserved"
     },
     {
       "path": "Modules/GamedayAtmosphere/Source/BackgroundRoar.h",
-      "sha256": "064e789e6faf1e0777220dca43b35acf648983b40be821727eef5cdc9aa10055",
-      "reason": "COT 0.1.5 feedback: native focus colors, exact AIO shared overview; separate visitor demand/tickets, deficit bed, scoring audio priority and recorded-TD inset recovery. Workspace only."
+      "sha256": "54a5763faef9fb9bd27ac3f2b800adc0d50b6df0617a9667a32ab9a189089043",
+      "reason": "Approved integrated release-readiness fixes; native contracts and saved data preserved"
     },
     {
       "path": "Modules/GamedayAtmosphere/Source/Build.ps1",
@@ -727,94 +1742,694 @@
       "reason": "Add explicit offline Play Now live-match atmosphere with native starting attendance/visitor appearance; isolate Dynasty seeds, plans and persistent histories; preserve offline checks, fingerprints and native ownership."
     },
     {
+      "path": "Modules/GamedayAtmosphere/Source/CallbackGate.h",
+      "sha256": "f01f5835742e9057949375d48f08021019218f30ef256d88f27f0780dd094dfb",
+      "reason": "Approved integrated release-readiness fixes; native contracts and saved data preserved"
+    },
+    {
+      "path": "Modules/GamedayAtmosphere/Source/CallbackTiming.h",
+      "sha256": "3c8ca8287b4960d9ba732402965dc598da64de769d74c38c9e48ae93b7d0bc6a",
+      "reason": "Approved integrated release-readiness fixes; native contracts and saved data preserved"
+    },
+    {
+      "path": "Modules/GamedayAtmosphere/Source/CameraProjection.h",
+      "sha256": "5056869f102280fff83282ac4812fe81796534c1a1c6b12d1c5fe82afcc20108",
+      "reason": "Approved integrated release-readiness fixes; native contracts and saved data preserved"
+    },
+    {
+      "path": "Modules/GamedayAtmosphere/Source/CannonImpact.h",
+      "sha256": "a75efb717a002ee7f1c98867f0b9621b1c1d5905422d15c6d53f1a0b25d7c811",
+      "reason": "Approved integrated release-readiness fixes; native contracts and saved data preserved"
+    },
+    {
+      "path": "Modules/GamedayAtmosphere/Source/CannonSoundRuntime.h",
+      "sha256": "ed9074367bfb662ea8e0e60d396d3323a58aafcaa4e3ed06b8a97a2508ae20ea",
+      "reason": "Approved integrated release-readiness fixes; native contracts and saved data preserved"
+    },
+    {
+      "path": "Modules/GamedayAtmosphere/Source/CatchKnockout.h",
+      "sha256": "a5cd68a69c2489e655070fc0c695397f6bb212d78f3322d012dcdd78a5417bfa",
+      "reason": "Approved integrated release-readiness fixes; native contracts and saved data preserved"
+    },
+    {
+      "path": "Modules/GamedayAtmosphere/Source/ChantAudioModel.h",
+      "sha256": "4b8d1a3eb9c0374abca05521c98f0a87df60a57b7282e0b4f19164259b0097dd",
+      "reason": "Approved integrated release-readiness fixes; native contracts and saved data preserved"
+    },
+    {
+      "path": "Modules/GamedayAtmosphere/Source/ChantMixerPreset.h",
+      "sha256": "ebd8ffda91b66b2fa65f713966a1f03caad52661ac351e5e7aea09814a2e8747",
+      "reason": "Approved integrated release-readiness fixes; native contracts and saved data preserved"
+    },
+    {
+      "path": "Modules/GamedayAtmosphere/Source/ChantMixerRuntime.h",
+      "sha256": "ea167a3ce8fe8ae86a990c63829416ce25ca86e2034dbf320dfa7b4823f288f8",
+      "reason": "Approved integrated release-readiness fixes; native contracts and saved data preserved"
+    },
+    {
+      "path": "Modules/GamedayAtmosphere/Source/ConfigSections.h",
+      "sha256": "38f5b48a88a8933771f42ce1f29c26e59bc339260a50ad925567f6ac43d95c61",
+      "reason": "Approved integrated release-readiness fixes; native contracts and saved data preserved"
+    },
+    {
+      "path": "Modules/GamedayAtmosphere/Source/ConfigValue.h",
+      "sha256": "50d88648b8ffb54a2a6411b6aec05c99af8325f5e34df5fe9cfc7fc25e719ed6",
+      "reason": "Approved integrated release-readiness fixes; native contracts and saved data preserved"
+    },
+    {
+      "path": "Modules/GamedayAtmosphere/Source/ContextReactions.h",
+      "sha256": "28014ca8f572b256598d1ac35456fe00991f4c9d65888056e57e667621f9c8e9",
+      "reason": "Approved integrated release-readiness fixes; native contracts and saved data preserved"
+    },
+    {
+      "path": "Modules/GamedayAtmosphere/Source/CoreAtmosphere.h",
+      "sha256": "cf6b61d3edf7b62195dbd4ab2d041187b2f7b1631c8b4f1478890b04251d6ec6",
+      "reason": "Approved integrated release-readiness fixes; native contracts and saved data preserved"
+    },
+    {
+      "path": "Modules/GamedayAtmosphere/Source/CrowdAgents.h",
+      "sha256": "e43e0f6fa9037009200d7551eb715b0950c5710ce86cd7319bbc819758cea0f2",
+      "reason": "Approved integrated release-readiness fixes; native contracts and saved data preserved"
+    },
+    {
+      "path": "Modules/GamedayAtmosphere/Source/CrowdAudioModel.h",
+      "sha256": "b095c89c36f9ddcd6e349e39bc2322a6152786478136bc5af3ba6c0118d9b362",
+      "reason": "Approved integrated release-readiness fixes; native contracts and saved data preserved"
+    },
+    {
+      "path": "Modules/GamedayAtmosphere/Source/CrowdAudioRuntime.h",
+      "sha256": "7ca368817ffef4f86e26de640dc2e3c85600c7198dfb48e591acf38bb17e5ed6",
+      "reason": "Approved integrated release-readiness fixes; native contracts and saved data preserved"
+    },
+    {
+      "path": "Modules/GamedayAtmosphere/Source/CrowdChangeWindow.h",
+      "sha256": "6365f47376bf19ce2f9f3b440530ceac17b4ce25417590a058838da3c2307519",
+      "reason": "Approved integrated release-readiness fixes; native contracts and saved data preserved"
+    },
+    {
+      "path": "Modules/GamedayAtmosphere/Source/CrowdDispatch.h",
+      "sha256": "f74c4dfdb198b7e510aa8c7225d40a763472bbb113e20e3cce73780a4e4edff3",
+      "reason": "Approved integrated release-readiness fixes; native contracts and saved data preserved"
+    },
+    {
+      "path": "Modules/GamedayAtmosphere/Source/CrowdIntensityRuntime.h",
+      "sha256": "04be1036668127609f2683f8e35fcf5c7a2a35b920510befc808f0da44f25283",
+      "reason": "Approved integrated release-readiness fixes; native contracts and saved data preserved"
+    },
+    {
+      "path": "Modules/GamedayAtmosphere/Source/CrowdMomentum.h",
+      "sha256": "1a52287b42814ae4b7e9febc8593625107a786eac2ffda85346c4117d783df5c",
+      "reason": "Approved integrated release-readiness fixes; native contracts and saved data preserved"
+    },
+    {
+      "path": "Modules/GamedayAtmosphere/Source/CrowdPartResolver.h",
+      "sha256": "68a20bc40441d931fe218ff70198e2434e4bd53ca76ed49def7c1c3c7f84a5dd",
+      "reason": "Approved integrated release-readiness fixes; native contracts and saved data preserved"
+    },
+    {
+      "path": "Modules/GamedayAtmosphere/Source/CrowdPopulation.h",
+      "sha256": "4e788bca15dadb8d2248be0e984f4da33cec319734d1441d47bbb77cf04e3d37",
+      "reason": "Approved integrated release-readiness fixes; native contracts and saved data preserved"
+    },
+    {
+      "path": "Modules/GamedayAtmosphere/Source/CrowdVisibility.h",
+      "sha256": "384d7f78d46c08a3b854af343c7bbac547fd48d5824765628f187250a0737444",
+      "reason": "Approved integrated release-readiness fixes; native contracts and saved data preserved"
+    },
+    {
+      "path": "Modules/GamedayAtmosphere/Source/DefensiveAccents.h",
+      "sha256": "3021529a5a1034f4bfa086a9ccab223a58eacf9339efaa8025de5c0813504530",
+      "reason": "Approved integrated release-readiness fixes; native contracts and saved data preserved"
+    },
+    {
+      "path": "Modules/GamedayAtmosphere/Source/DefensiveMotion.h",
+      "sha256": "d56f39b02642d17d05144223b06133eb9081aa1e22901a2bedd5d27a8a3c15e4",
+      "reason": "Approved integrated release-readiness fixes; native contracts and saved data preserved"
+    },
+    {
+      "path": "Modules/GamedayAtmosphere/Source/DenseCrowd.h",
+      "sha256": "fca99c6b76cbb13782e8451a520dd23b4389524f26b83f20f385861a83f907f2",
+      "reason": "Approved integrated release-readiness fixes; native contracts and saved data preserved"
+    },
+    {
+      "path": "Modules/GamedayAtmosphere/Source/DepartureModel.h",
+      "sha256": "cdb9a1c1684bc0cc016787ceef0ef6e540a587dfaabf81acc508b3cb44928c59",
+      "reason": "Approved integrated release-readiness fixes; native contracts and saved data preserved"
+    },
+    {
       "path": "Modules/GamedayAtmosphere/Source/DgaDiagnostics.cs",
       "sha256": "8f5812429f3eb15fbd1792cec6f03aed768f09edc01a69935f91f16f6730a645",
-      "reason": "Retain prior COT integration; 0.1.6 Gameday Atmosphere branding and appended stable-ID visitor-strength control, new-plan-only odds preference with existing native/neutral/protected/history gates retained."
+      "reason": "Approved integrated release-readiness fixes; native contracts and saved data preserved"
+    },
+    {
+      "path": "Modules/GamedayAtmosphere/Source/DiagnosticPreview.h",
+      "sha256": "377df81b7b9777dd848ec20b571f4a84516edd804edb4c830f0540e3a134a255",
+      "reason": "Approved integrated release-readiness fixes; native contracts and saved data preserved"
+    },
+    {
+      "path": "Modules/GamedayAtmosphere/Source/DirectorShake.h",
+      "sha256": "1e4ae295ce72090fbfa06e343cf56976969f67ded4eea8d7e44d2d9c0dec9cac",
+      "reason": "Approved integrated release-readiness fixes; native contracts and saved data preserved"
     },
     {
       "path": "Modules/GamedayAtmosphere/Source/DirectorShakeRuntime.h",
       "sha256": "adb0d9bbf225864e3f7ef3aa854ccc12642f2ef5ff253a101e282a71272f9194",
-      "reason": "Add explicit offline Play Now live-match atmosphere with native starting attendance/visitor appearance; isolate Dynasty seeds, plans and persistent histories; preserve offline checks, fingerprints and native ownership."
+      "reason": "Approved integrated release-readiness fixes; native contracts and saved data preserved"
+    },
+    {
+      "path": "Modules/GamedayAtmosphere/Source/DriveEscalation.h",
+      "sha256": "f014d01f85d32cbd1f746d1ce6417e84f9b288523006cd05853aa71bdf2b8967",
+      "reason": "Approved integrated release-readiness fixes; native contracts and saved data preserved"
+    },
+    {
+      "path": "Modules/GamedayAtmosphere/Source/DynamicAttendance.ini",
+      "sha256": "6eaca4b9d587a82c8fe34d9aff18739412874df46c176c8513fbc1d5a1ba8e01",
+      "reason": "Approved integrated release-readiness fixes; native contracts and saved data preserved"
     },
     {
       "path": "Modules/GamedayAtmosphere/Source/DynamicGamedayAtmosphere.ini",
-      "sha256": "2824d25ab34f8b99557e539d9c73dc93151630248a7791e29df3d35c37c03b02",
-      "reason": "Retain prior COT integration; 0.1.6 Gameday Atmosphere branding and appended stable-ID visitor-strength control, new-plan-only odds preference with existing native/neutral/protected/history gates retained."
+      "sha256": "53e9c4f15134d04b2ba2c0416db5916ac98896cdea7fb25a4c7d495815f2e377",
+      "reason": "Approved integrated release-readiness fixes; native contracts and saved data preserved"
+    },
+    {
+      "path": "Modules/GamedayAtmosphere/Source/ExcitementRules.h",
+      "sha256": "c490533a355996cd9c5b11c1305c8ef7f57cf0df5fab77488cd46cff39af178a",
+      "reason": "Approved integrated release-readiness fixes; native contracts and saved data preserved"
+    },
+    {
+      "path": "Modules/GamedayAtmosphere/Source/FinalReactionCarry.h",
+      "sha256": "b363dc2df2a5236b83d00cdcd760a8128f840f180f89357287ea141764630e3c",
+      "reason": "Approved integrated release-readiness fixes; native contracts and saved data preserved"
+    },
+    {
+      "path": "Modules/GamedayAtmosphere/Source/FumbleContact.h",
+      "sha256": "04e337f7e08c2c24a86ac4b08ff8dcf5ea5cb3998c10f857e8a9d704da59b3c6",
+      "reason": "Approved integrated release-readiness fixes; native contracts and saved data preserved"
+    },
+    {
+      "path": "Modules/GamedayAtmosphere/Source/GameBindings.h",
+      "sha256": "c5e5e42508c359376445aa0dcd54150ccecda82c2d4fdf38a45ad7076fb1ffa3",
+      "reason": "Approved integrated release-readiness fixes; native contracts and saved data preserved"
+    },
+    {
+      "path": "Modules/GamedayAtmosphere/Source/GameCompatibilityReport.cs",
+      "sha256": "a76e59fd13708e657d583723081d547052412fb0a30c177c1087ffbf26daa7ff",
+      "reason": "Approved integrated release-readiness fixes; native contracts and saved data preserved"
+    },
+    {
+      "path": "Modules/GamedayAtmosphere/Source/GameplayCamera.h",
+      "sha256": "3b0fcc9fbdf1d8fc6998ea78d6e6ff463ae4bfb1ec002656954a575aef873306",
+      "reason": "Approved integrated release-readiness fixes; native contracts and saved data preserved"
+    },
+    {
+      "path": "Modules/GamedayAtmosphere/Source/HailMaryPass.h",
+      "sha256": "9678e2518e8aa230fbd4f89d65f1fd5b4453f0ddc8ded37a1cb4e868dcd77816",
+      "reason": "Approved integrated release-readiness fixes; native contracts and saved data preserved"
+    },
+    {
+      "path": "Modules/GamedayAtmosphere/Source/HalftimeExitConversion.h",
+      "sha256": "a50a0899e9db828c92421e2d14e876fbefae7f8101ffb70f9bd62afcbb71ed77",
+      "reason": "Approved integrated release-readiness fixes; native contracts and saved data preserved"
+    },
+    {
+      "path": "Modules/GamedayAtmosphere/Source/HandoffCamera.h",
+      "sha256": "897b3d832536a88f673648712d767bc13f1c8f7be8431237619659b106c91371",
+      "reason": "Approved integrated release-readiness fixes; native contracts and saved data preserved"
+    },
+    {
+      "path": "Modules/GamedayAtmosphere/Source/HostileOpeningResult.h",
+      "sha256": "de98e2edfca234c4db850cf8f4951ee79cec8bfc15c917fd6765b1e87b7c2291",
+      "reason": "Approved integrated release-readiness fixes; native contracts and saved data preserved"
+    },
+    {
+      "path": "Modules/GamedayAtmosphere/Source/HumanDiagnostics.h",
+      "sha256": "df2c7b082daca1fcffba82c63149f7fafa3f5c2cf7a3ffc1f217b06496b51733",
+      "reason": "Approved integrated release-readiness fixes; native contracts and saved data preserved"
+    },
+    {
+      "path": "Modules/GamedayAtmosphere/Source/LateTraffic.h",
+      "sha256": "136e70203d2289b5c0f7dfe3ce1156ae4fd4318f879e40dca0e7837edee14316",
+      "reason": "Approved integrated release-readiness fixes; native contracts and saved data preserved"
+    },
+    {
+      "path": "Modules/GamedayAtmosphere/Source/LateTrafficEvents.h",
+      "sha256": "9c6c04f447c081832fbc4b36c1290717df26b7524006625694b08ac9b9081f3c",
+      "reason": "Approved integrated release-readiness fixes; native contracts and saved data preserved"
+    },
+    {
+      "path": "Modules/GamedayAtmosphere/Source/LaunchDiagnostics.cs",
+      "sha256": "2017779e9a9cbd2c8a997ca1fe8568e8efc753339e4e48ae2b2ff9b29257a077",
+      "reason": "Approved integrated release-readiness fixes; native contracts and saved data preserved"
+    },
+    {
+      "path": "Modules/GamedayAtmosphere/Source/LineupAtmosphere.h",
+      "sha256": "3a3dc80751ce2a5bed25fb41fb23ea894d731364016a04fec303baabe7f7ece3",
+      "reason": "Approved integrated release-readiness fixes; native contracts and saved data preserved"
+    },
+    {
+      "path": "Modules/GamedayAtmosphere/Source/LiveFumble.h",
+      "sha256": "1612c8a57433f6f7a561e7347fab806e3a54faa409cf2e8db49d69f9dc1ccabf",
+      "reason": "Approved integrated release-readiness fixes; native contracts and saved data preserved"
+    },
+    {
+      "path": "Modules/GamedayAtmosphere/Source/LiveReactions.h",
+      "sha256": "7910e72678ccad6c35fb13eecc06fa9c96f441135d9e0c008402d8f2e5a7f437",
+      "reason": "Approved integrated release-readiness fixes; native contracts and saved data preserved"
+    },
+    {
+      "path": "Modules/GamedayAtmosphere/Source/LoadRuntime.cpp",
+      "sha256": "85a82f1c635c8dc26d5a0e5325368d382d2f27658122ef28fada3b0719b1461b",
+      "reason": "Approved integrated release-readiness fixes; native contracts and saved data preserved"
+    },
+    {
+      "path": "Modules/GamedayAtmosphere/Source/LoaderDiagnostics.h",
+      "sha256": "8af7a208396ef4eb0bc9dadd2d49713ac394ec1a1eda53d65b0d166a08114ffb",
+      "reason": "Approved integrated release-readiness fixes; native contracts and saved data preserved"
+    },
+    {
+      "path": "Modules/GamedayAtmosphere/Source/LogFiles.h",
+      "sha256": "a850633b1b4e9edf083a0c795afc40760c393ccad15d958df79cc1adbc6994ee",
+      "reason": "Approved integrated release-readiness fixes; native contracts and saved data preserved"
+    },
+    {
+      "path": "Modules/GamedayAtmosphere/Source/LogPolicy.h",
+      "sha256": "d56323833394587e1922cd451a8d78b4d527b3fc261fbb0477f975c47cc6df51",
+      "reason": "Approved integrated release-readiness fixes; native contracts and saved data preserved"
     },
     {
       "path": "Modules/GamedayAtmosphere/Source/MajorReplay.h",
       "sha256": "ad5c74c6979f0d0903155fae6e10097487bd6321138480a40f336c12c8f581f4",
-      "reason": "COT 0.1.5 feedback: native focus colors, exact AIO shared overview; separate visitor demand/tickets, deficit bed, scoring audio priority and recorded-TD inset recovery. Workspace only."
+      "reason": "Approved integrated release-readiness fixes; native contracts and saved data preserved"
     },
     {
       "path": "Modules/GamedayAtmosphere/Source/ManagedRuntimeLoader.cs",
       "sha256": "56cb7f1a02f224efd27727bfb21cddd3916289bb1f139c4282ca4dba133e845f",
-      "reason": "1.0 branded source-built runtime names, direct verified loading and preserved data/hook contracts"
+      "reason": "Approved integrated release-readiness fixes; native contracts and saved data preserved"
+    },
+    {
+      "path": "Modules/GamedayAtmosphere/Source/MatchLifecycle.h",
+      "sha256": "8075f6fd8a9678a9d0f53eceef48e5b0bb8951b7f52d58675d7a8262c3a62da1",
+      "reason": "Approved integrated release-readiness fixes; native contracts and saved data preserved"
+    },
+    {
+      "path": "Modules/GamedayAtmosphere/Source/MatchupClass.h",
+      "sha256": "fb1bdbd0730d5a55c6b267c0165b6635d987a32cace861073e99fadbc8e4c4ca",
+      "reason": "Approved integrated release-readiness fixes; native contracts and saved data preserved"
+    },
+    {
+      "path": "Modules/GamedayAtmosphere/Source/MigrateSettings.cs",
+      "sha256": "43e71fa771d46f233a98f5e635afd0abd7f1544b7609e55c2766061d30cd5109",
+      "reason": "Approved integrated release-readiness fixes; native contracts and saved data preserved"
     },
     {
       "path": "Modules/GamedayAtmosphere/Source/MmcPlugin.cs",
-      "sha256": "213829b16e389cb3dcae91d7b5b87de35a0500d1d79e77e665927d10e3e50f94",
-      "reason": "Standalone Gameday packaging: retain existing settings/history, share bundled watcher ownership, and archive exact legacy helper files outside Plugins"
+      "sha256": "3c3cf40b6bde3577306af337672086d650c6b0f9894a94f3fff3d033103ed6f2",
+      "reason": "Approved integrated release-readiness fixes; native contracts and saved data preserved"
     },
     {
       "path": "Modules/GamedayAtmosphere/Source/MotionSoundPairing.h",
       "sha256": "8485cd251cd656dbb959636fc5749a364cbda5e9b2ee053325a2f0ad6c259f0b",
-      "reason": "Require currently audible crowd sound, retaining exact play/world ownership"
+      "reason": "Approved integrated release-readiness fixes; native contracts and saved data preserved"
+    },
+    {
+      "path": "Modules/GamedayAtmosphere/Source/NativeAtmosphereContext.h",
+      "sha256": "d7db5ba743d279dd99f7b0cb2ef362f3e22d16402567e49f01d31d7b6f86aec7",
+      "reason": "Approved integrated release-readiness fixes; native contracts and saved data preserved"
+    },
+    {
+      "path": "Modules/GamedayAtmosphere/Source/NativeAudience.h",
+      "sha256": "19a0b007708f771bd8a66c80c4d3a01b4d789a3f44b82e2a69ecc1db0255224d",
+      "reason": "Approved integrated release-readiness fixes; native contracts and saved data preserved"
+    },
+    {
+      "path": "Modules/GamedayAtmosphere/Source/NativeCameraAdmission.h",
+      "sha256": "4fd0021b8256a1a6a575b7e949f45c30430b7077690325decd5b616f9e99d200",
+      "reason": "Approved integrated release-readiness fixes; native contracts and saved data preserved"
+    },
+    {
+      "path": "Modules/GamedayAtmosphere/Source/NativeCapacity.h",
+      "sha256": "06b5d05687570599daf4cc6619110e96d17152525cae1ce94c302ac16c069828",
+      "reason": "Approved integrated release-readiness fixes; native contracts and saved data preserved"
+    },
+    {
+      "path": "Modules/GamedayAtmosphere/Source/NativePlayCall.h",
+      "sha256": "f7770ed5e184961c5c7c0352d7cdfec14f168fb44cbab4daabd0c9ee22e575fb",
+      "reason": "Approved integrated release-readiness fixes; native contracts and saved data preserved"
+    },
+    {
+      "path": "Modules/GamedayAtmosphere/Source/NativeReactionTrace.h",
+      "sha256": "e1c30555f8ee3dbafdf3e350664528dcbefb9f613033a0bd66421f5e7a89cdad",
+      "reason": "Approved integrated release-readiness fixes; native contracts and saved data preserved"
+    },
+    {
+      "path": "Modules/GamedayAtmosphere/Source/NativeRead.h",
+      "sha256": "73a8d015f49c43564ff7ed4ecdca1f881c7a0765cf69d1e093fa22a1b4975534",
+      "reason": "Approved integrated release-readiness fixes; native contracts and saved data preserved"
     },
     {
       "path": "Modules/GamedayAtmosphere/Source/NativeRuntime.cpp",
-      "sha256": "8af51dbd1d8f4972162af15e407ec9055afec6ac8383b74f8bdff6622b99e950",
-      "reason": "Gameday Atmosphere 2.1.11: admit supported offline Play Now in replay root eligibility and diagnostic scope; retain all native checks and original touchdown exclusion. Public hotfix excludes private TD experiments."
+      "sha256": "5c294317a461c4623f07ab3697afbb94b567566cb40a05b57f01acae9a7592f4",
+      "reason": "Approved integrated release-readiness fixes; native contracts and saved data preserved"
+    },
+    {
+      "path": "Modules/GamedayAtmosphere/Source/NativeSackFacts.h",
+      "sha256": "38648e7f68f4dc57ae51a3fcbcddaafeb0c52599d52eb84688e9348e16cfe2ff",
+      "reason": "Approved integrated release-readiness fixes; native contracts and saved data preserved"
     },
     {
       "path": "Modules/GamedayAtmosphere/Source/NativeSettingsMenu.h",
-      "sha256": "9d0abe94a018b64e45f5bb983b9390b94a080e4df68be3ed14059340321c311f",
-      "reason": "Retain prior COT integration; 0.1.6 Gameday Atmosphere branding and appended stable-ID visitor-strength control, new-plan-only odds preference with existing native/neutral/protected/history gates retained."
+      "sha256": "732c5b85dc4c40770318daad330b0a47d9ac05173563a68b161d3c59f4952a96",
+      "reason": "Approved integrated release-readiness fixes; native contracts and saved data preserved"
+    },
+    {
+      "path": "Modules/GamedayAtmosphere/Source/NativeSkillSignals.h",
+      "sha256": "28efa131bfd1f02f4fec21afb33572ff48cd036005a532c80063d978ef783ab3",
+      "reason": "Approved integrated release-readiness fixes; native contracts and saved data preserved"
     },
     {
       "path": "Modules/GamedayAtmosphere/Source/NativeStartingAttendance.h",
-      "sha256": "d03499204a89db37a30e8a4adeed519bb14abb54c33fb9f2276599792a2dcefe",
-      "reason": "COT feedback: strict AIO loader relocations, compact constrained NIL labels and Highest NIL grade display; current audible shake pairing and state travel fallback"
+      "sha256": "ccc57519eff9d333c0de5a0ea9ae628dcf49468d350f09de570b59b579d4e903",
+      "reason": "Approved integrated release-readiness fixes; native contracts and saved data preserved"
+    },
+    {
+      "path": "Modules/GamedayAtmosphere/Source/OpeningAtmosphere.h",
+      "sha256": "f6e3d911a820e3a9b2e6c2356dedbd4aab2985c95b5645ff53603d6fa803c675",
+      "reason": "Approved integrated release-readiness fixes; native contracts and saved data preserved"
+    },
+    {
+      "path": "Modules/GamedayAtmosphere/Source/OpeningDrive.h",
+      "sha256": "89ed151ffdc3ea224d6bdefd73859ca47b9b07c5a417f860d0163703006c029e",
+      "reason": "Approved integrated release-readiness fixes; native contracts and saved data preserved"
+    },
+    {
+      "path": "Modules/GamedayAtmosphere/Source/OpeningKickoffAtmosphere.h",
+      "sha256": "e56c9a583fe2acea6d045bb239b99c30568a70b53d701e3e04e477de554e2957",
+      "reason": "Approved integrated release-readiness fixes; native contracts and saved data preserved"
+    },
+    {
+      "path": "Modules/GamedayAtmosphere/Source/OpeningWelcome.h",
+      "sha256": "c788dd38151d812ae79cdb24c2735655705ee505d6f5f6d35af918e754188ece",
+      "reason": "Approved integrated release-readiness fixes; native contracts and saved data preserved"
+    },
+    {
+      "path": "Modules/GamedayAtmosphere/Source/OvertimeAtmosphere.h",
+      "sha256": "5c9c3878692c8b86e8c8a02408f1aa348b4e895fb58e1d5f3886e25b0b88c089",
+      "reason": "Approved integrated release-readiness fixes; native contracts and saved data preserved"
+    },
+    {
+      "path": "Modules/GamedayAtmosphere/Source/PackedHouse.h",
+      "sha256": "85ec4fed583d09536249bf8b5a30111a9e10509bbf70f8a19817901b701548b4",
+      "reason": "Approved integrated release-readiness fixes; native contracts and saved data preserved"
+    },
+    {
+      "path": "Modules/GamedayAtmosphere/Source/PauseMenu.h",
+      "sha256": "2c39e030aca9e4a935ed71765954695a7ed7885c3814c1a6d79c7b0ffdd1e008",
+      "reason": "Approved integrated release-readiness fixes; native contracts and saved data preserved"
+    },
+    {
+      "path": "Modules/GamedayAtmosphere/Source/PlayReactionTiming.h",
+      "sha256": "cbdd01c6308a47f234c5859dc73acec8d5b67972593574ea8ff975140cd63d59",
+      "reason": "Approved integrated release-readiness fixes; native contracts and saved data preserved"
+    },
+    {
+      "path": "Modules/GamedayAtmosphere/Source/PluginSettings.cs",
+      "sha256": "abe17824e3047e86f02bddc212f2ebc869848fc549d355592960206a5a64680c",
+      "reason": "Approved integrated release-readiness fixes; native contracts and saved data preserved"
     },
     {
       "path": "Modules/GamedayAtmosphere/Source/PluginStorage.cs",
-      "sha256": "4393613591e505e901fa1a0c182e40f0b29b8f7c03ccf5b231b404a59c7a6528",
-      "reason": "Standalone Gameday packaging: retain existing settings/history, share bundled watcher ownership, and archive exact legacy helper files outside Plugins"
+      "sha256": "69790f827a0a2e317091424213a002b593e23adafe36ee6373944b4b17a5e607",
+      "reason": "Approved integrated release-readiness fixes; native contracts and saved data preserved"
+    },
+    {
+      "path": "Modules/GamedayAtmosphere/Source/PostPlayAtmosphere.h",
+      "sha256": "f85f408d311750fb24d8434d5da6a67d3564dd77d0306f555ac0c20618bba223",
+      "reason": "Approved integrated release-readiness fixes; native contracts and saved data preserved"
+    },
+    {
+      "path": "Modules/GamedayAtmosphere/Source/PresentationAtmosphere.h",
+      "sha256": "57480c8bf95f6ead063ade770a6ad4bd314ab7b6ffd9e84483eb48e58fe071ba",
+      "reason": "Approved integrated release-readiness fixes; native contracts and saved data preserved"
+    },
+    {
+      "path": "Modules/GamedayAtmosphere/Source/PresentationCamera.h",
+      "sha256": "e917d8a7e9762ad438812fc1e4cf503ad890295a6ed6e50ceb1981cb69f125a3",
+      "reason": "Approved integrated release-readiness fixes; native contracts and saved data preserved"
+    },
+    {
+      "path": "Modules/GamedayAtmosphere/Source/Probe.cpp",
+      "sha256": "7a2eb282e7382268d9977abce385a0a6f2c876d4505ef489f847f8a793e32cc2",
+      "reason": "Approved integrated release-readiness fixes; native contracts and saved data preserved"
     },
     {
       "path": "Modules/GamedayAtmosphere/Source/Product.json",
       "sha256": "f49cc5032c78f44e2e1112f11b7156718fc2c54704067a121fddaf033c35b3e3",
-      "reason": "Gameday Atmosphere 2.1.11: admit supported offline Play Now in replay root eligibility and diagnostic scope; retain all native checks and original touchdown exclusion. Public hotfix excludes private TD experiments."
+      "reason": "Approved integrated release-readiness fixes; native contracts and saved data preserved"
+    },
+    {
+      "path": "Modules/GamedayAtmosphere/Source/ProtectedFanBudget.h",
+      "sha256": "9a1134f6fee2a47532c19451728384bd808ed0d913478cdfd43541f79b36d31d",
+      "reason": "Approved integrated release-readiness fixes; native contracts and saved data preserved"
     },
     {
       "path": "Modules/GamedayAtmosphere/Source/ReactionAudioRuntime.h",
-      "sha256": "4d0c2af5179d7ebc26aeb34b20f7e156bc5f32f6c989ad58005af9ca59ef8f04",
-      "reason": "COT 0.1.5 feedback: native focus colors, exact AIO shared overview; separate visitor demand/tickets, deficit bed, scoring audio priority and recorded-TD inset recovery. Workspace only."
+      "sha256": "04346ebb03290f86b855b5222b3e233af508f1900350f26df068b8623c6504b7",
+      "reason": "Approved integrated release-readiness fixes; native contracts and saved data preserved"
+    },
+    {
+      "path": "Modules/GamedayAtmosphere/Source/ReactionCatalog.h",
+      "sha256": "37b4ace271d776d7b29b205202386c4bd7ff9e383d909943d508d1a84fa01ea2",
+      "reason": "Approved integrated release-readiness fixes; native contracts and saved data preserved"
+    },
+    {
+      "path": "Modules/GamedayAtmosphere/Source/ReactionPalette.h",
+      "sha256": "976bcf19a2dd87b7191cb16d1e006ea739c57e125b38b9d23a98e9edb87b37a9",
+      "reason": "Approved integrated release-readiness fixes; native contracts and saved data preserved"
+    },
+    {
+      "path": "Modules/GamedayAtmosphere/Source/ReactionShape.h",
+      "sha256": "e300099681ac3a3420287f4df82d03511eb1def09843a32421f99137c2a87ddc",
+      "reason": "Approved integrated release-readiness fixes; native contracts and saved data preserved"
+    },
+    {
+      "path": "Modules/GamedayAtmosphere/Source/ReactionVariety.h",
+      "sha256": "4aa64bf1e8cab5653b8aea5bb67db42d2346e88073eec092aec69b02ff1ad15a",
+      "reason": "Approved integrated release-readiness fixes; native contracts and saved data preserved"
+    },
+    {
+      "path": "Modules/GamedayAtmosphere/Source/RenderedOccupancy.h",
+      "sha256": "eb722c5df2cda0c74d30936df1f5321b4187647d8d0301c5bf4b2b4426d28290",
+      "reason": "Approved integrated release-readiness fixes; native contracts and saved data preserved"
+    },
+    {
+      "path": "Modules/GamedayAtmosphere/Source/ReplayMode.h",
+      "sha256": "fae1a059358c191adac9e5dcca751614153421c1e1fcabfb8e47f1b94ce10700",
+      "reason": "Approved integrated release-readiness fixes; native contracts and saved data preserved"
+    },
+    {
+      "path": "Modules/GamedayAtmosphere/Source/ReplayPresentation.h",
+      "sha256": "48d3ee97f6b66f49927e790a2372ae3c9720f89cc3df26356526d84facd0b361",
+      "reason": "Approved integrated release-readiness fixes; native contracts and saved data preserved"
+    },
+    {
+      "path": "Modules/GamedayAtmosphere/Source/ReplaySelectionTrace.h",
+      "sha256": "2a0b3287aecbaeb03d8751e46f9a1c41f48cdb53e8c513a7a6a3c93e33cbc700",
+      "reason": "Approved integrated release-readiness fixes; native contracts and saved data preserved"
+    },
+    {
+      "path": "Modules/GamedayAtmosphere/Source/ReplayUpdateHook.h",
+      "sha256": "57a04cb87ab01489f4a04e5bc86ad03283adee87b964995400326a2485293262",
+      "reason": "Approved integrated release-readiness fixes; native contracts and saved data preserved"
+    },
+    {
+      "path": "Modules/GamedayAtmosphere/Source/ResultFreshness.h",
+      "sha256": "bc34ad95c4b0717b23c4f32d5c7452b8515907617923d499837a9fc6f10735fb",
+      "reason": "Approved integrated release-readiness fixes; native contracts and saved data preserved"
+    },
+    {
+      "path": "Modules/GamedayAtmosphere/Source/ResumeBridge.h",
+      "sha256": "07f5d70bdd20db6f905236ab15989ba365c6ac56eb66f7701e4967e35f3026ef",
+      "reason": "Approved integrated release-readiness fixes; native contracts and saved data preserved"
+    },
+    {
+      "path": "Modules/GamedayAtmosphere/Source/ReturnAtmosphere.h",
+      "sha256": "fb36705389467375179f8484a7fef139c2acb97dde9b62ebdaab29a077d81055",
+      "reason": "Approved integrated release-readiness fixes; native contracts and saved data preserved"
+    },
+    {
+      "path": "Modules/GamedayAtmosphere/Source/RuntimePaths.h",
+      "sha256": "d772b39e8ff971160795c22f23e7b7582a7b80421ee71ac2b636d9e6e5ee9661",
+      "reason": "Approved integrated release-readiness fixes; native contracts and saved data preserved"
+    },
+    {
+      "path": "Modules/GamedayAtmosphere/Source/ScoringEnergy.h",
+      "sha256": "a2569dbea31c7a4fdd7c5dff4ac59cef77ec81578c1159f34249cf133ad711e6",
+      "reason": "Approved integrated release-readiness fixes; native contracts and saved data preserved"
+    },
+    {
+      "path": "Modules/GamedayAtmosphere/Source/ScoringSoundHandoff.h",
+      "sha256": "a0cab1588ea875e874defdeb10235228fa05703cd3a6f12c7c366273c7d78b53",
+      "reason": "Approved integrated release-readiness fixes; native contracts and saved data preserved"
+    },
+    {
+      "path": "Modules/GamedayAtmosphere/Source/SeatBaseline.h",
+      "sha256": "79b2b59140242364e613f391da719c2e4c982414cb7844187119ba29dcc9e268",
+      "reason": "Approved integrated release-readiness fixes; native contracts and saved data preserved"
+    },
+    {
+      "path": "Modules/GamedayAtmosphere/Source/SeatHash.h",
+      "sha256": "f356c1de27f4053e4fb06ea11d89434665f62d807ba9cf93575f8c52535617c4",
+      "reason": "Approved integrated release-readiness fixes; native contracts and saved data preserved"
+    },
+    {
+      "path": "Modules/GamedayAtmosphere/Source/SeatMapping.h",
+      "sha256": "06203ae8bb9ebecdd777db205b57c4a976cd8d755ab42e74a1a5606e682525af",
+      "reason": "Approved integrated release-readiness fixes; native contracts and saved data preserved"
+    },
+    {
+      "path": "Modules/GamedayAtmosphere/Source/SeatPattern.h",
+      "sha256": "fec1baee20a110bc42a281cce92b484906a66bb3c186e10ffec5e17a6492064e",
+      "reason": "Approved integrated release-readiness fixes; native contracts and saved data preserved"
+    },
+    {
+      "path": "Modules/GamedayAtmosphere/Source/SettingsAptRouting.h",
+      "sha256": "cb155a769d3f83097e9d294f3c98f64266bb3f9801beaaa203eb395d17a955be",
+      "reason": "Approved integrated release-readiness fixes; native contracts and saved data preserved"
+    },
+    {
+      "path": "Modules/GamedayAtmosphere/Source/SettingsLayout.json",
+      "sha256": "350ca19c0898dfda38f8c146276402148ae5ed85b99ab14328f26c66580c15e0",
+      "reason": "Approved integrated release-readiness fixes; native contracts and saved data preserved"
     },
     {
       "path": "Modules/GamedayAtmosphere/Source/SettingsMenu.h",
       "sha256": "44f8ab039102aa0f09bdf8552e70aae3a532446d446e69b188cbbfef5c43aa88",
-      "reason": "Retain prior COT integration; 0.1.6 Gameday Atmosphere branding and appended stable-ID visitor-strength control, new-plan-only odds preference with existing native/neutral/protected/history gates retained."
+      "reason": "Approved integrated release-readiness fixes; native contracts and saved data preserved"
     },
     {
       "path": "Modules/GamedayAtmosphere/Source/SettingsMenuOptions.inc",
-      "sha256": "bf7043a599e607637c8d25283b7000e01a5a4472d1206c2279b7b7127cba4524",
-      "reason": "Retain prior COT integration; 0.1.6 Gameday Atmosphere branding and appended stable-ID visitor-strength control, new-plan-only odds preference with existing native/neutral/protected/history gates retained."
+      "sha256": "49dcb27f2cab389c77b1a283fceef35a8599c6ed09ea414d961f823bff926ca7",
+      "reason": "Approved integrated release-readiness fixes; native contracts and saved data preserved"
+    },
+    {
+      "path": "Modules/GamedayAtmosphere/Source/SettingsPoll.h",
+      "sha256": "ef52f056f39ab41b00ad905806410d51a89fb0c3c589bd88583a29d9c5ca1910",
+      "reason": "Approved integrated release-readiness fixes; native contracts and saved data preserved"
+    },
+    {
+      "path": "Modules/GamedayAtmosphere/Source/ShakeProfiles.h",
+      "sha256": "c387e5ba83c823c2fbb87c7156016982333e7e22dff09f19f4a695d4452be469",
+      "reason": "Approved integrated release-readiness fixes; native contracts and saved data preserved"
+    },
+    {
+      "path": "Modules/GamedayAtmosphere/Source/Showboating.h",
+      "sha256": "b5f42c238b354c654f5805b87dc8a46f5a37e8ccbddeb4d0c9e590cadadf6d28",
+      "reason": "Approved integrated release-readiness fixes; native contracts and saved data preserved"
+    },
+    {
+      "path": "Modules/GamedayAtmosphere/Source/ShowcaseAttendance.h",
+      "sha256": "36dd224244800a4793e7ed13ba3cd9200314d87a8cf70c89c01be48c20ac38b4",
+      "reason": "Approved integrated release-readiness fixes; native contracts and saved data preserved"
+    },
+    {
+      "path": "Modules/GamedayAtmosphere/Source/SituationalReactions.h",
+      "sha256": "be76a11f68063a57b46194d8d24091b2b331bef3c148ee7245d4eaeb4893a65c",
+      "reason": "Approved integrated release-readiness fixes; native contracts and saved data preserved"
+    },
+    {
+      "path": "Modules/GamedayAtmosphere/Source/SkillSwell.h",
+      "sha256": "1c07e794f9fe6a669a6b036f8e2cde3af4c7ee14325d92810f9a72558b003b2e",
+      "reason": "Approved integrated release-readiness fixes; native contracts and saved data preserved"
+    },
+    {
+      "path": "Modules/GamedayAtmosphere/Source/SoundOnlyReactions.h",
+      "sha256": "1aa07a43136ac1917c9c7eae0f16cd9e6a24400d1516b212eea9532442df588a",
+      "reason": "Approved integrated release-readiness fixes; native contracts and saved data preserved"
+    },
+    {
+      "path": "Modules/GamedayAtmosphere/Source/SparseHfaCamera.h",
+      "sha256": "10147fecc83bb8ac207c90025c4c67e0a8bda344e8bdc1c78c47cf9cdb1a390e",
+      "reason": "Approved integrated release-readiness fixes; native contracts and saved data preserved"
+    },
+    {
+      "path": "Modules/GamedayAtmosphere/Source/StadiumOccupancy.h",
+      "sha256": "06a05915749bbb228d407eabd3625218f5e37361c7700b07087c6d3b327d035e",
+      "reason": "Approved integrated release-readiness fixes; native contracts and saved data preserved"
+    },
+    {
+      "path": "Modules/GamedayAtmosphere/Source/StadiumSilenceRuntime.h",
+      "sha256": "7269b7aebed987e84a547919165f64c67b23bd057376715dbd444fa4e456dfc5",
+      "reason": "Approved integrated release-readiness fixes; native contracts and saved data preserved"
     },
     {
       "path": "Modules/GamedayAtmosphere/Source/StartingAttendance.h",
-      "sha256": "9feb6aa505a5a12325d2e395b1b0f07f65dfed5fe7dafcf3ef00ae10db64bc2b",
-      "reason": "COT feedback: strict AIO loader relocations, compact constrained NIL labels and Highest NIL grade display; current audible shake pairing and state travel fallback"
+      "sha256": "3d29328741a35bc1b31ade28ea9cd03a9529191e6ef7d110b971d76f36f9211a",
+      "reason": "Approved integrated release-readiness fixes; native contracts and saved data preserved"
+    },
+    {
+      "path": "Modules/GamedayAtmosphere/Source/StartingAttendanceLaunchHook.h",
+      "sha256": "844c02bb17c31bd2cfcd495381d2bd9e1716d5f8f95465d4364cf5f3208223bf",
+      "reason": "Approved integrated release-readiness fixes; native contracts and saved data preserved"
+    },
+    {
+      "path": "Modules/GamedayAtmosphere/Source/StartingAttendanceTransition.h",
+      "sha256": "60cd92c2729f40f846a0aa55bc553af73abee2dca5bb6d7419df3a1d24672a34",
+      "reason": "Approved integrated release-readiness fixes; native contracts and saved data preserved"
     },
     {
       "path": "Modules/GamedayAtmosphere/Source/StatusReport.h",
       "sha256": "6dc465246167de9b67008a871112f673fff3713e46bd75c1f45dab7206f62678",
-      "reason": "Retain prior COT integration; 0.1.6 Gameday Atmosphere branding and appended stable-ID visitor-strength control, new-plan-only odds preference with existing native/neutral/protected/history gates retained."
+      "reason": "Approved integrated release-readiness fixes; native contracts and saved data preserved"
+    },
+    {
+      "path": "Modules/GamedayAtmosphere/Source/SuperSimState.h",
+      "sha256": "a6c4cf27de18d5b6ab496a3d0b9b4479f6514e12a0ced20701c127522f4cbd8b",
+      "reason": "Approved integrated release-readiness fixes; native contracts and saved data preserved"
+    },
+    {
+      "path": "Modules/GamedayAtmosphere/Source/SustainedCrowd.h",
+      "sha256": "8b22fece5310f27307c3516852974bb8e1404604accf4dd65847f060ec97468a",
+      "reason": "Approved integrated release-readiness fixes; native contracts and saved data preserved"
+    },
+    {
+      "path": "Modules/GamedayAtmosphere/Source/SwellAudioRuntime.h",
+      "sha256": "444644e9285ae8bb3fc42b7780ab8278fc74a6afa4cb9f4246cd011f0914d340",
+      "reason": "Approved integrated release-readiness fixes; native contracts and saved data preserved"
+    },
+    {
+      "path": "Modules/GamedayAtmosphere/Source/UpsetAtmosphere.h",
+      "sha256": "8fa434acb74ce17b67a4d229f60bcb2df3550ea48b76385af52f83e988997b45",
+      "reason": "Approved integrated release-readiness fixes; native contracts and saved data preserved"
+    },
+    {
+      "path": "Modules/GamedayAtmosphere/Source/VenueMotion.h",
+      "sha256": "e0fbee0d126cf8b6f48ed9d151a85a724594bed7960b3c32b0a65e02c3b0de6b",
+      "reason": "Approved integrated release-readiness fixes; native contracts and saved data preserved"
+    },
+    {
+      "path": "Modules/GamedayAtmosphere/Source/VisitorPlans.h",
+      "sha256": "76a3c21a9c9c7f0898bdfd25161244b1f41651b3ad93fed18bcdea86036337b1",
+      "reason": "Approved integrated release-readiness fixes; native contracts and saved data preserved"
+    },
+    {
+      "path": "Modules/GamedayAtmosphere/Tests/AttendanceAudioTests.cpp",
+      "sha256": "759ed9ec38d4d2934b1dec715ba2d7bf6131b3df4623dea0f286083ae2858cbe",
+      "reason": "Approved integrated release-readiness fixes; native contracts and saved data preserved"
+    },
+    {
+      "path": "Modules/GamedayAtmosphere/Tests/AttendanceMixerTests.cpp",
+      "sha256": "f468fa396542f2b706c370e03a47eec7285d7745a69d466c8f5aa66738e6a26a",
+      "reason": "Approved integrated release-readiness fixes; native contracts and saved data preserved"
+    },
+    {
+      "path": "Modules/GamedayAtmosphere/Tests/AttendanceTimelineTests.cpp",
+      "sha256": "44301907be6e27de8d7a87868758db0300ab61dc3e49b9ab75285d4ce5639a4e",
+      "reason": "Approved integrated release-readiness fixes; native contracts and saved data preserved"
     },
     {
       "path": "Modules/GamedayAtmosphere/Tests/AwayCrowdIntegrationTests.cpp",
-      "sha256": "f09f092be7688f97a3a87f7797c9aacf3f2c86230115033eddcaafdf1fcfffb0",
-      "reason": "RC013 native Analytics roster-card/action/return, delayed week visibility, safe filter transitions, isolated full-card fog adapters, glyph repair, installer footer and winning visitor departures"
+      "sha256": "2a7a03059aabfffa14fb4979cae2ea067f629f4c439f76d010c9314de752787b",
+      "reason": "Approved integrated release-readiness fixes; native contracts and saved data preserved"
     },
     {
       "path": "Modules/GamedayAtmosphere/Tests/AwayCrowdTests.cpp",
@@ -822,9 +2437,39 @@
       "reason": "COT feedback: strict AIO loader relocations, compact constrained NIL labels and Highest NIL grade display; current audible shake pairing and state travel fallback"
     },
     {
+      "path": "Modules/GamedayAtmosphere/Tests/AwaySoundReactionsTests.cpp",
+      "sha256": "f32972768ea87264bbd257e457476aea41186465cf4c9013653684aaee517338",
+      "reason": "Approved integrated release-readiness fixes; native contracts and saved data preserved"
+    },
+    {
+      "path": "Modules/GamedayAtmosphere/Tests/AwayTakeawayTests.cpp",
+      "sha256": "4a4698c760ae4881c0d5f8a594e90ae1ce9c6bdadc4724b0b046b1adb92b23d3",
+      "reason": "Approved integrated release-readiness fixes; native contracts and saved data preserved"
+    },
+    {
+      "path": "Modules/GamedayAtmosphere/Tests/BandProtectionTests.cpp",
+      "sha256": "6a83231cdf0d426772d584d1e57a8495c2af7975097004cba7e3ba6f620c601b",
+      "reason": "Approved integrated release-readiness fixes; native contracts and saved data preserved"
+    },
+    {
       "path": "Modules/GamedayAtmosphere/Tests/ConfigurationOptions.inc",
       "sha256": "49790fa5b73200cd70e84e8c3ee8d6e6d8fd9c70a9f580da650280313047f570",
       "reason": "Retain prior COT integration; 0.1.6 Gameday Atmosphere branding and appended stable-ID visitor-strength control, new-plan-only odds preference with existing native/neutral/protected/history gates retained."
+    },
+    {
+      "path": "Modules/GamedayAtmosphere/Tests/CrowdCohesionTests.cpp",
+      "sha256": "6219178a0161b2e65420dac676f7c0f0ff207dd6b695f405be3516352f494c88",
+      "reason": "Approved integrated release-readiness fixes; native contracts and saved data preserved"
+    },
+    {
+      "path": "Modules/GamedayAtmosphere/Tests/DepartureModelTests.cpp",
+      "sha256": "a63cd544d128bb75c312f12fea136a9bfa3ab273d3627605b21f5ad94910cb0e",
+      "reason": "Approved integrated release-readiness fixes; native contracts and saved data preserved"
+    },
+    {
+      "path": "Modules/GamedayAtmosphere/Tests/DiagnosticPreviewTests.cpp",
+      "sha256": "63c9bd93aa68ec00ec0ab6dad8be1088a53282f021a3446ec2c055addfa04f57",
+      "reason": "Approved integrated release-readiness fixes; native contracts and saved data preserved"
     },
     {
       "path": "Modules/GamedayAtmosphere/Tests/DirectorShakeRuntimeTests.cpp",
@@ -832,9 +2477,19 @@
       "reason": "Verify new explicit configuration guard and both offline Dynasty/Play Now camera scopes; reject practice and online sessions while preserving the full camera regression suite."
     },
     {
+      "path": "Modules/GamedayAtmosphere/Tests/FumbleContactTests.cpp",
+      "sha256": "98c6d4abfc8fc0e32cbcba5b8d724fa622e2eb8753ec65f132caf8c336669878",
+      "reason": "Approved integrated release-readiness fixes; native contracts and saved data preserved"
+    },
+    {
       "path": "Modules/GamedayAtmosphere/Tests/HostChecks.cs",
       "sha256": "12be68f44f3bc4476704d1d9e945ce322ae122e6919724cf588982da69ddf43b",
       "reason": "Retain prior COT integration; 0.1.6 Gameday Atmosphere branding and appended stable-ID visitor-strength control, new-plan-only odds preference with existing native/neutral/protected/history gates retained."
+    },
+    {
+      "path": "Modules/GamedayAtmosphere/Tests/LoggingTests.cpp",
+      "sha256": "59e2de5cb413e147432164ccd76cbba889a60511e591060b59c53891c1985d07",
+      "reason": "Approved integrated release-readiness fixes; native contracts and saved data preserved"
     },
     {
       "path": "Modules/GamedayAtmosphere/Tests/MajorReplayTests.cpp",
@@ -852,29 +2507,114 @@
       "reason": "COT feedback: strict AIO loader relocations, compact constrained NIL labels and Highest NIL grade display; current audible shake pairing and state travel fallback"
     },
     {
+      "path": "Modules/GamedayAtmosphere/Tests/NativeAppearanceTests.cpp",
+      "sha256": "224b015ac842a59981a563bd4b1012bf417203c8854a11a4eb9229d3ed9dca55",
+      "reason": "Approved integrated release-readiness fixes; native contracts and saved data preserved"
+    },
+    {
+      "path": "Modules/GamedayAtmosphere/Tests/NativeAudienceTests.cpp",
+      "sha256": "cbdbf65a7eca751f4edab2c973f92f35ab4fc9ce54c71b46ad79b92e0d73c0c4",
+      "reason": "Approved integrated release-readiness fixes; native contracts and saved data preserved"
+    },
+    {
       "path": "Modules/GamedayAtmosphere/Tests/NativeStartingAttendanceTests.cpp",
-      "sha256": "c4e241d41eb19858f1d06d66e6db1b005b8d9324205f130fbd1be504e4344f05",
-      "reason": "COT feedback: strict AIO loader relocations, compact constrained NIL labels and Highest NIL grade display; current audible shake pairing and state travel fallback"
+      "sha256": "4badfd608add4543f8d4d17d867252d4e60475124851f338aab637ea2e5310a9",
+      "reason": "Approved integrated release-readiness fixes; native contracts and saved data preserved"
+    },
+    {
+      "path": "Modules/GamedayAtmosphere/Tests/PopulationReactionsTests.cpp",
+      "sha256": "90ed0ee2de2d1a148f7cb2e2615fe3da104d60c679c61026bb9d9cb252b79fbf",
+      "reason": "Private medium/sparse reaction calibration, snap-qualified spring boo policy and bounded verified background priority; season-long expectation freshness, cross-account/matchup repetition limits and non-tautological milestone wording"
+    },
+    {
+      "path": "Modules/GamedayAtmosphere/Tests/ProtectedFanBudgetRuntimeTests.cpp",
+      "sha256": "8dd8d38bb27cf5e84a521e03577606313e156a6e0f7d7e36d494a90fff6d63cf",
+      "reason": "Approved integrated release-readiness fixes; native contracts and saved data preserved"
+    },
+    {
+      "path": "Modules/GamedayAtmosphere/Tests/ProtectedFanBudgetTests.cpp",
+      "sha256": "16167142109ace1aba6d33c023bf4f3fb508c13ea0beec3975f46a1f873e3514",
+      "reason": "Approved integrated release-readiness fixes; native contracts and saved data preserved"
+    },
+    {
+      "path": "Modules/GamedayAtmosphere/Tests/ReactionPaletteTests.cpp",
+      "sha256": "d5816206c7ee0a834c121505f1009dd6f53e2f3de9b6d67ae925c7b8aeccbdf8",
+      "reason": "Private medium/sparse reaction calibration, snap-qualified spring boo policy and bounded verified background priority; season-long expectation freshness, cross-account/matchup repetition limits and non-tautological milestone wording"
     },
     {
       "path": "Modules/GamedayAtmosphere/Tests/ReactionRuntimeTests.cpp",
-      "sha256": "f3f8b945764249e8f80ecd70f0adc7706025167c1d6288283373bc05370d4396",
-      "reason": "COT 0.1.5 feedback: native focus colors, exact AIO shared overview; separate visitor demand/tickets, deficit bed, scoring audio priority and recorded-TD inset recovery. Workspace only."
+      "sha256": "0fa40ac9dc8a5370d90a36c4fe1b7f4e15eeb6b174799e9dc934012f8eca628a",
+      "reason": "Approved integrated release-readiness fixes; native contracts and saved data preserved"
+    },
+    {
+      "path": "Modules/GamedayAtmosphere/Tests/ReplayPresentationTests.cpp",
+      "sha256": "1b59679ae2c65a69454e04fc045661de438c52fafc503eb9dd21132185346bef",
+      "reason": "Approved integrated release-readiness fixes; native contracts and saved data preserved"
+    },
+    {
+      "path": "Modules/GamedayAtmosphere/Tests/ResumeBridgeTests.cpp",
+      "sha256": "78e9b29b8c73afa5185273987028c59c71a9f8f52d391bff4421b1ac150bd6a0",
+      "reason": "Approved integrated release-readiness fixes; native contracts and saved data preserved"
+    },
+    {
+      "path": "Modules/GamedayAtmosphere/Tests/ResumeHistoryTests.cpp",
+      "sha256": "f3be9fc7ef54de703b31b42f3415b8f49effa86eb3f059337f53e13ce9daaa94",
+      "reason": "Approved integrated release-readiness fixes; native contracts and saved data preserved"
+    },
+    {
+      "path": "Modules/GamedayAtmosphere/Tests/RuntimePathsTests.cpp",
+      "sha256": "424d5232520e809fd68d48a8ef7dc5ac6b74f098ca29024f98bd5bcbcfa3a35f",
+      "reason": "Approved integrated release-readiness fixes; native contracts and saved data preserved"
+    },
+    {
+      "path": "Modules/GamedayAtmosphere/Tests/SackCarryoverTests.cpp",
+      "sha256": "a7da98330535a14c5555deb6a4adc431eb37549b4c802993f6abd0df31b8ffbd",
+      "reason": "Approved integrated release-readiness fixes; native contracts and saved data preserved"
+    },
+    {
+      "path": "Modules/GamedayAtmosphere/Tests/SeatBaselineTests.cpp",
+      "sha256": "d6e837be0ef2ab921251dbd9f600aa98d9af4e04df79d397b96c4e6184e65bd6",
+      "reason": "Approved integrated release-readiness fixes; native contracts and saved data preserved"
     },
     {
       "path": "Modules/GamedayAtmosphere/Tests/SeatRuntimeTests.cpp",
-      "sha256": "dded3bc39851c3b0660fb6ffd38a9c4c9a9a42bcd8c55dd88314813d61c73c8d",
-      "reason": "COT 0.1.4: factual social perspectives, persistent voices, four-edition structure memory, required news retention and frozen publication wording; compact archive metadata and native UI performance; motion-driven sound companions and mixed visitor sections with strong-host travel resistance. Workspace only."
+      "sha256": "b3ae3961068e68547eae48aa5ab3a8324a3684e5dc8765d82e0786a22234d229",
+      "reason": "Approved integrated release-readiness fixes; native contracts and saved data preserved"
     },
     {
       "path": "Modules/GamedayAtmosphere/Tests/SettingsMenuTests.cpp",
-      "sha256": "d13f7a45f126f01465f6c3649b9cd34d9a135e0351375f32b7d72019b35ea737",
-      "reason": "Retain prior COT integration; 0.1.6 Gameday Atmosphere branding and appended stable-ID visitor-strength control, new-plan-only odds preference with existing native/neutral/protected/history gates retained."
+      "sha256": "552858a58147e0a03888d42b250d33b7e7232aae64e80566d89d81e8eee031c1",
+      "reason": "Approved integrated release-readiness fixes; native contracts and saved data preserved"
+    },
+    {
+      "path": "Modules/GamedayAtmosphere/Tests/SettingsTests.cs",
+      "sha256": "9f36d2024569e8a531a06385675bb461522b1aad4bc636fb5fd043ce39a79991",
+      "reason": "Private Gameday 2.1.17: restore replay threshold slider with default/reset 12 while retaining saved values and control IDs; cache exact seeded noise-grid hashes and invariant geometry/normalization work; skip unused neutral scoring; legacy diagnostic polling once per second. Prior AppData storage, visitor/attendance tuning, Broadcast Universe guards, native fingerprints/scopes/ownership and TD exclusions retained."
+    },
+    {
+      "path": "Modules/GamedayAtmosphere/Tests/StartingAttendanceLaunchHookTests.cpp",
+      "sha256": "2266f64af8ea3c27dc355ffdf960f5da608ebdd538495d3d0b2435ff0f32270f",
+      "reason": "Approved integrated release-readiness fixes; native contracts and saved data preserved"
+    },
+    {
+      "path": "Modules/GamedayAtmosphere/Tests/StartingAttendanceTransitionTests.cpp",
+      "sha256": "17c78395a5679a8636114f3210c2209a5e63b67400671f504e2245c973b20c91",
+      "reason": "Approved integrated release-readiness fixes; native contracts and saved data preserved"
+    },
+    {
+      "path": "Modules/GamedayAtmosphere/Tests/SustainedCrowdTests.cpp",
+      "sha256": "6d544ec18ba6bb04cb609201c59cc5a4f00a93ce4d1ea441c839124f45dc6091",
+      "reason": "Approved integrated release-readiness fixes; native contracts and saved data preserved"
     },
     {
       "path": "Modules/GamedayAtmosphere/Tests/Tuning2020Tests.cpp",
       "sha256": "03feff897d45222967d3ea6d0e28eca1b6833f6e92b5e28ca60ae66d1cf9f504",
       "reason": "COT 0.1.5 feedback: native focus colors, exact AIO shared overview; separate visitor demand/tickets, deficit bed, scoring audio priority and recorded-TD inset recovery. Workspace only."
+    },
+    {
+      "path": "Modules/GamedayAtmosphere/Tests/VisitorPlanTests.cpp",
+      "sha256": "8ebbc34a45871cf687a5133c565fdec38bd5bba5a04e5f127e60a715fc31221d",
+      "reason": "Approved integrated release-readiness fixes; native contracts and saved data preserved"
     },
     {
       "path": "Modules/GamedayAtmosphere/Tests/test_settings_menu_catalog.py",

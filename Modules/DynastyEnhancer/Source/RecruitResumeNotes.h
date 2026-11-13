@@ -2,16 +2,17 @@
 #include "RecruitResume.h"
 #include "RecruitNotes.h"
 #include "RecruitNotesProse.h"
+#include "NotesPresentation.h"
 #include <iomanip>
 #include <sstream>
 #include <set>
 namespace recruitingfog::resume {
 inline std::string formatted(int value){auto s=std::to_string(value);for(int i=int(s.size())-3;i>0;i-=3)s.insert(size_t(i),",");return s;}
 inline std::string stateLabel(const std::string& value){if(value=="NonUS")return "Outside US";std::string s;for(char c:value){if(!s.empty()&&c>='A'&&c<='Z')s+=' ';s+=c;}return s;}
-inline std::string renderResume(const Json& v){
+inline std::string renderResume(const Json& v,bool showSecondary=true){
     validate(v);const auto& s=v.at("stats");auto n=[&](const char* k){return formatted(s.value(k,0));};
     auto rate=[&](const char* key){std::ostringstream value;if(!v.contains("rates")||!v.at("rates").contains(key)||v.at("rates").at(key).is_null())return std::string("--");value<<std::fixed<<std::setprecision(1)<<v.at("rates").at(key).get<double>()<<'%';return value.str();};
-    std::string out=v.value("heading",std::string("Previous High School Season"));for(auto& c:out)c=static_cast<char>(std::toupper(static_cast<unsigned char>(c)));out+='\n';
+    std::string out=evidence::naturalNotesText(v.value("heading",std::string("Previous High School Season")));for(auto& c:out)c=static_cast<char>(std::toupper(static_cast<unsigned char>(c)));out+='\n';
     out+=v.value("hometown","")+", "+stateLabel(v.value("state",""))+" | "+v.at("competitionClass").get<std::string>();
     if(!v.value("collegeSchool",std::string()).empty())out+=" ("+v.at("collegeSchool").get<std::string>()+")";
     if(v.contains("gpa")){std::ostringstream gpa;gpa<<std::fixed<<std::setprecision(2)<<v.at("gpa").get<double>();out+=" | GPA: "+gpa.str();}out+='\n';
@@ -30,7 +31,10 @@ inline std::string renderResume(const Json& v){
     if(s.contains("fieldGoalAttempts"))out+="Kicking: "+n("fieldGoalsMade")+"/"+n("fieldGoalAttempts")+" FG, long "+n("longestFieldGoal")+"; "+n("extraPointsMade")+"/"+n("extraPointAttempts")+" XP\n";
     if(s.contains("punts")){const auto punts=s.at("punts").get<int>();std::ostringstream avg;avg<<std::fixed<<std::setprecision(1)<<(punts?s.at("puntingYards").get<double>()/punts:0.);out+="Punting: "+n("punts")+" punts, "+avg.str()+" average, "+n("puntsInside20")+" inside the 20\n";}
     if(s.contains("specialTeamsSnaps"))out+="Long snapping: "+n("badSnaps")+" off-target snaps / "+n("specialTeamsSnaps")+" snaps\n";
-    return out+"\n"+v.at("background").get<std::string>();
+    if(showSecondary&&v.contains("modeledSecondary")){const auto& secondary=v.at("modeledSecondary");const auto& stats=secondary.at("stats");out+="Also played: "+secondary.at("position").get<std::string>()+"\n";
+        if(stats.contains("defensiveSnaps"))out+="Defense: "+std::to_string(stats.at("tackles").get<int>())+" tackles, "+std::to_string(stats.at("interceptions").get<int>())+" INT, "+std::to_string(stats.at("passesDefended").get<int>())+" breakups\n";
+        else out+=std::to_string(stats.at("touches").get<int>())+" touches, "+std::to_string(stats.at("yards").get<int>())+" yards\n";}
+    return out+"\n"+(!showSecondary&&v.contains("modeledSecondary")?std::string("Shared reps last season."):evidence::naturalNotesText(v.at("background").get<std::string>()));
 }
 inline const char* awarenessFamily(const std::string& position){
     if(position=="QB")return "awareness qb";

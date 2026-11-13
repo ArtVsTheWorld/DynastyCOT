@@ -46,7 +46,10 @@ inline Json dataset(const Json& raw){
         out["teams"].push_back({{"key",record.at("key")},{"index",index},{"name",name},{"nativeNames",std::move(nativeNames)},{"isFcs",fcs.count(record.at("key").get<std::string>())!=0||name.rfind("FCS ",0)==0},{"isUserManaged",index==owner},{"logoId",v.value("TEAM_LOGO",0)},{"primaryColor",color(v,"TEAM_BACKGROUNDCOLORR","TEAM_BACKGROUNDCOLORG","TEAM_BACKGROUNDCOLORB")},{"secondaryColor",color(v,"TEAM_BACKGROUNDCOLORR2","TEAM_BACKGROUNDCOLORG2","TEAM_BACKGROUNDCOLORB2")}});
     }
     auto gameInfo=[&](const Json& record)->Json{
-        const auto& v=record.at("v");if(v.value("IsPractice",true))return nullptr;auto home=values(v.value("HomeTeam",Json()),"Team"),away=values(v.value("AwayTeam",Json()),"Team");if(!home||!away)return nullptr;
+        const auto& v=record.at("v");const auto phase=v.value("SeasonWeekType",std::string());
+        // Extension spring/drill games have IsPractice=false but remain
+        // preseason exhibitions. Do not grade them as competitive games.
+        if(v.value("IsPractice",true)||phase=="PreSeason"||phase=="Preseason")return nullptr;auto home=values(v.value("HomeTeam",Json()),"Team"),away=values(v.value("AwayTeam",Json()),"Team");if(!home||!away)return nullptr;
         Json result=v;result["key"]=record.at("key");result["homeTeamIndex"]=home->at("TeamIndex");result["awayTeamIndex"]=away->at("TeamIndex");return result;
     };
     // A finalized game is referenced by dozens of player stat rows. Resolve

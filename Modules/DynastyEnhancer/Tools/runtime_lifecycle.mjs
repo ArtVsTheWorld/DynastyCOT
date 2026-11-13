@@ -19,9 +19,10 @@ export function updateRuntime(s,state={format:1,editions:[]},{archives=[]}={}){
   if(state.format!==1||!Array.isArray(state.editions))throw Error('Invalid runtime history');
   const scope=scopeKey(s),week=s.season.CurrentWeek;
   const editions=state.editions.filter(e=>e.scope===scope&&e.week<=week);
+  for(const feed of archives)if(feed.recoveredFromTeam!==undefined&&feed.phase===s.season.CurrentWeekType&&feed.week<week&&!editions.some(e=>e.week===feed.week))editions.push({scope,week:feed.week,key:feed.key,reconstructed:true,feed});
   let authors=state.authors??{};
   const lastObserved=editions.filter(e=>!e.reconstructed&&e.snapshot&&e.week<week).sort((a,b)=>b.week-a.week)[0];
-  if(lastObserved)for(let missing=lastObserved.week+1;missing<week;++missing)if(!editions.some(e=>e.week===missing)){const r=recoverWeek(s,missing,authors);if(r){authors=r.authors;editions.push({scope,week:missing,key:r.feed.key,reconstructed:true,feed:r.feed});}}
+  for(const missing of [...new Set(s.games.filter(g=>g.phase===s.season.CurrentWeekType&&g.year===s.season.CurrentYear&&g.published!==false&&['HomeWon','AwayWon','Tie'].includes(g.status)).map(g=>g.week+1))].filter(w=>w>=1&&w<week&&(!lastObserved||w>lastObserved.week)).sort((a,b)=>a-b))if(!editions.some(e=>e.week===missing)){const r=recoverWeek(s,missing,authors);if(r){authors=r.authors;editions.push({scope,week:missing,key:r.feed.key,reconstructed:true,feed:r.feed});}}
   const same=editions.find(e=>e.week===week&&!e.reconstructed),previous=editions.find(e=>e.week===week-1&&!e.reconstructed);
   const baseline=same?.snapshot??previous?.snapshot;
   seedPostseasonPublications(s,same?.snapshot?.postseasonPublications??previous?.snapshot?.postseasonPublications??lastObserved?.snapshot?.postseasonPublications??[...archives].reverse().find(f=>f.postseasonPublications)?.postseasonPublications??{});
@@ -75,5 +76,5 @@ export function updateRuntime(s,state={format:1,editions:[]},{archives=[]}={}){
     draftBoard:s.draftBoard,undraftedSignings:s.undraftedSignings,recentDraftClass:s.recentDraftClass,transactionObservation:transactionObservation(s),transactionBaseline:s.transactionBaseline,delayedNILChanges:s.delayedNILChanges,postseasonPublications:s.postseasonPublications,seasonEndPublications:s.seasonEndPublications,milestoneTotals:totals,milestoneBaseline:s.milestoneBaseline,publicPoll:{key:poll.key,ranks:poll.ranks},players:s.players.filter(p=>p.team!==255).map(p=>({id:p.id,team:p.team,injury:p.injury,injuryYear:p.injuryYear,injuryWeek:p.injuryWeek,injuryType:p.injuryType,minInjury:p.minInjury,maxInjury:p.maxInjury,injurySeverity:p.injurySeverity})),records:s.records??[],recordBaseline:s.recordBaseline,recordBaselineVersion:1,pregameGames:s.pregameGames,commitmentChanges:s.commitmentChanges,commitments:s.commitments,offers:s.offers,offerEvents:s.newOffers,commitmentEvents:s.newCommitments,recruitingObservationVersion:1,recruitingCatchup:s.recruitingCatchup,midweekBaseline};
   const entry={scope,week,key:weekKey(s),snapshot,feed};
   const updated=[...editions.filter(e=>e.week!==week).map(e=>({...e,feed:refreshAccountPresentation(e.feed,s)})),entry].sort((a,b)=>a.week-b.week);
-  return {state:{format:1,editions:updated,authors,recruitGameLedger:recruitGames.ledger},catalog:buildCatalog(feed,[...archives.map(f=>refreshAccountPresentation(f,s)),...updated.map(e=>e.feed)])};
+  return {state:{format:1,editions:updated,authors,sharedSchools:[...new Set([...(state.sharedSchools??[]),...archives.map(f=>f.recoveredFromTeam).filter(Number.isInteger)])].filter(id=>id!==s.userTeamIndex),recruitGameLedger:recruitGames.ledger},catalog:buildCatalog(feed,[...archives.map(f=>refreshAccountPresentation(f,s)),...updated.map(e=>e.feed)])};
 }

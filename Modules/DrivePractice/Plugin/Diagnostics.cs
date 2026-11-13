@@ -12,15 +12,12 @@ namespace SituationalPractice
 {
     internal static class BuildIdentity
     {
-        internal const string Version="0.8.21";
+        internal const string Version="0.8.23";
         internal static string Folder {get{return FolderForAssembly(typeof(BuildIdentity).Assembly.Location);}}
         internal static string FolderForAssembly(string assemblyPath)
         {
-            string directory=Path.GetDirectoryName(Path.GetFullPath(assemblyPath));
-            // MMC loads the DLL from Plugins. The extracted helper already
-            // lives in the data folder; do not create a nested folder for it.
-            return String.Equals(Path.GetExtension(assemblyPath),".exe",StringComparison.OrdinalIgnoreCase)
-                ? directory : Path.Combine(directory,"SituationalPractice");
+            // DLL and helper share user data regardless of their code location.
+            return Ace.DynastyCOT.UserStorage.Folder("ExpandedPractice");
         }
     }
 

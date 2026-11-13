@@ -8,8 +8,8 @@ inline void independentGradeOptions(){
         value.team=bool(flags&8);value.colors=bool(flags&16);value.dollars=bool(flags&32);
         require(Options::validBits(value.packed())&&Options::unpack(value.packed()).packed()==value.packed(),"Independent scale bit packing failed");
     }
-    for(unsigned bits=0;bits<4096;++bits)if(Options::validBits(bits))require(Options::unpack(bits).packed()==bits,"Reserved scale bit was lost");
-    require(!Options::validBits(4096)&&!Options::validBits(5u<<9),"Invalid shared scale admitted");
+    for(unsigned bits=0;bits<4096;++bits)if(Options::validBits(bits))require((Options::unpack(bits).packed()&4095)==bits,"Reserved scale bit was lost");
+    require(!Options::validBits(131072)&&!Options::validBits(5u<<9),"Invalid shared scale admitted");
     Json old={{"format",1},{"league",99},{"socialMedia",true},{"recruitingFog",true},{"rosterFog",true},{"gradeScale",3},{"ratingColors",false},{"dollarValues",true}};
     const auto migrated=decodeOptions(old,99);
     require(migrated.scale==GradeScale::Descriptive&&migrated.teamScale==migrated.scale&&!migrated.colors&&migrated.dollars,"Legacy scale did not migrate to both controls");

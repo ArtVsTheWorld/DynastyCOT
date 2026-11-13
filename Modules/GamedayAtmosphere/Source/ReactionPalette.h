@@ -4,10 +4,9 @@
 #include "LiveReactions.h"
 #include "SituationalReactions.h"
 namespace attendance::palette {
-inline int tier(const energy::Play& snap,const State& s,bool major=false){
- bool critical=overtime(s)||(snap.down>=3&&std::abs(s.homeScore-s.awayScore)<=8)||(s.quarter==4&&s.seconds<=120);
+inline int tier(const energy::Play&,const State&,bool major=false){
  // Play importance selects the variant; crowd size remains a separate ceiling.
- return major?3:critical?2:1;
+ return major?3:2; // Population is the sole sparse-crowd downsize.
 }
 inline int generic(uint64_t key,int level=3){return catalog::choose(std::array<int,2>{22,26},key,level);}
 inline int liveType(const live::Outcome& o,const energy::Play& snap,const State& s,uint64_t sequence,unsigned epoch,bool negative=false){

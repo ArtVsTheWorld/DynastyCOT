@@ -40,7 +40,7 @@ struct Fixture {
 }
 int main(){
     using namespace attendance::settingsmenu::native;
-    assert(Count==46);std::set<std::wstring> unique;
+    assert(Count==48);std::set<std::wstring> unique;
     Output catalog;ArrayWriter writer{catalog.address()};attendance::settingsmenu::list(writer);assert(writer.okay);
     size_t controls=0,headers=0;
     for(const auto& row:catalog.fields){const auto& fields=row.second;
@@ -59,9 +59,9 @@ int main(){
     }
     assert(controls==Count&&headers==3);
     std::map<std::string,size_t> sizes;std::map<std::string,bool> numericSeen;
-    for(const auto& o:Options){++sizes[o.group];if(o.kind!=Kind::Toggle)numericSeen[o.group]=true;else assert(!numericSeen[o.group]);}
-    assert(sizes.size()==3&&sizes["Attendance"]==14&&sizes["Soundscape"]==12&&sizes["Broadcast"]==20);
-    for(const auto& group:sizes)assert(group.second<=(group.first=="Broadcast"?20u:15u));
+    for(const auto& o:Options){++sizes[o.group];if(o.kind!=Kind::Toggle)numericSeen[o.group]=true;else if(std::wcscmp(o.key,L"RegenerateNextCrowd"))assert(!numericSeen[o.group]);}
+    assert(sizes.size()==3&&sizes["Attendance"]==15&&sizes["Soundscape"]==12&&sizes["Broadcast"]==21);
+    for(const auto& group:sizes)assert(group.second<=(group.first=="Broadcast"?21u:15u));
     // Execute the new bytecode fallback's branch semantics: only DGA can pass
     // through the finite native tab switch; every other unknown key returns zero.
     auto patch=categoryFallback();assert(patch[0]==0xb9&&patch[1]==2&&patch[7]==0x66&&patch[8]==0xb8&&patch[16]==0xb9&&patch[18]==0x3e);
@@ -106,7 +106,7 @@ int main(){
     assert(zoomIndex<Count&&Options[zoomIndex].factory==100&&Options[zoomIndex].high==200);
     Reader zoomKey(FirstKey+static_cast<int>(zoomIndex));menu.setSlider(p,0,category.address(),zoomKey.address(),125,0);menu.finish(p,0);
     menu.initialize(p,category.address());assert(Fixture::current(menu,zoomIndex)==125);
-    size_t visitorIndex=Count-1;assert(std::wcscmp(Options[visitorIndex].key,L"VisitorCrowdInfluencePercent")==0);
+    size_t visitorIndex=Count-3;assert(std::wcscmp(Options[visitorIndex].key,L"VisitorCrowdInfluencePercent")==0);
     Reader visitorKey(FirstKey+static_cast<int>(visitorIndex));
     for(int strength:{0,50,100,150,200}){
         menu.setSlider(p,0,category.address(),visitorKey.address(),strength,0);menu.finish(p,0);
@@ -123,6 +123,23 @@ int main(){
     }
     {size_t index=0;while(index<Count&&std::wcscmp(Options[index].key,L"AwayTeamReactionShakeEnabled"))++index;
      assert(index<Count&&Options[index].kind==Kind::Toggle&&Options[index].factory==1&&Options[index].high==1);}
+    const size_t regenerateIndex=Count-1;assert(std::wcscmp(Options[regenerateIndex].key,L"RegenerateNextCrowd")==0&&Options[regenerateIndex].factory==0&&Options[regenerateIndex].kind==Kind::Toggle);
+    Reader regenerateKey(FirstKey+static_cast<int>(regenerateIndex)),regenerateOn(1);menu.setToggle(p,0,category.address(),regenerateKey.address(),regenerateOn.address(),0);
+    assert(GetPrivateProfileIntW(L"Dynamic Gameday Attendance",L"RegenerateNextCrowd",-1,path.c_str())==1);
+    // Worker consumption resets the INI; the next settings opening shows Off.
+    assert(WritePrivateProfileStringW(L"Dynamic Gameday Attendance",L"RegenerateNextCrowd",L"0",path.c_str()));menu.finish(p,0);menu.initialize(p,category.address());assert(Fixture::current(menu,regenerateIndex)==0);
+    size_t thresholdIndex=Count-2;const auto& threshold=Options[thresholdIndex];
+    assert(std::wcscmp(threshold.key,L"FullScreenMinimumYards")==0&&threshold.kind==Kind::Slider&&threshold.factory==12&&threshold.low==10&&threshold.high==60);
+    Reader thresholdKey(FirstKey+static_cast<int>(thresholdIndex));
+    // Existing explicitly saved 15 remains 15; no value is retuned on upgrade.
+    for(int yards:{10,12,15,24,60}){menu.setSlider(p,0,category.address(),thresholdKey.address(),yards,0);menu.finish(p,0);menu.initialize(p,category.address());assert(Fixture::current(menu,thresholdIndex)==yards);}
+    WritePrivateProfileStringW(threshold.section,threshold.key,nullptr,path.c_str());
+    WritePrivateProfileStringW(L"Replays",threshold.key,L"15",path.c_str());menu.initialize(p,category.address());assert(Fixture::current(menu,thresholdIndex)==15);
+    WritePrivateProfileStringW(L"Replays",threshold.key,nullptr,path.c_str());menu.initialize(p,category.address());assert(Fixture::current(menu,thresholdIndex)==12);
+    menu.setSlider(p,0,category.address(),thresholdKey.address(),12,0); // Unchanged default must not force a file write.
+    menu.setSlider(p,0,category.address(),thresholdKey.address(),24,0);menu.finish(p,0);menu.initialize(p,category.address());
+    menu.setSlider(p,0,category.address(),thresholdKey.address(),12,0);menu.finish(p,0);menu.initialize(p,category.address());assert(Fixture::current(menu,thresholdIndex)==12);
+    menu.setSlider(p,0,category.address(),thresholdKey.address(),9,0);menu.setSlider(p,0,category.address(),thresholdKey.address(),61,0);assert(Fixture::current(menu,thresholdIndex)==12);
     WritePrivateProfileStringW(L"General",L"ConfigVersion",L"3",path.c_str());
     size_t sliderIndex=0;while(Options[sliderIndex].kind!=Kind::Slider)++sliderIndex;Reader key(FirstKey+static_cast<int>(sliderIndex));
     menu.setSlider(p,0,category.address(),key.address(),static_cast<int>(Options[sliderIndex].high),0);assert(Fixture::current(menu,sliderIndex)==Options[sliderIndex].low);
@@ -139,6 +156,7 @@ int main(){
     pause.setSlider(p,0,category.address(),zoomKey.address(),105,0);pause.finish(p,0);
     assert(provider[0x34]==0&&provider[0x62]==0x5a);
     pause.initialize(p,category.address());assert(Fixture::current(pause,zoomIndex)==105);
+    pause.setSlider(p,0,category.address(),thresholdKey.address(),18,0);pause.finish(p,0);pause.initialize(p,category.address());assert(Fixture::current(pause,thresholdIndex)==18);
     menu.initialize(p+0x80,category.address());assert(Fixture::current(menu,zoomIndex)==105);
     menu.finish(p+0x80,0);pause.finish(p,0);
     DeleteFileW(path.c_str());

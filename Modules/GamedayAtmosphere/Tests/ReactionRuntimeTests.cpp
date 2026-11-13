@@ -1,5 +1,6 @@
 #define WIN32_LEAN_AND_MEAN
 #include "../Source/ReactionAudioRuntime.h"
+#include "../Source/SpringReactions.h"
 #include <cassert>
 #include <cstdio>
 #include <vector>
@@ -9,7 +10,8 @@ constexpr Address image=0x140000000;
 unsigned char entity[0x200]{},asset[0x80]{},systemData[0x60]{},list[0x20]{},description[0x60]{},reactionValue[0x60]{},parameter[0x60]{},instances[4096]{};
 std::vector<int> received;
 std::vector<attendance::cheer::Delivery> reports;
-void report(attendance::cheer::Source,uint64_t,attendance::cheer::Delivery delivery){reports.push_back(delivery);}
+std::vector<std::pair<uint64_t,attendance::cheer::Delivery>> receipts;
+void report(attendance::cheer::Source,uint64_t id,attendance::cheer::Delivery delivery){reports.push_back(delivery);receipts.emplace_back(id,delivery);}
 Address entries[1]{};unsigned arenas=0,arenaEnds=0,events=0,eventEnds=0,sends=0;
 bool immediateVoice=false;
 int voiceOnType=-1;
@@ -49,6 +51,8 @@ int main(){
     voices(0);attendance::cheer::Runtime paired;paired.configure(image,&api,receive);
     wanted=intent();wanted.playSequence=44;wanted.liveCheer=1;wanted.liveCheerUntil=1500;wanted.liveType=83;
     check(1,[&]{paired.tick(addr(entity),wanted,1000);});assert(!paired.audible(123,1,44,1000));
+    assert(paired.eventFocus(123,1,44,1000)&&paired.eventFocus(123,1,44,1699));
+    assert(!paired.eventFocus(123,1,44,1700)&&!paired.eventFocus(124,1,44,1100)&&!paired.eventFocus(123,2,44,1100)&&!paired.eventFocus(123,1,45,1100)&&!paired.eventFocus(123,1,44,999));
     voices(1);wanted.updated=1030;check(0,[&]{paired.tick(addr(entity),wanted,1030);});
     assert(paired.audible(123,1,44,1030)&&!paired.audible(123,1,45,1030)&&!paired.audible(124,1,44,1030)&&!paired.audible(123,2,44,1030));
     assert(!paired.audible(123,1,44,1181));
@@ -69,7 +73,7 @@ int main(){
     }
     for(int type:{11,91,95}){voices(4);for(int i=0;i<4;++i)put<int>(addr(instances)+16*i,type);
         attendance::cheer::Runtime runtime;runtime.configure(image,&api,receive);wanted=intent();wanted.liveCheer=1;wanted.liveCheerUntil=1500;wanted.liveType=type;
-        check(1,[&]{runtime.tick(addr(entity),wanted,1000);});assert(received.back()==type);check(0,[&]{runtime.tick(addr(entity),wanted,1000);});}
+        check(1,[&]{runtime.tick(addr(entity),wanted,1000);});assert(received.back()==attendance::population::reactionType(type,3));check(0,[&]{runtime.tick(addr(entity),wanted,1000);});}
     voices(4);attendance::cheer::Runtime burst;burst.configure(image,&api,receive);wanted=intent();wanted.celebration=1;wanted.celebrationUntil=3000;wanted.deepCheers=true;
     check(2,[&]{burst.tick(addr(entity),wanted,1000);});assert(received[received.size()-2]==91&&received.back()==75);check(0,[&]{burst.tick(addr(entity),wanted,1100);});
     attendance::cheer::Runtime stagger;stagger.configure(image,&api,receive);wanted=intent();wanted.liveCheer=1;wanted.liveCheerUntil=1500;wanted.liveType=83;wanted.majorLive=wanted.staggered=true;wanted.playSequence=wanted.reactionId=20;wanted.reason=Reason::Result;
@@ -92,7 +96,7 @@ int main(){
     assert(scorePriority.priorityPending());
     wanted.updated=1200;check(0,[&]{scorePriority.tick(addr(entity),wanted,1200);});
     wanted.updated=1300;check(0,[&]{scorePriority.tick(addr(entity),wanted,1300);});
-    wanted.updated=1900;check(1,[&]{scorePriority.tick(addr(entity),wanted,1900);});assert(received.back()!=83&&scorePriority.priorityPending());
+    wanted.updated=1900;check(0,[&]{scorePriority.tick(addr(entity),wanted,1900);});assert(received.back()!=83&&scorePriority.priorityPending());
     wanted.updated=2000;check(0,[&]{scorePriority.tick(addr(entity),wanted,2000);});assert(scorePriority.priorityPending());
     wanted.updated=2401;check(0,[&]{scorePriority.tick(addr(entity),wanted,2401);});assert(!scorePriority.priorityPending());
     // A later result must not cancel the earlier valid major-play followup.
@@ -114,8 +118,8 @@ int main(){
     // One bounded queue-recovery request, despite other active native voices.
     voices(4);attendance::cheer::Runtime receipt;receipt.configure(image,&api,receive,report);wanted=intent();wanted.playSequence=1;wanted.liveCheer=1;wanted.liveCheerUntil=1500;wanted.liveType=83;
     auto tick=[&](uint64_t now){wanted.updated=now;receipt.tick(addr(entity),wanted,now);};
-    check(1,[&]{tick(1000);});check(0,[&]{tick(1030);tick(1060);});check(1,[&]{tick(1100);});assert(reports.back()==attendance::cheer::Delivery::Recovery);
-    check(0,[&]{tick(1130);tick(1160);tick(1200);});assert(reports.back()==attendance::cheer::Delivery::Unregistered);
+    check(1,[&]{tick(1000);});check(0,[&]{tick(1030);tick(1060);});check(0,[&]{tick(1100);});assert(reports.back()==attendance::cheer::Delivery::Sent);
+    check(0,[&]{tick(1130);tick(1160);tick(1601);});assert(reports.back()==attendance::cheer::Delivery::Unregistered);
     // Snapshot every old handle: a third pre-existing matching voice cannot
     // falsely establish that the new request registered. Only a new handle can.
     voices(4);for(int i=0;i<4;++i)put<int>(addr(instances)+16*i,83);
@@ -140,16 +144,95 @@ int main(){
         wanted=intent();wanted.playSequence=50;wanted.liveCheer=1;wanted.liveCheerUntil=1500;wanted.liveType=type;
         int generic=(attendance::population::negative(type)?92:88)+(type%4);
         if(generic==type)--generic;
-        voiceOnType=generic;check(1,[&]{fallback.tick(addr(entity),wanted,1000);});assert(received.back()==type);
+        voiceOnType=generic;check(1,[&]{fallback.tick(addr(entity),wanted,1000);});assert(received.back()==attendance::population::reactionType(type,3));
         for(uint64_t time:{1030u,1060u,1100u}){wanted.updated=time;fallback.tick(addr(entity),wanted,time);}
-        assert(received.back()==generic);wanted.updated=1130;check(0,[&]{fallback.tick(addr(entity),wanted,1130);});
-        assert(reports.back()==attendance::cheer::Delivery::Registered);voiceOnType=-1;
+        assert(received.back()==attendance::population::reactionType(type,3));wanted.updated=1601;check(0,[&]{fallback.tick(addr(entity),wanted,1601);});
+        assert(reports.back()==attendance::cheer::Delivery::Unregistered);voiceOnType=-1;
     }
+    // Relaxed spring coverage uses the same owner once, yields to already
+    // playing native reactions, and does not arm ordinary recovery duplicates.
+    for(int n:{0,1,4}){voices(n);attendance::cheer::Runtime springRuntime;springRuntime.configure(image,&api,receive,report);
+        wanted=intent();wanted.spring=true;wanted.resultCheer=900;wanted.resultCheerUntil=1600;wanted.playSequence=77;wanted.populationSize=1;
+        check(1,[&]{springRuntime.tick(addr(entity),wanted,1000);});assert(received.back()==89);wanted.updated=1030;check(0,[&]{springRuntime.tick(addr(entity),wanted,1030);});
+        wanted.updated=1200;check(0,[&]{springRuntime.tick(addr(entity),wanted,1200);});
+    }
+    // Positive voices, AWW, old same-family handles and unknown-age voices
+    // cannot consume the one small GEN_BOO opportunity. It never retries or
+    // adds a continuous layer; a truly fresh equivalent native voice still wins.
+    for(int nativeType:{83,95,101}){
+        voices(1);put<int>(addr(instances),nativeType);attendance::cheer::Runtime springBoo;springBoo.configure(image,&api,receive,report);
+        wanted=intent();wanted.spring=true;wanted.resultCheer=901;wanted.resultCheerUntil=1600;wanted.playSequence=78;wanted.populationSize=1;wanted.resultType=101;
+        check(1,[&]{springBoo.tick(addr(entity),wanted,1000);});assert(received.back()==101);
+        for(uint64_t now:{1030u,1100u,1300u,1601u}){wanted.updated=now;check(0,[&]{springBoo.tick(addr(entity),wanted,now);});}
+    }
+    for(bool positive:{false,true}){
+        voices(0);attendance::cheer::Runtime matching;matching.configure(image,&api,receive,report);wanted=intent();wanted.spring=true;wanted.playSequence=79;wanted.populationSize=1;wanted.resultType=positive?89:101;
+        check(0,[&]{matching.tick(addr(entity),wanted,1000);});
+        voices(1);put<int>(addr(instances),positive?91:103); // generic family cannot prove an exact-event duplicate
+        wanted.updated=1030;wanted.resultCheer=902;wanted.resultCheerUntil=1630;
+        check(1,[&]{matching.tick(addr(entity),wanted,1030);});assert(reports.back()==attendance::cheer::Delivery::Sent);
+        // A carried-over native handle is not a new play's reaction.
+        ++wanted.playSequence;++wanted.resultCheer;wanted.updated=1060;
+        check(1,[&]{matching.tick(addr(entity),wanted,1060);});assert(received.back()==(positive?89:101));
+    }
+    {voices(0);attendance::cheer::Runtime exact;exact.configure(image,&api,receive,report);wanted=intent();wanted.spring=true;wanted.playSequence=79;wanted.populationSize=2;wanted.resultType=58;
+     check(0,[&]{exact.tick(addr(entity),wanted,1000);});voices(1);put<int>(addr(instances),59);wanted.updated=1030;wanted.resultCheer=902;wanted.resultCheerUntil=1630;
+     check(0,[&]{exact.tick(addr(entity),wanted,1030);});assert(reports.back()==attendance::cheer::Delivery::NativePriority);}
+    for(int discontinuity:{0,1,2,3}){
+        voices(0);attendance::cheer::Runtime runtime;runtime.configure(image,&api,receive,report);wanted=intent();wanted.spring=true;wanted.playSequence=80;wanted.populationSize=1;wanted.resultType=101;
+        check(0,[&]{runtime.tick(addr(entity),wanted,1000);});voices(1);put<int>(addr(instances),101);
+        if(discontinuity==0)wanted.updated=1700; // sample gap
+        if(discontinuity==1){wanted.updated=1030;++wanted.epoch;}
+        if(discontinuity==2)wanted.updated=900; // clock rewind
+        if(discontinuity==3){wanted.active=false;check(0,[&]{runtime.tick(addr(entity),wanted,1010);});wanted.active=true;wanted.updated=1030;}
+        wanted.resultCheer=903;wanted.resultCheerUntil=wanted.updated+600;
+        check(1,[&]{runtime.tick(addr(entity),wanted,wanted.updated);});assert(received.back()==101);
+    }
+    // A result is seen once, then the ordinary update stream contains no
+    // result. The later sound callback must still receive the retained lease.
+    {voices(0);attendance::spring::Reactions lease;attendance::energy::Play p;p.game={2,7,7,4,40,180};p.game.spring=true;p.game.springDynasty=77;p.game.springNumber=250;p.game.team0=1502;p.game.team1=p.game.springSchool=1145;p.offense=1;
+     attendance::energy::Outcome r;r.accepted=r.completed=true;r.sequence=100;r.yards=15;
+     auto selected=lease.observe(p,r,123,1,100,1000,true,1);assert(selected.selected);r={};
+     auto later=lease.observe(p,r,123,1,100,1300,true,1);assert(later.intent.resultCheer==100);
+     attendance::cheer::Runtime runtime;runtime.configure(image,&api,receive,report);immediateVoice=true;check(1,[&]{runtime.tick(addr(entity),later.intent,1300);});immediateVoice=false;
+     later=lease.observe(p,r,123,1,100,1330,true,1);check(0,[&]{runtime.tick(addr(entity),later.intent,1330);});assert(reports.back()==attendance::cheer::Delivery::Registered);
+     voices(0);attendance::cheer::Runtime unregistered;unregistered.configure(image,&api,receive,report);later.intent.resultCheer=101;later.intent.updated=2000;later.intent.resultCheerUntil=2600;later.intent.playSequence=101;
+     check(1,[&]{unregistered.tick(addr(entity),later.intent,2000);});for(uint64_t now:{2030u,2100u,2200u,2500u,2601u}){later.intent.updated=now;check(0,[&]{unregistered.tick(addr(entity),later.intent,now);});}assert(reports.back()==attendance::cheer::Delivery::Unregistered);}
+    // Two requests from one play keep independent receipts after the source
+    // IDs change. No inferred failure may replay either sound.
+    voices(0);receipts.clear();attendance::cheer::Runtime ledger;ledger.configure(image,&api,receive,report);
+    wanted=intent();wanted.playSequence=777;wanted.liveCheer=201;wanted.liveCheerUntil=1500;wanted.liveType=2;
+    check(1,[&]{ledger.tick(addr(entity),wanted,1000);});wanted.resultCheer=202;wanted.resultType=74;wanted.resultCheerUntil=2200;wanted.scoringReaction=true;wanted.updated=1050;
+    check(1,[&]{ledger.tick(addr(entity),wanted,1050);});voices(2);put<int>(addr(instances),2);put<int>(addr(instances)+16,74);wanted.liveCheer=0;wanted.updated=1080;
+    check(0,[&]{ledger.tick(addr(entity),wanted,1080);});
+    assert(std::find(receipts.begin(),receipts.end(),std::make_pair(uint64_t(201),attendance::cheer::Delivery::Registered))!=receipts.end());
+    assert(std::find(receipts.begin(),receipts.end(),std::make_pair(uint64_t(202),attendance::cheer::Delivery::Registered))!=receipts.end());
+    assert(!ledger.observing());voices(0);
+    // Missing eligible callbacks and intentional scoring suppression are named.
+    wanted.liveCheer=203;wanted.liveCheerUntil=1090;wanted.updated=1100;check(0,[&]{ledger.tick(addr(entity),wanted,1100);});assert(reports.back()==attendance::cheer::Delivery::Expired);
+    wanted.liveCheer=204;wanted.liveCheerUntil=1600;wanted.updated=1130;check(0,[&]{ledger.tick(addr(entity),wanted,1130);});assert(reports.back()==attendance::cheer::Delivery::PrioritySuppressed);
+    // Production uses independent receivers for a verified skill accent and
+    // its score. Both families can register without overwriting either ticket.
+    voices(0);receipts.clear();attendance::cheer::Runtime touchdown,hurdle;touchdown.configure(image,&api,receive,report);hurdle.configure(image,&api,receive,report);
+    wanted=intent();wanted.playSequence=800;wanted.resultCheer=301;wanted.resultCheerUntil=1700;wanted.resultType=74;wanted.scoringReaction=true;
+    check(1,[&]{touchdown.tick(addr(entity),wanted,1000);});auto accent=wanted;accent.resultCheer=0;accent.scoringReaction=false;accent.liveCheer=302;accent.liveCheerUntil=1500;accent.liveType=2;
+    check(1,[&]{hurdle.tick(addr(entity),accent,1000);});voices(2);put<int>(addr(instances),74);put<int>(addr(instances)+16,2);wanted.updated=accent.updated=1030;
+    check(0,[&]{touchdown.tick(addr(entity),wanted,1030);hurdle.tick(addr(entity),accent,1030);});assert(!touchdown.observing()&&!hurdle.observing());
+    wanted.updated=accent.updated=1100;check(0,[&]{touchdown.tick(addr(entity),wanted,1100);hurdle.tick(addr(entity),accent,1100);});
+    // Same-selector requests cannot both claim one native voice. Matching
+    // remains independent even when both dispatch before the first registers.
+    voices(0);receipts.clear();attendance::cheer::Runtime sharedVoice;sharedVoice.configure(image,&api,receive,report);wanted=intent();wanted.playSequence=900;wanted.liveCheer=401;wanted.liveCheerUntil=1500;wanted.liveType=90;
+    check(1,[&]{sharedVoice.tick(addr(entity),wanted,1000);});wanted.liveCheer=402;wanted.updated=1030;check(1,[&]{sharedVoice.tick(addr(entity),wanted,1030);});voices(1);put<int>(addr(instances),90);wanted.updated=1060;check(0,[&]{sharedVoice.tick(addr(entity),wanted,1060);});
+    auto registeredCount=[&]{return std::count_if(receipts.begin(),receipts.end(),[](const auto& p){return p.second==attendance::cheer::Delivery::Registered;});};assert(registeredCount()==1);wanted.updated=1090;check(0,[&]{sharedVoice.tick(addr(entity),wanted,1090);});assert(registeredCount()==1);
+    wanted.updated=1700;check(0,[&]{sharedVoice.tick(addr(entity),wanted,1700);});assert(reports.back()==attendance::cheer::Delivery::Unregistered);
     unsigned valid=0;
     for(int id=0;id<112;++id){bool heard=id%4!=0&&id!=13&&id!=14&&id!=15&&id!=23;
         if(heard){check(1,[&]{assert(attendance::cheer::emit(api,receive,image,addr(entity),id));});assert(received.back()==id);++valid;}
         else check(0,[&]{assert(!attendance::cheer::emit(api,receive,image,addr(entity),id));});
     }assert(valid==80);
     for(int invalid:{-1,112,999})assert(!attendance::cheer::emit(api,receive,image,addr(entity),invalid));
-    std::puts("PASS: all earned layers dispatch over matching/multiple native voices, once-per-event and reentrant guards, bounded followups/recovery, complete prior-handle receipts, ownership/expiry/callback/fault safety and native family validation.");
+    // Spring focus is separate from the unchanged short dispatch deadline.
+    voices(0);attendance::cheer::Runtime springFocus;springFocus.configure(image,&api,receive);wanted=intent();wanted.spring=true;wanted.playSequence=999;wanted.resultCheer=999;wanted.resultCheerUntil=1600;wanted.resultType=102;wanted.size=wanted.populationSize=2;
+    springFocus.tick(addr(entity),wanted,1000);assert(springFocus.eventFocus(123,1,999,2499)&&!springFocus.eventFocus(123,1,999,2500));assert(!springFocus.eventFocus(123,1,1000,1100));
+    std::puts("PASS: all earned layers dispatch over matching/multiple native voices, once-per-event and reentrant guards, bounded followups without receipt-based replay, complete prior-handle receipts, ownership/expiry/callback/fault safety and native family validation.");
 }

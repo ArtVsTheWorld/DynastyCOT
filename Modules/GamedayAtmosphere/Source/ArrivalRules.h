@@ -109,7 +109,7 @@ struct Halftime {
         if(seen&&now+0.01f<highTime)return temporary;
         bool crossing=seen&&lastQuarter<3&&s.quarter==3&&highTime<2*s.quarterSeconds-0.01f;
         bool enteredThird=seen&&lastQuarter<3&&s.quarter==3;
-        bool patient=std::abs(s.homeScore-s.awayScore)<=8&&(marqueeMatchup(s)||packedHouse);
+        bool patient=!springContext(s)&&std::abs(s.homeScore-s.awayScore)<=8&&(marqueeMatchup(s)||packedHouse);
         if(s.quarter==2&&s.seconds>.01f)waitingForBreak=patient;
         else if(s.quarter==2&&patient)waitingForBreak=true;
         bool release=waitingForBreak&&((s.quarter==2&&s.seconds<=.01f)||enteredThird);

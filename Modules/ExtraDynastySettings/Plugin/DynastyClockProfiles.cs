@@ -20,7 +20,7 @@ namespace OfflineDynastySettings {
         internal const int AllocationSize=16384;
         internal static bool ValidLeague(uint league) {return league!=0 && league!=UInt32.MaxValue;}
         internal static string FilePath(string plugins) {
-            return Path.Combine(plugins,"OfflineDynastySettings","DynastyClocks.json");
+            return Path.Combine(Ace.DynastyCOT.UserStorage.Folder("ExtraSettings"),"DynastyClocks.json");
         }
         internal static DynastyClockValue Default {get{return new DynastyClockValue(1,15);}}
         private static int Integer(Dictionary<string,object> data,string key) {

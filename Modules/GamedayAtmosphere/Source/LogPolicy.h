@@ -2,7 +2,8 @@
 #include <string>
 namespace attendance {
 inline bool importantLogTag(const std::string& kind,const std::string& message){
-    if(kind=="away-appearance-budget"||kind=="starting-attendance-state")return true;
+    if(kind.rfind("spring-",0)==0||kind=="crowd-history")return true;
+    if(kind=="replay-route"||kind=="visitor-demand-components"||kind=="away-appearance-budget"||kind=="starting-attendance-state")return true;
     if(kind.find("unavailable")!=std::string::npos||kind=="2020-mode"||kind=="defensive-motion"||kind=="showboat"||kind=="audience-history")return true;
     return !(kind!="defensive-proof"&&kind!="major-replay"&&kind!="replay-select"&&kind!="starting"&&kind!="ready"&&kind!="inactive"&&kind!="fault"&&kind!="quarter-break"&&
        kind!="two-minute"&&kind!="departures"&&kind!="arrivals"&&kind!="halftime"&&kind!="opening"&&kind!="eruption"&&

@@ -2,7 +2,7 @@
 #include <cstdint>
 namespace dynasty::live {
 // Fast identity-only wakeups keep the expensive midweek-content scan at its
-// existing five-second interval. Publication still requires two full captures.
+// existing five-second interval. Publication requires full capture plus settled proof.
 struct FeedSchedule {
     static constexpr uint64_t identityMs=500,contentMs=5000,settleMs=750,retryMs=1000;
     uint64_t pollAt=0,contentAt=0;

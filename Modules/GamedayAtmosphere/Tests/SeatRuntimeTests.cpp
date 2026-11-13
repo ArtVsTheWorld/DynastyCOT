@@ -155,11 +155,14 @@ void testReplaySelectors(TestWorld& world){
         expressions.logic({expressions.compare(0,"128",3),expressions.compare(5,"22",7)})},1);
     A routine=expressions.logic({gate,expressions.fn("1")});
     testLogicRoot=routine;testLogicChild=gate;replayMode=attendance::replaymode::Mode::PlayCall;
-    assert(museLogicEvaluate(routine,123)&&at<unsigned char>(gate+0x38)==1&&!replaySelection.depth&&!replaySelection.selection.insetGate);
+    // This mock deliberately has no play/snap or native play-call bindings.
+    // Retain the native false gate; positive admission is covered by ReplayEntryGateTests.
+    assert(museLogicEvaluate(routine,123)&&at<unsigned char>(gate+0x38)==0&&!replaySelection.depth&&!replaySelection.selection.insetGate);
     extraReplays=false;assert(museLogicEvaluate(routine,123)&&at<unsigned char>(gate+0x38)==0);
     extraReplays=true;testLogicRoot=testLogicChild=0;replayMode=attendance::replaymode::Mode::Unknown;
     A unrelatedEvent=expressions.allocate(0x60);testPut(unrelatedEvent,image+attendance::bindings::ReplayEventNodeVtable);testPut(unrelatedEvent+0x50,11);
-    replayEventNode(unrelatedEvent);assert(testEventCalls==2&&replayMajorSelectorSamples==refreshes+1);
+    auto beforeUnrelated=replayMajorSelectorSamples.load();
+    replayEventNode(unrelatedEvent);assert(testEventCalls==2&&replayMajorSelectorSamples==beforeUnrelated);
     replayPresentationInstalled=false;majorReplayBindings=false;extraReplays=true;replayBinding=false;world.phase(6);
     testGlobal(attendance::bindings::ReplayManager,A(0));
     originalMuseLogic=nullptr;originalMuseComparison=nullptr;originalReplayEventNode=nullptr;
@@ -583,6 +586,20 @@ int main(){
     assert(!audioBusMix().valid); // Interactive replay never inherits a category-volume override.
     replaySuspendsAtmosphere=false;replayLoss=-1;activeLoss=0;
     world.phase(1);assert(!audioBusMix().valid); // Ordinary gameplay pause restores native volume.
+    // Production audio consumer: only a fresh same-world envelope can lower
+    // continuous beds; all reaction buses, disabled strength and pause survive.
+    world.paused=0;lastAudibleUpdate=GetTickCount64();
+    auto stockMix=audioBusMix();assert(stockMix.valid);
+    auto hush=std::make_shared<attendance::homequiet::Envelope>();hush->match=audioMatch.load();hush->epoch=audioEpoch.load();hush->updated=GetTickCount64();hush->quiet=1;hush->visitorShare=.06f;
+    std::shared_ptr<const attendance::homequiet::Envelope> hushed=hush;std::atomic_store(&homeQuietEnvelope,hushed);
+    auto bedMix=audioBusMix();assert(bedMix.valid&&bedMix.net(1)<stockMix.net(1));
+    for(unsigned child:{0u,3u,5u,6u})assert(bedMix.net(child)==stockMix.net(child));
+    ++hush->epoch;assert(audioBusMix().key==stockMix.key);--hush->epoch;
+    hush->updated=GetTickCount64()-1000;assert(audioBusMix().key==stockMix.key);hush->updated=GetTickCount64();
+    busMixStrength=0;assert(!audioBusMix().needed());busMixStrength=100;
+    replaySuspendsAtmosphere=true;assert(!audioBusMix().valid);replaySuspendsAtmosphere=false;
+    world.paused=1;assert(!audioBusMix().valid);
+    std::shared_ptr<const attendance::homequiet::Envelope> noHush=std::make_shared<attendance::homequiet::Envelope>();std::atomic_store(&homeQuietEnvelope,noHush);
     world.phase(8);testPut(reinterpret_cast<A>(world.manager.data())+8,6);testPut(reinterpret_cast<A>(world.clock.data())+0x28,0.f);
     testPut(world.wrapper[2]+0x1d8,21);testPut(world.wrapper[2]+0x1dc,14);world.paused=0;lastAtmosphereTick=0;atmosphereTick();
     assert(audioPresentationPhase()==7&&at<int>(reinterpret_cast<A>(world.states.data())+0xa0)==8);

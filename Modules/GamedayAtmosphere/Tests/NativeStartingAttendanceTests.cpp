@@ -1,5 +1,7 @@
 #define WIN32_LEAN_AND_MEAN
 #include "../Source/NativeStartingAttendance.h"
+#include "../Source/AppearanceAdmission.h"
+#include "../Source/AwayCrowd.h"
 #include <cassert>
 #include <cstring>
 #include <map>
@@ -12,7 +14,7 @@ A address(void* p){return reinterpret_cast<A>(p);}
 struct Table;
 struct Row {A vt=0,unused=0;Table* table=nullptr;int index=0;int refs=0;};
 struct Table {
-    A vt=0;unsigned char schema[0xe0]{};A columns[512]{};
+    A vt=0,descriptor=0;unsigned char schema[0xe0]{};A columns[512]{};
     std::map<int,int> ints;std::map<int,float> reals;std::map<int,Row*> related;
 };
 A image=0,recordVt=0,tableVt=0;int enums=0,sets=0;bool sameConference=false;
@@ -33,7 +35,7 @@ bool __fastcall set(A service,unsigned key,A reference){
     auto ref=reinterpret_cast<A*>(reference);assert(ref[0]==image+UnsignedType);int value=0;std::memcpy(&value,reinterpret_cast<void*>(ref[1]),4);put(service+0x14,value);++sets;return true;
 }
 void init(Table& t,Row& r){
-    t.vt=tableVt;for(unsigned i=0;i<512;++i)t.columns[i]=i;
+    t.vt=tableVt;t.descriptor=address(t.schema);for(unsigned i=0;i<512;++i)t.columns[i]=i;
     put(address(t.schema)+0xd0,address(t.columns));put<short>(address(t.schema)+0xd8,512);
     r.vt=recordVt;r.table=&t;
 }
@@ -69,6 +71,7 @@ int main(){
     put<int>(image+0xbde66a0,17);put(image+0xbde66a8,reinterpret_cast<A>("Latitude"));
     put<int>(image+0xbde66b0,18);put(image+0xbde66b8,reinterpret_cast<A>("Longitude"));
     put<int>(image+0xbdd20b0,0x84);put(image+0xbdd20b8,reinterpret_cast<A>("IsMilitary"));
+    put<int>(image+0xbdd3070,0x180);put(image+0xbdd3078,reinterpret_cast<A>("TeamPrestige"));
     put(tableVt+0x110,reinterpret_cast<A>(realNumber));hct.reals={{17,41.4f},{18,-74.f}};act.reals={{17,37.8f},{18,-122.3f}};ht.ints[0x84]=1;
     Api api{count,same,set};Seed seed;
     std::vector<Table> memberTables(137),schoolTables(138);std::vector<Row> memberRows(137),schoolRows(138);
@@ -94,10 +97,50 @@ int main(){
     Seed schools;assert(crowdIdentity(image,address(manager),address(&reference),schools)&&schools.home.id==1153&&schools.home.militaryKnown&&schools.home.military&&schools.away.militaryKnown&&!schools.away.military);noLeaks();
     ht.related[0xa5]=&schoolRows[0];
     gt.ints[0x3e]=2;assert(capture(image,address(manager),address(&reference),45000,seed,&api)&&!seed.regular&&seed.home.militaryKnown&&seed.home.military);noLeaks();gt.ints[0x3e]=1;
-    gt.related[0x15]=&stadium;assert(capture(image,address(manager),address(&reference),45000,seed,&api)&&!seed.regular);noLeaks();gt.related[0x15]=nullptr;
+    gt.related[0x15]=&stadium;assert(capture(image,address(manager),address(&reference),45000,seed,&api)&&!seed.regular&&seed.bowlFixture&&grades(seed.home)&&grades(seed.away));noLeaks();
+    for(int type:{1,2,3,4,5}){gt.ints[0x3e]=type;assert(capture(image,address(manager),address(&reference),45000,seed,&api)&&seed.bowlFixture&&seed.bowlRelated&&!seed.practiceFixture&&!seed.regular&&seed.springType==type);noLeaks();}
+    for(int type:{0,6,7,8,9,-1}){gt.ints[0x3e]=type;assert(capture(image,address(manager),address(&reference),45000,seed,&api)&&!seed.bowlFixture&&seed.bowlRelated);noLeaks();}
+    gt.ints[0x3e]=5;gt.ints[0x33]=1;assert(capture(image,address(manager),address(&reference),45000,seed,&api)&&!seed.bowlFixture&&seed.practiceFixture);gt.ints[0x33]=0;
+    assert(capture(image,address(manager),address(&reference),45000,seed,&api)&&seed.bowlFixture&&seed.springType==5);noLeaks();
+    auto postseasonSeed=seed;gt.related[0x15]=nullptr;gt.ints[0x3e]=1;
     gt.ints[36]=7;assert(capture(image,address(manager),address(&reference),45000,seed,&api)&&seed.resumed&&seed.home.militaryKnown&&seed.home.military);noLeaks();gt.ints[36]=0;
     gt.ints[0x3d]=15;sameConference=true;assert(capture(image,address(manager),address(&reference),45000,seed,&api)&&!seed.regular);noLeaks();sameConference=false;assert(capture(image,address(manager),address(&reference),45000,seed,&api)&&seed.regular);noLeaks();gt.ints[0x3d]=8;
     put(tableVt+0x128,A(0));assert(!capture(image,address(manager),address(&reference),45000,seed,&api));put(tableVt+0x128,reinterpret_cast<A>(related));noLeaks();
+    // Semantic field-name resolution: marker excluded, actual school resolved
+    // independently of scoreboard slots, failed/ambiguous metadata stays native.
+    std::vector<unsigned char> gameFields(512*0x58,0);auto gf=address(gameFields.data());
+    for(int i=0;i<512;++i)gameFields[i*0x58+15]=15;
+    std::memcpy(gameFields.data()+5*0x58,"SeasonGameNum",13);gameFields[5*0x58+15]=2;put<unsigned>(gf+5*0x58+0x40,2);
+    put(address(gt.schema)+0x40,gf);put(address(gt.schema)+0x48,gf+gameFields.size());gt.ints[5]=4;gt.ints[0x3e]=0;
+    put<int>(image+0xbdd9e50,0x3c);put(image+0xbdd9e58,reinterpret_cast<A>("SeasonGameNum"));
+    put<int>(image+0xbdd1960,0xf);put(image+0xbdd1968,reinterpret_cast<A>("BlacklistUserIdLower"));
+    gt.columns[0x3c]=5; // native game class key60 maps to database column5
+    gt.columns[5]=6;gt.ints[6]=250; // class-key map intentionally differs from the named database column
+    schoolTables[1].ints[34]=13; // actual school grades are not ready in spring
+    ht.ints[0xd1]=1502;ht.related[0xa5]=nullptr;
+    assert(capture(image,address(manager),address(&reference),45000,seed,&api)&&seed.spring&&seed.springSide==1&&seed.springSchool==1193&&seed.springNumber==4);noLeaks();
+    assert(seed.springNumberKnown&&seed.springRoleEvidence==6); // away tracking + fixture home venue
+    at.related[0xa5]=nullptr;at.related[0x118]=&stadium;
+    assert(capture(image,address(manager),address(&reference),45000,seed,&api)&&seed.spring&&seed.springSide==1&&(seed.springRoleEvidence&8));noLeaks();
+    at.related[0x118]=nullptr;assert(capture(image,address(manager),address(&reference),45000,seed,&api)&&!seed.spring);noLeaks();
+    at.related[0xa5]=&schoolRows[1];schoolTables[1].ints[34]=1;
+    gt.columns[5]=5;
+    gt.ints[5]=250;assert(capture(image,address(manager),address(&reference),45000,seed,&api)&&!seed.spring);noLeaks();
+    // Observed Extensions 0.3 BeginGame: game250, stand-in1502, native team
+    // field15=1200000. A launched stamped row can use regular week type; the
+    // stamp, real-school ownership and fresh Dynasty launch still qualify it.
+    for(int type:{0,1})for(int stamp:{1100000,1200000}){
+        gt.ints[0x3e]=type;ht.ints[0xf]=stamp;
+        assert(capture(image,address(manager),address(&reference),45000,seed,&api)&&seed.spring&&!seed.regular&&seed.springStamp==stamp&&seed.springNumber==250&&seed.springSide==1);noLeaks();
+    }
+    gt.ints[0x3e]=0;
+    for(int stamp:{0,1099999,1100001,1199999,1200001}){ht.ints[0xf]=stamp;assert(capture(image,address(manager),address(&reference),45000,seed,&api)&&!seed.spring);noLeaks();}
+    ht.ints[0xf]=1200000;put(image+0xbdd1968,reinterpret_cast<A>("OtherField"));assert(capture(image,address(manager),address(&reference),45000,seed,&api)&&!seed.spring);noLeaks();
+    put(image+0xbdd1968,reinterpret_cast<A>("BlacklistUserIdLower"));put<int>(image+0xbdd9e50,59);assert(capture(image,address(manager),address(&reference),45000,seed,&api)&&!seed.spring);noLeaks();
+    put<int>(image+0xbdd9e50,60);ht.ints[0xf]=0;
+    gt.ints[5]=4;gt.ints[0x33]=1;assert(capture(image,address(manager),address(&reference),45000,seed,&api)&&!seed.spring);gt.ints[0x33]=0;
+    ht.ints[0xd1]=1153;ht.related[0xa5]=&schoolRows[0];gt.ints[0x3e]=1;
+    assert(capture(image,address(manager),address(&reference),45000,seed,&api)&&seed.regular&&!seed.spring);noLeaks();
     // Real descriptor layout and typed setter contract; no writes to native records.
     for(A p:{image+OptionService,image+OptionType,image+OptionVtable,image+0xd9eb808,image+0xf63f9f0})page(p);
     unsigned char options[0x200]{},config[0x100]{};put(image+OptionService,address(options));put(address(options),image+OptionVtable);put(image+OptionVtable+0x80,image+0x90a1670);
@@ -146,7 +189,41 @@ int main(){
     members[3].flags|=1;assert(!setAttendance(image,51000,&api)&&sets==1);members[3].flags&=~1u;
     put<int>(image+0xd9eb808,-1);assert(!setAttendance(image,51000,&api)&&sets==1);assert(setAttendance(image,51000,&api,true)&&sets==2);put<int>(image+0xd9eb808,14);
     put<int>(image+0xd9eb808,17);assert(!launch(image,launchInput,seed)&&!setAttendance(image,51000,&api));put<int>(image+0xd9eb808,14);
-    put<unsigned char>(address(options)+0x22,47);assert(!launch(image,launchInput,seed));
+    // Regression: 2.1.33 rejected the shared launch on gameBowlId before
+    // publishing CrowdFixture, so appearance preparation never had an owner.
+    put<int>(address(options)+0x14,45000);put<unsigned char>(address(options)+0x22,47);assert(!launch(image,launchInput,seed));
+    assert(!launch(image,launchInput,postseasonSeed)); // Turnout API remains strict.
+    assert(!launch(image,launchInput,seed,nullptr,false,LaunchUse::Supporters)); // Not a captured bowl fixture.
+    assert(launch(image,launchInput,postseasonSeed,nullptr,false,LaunchUse::Supporters)&&launchInput.bowl==47);
+    assert(!turnoutEligible(postseasonSeed,launchInput)&&!calculate(postseasonSeed,launchInput).applied);
+    postseasonSeed.dynasty=42;postseasonSeed.serial=1;postseasonSeed.observed=100;postseasonSeed.dynastyVerifiedAt=99;postseasonSeed.dynastyGeneration=1;
+    assert(capturedLaunchProof(postseasonSeed,launchInput,101,1)&&!transitionProof(postseasonSeed,launchInput,101,1));
+    std::vector<unsigned char> untouched(options,options+sizeof(options));auto previousSets=sets;assert(!setAttendance(image,51000,&api)&&sets==previousSets&&!std::memcmp(options,untouched.data(),sizeof(options)));
+    postseasonSeed.home.audienceFans=100000;postseasonSeed.away.audienceFans=75000;launchInput.neutral=true;
+    CrowdFixture fixture{postseasonSeed,launchInput,true};
+    using namespace attendance::visitors;
+    assert(appearanceAdmission({},1153,1193,true)==AppearanceStage::NoFixture);
+    assert(appearanceAdmission(fixture,1153,1193,true)==AppearanceStage::Prepared);
+    assert(appearanceAdmission(fixture,1193,1153,true)==AppearanceStage::Ownership);
+    assert(appearanceAdmission(fixture,1153,1193,false)==AppearanceStage::Disabled);
+    auto supporterPlan=plan(fixture,1153,1193);assert(supporterPlan.valid&&!supporterPlan.native&&supporterPlan.layoutVersion==4&&supporterPlan.share>=.30f&&supporterPlan.share<=.70f);
+    assert(!plan(fixture,1193,1153).valid);auto missing=fixture;missing.seed.away.audienceFans=0;assert(!plan(missing,1153,1193).valid);
+    // Every relevant identity and descriptor guard still applies in supporter mode.
+    for(int field=0;field<4;++field){auto wrong=postseasonSeed;if(field==0)++wrong.home.id;if(field==1)++wrong.away.id;if(field==2)++wrong.stadium;if(field==3)++wrong.ea;assert(!launch(image,launchInput,wrong,nullptr,false,LaunchUse::Supporters));}
+    for(int other:{-2,0,15,17,99}){put<int>(image+0xd9eb808,other);assert(!launch(image,launchInput,postseasonSeed,nullptr,true,LaunchUse::Supporters));}put<int>(image+0xd9eb808,14);
+    members[7].name=reinterpret_cast<A>("wrongBowlName");assert(!launch(image,launchInput,postseasonSeed,nullptr,false,LaunchUse::Supporters));members[7].name=reinterpret_cast<A>(names[7]);
+    for(int bowlId:{0,47,126}){put<unsigned char>(address(options)+0x22,static_cast<unsigned char>(bowlId));assert(launch(image,launchInput,postseasonSeed,nullptr,false,LaunchUse::Supporters)&&!setAttendance(image,51000,&api)&&sets==previousSets);}
+    for(int invalid:{128,255}){put<unsigned char>(address(options)+0x22,static_cast<unsigned char>(invalid));assert(!launch(image,launchInput,postseasonSeed,nullptr,false,LaunchUse::Supporters));}
+    put<unsigned char>(address(options)+0x22,47);
+    for(int invalidType:{0,6,7,8,9,-1,255}){auto invalid=postseasonSeed;invalid.springType=invalidType;assert(!launch(image,launchInput,invalid,nullptr,false,LaunchUse::Supporters));}
+    for(int field=0;field<2;++field){auto invalid=postseasonSeed;if(field==0)invalid.bowlRelated=false;else invalid.practiceFixture=true;assert(!launch(image,launchInput,invalid,nullptr,false,LaunchUse::Supporters));}
+    // Exact reported championship tuple: native type5, Week20, bowl47.
+    ht.ints[0xd1]=1212;at.ints[0xd1]=1205;gt.ints[0x3e]=5;gt.ints[0x3d]=20;gt.related[0x15]=&stadium;st.ints[6]=615;st.ints[22]=65000;
+    Seed observedChampionship;assert(capture(image,address(manager),address(&reference),65000,observedChampionship,&api)&&observedChampionship.bowlFixture&&observedChampionship.springType==5);
+    put<unsigned short>(address(options)+0x30,1212);put<unsigned short>(address(options)+0x20,1205);put<unsigned short>(address(options)+0x46,615);put<int>(address(options)+0x14,65000);
+    assert(launch(image,launchInput,observedChampionship,nullptr,false,LaunchUse::Supporters)&&!turnoutEligible(observedChampionship,launchInput)&&!setAttendance(image,51000,&api)&&sets==previousSets);
+    noLeaks();put<unsigned short>(address(options)+0x30,1153);put<unsigned short>(address(options)+0x20,1193);put<unsigned short>(address(options)+0x46,553);put<int>(address(options)+0x14,45000);
+    put<unsigned char>(address(options)+0x22,127);assert(launch(image,launchInput,seed)&&!seed.bowlFixture); // Regular route preserved.
     for(void* block:memory)assert(VirtualFree(block,0,MEM_RELEASE));
-    std::puts("PASS: captured stadium capacity with exact launch ownership/bounds and no capacity RPC, Dynasty setup, scoped -1 transition, other-mode rejection and no gameplay-config dependency, exact option failure names; native record/schema/int/enum/boolean ABI, owned-reference cleanup, regular/postseason/conference/resume classification, validated launch descriptors and isolated typed option write.");
+    std::puts("PASS: captured capacity/ownership, native descriptor/ABI/reference cleanup, verified competitive types1-5 including observed Week20 final type5/bowl47; practice, unknown types, missing Bowl proof and contradictory flags rejected; postseason turnout/setter blocked; regular and spring contracts preserved.");
 }

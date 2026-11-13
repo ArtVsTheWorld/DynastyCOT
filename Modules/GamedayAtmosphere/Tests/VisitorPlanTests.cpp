@@ -37,7 +37,7 @@ int main(){
     PlanBook bounded;for(int i=0;i<300;++i){auto f=fixture;f.year=i;assert(bounded.resolve(f,current,static_cast<unsigned>(i),selected,seed,reused));}
     assert(bounded.entries.size()==PlanBook::Maximum&&!bounded.resolve(fixture,{},1,selected,seed,reused));
     // Neutral crowds and disabled outfit changes still need save ownership.
-    PlanBook ownership;assert(ownership.bind(fixture,100)&&ownership.source(fixture)==100);
+    PlanBook ownership;assert(ownership.bind(fixture,100,2)&&ownership.source(fixture)==100);
     assert(!ownership.resolve(fixture,neutral,1,selected,seed,reused));
     assert(!linkedHistoryReady(ownership,{100},{}));assert(linkedHistoryReady(ownership,{100},{100}));assert(linkedHistoryReady(ownership,{},{}));
     attendance::State state{2,7,0,5,120,720};state.team0=1153;state.team1=1193;
@@ -56,7 +56,7 @@ int main(){
     assert(ownedLoad.bind(fixture,200)&&ownedLoad.revision==unchangedRevision+1);
     std::stringstream legacy("DGA-VISITORS-1 1\n-1649480587 1153 1193 7 32 553 8 0 .07 12345\n");PlanBook legacyBook;
     assert(PlanBook::read(legacy,legacyBook)&&legacyBook.entries.size()==1&&legacyBook.source(fixture)==0);
-    for(const char* text:{"bad","DGA-VISITORS-1 257","DGA-VISITORS-1 0 trailing","DGA-VISITORS-3 0",
+    for(const char* text:{"bad","DGA-VISITORS-1 257","DGA-VISITORS-1 0 trailing","DGA-VISITORS-4 0",
         "DGA-VISITORS-1 1\n0 1153 1193 7 32 553 8 0 .07 1",
         "DGA-VISITORS-1 1\n1 1153 1193 7 32 553 8 0 .701 1",
         "DGA-VISITORS-1 1\n1 1153 1193 7 32 553 8 0 .07 4294967296",

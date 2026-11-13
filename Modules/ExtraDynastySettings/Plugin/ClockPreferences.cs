@@ -11,38 +11,15 @@ namespace OfflineDynastySettings
             "DynastyPlayClock.log","OfflinePlaycall.log"};
         internal static string Folder(string pluginFolder)
         {
-            string directory=Path.Combine(pluginFolder,"OfflineDynastySettings");
+            string directory=Ace.DynastyCOT.UserStorage.Folder("ExtraSettings");
             Directory.CreateDirectory(directory);return directory;
         }
         internal static string PathFor(string pluginFolder,string name)
         {
             if(Array.IndexOf(Names,name)<0)throw new ArgumentException("Unknown plugin settings/log file.","name");
-            lock(sync){
-                string directory=Folder(pluginFolder),target=Path.Combine(directory,name),legacy=Path.Combine(pluginFolder,name);
-                if(File.Exists(legacy)){
-                    try {
-                        if(!File.Exists(target))File.Move(legacy,target);
-                        else {
-                            // The current folder wins. Keep a conflicting old
-                            // file as a backup instead of replacing saved values.
-                            string archive=Path.Combine(directory,"Legacy");Directory.CreateDirectory(archive);
-                            string backup=Path.Combine(archive,name);
-                            if(File.Exists(backup))backup=Path.Combine(archive,Path.GetFileNameWithoutExtension(name)+"-"+Guid.NewGuid().ToString("N")+Path.GetExtension(name));
-                            File.Move(legacy,backup);
-                        }
-                    } catch(IOException){
-                        // Another helper may have migrated the same file. A
-                        // locked old preference must never become a default.
-                        if(!File.Exists(target))throw;
-                    }
-                }
-                return target;
-            }
+            lock(sync){return Path.Combine(Folder(pluginFolder),name);}
         }
-        internal static void Migrate(string pluginFolder)
-        {
-            foreach(string name in Names)try{PathFor(pluginFolder,name);}catch(IOException){}catch(UnauthorizedAccessException){}
-        }
+        internal static void Migrate(string pluginFolder){Ace.DynastyCOT.UserStorage.Migrate("ExtraSettings",pluginFolder);}
     }
     internal static class ClockPreferences
     {

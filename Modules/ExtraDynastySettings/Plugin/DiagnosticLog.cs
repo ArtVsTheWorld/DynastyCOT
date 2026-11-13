@@ -14,10 +14,10 @@ namespace OfflineDynastySettings
     // Diagnostics are best effort. A locked report must never disable gameplay or saving.
     internal static class DiagnosticLog
     {
-        internal const string Version = "0.2.10";
+        internal const string Version = "0.2.11";
         private static readonly object sync = new object();
         internal static string PluginFolder { get { return Path.GetDirectoryName(typeof(DiagnosticLog).Assembly.Location); } }
-        private static string Reports(string folder) { return Path.Combine(folder,"OfflineDynastySettings","Diagnostics"); }
+        private static string Reports(string folder) { return Path.Combine(Ace.DynastyCOT.UserStorage.Folder("ExtraSettings"),"Diagnostics"); }
         internal static void Write(string folder,string component,string message)
         {
             try { lock(sync) {

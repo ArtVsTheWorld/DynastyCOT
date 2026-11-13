@@ -9,6 +9,7 @@ import {PUBLICATION_POLICY_VERSION} from './publication_policy.mjs';
 import {freshEditorialEvents,EDITORIAL_POLICY_VERSION} from './editorial_policy.mjs';
 import {deduplicateConversations} from './conversation_topics.mjs';
 import {freezePublishedGpi} from './gpi_events.mjs';
+import {preservePublishedSignings} from './signing_ownership.mjs';
 export {detectEvents,weekKey};
 export const ENGINE_VERSION=2;
 export function trackOffers(s,sameWeek=null,previous=null,earlier=null){
@@ -24,12 +25,13 @@ export function trackOffers(s,sameWeek=null,previous=null,earlier=null){
   return [...events.values()];
 }
 export function buildFeed(s,previous=null,options={}){
-  const publication={key:weekKey(s),leagueId:s.leagueId,userTeamIndex:s.userTeamIndex,season:s.season.CurrentSeasonYear,phase:s.season.CurrentWeekType,week:s.season.CurrentWeek};
-  const events=freezePublishedGpi(freshEditorialEvents(detectEvents(s,previous),publication,options.history??[]),s,options.sameWeek),key=weekKey(s);
+  const publication={springExhibitions:s.exhibitions?.supported===true,key:weekKey(s),leagueId:s.leagueId,userTeamIndex:s.userTeamIndex,season:s.season.CurrentSeasonYear,phase:s.season.CurrentWeekType,week:s.season.CurrentWeek};
+  const events=freezePublishedGpi(freshEditorialEvents(preservePublishedSignings(detectEvents(s,previous),options.sameWeek),publication,options.history??[],options.sameWeek),s,options.sameWeek),key=weekKey(s);
   const rendered=renderStories(s,events,{authors:options.authors??{},history:options.history??[],sameWeek:options.sameWeek??null,onTemplates:options.onTemplates??null});
   options.onAuthors?.(rendered.authors);
+  const publishedIds=new Set(options.sameWeek?.stories?.map(p=>p.id)??[]);
   return publishWeek({format:1,engineVersion:ENGINE_VERSION,key,leagueId:s.leagueId,userTeamIndex:s.userTeamIndex,
     offseasonStage:s.season.CurrentOffseasonStage,championshipWeek:s.season.RegularSeasonWeekConferenceChampionship,season:publication.season,week:publication.week,phase:publication.phase,source:s.source,sourceKind:s.sourceKind??'save',sha256:s.sha256,sourceUnchanged:true,
     conference:s.teams.find(t=>t.id===s.userTeamIndex)?.conferenceName??null,contentStatus:'generated',contentRevision:CONTENT_REVISION,publicationPolicyVersion:PUBLICATION_POLICY_VERSION,
-    editorialPolicyVersion:EDITORIAL_POLICY_VERSION,presentationVersion:4,scopeOptions:scopeCatalog(s),events:events.map(e=>({...e,publication})),dialogueEventOrder:rendered.dialogueEventOrder,transactionObservation:transactionObservation(s),coverageVersion:1,stories:applyWeeklyCoverage(deduplicateConversations(rendered.stories,events),s,{sameWeek:options.sameWeek})});
+    editorialPolicyVersion:EDITORIAL_POLICY_VERSION,presentationVersion:4,scopeOptions:scopeCatalog(s),events:events.map(e=>({...e,publication})),dialogueEventOrder:rendered.dialogueEventOrder,transactionObservation:transactionObservation(s),coverageVersion:1,stories:applyWeeklyCoverage(deduplicateConversations(rendered.stories,events,publishedIds),s,{sameWeek:options.sameWeek})},{publishedIds});
 }

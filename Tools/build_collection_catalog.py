@@ -1,25 +1,37 @@
 """Pin the already-built standalone artifacts; no module rebuild/install/network."""
 from pathlib import Path
-import hashlib,json,re,zipfile
+import argparse,hashlib,json,re,zipfile
 ROOT=Path(__file__).resolve().parents[1]
 DEFS=[
- ('BeyondTheField','DynastyEnhancer','Beyond the Field','BeyondTheField','1.0.7',['DynastyEnhancer','PlayerAnalytics'],'Dynasty news, recruiting feedback and scouting fog. Choose rating styles, clearer money labels and GPI player grades.'),
- ('GamedayAtmosphere','GamedayAtmosphere','Gameday Atmosphere','DynamicGamedayAtmosphere','2.1.11',['DynamicGamedayAtmosphere','DynamicAttendance'],'Fans arrive, cheer, travel and leave as games develop. Tune crowd sound, camera shake and visiting support.'),
- ('ExtraSettings','ExtraDynastySettings','Extra Settings','offline-dynasty-settings','0.2.10',['OfflineDynastySettings','DynastyPlayClock','OfflinePlaycall'],'Set separate offensive and defensive play clocks, playcall limits and cooldowns. Each Dynasty keeps its choices.'),
- ('ExpandedPractice','DrivePractice','Expanded Practice','drive-based-practice','0.8.21',['SituationalPractice'],'Run full drives or scrimmages in Dynasty or main-menu Practice. Choose your starting spot and switch sides.')]
+ ('BeyondTheField','DynastyEnhancer','Beyond the Field','BeyondTheField','1.0.23',['DynastyEnhancer','PlayerAnalytics'],'Dynasty news, recruiting feedback and scouting fog. Choose rating styles, clearer money labels and GPI player grades.'),
+ ('GamedayAtmosphere','GamedayAtmosphere','Gameday Atmosphere','DynamicGamedayAtmosphere','2.1.35',['DynamicGamedayAtmosphere','DynamicAttendance'],'Fans arrive, cheer, travel and leave as games develop. Tune crowd sound, camera shake and visiting support.'),
+ ('ExtraSettings','ExtraDynastySettings','Extra Settings','offline-dynasty-settings','0.2.11',['OfflineDynastySettings','DynastyPlayClock','OfflinePlaycall'],'Set separate offensive and defensive play clocks, playcall limits and cooldowns. Each Dynasty keeps its choices.'),
+ ('ExpandedPractice','DrivePractice','Expanded Practice','drive-based-practice','0.8.23',['SituationalPractice'],'Run full drives or scrimmages in Dynasty or main-menu Practice. Choose your starting spot and switch sides.')]
 def sha(data):return hashlib.sha256(data).hexdigest()
 def main():
+ p=argparse.ArgumentParser();p.add_argument('--artifact-root',type=Path,default=ROOT/'Release');p.add_argument('--version',default='1.1.4');p.add_argument('--migration-catalog',type=Path,default=ROOT/'Packaging/Collection/catalog.json');a=p.parse_args();artifacts=a.artifact_root.resolve()
  modules=[];known={};programs={};mapping={old:new for new,old,*_ in DEFS}
+ # Preserve reviewed exact identities, including earlier external-support builds.
+ # This is a hash inventory, never a filename-substring deletion rule.
+ if a.migration_catalog.exists():
+  previous=json.loads(a.migration_catalog.read_text(encoding='utf8'))
+  for field,target in [('KnownPlugins',known),('Programs',programs)]:
+   for row in previous.get(field,[]):
+    path=row['Path'];digest=row['Sha256'];owner=row['Module']
+    assert re.fullmatch(r'[a-f0-9]{64}',digest) and not path.startswith(('/', '\\')) and '..' not in Path(path).parts
+    assert owner in {x[0] for x in DEFS}|{'Core'}
+    target[(path,digest)]=dict(Path=path,Module=owner,Sha256=digest)
  for name,old,title,repo,version,aliases,description in DEFS:
-  archive=ROOT/f'Release/{name}-{version}.zip';proof=json.loads(archive.with_name(archive.stem+'-verification.json').read_text(encoding='utf-8'))
+  archive=artifacts/f'{name}-{version}.zip';proof=json.loads(archive.with_name(archive.stem+'-verification.json').read_text(encoding='utf-8'))
   assert sha(archive.read_bytes())==proof['archiveSha256']
   with zipfile.ZipFile(archive) as z:
-   assert set(z.namelist())=={name+'.dll','README.txt','FEATURES.md'} and not z.testzip()
+   assert set(z.namelist())=={name+'.dll','README.txt','FEATURES.md'}|({'LICENSES.txt'} if name=='BeyondTheField' else set()) and not z.testzip()
    assert sha(z.read(name+'.dll'))==proof['dllSha256']
   prefix=f'https://github.com/ArtVsTheWorld/{repo}/releases/download/v{version}/'
   notes=(ROOT/f'Packaging/Standalone/{name}/RELEASE_NOTES.md').read_text(encoding='utf-8')
   current=dict(Module=name,Version=version,Tag='v'+version,ArchiveName=archive.name,ArchiveUrl=prefix+archive.name,ArchiveSha256=proof['archiveSha256'],DllSha256=proof['dllSha256'],ArchiveBytes=archive.stat().st_size,ProofUrl=prefix+archive.stem+'-verification.json',PageUrl=f'https://github.com/ArtVsTheWorld/{repo}/releases/tag/v{version}',Notes=notes,Compatibility='Offline scope and native protections stay in each module. Use one provider of each feature. Read the module release notes for known limits.',Prerelease=False)
   modules.append(dict(Id=name,LegacyId=old,Title=title,Description=description,Repository='ArtVsTheWorld/'+repo,Aliases=aliases,Current=current))
+  currentPath='Plugins/'+name+'.dll';known[(currentPath,proof['dllSha256'])]=dict(Path=currentPath,Module=name,Sha256=proof['dllSha256'])
   for path,digest in proof.get('payload',{}).items():programs[(path,digest)]=dict(Path=path,Module=name,Sha256=digest)
   if name=='GamedayAtmosphere':
    for entry in proof.get('resources',[]):
@@ -57,7 +69,7 @@ def main():
   cot_runtime=path.startswith('COT-Runtime/') and (path.endswith(('.dll','.exe')) or path.startswith('COT-Runtime/DynastyEnhancer/Tools/') and path.endswith('.mjs') or path.startswith('COT-Runtime/DynastyEnhancer/Content/Runtime/') and path.endswith('.json'))
   return cot_runtime or bool(re.fullmatch(r'LICENSES/[^/]+[.]txt',path)) or path.startswith('DGA-Runtime/Runtime-') and path.endswith(('.dll','.exe')) or path.startswith('Plugins/OfflineDynastySettings/') and path.endswith('.Persistence.exe') or path.startswith('Plugins/SituationalPractice/') and path.endswith('.Runtime.exe')
  programs={key:row for key,row in programs.items() if program_path(row['Path'])}
- doc=dict(Format=1,Version='1.1.0',Modules=modules,KnownPlugins=list(known.values()),Programs=list(programs.values()))
+ doc=dict(Format=1,Version=a.version,Modules=modules,KnownPlugins=list(known.values()),Programs=list(programs.values()))
  output=ROOT/'Packaging/Collection/catalog.json';output.write_text(json.dumps(doc,indent=2)+'\n',encoding='utf-8')
  print('Pinned four exact standalone ZIP/DLLs;',len(known),'known plugin hashes;',len(programs),'program-only rollback references. No installs/network.')
 if __name__=='__main__':main()

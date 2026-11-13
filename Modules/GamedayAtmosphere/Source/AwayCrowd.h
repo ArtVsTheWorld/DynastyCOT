@@ -10,6 +10,7 @@
 #include "CrowdAgents.h"
 #include "StartingAttendance.h"
 #include "ProtectedFanBudget.h"
+#include "VisitorSeating.h"
 
 namespace attendance::visitors {
 struct Location {double latitude=NAN,longitude=NAN;};
@@ -28,11 +29,12 @@ struct Demand {
     bool sameState=false,rivalry=false,neutral=false;
     double homeStrength=0; // Verified public rank / established record, 0..1.
     bool marquee=false; // Both verified AP top ten, never guessed from brand.
-    unsigned seed=0;
+    int homePrestige=-1,awayPrestige=-1,homeWins=-1,homeLosses=-1,awayWins=-1,awayLosses=-1;
+    double homeTickets=0;bool fcs=false;int fcsRegion=-1;unsigned seed=0;
 };
-enum class Travel {Unknown,City,State,Local};
-struct Plan {bool valid=false,native=false,travelKnown=false;float share=.05f;double distance=NAN;Travel travel=Travel::Unknown;double travelFactor=1;};
-inline Plan influence(Plan p,double percent){
+enum class Travel {Unknown,City,State,Local,Region};
+struct Plan {bool valid=false,native=false,travelKnown=false;float share=.05f;double distance=NAN;Travel travel=Travel::Unknown;double travelFactor=1;unsigned layoutVersion=1;double ceiling=.70;visitormodel::Components components;};
+inline Plan influenceLegacy(Plan p,double percent){
     // Preference for new plans, separate from the underlying travel model.
     // Default is bit-for-bit unchanged; neutral seating remains native.
     if(!p.valid||p.native||!std::isfinite(percent)||percent==100)return p;
@@ -41,7 +43,7 @@ inline Plan influence(Plan p,double percent){
     const double odds=double(p.share)/(1.-p.share)*strength;
     p.share=static_cast<float>((std::clamp)(odds/(1.+odds),.01,.70));return p;
 }
-inline Plan plan(const Demand& d){
+inline Plan planLegacy(const Demand& d){
     Plan p;if(d.neutral){p.valid=p.native=true;p.share=.5f;return p;}
     if(!std::isfinite(d.homeFans)||!std::isfinite(d.awayFans)||d.homeFans<=0||d.awayFans<=0)return p;
     p.valid=true;p.distance=miles(d.home,d.away);p.travelKnown=std::isfinite(p.distance);
@@ -81,30 +83,65 @@ inline Plan plan(const Demand& d){
     odds=compressed/(1-compressed);
     p.share=static_cast<float>((std::clamp)(odds/(1+odds),.01,.70));return p;
 }
-inline Plan plan(const turnout::CrowdFixture& fixture,int home,int away){
-    if(!fixture.owns(home,away))return {};
-    const auto& s=fixture.seed;Demand d;
-    d.homeFans=s.home.audienceFans;d.awayFans=s.away.audienceFans;
-    d.home={s.home.latitude,s.home.longitude};d.away={s.away.latitude,s.away.longitude};
-    d.homeState={s.home.stateLatitude,s.home.stateLongitude};d.awayState={s.away.stateLatitude,s.away.stateLongitude};
-    d.sameState=turnout::sameState(s);d.rivalry=fixture.launch.rivalry;
-    const auto& host=s.home;
-    d.marquee=host.apRank>=1&&host.apRank<=10&&s.away.apRank>=1&&s.away.apRank<=10;
-    if(host.apRank>=1&&host.apRank<=25)d.homeStrength=.65+.35*(25-host.apRank)/24.;
-    const int games=host.wins+host.losses;
-    if(host.wins>=0&&host.losses>=0&&games>=4){
-        const double form=(std::clamp)((double(host.wins)/games-.5)*2.,0.,1.);
-        d.homeStrength=(std::max)(d.homeStrength,form*(std::min)(1.,games/8.));
-    }
-    d.neutral=fixture.launch.neutral;d.seed=turnout::fixtureHash(s);
-    auto out=plan(d);
-    if(turnout::fcs(away)&&!d.neutral){out.valid=true;out.share=.01f;}
-    return out;
+inline Plan plan(const Demand& d){
+ Plan p;if(!std::isfinite(d.homeFans)||d.homeFans<=0)return p;
+ p.layoutVersion=4;p.distance=miles(d.home,d.away);p.travelKnown=std::isfinite(p.distance);
+ if(p.travelKnown)p.travel=Travel::City;
+ else if(d.sameState){p.travel=Travel::Local;p.distance=NAN;p.travelFactor=1.12;}
+ else if(valid(d.homeState)&&valid(d.awayState)){p.distance=miles(d.homeState,d.awayState);if(p.distance>1){p.travel=Travel::State;p.travelKnown=true;}else{p.distance=NAN;p.travel=Travel::Local;p.travelFactor=1.12;}}
+ if(p.travelKnown)p.travelFactor=visitormodel::travel(p.distance);
+ if(p.travel==Travel::State)p.travelFactor=1+.5*(p.travelFactor-1);
+ // Verified native PresentationId labels: East, Midwest, Northwest,
+ // Southeast, West (1500..1504). Regional centers below are model proxies,
+ // not fictional campuses. Broad overlapping home regions represent nearby FCS scheduling.
+ if(d.fcs&&d.fcsRegion>=0&&d.fcsRegion<5){
+  Location host=valid(d.home)?d.home:d.homeState;
+  if(valid(host)){
+   const double lat=host.latitude,lon=host.longitude;
+   bool local=d.fcsRegion==0?lon>=-85.5:
+    d.fcsRegion==1?lon>=-106&&lon<=-79&&lat>=35:
+    d.fcsRegion==2?lon<=-111&&lat>=40:
+    d.fcsRegion==3?lon>=-96&&lat<=37.5:lon<=-105;
+   const std::array<Location,5> center{{{39,-77},{42,-93},{46,-120},{33,-85},{37,-119}}};
+   p.distance=local?75:miles(host,center[d.fcsRegion]);p.travelKnown=true;p.travel=Travel::Region;
+   p.travelFactor=1+(valid(d.home)?.65:.40)*(visitormodel::travel(p.distance)-1);
+  }
+ }
+ visitormodel::Inputs in;in.homeFans=d.homeFans;in.awayFans=d.awayFans;in.homeTickets=d.homeTickets;in.travelFactor=p.travelFactor;
+ in.homePrestige=d.homePrestige;in.awayPrestige=d.awayPrestige;in.homeWins=d.homeWins;in.homeLosses=d.homeLosses;in.awayWins=d.awayWins;in.awayLosses=d.awayLosses;
+ in.rivalry=d.rivalry;in.neutral=d.neutral;in.fcs=d.fcs;in.seed=d.seed;
+ p.components=visitormodel::demand(in,100,true);p.valid=p.components.valid;p.share=static_cast<float>(p.components.share);p.ceiling=p.components.ceiling;return p;
+}
+inline Plan influence(Plan p,double percent){
+ if(p.layoutVersion<2)return influenceLegacy(p,percent);
+ if(!p.valid||!std::isfinite(percent)||percent==100)return p;
+ // Neutral seats stay 30/70..70/30. Slider only changes newly made home-site plans.
+ if(p.ceiling==.70)return p;
+ double odds=p.share/(1-p.share)*(std::clamp)(percent,0.,200.)/100.;
+ p.share=static_cast<float>((std::clamp)(odds/(1+odds),.03,p.ceiling));return p;
+}
+inline Demand demand(const turnout::CrowdFixture& fixture){
+ const auto& s=fixture.seed;Demand d;d.homeFans=s.home.audienceFans;d.awayFans=s.away.audienceFans;
+ d.home={s.home.latitude,s.home.longitude};d.away={s.away.latitude,s.away.longitude};
+ d.homeState={s.home.stateLatitude,s.home.stateLongitude};d.awayState={s.away.stateLatitude,s.away.stateLongitude};
+ d.sameState=turnout::sameState(s);d.rivalry=fixture.launch.rivalry;d.neutral=fixture.launch.neutral;d.seed=turnout::fixtureHash(s,fixture.launch.neutral);
+ d.homePrestige=s.home.prestigeKnown?s.home.prestige:-1;d.awayPrestige=s.away.prestigeKnown?s.away.prestige:-1;
+ d.homeWins=s.home.wins;d.homeLosses=s.home.losses;d.awayWins=s.away.wins;d.awayLosses=s.away.losses;d.fcs=turnout::fcs(s.away.id);d.fcsRegion=d.fcs?s.away.id-1500:-1;
+ auto legacy=turnout::calculateAudienceLegacy(s,fixture.launch);d.homeTickets=legacy.applied?turnout::homeTicketDemand(s,fixture.launch,legacy):d.homeFans*visitormodel::season(s.home.prestige,s.home.wins,s.home.losses);return d;
+}
+inline Plan plan(const turnout::CrowdFixture& fixture,int home,int away){return fixture.owns(home,away)?plan(demand(fixture)):Plan{};}
+inline turnout::Result attendancePlan(const turnout::Seed& s,const turnout::Launch& l,bool fuller,double slider){
+ auto r=turnout::calculateAudience(s,l,fuller);if(!r.applied)return r;
+ auto p=influence(plan(demand({s,l,true})),slider);if(!p.valid){r.applied=false;return r;}
+ double count=l.neutral?turnout::neutralTicketDemand(s,l,turnout::calculateAudienceLegacy(s,l,fuller)):p.components.home/(1-p.share);
+ r.percent=static_cast<float>((std::clamp)(100*count/l.capacity+r.profileBoost,0.,100.));
+ r.attendance=(std::clamp)(static_cast<int>(std::llround(l.capacity*r.percent/100)),1,l.capacity);
+ turnout::applyShowcase(s,l,r);turnout::applyCapacityLimits(s,l,r);return r;
 }
 // Strong group preference around a deterministic corner/end-zone visiting area,
 // with smaller scattered parties. Distance/height balance is handled by the
 // per-side departure ranks, so visitors do not all disappear with the top rows.
-inline std::vector<unsigned char> assign(const std::vector<seats::Position>& positions,const agents::Tags& tags,float share,unsigned seed,const std::vector<unsigned char>* occupied=nullptr){
+inline std::vector<unsigned char> assignLegacy(const std::vector<seats::Position>& positions,const agents::Tags& tags,float share,unsigned seed,const std::vector<unsigned char>* occupied=nullptr){
     std::vector<unsigned char> side=tags.side;
     if(!tags.verified||positions.size()!=side.size()||!std::isfinite(share)||share<.01f||share>.70f||
        (occupied&&occupied->size()!=side.size()))return {};
@@ -194,14 +231,18 @@ inline std::vector<unsigned char> assign(const std::vector<seats::Position>& pos
     }
     return side;
 }
+inline std::vector<unsigned char> assign(const std::vector<seats::Position>& positions,const agents::Tags& tags,float share,unsigned seed,const std::vector<unsigned char>* occupied=nullptr,unsigned layoutVersion=1,bool neutral=false,bool* nativeFallback=nullptr){
+ return layoutVersion>=2?seating::assign(positions,tags,share,seed,occupied,neutral,nullptr,layoutVersion>=3,nativeFallback,layoutVersion>=4):assignLegacy(positions,tags,share,seed,occupied);
+}
 struct Population {
     bool verified=false;uint64_t home=0,away=0,originalHome=0,originalAway=0;
     bool sharedBudget=false;
     int appliedLoss=0,appliedTemporary=0;
     uintptr_t match=0;unsigned epoch=0;
     float homeLoss=-1,awayLoss=-1;
-    bool owns(uintptr_t m,unsigned e)const{return verified&&match==m&&epoch==e&&home+away>0;}
-    float share()const{return verified&&home+away?static_cast<float>(static_cast<double>(away)/(home+away)):0;}
+    bool withinOriginal()const{return (!originalHome&&!originalAway)||(home<=originalHome&&away<=originalAway);}
+    bool owns(uintptr_t m,unsigned e)const{return verified&&match==m&&epoch==e&&home+away>0&&withinOriginal();}
+    float share()const{return verified&&withinOriginal()&&home+away?static_cast<float>(static_cast<double>(away)/(home+away)):0;}
 };
 struct Losses {
     uint64_t home=0,away=0;
@@ -211,7 +252,7 @@ struct Losses {
         home=(std::min)(originalHome-protectedHome,static_cast<uint64_t>(std::llround(originalHome*homeFraction)));
         away=(std::min)(originalAway-protectedAway,static_cast<uint64_t>(std::llround(originalAway*awayFraction)));
     }
-    void advance(uint64_t homeOriginal,uint64_t awayOriginal,int percent,int homeScore,int awayScore,int quarter,uint64_t homeProtected=0,uint64_t awayProtected=0,bool neutral=false){
+    void advance(uint64_t homeOriginal,uint64_t awayOriginal,int percent,int homeScore,int awayScore,int quarter,uint64_t homeProtected=0,uint64_t awayProtected=0,bool neutral=false,bool familyFloor=false){
         uint64_t total=homeOriginal+awayOriginal;
         if(!total||home>homeOriginal||away>awayOriginal)return;
         if(homeProtected>homeOriginal||awayProtected>awayOriginal)return;
@@ -220,6 +261,15 @@ struct Losses {
         if(target<=home+away)return; // A lead change never brings departed fans back.
         if(home+homeProtected>homeOriginal||away+awayProtected>awayOriginal)return;
         uint64_t increment=target-home-away,h=homeOriginal-homeProtected-home,a=awayOriginal-awayProtected-away;
+        if(familyFloor&&!neutral&&awayOriginal){
+            // Reserve family/friends from those still present, never repopulate.
+            // 1% of the remaining audience, or the already smaller living group.
+            uint64_t remaining=total-target,keep=(remaining+99)/100;
+            uint64_t available=awayOriginal-away;
+            keep=(std::max)(awayProtected,(std::min)(keep,available));
+            a=(std::min)(a,available-keep);
+            if(increment>h+a)increment=h+a;
+        }
         double leverage=.4+.6*(std::clamp)(quarter,1,4)/4.;
         double pressure=(std::clamp)((awayScore-homeScore)/14.*leverage,-2.5,2.5);
         double hw=std::exp(pressure),aw=std::exp(-pressure),low=0,high=1;

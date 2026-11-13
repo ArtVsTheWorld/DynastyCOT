@@ -43,13 +43,14 @@ int main(){
     // History tags the policy, preserving old filmed/paused temporary crowds.
     State s{3,7,28,1,620,720};s.team0=1100;s.team1=1166;
     timeline::Archive archive;archive.begin(91,s,true);timeline::Point point;point.state=s;point.time=20;point.loss=20;point.temporary=35;point.homeLoss=3500.f/18000;point.awayLoss=.25f;point.originalAwayShare=.1f;
-    assert(archive.record(point));std::stringstream disk;timeline::write(disk,archive);assert(disk.str().find("DGA-HISTORY-7")==0);
+    assert(archive.record(point));std::stringstream disk;timeline::write(disk,archive);assert(disk.str().find("DGA-HISTORY-8")==0);
     timeline::Archive loaded;assert(timeline::read(disk,loaded));timeline::Point saved;assert(loaded.resume(s,saved)&&saved.sharedBudget);
     visitors::Losses restored;restored.restore(18000,2000,2000,0,saved.homeLoss,saved.awayLoss);
     auto resume=build(layouts,{restored.home,restored.away},saved.temporary);assert(resume.valid);
     for(size_t i=0;i<halftime.layouts.size();++i)assert(resume.layouts[i].missing.home==halftime.layouts[i].missing.home&&resume.layouts[i].missing.away==halftime.layouts[i].missing.away);
     auto recording=loaded;recording.active=recording.games.back().id;assert(recording.replay(20,saved)&&saved.sharedBudget);
     std::string old=disk.str(); // stream contents remain available after reading
+    auto headerEnd=old.find('\n',old.find('\n')+1);for(int n=0;n<4;++n){auto at=old.rfind(' ',headerEnd);old.erase(at,headerEnd-at);headerEnd=at;}
     old.replace(0,13,"DGA-HISTORY-6");old.erase(old.rfind(' '),old.size()-old.rfind(' ')-1);
     std::stringstream legacy(old);assert(timeline::read(legacy,loaded)&&!loaded.games.front().points.front().sharedBudget);
     auto bad=disk.str();bad[bad.size()-2]='2';std::stringstream corrupt(bad);assert(!timeline::read(corrupt,loaded));

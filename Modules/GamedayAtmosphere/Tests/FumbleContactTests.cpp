@@ -44,6 +44,7 @@ int main(){
     // fumbler's ownership. The impact represents the earlier contact.
     {Case c;c.collision();c.wait(850);c.p.offense=0;auto out=c.confirmed();assert(out.event==live::Event::ForcedFumble&&out.side==0&&c.proof.owner==1);}
     {Case c;c.collision();c.tick(4);c.wait(200,4);assert(c.confirmed(5).event==live::Event::ForcedFumble);} // Late authoritative fumble state.
+    {Case c;c.collision();c.tick(4);c.wait(850,4);assert(c.confirmed(5).event==live::Event::ForcedFumble);} // Fresh delayed official result, same play.
     // Native and fallback proofs share the same one-force-per-play latch.
     {Case c;c.native.type=32;c.held=false;c.ball=0;assert(c.tick(3).event==live::Event::ForcedFumble);c.sample={999,true,508.8,508.8,1,0};c.tick(3);assert(!c.confirmed().id);}
     {Case c;c.collision();assert(c.confirmed().event==live::Event::ForcedFumble);c.native.type=32;assert(!c.tick(3).id);}
@@ -57,7 +58,7 @@ int main(){
         if(bad==0)c.allowed=false;if(bad==1)c.p.simulated=true;if(bad==2)c.p.resumed=true;if(bad==3)c.now+=800;
         if(bad==4)++c.epoch;if(bad==5)++c.match;if(bad==6)c.wait(1550);
         if(bad==7){c.sample.object=1001;c.tick(3);}if(bad==8){c.detector.reset();}
-        if(bad==9)c.wait(800,4);if(bad==10)c.p.game.phase=7;
+        if(bad==9)c.wait(1600,4);if(bad==10)c.p.game.phase=7;
         int phase=bad==10?7:3;if(bad==11)phase=8;
         auto rejected=c.confirmed(phase);if(rejected.id||c.proof.id)std::fprintf(stderr,"Invalid contact case %d emitted proof %llu\n",bad,static_cast<unsigned long long>(c.proof.id));assert(!rejected.id&&!c.proof.id);
     }

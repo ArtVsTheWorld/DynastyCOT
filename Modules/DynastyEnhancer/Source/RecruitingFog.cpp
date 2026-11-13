@@ -1,3 +1,4 @@
+#include "UserRuntimePaths.h"
 #include "../../../Compatibility/PracticeTextSetter.generated.h"
 #define WIN32_LEAN_AND_MEAN
 #include <windows.h>
@@ -48,6 +49,7 @@
 #include "PlayerCardUiPrograms.h"
 #include "PlayerFogPerformance.h"
 #include "PlayerHubUiPrograms.h"
+#include "WeeklyReportUiPrograms.h"
 #include "PlayerInGameUiPrograms.h"
 #include "PlayerPlaycallUiPrograms.h"
 #include "PlayerRecruitUiPrograms.h"
@@ -95,6 +97,9 @@ notesui::Runtime playerSkillUi(playercardui::skillPrograms());
 notesui::Runtime playerTeamModuleUi(playercardui::teamModulePrograms());
 notesui::Runtime analyticsRefreshUi(analyticsactions::hubRefreshPrograms()),analyticsCurrentRefreshUi(analyticsactions::currentRefreshPrograms());
 notesui::Runtime playerHubUi(playerhubui::programs());
+notesui::Runtime weeklyReportUi(weeklyreportui::programs());
+notesui::Runtime weeklyProfileUi(weeklyreportui::teamProfilePrograms());
+notesui::Runtime weeklyPickerUi(weeklyreportui::pickerPrograms());
 notesui::Runtime playerSliderUi(playercardui::sliderPrograms());
 notesui::Runtime playerInGameUi(playeringameui::programs());
 notesui::Runtime playerRecruitUi(playerrecruitui::programs());
@@ -113,6 +118,7 @@ notesui::Runtime playerImpactPanelUi(playerplaycallui::impactPrograms());
 notesui::Runtime playerLineupPanelUi(playerplaycallui::lineupPrograms());
 notesui::Runtime playerTrenchPanelUi(playerplaycallui::trenchPrograms());
 notesui::Runtime playerInjuryScreenUi(playeringameui::injuryPrograms());
+notesui::Runtime playerDepthScreenUi(playeringameui::depthPrograms());
 notesui::Runtime currencyIconUi(currencyui::iconPrograms()),currencySlotUi(currencyui::slotPrograms()),currencyCellUi(currencyui::cellPrograms());
 notesui::Runtime currencyTopbarUi(currencytopbarui::programs());
 notesui::Runtime currencyRecruitingUi(currencyclassui::recruitingPrograms(0));
@@ -130,8 +136,10 @@ notesui::Runtime aioCurrency0(aiocurrencyui::group0()),aioCurrency1(aiocurrencyu
 notesui::Runtime aioNotesUi(aiorecruitnotesui::programs());
 notesui::Runtime analyticsRowUi(analyticsactions::hubRowPrograms()),analyticsCurrentRowUi(analyticsactions::currentRowPrograms());
 notesui::Runtime positionChangesUi(positionchangesui::programs());
-const std::array<notesui::Runtime*,62> cardUiBanks={&playerControlUi,&playerCardUi,&playerTemplateUi,&playerSkillUi,&playerHubUi,&playerSliderUi,&playerInGameUi,&playerRecruitUi,&playerFormationUi,&playerLegacyOvrUi,&playerNilUi,&playerBlueprintUi,&playerPracticeUi,&playerNilEmbeddedUi,&playerKickerUi,&playerIndividualPanelUi,&playerComparisonPanelUi,&playerImpactPanelUi,&playerLineupPanelUi,&playerTrenchPanelUi,&playerInjuryScreenUi,&currencyIconUi,&currencySlotUi,&currencyCellUi,&gapCoreUi,&gapHubUi,&gapRecruitUi,&gapTeamSelectUi,&draftOvrStrategyUi,&draftOvrCurrentStrategyUi,&draftOvrRowsUi,&currencyTopbarUi,&currencyRecruitingUi,&currencyBudgetUi,&currencyAnimationUi,&currencyBudgetArtUi,&currencyRecruitDetailUi,&currencyRecruitEditorUi,&aioCurrency0,&aioCurrency1,&aioCurrency2,&aioCurrency3,&playerBlueprintAioUi,&gapWeeklyUi,&gapTopPlayersUi,&gapAioTopPlayersUi,&aioNotesUi,&analyticsMainUi,&analyticsCurrentUi,&analyticsCleanupUi,&analyticsCurrentCleanupUi,&analyticsHintsUi,&playerTeamModuleUi,&analyticsRefreshUi,&analyticsCurrentRefreshUi,&analyticsCurrentHintsUi,&analyticsRowUi,&analyticsCurrentRowUi,&nilToggleUi,&currencyRecruitingOfferUi,&currencyRecruitingHoursUi,&positionChangesUi};
-bool cardBankEnabled(size_t bank){const auto selected=enhancements::options();const auto* runtime=cardUiBanks[bank];
+const std::array<notesui::Runtime*,66> cardUiBanks={&playerControlUi,&playerCardUi,&playerTemplateUi,&playerSkillUi,&playerHubUi,&playerSliderUi,&playerInGameUi,&playerRecruitUi,&playerFormationUi,&playerLegacyOvrUi,&playerNilUi,&playerBlueprintUi,&playerPracticeUi,&playerNilEmbeddedUi,&playerKickerUi,&playerIndividualPanelUi,&playerComparisonPanelUi,&playerImpactPanelUi,&playerLineupPanelUi,&playerTrenchPanelUi,&playerInjuryScreenUi,&currencyIconUi,&currencySlotUi,&currencyCellUi,&gapCoreUi,&gapHubUi,&gapRecruitUi,&gapTeamSelectUi,&draftOvrStrategyUi,&draftOvrCurrentStrategyUi,&draftOvrRowsUi,&currencyTopbarUi,&currencyRecruitingUi,&currencyBudgetUi,&currencyAnimationUi,&currencyBudgetArtUi,&currencyRecruitDetailUi,&currencyRecruitEditorUi,&aioCurrency0,&aioCurrency1,&aioCurrency2,&aioCurrency3,&playerBlueprintAioUi,&gapWeeklyUi,&gapTopPlayersUi,&gapAioTopPlayersUi,&aioNotesUi,&analyticsMainUi,&analyticsCurrentUi,&analyticsCleanupUi,&analyticsCurrentCleanupUi,&analyticsHintsUi,&playerTeamModuleUi,&analyticsRefreshUi,&analyticsCurrentRefreshUi,&analyticsCurrentHintsUi,&analyticsRowUi,&analyticsCurrentRowUi,&nilToggleUi,&currencyRecruitingOfferUi,&currencyRecruitingHoursUi,&positionChangesUi,&playerDepthScreenUi,&weeklyReportUi,&weeklyProfileUi,&weeklyPickerUi};
+bool recruitBank(size_t bank){const auto* r=cardUiBanks[bank];return r==&gapRecruitUi||r==&aioNotesUi;}
+bool cardBankEnabled(size_t bank,enhancements::Options selected=enhancements::options()){const auto* runtime=cardUiBanks[bank];
+    if(runtime==&weeklyReportUi||runtime==&weeklyProfileUi||runtime==&weeklyPickerUi)return selected.roster||selected.colors;
     if(runtime==&nilToggleUi)return selected.dollars;
     if(runtime==&analyticsMainUi||runtime==&analyticsCurrentUi)return nativeanalytics::opened;
     if(runtime==&analyticsRowUi||runtime==&analyticsCurrentRowUi)return true;
@@ -139,7 +147,7 @@ bool cardBankEnabled(size_t bank){const auto selected=enhancements::options();co
     if(runtime==&analyticsCleanupUi||runtime==&analyticsCurrentCleanupUi||runtime==&analyticsHintsUi||runtime==&analyticsCurrentHintsUi)return true;
     if(runtime==&aioNotesUi)return true;
     if(runtime==&aioCurrency0||runtime==&aioCurrency1||runtime==&aioCurrency2||runtime==&aioCurrency3)return true;
-    if(runtime==&gapRecruitUi)return selected.recruiting;
+    if(recruitBank(bank))return selected.recruiting||selected.colors;
     // Currency layout must undo its own prior fit when dollars is switched Off.
     // The suffix retains the real option gate; fresh Off widgets are a no-op.
     if(runtime==&currencySlotUi||runtime==&currencyRecruitingUi||runtime==&currencyRecruitingOfferUi||runtime==&currencyRecruitingHoursUi||runtime==&currencyRecruitDetailUi||runtime==&currencyRecruitEditorUi||runtime==&playerSliderUi)return true;
@@ -473,12 +481,12 @@ unsigned __fastcall colorLengthHook(void* object){
 #endif
         static const notesui::FrameDispatch<cardUiBanks.size()> fixedDispatch(cardUiBanks);
         const auto candidates=fixedDispatch.candidates(h,true);
-        for(size_t bank=0;bank<cardUiBanks.size();++bank)if((candidates&(uint64_t{1}<<bank))&&!cardUiFailed[bank]&&(enhancements::presentationAllowed()||cardUiBanks[bank]->retainedDefinitionCount()!=0))
-        try{CallGuard guard;if(disabled)return originalColorLength(object);const auto index=cardUiBanks[bank]->beforeInvoke(object,read,true,cardBankEnabled(bank),unsigned(enhancements::options().scale),enhancements::options().colors,enhancements::options().roster,enhancements::options().team,enhancements::options().dollars,unsigned(enhancements::options().teamScale));
+        for(size_t bank=0;bank<cardUiBanks.size();++bank)if(candidates.test(bank)&&!cardUiFailed[bank]&&(enhancements::presentationAllowed()||cardUiBanks[bank]->retainedDefinitionCount()!=0))
+        try{CallGuard guard;if(disabled)return originalColorLength(object);const auto selected=enhancements::options();const auto index=cardUiBanks[bank]->beforeInvoke(object,read,true,cardBankEnabled(bank,selected),unsigned(recruitBank(bank)?selected.recruitingScale:selected.scale),selected.colors,recruitBank(bank)?selected.recruiting:selected.roster,selected.team,selected.dollars,unsigned(selected.teamScale));
             if(index>=0){const auto bit=1u<<index;if(!(cardUiAttached[bank].fetch_or(bit)&bit))note({{"event","player_fog_card_adapter_attached"},{"bank",bank},{"method",index},{"path","fixed frame body accessor"}});}}
         catch(const std::exception& error){cardUiFailed[bank]=true;note({{"event","player_fog_card_adapter_failed"},{"bank",bank},{"reason",error.what()}});}
         if(!notesAttachmentFailed&&notesUi.acceptsFrame(h,true))
-        try{CallGuard guard;if(disabled)return originalColorLength(object);const auto index=notesUi.beforeInvoke(object,read,true,true,unsigned(enhancements::options().scale),enhancements::options().colors);if(index>=0){const auto bit=1u<<index;if(!(notesAttachedMethods.fetch_or(bit)&bit))note({{"event","recruit_color_focus_attached"},{"program",index}});}}
+        try{CallGuard guard;if(disabled)return originalColorLength(object);const auto index=notesUi.beforeInvoke(object,read,true,true,unsigned(enhancements::options().recruitingScale),enhancements::options().colors);if(index>=0){const auto bit=1u<<index;if(!(notesAttachedMethods.fetch_or(bit)&bit))note({{"event","recruit_color_focus_attached"},{"program",index}});}}
         catch(const std::exception& error){notesAttachmentFailed=true;note({{"event","recruit_color_focus_failed"},{"reason",error.what()}});}
     }
     return originalColorLength(object);
@@ -598,13 +606,13 @@ uintptr_t __fastcall notesSetupHook(void* object,void* saved,uintptr_t receiver,
     }
     static const notesui::FrameDispatch<cardUiBanks.size()> cardDispatch(cardUiBanks);
     const auto candidates=cardDispatch.candidates(liveHeader);
-    for(size_t bank=0;bank<cardUiBanks.size();++bank)if((candidates&(uint64_t{1}<<bank))&&!cardUiFailed[bank]&&(enhancements::presentationAllowed()||cardUiBanks[bank]->retainedDefinitionCount()!=0))try{
-        const auto index=cardUiBanks[bank]->beforeInvoke(object,read,false,cardBankEnabled(bank),unsigned(enhancements::options().scale),enhancements::options().colors,enhancements::options().roster,enhancements::options().team,enhancements::options().dollars,unsigned(enhancements::options().teamScale));
+    for(size_t bank=0;bank<cardUiBanks.size();++bank)if(candidates.test(bank)&&!cardUiFailed[bank]&&(enhancements::presentationAllowed()||cardUiBanks[bank]->retainedDefinitionCount()!=0))try{
+        const auto selected=enhancements::options();const auto index=cardUiBanks[bank]->beforeInvoke(object,read,false,cardBankEnabled(bank,selected),unsigned(recruitBank(bank)?selected.recruitingScale:selected.scale),selected.colors,recruitBank(bank)?selected.recruiting:selected.roster,selected.team,selected.dollars,unsigned(selected.teamScale));
         if(index>=0){const auto bit=1u<<index;if(!(cardUiAttached[bank].fetch_or(bit)&bit))note({{"event","player_fog_card_adapter_attached"},{"bank",bank},{"method",index}});}
     }catch(const std::exception& error){cardUiFailed[bank]=true;note({{"event","player_fog_card_adapter_failed"},{"bank",bank},{"reason",error.what()}});}
     }
 #endif
-    if(!disabled&&!notesAttachmentFailed)try{const auto index=notesUi.beforeInvoke(object,read,false,true,unsigned(enhancements::options().scale),enhancements::options().colors);if(index>=0){const auto bit=1u<<index;
+    if(!disabled&&!notesAttachmentFailed)try{const auto index=notesUi.beforeInvoke(object,read,false,true,unsigned(enhancements::options().recruitingScale),enhancements::options().colors);if(index>=0){const auto bit=1u<<index;
         if(!(notesAttachedMethods.fetch_or(bit)&bit))note({{"event","recruit_notes_method_attached"},{"program",index}});}}
     catch(const std::exception& error){notesAttachmentFailed=true;note({{"event","recruit_notes_attachment_failed"},{"reason",error.what()}});}
     }
@@ -629,7 +637,7 @@ template<size_t Index>void* __fastcall detailHook(void* object,void** out,uintpt
                         const auto found=cache->data.entries.find(static_cast<uint32_t>(id));
                         if(found!=cache->data.entries.end()&&found->second.first==firstName&&found->second.last==lastName){
                             std::string label;
-                            if(found->second.juniorCollege&&!found->second.classYear.empty())label=found->second.saved.at("competitionClass").get<std::string>()+" ("+found->second.classYear+")";
+                            if(found->second.juniorCollege&&!found->second.classYear.empty())label=found->second.saved.at("competitionClass").get<std::string>()+" "+found->second.classYear;
                             else label=resume::nativeTransferClass(found->second);
                             if(!label.empty())reinterpret_cast<void(__fastcall*)(void*,const char*,const char*)>(base+0x25a3e60)(reinterpret_cast<void*>(value),"className",label.c_str());
                         }
@@ -661,18 +669,18 @@ void* __fastcall getterHook(void* object,void** out){
             const auto notesCount=appendRecruitNotes(view,value,[&](uintptr_t at,const char* key,const char* text){
                 reinterpret_cast<void(__fastcall*)(void*,const char*,const char*)>(base+0x25a3e60)(reinterpret_cast<void*>(at),key,text);
                 reinterpret_cast<void(__fastcall*)(void*,const char*,bool)>(base+0x2bf6720)(reinterpret_cast<void*>(at),"DENotesLoading",notesLoading);
-            },[&](NotesProspect& p,double id,const std::string& first,const std::string& last){return resumeCache.compose(cached,p,id,first,last,notesLoading);});
+            },[&](NotesProspect& p,double id,const std::string& first,const std::string& last){try{return resumeCache.compose(cached,p,id,first,last,notesLoading);}catch(...){notesLoading=false;return std::string("SCOUTING NOTES\nReport unavailable. Rating concealment remains active.");}});
             if(call<=5)note({{"event","recruit_notes_prepared"},{"recruits",notesCount},{"resumes",bool(cached)}});
 #elif defined(RECRUIT_NOTES_PROBE)
             const auto notesCount=appendRecruitNotes(view,value,[&](uintptr_t at,const char* key,const char* text){reinterpret_cast<void(__fastcall*)(void*,const char*,const char*)>(base+0x25a3e60)(reinterpret_cast<void*>(at),key,text);});
             if(call<=5)note({{"event","recruit_notes_prepared"},{"recruits",notesCount}});
 #endif
-            if(enhancements::options().recruiting){
+            if(enhancements::options().recruiting||enhancements::options().measurables){
             auto stats=convertRecruitingResponse(view,value,
                 [&](uintptr_t at,const char* key,const char* text){reinterpret_cast<void(__fastcall*)(void*,const char*,const char*)>(base+0x25a3e60)(reinterpret_cast<void*>(at),key,text);},
-                [&](uintptr_t at,const char* key,bool flag){reinterpret_cast<void(__fastcall*)(void*,const char*,bool)>(base+0x2bf6720)(reinterpret_cast<void*>(at),key,flag);});
+                [&](uintptr_t at,const char* key,bool flag){reinterpret_cast<void(__fastcall*)(void*,const char*,bool)>(base+0x2bf6720)(reinterpret_cast<void*>(at),key,flag);},[&](auto& ui,const auto& fields,auto& revealed){resumeCache.completeMeasurements(ui,fields,revealed);});
             if(call<=10||stats.unsupported)note({{"event","grades_applied"},{"call",call},{"recruits",stats.recruits},{"attributes",stats.attributes},{"revealed",stats.revealed},{"ranges",stats.ranges},{"unknown",stats.unknown},{"unsupported",stats.unsupported},{"ms",GetTickCount64()-began}});
-            const auto mask=applyPlayingTime(value,PlayingTimeSurface::RecruitList,0,reinterpret_cast<uintptr_t>(object));
+            const auto mask=enhancements::options().recruiting?applyPlayingTime(value,PlayingTimeSurface::RecruitList,0,reinterpret_cast<uintptr_t>(object)):PlayingTimeStats{};
             if(call<=10)note({{"event","dealbreakers_masked"},{"fields",mask.dealbreakers},{"unsupported",mask.unsupported}});
             }
         }catch(const std::exception& error){note({{"event","conversion_failed"},{"reason",error.what()}});}
@@ -772,7 +780,7 @@ DWORD stop(){
     return ownershipFailed?2:inflight?3:0;
 }
 DWORD WINAPI worker(void*){
-    wchar_t path[32768]{};GetModuleFileNameW(self,path,32768);const auto folder=std::filesystem::path(path).parent_path();base=reinterpret_cast<uintptr_t>(GetModuleHandleW(nullptr));enhancements::requireDynastyPresentation(base);
+    wchar_t path[32768]{};GetModuleFileNameW(self,path,32768);const auto folder=dynasty::userpaths::data(std::filesystem::path(path).parent_path());if(folder.empty()){OutputDebugStringW(L"Beyond the Field: unsupported writable-data location; no hooks changed.\n");return 1;}base=reinterpret_cast<uintptr_t>(GetModuleHandleW(nullptr));enhancements::requireDynastyPresentation(base);
     auto flush=[&](){std::deque<Json> items;{std::lock_guard<std::mutex> lock(queueMutex);items.swap(pending);}if(!items.empty()){std::ofstream out(folder/L"recruiting-fog.jsonl",std::ios::app);for(const auto& j:items)out<<j.dump(-1,' ',false,Json::error_handler_t::replace)<<'\n';}};
     try{
         enhancementSettings.configure(folder);

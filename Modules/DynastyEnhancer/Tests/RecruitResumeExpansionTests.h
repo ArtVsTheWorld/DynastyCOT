@@ -76,10 +76,10 @@ inline nlohmann::json expansionTests(){
     const auto fumbles=renderTransfer(transferSeason(sparseDefense,ligginsPlayer,3,schools),3.8,2029,3);
     if(fumbles.find("2 forced fumbles, 1 fumble recoveries")==std::string::npos||fumbles.find("games played")!=std::string::npos)throw std::runtime_error("Partial recorded defense was omitted or given invented games");
     NativeEntry portal;portal.classYear="JR";portal.redshirt=true;
-    if(nativeTransferClass(portal)!="TR (JR RS)"||nativeRecruitClassLabel(portal,"Transfer (JR)")!="TR (JR RS)"||!nativeRecruitClassLabel(portal,"Transfer (SO)").empty())throw std::runtime_error("Transfer redshirt class labeling lost its year gate");
-    portal.redshirt=false;if(nativeTransferClass(portal)!="TR (JR)"||nativeRecruitClassLabel(portal,"Transfer (JR)")!="TR (JR)")throw std::runtime_error("An eligible/ineligible transfer received an incorrect compact class");
+    if(nativeTransferClass(portal)!="TR RSJR"||nativeRecruitClassLabel(portal,"Transfer (JR)")!="TR RSJR"||!nativeRecruitClassLabel(portal,"Transfer (SO)").empty())throw std::runtime_error("Transfer redshirt class labeling lost its year gate");
+    portal.redshirt=false;if(nativeTransferClass(portal)!="TR JR"||nativeRecruitClassLabel(portal,"Transfer (JR)")!="TR JR")throw std::runtime_error("An eligible/ineligible transfer received an incorrect compact class");
     portal.redshirt=true;portal.juniorCollege=true;portal.saved={{"competitionClass","FCS"}};
-    if(!nativeTransferClass(portal).empty()||nativeRecruitClassLabel(portal,"JC (JR)")!="FCS (JR)")throw std::runtime_error("Transfer redshirt handling changed the generated JUCO association");
+    if(!nativeTransferClass(portal).empty()||nativeRecruitClassLabel(portal,"JC (JR)")!="FCS JR")throw std::runtime_error("Transfer redshirt handling changed the generated JUCO association");
     if(nativeClassYear("Transfer_Freshman")!="FR"||nativeClassYear("Senior")!="SR"||!nativeClassYear("Unknown").empty())throw std::runtime_error("Native transfer class year mapping differs");
     // A native transfer's actual RedshirtStatus, not its age/class label,
     // controls the RS tag. High-school/JUCO generation stays on its own path.

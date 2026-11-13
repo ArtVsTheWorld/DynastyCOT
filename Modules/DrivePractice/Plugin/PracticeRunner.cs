@@ -51,8 +51,8 @@ namespace SituationalPractice
             pending=fresh;sideReset=true;previous=null;waitingResult=0;outcomeSpotted=false;manualSpot=false;livePlay=false;seen=runtime.Completed;plays=0;
             Log("Flip Sides: fresh drive at selected starting spot "+fresh.Ball.ToString("0.0")+", first down; scores and session stats retained. Native menu supplies the next user selection.");
         }
-        public PracticeRunner(int pid):this(pid,new DiagnosticSession(AppDomain.CurrentDomain.BaseDirectory,pid)){}
-        internal PracticeRunner(int pid,DiagnosticSession diagnostics,bool refreshPicker=false,int resumeUserTeam=-1){this.pid=pid;folder=AppDomain.CurrentDomain.BaseDirectory;this.diagnostics=diagnostics;this.refreshPicker=refreshPicker;this.resumeUserTeam=resumeUserTeam;}
+        public PracticeRunner(int pid):this(pid,new DiagnosticSession(BuildIdentity.Folder,pid)){}
+        internal PracticeRunner(int pid,DiagnosticSession diagnostics,bool refreshPicker=false,int resumeUserTeam=-1){this.pid=pid;folder=BuildIdentity.Folder;this.diagnostics=diagnostics;this.refreshPicker=refreshPicker;this.resumeUserTeam=resumeUserTeam;}
         private void Log(string message){diagnostics.Log(message);}
         private string Context()
         {
@@ -270,7 +270,7 @@ namespace SituationalPractice
             try{
                 int pid=args.Length>0?int.Parse(args[0]):0;
                 if(pid==0){var games=Process.GetProcessesByName("CollegeFB27");try{if(games.Length!=1)return;pid=games[0].Id;}finally{foreach(var game in games)game.Dispose();}}
-                diagnostics=new DiagnosticSession(AppDomain.CurrentDomain.BaseDirectory,pid);
+                diagnostics=new DiagnosticSession(BuildIdentity.Folder,pid);
                 AppDomain.CurrentDomain.UnhandledException+=(sender,eventArgs)=>{
                     try{
                         diagnostics.Error("Unhandled helper exception",eventArgs.ExceptionObject as Exception??new Exception(Convert.ToString(eventArgs.ExceptionObject)));
@@ -283,7 +283,7 @@ namespace SituationalPractice
                     new PracticeRunner(pid,diagnostics,args.Length>1 && (args[1]=="refresh" || args[1]=="resume-pick"),resume).Run();
                 }
             }catch(Exception error){
-                if(diagnostics==null)diagnostics=new DiagnosticSession(AppDomain.CurrentDomain.BaseDirectory,0);
+                if(diagnostics==null)diagnostics=new DiagnosticSession(BuildIdentity.Folder,0);
                 diagnostics.Error("Fatal helper startup/runtime failure",error);
                 diagnostics.CompleteForExit("Helper failed",null,"No game exit was established by this helper exception.");
                 Environment.ExitCode=1;

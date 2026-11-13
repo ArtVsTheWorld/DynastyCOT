@@ -129,6 +129,8 @@ template<bool Pause> class BasicMenu {
     }
     double readOption(size_t i){
         const auto& o=Options[i];wchar_t raw[128]{};GetPrivateProfileStringW(o.section,o.key,L"",raw,128,path_.c_str());
+        // Preserve the threshold from pre-layout INIs until the user edits it.
+        if(!raw[0]&&!std::wcscmp(o.key,L"FullScreenMinimumYards"))GetPrivateProfileStringW(L"Replays",o.key,L"",raw,128,path_.c_str());
         if(o.kind==Kind::Profile){for(int n=0;n<4;++n)if(!_wcsicmp(raw,ProfileValues[n]))return n;return 0;}
         if(o.kind!=Kind::Choice)return config::integer(raw,static_cast<int>(o.factory),static_cast<int>(o.low),static_cast<int>(o.high)).value;
         return config::real(raw,static_cast<float>(o.factory),static_cast<float>(o.low),static_cast<float>(o.high)).value;
