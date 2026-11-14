@@ -9,13 +9,16 @@ class ManagedRuntimeLoaderTests {
     sealed class Fake : IRuntimeLoadApi {
         internal string File,Fail,Target="CollegeFB27.exe";internal bool Existing,Conflict,WrongExistingPath,MissingOwner,AbsentAfter,FreeFails;
         internal string OtherModule;
+        internal int PreSnapshotErrors,PostSnapshotErrors,SnapshotError=24,FailureCode=5;
         internal int Starts,Frees,Closes,ModuleCalls;internal byte[] Bytes;internal long Entry;
         internal string Owner=Path.Combine(Environment.SystemDirectory,"kernelbase.dll");
-        void Check(string step){if(Fail==step)throw new Win32Exception(5,"Test denied "+step);}
+        void Check(string step){if(Fail==step)throw new Win32Exception(FailureCode,"Test denied "+step);}
         public IntPtr Open(int pid){Check("open");return new IntPtr(1);}
         public string Image(IntPtr p){Check("image");return Path.Combine(Environment.SystemDirectory,Target);}
         public IList<RuntimeModule> Modules(int pid){
             ++ModuleCalls;Check(ModuleCalls==1?"modules":"verify");var list=new List<RuntimeModule>();
+            if(Starts==0&&PreSnapshotErrors>0){--PreSnapshotErrors;throw new Win32Exception(SnapshotError);}
+            if(Starts>0&&PostSnapshotErrors>0){--PostSnapshotErrors;throw new Win32Exception(SnapshotError);}
             if(!MissingOwner)list.Add(new RuntimeModule("kernelbase.dll",Owner,0x60000000,4096));
             if(Existing||(Starts>0&&!AbsentAfter))list.Add(new RuntimeModule(Path.GetFileName(File),WrongExistingPath?Path.Combine(Path.GetTempPath(),Path.GetFileName(File)):File,0x70000000,4096));
             if(Conflict)list.Add(new RuntimeModule("DynamicGamedayAtmosphereNative-1.0.0.dll","other",0x71000000,4096));
@@ -61,6 +64,26 @@ class ManagedRuntimeLoaderTests {
             var cleanup=new Fake{File=file,Fail="write",FreeFails=true};var first=Failure(cleanup);Check(LaunchDiagnostics.Root(first).Message.Contains("write"),"Cleanup cannot hide first failure");
             var noteFails=new Fake{File=file,FreeFails=true};ManagedRuntimeLoader.Load(42,file,noteFails,s=>{throw new Exception("Logger failed");});Check(noteFails.Closes==2,"Logger cannot prevent handle cleanup");
             var missing=new Fake{File=file+".missing"};Failure(missing);Check(missing.Closes==0,"Missing file fails before native calls");
+            // Only the documented read-only module-list race is retryable.
+            int reads=0,waited=0,notices=0;
+            try{ManagedRuntimeLoader.ReadModules(()=>{++reads;throw new Win32Exception(24);},ms=>waited+=ms,s=>++notices);throw new Exception("Persistent race accepted");}
+            catch(Win32Exception e){Check(e.NativeErrorCode==24&&reads==8&&waited==700&&notices==1,"Snapshot retries bounded at eight reads/700 ms");}
+            reads=0;waited=0;
+            try{ManagedRuntimeLoader.ReadModules(()=>{++reads;throw new Win32Exception(5);},ms=>waited+=ms,s=>{});throw new Exception("Permission failure accepted");}
+            catch(Win32Exception e){Check(e.NativeErrorCode==5&&reads==1&&waited==0,"Access denial is not retried as module churn");}
+            foreach(bool after in new[]{false,true}){
+                var transient=new Fake{File=file,PreSnapshotErrors=after?0:3,PostSnapshotErrors=after?3:0};
+                ManagedRuntimeLoader.Load(42,file,transient,s=>{});
+                Check(transient.Starts==1&&transient.ModuleCalls==5&&transient.Frees==1&&transient.Closes==2,"Snapshot churn recovery never duplicates load: "+after);
+                var exhausted=new Fake{File=file,PreSnapshotErrors=after?0:8,PostSnapshotErrors=after?8:0};
+                var error=Failure(exhausted) as LaunchOperationException;
+                Check(error!=null&&((Win32Exception)LaunchDiagnostics.Root(error)).NativeErrorCode==24,"Exhausted snapshot retains Windows code");
+                Check(exhausted.Starts==(after?1:0)&&exhausted.ModuleCalls==(after?9:8),"Exhausted snapshot never repeats remote load: "+after);
+                Check(error.Operation==(after?"verify native runtime module and path":"inspect existing game runtime modules"),"Precise failure operation preserved");
+                Check(LaunchDiagnostics.Failure(42,"generic",file,error).Contains("Windows error 24"),"Snapshot error diagnostic includes code");
+            }
+            var uncertain=new Fake{File=file,Fail="wait",FailureCode=24};var uncertainError=Failure(uncertain);
+            Check(uncertain.Starts==1&&uncertain.ModuleCalls==1&&uncertain.Frees==0&&LaunchDiagnostics.Root(uncertainError) is Win32Exception,"Error 24 during remote wait never retries or frees pending path");
             // Native marshalling and read-only queries against this test itself.
             // No allocation, write, remote thread or game process is used.
             using(var self=Process.GetCurrentProcess()){

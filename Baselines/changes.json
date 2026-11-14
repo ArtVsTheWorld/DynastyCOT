@@ -443,8 +443,8 @@
     },
     {
       "path": "Modules/DynastyEnhancer/Source/MmcRecruitingPlugin.cs",
-      "sha256": "a8e00e0f21f7fc80e990fe122370f7b4b132466b963d3f3f74e6caf5c843d428",
-      "reason": "Reviewed public releases: retain readiness fixes; MMC display branding, complete guides and exact archive compatibility; test catalog reflects current 12-yard default and one-shot action"
+      "sha256": "1f0a1714839c2cf280572023e6ed62280a944c16ecc79c34f70dfe7c3220dcc4",
+      "reason": "Update 2/5 loader hotfix: bounded read-only Windows module-list retries and precise BTF runtime diagnostics; preserve single-load, ownership and integrity guards"
     },
     {
       "path": "Modules/DynastyEnhancer/Source/NativeMapValue.h",
@@ -2028,8 +2028,8 @@
     },
     {
       "path": "Modules/GamedayAtmosphere/Source/ManagedRuntimeLoader.cs",
-      "sha256": "56cb7f1a02f224efd27727bfb21cddd3916289bb1f139c4282ca4dba133e845f",
-      "reason": "Approved integrated release-readiness fixes; native contracts and saved data preserved"
+      "sha256": "00e5dbb992a1721cb3a7224eff0389378b521862ffed003e1ec7cfe402593843",
+      "reason": "Update 2/5 loader hotfix: bounded read-only Windows module-list retries and precise BTF runtime diagnostics; preserve single-load, ownership and integrity guards"
     },
     {
       "path": "Modules/GamedayAtmosphere/Source/MatchLifecycle.h",
@@ -2523,8 +2523,8 @@
     },
     {
       "path": "Modules/GamedayAtmosphere/Tests/ManagedRuntimeLoaderTests.cs",
-      "sha256": "352ff62e5209cc395f260a1821227e74e0ee805dfbe6620602455ef9e0675fb7",
-      "reason": "1.0 branded source-built runtime names, direct verified loading and preserved data/hook contracts"
+      "sha256": "e7adee801dac533c41e71846f561bbd9d7d3c624d0d715e0007abce81adb5ebc",
+      "reason": "Update 2/5 loader hotfix: bounded read-only Windows module-list retries and precise BTF runtime diagnostics; preserve single-load, ownership and integrity guards"
     },
     {
       "path": "Modules/GamedayAtmosphere/Tests/MotionSoundCoverageTests.cpp",

@@ -4,6 +4,7 @@ using System.ComponentModel;
 using System.IO;
 using System.Runtime.InteropServices;
 using System.Text;
+using System.Threading;
 
 namespace DynamicGamedayAtmosphere {
     internal sealed class RuntimeModule {
@@ -25,6 +26,18 @@ namespace DynamicGamedayAtmosphere {
         void Close(IntPtr handle);
     }
     internal static class ManagedRuntimeLoader {
+        // ERROR_BAD_LENGTH is documented for a module list changing during a
+        // Toolhelp snapshot. Retry only this read, never the load operation.
+        internal static IList<RuntimeModule> ReadModules(Func<IList<RuntimeModule>> read,Action<int> delay,Action<string> note){
+            for(int attempt=0;;++attempt){
+                try{return read();}
+                catch(Win32Exception error){
+                    if(error.NativeErrorCode!=24||attempt>=7)throw;
+                    if(attempt==0)Notice(note,"Windows module list changed during a read (error 24). Retrying the read only; no native load is repeated.");
+                    delay(25*(attempt+1));
+                }
+            }
+        }
         // Runtime families are independent: Beyond the Field's social and fog
         // payloads must coexist, but two versions of either role must not.
         internal static string RuntimeRole(string name){
@@ -52,7 +65,7 @@ namespace DynamicGamedayAtmosphere {
                 step="validate direct-load target process";
                 if(!String.Equals(Path.GetFileName(api.Image(process)),"CollegeFB27.exe",StringComparison.OrdinalIgnoreCase))throw new InvalidOperationException("Target is not CollegeFB27.exe.");
                 step="inspect existing game runtime modules";
-                var modules=api.Modules(pid);bool same=false;
+                var modules=ReadModules(()=>api.Modules(pid),Thread.Sleep,note);bool same=false;
                 foreach(var module in modules){
                     if(String.Equals(module.Name,Path.GetFileName(file),StringComparison.OrdinalIgnoreCase)){
                         if(!String.Equals(Path.GetFullPath(module.Path),file,StringComparison.OrdinalIgnoreCase))throw new InvalidOperationException("The same runtime filename is already loaded from another folder. Restart the game and MMC.");
@@ -76,7 +89,7 @@ namespace DynamicGamedayAtmosphere {
                 step="wait for direct native runtime load";api.Wait(thread);finished=true;
                 step="read direct native load result";uint result=api.Result(thread);
                 step="verify native runtime module and path";bool verified=false;
-                foreach(var module in api.Modules(pid))if(String.Equals(Path.GetFileName(file),module.Name,StringComparison.OrdinalIgnoreCase)&&String.Equals(Path.GetFullPath(module.Path),file,StringComparison.OrdinalIgnoreCase))verified=true;
+                foreach(var module in ReadModules(()=>api.Modules(pid),Thread.Sleep,note))if(String.Equals(Path.GetFileName(file),module.Name,StringComparison.OrdinalIgnoreCase)&&String.Equals(Path.GetFullPath(module.Path),file,StringComparison.OrdinalIgnoreCase))verified=true;
                 if(!verified)throw new InvalidOperationException("Load operation finished but the requested DLL is absent. Thread result: "+result+". Check security history, dependencies and runtime initialization.");
             }catch(Exception error){throw new LaunchOperationException(step,error);}
             finally {

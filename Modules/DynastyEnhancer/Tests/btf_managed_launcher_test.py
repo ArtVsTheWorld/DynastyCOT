@@ -39,7 +39,7 @@ if(System.IO.File.Exists(System.IO.Path.Combine(DynastyEnhancer.LaunchAction.Plu
 Console.WriteLine("PASS: actual adapter manifest/tamper/path guards, nested launcher log/rotation; no process attachment.");return 0;}}
 ''')
     exe=d/'Check.exe'
-    command=[r'C:\Windows\Microsoft.NET\Framework64\v4.0.30319\csc.exe','/nologo','/target:exe','/platform:x64','/reference:System.Web.Extensions.dll','/out:'+str(exe),'/resource:'+str(manifest)+',DynastyEnhancer.payload-sha256.txt',str(source),str(stubs)]
+    command=[r'C:\Windows\Microsoft.NET\Framework64\v4.0.30319\csc.exe','/nologo','/target:exe','/platform:x64','/reference:System.Web.Extensions.dll','/out:'+str(exe),'/resource:'+str(manifest)+',DynastyEnhancer.payload-sha256.txt',str(source),str(ROOT/'Modules/GamedayAtmosphere/Source/LaunchDiagnostics.cs'),str(stubs)]
     subprocess.run(command,check=True,capture_output=True,text=True)
     subprocess.run([str(exe)],check=True)
 print('PASS: BTF branded native pair, managed loading without EXE, no uncertain-completion retry, sibling owner/build guards preserved.')

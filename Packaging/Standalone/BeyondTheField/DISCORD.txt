@@ -1,6 +1,10 @@
-**Ace’s Beyond the Field 1.0.24**
-Changes since public release 1.0.7.
+**Update 2 Hotfix — Beyond the Field 1.0.25**
 
-Choose separate grade scales, read position-specific Notes and see signings credited to the school the player joined. Settings and published editions travel between MMC copies on the same Windows account.
+**Startup Fix**
+- Fixed a temporary Windows check that could leave Social Media or recruiting/fog inactive, or report failure after a successful load.
+- Added clearer error details naming the component and failed step.
+- Settings, Notes, accounts and published tweets stay intact.
 
-Close MMC and the game, then copy BeyondTheField.dll from the standalone ZIP into MMC’s Plugins folder. The ZIP includes the full feature list and an illustrated player guide.
+Close MMC/game and replace BeyondTheField.dll, or explicitly check for updates in COT and choose BTF 1.0.25.
+
+The separate missing-path reports still need logs; this hotfix does not claim to fix those.

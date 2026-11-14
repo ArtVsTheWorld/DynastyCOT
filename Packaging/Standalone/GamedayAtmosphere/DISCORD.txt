@@ -1,6 +1,10 @@
-**Ace’s Gameday Atmosphere 2.1.38**
-Changes since public release 2.1.11.
+**Update 5 Hotfix — Gameday Atmosphere 2.1.39**
 
-New Dynasty crowds can give visiting fans several nearby blocks. Added visiting cheers at home stadiums need at least 20% visiting support among fans present. Spring games use one school's crowd, and saved matchup plans carry forward.
+**Startup Reliability**
+- Added the same protection tested in BTF for a temporary Windows startup check.
+- GDA can briefly retry reading the loaded-file list without loading the runtime twice.
+- Crowd plans, settings, attendance, sounds, camera and replay behavior stay the same.
 
-Close MMC and the game, then copy GamedayAtmosphere.dll from the standalone ZIP into MMC’s Plugins folder. The ZIP includes the full feature list and an illustrated player guide.
+Close MMC/game and replace GamedayAtmosphere.dll, or explicitly check for updates in COT and choose GDA 2.1.39.
+
+This hardens the shared loader; GDA did not reproduce BTF's failed launch in the observed session. Live startup acceptance remains separate from automated tests.

@@ -1,11 +1,14 @@
-# Ace’s Gameday Atmosphere 2.1.38
+# **Update 5 Hotfix**
 
-Changes since public release 2.1.11.
+**More Reliable Startup**
+- Added the same startup protection tested in Beyond the Field. If Windows is briefly updating the game's loaded-file list, GDA retries that check instead of immediately giving up.
+- This also protects the final check after loading, which could otherwise report failure even when the runtime was already present.
+- Retries are brief and limited to checking that list. The plugin does not repeat an uncertain runtime load.
 
-- On new Dynasty home dates, ticket demand, travel and each school's following help set turnout. A visiting section can stretch across nearby blocks, with mixed edges and scattered groups of friends. Saved matchups keep their old plan unless you choose Regenerate Next Crowd for a newly started game.
-- An added positive visiting cheer at a home stadium needs at least one visitor in five among the supporters actually present. A visiting touchdown can still hush the home background below that mark. A big lead can calm the roar.
-- Supported neutral games keep the game's turnout and split the crowd between both schools. In supported Dynasty Extensions spring games, the actual school's fans wear its colors, take halftime breaks and drift out in the second half, whatever the score.
-- Set Big Play Replay Minimum Yards in the menu from 10 to 60. It starts at 12. Supported Broadcast Universe setups can receive a big-play request when a clip is available. The game handles touchdown replays.
-- A guide in the ZIP shows how to read the stands. The status report can help explain a missed cheer. The new section layouts, spring boos and in-game frame rate still need live checks.
+**What Stays the Same**
+- Crowd plans/history, settings, attendance, reactions, audio, camera and replay behavior are unchanged.
+- This is preventive hardening for the shared loader. GDA did not reproduce BTF's failed startup in the observed session; automated tests are separate from live acceptance.
 
-Download the standalone ZIP, close MMC and the game, and copy **GamedayAtmosphere.dll** into MMC’s **Plugins** folder. The ZIP includes a full feature list and an illustrated player guide.
+**Install**
+- Close MMC and the game, then replace **GamedayAtmosphere.dll** in your usual **Plugins** folder. COT users can explicitly check for updates and choose **2.1.39** for GDA only.
+- Separate BTF missing-path reports remain under investigation pending their logs. This release does not claim to fix them.

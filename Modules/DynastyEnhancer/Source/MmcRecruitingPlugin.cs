@@ -80,10 +80,12 @@ namespace DynastyEnhancer {
        // An unknown remote completion must never start a second load request.
        // Payload hashes are verified by Prepare before the watcher starts.
        attempts[key]=3;
+       try{
        DynamicGamedayAtmosphere.ManagedRuntimeLoader.Load(game.Id,Path.Combine(RuntimeFolder,nativeFile),Note);
        loaded.Add(key);Note(nativeFile+" loaded for game PID "+game.Id+". Native hook and feature checks follow. See "+Path.Combine(Ace.DynastyCOT.UserStorage.Folder("BeyondTheField"),nativeFile==NativeFile?"social-media-status.log":"recruiting-fog-status.log")+".");
+       }catch(Exception error){Note(DynamicGamedayAtmosphere.LaunchDiagnostics.Failure(game.Id,"load Beyond the Field runtime",Path.Combine(RuntimeFolder,nativeFile),error)+" | This runtime was not confirmed loaded. No second load request is issued in this game process. After resolving the named failure, start a fresh game.");}
       }
-      }catch(Exception error){Note("Runtime loading failed for game PID "+game.Id+": "+error.Message+". Check the named component and its AppData diagnostics. After resolving the cause, start a fresh game.");}
+      }catch(Exception error){Note(DynamicGamedayAtmosphere.LaunchDiagnostics.Failure(game.Id,"inspect game readiness for Beyond the Field",RuntimeFolder,error));}
       Thread.Sleep(1000);
      }
     }catch(Exception error){try{Note("Watcher stopped: "+error.Message);}catch{}}
