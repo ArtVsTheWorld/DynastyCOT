@@ -47,6 +47,20 @@ int main(){
         for(int i=0;i<n;++i){put<int>(addr(instances)+16*i,i%2?59:83);put<int>(addr(instances)+16*i+4,100+i);put<unsigned char>(addr(instances)+16*i+12,0);}};
     auto intent=[&](){Intent w;w.active=true;w.match=123;w.epoch=1;w.updated=1000;return w;};
     unsigned checkId=0;auto check=[&](unsigned n,auto action){++checkId;unsigned before=sends;action();balanced();if(sends!=before+n)std::fprintf(stderr,"check %u: expected %u sends, got %u\n",checkId,n,sends-before);assert(sends==before+n);};
+    // A visiting cheer rejected on the first population sample stays consumed if
+    // the percentage changes before its original window expires. A new event
+    // has its own dispatch opportunity.
+    {
+        for(bool seenEarlier:{false,true}){
+        voices(0);attendance::cheer::Runtime visitors;visitors.configure(image,&api,receive,report);
+        wanted=intent();wanted.playSequence=91;
+        if(seenEarlier)visitors.tick(addr(entity),wanted,1000);
+        visitors.suppressPopulation(10019);
+        wanted.liveCheer=10019;wanted.liveCheerUntil=2000;wanted.liveType=83;
+        wanted.updated=1100;check(0,[&]{visitors.tick(addr(entity),wanted,1100);});
+        wanted.liveCheer=10020;wanted.updated=1200;check(1,[&]{visitors.tick(addr(entity),wanted,1200);});
+        }
+    }
     // Dispatch alone is not sound proof. Only a fresh active voice can admit shake.
     voices(0);attendance::cheer::Runtime paired;paired.configure(image,&api,receive);
     wanted=intent();wanted.playSequence=44;wanted.liveCheer=1;wanted.liveCheerUntil=1500;wanted.liveType=83;

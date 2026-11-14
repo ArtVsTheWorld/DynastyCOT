@@ -8,8 +8,8 @@
     },
     {
       "path": "Modules/DrivePractice/Plugin/AssemblyInfo.cs",
-      "sha256": "f9e70bf453593ece2d52d44c5bcf2ce9dface34aa75f5ff7cb935235f071b264",
-      "reason": "Retain prior native practice and exact helper/ownership contracts; 0.1.6 user-facing Expanded Practice branding, original UTF-8 source encoding retained, internal IDs/paths unchanged."
+      "sha256": "86ac81aa20ae77065b23cf458e4b9e2c62c2f2c0029f7d586bff1b6cc11fba44",
+      "reason": "Reviewed public releases: retain readiness fixes; MMC display branding, complete guides and exact archive compatibility; test catalog reflects current 12-yard default and one-shot action"
     },
     {
       "path": "Modules/DrivePractice/Plugin/DefenseChoice.cs",
@@ -18,8 +18,8 @@
     },
     {
       "path": "Modules/DrivePractice/Plugin/Diagnostics.cs",
-      "sha256": "de8caf084b15dad98299c38ac2a79ef5926ea78517bcce924261ab07d035b0ac",
-      "reason": "Approved integrated release-readiness fixes; native contracts and saved data preserved"
+      "sha256": "ece44733f310a3bfc50b4dec736a4bb1d2f925574ec2b9ac8a279150f3e3bd0a",
+      "reason": "Reviewed public releases: retain readiness fixes; MMC display branding, complete guides and exact archive compatibility; test catalog reflects current 12-yard default and one-shot action"
     },
     {
       "path": "Modules/DrivePractice/Plugin/DriveEngine.cs",
@@ -43,23 +43,23 @@
     },
     {
       "path": "Modules/DrivePractice/Plugin/NativeRuntime.cs",
-      "sha256": "35567c25978e8f0f3b7988c55f0853d01b59784ed5ab804b139ff5be76b95fd8",
-      "reason": "Approved integrated release-readiness fixes; native contracts and saved data preserved"
+      "sha256": "6d9f9959e5527fa9ab32938efa563b82d13cac52581135a36cb30015885ad915",
+      "reason": "Reviewed public releases: retain readiness fixes; MMC display branding, complete guides and exact archive compatibility; test catalog reflects current 12-yard default and one-shot action"
     },
     {
       "path": "Modules/DrivePractice/Plugin/PracticeAction.cs",
-      "sha256": "214cfb8fa6636b7f98f09a2f551997a265f8707c2ac025bf315a6dcbc41d846a",
-      "reason": "Approved integrated release-readiness fixes; native contracts and saved data preserved"
+      "sha256": "0d1e6b1718946bab068af959b21dbfab15979477008a2fc3b579dcd35e3d2ab9",
+      "reason": "Reviewed public releases: retain readiness fixes; MMC display branding, complete guides and exact archive compatibility; test catalog reflects current 12-yard default and one-shot action"
     },
     {
       "path": "Modules/DrivePractice/Plugin/PracticeRunner.cs",
-      "sha256": "0d07a32bd938f516f47222b5b9f9799cc48039e2c076be235c3b27057de9908b",
-      "reason": "Approved integrated release-readiness fixes; native contracts and saved data preserved"
+      "sha256": "209fa2234e464322c458ca2d0fd35c52af1e75e443edd51b168371a27d6e9bb6",
+      "reason": "Reviewed public releases: retain readiness fixes; MMC display branding, complete guides and exact archive compatibility; test catalog reflects current 12-yard default and one-shot action"
     },
     {
       "path": "Modules/DrivePractice/Plugin/RuntimeFiles.cs",
-      "sha256": "09c5a976a749b1e813f6001d4b79bf5a2439ec37c72cb3ea6e04716173736b2a",
-      "reason": "Approved integrated release-readiness fixes; native contracts and saved data preserved"
+      "sha256": "df13ea1a587dd451328d9e58b55e6ae6ee045ce92df83fd561e65c41090a4243",
+      "reason": "Reviewed public releases: retain readiness fixes; MMC display branding, complete guides and exact archive compatibility; test catalog reflects current 12-yard default and one-shot action"
     },
     {
       "path": "Modules/DrivePractice/Plugin/SessionStats.cs",
@@ -73,8 +73,8 @@
     },
     {
       "path": "Modules/DrivePractice/Tools/DiagnosticsChecks.cs",
-      "sha256": "39ebbde42fcb732a58ade2e86dea31c4d8a316d72b3f34f68d4c06c66765c585",
-      "reason": "Release-readiness provenance and approved integrated regression coverage"
+      "sha256": "c3044743619a363f6dd16631729cec9359220a9483e761a04176304b46256619",
+      "reason": "Reviewed public releases: retain readiness fixes; MMC display branding, complete guides and exact archive compatibility; test catalog reflects current 12-yard default and one-shot action"
     },
     {
       "path": "Modules/DrivePractice/Tools/ModeChecks.cs",
@@ -288,8 +288,8 @@
     },
     {
       "path": "Modules/DynastyEnhancer/Source/Analytics.NOTICES.txt",
-      "sha256": "94e22d8fdebb3754cd15f9a8392156978500f392f3e173834e76406dec23ddf3",
-      "reason": "GPI branding: current account/handle/native G icon, analytics labels and archived-header display projection; retain existing publication/account keys, statistics, grading model and academic GPA"
+      "sha256": "eca683dae88aa749bfb6f09fef99ec681bca7b7c1d7126feb86e84037ee9d5fc",
+      "reason": "Reviewed public releases: retain readiness fixes; MMC display branding, complete guides and exact archive compatibility; test catalog reflects current 12-yard default and one-shot action"
     },
     {
       "path": "Modules/DynastyEnhancer/Source/AnalyticsModel.h",
@@ -383,8 +383,8 @@
     },
     {
       "path": "Modules/DynastyEnhancer/Source/EnhancementSettingsMenu.h",
-      "sha256": "e66a940eb5483a73281599e518cde1f14fc043ba1e8e8e8b1485995b683adf2e",
-      "reason": "Approved integrated release-readiness fixes; native contracts and saved data preserved"
+      "sha256": "faa695e4ec9e5aab9ee2e79e9c1d53e13d46f28e83a2452df90feee0d9831847",
+      "reason": "Reviewed public releases: retain readiness fixes; MMC display branding, complete guides and exact archive compatibility; test catalog reflects current 12-yard default and one-shot action"
     },
     {
       "path": "Modules/DynastyEnhancer/Source/FeedData.h",
@@ -393,8 +393,8 @@
     },
     {
       "path": "Modules/DynastyEnhancer/Source/FeedRefresh.h",
-      "sha256": "64b88c095f0d72e99d879290483fc2739cb45e878929e1ae9aa331850ead46e0",
-      "reason": "Approved integrated release-readiness fixes; native contracts and saved data preserved"
+      "sha256": "57bece62e4876ff97653537667e17429839f910d9cc511d4021c0d0962208b35",
+      "reason": "Reviewed public releases: retain readiness fixes; MMC display branding, complete guides and exact archive compatibility; test catalog reflects current 12-yard default and one-shot action"
     },
     {
       "path": "Modules/DynastyEnhancer/Source/FogGapUiPrograms.h",
@@ -443,8 +443,8 @@
     },
     {
       "path": "Modules/DynastyEnhancer/Source/MmcRecruitingPlugin.cs",
-      "sha256": "06d8c49aba937bb03a04cebc13ef9d77a0f90caa30d7580e172e69b12b5809ef",
-      "reason": "Release-readiness provenance and approved integrated regression coverage"
+      "sha256": "a8e00e0f21f7fc80e990fe122370f7b4b132466b963d3f3f74e6caf5c843d428",
+      "reason": "Reviewed public releases: retain readiness fixes; MMC display branding, complete guides and exact archive compatibility; test catalog reflects current 12-yard default and one-shot action"
     },
     {
       "path": "Modules/DynastyEnhancer/Source/NativeMapValue.h",
@@ -453,8 +453,8 @@
     },
     {
       "path": "Modules/DynastyEnhancer/Source/NativeSocialMedia.cpp",
-      "sha256": "58a3965f685cf9fea776749eb1d6d45fd6bd79aa4e1af5ce4f414bbd409dc09b",
-      "reason": "Approved integrated release-readiness fixes; native contracts and saved data preserved"
+      "sha256": "553ff5bcaa30f2acb7fedb8b5185f963c9fa877fc79a3510275275c12b76d17c",
+      "reason": "Reviewed public releases: retain readiness fixes; MMC display branding, complete guides and exact archive compatibility; test catalog reflects current 12-yard default and one-shot action"
     },
     {
       "path": "Modules/DynastyEnhancer/Source/NewsAssetDiscovery.h",
@@ -723,8 +723,8 @@
     },
     {
       "path": "Modules/DynastyEnhancer/Source/RecruitResumeRuntime.h",
-      "sha256": "8d22586dd7e537b47f54728e652f2d88cd93d44785178f7269aa6360b461f46d",
-      "reason": "Approved integrated release-readiness fixes; native contracts and saved data preserved"
+      "sha256": "23f86fb7e68d9e161db6f2eb6f95fa26f2a368dce0a9a34c46b83252d7f706c0",
+      "reason": "Reviewed public releases: retain readiness fixes; MMC display branding, complete guides and exact archive compatibility; test catalog reflects current 12-yard default and one-shot action"
     },
     {
       "path": "Modules/DynastyEnhancer/Source/RecruitResumeSource.h",
@@ -748,8 +748,8 @@
     },
     {
       "path": "Modules/DynastyEnhancer/Source/RecruitingFog.cpp",
-      "sha256": "32b1b88b601507980a3a9fca1d2a7700b02ad7c7501c3eaefae7f6d46045403d",
-      "reason": "Approved integrated release-readiness fixes; native contracts and saved data preserved"
+      "sha256": "83f5a7535e10963bf56e6a84ec4c4960144939d00d17fe435f976cdfd8fc7fde",
+      "reason": "Reviewed public releases: retain readiness fixes; MMC display branding, complete guides and exact archive compatibility; test catalog reflects current 12-yard default and one-shot action"
     },
     {
       "path": "Modules/DynastyEnhancer/Source/RecruitingGradePolicy.h",
@@ -773,8 +773,8 @@
     },
     {
       "path": "Modules/DynastyEnhancer/Source/RuntimeFeed.h",
-      "sha256": "2ba589b73340a011431ed4d25905a45c47bea4ddee10e0fffd34717cf39b9224",
-      "reason": "Approved integrated release-readiness fixes; native contracts and saved data preserved"
+      "sha256": "84ca7a7e0ed247171f05e83d91b53ba4ef0b0af9e6eb36d99c84ff3942514060",
+      "reason": "Reviewed public releases: retain readiness fixes; MMC display branding, complete guides and exact archive compatibility; test catalog reflects current 12-yard default and one-shot action"
     },
     {
       "path": "Modules/DynastyEnhancer/Source/Startup.h",
@@ -823,8 +823,8 @@
     },
     {
       "path": "Modules/DynastyEnhancer/Tests/EnhancementOptionsTests.h",
-      "sha256": "3ce6b34cb8ea1d9313dff1bfb8af801441f8adb016a60214882c23b9edc971b4",
-      "reason": "Approved integrated release-readiness fixes; native contracts and saved data preserved"
+      "sha256": "d56519eff24230a3bbec886d93b0c5a8ff2607c9caab037ce93a44a01a1e2a96",
+      "reason": "Reviewed public releases: retain readiness fixes; MMC display branding, complete guides and exact archive compatibility; test catalog reflects current 12-yard default and one-shot action"
     },
     {
       "path": "Modules/DynastyEnhancer/Tests/IndependentGradeOptionsTests.h",
@@ -1523,8 +1523,8 @@
     },
     {
       "path": "Modules/ExtraDynastySettings/Plugin/AssemblyInfo.cs",
-      "sha256": "3ccc7597aa9954055cf6c61c1d735d80a6dc90d3da71a0f2cadee04a4b683032",
-      "reason": "Retain prior per-Dynasty clocks and compatibility IDs; 0.1.6 user-facing Extra Settings branding only."
+      "sha256": "673f9ef00a68d191d3f3f25bd7acd9e39d6d0f5b6f8e6abdea72ca15d07fd175",
+      "reason": "Reviewed public releases: retain readiness fixes; MMC display branding, complete guides and exact archive compatibility; test catalog reflects current 12-yard default and one-shot action"
     },
     {
       "path": "Modules/ExtraDynastySettings/Plugin/ClockPreferences.cs",
@@ -1538,8 +1538,8 @@
     },
     {
       "path": "Modules/ExtraDynastySettings/Plugin/CombinedSettingsAction.cs",
-      "sha256": "c8ce7a559fc8ca8fadab28ac3597a2222eaf86f782435a8fe41f20c8b79982a5",
-      "reason": "Approved integrated release-readiness fixes; native contracts and saved data preserved"
+      "sha256": "d934de467b2d2b7fd1d87a53e04596e16ade268414c80c58dbe5bd069bdccec8",
+      "reason": "Reviewed public releases: retain readiness fixes; MMC display branding, complete guides and exact archive compatibility; test catalog reflects current 12-yard default and one-shot action"
     },
     {
       "path": "Modules/ExtraDynastySettings/Plugin/ControllerSelect.cs",
@@ -1558,8 +1558,8 @@
     },
     {
       "path": "Modules/ExtraDynastySettings/Plugin/DiagnosticLog.cs",
-      "sha256": "8cda3f2010550305e75b03b4ad16519fd08c04e1430d4f9239380e94012e9557",
-      "reason": "Approved integrated release-readiness fixes; native contracts and saved data preserved"
+      "sha256": "3344faf966e68289eaf071eb3129fb27ccb58f3fcfcd0dc514e6978052f89be5",
+      "reason": "Reviewed public releases: retain readiness fixes; MMC display branding, complete guides and exact archive compatibility; test catalog reflects current 12-yard default and one-shot action"
     },
     {
       "path": "Modules/ExtraDynastySettings/Plugin/GameSettingsMenuRows.cs",
@@ -1568,8 +1568,8 @@
     },
     {
       "path": "Modules/ExtraDynastySettings/Plugin/LaunchCoordinator.cs",
-      "sha256": "c3401fb6664065d4a50c9ad35b72f30f12a91f4bf11a8a26a729a507cded278d",
-      "reason": "Approved integrated release-readiness fixes; native contracts and saved data preserved"
+      "sha256": "45e19f43a709603a139bfed6b510facdd3767b6e2e59138dc99d11f9a3a57c79",
+      "reason": "Reviewed public releases: retain readiness fixes; MMC display branding, complete guides and exact archive compatibility; test catalog reflects current 12-yard default and one-shot action"
     },
     {
       "path": "Modules/ExtraDynastySettings/Plugin/PersistenceContracts.cs",
@@ -1578,8 +1578,8 @@
     },
     {
       "path": "Modules/ExtraDynastySettings/Plugin/PersistenceController.cs",
-      "sha256": "cc1ec35610acc81a25ad6c0f1b3d523729b6d587d8097594a3cbec68ab51721e",
-      "reason": "Approved integrated release-readiness fixes; native contracts and saved data preserved"
+      "sha256": "64d61917fa69fe094f7eb1ce765c021180347c614e046c60ee1a22aa78479836",
+      "reason": "Reviewed public releases: retain readiness fixes; MMC display branding, complete guides and exact archive compatibility; test catalog reflects current 12-yard default and one-shot action"
     },
     {
       "path": "Modules/ExtraDynastySettings/Plugin/PersistenceHelper.cs",
@@ -1588,8 +1588,8 @@
     },
     {
       "path": "Modules/ExtraDynastySettings/Plugin/RuntimeFiles.cs",
-      "sha256": "58bc2e13b965e30fb90a08149176a0f8e6b516601102d93eb143a7243176348e",
-      "reason": "Approved integrated release-readiness fixes; native contracts and saved data preserved"
+      "sha256": "5dd954816dc3ec92306fcc8a2dbcac8fe4168f7ea4186cdb2f2df13c844c9192",
+      "reason": "Reviewed public releases: retain readiness fixes; MMC display branding, complete guides and exact archive compatibility; test catalog reflects current 12-yard default and one-shot action"
     },
     {
       "path": "Modules/ExtraDynastySettings/Plugin/build.ps1",
@@ -1693,8 +1693,8 @@
     },
     {
       "path": "Modules/GamedayAtmosphere/Source/AudienceModel.h",
-      "sha256": "559733767dd6eec051e2a6e921a1b50378f9a9f485f358ada4119610027ac7dd",
-      "reason": "Approved integrated release-readiness fixes; native contracts and saved data preserved"
+      "sha256": "831d6efdbf617967195f7c627cf149bb00fa73bf1f531839829481821b1afce2",
+      "reason": "Reviewed public releases: retain readiness fixes; MMC display branding, complete guides and exact archive compatibility; test catalog reflects current 12-yard default and one-shot action"
     },
     {
       "path": "Modules/GamedayAtmosphere/Source/AudienceTurnoutEvidence.h",
@@ -1713,18 +1713,18 @@
     },
     {
       "path": "Modules/GamedayAtmosphere/Source/AwayAppearance.h",
-      "sha256": "0e587827dd53b72976916564f071b32fa58e6bd90bfa0ecf12691cdc08fe9c17",
-      "reason": "Approved integrated release-readiness fixes; native contracts and saved data preserved"
+      "sha256": "fdf189810c43f929fc163e1cf7c8f009e869dfbea5954e9e37d510c8593f2232",
+      "reason": "Reviewed public releases: retain readiness fixes; MMC display branding, complete guides and exact archive compatibility; test catalog reflects current 12-yard default and one-shot action"
     },
     {
       "path": "Modules/GamedayAtmosphere/Source/AwayCrowd.h",
-      "sha256": "7742c2a0c1628f72bea6a375ee53d630fd9b86a17d6c51a2e8f64353275a263d",
-      "reason": "Approved integrated release-readiness fixes; native contracts and saved data preserved"
+      "sha256": "f82224d8990087ab57ae96ddaa2ad598f730891a60365c6f59eb6f710abb82c2",
+      "reason": "Reviewed public releases: retain readiness fixes; MMC display branding, complete guides and exact archive compatibility; test catalog reflects current 12-yard default and one-shot action"
     },
     {
       "path": "Modules/GamedayAtmosphere/Source/AwayCrowdAudio.h",
-      "sha256": "7756d07528e8ef0943ed7700c8e0082c21d6b53ae52e5bd6c00eb0594393ed63",
-      "reason": "Approved integrated release-readiness fixes; native contracts and saved data preserved"
+      "sha256": "a51a6545bb7522ad39d3f2ebed472941f01e39a56d1fae64a586c5243b24a31b",
+      "reason": "Reviewed public releases: retain readiness fixes; MMC display branding, complete guides and exact archive compatibility; test catalog reflects current 12-yard default and one-shot action"
     },
     {
       "path": "Modules/GamedayAtmosphere/Source/AwaySoundReactions.h",
@@ -1957,14 +1957,19 @@
       "reason": "Approved integrated release-readiness fixes; native contracts and saved data preserved"
     },
     {
+      "path": "Modules/GamedayAtmosphere/Source/HomeCrowdQuiet.h",
+      "sha256": "ee7a0b5af1b9b7f135993ddc125ca3fbbf38d1ec78b9d22dba86dde11cb42515",
+      "reason": "Private away-TD diagnostics: retain paused evidence without extending audio freshness; enable normal quieting logs. No reaction, history or attendance changes."
+    },
+    {
       "path": "Modules/GamedayAtmosphere/Source/HostileOpeningResult.h",
       "sha256": "de98e2edfca234c4db850cf8f4951ee79cec8bfc15c917fd6765b1e87b7c2291",
       "reason": "Approved integrated release-readiness fixes; native contracts and saved data preserved"
     },
     {
       "path": "Modules/GamedayAtmosphere/Source/HumanDiagnostics.h",
-      "sha256": "df2c7b082daca1fcffba82c63149f7fafa3f5c2cf7a3ffc1f217b06496b51733",
-      "reason": "Approved integrated release-readiness fixes; native contracts and saved data preserved"
+      "sha256": "d4f21766175d52f611b7a5002e65dc7df0ebf2e9ce7e344e235b3a2b3bdd5772",
+      "reason": "Reviewed public releases: retain readiness fixes; MMC display branding, complete guides and exact archive compatibility; test catalog reflects current 12-yard default and one-shot action"
     },
     {
       "path": "Modules/GamedayAtmosphere/Source/LateTraffic.h",
@@ -1978,8 +1983,8 @@
     },
     {
       "path": "Modules/GamedayAtmosphere/Source/LaunchDiagnostics.cs",
-      "sha256": "2017779e9a9cbd2c8a997ca1fe8568e8efc753339e4e48ae2b2ff9b29257a077",
-      "reason": "Approved integrated release-readiness fixes; native contracts and saved data preserved"
+      "sha256": "06517858463cf80b45005911ccbbf7d79f73bb2be41117228ebe1638024a18e3",
+      "reason": "Reviewed public releases: retain readiness fixes; MMC display branding, complete guides and exact archive compatibility; test catalog reflects current 12-yard default and one-shot action"
     },
     {
       "path": "Modules/GamedayAtmosphere/Source/LineupAtmosphere.h",
@@ -2013,8 +2018,8 @@
     },
     {
       "path": "Modules/GamedayAtmosphere/Source/LogPolicy.h",
-      "sha256": "d56323833394587e1922cd451a8d78b4d527b3fc261fbb0477f975c47cc6df51",
-      "reason": "Approved integrated release-readiness fixes; native contracts and saved data preserved"
+      "sha256": "9a872dba7176c117a20478a5bbfc6986314814265faa8ad0915a0e7d2ff3842a",
+      "reason": "Reviewed public releases: retain readiness fixes; MMC display branding, complete guides and exact archive compatibility; test catalog reflects current 12-yard default and one-shot action"
     },
     {
       "path": "Modules/GamedayAtmosphere/Source/MajorReplay.h",
@@ -2043,8 +2048,8 @@
     },
     {
       "path": "Modules/GamedayAtmosphere/Source/MmcPlugin.cs",
-      "sha256": "3c3cf40b6bde3577306af337672086d650c6b0f9894a94f3fff3d033103ed6f2",
-      "reason": "Approved integrated release-readiness fixes; native contracts and saved data preserved"
+      "sha256": "f90c0bb61826ed193215fef59d5c4a09ffc693a707950ba77cd139d65fe4efd2",
+      "reason": "Reviewed public releases: retain readiness fixes; MMC display branding, complete guides and exact archive compatibility; test catalog reflects current 12-yard default and one-shot action"
     },
     {
       "path": "Modules/GamedayAtmosphere/Source/MotionSoundPairing.h",
@@ -2088,8 +2093,8 @@
     },
     {
       "path": "Modules/GamedayAtmosphere/Source/NativeRuntime.cpp",
-      "sha256": "5c294317a461c4623f07ab3697afbb94b567566cb40a05b57f01acae9a7592f4",
-      "reason": "Approved integrated release-readiness fixes; native contracts and saved data preserved"
+      "sha256": "edc42cc47d48622f6cfcacd2dbeab2db9f734960419c1a73ad9f758e40186c12",
+      "reason": "Reviewed public releases: retain readiness fixes; MMC display branding, complete guides and exact archive compatibility; test catalog reflects current 12-yard default and one-shot action"
     },
     {
       "path": "Modules/GamedayAtmosphere/Source/NativeSackFacts.h",
@@ -2193,8 +2198,8 @@
     },
     {
       "path": "Modules/GamedayAtmosphere/Source/ReactionAudioRuntime.h",
-      "sha256": "04346ebb03290f86b855b5222b3e233af508f1900350f26df068b8623c6504b7",
-      "reason": "Approved integrated release-readiness fixes; native contracts and saved data preserved"
+      "sha256": "16916658b1807b8da536d1f13148ea272ddf8e9e5fa853bd9fcbd0da5ba191e9",
+      "reason": "Reviewed public releases: retain readiness fixes; MMC display branding, complete guides and exact archive compatibility; test catalog reflects current 12-yard default and one-shot action"
     },
     {
       "path": "Modules/GamedayAtmosphere/Source/ReactionCatalog.h",
@@ -2273,8 +2278,8 @@
     },
     {
       "path": "Modules/GamedayAtmosphere/Source/SeatBaseline.h",
-      "sha256": "79b2b59140242364e613f391da719c2e4c982414cb7844187119ba29dcc9e268",
-      "reason": "Approved integrated release-readiness fixes; native contracts and saved data preserved"
+      "sha256": "1df1826bd697eb0cb09c4e23aeecfe25c6b7ba4b92244854a693c2af6ab6ef4d",
+      "reason": "Reviewed public releases: retain readiness fixes; MMC display branding, complete guides and exact archive compatibility; test catalog reflects current 12-yard default and one-shot action"
     },
     {
       "path": "Modules/GamedayAtmosphere/Source/SeatHash.h",
@@ -2388,8 +2393,8 @@
     },
     {
       "path": "Modules/GamedayAtmosphere/Source/SustainedCrowd.h",
-      "sha256": "8b22fece5310f27307c3516852974bb8e1404604accf4dd65847f060ec97468a",
-      "reason": "Approved integrated release-readiness fixes; native contracts and saved data preserved"
+      "sha256": "018706045506d2367389d96739549dc378fa2f5174a63bfbb595a78b6380fcc0",
+      "reason": "Reviewed public releases: retain readiness fixes; MMC display branding, complete guides and exact archive compatibility; test catalog reflects current 12-yard default and one-shot action"
     },
     {
       "path": "Modules/GamedayAtmosphere/Source/SwellAudioRuntime.h",
@@ -2408,8 +2413,8 @@
     },
     {
       "path": "Modules/GamedayAtmosphere/Source/VisitorPlans.h",
-      "sha256": "76a3c21a9c9c7f0898bdfd25161244b1f41651b3ad93fed18bcdea86036337b1",
-      "reason": "Approved integrated release-readiness fixes; native contracts and saved data preserved"
+      "sha256": "6bef5825200e452fb77e7c7d3b44afdf4563266d9ea4678418e4a3ce3cc3b3ac",
+      "reason": "Reviewed public releases: retain readiness fixes; MMC display branding, complete guides and exact archive compatibility; test catalog reflects current 12-yard default and one-shot action"
     },
     {
       "path": "Modules/GamedayAtmosphere/Tests/AttendanceAudioTests.cpp",
@@ -2425,6 +2430,16 @@
       "path": "Modules/GamedayAtmosphere/Tests/AttendanceTimelineTests.cpp",
       "sha256": "44301907be6e27de8d7a87868758db0300ab61dc3e49b9ab75285d4ce5639a4e",
       "reason": "Approved integrated release-readiness fixes; native contracts and saved data preserved"
+    },
+    {
+      "path": "Modules/GamedayAtmosphere/Tests/AudienceCorrectionTests.cpp",
+      "sha256": "9ca6139fb49c45a290381812ce0c1fe330082bcc639fe12335a9c96376aadd64",
+      "reason": "Reviewed public releases: retain readiness fixes; MMC display branding, complete guides and exact archive compatibility; test catalog reflects current 12-yard default and one-shot action"
+    },
+    {
+      "path": "Modules/GamedayAtmosphere/Tests/AudienceModelTests.cpp",
+      "sha256": "0f8d1cb90bb9046ae1ec08efde8d73d739ce90ecb1444b7f085cf3adee06a3da",
+      "reason": "Reviewed public releases: retain readiness fixes; MMC display branding, complete guides and exact archive compatibility; test catalog reflects current 12-yard default and one-shot action"
     },
     {
       "path": "Modules/GamedayAtmosphere/Tests/AwayCrowdIntegrationTests.cpp",
@@ -2453,8 +2468,8 @@
     },
     {
       "path": "Modules/GamedayAtmosphere/Tests/ConfigurationOptions.inc",
-      "sha256": "49790fa5b73200cd70e84e8c3ee8d6e6d8fd9c70a9f580da650280313047f570",
-      "reason": "Retain prior COT integration; 0.1.6 Gameday Atmosphere branding and appended stable-ID visitor-strength control, new-plan-only odds preference with existing native/neutral/protected/history gates retained."
+      "sha256": "52f7e1dd87f00a6781a01eef9ee672eaba8a44a00d2d0e62f4720ea75c42bb6f",
+      "reason": "Reviewed public releases: retain readiness fixes; MMC display branding, complete guides and exact archive compatibility; test catalog reflects current 12-yard default and one-shot action"
     },
     {
       "path": "Modules/GamedayAtmosphere/Tests/CrowdCohesionTests.cpp",
@@ -2482,14 +2497,24 @@
       "reason": "Approved integrated release-readiness fixes; native contracts and saved data preserved"
     },
     {
+      "path": "Modules/GamedayAtmosphere/Tests/HomeCrowdQuietTests.cpp",
+      "sha256": "713fa406c11540a0c8faa82ffa066fd7469ec9b0267fd8bfa0a1154066640f39",
+      "reason": "Private away-TD diagnostics: retain paused evidence without extending audio freshness; enable normal quieting logs. No reaction, history or attendance changes."
+    },
+    {
       "path": "Modules/GamedayAtmosphere/Tests/HostChecks.cs",
       "sha256": "12be68f44f3bc4476704d1d9e945ce322ae122e6919724cf588982da69ddf43b",
       "reason": "Retain prior COT integration; 0.1.6 Gameday Atmosphere branding and appended stable-ID visitor-strength control, new-plan-only odds preference with existing native/neutral/protected/history gates retained."
     },
     {
+      "path": "Modules/GamedayAtmosphere/Tests/LauncherDiagnosticsTests.cs",
+      "sha256": "9f97d5473f1d58391bbf4f32704f49967a655799cefb37cc1ae62c7f633fe091",
+      "reason": "Reviewed public releases: retain readiness fixes; MMC display branding, complete guides and exact archive compatibility; test catalog reflects current 12-yard default and one-shot action"
+    },
+    {
       "path": "Modules/GamedayAtmosphere/Tests/LoggingTests.cpp",
-      "sha256": "59e2de5cb413e147432164ccd76cbba889a60511e591060b59c53891c1985d07",
-      "reason": "Approved integrated release-readiness fixes; native contracts and saved data preserved"
+      "sha256": "39bc291ac48facdcb6fa4d4c4fa3a8ad61e19b12f3de7d7aacccf1d6f8f29270",
+      "reason": "Reviewed public releases: retain readiness fixes; MMC display branding, complete guides and exact archive compatibility; test catalog reflects current 12-yard default and one-shot action"
     },
     {
       "path": "Modules/GamedayAtmosphere/Tests/MajorReplayTests.cpp",
@@ -2508,8 +2533,8 @@
     },
     {
       "path": "Modules/GamedayAtmosphere/Tests/NativeAppearanceTests.cpp",
-      "sha256": "224b015ac842a59981a563bd4b1012bf417203c8854a11a4eb9229d3ed9dca55",
-      "reason": "Approved integrated release-readiness fixes; native contracts and saved data preserved"
+      "sha256": "c44681933147c3479a10333f93d98875bfe8fa929c2fd2e42604ead570fb3f8e",
+      "reason": "Reviewed public releases: retain readiness fixes; MMC display branding, complete guides and exact archive compatibility; test catalog reflects current 12-yard default and one-shot action"
     },
     {
       "path": "Modules/GamedayAtmosphere/Tests/NativeAudienceTests.cpp",
@@ -2518,8 +2543,8 @@
     },
     {
       "path": "Modules/GamedayAtmosphere/Tests/NativeStartingAttendanceTests.cpp",
-      "sha256": "4badfd608add4543f8d4d17d867252d4e60475124851f338aab637ea2e5310a9",
-      "reason": "Approved integrated release-readiness fixes; native contracts and saved data preserved"
+      "sha256": "07d647ee92e7de75d720e65c811e09ac012d701879d6e4e78159e791cfa79c31",
+      "reason": "Reviewed public releases: retain readiness fixes; MMC display branding, complete guides and exact archive compatibility; test catalog reflects current 12-yard default and one-shot action"
     },
     {
       "path": "Modules/GamedayAtmosphere/Tests/PopulationReactionsTests.cpp",
@@ -2543,8 +2568,8 @@
     },
     {
       "path": "Modules/GamedayAtmosphere/Tests/ReactionRuntimeTests.cpp",
-      "sha256": "0fa40ac9dc8a5370d90a36c4fe1b7f4e15eeb6b174799e9dc934012f8eca628a",
-      "reason": "Approved integrated release-readiness fixes; native contracts and saved data preserved"
+      "sha256": "754c3f9c7604703295b76bc0efd46f8172a21560db5316d48820ce7b8d7e2c36",
+      "reason": "Reviewed public releases: retain readiness fixes; MMC display branding, complete guides and exact archive compatibility; test catalog reflects current 12-yard default and one-shot action"
     },
     {
       "path": "Modules/GamedayAtmosphere/Tests/ReplayPresentationTests.cpp",
@@ -2573,8 +2598,8 @@
     },
     {
       "path": "Modules/GamedayAtmosphere/Tests/SeatBaselineTests.cpp",
-      "sha256": "d6e837be0ef2ab921251dbd9f600aa98d9af4e04df79d397b96c4e6184e65bd6",
-      "reason": "Approved integrated release-readiness fixes; native contracts and saved data preserved"
+      "sha256": "69637bad6571992d140c834c33e3c7a086b22b8261f3299133964031b3d50ced",
+      "reason": "Reviewed public releases: retain readiness fixes; MMC display branding, complete guides and exact archive compatibility; test catalog reflects current 12-yard default and one-shot action"
     },
     {
       "path": "Modules/GamedayAtmosphere/Tests/SeatRuntimeTests.cpp",
@@ -2618,8 +2643,8 @@
     },
     {
       "path": "Modules/GamedayAtmosphere/Tests/test_settings_menu_catalog.py",
-      "sha256": "bef11af665968cd0f4c4aca2b4bb0ed67a977022243f709a8770606e9ae0c7cd",
-      "reason": "Retain prior COT integration; 0.1.6 Gameday Atmosphere branding and appended stable-ID visitor-strength control, new-plan-only odds preference with existing native/neutral/protected/history gates retained."
+      "sha256": "5e79f217605af12c924c1e461f4be208f4dbed728ca33f8a7018aa005c56f93c",
+      "reason": "Reviewed public releases: retain readiness fixes; MMC display branding, complete guides and exact archive compatibility; test catalog reflects current 12-yard default and one-shot action"
     }
   ]
 }

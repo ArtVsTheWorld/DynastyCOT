@@ -16,6 +16,7 @@ namespace SituationalPractice
         private int resumeUserTeam;
         private string operation="startup";
         private int diagnosticPhase=-1,attachAttempts;
+        private long nextStopCheck;
         private Scenario starting,pending;
         private NativeSnapshot previous;
         private int command,seen,plays,waitingResult;
@@ -93,7 +94,7 @@ namespace SituationalPractice
                 runtime.QueueCustomModeStart(drive,++command);
                 pending=fresh;sideReset=true;
             }
-            Log("Practice mode changed to "+next+"; fresh session, scores and stats reset.");
+            diagnostics.Status("Practice mode changed to "+next+"; fresh session, scores and stats reset.");
         }
         private void Attach()
         {
@@ -112,7 +113,7 @@ namespace SituationalPractice
             lastError=null;
             if(session.Mode==PracticeMode.DefaultPractice){
                 runtime.UseDefaultPractice(resumeUserTeam>=0);seen=runtime.Completed;resumeUserTeam=-1;
-                Log("Default Practice ready. Pause > Mode selects Drive Practice or Scrimmage. No initialization play needed for normal practice.");return;
+                diagnostics.Status("Default Practice is active. Custom drives and scoring are inactive. Once the practice pause menu is bound, use Pause > Mode for Drive Practice or Scrimmage.");return;
             }
             runtime.RequestNativeHud(true);
             if(resumeUserTeam>=0){
@@ -138,7 +139,12 @@ namespace SituationalPractice
                 diagnostics.GameIdentity(game);
                 bool requestedStop=false,failed=false;
                 try {
-                    while(!game.HasExited && !(requestedStop=File.Exists(Path.Combine(folder,"runtime.stop")))) {
+                    while(!game.HasExited) {
+                        if(timer.ElapsedMilliseconds>=nextStopCheck){
+                            requestedStop=File.Exists(Path.Combine(folder,"runtime.stop"));
+                            if(requestedStop)break;
+                            nextStopCheck=timer.ElapsedMilliseconds+500;
+                        }
                         try {
                             if(runtime==null)Attach();
                             operation="read practice snapshot";
@@ -247,7 +253,11 @@ namespace SituationalPractice
                             }
                             previous=null;pending=null;waitingResult=0;manualSpot=false;livePlay=false;sideReset=false;sideResetRequested=false;
                             if(expected){session=null;sessionMatch=0;}
-                            if(lastError!=error.Message){lastError=error.Message;Log(lastError);}
+                            if(lastError!=error.Message){
+                                lastError=error.Message;
+                                diagnostics.Status(expected?"Practice features are inactive outside a settled offline practice. "+lastError
+                                    :"Practice could not complete "+operation+": "+lastError+" Check the game build and other practice or controller plugins. Details are in "+diagnostics.RunFolder+".");
+                            }
                         }
                         Thread.Sleep(runtime==null?1000:40);
                     }
@@ -278,7 +288,7 @@ namespace SituationalPractice
                     }catch{}
                 };
                 bool created;using(var mutex=new Mutex(true,"Local\\SituationalPractice-"+pid,out created)) {
-                    if(!created){diagnostics.Log("Another practice helper owns this game; duplicate helper exiting.");return;}
+                    if(!created){diagnostics.Log("Another practice helper owns this game; duplicate helper exiting.");diagnostics.Flush();return;}
                     int resume=args.Length>2 && (args[1]=="resume" || args[1]=="resume-pick")?int.Parse(args[2]):-1;
                     new PracticeRunner(pid,diagnostics,args.Length>1 && (args[1]=="refresh" || args[1]=="resume-pick"),resume).Run();
                 }

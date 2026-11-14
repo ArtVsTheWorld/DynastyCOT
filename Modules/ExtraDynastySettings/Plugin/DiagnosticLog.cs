@@ -14,20 +14,24 @@ namespace OfflineDynastySettings
     // Diagnostics are best effort. A locked report must never disable gameplay or saving.
     internal static class DiagnosticLog
     {
-        internal const string Version = "0.2.11";
+        internal const string Version = "0.2.12";
         private static readonly object sync = new object();
         internal static string PluginFolder { get { return Path.GetDirectoryName(typeof(DiagnosticLog).Assembly.Location); } }
         private static string Reports(string folder) { return Path.Combine(Ace.DynastyCOT.UserStorage.Folder("ExtraSettings"),"Diagnostics"); }
         internal static void Write(string folder,string component,string message)
         {
             try { lock(sync) {
+                if(message.Length>32768)message=message.Substring(0,32768)+" [truncated]";
                 string path=SettingsFiles.PathFor(folder,"OfflineDynastySettings.log");
                 if(File.Exists(path) && new FileInfo(path).Length>2*1024*1024) {
                     string old=path+".1";if(File.Exists(old))File.Delete(old);File.Move(path,old);
                 }
-                File.AppendAllText(path,DateTime.Now.ToString("O",CultureInfo.InvariantCulture)+" ["+Version+"]["+component+"][host "+Process.GetCurrentProcess().Id+"/thread "+Thread.CurrentThread.ManagedThreadId+"] "+message+Environment.NewLine);
+                File.AppendAllText(path,DateTime.Now.ToString("O",CultureInfo.InvariantCulture)+" ["+Version+"]["+component+"][host "+hostPid+"/thread "+Thread.CurrentThread.ManagedThreadId+"] "+message+Environment.NewLine);
             } } catch { }
         }
+        private static string lastSnapshot;
+        private static readonly int hostPid=CurrentPid();
+        private static int CurrentPid(){using(var host=Process.GetCurrentProcess())return host.Id;}
         private static string Digest(byte[] bytes)
         { if(bytes==null)return "unreadable";using(SHA256 sha=SHA256.Create())return BitConverter.ToString(sha.ComputeHash(bytes)).Replace("-","").ToLowerInvariant(); }
         internal static string Mismatch(string component,long rva,string expected,byte[] actual)
@@ -37,7 +41,7 @@ namespace OfflineDynastySettings
                 +(actual==null?"unreadable":BitConverter.ToString(actual,0,Math.Min(actual.Length,32)))
                 +". No unknown code will be overwritten. This is a code-region check, not a whole-EXE hash requirement.";
         }
-        private static void Report(string folder,string name,object value)
+        private static bool Report(string folder,string name,object value)
         {
             try { lock(sync) {
                 string directory=Reports(folder);Directory.CreateDirectory(directory);
@@ -45,12 +49,14 @@ namespace OfflineDynastySettings
                 try {
                     File.WriteAllText(temporary,new JavaScriptSerializer().Serialize(value));
                     if(File.Exists(path))File.Replace(temporary,path,null);else File.Move(temporary,path);
+                    return true;
                 } finally { if(File.Exists(temporary))File.Delete(temporary); }
-            } } catch { }
+            } } catch { return false; }
         }
         internal static void Started(Process game)
         {
             string folder=PluginFolder;
+            lastSnapshot=null;
             SettingsFiles.Migrate(folder);
             Write(folder,"startup","Game PID="+game.Id+" started="+game.StartTime.ToUniversalTime().ToString("O")+". Whole-EXE hash gate: disabled. Targeted code checks and hook ownership remain enabled.");
             try {
@@ -76,7 +82,7 @@ namespace OfflineDynastySettings
                     os=Environment.OSVersion.ToString(),clr=Environment.Version.ToString(),wholeExeHashGate=false,
                     installedPlugins=installed,loadedPluginAssemblies=loaded,
                     savedDefensiveClock=ClockPreferences.Load(folder),offensiveExtendedPreference=File.Exists(SettingsFiles.PathFor(folder,"DynastyPlayClock.ini"))?File.ReadAllText(SettingsFiles.PathFor(folder,"DynastyPlayClock.ini")).Trim():"default",
-                    defenseSettingsPresent=File.Exists(Path.Combine(folder,"OfflinePlaycallSettings","dynasties.json")) });
+                    defenseSettingsPresent=File.Exists(Path.Combine(Ace.DynastyCOT.UserStorage.Folder("ExtraSettings"),"OfflinePlaycallSettings","dynasties.json")) });
             } catch(Exception ex) { Write(folder,"diagnostics","Environment inventory incomplete: "+ex); }
         }
         internal static void Hooks(PersistenceContext context)
@@ -88,6 +94,12 @@ namespace OfflineDynastySettings
             }
             Report(context.PluginFolder,"hooks.json",new { plugin=Version,pid=context.Pid,utc=DateTime.UtcNow.ToString("O"),checks=checks,
                 defensiveInitializerRva="0x35fa471",legacyDefensiveTimerHook=false,wholeExeHashGate=false });
+        }
+        internal static string ClockContext(int? mode,int? matchType)
+        {
+            if(!mode.HasValue||!matchType.HasValue)return "Waiting for a readable game context.";
+            if(mode.Value!=14||matchType.Value!=3)return "Match-only clock changes are inactive outside an eligible offline Dynasty match.";
+            return "Offline Dynasty mode and session match. Timer counters show which changes have actually run.";
         }
         internal static void Runtime(PersistenceContext context,Func<long,int,byte[]> read)
         {
@@ -105,13 +117,19 @@ namespace OfflineDynastySettings
                         }
                     } catch { live=new { status="not available during this game transition" }; }
                 }
-                Report(context.PluginFolder,"runtime.json",new { plugin=Version,pid=context.Pid,utc=DateTime.UtcNow.ToString("O"),status="active; hook ownership verified",mode=mode,matchType=matchType,
+                var evidence=new { plugin=Version,pid=context.Pid,status="Runtime loaded and hook ownership verified",clockContext=ClockContext(mode,matchType),mode=mode,matchType=matchType,
                     offensive60Seconds=BitConverter.ToInt32(clock,0)==1,offensiveResetOverrides=BitConverter.ToUInt32(clock,8),
                     offensiveResetsSeen=BitConverter.ToUInt32(clock,0x10),defensiveChoiceSeconds=BitConverter.ToInt32(clock,0x58),
                     defensiveClockEnabled=BitConverter.ToInt32(clock,0x58)>0,defensivePreferenceRevision=BitConverter.ToUInt32(clock,0x5c),defensiveInitializationsSeen=BitConverter.ToUInt32(clock,0x78),
                     defensiveInitializationsApplied=BitConverter.ToUInt32(clock,0x7c),lastAppliedDefensiveSeconds=BitConverter.ToInt32(clock,0x80),
                     defensiveGateReads=BitConverter.ToUInt32(clock,0x98),lastOffensiveClockModeAtDefensiveGate=BitConverter.ToInt32(clock,0x9c),
-                    defensiveGateCorrections=BitConverter.ToUInt32(clock,0xa0),defenseSettingsRevision=BitConverter.ToUInt32(split,0),liveDefensiveTimer=live });
+                    defensiveGateCorrections=BitConverter.ToUInt32(clock,0xa0),defenseSettingsRevision=BitConverter.ToUInt32(split,0),liveDefensiveTimer=live };
+                var serializer=new JavaScriptSerializer();
+                string signature=serializer.Serialize(evidence);
+                if(signature==lastSnapshot)return;
+                var report=serializer.Deserialize<Dictionary<string,object>>(signature);
+                report["utc"]=DateTime.UtcNow.ToString("O");
+                if(Report(context.PluginFolder,"runtime.json",report))lastSnapshot=signature;
             } catch(Exception ex) { Write(context.PluginFolder,"diagnostics","Runtime snapshot unavailable: "+ex.Message); }
         }
         internal static void Ended(string folder,int pid,int? exitCode)

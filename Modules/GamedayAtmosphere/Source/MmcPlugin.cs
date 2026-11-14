@@ -18,7 +18,7 @@ using FrostySdk.Interfaces;
 [assembly: AssemblyFileVersion(DynamicGamedayAtmosphere.BuildInfo.AssemblyVersion)]
 [assembly: PluginVersion(DynamicGamedayAtmosphere.BuildInfo.Version)]
 [assembly: PluginAuthor("Ace")]
-[assembly: PluginDisplayName("Gameday Atmosphere")]
+[assembly: PluginDisplayName("Ace\u2019s Gameday Atmosphere")]
 [assembly: RegisterExecutionAction(typeof(DynamicGamedayAtmosphere.AttendanceAction))]
 
 namespace DynamicGamedayAtmosphere
@@ -47,7 +47,6 @@ namespace DynamicGamedayAtmosphere
 #endif
         private static int watching;
         private static Mutex watcherMutex;
-        private static ILogger hostLogger;
         private static readonly object noteLock=new object();
         public AttendanceAction()
         {
@@ -63,7 +62,6 @@ namespace DynamicGamedayAtmosphere
         public static string LogsFolder { get { return Path.Combine(DataFolder,"Logs"); } }
         private static void Note(ILogger logger,string text)
         {
-            logger=logger??Interlocked.CompareExchange(ref hostLogger,null,null);
             string failure=null;
             try {Directory.CreateDirectory(LogsFolder);
             lock(noteLock){
@@ -73,8 +71,9 @@ namespace DynamicGamedayAtmosphere
                 int count=Math.Min(limit,entry.Length);long size=File.Exists(path)?new FileInfo(path).Length:0;
                 using(var file=new FileStream(path,size>=limit||size+count>limit?FileMode.Create:FileMode.Append,FileAccess.Write,FileShare.Read))file.Write(entry,0,count);
             }}catch(Exception error){failure=" Log file unavailable: "+error.Message;}
-            if(logger!=null)try{logger.Log("[Gameday] "+text+(failure??""),new object[0]);}catch{}
-            else if(failure!=null)using(var diagnostic=new DefaultTraceListener())diagnostic.WriteLine("[Gameday] "+text+failure);
+            // MMC owns its progress display and errors. GDA diagnostics stay in
+            // AppData even when a host logger is supplied by launch callbacks.
+            if(failure!=null)using(var diagnostic=new DefaultTraceListener())diagnostic.WriteLine("[Gameday] "+text+failure);
         }
         private static void Extract(string name,bool preserve){Ace.DynastyCOT.UserStorage.Current.WithModule("GamedayAtmosphere",()=>ExtractCore(name,preserve));}
         private static void ExtractCore(string name,bool preserve)
@@ -126,9 +125,6 @@ namespace DynamicGamedayAtmosphere
 #endif
         private static void Start(ILogger logger)
         {
-            // Registration can start the watcher before MMC supplies its logger.
-            // Later launch callbacks must still make that logger available.
-            if(logger!=null)Interlocked.Exchange(ref hostLogger,logger);
 #if STANDALONE_GAMEDAY
             string legacy=LegacyStandaloneIssue();if(legacy!=null){Note(logger,legacy);return;}
 #endif
@@ -142,6 +138,7 @@ namespace DynamicGamedayAtmosphere
                 string mmcElevation=LaunchDiagnostics.Elevation(Process.GetCurrentProcess().Id);
                 try
                 {
+                    Note(logger,"Plugin discovered by MMC. Preparing verified runtime files; match-only features wait for an eligible offline game and are not active merely because the plugin is listed.");
                     if(Ace.DynastyCOT.UserStorage.Current.NeedsMigration("GamedayAtmosphere",PluginsFolder)){
                         var games=Process.GetProcessesByName("CollegeFB27");bool running=games.Length!=0;foreach(var game in games)game.Dispose();
                         if(running)throw new IOException("Close the game once to copy existing Gameday settings/history safely. Original files are retained.");
@@ -166,7 +163,7 @@ namespace DynamicGamedayAtmosphere
 #elif EXTERNAL_RUNTIME_LOADER
                     Note(logger,"Separate loader verified: loader EXE is packaged beside the native runtime, outside the plugin DLL; its SHA256 matches this build.");
 #endif
-                    Note(logger,"Watching for CollegeFB27.exe once per second | Plugin: "+typeof(AttendanceAction).Assembly.Location+" | Logs: "+LogsFolder+". Loading requires a game main window and a process age of at least 20 seconds. Unchanged launcher states repeat once per minute.");
+                    Note(logger,"Watching for CollegeFB27.exe once per second | Plugin: "+typeof(AttendanceAction).Assembly.Location+" | Logs: "+LogsFolder+". Loading requires a game main window and a process age of at least 20 seconds. Unchanged healthy launcher states are not repeated; loading and feature activation are separate.");
                     while(true)
                     {
                         watcherStep="enumerate game processes";watcherFile=null;var present=new HashSet<int>();
@@ -201,7 +198,7 @@ namespace DynamicGamedayAtmosphere
                                 Note(logger,"Starting direct runtime load | PID "+pid+" | MMC permissions: "+mmcElevation+" | Game permissions: "+LaunchDiagnostics.Elevation(pid)+" | Runtime: "+file);
                                 Ace.DynastyCOT.UserStore.Atomic(Path.Combine(RuntimeFolder,"origin-"+pid+".txt"),Encoding.UTF8.GetBytes("DGA-ORIGIN-1\n"+pid+"\n"+game.StartTime.ToUniversalTime().ToFileTimeUtc()+"\n"+PluginsFolder+"\n"));
                                 ManagedRuntimeLoader.Load(pid,file,text=>Note(logger,text));
-                                Note(logger,"Runtime loaded directly for PID "+pid+". Activation status is in "+Path.Combine(LogsFolder,"DynamicGamedayAtmosphere.log")+".");
+                                Note(logger,"Native image loaded directly for PID "+pid+"; native binding checks and feature readiness are reported separately in "+Path.Combine(LogsFolder,"status.txt")+". Waiting in the Dynasty hub is normal for match-only features.");
 #else
                                 file=Path.Combine(RuntimeFolder,"LoadDynamicGamedayAtmosphere.exe");
 #if EXTERNAL_RUNTIME_LOADER

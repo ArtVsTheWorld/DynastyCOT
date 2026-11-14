@@ -34,6 +34,7 @@ string prefix=Path.GetFullPath(root).TrimEnd('\\')+"\\",path=Path.GetFullPath(Pa
   }
   internal static string ValidateRoot(string value){
    if(String.IsNullOrWhiteSpace(value))throw new IOException("Choose MMCModManager.exe.");string path=Path.GetFullPath(value.Trim()).TrimEnd('\\');if(File.Exists(path)&&Path.GetFileName(path).Equals("MMCModManager.exe",StringComparison.OrdinalIgnoreCase))path=Path.GetDirectoryName(path);
+   if(File.Exists(Path.Combine(path,"MMCModManager.exe"))){NoLinks(path,path);return path;}
    var children=Directory.Exists(path)?Directory.GetDirectories(path,"MMC_ModManager*").Where(x=>File.Exists(Path.Combine(x,"MMCModManager.exe"))).ToArray():new string[0];
    if(children.Length>1)throw new IOException("Several Mod Managers found. Choose the one you use.");if(children.Length==1)path=children[0];if(!File.Exists(Path.Combine(path,"MMCModManager.exe")))throw new IOException("Choose the folder containing MMCModManager.exe.");NoLinks(path,path);return path;
   }

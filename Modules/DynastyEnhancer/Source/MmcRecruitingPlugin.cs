@@ -16,7 +16,7 @@ using FrostySdk.Interfaces;
 [assembly: AssemblyFileVersion("0.1.105.0")]
 [assembly: PluginVersion("0.1.105-prototype")]
 [assembly: PluginAuthor("ArtVsTheWorld")]
-[assembly: PluginDisplayName("Beyond the Field")]
+[assembly: PluginDisplayName("Ace\u2019s Beyond the Field")]
 [assembly: RegisterExecutionAction(typeof(DynastyEnhancer.LaunchAction))]
 namespace DynastyEnhancer {
  public sealed class LaunchAction : ExecutionAction {
@@ -42,8 +42,8 @@ namespace DynastyEnhancer {
     if(stream==null)throw new IOException("Missing payload manifest");
     using(var reader=new StreamReader(stream))for(string line;(line=reader.ReadLine())!=null;){
      if(line.Length==0)continue;var item=line.Split('|');if(item.Length!=2||item[0].Length!=64)throw new IOException("Invalid payload manifest");
-     var path=PayloadPath(item[1]);if(!File.Exists(path))throw new IOException("Missing "+item[1]+"; install the complete Beyond the Field package.");
-     using(var hash=SHA256.Create())using(var input=File.OpenRead(path))if(BitConverter.ToString(hash.ComputeHash(input)).Replace("-","").ToLowerInvariant()!=item[0])throw new IOException("Payload differs: "+item[1]);
+     var path=PayloadPath(item[1]);if(!File.Exists(path))throw new IOException("Missing runtime file "+path+". Restore the matching Beyond the Field release DLL and prepare its runtime before launching the game.");
+     using(var hash=SHA256.Create())using(var input=File.OpenRead(path))if(BitConverter.ToString(hash.ComputeHash(input)).Replace("-","").ToLowerInvariant()!=item[0])throw new IOException("Integrity check failed for "+path+". Restore the matching Beyond the Field release DLL and prepare its runtime before launching the game.");
     }
    }
   }
@@ -51,22 +51,23 @@ namespace DynastyEnhancer {
    try{
     var config=new JavaScriptSerializer().Deserialize<Dictionary<string,object>>(File.ReadAllText(Path.Combine(Ace.DynastyCOT.UserStorage.Folder("BeyondTheField"),"dynasty-enhancer.json")));
     foreach(var key in new[]{"node","exporter"}){object value;if(!config.TryGetValue(key,out value)||!(value is string))return "Missing configuration field: "+key;
-     var path=(string)value;if(key=="node"&&path=="../Shared/node.exe")path=Path.Combine(RuntimeFolder,"Shared","node.exe");else if(key=="exporter"&&path=="Tools/export_runtime.mjs")path=Path.Combine(RuntimeFolder,"Tools","export_runtime.mjs");else if(!Path.IsPathRooted(path))path=Path.Combine(Ace.DynastyCOT.UserStorage.Folder("BeyondTheField"),path);if(!File.Exists(path))return "Configured "+key+" is unavailable: "+path;}
+     var path=(string)value;if(key=="node"&&path=="../Shared/node.exe")path=Path.Combine(RuntimeFolder,"Shared","node.exe");else if(key=="exporter"&&path=="Tools/export_runtime.mjs")path=Path.Combine(RuntimeFolder,"Tools","export_runtime.mjs");else if(!Path.IsPathRooted(path))path=Path.Combine(Ace.DynastyCOT.UserStorage.Folder("BeyondTheField"),path);if(!File.Exists(path))return "Social Media is waiting for its configured "+key+" at "+path+". Check the path in the Beyond the Field configuration or repair the matching release.";}
     return "";
    }catch(Exception error){return "Runtime configuration unavailable: "+error.Message;}
   }
   private static void Note(string message){
-   var folder=Path.Combine(Ace.DynastyCOT.UserStorage.Folder("BeyondTheField"),"Logs");Directory.CreateDirectory(folder);
+   try{var folder=Path.Combine(Ace.DynastyCOT.UserStorage.Folder("BeyondTheField"),"Logs");Directory.CreateDirectory(folder);
    var path=Path.Combine(folder,"BeyondTheField-launcher.log");
    if(File.Exists(path)&&new FileInfo(path).Length>1024*1024){if(File.Exists(path+".1"))File.Delete(path+".1");File.Move(path,path+".1");}
    File.AppendAllText(path,DateTimeOffset.Now.ToString("O")+" | "+message+Environment.NewLine);
+   }catch(Exception error){Debug.WriteLine("Beyond the Field diagnostics unavailable: "+error.Message);}
   }
   private static void Start(){
    if(Interlocked.CompareExchange(ref watching,1,0)!=0)return;
    bool first;watcherMutex=new Mutex(false,"Local\\DynastyEnhancer.MMC."+Process.GetCurrentProcess().Id,out first);if(!first)return;
    new Thread(()=>{
     try{
-     Prepare();Note("v105 watcher ready; Social Media and recruiting Fog activate independently as their native assets become available.");
+     Prepare();Note("MMC discovered Beyond the Field. Runtime files passed integrity checks. Waiting for the game window before loading Social Media and recruiting.");
      var loaded=new HashSet<string>();var retryAt=new Dictionary<string,DateTime>();var attempts=new Dictionary<string,int>();string previousIssue=null;
      while(true){
       var issue=ConfigurationIssue();if(issue.Length!=0){if(issue!=previousIssue)Note(issue);previousIssue=issue;Thread.Sleep(1000);continue;}previousIssue=null;
@@ -80,9 +81,9 @@ namespace DynastyEnhancer {
        // Payload hashes are verified by Prepare before the watcher starts.
        attempts[key]=3;
        DynamicGamedayAtmosphere.ManagedRuntimeLoader.Load(game.Id,Path.Combine(RuntimeFolder,nativeFile),Note);
-       loaded.Add(key);Note(nativeFile+" loaded for PID "+game.Id+"; see the native runtime logs for activation.");
+       loaded.Add(key);Note(nativeFile+" loaded for game PID "+game.Id+". Native hook and feature checks follow. See "+Path.Combine(Ace.DynastyCOT.UserStorage.Folder("BeyondTheField"),nativeFile==NativeFile?"social-media-status.log":"recruiting-fog-status.log")+".");
       }
-      }catch(Exception error){Note("Load attempt failed: "+error.Message);}
+      }catch(Exception error){Note("Runtime loading failed for game PID "+game.Id+": "+error.Message+". Check the named component and its AppData diagnostics. After resolving the cause, start a fresh game.");}
       Thread.Sleep(1000);
      }
     }catch(Exception error){try{Note("Watcher stopped: "+error.Message);}catch{}}

@@ -9,6 +9,37 @@ class CollectionInstallerChecks {
  static ModuleRelease Copy(ModuleRelease r){return Json.Serializer().Deserialize<ModuleRelease>(Json.Serializer().Serialize(r));}
  static string Root(string name){string root=Path.Combine(parent,name);Directory.CreateDirectory(root);File.WriteAllText(Path.Combine(root,".cot-fixture"),"isolated");File.WriteAllText(Path.Combine(root,"MMCModManager.exe"),"fixture; never executed");return root;}
  static CollectionInstaller Engine(string root){return new CollectionInstaller(catalog,new Fixture(root,parent));}
+ static void SelectedManagerWithNestedInstall(){
+  string selected=Root("explicit-manager");
+  string nested=Path.Combine(selected,"MMC_ModManager_nested");
+  Directory.CreateDirectory(nested);File.WriteAllText(Path.Combine(nested,"MMCModManager.exe"),"fixture; never executed");
+  Check(Paths.ValidateRoot(Path.Combine(selected,"MMCModManager.exe"))==selected,"Explicit manager executable stays selected when it has a nested MMC");
+  Check(Paths.ValidateRoot(selected)==selected,"Resolved manager folder remains stable when inspected again");
+ }
+ static void RetryLockedManualRestore(List<PreparedModule> payloads){
+  string root=Root("locked-manual-restore");
+  var history=UserData(root);var engine=Engine(root);
+  string first=Apply(root,payloads.Take(1).ToList());
+  string directory=Apply(root,payloads.Skip(1).Take(1).ToList());
+  string file=Paths.Resolve(root,"Plugins/"+payloads[1].Module.FileName);
+  string journalFile=Path.Combine(directory,"transaction.json");
+  using(var held=new FileStream(file,FileMode.Open,FileAccess.Read,FileShare.Read)){
+   try{engine.Restore(root,directory);throw new Exception("Locked manual restore unexpectedly succeeded");}
+   catch(IOException error){Check(Paths.Explain(error).Contains(file)&&Paths.Explain(error).Contains("locked file"),"Restore failure identifies the locked target and recoverable cause");}
+   var failed=Json.Read<Journal>(journalFile);
+   Check(failed.Status=="restore_failed"&&engine.Backups(root).Any(x=>x.Directory==directory),"Partially restored transaction stays visible and recoverable");
+   Check(failed.Operations.Any(o=>o.Before!=o.After&&Paths.Existing(Paths.Resolve(root,o.Path))==o.Before),"Real restore performed earlier reverse writes before the lock");
+   Reject(()=>engine.Execute(engine.Remove(root,new[]{payloads[0].Module.Id}),new Dictionary<string,string>(),s=>{}),"Pending manual restore blocks a new operation");
+   Reject(()=>engine.Restore(root,first),"Pending manual restore blocks an unrelated backup");
+  }
+  // A hard interruption can leave the earlier durable marker instead of the catch marker.
+  var interrupted=Json.Read<Journal>(journalFile);interrupted.Status="restoring";File.WriteAllBytes(journalFile,Json.Bytes(interrupted));
+  Reject(()=>engine.Execute(engine.Remove(root,new[]{payloads[0].Module.Id}),new Dictionary<string,string>(),s=>{}),"Process interruption during restoration also blocks new operations");
+  engine.Restore(root,directory);
+  Check(Json.Read<Journal>(journalFile).Status=="rolled_back"&&!File.Exists(file),"Retry completes with the original backup");
+  Check(engine.Inspect(root).Plugins.Count==1&&engine.Inspect(root).Plugins[0].Module==payloads[0].Module.Id,"Earlier independent module survives recovery");
+  Unchanged(root,history);
+ }
  static Downloads Client(string root){return new Downloads(new Fixture(root,parent),(url,max)=>{requests.Add(url);byte[] value;if(!remote.TryGetValue(url,out value))throw new IOException("Fixture endpoint missing: "+url);return value;});}
  static List<PreparedModule> Prepare(string root,IEnumerable<Module> modules){return modules.Select(m=>Client(root).Prepare(m,Copy(m.Current),Path.Combine(parent,"Cache"),CancellationToken.None,s=>{})).ToList();}
  static Dictionary<string,ModuleRelease> Choices(IEnumerable<PreparedModule> list){return list.ToDictionary(x=>x.Module.Id,x=>x.Release);}
@@ -16,6 +47,79 @@ class CollectionInstallerChecks {
  static Dictionary<string,string> UserData(string root){var values=new Dictionary<string,string>{{"COT-Runtime/DynastyEnhancer/RuntimeHistory/42/history.json","published words"},{"COT-Runtime/DynastyEnhancer/RecruitResumeHistory/42.json","native/mod recruit history"},{"COT-Runtime/DynastyEnhancer/DynastyEnhancementSettings/42.json","saved interest choice, fog and GPI"},{"Plugins/OfflineDynastySettings/DynastyClocks.json","per-Dynasty clocks"},{"Plugins/SituationalPractice/session.txt","session data"},{"Plugins/DynamicGamedayAtmosphere/history.json","saved crowd plan"}};foreach(var entry in values){string path=Paths.Resolve(root,entry.Key);Directory.CreateDirectory(Path.GetDirectoryName(path));File.WriteAllText(path,entry.Value);}return values;}
  static void Unchanged(string root,Dictionary<string,string> data){foreach(var entry in data)Check(File.ReadAllText(Paths.Resolve(root,entry.Key))==entry.Value,"User data changed: "+entry.Key);}
  static byte[] Zip(string dll,byte[] bytes,bool unsafeEntry=false){using(var output=new MemoryStream()){using(var zip=new ZipArchive(output,ZipArchiveMode.Create,true)){foreach(string name in new[]{unsafeEntry?"../"+dll:dll,"README.txt","FEATURES.md"}){var entry=zip.CreateEntry(name);using(var stream=entry.Open()){byte[] content=name.EndsWith(".dll")?bytes:Encoding.UTF8.GetBytes("fixture text");stream.Write(content,0,content.Length);}}}return output.ToArray();}}
+ static byte[] GuideZip(Module module,byte[] dll,IEnumerable<string> names,byte[] guide,int readmeSize){
+  using(var output=new MemoryStream()){
+   using(var zip=new ZipArchive(output,ZipArchiveMode.Create,true))foreach(var name in names){
+    byte[] content=name.EndsWith(module.FileName,StringComparison.Ordinal)?dll:name.EndsWith(".pdf",StringComparison.OrdinalIgnoreCase)?guide:name=="README.txt"?new byte[readmeSize]:Encoding.ASCII.GetBytes("fixture text");
+    using(var entry=zip.CreateEntry(name,CompressionLevel.Fastest).Open())entry.Write(content,0,content.Length);
+   }
+   return output.ToArray();
+  }
+ }
+ static PreparedModule StageLayout(string root,Module module,byte[] dll,string[] names,byte[] guide,string guideHash,int readmeSize=22,string supportPath=null,ModuleRelease selected=null){
+  var release=Copy(selected??module.Current);
+  var zip=GuideZip(module,dll,names,guide,readmeSize);release.ArchiveBytes=zip.Length;release.ArchiveSha256=Paths.Hash(zip);release.DllSha256=Paths.Hash(dll);
+  var proof=new Dictionary<string,object>{{"name",module.Id},{"version",release.Version},{"archiveSha256",release.ArchiveSha256},{"dllSha256",release.DllSha256}};
+  if(guideHash!=null)proof["playerGuideSha256"]=guideHash;
+  if(supportPath!=null)proof["supportFiles"]=new Dictionary<string,string>{{supportPath,Paths.Hash(Encoding.ASCII.GetBytes("fixture text"))}};
+  var reader=new Downloads(new Fixture(root,parent),(url,max)=>url==release.ArchiveUrl?zip:Json.Bytes(proof));
+  return reader.Prepare(module,release,Path.Combine(parent,"LayoutCache"),CancellationToken.None,s=>{});
+ }
+ static void ArchiveLayouts(List<PreparedModule> payloads,string futureFixtureDll){
+  string root=Root("guide-layouts");var m=catalog.Get("GamedayAtmosphere");var dll=File.ReadAllBytes(payloads.Single(p=>p.Module.Id==m.Id).Dll);
+  var basic=new[]{m.FileName,"README.txt","FEATURES.md"};var names=basic.Concat(new[]{m.GuideName}).ToArray();
+  byte[] guide=Encoding.ASCII.GetBytes("%PDF-1.4\n1 0 obj\n<< /Type /Catalog >>\nendobj\n%%EOF\n");string digest=Paths.Hash(guide);
+  Check(StageLayout(root,m,dll,basic,guide,null).Guide==null,"Historical three-file layout accepted");
+  Check(StageLayout(root,m,dll,basic.Concat(new[]{"LICENSES.txt"}).ToArray(),guide,null).Guide==null,"Historical separate license accepted");
+  string support="COT-Support/"+m.Id+"/"+m.Current.Version+"/GamedayAtmosphereNative-"+m.Current.Version+".dll";
+  var external=new[]{"Plugins/"+m.FileName,"README.txt","FEATURES.md",support};
+  foreach(bool license in new[]{false,true}){
+   var entries=license?external.Concat(new[]{"LICENSES.txt"}).ToArray():external;
+   var legacy=StageLayout(root,m,dll,entries,guide,null,22,support);
+   Check(legacy.SupportFiles.Count==1&&legacy.SupportFiles.ContainsKey(support)&&legacy.Guide==null,"Historical external native layout and optional license accepted");
+  }
+  var prepared=StageLayout(root,m,dll,names,guide,digest);
+  Check(Paths.Hash(prepared.Guide)==digest,"Guide verified and retained byte for byte");
+  Check(Paths.Hash(StageLayout(root,m,dll,names,guide,null).Guide)==digest,"ZIP digest also covers a guide without an optional entry hash");
+  Reject(()=>StageLayout(root,m,dll,basic,guide,digest),"Proof cannot claim a missing guide");
+  Reject(()=>StageLayout(root,m,dll,names,guide,new string('f',64)),"Incorrect guide digest rejected even with a matching archive hash");
+  Reject(()=>StageLayout(root,m,dll,names,guide,"invalid"),"Malformed guide digest rejected");
+  Reject(()=>StageLayout(root,m,dll,names,Encoding.ASCII.GetBytes("not a PDF\n%%EOF"),null),"Guide entry must be PDF");
+  Reject(()=>StageLayout(root,m,dll,names,Encoding.ASCII.GetBytes("%PDF-1.4\ntruncated"),null),"Truncated PDF ending rejected");
+  Reject(()=>StageLayout(root,m,dll,names,new byte[10*1024*1024+1],null),"Guide size bound enforced on compressed inputs");
+  Reject(()=>StageLayout(root,m,dll,names,guide,null,128*1024+1),"Existing README bound still applies outside BTF");
+  Reject(()=>StageLayout(root,m,dll,names.Concat(new[]{m.GuideName}).ToArray(),guide,digest),"Duplicate guide rejected");
+  Reject(()=>StageLayout(root,m,dll,names.Concat(new[]{"LICENSES.txt"}).ToArray(),guide,digest),"Mixed five-file layout rejected");
+  Reject(()=>StageLayout(root,m,dll,external.Concat(new[]{m.GuideName}).ToArray(),guide,digest,22,support),"External support format cannot be mixed with a guide release");
+  foreach(string bad in new[]{"ExtraSettings-Player-Guide.pdf","../"+m.GuideName,"Docs/"+m.GuideName,m.GuideName.ToUpperInvariant()}){
+   Reject(()=>StageLayout(root,m,dll,basic.Concat(new[]{bad}).ToArray(),guide,null),"Only exact guide name and root location accepted: "+bad);
+  }
+  var btf=catalog.Get("BeyondTheField");var fixtureDll=File.ReadAllBytes(futureFixtureDll);
+  var future=Copy(btf.Current);future.Version="9.9.9";future.Tag="v9.9.9";future.ArchiveName=btf.Id+"-9.9.9.zip";future.ArchiveUrl="https://github.com/"+btf.Repository+"/releases/download/"+future.Tag+"/"+future.ArchiveName;future.ProofUrl="https://github.com/"+btf.Repository+"/releases/download/"+future.Tag+"/"+btf.Id+"-9.9.9-verification.json";
+  var btfNames=new[]{btf.FileName,"README.txt","FEATURES.md",btf.GuideName};
+  var futureGuide=StageLayout(root,btf,fixtureDll,btfNames,guide,digest,192*1024,null,future);
+  Check(futureGuide.Readme.Length==192*1024,"BTF guide release permits consolidated runtime notices");
+  Reject(()=>StageLayout(root,btf,fixtureDll,btfNames,guide,digest,512*1024+1,null,future),"BTF README remains bounded");
+  var e=Engine(root);var state=UserData(root);string guidePath=Paths.Resolve(root,"COT-Collection/Modules/"+btf.Id+"/"+btf.GuideName);
+  var old=payloads.Single(p=>p.Module.Id==btf.Id);
+  var oldPayload=StageLayout(root,btf,File.ReadAllBytes(old.Dll),new[]{btf.FileName,"README.txt","FEATURES.md"},guide,null);
+  Apply(root,new List<PreparedModule>{oldPayload});Check(!File.Exists(guidePath),"Installing old layout creates no guide");
+  var update=e.Install(root,Choices(new[]{futureGuide}),new[]{futureGuide});
+  int fault=update.Operations.FindIndex(o=>o.Path.EndsWith("/"+btf.GuideName,StringComparison.Ordinal))+1;
+  Check(fault>0,"Guide is part of the transaction");
+  Reject(()=>e.Execute(update,new Dictionary<string,string>(),s=>{},fault),"Error after writing guide rolls back entire update");
+  Check(Paths.HashFile(Paths.Resolve(root,"Plugins/"+btf.FileName))==old.Release.DllSha256&&!File.Exists(guidePath),"Failed update restores old DLL and exact guide absence");
+  string upgrade=Apply(root,new List<PreparedModule>{futureGuide});
+  Check(Paths.HashFile(guidePath)==digest&&!Directory.GetFiles(Paths.Resolve(root,"Plugins"),"*.pdf",SearchOption.AllDirectories).Any(),"Guide installed outside Plugins");
+  string neighbor=Path.Combine(Path.GetDirectoryName(guidePath),"unrelated.pdf");File.WriteAllText(neighbor,"keep");
+  string removal=e.Execute(e.Remove(root,new[]{btf.Id}),new Dictionary<string,string>(),s=>{});Check(!File.Exists(guidePath)&&File.Exists(neighbor),"Remove only the exact managed guide");
+  e.Restore(root,removal);Check(Paths.HashFile(guidePath)==digest,"Uninstall rollback restores exact PDF");
+  var rollback=e.Install(root,Choices(new[]{oldPayload}),new[]{oldPayload},new HashSet<string>{btf.Id});string down=e.Execute(rollback,new Dictionary<string,string>(),s=>{});
+  Check(!File.Exists(guidePath),"Selecting a legacy package retires the newer guide");
+  e.Restore(root,down);Check(Paths.HashFile(guidePath)==digest,"Downgrade rollback restores newer guide");
+  e.Restore(root,upgrade);Check(!File.Exists(guidePath)&&File.Exists(neighbor),"Restoring old upgrade journal preserves unrelated PDF");
+  Unchanged(root,state);
+ }
  static void Legacy(string root,bool all){
   using(var stream=File.OpenRead(Path.Combine(source,"Release/DynastyCOT-1.0.2.zip")))using(var zip=new ZipArchive(stream,ZipArchiveMode.Read)){
    var manifest=Json.Serializer().Deserialize<Dictionary<string,object>>(new StreamReader(zip.GetEntry("package-manifest.json").Open()).ReadToEnd());var rows=Json.Array(manifest["files"]);var owned=new List<object>();
@@ -33,7 +137,8 @@ class CollectionInstallerChecks {
   foreach(var m in catalog.Modules){var offline=new Downloads().Prepare(m,Copy(m.Current),Path.Combine(parent,"OfflineCache"),CancellationToken.None,x=>{});Check(Paths.HashFile(offline.Dll)==m.Current.DllSha256,"Exact local ZIP/proof discovery for "+m.Id);}
   var localModule=catalog.Modules[0];string localZip=Path.Combine(AppDomain.CurrentDomain.BaseDirectory,localModule.Current.ArchiveName);var goodLocal=File.ReadAllBytes(localZip);var badLocal=(byte[])goodLocal.Clone();badLocal[badLocal.Length/2]^=1;File.WriteAllBytes(localZip,badLocal);Reject(()=>new Downloads().Prepare(localModule,Copy(localModule.Current),Path.Combine(parent,"BadOfflineCache"),CancellationToken.None,x=>{}),"Local assets cannot bypass SHA-256 verification");File.WriteAllBytes(localZip,goodLocal);
   string fresh=Root("fresh");var data=UserData(fresh);var payloads=Prepare(fresh,catalog.Modules);string backup=Apply(fresh,payloads);var engine=Engine(fresh);
-  Check(!File.Exists(Paths.Resolve(fresh,"Plugins/DynastyCOT.dll")),"No collection host installed");foreach(var p in payloads)Check(Paths.HashFile(Paths.Resolve(fresh,"Plugins/"+p.Module.FileName))==p.Release.DllSha256,"Exact released standalone DLL");Unchanged(fresh,data);
+  Check(!File.Exists(Paths.Resolve(fresh,"Plugins/DynastyCOT.dll")),"No collection host installed");foreach(var p in payloads){Check(Paths.HashFile(Paths.Resolve(fresh,"Plugins/"+p.Module.FileName))==p.Release.DllSha256,"Exact released standalone DLL");if(p.Guide!=null)Check(Paths.HashFile(Paths.Resolve(fresh,"COT-Collection/Modules/"+p.Module.Id+"/"+p.Module.GuideName))==Paths.Hash(p.Guide),"Exact release guide installed");}Unchanged(fresh,data);
+  ArchiveLayouts(payloads,args[2]);
   Check(engine.Inspect(fresh).Plugins.Count==4&&engine.Inspect(fresh).Plugins.All(x=>x.Known),"All modules recognized");
   foreach(var item in payloads.SelectMany(p=>p.SupportFiles)){Check(Paths.HashFile(Paths.Resolve(fresh,item.Key))==Paths.Hash(item.Value),"Plain support file installed with exact bytes outside Plugins");}
   var supportFile=payloads.SelectMany(p=>p.SupportFiles).FirstOrDefault();
@@ -107,6 +212,7 @@ class CollectionInstallerChecks {
   var badZip=Zip(gm.FileName,File.ReadAllBytes(payloads.Single(x=>x.Module.Id==gm.Id).Dll),true);var badRelease=Copy(g);badRelease.ArchiveSha256=Paths.Hash(badZip);badRelease.ArchiveBytes=badZip.Length;wrong=Json.Serializer().Deserialize<Dictionary<string,object>>(originalProof);wrong["archiveSha256"]=badRelease.ArchiveSha256;remote[g.ProofUrl]=Json.Bytes(wrong);remote[g.ArchiveUrl]=badZip;Reject(()=>Client(fresh).Prepare(gm,badRelease,Path.Combine(parent,"TraversalZip"),CancellationToken.None,s=>{}),"ZIP traversal rejected even with matching archive hash");remote[g.ProofUrl]=Encoding.UTF8.GetBytes(originalProof);remote[g.ArchiveUrl]=originalZip;
   var downgrade=Copy(g);downgrade.Version="0.1.0";downgrade.Tag="v0.1.0";downgrade.ArchiveName=gm.Id+"-0.1.0.zip";downgrade.ArchiveUrl="https://github.com/"+gm.Repository+"/releases/download/v0.1.0/"+downgrade.ArchiveName;downgrade.ProofUrl="https://github.com/"+gm.Repository+"/releases/download/v0.1.0/"+gm.Id+"-0.1.0-verification.json";Reject(()=>engine.Install(fresh,new Dictionary<string,ModuleRelease>{{gm.Id,downgrade}},new PreparedModule[0]),"No automatic downgrade");
   string interrupted=Root("interrupted");string interruptedBackup=Apply(interrupted,payloads.Take(1).ToList());var ij=Json.Read<Journal>(Path.Combine(interruptedBackup,"transaction.json"));ij.Status="installing";File.WriteAllBytes(Path.Combine(interruptedBackup,"transaction.json"),Json.Bytes(ij));var ie=Engine(interrupted);Reject(()=>ie.Execute(ie.Remove(interrupted,new[]{"BeyondTheField"}),new Dictionary<string,string>(),s=>{}),"Interrupted transaction must be restored before new writes");ie.Restore(interrupted,interruptedBackup);Check(ie.Inspect(interrupted).Plugins.Count==0,"Interrupted install restoration removes new plugin");
+  SelectedManagerWithNestedInstall();RetryLockedManualRestore(payloads);
   Unchanged(fresh,data);
   return Finish();
  }catch(Exception e){Console.Error.WriteLine(e);return 1;}}

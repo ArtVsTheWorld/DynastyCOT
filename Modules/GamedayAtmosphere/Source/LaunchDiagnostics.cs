@@ -49,14 +49,14 @@ namespace DynamicGamedayAtmosphere {
             }
         }
     }
-    // State changes are immediate; unchanged waiting/loaded states get one
-    // reminder per minute. This is reporting only, never an activation gate.
+    // Healthy state transitions are recorded once, never repeated as chatter.
+    // Error retry reporting is independently bounded by LaunchBackoff.
     internal sealed class LaunchProgress {
         sealed class Entry {internal string State;internal long Logged;}
         readonly Dictionary<int,Entry> entries=new Dictionary<int,Entry>();
         internal bool Report(int pid,string state,long now){
             Entry entry;if(!entries.TryGetValue(pid,out entry)){entries[pid]=new Entry{State=state,Logged=now};return true;}
-            if(entry.State==state&&now>=entry.Logged&&now-entry.Logged<60000)return false;
+            if(entry.State==state&&now>=entry.Logged)return false;
             entry.State=state;entry.Logged=now;return true;
         }
         internal string[] Retain(HashSet<int> present){
@@ -112,6 +112,7 @@ namespace DynamicGamedayAtmosphere {
                     if(label=="Source"||label=="Destination"||label=="Backup")text+=" ("+value.Length+" characters)";
                 }
             }
+            text+=" | Next: "+(code==5?"Check access to this path/process and whether MMC and the game use different permission levels. Send launcher.log if access is still denied.":code==2||code==3?"Restore the matching complete plugin download and check the named path exists.":code==32||code==33?"The named file is in use. Close the owning application before replacing that file.":"Keep the named component and error details; send launcher.log and technical-status.txt for diagnosis. Native feature readiness is not established.");
             return text;
         }
         static IEnumerable<Exception> Chain(Exception error){for(;error!=null;error=error.InnerException)yield return error;}

@@ -100,10 +100,12 @@ namespace SituationalPractice
         private NativeRuntime(int pid,Action<string> log,bool install)
         {
             this.log=log; game=Process.GetProcessById(pid);
-            image=game.MainModule.BaseAddress.ToInt64(); handle=OpenProcess(0x438,false,pid);
-            if(handle==IntPtr.Zero)throw new InvalidOperationException("Cannot access game: "+Marshal.GetLastWin32Error());
+            bool hooksExposed=false;
             try {
+                image=game.MainModule.BaseAddress.ToInt64();handle=OpenProcess(0x438,false,pid);
+                if(handle==IntPtr.Zero)throw new InvalidOperationException("Cannot access game PID "+pid+" (Windows error "+Marshal.GetLastWin32Error()+"). Check that MMC and the game run as the same Windows user and privilege level.");
                 if(!install)return;
+                RequirePracticeContext();
                 // Only inspect memory here. No EXE hash gate or remote writes.
                 NativeCompatibility.Verify(Read,image,destination=>ExtensionsPregame.Owner(game,destination));
                 firstDownLine=new NativeFirstDownLine(Read,Write,image,log);
@@ -148,13 +150,20 @@ namespace SituationalPractice
                             throw new InvalidOperationException("Hook location changed before installation. No hooks installed.");
                     try { for(int i=0;i<Sites.Length;i++) {
                         var p=new Patch {Address=image+Sites[i],Original=Originals[i],Replacement=Pad(Jump(code+i*1024),Originals[i].Length)};
-                        installed.Add(p); PatchBytes(p.Address,p.Replacement);
+                        hooksExposed=true;installed.Add(p); PatchBytes(p.Address,p.Replacement);
                     } } catch { foreach(var p in installed)PatchBytes(p.Address,p.Original); installed.Clear(); throw; }
                 }
                 log("Installed inactive practice hooks in PID "+pid+"; image=0x"+image.ToString("x")+" code=0x"+code.ToString("x")+" data=0x"+data.ToString("x")+"; awaiting practice menu binding.");
                 for(int i=0;i<Sites.Length;i++)log("Hook "+i+": native RVA=0x"+Sites[i].ToString("x")+" address=0x"+(image+Sites[i]).ToString("x")+" trampoline=0x"+(code+i*1024).ToString("x"));
                 log("CPU commit trampoline=0x"+(code+16384).ToString("x"));
-            } catch { CloseHandle(handle); handle=IntPtr.Zero; game.Dispose(); throw; }
+            } catch {
+                // Never free a trampoline that may have been visible to another thread.
+                if(!hooksExposed&&handle!=IntPtr.Zero){
+                    if(code!=0)VirtualFreeEx(handle,new IntPtr(code),UIntPtr.Zero,0x8000);
+                    if(data!=0)VirtualFreeEx(handle,new IntPtr(data),UIntPtr.Zero,0x8000);
+                }
+                if(handle!=IntPtr.Zero)CloseHandle(handle);handle=IntPtr.Zero;game.Dispose();throw;
+            }
         }
         // Manual recovery after an interrupted helper. Requires all installed hooks
         // to be our exact generated code and the runtime to be inactive.
@@ -193,11 +202,16 @@ namespace SituationalPractice
                 b.H("80b88400000001");b.J("0f85","native");
             }
         }
+        private void RequirePracticeContext()
+        {
+            int mode=Int(image+0xd9eb808),session=Int(image+0xf3fddbc);
+            long configuration=OfflinePracticeEligible(mode,session,true)?Long(image+0xf63f9f0):0;
+            if(!OfflinePracticeEligible(mode,session,configuration!=0 && Read(configuration+0x84,1)[0]==1))
+                throw new InvalidOperationException("Waiting for offline Dynasty or main-menu practice.");
+        }
         public NativeSnapshot Snapshot()
         {
-            long configuration=Long(image+0xf63f9f0);
-            if(!OfflinePracticeEligible(Int(image+0xd9eb808),Int(image+0xf3fddbc),configuration!=0 && Read(configuration+0x84,1)[0]==1))
-                throw new InvalidOperationException("Waiting for offline Dynasty or main-menu practice.");
+            RequirePracticeContext();
             long wrapper=Long(image+0xf85f700), states=Long(image+0xf85f5f0);
             if(wrapper==0 || states==0)throw new InvalidOperationException("Waiting for an offline practice session.");
             long match=Long(wrapper+16);
@@ -1051,6 +1065,7 @@ namespace SituationalPractice
         [DllImport("kernel32.dll")] static extern bool CloseHandle(IntPtr h);
         [DllImport("kernel32.dll",SetLastError=true)] static extern bool ReadProcessMemory(IntPtr h,IntPtr a,byte[] b,IntPtr n,out IntPtr read);
         [DllImport("kernel32.dll",SetLastError=true)] static extern bool WriteProcessMemory(IntPtr h,IntPtr a,byte[] b,IntPtr n,out IntPtr written);
+        [DllImport("kernel32.dll",SetLastError=true)] static extern bool VirtualFreeEx(IntPtr h,IntPtr a,UIntPtr n,uint type);
         [DllImport("kernel32.dll",SetLastError=true)] static extern IntPtr VirtualAllocEx(IntPtr h,IntPtr a,UIntPtr n,uint type,uint protection);
         [DllImport("kernel32.dll",SetLastError=true)] static extern bool VirtualProtectEx(IntPtr h,IntPtr a,UIntPtr n,uint protection,out uint old);
         [DllImport("kernel32.dll")] static extern bool FlushInstructionCache(IntPtr h,IntPtr a,UIntPtr n);

@@ -53,6 +53,11 @@ inline void run(){
     for(const Json bad:std::vector<Json>{-1,3,1.5,true,nullptr,"1"}){auto saved=valid;saved["recruitInterestDisplay"]=bad;bool rejected=false;try{decodeOptions(saved,1001);}catch(const std::exception&){rejected=true;}require(rejected,"Malformed interest mode was silently accepted");}
     for(int mode=0;mode<3;++mode){auto saved=valid;saved["recruitInterestDisplay"]=mode;require(unsigned(decodeOptions(saved,1001).interest)==unsigned(mode),"Interest mode did not decode");}
     Options selected;selected.scale=GradeScale::Descriptive;selected.colors=false;
+    for(bool canEdit:{false,true}){
+        Output independent{outputTable,{}};Options fogOff;fogOff.recruiting=false;
+        menu::append(&independent,0,fogOff,canEdit);
+        require(independent.rows[5]["isInteractive"]==canEdit&&independent.rows[6]["isInteractive"]==canEdit,"Independent settings must follow Dynasty edit eligibility with Recruiting Fog off");
+    }
     Output output{outputTable,{}};output.rows[9]={{"label","Existing Commissioner Settings"},{"foreign",123}};
     menu::append(&output,10,selected,true);
     require(output.rows[16]["Display0"]=="Default"&&output.rows[16]["Display1"]=="Recruit Feedback"&&output.rows[16]["Display2"]=="Rank Only"&&output.rows[16]["isDefault"]==0,"Interest labels/default changed or saved numeric IDs moved");

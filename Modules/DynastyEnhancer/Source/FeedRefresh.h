@@ -95,7 +95,9 @@ struct PublicationGateFiles {
 };
 inline DWORD exportSave(const Settings& s,const fs::path& output,const fs::path& log,const std::function<bool()>& cancelled,const std::function<bool()>& verifyBeforeCommit={}){
     SECURITY_ATTRIBUTES sa{sizeof(sa),nullptr,TRUE};
-    HANDLE stream=CreateFileW(log.c_str(),FILE_APPEND_DATA,FILE_SHARE_READ|FILE_SHARE_WRITE,&sa,OPEN_ALWAYS,FILE_ATTRIBUTE_NORMAL,nullptr);
+    // The bundled generator emits one result per run. Retain the most recent run.
+    HANDLE stream=CreateFileW(log.c_str(),GENERIC_WRITE,FILE_SHARE_READ,&sa,CREATE_ALWAYS,FILE_ATTRIBUTE_NORMAL,nullptr);
+    if(stream==INVALID_HANDLE_VALUE)stream=CreateFileW(L"NUL",GENERIC_WRITE,FILE_SHARE_READ|FILE_SHARE_WRITE,&sa,OPEN_EXISTING,FILE_ATTRIBUTE_NORMAL,nullptr);
     HANDLE nullIn=CreateFileW(L"NUL",GENERIC_READ,FILE_SHARE_READ|FILE_SHARE_WRITE,&sa,OPEN_EXISTING,FILE_ATTRIBUTE_NORMAL,nullptr);
     if(stream==INVALID_HANDLE_VALUE||nullIn==INVALID_HANDLE_VALUE){if(stream!=INVALID_HANDLE_VALUE)CloseHandle(stream);if(nullIn!=INVALID_HANDLE_VALUE)CloseHandle(nullIn);throw std::runtime_error("Cannot create exporter log handles");}
     PublicationGateFiles gate;bool approved=false;

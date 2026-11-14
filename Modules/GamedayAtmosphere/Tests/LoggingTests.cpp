@@ -8,6 +8,7 @@
 static std::string contents(const std::filesystem::path& p){std::ifstream f(p,std::ios::binary);return {std::istreambuf_iterator<char>(f),{}};}
 int main(){
  for(const char* tag:{"spring-context","spring-plan","spring-appearance","spring-inactive","crowd-history"})assert(attendance::importantLogTag(tag,"launch evidence"));
+ for(const char* tag:{"home-crowd","home-crowd-proof","home-crowd-envelope"})assert(attendance::importantLogTag(tag,"quieting evidence"));
  auto folder=std::filesystem::temp_directory_path()/("GamedayLogTest-"+std::to_string(std::chrono::steady_clock::now().time_since_epoch().count()));
  auto path=folder/"Logs"/"atmosphere.log";
  assert(attendance::appendLog(path,"first\n",16)&&contents(path)=="first\n");
@@ -30,6 +31,11 @@ int main(){
  assert(attendance::readable::event(event("play-summary","Play #4 ended; official result still pending.")).empty());
  assert(attendance::readable::event(event("replay-select","native identity0x123 phase4")).empty());
  assert(attendance::readable::event(event("reaction-audio","native cheer voice registered")).empty());
+ assert(attendance::readable::event(event("home-crowd-proof","Play #54; score corroboration matched")).empty());
+ assert(attendance::readable::event(event("home-crowd-envelope","Reduction target active")).empty());
+ assert(attendance::readable::event(event("home-crowd","Verified visiting touchdown")).find("Verified visiting touchdown")!=std::string::npos);
+ auto heldStatus=attendance::readable::status("Gameday Atmosphere\nHome ambient settling: TD hold retained; live application suspended; visiting-TD fade snapshot 100%\n");
+ assert(heldStatus.find("TD hold retained; live application suspended")!=std::string::npos);
  assert(attendance::readable::event(event("reaction-audio","no native cheer voice registered within the short recovery window")).find("warning/")!=std::string::npos);
  assert(attendance::readable::event(event("audio-inactive","callback unavailable")).find("callback unavailable")!=std::string::npos);
  assert(attendance::readable::event(event("play-summary","Play #4: None; 2 yards; snap down 1;")).find("Play completed")!=std::string::npos);

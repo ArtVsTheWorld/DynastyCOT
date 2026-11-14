@@ -8,9 +8,19 @@ namespace attendance::homequiet {
 struct Envelope {
     uintptr_t match=0;unsigned epoch=0;uint64_t updated=0;
     float leadGain=1,quiet=0,visitorShare=-1;
-    bool newTouchdown=false;
+    bool newTouchdown=false;int corroboration=0; // 1 matched, 2 pending, 3 inconsistent, 4 expired
+    bool tdObserved=false;
+    uint64_t touchdownSequence=0,ageMs=0;bool holding=false;
+    bool owns(uintptr_t owner,unsigned generation)const{return match&&match==owner&&epoch==generation;}
     bool fresh(uintptr_t owner,unsigned generation,uint64_t now)const{
-        return match&&match==owner&&epoch==generation&&now>=updated&&now-updated<=750;
+        return owns(owner,generation)&&now>=updated&&now-updated<=750;
+    }
+    // Retained diagnostic evidence must not become an audio lease. A paused
+    // envelope can still describe a held TD, but fresh() continues gating sound.
+    const char* status(uintptr_t owner,unsigned generation,uint64_t now,bool audible)const{
+        if(!owns(owner,generation))return "no matching snapshot";
+        if(!fresh(owner,generation,now)||!audible)return holding?"TD hold retained; live application suspended":"snapshot retained; live application suspended";
+        return holding?"TD hold active; live mix eligible":"live mix eligible; no TD hold";
     }
     float postGain()const{
         // No alumni geography/acoustic measurement is inferred. This is a
@@ -22,13 +32,13 @@ struct Envelope {
 };
 class Model {
     uintptr_t match_=0;unsigned epoch_=0;uint64_t previous_=0,age_=0,sequence_=0;
-    int home_=0,away_=0;float elapsed_=0;bool seen_=false,holding_=false;
+    int home_=0,away_=0,pendingHome_=0,pendingAway_=0;uint64_t pending_=0,pendingAt_=0,lastTd_=0;float elapsed_=0;bool seen_=false,holding_=false;
 public:
     void reset(){*this=Model{};}
     // Pause/replay time neither advances the fade nor erases a valid score.
     void suspend(){previous_=0;}
     Envelope observe(const energy::Play& p,const energy::Outcome& result,uintptr_t match,unsigned epoch,
-                     uint64_t sequence,uint64_t now,bool allowed,float visitorShare=-1){
+                     uint64_t sequence,uint64_t now,bool allowed,float visitorShare=-1,const energy::Play* snap=nullptr){
         if(!allowed||!match||!valid(p.game)||p.game.neutral||p.simulated||p.game.phase==6||p.game.phase==7){reset();return {};}
         if(match_!=match||epoch_!=epoch){reset();match_=match;epoch_=epoch;}
         float elapsed=elapsedGameTime(p.game);
@@ -37,11 +47,20 @@ public:
         if(holding_&&previous_&&now>=previous_)age_+=(std::min)(now-previous_,uint64_t(250));
         bool freshResult=!corrected&&result.accepted&&result.completed&&sequence&&result.sequence==sequence;
         bool touchdown=freshResult&&result.side==1&&result.homePoints==0&&result.awayPoints>=6&&result.awayPoints<=8;
-        // Require an observed score increase on this fresh completed play.
-        // Reopening a scored game or repeating a result cannot start a lull.
-        int awayDelta=p.game.awayScore-away_;
-        bool newlyScored=touchdown&&seen_&&awayDelta>=6&&awayDelta<=8&&p.game.homeScore==home_&&sequence!=sequence_;
-        if(newlyScored){holding_=true;age_=0;sequence_=sequence;}
+        int proof=0;
+        if(corrected){pending_=0;}
+        bool firstTd=touchdown&&sequence!=lastTd_;if(firstTd)lastTd_=sequence;
+        if(firstTd&&seen_&&sequence!=sequence_&&!pending_){
+            pending_=sequence;pendingAt_=now;pendingHome_=snap?snap->game.homeScore:home_;pendingAway_=snap?snap->game.awayScore:away_;
+        }
+        bool newlyScored=false;
+        if(pending_){
+            int hd=p.game.homeScore-pendingHome_,ad=p.game.awayScore-pendingAway_;
+            if(sequence!=pending_||now<pendingAt_||now-pendingAt_>1500){proof=4;pending_=0;}
+            else if(hd==0&&ad>=6&&ad<=8){proof=1;holding_=true;age_=0;sequence_=pending_;pending_=0;newlyScored=true;}
+            else if(hd==0&&ad==0)proof=2;
+            else {proof=3;pending_=0;}
+        }
         // Any verified home score takes precedence (including a try return).
         if(freshResult&&result.homePoints>0){holding_=false;age_=0;}
         // Unknown selected-type data may not end the lull on a menu. An
@@ -54,7 +73,8 @@ public:
         out.leadGain=background::leadEngagement(p.game);
         out.quiet=holding_?dense::smooth((static_cast<float>(age_)-1500.f)/2500.f):0;
         out.visitorShare=std::isfinite(visitorShare)?visitorShare:-1;
-        out.newTouchdown=newlyScored;
+        out.newTouchdown=newlyScored;out.tdObserved=firstTd;out.corroboration=proof;
+        out.touchdownSequence=sequence_;out.ageMs=age_;out.holding=holding_;
         return out;
     }
 };

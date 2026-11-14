@@ -46,7 +46,7 @@ inline void append(void* out,unsigned row,Options selected,bool interactive){
         put(out,row,"linkage","madden.component.SettingsToggleHorizontal",6);put(out,row,"key",firstKey+int(keys[i]),4);
         put(out,row,"label",names[i],6);put(out,row,"description",descriptions[i],6);
         const bool scaleRow=i>=1&&i<=3,interestRow=i==5,measurementRow=i==4;
-        const int count=scaleRow?6:interestRow?3:2;put(out,row,"numItems",count,4);put(out,row,"isDefault",values[i],4);put(out,row,"isInteractive",interactive&&(!(interestRow||measurementRow)||selected.recruiting),3);
+        const int count=scaleRow?6:interestRow?3:2;put(out,row,"numItems",count,4);put(out,row,"isDefault",values[i],4);put(out,row,"isInteractive",interactive,3);
         constexpr const char* scales[]={"Off","A+-","A","S","Descriptive","Blind"};
         for(int j=0;j<count;++j){const auto display="Display"+std::to_string(j),value="Value"+std::to_string(j);
             put(out,row,display.c_str(),scaleRow?scales[j]:interestRow?(j==0?"Default":j==1?"Recruit Feedback":"Rank Only"):measurementRow?(j?"Athletic Measurables":"Default"):j?"On":"Off",6);put(out,row,value.c_str(),j,4);}

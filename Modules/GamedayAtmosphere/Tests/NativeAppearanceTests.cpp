@@ -25,11 +25,20 @@ int main(){
     // and uniforms; unrelated native flags can still change during that call.
     for(unsigned i=0;i<1024;++i){assert((raw[10*i]&1)==prepared.desired[i]);assert(raw[10*i+6]==original[10*i+6]);}
     raw[2000]|=0x10;original[2000]|=0x10;
-    GeneratedAppearance generated{c,address(map),address(raw.data()),address(points.data()),1153,1193,prepared.desired};
+    GeneratedAppearance generated{c,address(map),prepared.stream,prepared.coordinateStream,1153,1193,prepared.desired};
     assert(restoreAppearance(memory,image,prepared)&&raw==original);
     auto tags=agents::decode(raw,1024);agents::protectStudents(tags,true,false);
     assert(generated.apply(memory,image,s,1153,1193,tags)&&tags.side==prepared.desired);
     assert(!generated.apply(memory,image,s,1193,1153,tags));
+    uintptr_t alternateTags[]={1024,address(raw.data())},alternatePoints[]={1024,address(points.data())};
+    tagValue[1]=address(alternateTags);assert(!generated.apply(memory,image,s,1153,1193,tags));tagValue[1]=address(tagHolder);
+    posValue[1]=address(alternatePoints);assert(!generated.apply(memory,image,s,1153,1193,tags));posValue[1]=address(posHolder);
+    auto swappedDuringRead=[&](uintptr_t p,void* out,size_t bytes){
+        bool ok=memory(p,out,bytes);if(p==address(points.data()))posValue[1]=address(alternatePoints);return ok;
+    };
+    assert(!appearance(swappedDuringRead,image,c,plan,123,true,false).applied&&raw==original);posValue[1]=address(posHolder);
+    std::vector<unsigned char> tooShort(1023,1);
+    for(int singleSchool:{-1,0,1})assert(!appearance(memory,image,c,plan,123,true,false,&tooShort,singleSchool).applied&&raw==original);
     // A second fixture begins from EA's flags, not the previous visitor mix.
     plan.share=.05f;auto next=appearance(memory,image,c,plan,321,true,false);assert(next.applied&&next.native.side==prepared.native.side);
     assert(restoreAppearance(memory,image,next)&&raw==original);

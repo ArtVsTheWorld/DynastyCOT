@@ -7,7 +7,7 @@ namespace attendance::cheer {
 using Address=uintptr_t;
 using Receiver=Address(__fastcall*)(Address,Address);
 enum class Source {Live,Lineup,Result,Eruption,Followup};
-enum class Delivery {Sent,Failed,Expired,Registered,Recovery,Unregistered,NativePriority,PrioritySuppressed,Cancelled,ObservationUnavailable};
+enum class Delivery {Sent,Failed,Expired,Registered,Recovery,Unregistered,NativePriority,PrioritySuppressed,Cancelled,ObservationUnavailable,PopulationSuppressed};
 using Note=void(*)(Source,uint64_t,Delivery);
 // Eruption, conversion and defensive-stop families passed listening tests. Their native
 // owner limits each reaction to 25 seconds; no borrowed entity is retained.
@@ -112,6 +112,7 @@ class Runtime {
     void cancelReceipts(Delivery why){for(auto& r:receipts_)if(r.active){auto old=r;r={};report(old.source,old.id,why);}}
     bool receiptPending()const{for(const auto& r:receipts_)if(r.active&&(r.source==Source::Result||r.source==Source::Eruption))return true;return false;}
     std::atomic<bool> priorityPending_{false},observing_{false};
+    std::atomic<uint64_t> populationDenied_{0}; // Scoped request ID; survives first tick's owner initialization.
     void receipt(Source source,uint64_t id,int type,Address entity,const sustained::Intent& wanted,uint64_t now){
         if(!wanted.playSequence||source==Source::Lineup)return;
         bool scoring=source==Source::Eruption||(source==Source::Result&&wanted.scoringReaction);
@@ -195,6 +196,7 @@ public:
         if(wanted.liveCheer&&liveConsumed_!=wanted.liveCheer&&now>=wanted.liveCheerUntil){liveConsumed_=wanted.liveCheer;report(Source::Live,wanted.liveCheer,Delivery::Expired);}
         if(wanted.resultCheer&&result_!=wanted.resultCheer&&now>=wanted.resultCheerUntil){result_=wanted.resultCheer;report(Source::Result,wanted.resultCheer,Delivery::Expired);}
         if(wanted.celebration&&consumed_!=wanted.celebration&&now>=wanted.celebrationUntil){consumed_=wanted.celebration;report(Source::Eruption,wanted.celebration,Delivery::Expired);}
+        if(wanted.liveCheer&&populationDenied_.load()==wanted.liveCheer)liveConsumed_=wanted.liveCheer;
         bool during=wanted.liveCheer&&now<wanted.liveCheerUntil&&liveConsumed_!=wanted.liveCheer;
         // A late live-run accent must not take the receiver/receipt slot from
         // a fresh scoring cheer. Leave its ID unconsumed; it expires normally.
@@ -256,6 +258,7 @@ public:
     bool healthy()const{return healthy_;}unsigned sent()const{return sent_;}
     bool observing()const{return observing_.load(std::memory_order_relaxed);}
     void suppress(uint64_t id){if(id&&liveResolved_.exchange(id)!=id)report(Source::Live,id,Delivery::PrioritySuppressed);}
+    void suppressPopulation(uint64_t id){if(id&&populationDenied_.exchange(id)!=id)report(Source::Live,id,Delivery::PopulationSuppressed);}
     bool priorityPending()const{return priorityPending_.load();}
     bool eventFocus(Address match,unsigned epoch,uint64_t sequence,uint64_t now)const{
         return healthy_&&match&&sequence&&focusMatch_.load()==match&&focusEpoch_.load()==epoch&&focusSequence_.load()==sequence&&now>=focusBegan_.load()&&now<focusUntil_.load();

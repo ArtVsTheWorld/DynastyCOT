@@ -1,18 +1,11 @@
-# BeyondTheField 1.0.23
+# Ace’s Beyond the Field 1.0.24
 
-Changes since public 1.0.7
+Changes since public release 1.0.7.
 
-- Choose separate grade scales for recruiting, rosters and teams, including Off and Blind
-- Use optional Athletic Measurables and interest-display choices independently of Recruiting Fog
-- Recruit Notes load more reliably and offer shorter, more varied observations, coherent ATH secondary roles and improved new prospect backgrounds
-- Previously saved Notes keep their data while technical labels are hidden; compact transfer labels retain year and redshirt status
-- Confirmed signing news now follows the actual signing school, including recruits whose interest list still names another leader
-- Fans and official accounts have more personality, clearer rivalry references and cleaner grammar; unchanged preseason stories and milestone repetition are reduced
-- Social Media reuses unchanged work and handles available historical editions more efficiently without increasing weekly post budgets
-- GPI Season matches the weekly grade when a player has only one graded game
-- Fog covers additional depth-chart, hub and supported Dynasty Extensions report/drill displays; money formatting and navigation fixes remain
-- Settings and history move safely to shared AppData, helping installs in protected folders
+- Set separate rating styles for recruits, roster players and teams. Use workout estimates or change how a recruit's interest looks even when Recruiting Fog is off.
+- Recruit Notes now give shorter, position-specific scouting observations. New backgrounds better fit each player's workload and can give two-way athletes a second role. Existing Notes keep what you learned.
+- Signing stories follow the school the recruit joined. Fans and school accounts respond to the matchup, repeated preseason stories show up less often, and spring exhibitions stay separate from fall coverage.
+- Season GPI now matches the weekly grade for a player with one graded game. More depth charts, hub comparisons and supported Dynasty Extensions reports and drills follow your fog choices.
+- Settings, Notes, accounts and published editions share one folder across MMC copies on the same Windows account. In a league with several coaches, the verified view is still the owner's school.
 
-Full multi-coach active-school selection and private Notes ownership remain unsupported outside the verified Owner-school perspective. Saved backgrounds are not rerolled. Installed-menu acceptance is still required.
-
-Install or update: close MMC/game, back up the previous DLL and replace it in Plugins. Keep settings and history. Restore that DLL to roll back.
+Download the standalone ZIP, close MMC and the game, and copy **BeyondTheField.dll** into MMC’s **Plugins** folder. The ZIP includes a full feature list and an illustrated player guide.

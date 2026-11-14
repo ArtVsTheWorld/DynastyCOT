@@ -5,7 +5,7 @@ class CollectionReleasedMigration {
  static object Call(Type type,string name,params object[] args){try{return type.GetMethod(name,BindingFlags.Static|BindingFlags.Public|BindingFlags.NonPublic).Invoke(null,args);}catch(TargetInvocationException e){throw e.InnerException;}}
  static int Main(string[] args){try{
   typeof(Ace.DynastyCOT.UserStorage).GetField("current",BindingFlags.Static|BindingFlags.NonPublic).SetValue(null,new Ace.DynastyCOT.UserStore(Path.Combine(args[3],"UserData")));
-  string mode=args[0],source=Path.GetFullPath(args[1]),root=Paths.ValidateRoot(args[2]),parent=Path.GetFullPath(args[3]),sdk=Path.GetFullPath(args[4]);var fixture=new Fixture(root,parent);var catalog=Json.Read<Catalog>(Path.Combine(source,"Packaging/Collection/catalog.json"));var engine=new CollectionInstaller(catalog,fixture);
+  string mode=args[0],source=Path.GetFullPath(args[1]),root=Paths.ValidateRoot(args[2]),parent=Path.GetFullPath(args[3]),sdk=Path.GetFullPath(args[4]);var fixture=new Fixture(root,parent);var catalog=Json.Read<Catalog>(args.Length>6?Path.GetFullPath(args[6]):Path.Combine(source,"Packaging/Collection/catalog.json"));var engine=new CollectionInstaller(catalog,fixture);
   AppDomain.CurrentDomain.AssemblyResolve+=(s,e)=>{string file=Path.Combine(sdk,new AssemblyName(e.Name).Name+".dll");return File.Exists(file)?Assembly.LoadFrom(file):null;};
   string state=Paths.Resolve(root,".migration-test.json");
   if(mode=="migrate"){

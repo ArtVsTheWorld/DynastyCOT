@@ -17,8 +17,10 @@ class MenuCatalogTests(unittest.TestCase):
         source = (ROOT / 'Source/SettingsMenuOptions.inc').read_text()
         pairs = re.findall(r'\{[^\n]*?L"([^"]+)",L"([^"]+)"', source)
         self.assertEqual(len(pairs), len(set(pairs)))
-        self.assertTrue(set(pairs) < expected)
-        self.assertEqual(len(pairs), 46)
+        action = ('Dynamic Gameday Attendance', 'RegenerateNextCrowd')
+        self.assertEqual(set(pairs) - expected, {action})
+        self.assertTrue(set(pairs) - {action} < expected)
+        self.assertEqual(len(pairs), 48)
         self.assertTrue(all(section != 'Logging' for section, key in pairs))
         self.assertNotIn(('Dynamic Gameday Soundscape', 'MaximumBoostPercent'), pairs)
         self.assertNotIn(('Dynamic Gameday Attendance', 'MaximumDeparturePerQuarter'), pairs)
@@ -48,6 +50,8 @@ class MenuCatalogTests(unittest.TestCase):
             values = re.search(r',([\d.]+),([\d.]+),([\d.]+),Kind::(\w+)\}', line)
             if name and values and values[4] != 'Profile':
                 actual[name.group(1, 2)] = tuple(map(float, values.group(1, 2, 3)))
+        action = ('Dynamic Gameday Attendance', 'RegenerateNextCrowd')
+        self.assertEqual(actual.pop(action), (0.0, 0.0, 1.0))
         self.assertEqual(actual, {pair: expected[pair] for pair in actual})
 
     def test_three_sections_cap_and_toggle_order(self):
@@ -56,13 +60,19 @@ class MenuCatalogTests(unittest.TestCase):
         for line in catalog.splitlines():
             row = re.match(r'\{"([^\"]+)".*Kind::(\w+)\}', line)
             if row:
-                groups.setdefault(row[1], []).append(row[2])
+                key = re.search(r'L"[^"]+",L"([^"]+)"', line)[1]
+                groups.setdefault(row[1], []).append((key, row[2]))
         self.assertEqual(list(groups), ['Attendance', 'Soundscape', 'Broadcast'])
-        self.assertEqual([len(x) for x in groups.values()], [14, 12, 20])
+        self.assertEqual([len(x) for x in groups.values()], [15, 12, 21])
         for group, controls in groups.items():
-            self.assertLessEqual(len(controls), 20 if group == "Broadcast" else 15)
+            self.assertLessEqual(len(controls), 21 if group == "Broadcast" else 15)
             numeric_seen = False
-            for kind in controls:
+            for key, kind in controls:
+                if key == 'RegenerateNextCrowd':
+                    self.assertEqual(group, 'Attendance')
+                    self.assertEqual(kind, 'Toggle')
+                    self.assertEqual(controls[-1][0], key)
+                    continue  # Append-only, self-reset action; not a persistent toggle.
                 if kind == 'Toggle':
                     self.assertFalse(numeric_seen, 'toggles must precede numeric/dropdown controls')
                 else:

@@ -51,12 +51,13 @@ class Baselines {
 public:
     static uint64_t fingerprint(const std::vector<Position>& positions){return key(positions);}
     void reset(){entries_.clear();}
-    void remember(const std::vector<Position>& positions,const std::vector<unsigned short>& masks,unsigned short parts){
+    void remember(const std::vector<Position>& positions,const std::vector<unsigned short>& masks,unsigned short parts,uint64_t layoutKey=0){
         if(!parts||positions.size()!=masks.size()||positions.size()<512||positions.size()>200000||entries_.size()>=64)return;
-        entries_.emplace(key(positions),Entry{positions,masks,parts}); // Original snapshot is immutable.
+        if(!layoutKey)layoutKey=key(positions);
+        if(entries_.find(layoutKey)==entries_.end())entries_.emplace(layoutKey,Entry{positions,masks,parts});
     }
-    bool restore(const std::vector<Position>& positions,std::vector<unsigned short>& masks,std::vector<unsigned short>& seen,unsigned short& parts)const{
-        auto found=entries_.find(key(positions));if(found==entries_.end()||!same(found->second.positions,positions))return false;
+    bool restore(const std::vector<Position>& positions,std::vector<unsigned short>& masks,std::vector<unsigned short>& seen,unsigned short& parts,uint64_t layoutKey=0)const{
+        auto found=entries_.find(layoutKey?layoutKey:key(positions));if(found==entries_.end()||!same(found->second.positions,positions))return false;
         const auto& old=found->second;masks=old.masks;seen.resize(masks.size());parts|=old.parts;
         for(size_t i=0;i<masks.size();++i){
             bool empty=(old.masks[i]&old.parts)==old.parts;

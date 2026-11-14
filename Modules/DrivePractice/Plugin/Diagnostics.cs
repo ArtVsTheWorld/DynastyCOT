@@ -4,7 +4,6 @@ using System.Diagnostics;
 using System.Globalization;
 using System.IO;
 using System.IO.Compression;
-using System.Security.Cryptography;
 using System.Text;
 using System.Threading;
 
@@ -12,7 +11,7 @@ namespace SituationalPractice
 {
     internal static class BuildIdentity
     {
-        internal const string Version="0.8.23";
+        internal const string Version="0.8.24";
         internal static string Folder {get{return FolderForAssembly(typeof(BuildIdentity).Assembly.Location);}}
         internal static string FolderForAssembly(string assemblyPath)
         {
@@ -72,9 +71,44 @@ namespace SituationalPractice
         readonly string root,run;
         readonly int gamePid;
         readonly DateTime started=DateTime.UtcNow;
-        readonly SafeFileLog events,aggregate;
+        readonly SafeFileLog events,aggregate,status;
         readonly Queue<string> recent=new Queue<string>();
         readonly Stopwatch clock=Stopwatch.StartNew();
+        // Snapshot native state on its owning thread. The writer receives only immutable text.
+        readonly object queueLock=new object();
+        readonly Queue<Action> pending=new Queue<Action>();
+        string pendingState;
+        bool draining;
+        int omitted;
+        void Schedule(Action write,string state=null)
+        {
+            lock(queueLock){
+                if(state!=null)pendingState=state;
+                else if(pending.Count<256)pending.Enqueue(write);
+                else omitted++;
+                if(draining)return;
+                draining=true;
+                if(!ThreadPool.QueueUserWorkItem(Drain)){draining=false;pending.Clear();pendingState=null;}
+            }
+        }
+        void Drain(object ignored)
+        {
+            for(;;){
+                Action work=null;string state;int dropped;
+                lock(queueLock){
+                    state=pendingState;pendingState=null;dropped=omitted;omitted=0;
+                    if(pending.Count!=0)work=pending.Dequeue();
+                    else if(state==null&&dropped==0){draining=false;Monitor.PulseAll(queueLock);return;}
+                }
+                if(state!=null)try{AtomicText(Path.Combine(run,"last-state.txt"),state);}catch(Exception ex){events.Error("Write last-state.txt",ex);}
+                if(dropped!=0)events.Write("INFO","Skipped "+dropped+" diagnostic messages while the log writer was busy.");
+                if(work!=null)try{work();}catch(Exception ex){events.Error("Write diagnostic entry",ex);}
+            }
+        }
+        internal void Flush()
+        {
+            lock(queueLock){while(draining)Monitor.Wait(queueLock);}
+        }
         long nextState;
         bool completed;
         string lastState="No native practice state captured yet.";
@@ -89,6 +123,7 @@ namespace SituationalPractice
             try{Directory.CreateDirectory(run);}catch{run=Path.Combine(Path.GetTempPath(),"Drive-Based-Practice-Diagnostics",name);}
             events=new SafeFileLog(Path.Combine(run,"events.log"));
             aggregate=new SafeFileLog(Path.Combine(root,"SituationalPractice.log"));
+            status=new SafeFileLog(Path.Combine(root,"practice-status.log"));
             Log("Session started; plugin="+BuildIdentity.Version+"; game PID="+pid+"; helper PID="+Process.GetCurrentProcess().Id+"; OS="+Environment.OSVersion+"; CLR="+Environment.Version+"; 64-bit="+Environment.Is64BitProcess+"; report folder="+run);
             try{AtomicText(Path.Combine(root,"latest-session.txt"),"Started UTC: "+started.ToString("O")+Environment.NewLine+"Game PID: "+pid+Environment.NewLine+"Current diagnostic folder: "+run);}catch(Exception error){Error("Write current session pointer",error);}
             try{if(File.Exists(Path.Combine(root,"launcher-context.txt")))AtomicText(Path.Combine(run,"launcher-context.txt"),File.ReadAllText(Path.Combine(root,"launcher-context.txt")));}catch(Exception error){Error("Copy launcher context",error);}
@@ -99,14 +134,19 @@ namespace SituationalPractice
                 string tagged="game="+gamePid+" "+message;
                 recent.Enqueue(DateTimeOffset.Now.ToString("O")+" "+message);
                 while(recent.Count>80)recent.Dequeue();
-                events.Write("INFO",tagged);aggregate.Write("INFO",tagged);
+                Schedule(delegate{events.Write("INFO",tagged);aggregate.Write("INFO",tagged);});
             }
+        }
+        internal void Status(string message)
+        {
+            Log(message);
+            Schedule(delegate{status.Write("STATUS","Game PID "+gamePid+" | "+message);});
         }
         internal void Error(string operation,Exception error)
         {
             lock(sync){
                 lastError=operation+Environment.NewLine+error;
-                events.Error(operation,error);aggregate.Error("game="+gamePid+" "+operation,error);
+                Schedule(delegate{events.Error(operation,error);aggregate.Error("game="+gamePid+" "+operation,error);});
             }
         }
         internal void UpdateState(Func<string> capture,bool force=false)
@@ -116,7 +156,7 @@ namespace SituationalPractice
                 nextState=clock.ElapsedMilliseconds+2000;
                 try{
                     string state="Captured: "+DateTimeOffset.Now.ToString("O")+Environment.NewLine+capture();
-                    AtomicText(Path.Combine(run,"last-state.txt"),state);lastState=state;
+                    lastState=state;Schedule(null,state);
                 }catch(Exception error){Error("Capture diagnostic state (gameplay continues)",error);}
             }
         }
@@ -141,9 +181,8 @@ namespace SituationalPractice
             try{
                 string path=game.MainModule.FileName;var file=new FileInfo(path);var version=FileVersionInfo.GetVersionInfo(path);
                 Log("Game start UTC="+game.StartTime.ToUniversalTime().ToString("O")+"; EXE="+path+"; file version="+version.FileVersion+"; product version="+version.ProductVersion+"; bytes="+file.Length);
-                // Diagnostic identity only; this hash is never an admission check.
-                using(var stream=new FileStream(path,FileMode.Open,FileAccess.Read,FileShare.ReadWrite|FileShare.Delete))
-                using(var sha=SHA256.Create())Log("EXE SHA-256 (diagnostic only)="+BitConverter.ToString(sha.ComputeHash(stream)).Replace("-",""));
+                // The runtime verifies its exact supported code regions before attaching.
+                // Hashing the whole game here would reread the EXE on every launch.
             }catch(Exception error){Error("Read diagnostic game identity",error);}
         }
         internal void Complete(Process game,bool manualStop,bool helperFailed)
@@ -160,6 +199,7 @@ namespace SituationalPractice
                 if(completed)return;completed=true;
                 try{
                     Log(reason+"; game exit status="+ExitStatus(exitCode)+"; final report="+ReportZip);
+                    Flush();
                     string report="Expanded Practice "+BuildIdentity.Version+" diagnostic report"+Environment.NewLine
                         +"Game PID: "+gamePid+Environment.NewLine+"Started UTC: "+started.ToString("O")+Environment.NewLine
                         +"Ended UTC: "+DateTime.UtcNow.ToString("O")+Environment.NewLine+"Reason: "+reason+Environment.NewLine

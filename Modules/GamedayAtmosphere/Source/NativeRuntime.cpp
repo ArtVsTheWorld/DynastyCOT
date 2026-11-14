@@ -49,6 +49,7 @@
 #include "AwayAppearance.h"
 #include "AppearanceAdmission.h"
 #include "AwayCrowdAudio.h"
+#include "VisitorCheerGate.h"
 #include "VisitorPlans.h"
 #include "SeatMapping.h"
 #include "SeatBaseline.h"
@@ -273,7 +274,8 @@ struct StartingCrowd {
 std::mutex crowdMutex;
 inline bool selectedSupporter(const StartingCrowd& base,unsigned agent,int purpose,int fallbackLoss){
     const auto& group=base.supporters;
-    if(!group.verified||agent>=group.rank.size())return base.selection.departed(agent,fallbackLoss);
+    if(!group.verified)return base.selection.departed(agent,fallbackLoss);
+    if(agent>=group.rank.size()||agent>=group.side.size())return false;
     if(group.rank[agent]==UINT32_MAX)return false;
     bool away=group.side[agent]!=0;
     unsigned permanent=away?base.awayGone:base.homeGone,absent=away?base.awayAbsent:base.homeAbsent;
@@ -300,6 +302,9 @@ std::atomic<int> replayLoss{-1};
 std::atomic<float> replayHomeLoss{-1},replayAwayLoss{-1},resumeHomeLoss{-1},resumeAwayLoss{-1};
 std::atomic<int> replayVisitorArrivals{-1};
 std::shared_ptr<const attendance::visitors::Population> visitorPopulation=std::make_shared<attendance::visitors::Population>();
+// A suppressed same-play visiting request is consumed, never deferred until
+// the share changes. Scope verification remains on the population itself.
+std::array<std::atomic<uint64_t>,16> visitorDeniedPlays{};
 bool replayWasActive=false,replayRestorePending=false;
 std::mutex timelineMutex;attendance::timeline::Archive attendanceArchive;
 std::atomic<bool> attendanceHistoryWritable{true};
@@ -477,6 +482,25 @@ float audibleFullness(const attendance::audio::Wanted& wanted){
         return rendered->peak()*(100-(std::clamp)(historical,0,100))*.01f;
     return (std::min)(wanted.remaining,wanted.arrivalFraction);
 }
+bool visitorCountsEligible(const attendance::visitors::Population& pop,A match,unsigned epoch,uint64_t now){
+    return attendance::visitorcheers::eligible(pop,match,epoch,now)&&!visibilityRetry&&!seatPatternPending&&
+        pop.appliedLoss==activeLoss.load()&&pop.appliedTemporary==arrivalMissing.load();
+}
+attendance::sustained::Intent visitorSoundPolicy(attendance::sustained::Intent intent,uint64_t now,bool selected=false){
+    if(!selected&&!attendance::visitorcheers::requested(intent))return intent;
+    auto published=std::atomic_load(&sustainedIntent);
+    if(!intent.playSequence||intent.match!=audioMatch.load()||intent.epoch!=audioEpoch.load()||
+       (published->match==intent.match&&published->epoch==intent.epoch&&intent.playSequence<published->playSequence))
+        return attendance::visitorcheers::restrain(intent,false);
+    const uint64_t key=(std::max)(uint64_t{1},uint64_t{attendance::catalog::hash(intent.playSequence,static_cast<unsigned>(intent.match),intent.epoch)});
+    auto& denied=visitorDeniedPlays[intent.playSequence%visitorDeniedPlays.size()];
+    auto pop=std::atomic_load(&visitorPopulation);
+    bool eligible=visitorCountsEligible(*pop,intent.match,intent.epoch,now);
+    if(!eligible&&denied.exchange(key)!=key)
+        log("visitor-cheer-gate","Play #"+std::to_string(intent.playSequence)+": added visiting sound suppressed; current owned counts "+std::to_string(pop->home)+" home / "+std::to_string(pop->away)+" away; below 20% or snapshot unavailable/stale. Request consumed, not queued. Native audio, home disappointment and TD background quieting unchanged.");
+    bool allowed=eligible&&denied.load()!=key;
+    return attendance::visitorcheers::restrain(intent,allowed);
+}
 attendance::sustained::Intent wantedSwell(const attendance::audio::Wanted& wanted){
     auto intent=*std::atomic_load(&sustainedIntent);auto c=std::atomic_load(&coreSettings);
     auto now=GetTickCount64(),audibleAt=lastAudibleUpdate.load();
@@ -495,7 +519,7 @@ attendance::sustained::Intent wantedSwell(const attendance::audio::Wanted& wante
     intent.cameraPrime=phase==5&&intent.shake;
     if(phase!=1&&phase!=5){intent.shake=false;intent.shakeTier=0;}
     if(phase!=1&&intent.reason==attendance::sustained::Reason::Lineup)intent.cheers=false;
-    return intent;
+    return visitorSoundPolicy(intent,now);
 }
 attendance::sustained::Intent wantedSwell(){return wantedSwell(audioWanted());}
 void __fastcall intensityUpdate(A entity){
@@ -529,9 +553,13 @@ void __fastcall reactionUpdate(A entity,A frame){
          const int primary=wanted.celebration?wanted.celebrationType:wanted.scoringReaction?wanted.resultType:0;
          if(primary&&extra.liveCheer&&primary/4==extra.liveType/4){extraCheer.suppress(extra.liveCheer);extra.liveCheer=0;}
          extraCheer.tick(entity,extra,now);}catch(...){extraCheer.fail();audioNote("skill-cheer-fault: independent skill cheer stopped; other reactions unchanged");}
-        if(wanted.opponentCheer&&!positiveCheer.priorityPending())try{auto other=wanted;other.celebration=other.resultCheer=other.lineupCheer=0;
+        // Recheck at dispatch; suppress rather than queue for a higher share.
+        auto raw=std::atomic_load(&sustainedIntent);
+        if(raw->match==wanted.match&&raw->epoch==wanted.epoch&&raw->opponentPositive&&raw->opponentCheer&&!wanted.opponentCheer)
+            opponentCheer.suppressPopulation(raw->opponentCheer);
+        if(opponentCheer.observing()||(wanted.opponentCheer&&!positiveCheer.priorityPending()))try{auto other=wanted;other.celebration=other.resultCheer=other.lineupCheer=0;
          other.cheers=other.staggered=other.majorLive=other.deepCheers=false;other.supporterSize=0;
-         other.liveCheer=wanted.opponentCheer;other.liveCheerUntil=wanted.opponentCheerUntil;other.liveType=wanted.opponentType;
+         other.liveCheer=positiveCheer.priorityPending()?0:wanted.opponentCheer;other.liveCheerUntil=wanted.opponentCheerUntil;other.liveType=wanted.opponentType;
          other.populationSize=wanted.opponentSize;opponentCheer.tick(entity,other,now);}catch(...){opponentCheer.fail();audioNote("visitor-cheer-fault: independent visitor response stopped; other reactions unchanged");}
     }
     catch(...){positiveCheer.fail();audioNote("cheer-fault: further added cheers disabled");}
@@ -679,9 +707,14 @@ A __fastcall audioUpdate(A owner,A a,A b,A c){
                 auto supporters=std::atomic_load(&visitorPopulation);auto rendered=std::atomic_load(&renderedOccupancy);
                 attendance::sustained::Intent visitor;visitor.active=wanted.active;visitor.match=wanted.match;visitor.epoch=wanted.epoch;visitor.updated=wanted.updated;
                 visitor=attendance::pairing::merge(visitor,*companion,companionNow,fullness,wanted.playSequence);
-                wanted=attendance::visitors::layer(wanted,visitor,*supporters,rendered->seats,fullness);
+                // Visiting camera effects remain independent; only their
+                // added sustained sound companion needs the supporter gate.
+                auto candidate=attendance::visitors::layer(wanted,visitor,*supporters,rendered->seats,fullness);
+                auto filtered=visitorSoundPolicy(candidate,companionNow);
+                if(!candidate.visitorLayer||filtered.reason!=attendance::sustained::Reason::None)wanted=filtered;
             }
         }
+        wanted=visitorSoundPolicy(wanted,companionNow);
         auto primary=wanted;auto preview=std::atomic_load(&diagnosticPreview);
         bool diagnostic=preview->sound&&preview->playing(wanted.match,wanted.epoch,GetTickCount64())&&wanted.active;
         if((diagnostic&&!preview->primary)||(!diagnostic&&wanted.supportingOnly&&supportingSwell.healthy()))primary.active=false;
@@ -1271,7 +1304,7 @@ void settingsMenuNote(const char* message){log("settings-menu",message);}
 void reactionNote(attendance::cheer::Source source,uint64_t id,attendance::cheer::Delivery delivery){
     using namespace attendance::cheer;
     const char* family=source==Source::Followup?"Staggered second cheer":source==Source::Live?"Live reaction":source==Source::Lineup?"Lineup cheer":source==Source::Result?(shownSpring?"Spring result reaction":"Play-result cheer"):"Eruption cheer";
-    const char* outcome=delivery==Delivery::PrioritySuppressed?"intentionally suppressed generic accent in favor of a current scoring reaction":delivery==Delivery::Cancelled?"receipt observation ended with a new play, owner or scene; playback unconfirmed":delivery==Delivery::ObservationUnavailable?"receipt observation unavailable or at its bounded capacity; playback unconfirmed":delivery==Delivery::NativePriority?"fresh same-family native voice registered on this play; duplicate skipped, audibility unverified":delivery==Delivery::Registered?"native reaction voice registered; audibility unverified":delivery==Delivery::Recovery?"native queue dropped the event selector; one same-size generic cheer/disappointment fallback sent":delivery==Delivery::Unregistered?"no matching positive native voice observed within the receipt window; dispatch is not proof of rejection or audible playback":delivery==Delivery::Sent?"native reaction event dispatched; playback unconfirmed":
+    const char* outcome=delivery==Delivery::PopulationSuppressed?"intentionally suppressed: current verified visiting share is below 20% or unavailable; request consumed":delivery==Delivery::PrioritySuppressed?"intentionally suppressed generic accent in favor of a current scoring reaction":delivery==Delivery::Cancelled?"receipt observation ended with a new play, owner or scene; playback unconfirmed":delivery==Delivery::ObservationUnavailable?"receipt observation unavailable or at its bounded capacity; playback unconfirmed":delivery==Delivery::NativePriority?"fresh same-family native voice registered on this play; duplicate skipped, audibility unverified":delivery==Delivery::Registered?"native reaction voice registered; audibility unverified":delivery==Delivery::Recovery?"native queue dropped the event selector; one same-size generic cheer/disappointment fallback sent":delivery==Delivery::Unregistered?"no matching positive native voice observed within the receipt window; dispatch is not proof of rejection or audible playback":delivery==Delivery::Sent?"native reaction event dispatched; playback unconfirmed":
         delivery==Delivery::Expired?"scene/callback arrived after the cheer window; stale cheer skipped":"native cheer dispatch failed; sound control stopped";
     log("reaction-audio",std::string(family)+" #"+std::to_string(id)+": "+outcome+".");
 }
@@ -1415,11 +1448,18 @@ A __fastcall appearanceGenerate(A component){
             if(s.spring)log("spring-appearance","Native school palette side "+std::to_string(s.springSide)+"; ordinary positions "+std::to_string(prepared.positions)+"; protected/native selectors restored after generation. No opposing section or travel model.");
             if(!s.spring)log("away-appearance-budget",std::string(prepared.nativeFallback?"Native seating fallback; section anchor/budget unavailable. ":"")+"Native generation: component "+hex(component)+"; occupied snapshot "+std::to_string(prepared.occupiedVerified)+"; spectator / visitor count "+std::to_string(prepared.spectators)+" / "+std::to_string(prepared.occupiedVisitors)+"; authored positions "+std::to_string(prepared.positions)+"; target "+std::to_string(plan.share*100)+"% of spectators; "+(occupied.empty()?"original visibility not ready at this generation; appearance ratio requires live verification.":"original occupied denominator, bands excluded."));
             ++appearanceRuns;
+            if(prepared.seatingMeasured&&!applied->launch.neutral){const auto& q=prepared.seating;std::ostringstream detail;
+                detail<<"Layout "<<plan.layoutVersion<<"; "<<(reused&&!visitorPlanCreatedAtLaunch?"REUSED plan":"NEW plan")
+                    <<"; main-section ordinary visitors "<<q.core<<" across "<<q.blocks<<" real aisle-separated blocks; scattered "<<q.scattered
+                    <<" in "<<q.parties<<" parties; core "<<q.innerVisitors<<"/"<<q.innerSeats<<"; edges "<<q.edgeVisitors<<"/"<<q.edgeSeats
+                    <<"; party-size counts (1..8)";for(unsigned i=1;i<=8;++i)detail<<" "<<q.sizes[i];
+                detail<<". These are preparation assignments, not proof of visible clothing or currently attending supporters. Protected non-band supporters remain in the separate exact total.";
+                log("visiting-section",detail.str());}
             if(prepared.applied){
                 // Allocate DGA's identity record before native generation. An
                 // allocation failure can then restore the selectors first.
                 generated=std::make_shared<attendance::visitors::GeneratedAppearance>();
-                generated->component=component;generated->map=prepared.map;generated->data=prepared.stream.data;generated->coordinates=prepared.coordinates;
+                generated->component=component;generated->map=prepared.map;generated->selectors=prepared.stream;generated->points=prepared.coordinateStream;
                 generated->home=home;generated->away=away;generated->side=prepared.desired;
                 ++appearanceChanged;appearanceBand=prepared.band;appearanceShare=s.spring?-1.f:plan.share;appearanceMiles=plan.travelKnown?plan.distance:-1;appearanceTravel=static_cast<int>(plan.travel);appearancePlanSource=reused&&!visitorPlanCreatedAtLaunch?2:1;appearanceLayoutVersion=s.spring?0:plan.layoutVersion;
                 if(!s.spring)log("visitor-demand-components","Layout model "+std::to_string(plan.layoutVersion)+"; "+(reused&&!visitorPlanCreatedAtLaunch?"REUSED prior fixture share/seed":"NEW launch plan (frozen for generation)")+"; home tickets "+std::to_string(plan.components.home)+"; regional travelers "+std::to_string(plan.components.regional)+"; modeled local supporters "+std::to_string(plan.components.local)+"; national supporters "+std::to_string(plan.components.national)+"; prestige reach "+std::to_string(plan.components.nationalReach)+"; travel factor "+std::to_string(plan.travelFactor)+"; takeover gate "+std::to_string(plan.components.takeover)+"; starting ceiling "+std::to_string(plan.ceiling)+". Components describe current eligibility, not a retune of reused plans.");
@@ -1521,6 +1561,29 @@ void refreshRenderedOccupancy(){
     auto known=std::atomic_load(&renderedOccupancy);if(known->owns(audioMatch.load(),audioEpoch.load()))return;
     std::lock_guard<std::mutex> guard(crowdMutex);publishRenderedOccupancyLocked();
 }
+// Cheap, read-only lease renewal. A settled audience need not run another full
+// native attendance/visibility pass merely to prove its unchanged identity.
+void refreshVisitorPopulationProof(){
+    const auto now=GetTickCount64();auto old=std::atomic_load(&visitorPopulation);
+    if(!old->verified)return;
+    bool valid=old->owns(audioMatch.load(),audioEpoch.load())&&old->appliedLoss==activeLoss.load()&&old->appliedTemporary==arrivalMissing.load()&&
+        !visibilityRetry&&!seatPatternPending&&visibilityGeneration==entityGeneration.load();
+    {std::lock_guard<std::mutex> guard(crowdMutex);
+        valid=valid&&old->revision==crowdRevision;
+        if(valid&&old->updated&&now>=old->updated&&now-old->updated<500)return;
+        unsigned groups=0;
+        if(valid)for(const auto& item:startingCrowds){const auto& base=item.second;if(base.hidden.size()<512){if(base.supporters.verified&&(base.supporters.home||base.supporters.away)){valid=false;break;}continue;}
+            attendance::seats::Mapping mapping;
+            if(!base.baselineComplete||!base.parts||!base.supporters.verified||base.supporters.side.size()!=base.hidden.size()||base.supporters.rank.size()!=base.hidden.size()||
+               base.selection.policy==attendance::seats::Policy::Pending||!attendance::seats::mapping(read,image,base.scene,item.first,base.masks,base.hidden.size(),mapping)||mapping.positions!=base.geometry){valid=false;break;}
+            ++groups;
+        }
+        valid=valid&&groups>0;
+    }
+    auto next=std::make_shared<attendance::visitors::Population>(valid?*old:attendance::visitors::Population{});
+    if(valid)next->updated=now;else visibilityRetry=true;
+    std::shared_ptr<const attendance::visitors::Population> publish=next;std::atomic_store(&visitorPopulation,publish);
+}
 // Runs after the native baseline pass, outside the per-fan callback. Build one
 // immutable order per renderer, then share it across every attendance purpose.
 void prepareSeatPatterns(){
@@ -1552,16 +1615,16 @@ void prepareSeatPatterns(){
                 {std::lock_guard<std::mutex> generatedGuard(generatedCrowdMutex);A component=at<A>(base.scene+0x908);
                  for(const auto& generated:generatedCrowds)if(generated&&generated->component==component){generated->apply(read,image,base.scene,shownTeam0,shownTeam1,base.agents);break;}}
                 if(attendance::seats::positions(read,image,base.scene,item.first,base.masks,base.hidden.size(),coordinates)){
-                    originalSeatLayouts.restore(coordinates,base.hidden,base.nativeSeen,base.parts);
-                    attendance::seats::freezeEmptyPositions(base.hidden,base.nativeSeen,base.parts);
                     base.layoutKey=attendance::seats::Baselines::fingerprint(coordinates);
+                    originalSeatLayouts.restore(coordinates,base.hidden,base.nativeSeen,base.parts,base.layoutKey);
+                    attendance::seats::freezeEmptyPositions(base.hidden,base.nativeSeen,base.parts);
                     auto fanSeats=base.hidden;
                     if(base.agents.verified)for(size_t i=0;i<fanSeats.size();++i)
                         if(base.agents.protectedBand(i))fanSeats[i]=base.parts;
                     base.selection=attendance::seats::build(coordinates,fanSeats,base.parts,attendanceSeed.load());
                     attendance::seats::Mapping geometry;
                     if(attendance::seats::mapping(read,image,base.scene,item.first,base.masks,base.hidden.size(),geometry))base.geometry=geometry.positions;
-                    if(base.selection.policy==attendance::seats::Policy::Position)originalSeatLayouts.remember(coordinates,base.hidden,base.parts);
+                    if(base.selection.policy==attendance::seats::Policy::Position)originalSeatLayouts.remember(coordinates,base.hidden,base.parts,base.layoutKey);
                 }else {attendance::seats::freezeEmptyPositions(base.hidden,base.nativeSeen,base.parts);base.selection.policy=attendance::seats::Policy::Scattered;}
                 base.supporters=attendance::visitors::groups(base.selection,base.hidden,base.parts,base.agents);
             }catch(const std::exception&){base.selection={};base.selection.policy=attendance::seats::Policy::Scattered;}
@@ -1819,14 +1882,17 @@ void apply(bool thin,bool arrivals=false,bool captureOnly=false) {
     if(!captureOnly&&result.verified){
         attendance::timing::Scope measuredCrowd(crowdMeasurementTimings);
         std::lock_guard<std::mutex> guard(crowdMutex);
+        supporters.revision=crowdRevision;
         for(const auto& item:startingCrowds){
             A renderer=item.first;const auto& base=item.second;
             if(at<A>(base.scene)!=image+attendance::bindings::SceneCrowdVtable||at<A>(base.scene+0x9f0)!=renderer||at<A>(renderer)!=image+0xb7e1988||at<A>(renderer+0x188)!=base.masks||
-               at<A>(renderer+0x190)!=base.masks+base.hidden.size()*2||!base.parts)continue;
-            std::vector<unsigned short> current(base.hidden.size());if(!read(base.masks,current.data(),current.size()*2))continue;
+               at<A>(renderer+0x190)!=base.masks+base.hidden.size()*2||!base.parts){if(base.hidden.size()>=512)supporterUnknown=true;continue;}
+            std::vector<unsigned short> current(base.hidden.size());if(!read(base.masks,current.data(),current.size()*2)){if(base.hidden.size()>=512)supporterUnknown=true;continue;}
+            if(base.nativeHidden.size()!=base.hidden.size()||(base.supporters.verified&&
+                (base.hidden.size()<512||base.supporters.side.size()!=base.hidden.size()||base.supporters.rank.size()!=base.hidden.size()))){supporterUnknown=true;continue;}
             measured=true;
             bool unique=base.geometry&&supporterGeometry.insert(base.layoutKey?static_cast<A>(base.layoutKey):base.geometry).second;
-            if(base.hidden.size()>=512&&(!base.supporters.verified||!base.geometry))supporterUnknown=true;
+            if(base.hidden.size()>=512&&(!base.baselineComplete||base.selection.policy==attendance::seats::Policy::Pending||!base.supporters.verified||!base.geometry||base.supporters.side.size()!=base.hidden.size()))supporterUnknown=true;
             if(unique&&base.supporters.verified){supporters.originalHome+=base.supporters.home;supporters.originalAway+=base.supporters.away;homeGone+=base.homeGone;awayGone+=base.awayGone;}
             for(size_t i=0;i<current.size();++i){
                 if(base.selection.policy==attendance::seats::Policy::Pending)continue;
@@ -1838,10 +1904,12 @@ void apply(bool thin,bool arrivals=false,bool captureOnly=false) {
         }
     }
     if(!captureOnly&&result.verified&&historical<0&&!supporterUnknown&&supporters.originalHome+supporters.originalAway){
-        supporters.verified=true;supporters.sharedBudget=sharedFanBudgetApplied.load();supporters.appliedLoss=activeLoss.load();supporters.appliedTemporary=arrivalMissing.load();supporters.match=audioMatch.load();supporters.epoch=audioEpoch.load();
+        supporters.verified=true;supporters.updated=GetTickCount64();supporters.sharedBudget=sharedFanBudgetApplied.load();supporters.appliedLoss=activeLoss.load();supporters.appliedTemporary=arrivalMissing.load();supporters.match=audioMatch.load();supporters.epoch=audioEpoch.load();
         supporters.homeLoss=supporters.originalHome?static_cast<float>(static_cast<double>(homeGone)/supporters.originalHome):0;
         supporters.awayLoss=supporters.originalAway?static_cast<float>(static_cast<double>(awayGone)/supporters.originalAway):0;
         std::shared_ptr<const attendance::visitors::Population> next=std::make_shared<attendance::visitors::Population>(supporters);std::atomic_store(&visitorPopulation,next);
+    }else if(!captureOnly){
+        std::shared_ptr<const attendance::visitors::Population> unknown=std::make_shared<attendance::visitors::Population>();std::atomic_store(&visitorPopulation,unknown);
     }
     if(!captureOnly){
         shownOriginalFans=population.original;shownVisibleFans=population.visible;shownExpectedFans=population.expected;
@@ -2606,6 +2674,7 @@ void atmosphereTick(){
     attendance::timing::Scope measured(atmosphereTimings);
     auto now=GetTickCount64();uint64_t interval=lastAtmospherePhase==3||lastAtmospherePhase==4?16:50;
     if(now-lastAtmosphereTick<interval)return;lastAtmosphereTick=now;
+    refreshVisitorPopulationProof();
     flushReplaySelection();
     updateDiagnostic(now);
     static unsigned loggedCannons=0;auto fired=cannonStarts.load();if(fired!=loggedCannons){
@@ -2633,6 +2702,7 @@ void atmosphereTick(){
     };
     attendance::energy::Play p;A match=0;
     if(!gameState(p.game,match)||!contextReady){gap();return;}
+    shownQuarter=p.game.quarter;shownSeconds=p.game.seconds;shownScore0=p.game.homeScore;shownScore1=p.game.awayScore;
     lastAtmospherePhase=p.game.phase;
     if(replaySuspendsAtmosphere){gap();return;}
     refreshStadiumOccupancy(match,audioEpoch.load(),now);refreshRenderedOccupancy();
@@ -2704,7 +2774,11 @@ void atmosphereTick(){
     if(!emptyCrowdActive&&fullnessReady&&liveSupporters->owns(match,epoch))remaining=static_cast<float>(static_cast<double>(liveSupporters->home+liveSupporters->away)/rendered->seats);
     auto quiet=homeCrowdQuiet.observe(p,result,match,epoch,playTracker.serial,now,
         enabled&&audioSetting&&mode==0&&std::atomic_load(&coreSettings)->enabled,
-        liveSupporters->owns(match,epoch)?liveSupporters->share():-1.f);
+        liveSupporters->owns(match,epoch)?liveSupporters->share():-1.f,&playTracker.start);
+    static uint64_t quietProofSequence=0;static int quietProof=0;static bool quietReduced=false;
+    if((quiet.tdObserved||quiet.corroboration)&&(quietProofSequence!=playTracker.serial||quietProof!=quiet.corroboration)){quietProofSequence=playTracker.serial;quietProof=quiet.corroboration;log("home-crowd-proof","Play #"+std::to_string(playTracker.serial)+"; TD result "+(quiet.tdObserved?"observed":"retained")+"; score corroboration "+(quiet.corroboration==1?"matched":quiet.corroboration==2?"pending":quiet.corroboration==3?"inconsistent":quiet.corroboration==4?"expired":"duplicate/skipped")+"; snap "+std::to_string(playTracker.start.game.homeScore)+"/"+std::to_string(playTracker.start.game.awayScore)+"; current "+std::to_string(p.game.homeScore)+"/"+std::to_string(p.game.awayScore));}
+    bool reduced=quiet.quiet>0;
+    if(reduced!=quietReduced){quietReduced=reduced;log("home-crowd-envelope",reduced?"Away-TD home background reduction target active; actual bus gains are reported separately; voices are not playback proof.":"Away-TD home background reduction released; normal background target restored; score/fixture and native mix gates still apply.");}
     if(quiet.newTouchdown)log("home-crowd","Verified visiting touchdown: initial reaction retained; home ambient bed fades from 1.5 to 4 seconds, staying subdued through the try/kickoff until the next ordinary possession. Visiting cheers and earned home reactions retain priority.");
     std::shared_ptr<const attendance::homequiet::Envelope> quietSnapshot=std::make_shared<attendance::homequiet::Envelope>(quiet);
     std::atomic_store(&homeQuietEnvelope,quietSnapshot);
@@ -3049,9 +3123,19 @@ void atmosphereTick(){
      if(visitorResult.blockedFieldGoal)awayMotion.blockedFieldGoal=visitorResult.sequence;
     }
     if(extraReactionId&&extraReactionId!=awayExtraHeardId&&attendance::population::negative(extraReactionType)&&extraCheer.liveDelivered(extraReactionId)){awayExtraHeardId=extraReactionId;awayHeardAt=now;}
+    auto visitingLayer=awaySoundReactions.positiveIntent(*audio,p,match,epoch,now,remaining,reactionEligible,reactionMinimum);
+    // Record admission when the source is selected, even before supporter
+    // ownership is available. Resolving counts later cannot resurrect it.
+    bool visitorSource=(wanted.liveCheer&&attendance::catalog::negative(wanted.liveType))||
+        (wanted.resultCheer&&attendance::catalog::negative(wanted.resultType))||
+        (wanted.celebration&&attendance::catalog::negative(wanted.celebrationType))||
+        (visitingLayer.active&&(visitingLayer.reason==attendance::sustained::Reason::Result||visitingLayer.reason==attendance::sustained::Reason::Eruption));
+    if(!p.game.neutral&&visitorSource)(void)visitorSoundPolicy(wanted,now,true);
     if(mixedSupporters){wanted=attendance::visitors::audience(wanted,*supporters,rendered->seats,remaining,now);
-        auto visitingLayer=awaySoundReactions.positiveIntent(*audio,p,match,epoch,now,remaining,reactionEligible,reactionMinimum);
-        wanted=attendance::visitors::layer(wanted,visitingLayer,*supporters,rendered->seats,remaining);
+        auto candidate=attendance::visitors::layer(wanted,visitingLayer,*supporters,rendered->seats,remaining);
+        auto filtered=visitorSoundPolicy(candidate,now);
+        if(!candidate.visitorLayer||filtered.reason!=attendance::sustained::Reason::None)wanted=filtered;
+        wanted=visitorSoundPolicy(wanted,now);
         if(wanted.opponentCheer&&wanted.opponentPositive&&opponentCheer.liveDelivered(wanted.opponentCheer))awayHeardAt=now;}
     auto visitorCue=awayCameraMotion.observe(*awayConfig,awayMotion);visitorCue.visitor=true;visitorCue.soundAt=awayHeardAt;visitorCue.playSequence=playTracker.serial;
     if(visitorCue.kind!=attendance::motion::Kind::None&&
@@ -3584,7 +3668,8 @@ void readResumeStatus(uint64_t now){
     std::shared_ptr<const attendance::resume::Signal> signal=std::make_shared<attendance::resume::Signal>(next);std::atomic_store(&resumeSignal,signal);
 }
 void loadAudienceFoundations(){
-    auto file=dataFolder/L"History"/L"audience-foundations.txt";std::error_code ec;
+    auto file=dataFolder/L"History"/L"audience-foundations-v3.txt";std::error_code ec;
+    if(!std::filesystem::exists(file,ec)&&!ec)file=dataFolder/L"History"/L"audience-foundations.txt";
     if(!std::filesystem::exists(file,ec)&&!ec)return;
     auto size=std::filesystem::file_size(file,ec);
     attendance::audience::Book next;std::ifstream input(file);
@@ -3607,7 +3692,7 @@ void saveAudienceFoundations(){
     {std::lock_guard<std::mutex> guard(audienceMutex);if(written==audienceBook.revision)return;snapshot=audienceBook;}
     auto failed=[&](){if(!warned){log("audience-history","Audience foundations could not be saved in the plugin History folder. This session keeps its in-memory foundation; check folder permissions/free space before restarting.");warned=true;}};
     auto dir=dataFolder/L"History";if(!attendance::ensureFolder(dir)){failed();return;}
-    auto pending=dir/L"audience-foundations.pending",file=dir/L"audience-foundations.txt";
+    auto pending=dir/L"audience-foundations-v3.pending",file=dir/L"audience-foundations-v3.txt";
     {std::ofstream output(pending,std::ios::trunc);snapshot.write(output);output.flush();if(!output){failed();return;}}
     if(MoveFileExW(pending.c_str(),file.c_str(),MOVEFILE_REPLACE_EXISTING|MOVEFILE_WRITE_THROUGH)){written=snapshot.revision;warned=false;}else failed();
 }
@@ -3753,6 +3838,7 @@ void writeStatus(std::ostream& state,unsigned long long now){
     report.field("Native appearance selectors")<<(appearanceRestoreFailed?"restoration guard failed; further outfit overrides stopped":"temporary only; restored after generation")<<"\n";
     {std::lock_guard<std::mutex> guard(visitorPlanMutex);report.field("Visiting fan plan history")<<visitorPlans.entries.size()<<" saved fixture(s); latest "<<(appearancePlanSource==2?"reused exact fixture plan":appearancePlanSource==1?"new verified demand plan":"waiting for crowd generation")<<"; "<<(visitorPlanWritable?"storage ready":"unreadable file preserved; in-memory only")<<"\n";}
     report.field("Remaining supporters")<<supporters->home<<" home / "<<supporters->away<<" away; "<<100*supporters->share()<<"% visitors; "<<(supporters->verified?"measured from owned fan selections":"waiting for verified fan groups")<<"\n";
+    report.field("Added visiting cheers")<<(visitorCountsEligible(*supporters,audioMatch.load(),audioEpoch.load(),GetTickCount64())?"eligible: current visiting share at least 20%":"inactive: below 20% or current owned counts unavailable/stale")<<"; bands excluded, protected non-band spectators included; native reactions unchanged\n";
     report.field("Supporter population basis")<<supporters->originalHome+supporters->originalAway<<" original spectators; "<<(supporters->withinOriginal()?"current counts within original bounds":"invalid overcount rejected by audio/reaction consumers")<<"; native empty seats remain excluded\n";
     report.field("Protected fan budget")<<(sharedFanBudgetApplied?"shared total":"legacy / waiting for verified layouts")<<"; target "<<sharedFanTarget<<" spectators including "<<sharedFanProtected<<" protected spectators; bands excluded\n";
     report.field("Permanent departures")<<activeLoss<<"% of original crowd\n";
@@ -3774,8 +3860,11 @@ void writeStatus(std::ostream& state,unsigned long long now){
     report.field("Crowd mix")<<"eight native buses; no graph-volume cuts or separate chant cut\n";
     const char* busNames[]={"Pass anticipation gain","Continuous Beds gain","Chants gain","Collective Reactions gain","Student section gain","Individual detail gain","Swells gain"};
     for(unsigned i=0;i<7;++i)report.field(busNames[i])<<attendanceMixer.netDb(i)<<" dB versus native\n";
-    {auto quiet=std::atomic_load(&homeQuietEnvelope);bool current=quiet->fresh(audioMatch.load(),audioEpoch.load(),now);
-        report.field("Home ambient settling")<<"big-lead background "<<(current?100*quiet->leadGain:100)<<"%; visiting-TD fade "<<(current?100*quiet->quiet:0)<<"%; continuous-bed target "<<(current?100*quiet->ambientGain():100)<<"% signal before existing mix; cheers/bands unchanged\n";}
+    {auto quiet=std::atomic_load(&homeQuietEnvelope);auto owner=audioMatch.load();auto generation=audioEpoch.load();bool owned=quiet->owns(owner,generation);
+        bool audible=audioAudible&&attendance::balance::audiblePhase(audioPresentationPhase(),nativeUnpaused(),replaySuspendsAtmosphere.load());
+        report.field("Home ambient settling")<<quiet->status(owner,generation,now,audible);
+        if(owned)state<<"; big-lead background "<<100*quiet->leadGain<<"%; visiting-TD fade snapshot "<<100*quiet->quiet<<"%; continuous-bed target snapshot "<<100*quiet->ambientGain()<<"% signal; TD play #"<<quiet->touchdownSequence<<"; active fade time "<<quiet->ageMs<<" ms";
+        state<<"; observed bus gains above are separate; cheers/bands unchanged; audibility unverified\n";}
     report.field("Empty crowd mute")<<(attendanceMixer.muted()?"active":"inactive")<<"\n";
     report.field("Vanilla crossover");if(mapped)state<<100*attendance::balance::crossover(density->seats)<<"% mapped fullness (size-dependent)\n";else state<<"waiting for verified mapped seats\n";
     report.field("Old excitement limiter")<<"removed; native excitement preserved, earned upward reactions retained\n";

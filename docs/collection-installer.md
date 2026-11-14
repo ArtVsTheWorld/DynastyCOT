@@ -1,5 +1,11 @@
 # Dynasty COT collection installer
 
+## Private candidate handoff
+
+Keep setup, its matching `.exe.config`, module ZIPs and verification JSON files together. Select your normal `MMCModManager.exe`, check the modules you want, and choose **Install / Update**. This private kit supplies Beyond the Field 1.0.24, Gameday Atmosphere 2.1.38, Extra Settings 0.2.12 and Expanded Practice 0.8.24. The public version picker lists separately published builds. Close MMC and the game before changing DLLs. For a standalone installation, use the instructions in the chosen ZIP. For an installer-managed rollback, open **Backups** and restore the matching operation.
+
+See the [private installer instructions](player-guides/Private-Installer-Readme.txt). Each module has a printable guide and editable Markdown under [player-guides](player-guides/). In the distributed private kit, open `Player-Guides`. The PDFs cover settings, examples, mode limits and optional Windows Security troubleshooting.
+
 The [1.1.0 installer](https://github.com/ArtVsTheWorld/DynastyCOT/releases/tag/v1.1.0) is the optional collection manager. It manages the same four standalone DLLs; it does not install a new DynastyCOT.dll or change any module's native hooks/helpers. The individual ZIPs remain usable without this installer.
 
 ## What the user sees
@@ -67,3 +73,7 @@ Verification metadata is supplied beside the installer. The released 1.0.0, 1.0.
 Only installer-compatible public releases appear in the version picker; a release needs the expected ZIP layout, module identity, GitHub digest and matching integrity metadata. Checking does not install anything. Release notes render safe Markdown without a browser.
 
 Single-owner Dynasty operation is the verified BTF scope. Multi-coach active non-owner selection and private Notes ownership remain implementation limitations, not completed tests. The release-preparation report distinguishes fixture checks from installed-game acceptance.
+
+## Current download contents
+
+A current standalone ZIP contains its DLL, README.txt, FEATURES.md and module-specific Player-Guide.pdf. Required notices are in the README appendix where needed. The updated installer retains earlier accepted archive layouts, verifies guide-bearing releases and copies their PDF outside Plugins with the other module documents. Rollback restores the prior guide or its prior absence. Verification JSON and checksum assets remain outside module ZIPs.

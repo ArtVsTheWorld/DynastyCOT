@@ -51,6 +51,7 @@ class DiagnosticsChecks
         var session=new DiagnosticSession(root,12345);
         session.Log("user picked offensive play");
         session.UpdateState(()=>"phase=5 down=3 ball=47 service_flags=0x19 operation=prepare CPU defense",true);
+        session.Flush();
         string statePath=Path.Combine(session.RunFolder,"last-state.txt");
         string state=File.ReadAllText(statePath);
         Check(state.Contains("phase=5") && state.Contains("service_flags=0x19"),"Native state missing");
@@ -84,6 +85,7 @@ class DiagnosticsChecks
         }
         var abandoned=new DiagnosticSession(Path.Combine(root,"abandoned"),24680);
         abandoned.UpdateState(()=>"phase=3 ball=80",true);
+        abandoned.Flush();
         DiagnosticSession.ObserveHelperFailure(Path.Combine(root,"abandoned"),24680,Process.GetCurrentProcess().Id,5,true,"No event yet");
         Check(File.ReadAllText(Path.Combine(abandoned.RunFolder,"report.txt")).Contains("phase=3 ball=80"),"Killed-helper report did not recover durable state");
         Check(File.Exists(abandoned.ReportZip),"Killed-helper report not bundled");

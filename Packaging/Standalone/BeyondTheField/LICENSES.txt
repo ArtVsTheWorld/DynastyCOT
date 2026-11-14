@@ -3005,7 +3005,7 @@ LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
 
-MMC/Frosty SDK, Node.js, the installed MMC Editor/madden-franchise parser and
+The MMC/Frosty SDK, the installed MMC Editor/madden-franchise parser and
 MyDynasty's schema are external requirements and are not redistributed here.
 This package contains no game executable, game assets, dynasty saves or
 save-derived player caches. Gridiron Performance Index (GPI) is the

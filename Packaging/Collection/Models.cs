@@ -21,6 +21,7 @@ namespace DynastyCOT.Collection {
   public string[] Aliases {get;set;}
   public ModuleRelease Current {get;set;}
   public string FileName {get{return Id+".dll";}}
+  internal string GuideName {get{return Id+"-Player-Guide.pdf";}}
  }
  internal sealed class ModuleRelease {
   public string Module,Version,Tag,ArchiveName,ArchiveUrl,ArchiveSha256,DllSha256,ProofUrl,PageUrl,Notes,Compatibility;
@@ -71,7 +72,7 @@ namespace DynastyCOT.Collection {
  internal sealed class PreparedModule {
   internal Dictionary<string,byte[]> SupportFiles=new Dictionary<string,byte[]>(StringComparer.OrdinalIgnoreCase);
   internal Module Module;internal ModuleRelease Release;internal string Dll;
-  internal byte[] Readme,Features;
+  internal byte[] Readme,Features,Guide;
   internal List<KnownFile> Programs=new List<KnownFile>();
  }
  internal sealed class Operation {

@@ -34,6 +34,7 @@ struct Demand {
 };
 enum class Travel {Unknown,City,State,Local,Region};
 struct Plan {bool valid=false,native=false,travelKnown=false;float share=.05f;double distance=NAN;Travel travel=Travel::Unknown;double travelFactor=1;unsigned layoutVersion=1;double ceiling=.70;visitormodel::Components components;};
+inline constexpr unsigned CurrentLayoutVersion=5;
 inline Plan influenceLegacy(Plan p,double percent){
     // Preference for new plans, separate from the underlying travel model.
     // Default is bit-for-bit unchanged; neutral seating remains native.
@@ -85,7 +86,7 @@ inline Plan planLegacy(const Demand& d){
 }
 inline Plan plan(const Demand& d){
  Plan p;if(!std::isfinite(d.homeFans)||d.homeFans<=0)return p;
- p.layoutVersion=4;p.distance=miles(d.home,d.away);p.travelKnown=std::isfinite(p.distance);
+ p.layoutVersion=CurrentLayoutVersion;p.distance=miles(d.home,d.away);p.travelKnown=std::isfinite(p.distance);
  if(p.travelKnown)p.travel=Travel::City;
  else if(d.sameState){p.travel=Travel::Local;p.distance=NAN;p.travelFactor=1.12;}
  else if(valid(d.homeState)&&valid(d.awayState)){p.distance=miles(d.homeState,d.awayState);if(p.distance>1){p.travel=Travel::State;p.travelKnown=true;}else{p.distance=NAN;p.travel=Travel::Local;p.travelFactor=1.12;}}
@@ -231,8 +232,8 @@ inline std::vector<unsigned char> assignLegacy(const std::vector<seats::Position
     }
     return side;
 }
-inline std::vector<unsigned char> assign(const std::vector<seats::Position>& positions,const agents::Tags& tags,float share,unsigned seed,const std::vector<unsigned char>* occupied=nullptr,unsigned layoutVersion=1,bool neutral=false,bool* nativeFallback=nullptr){
- return layoutVersion>=2?seating::assign(positions,tags,share,seed,occupied,neutral,nullptr,layoutVersion>=3,nativeFallback,layoutVersion>=4):assignLegacy(positions,tags,share,seed,occupied);
+inline std::vector<unsigned char> assign(const std::vector<seats::Position>& positions,const agents::Tags& tags,float share,unsigned seed,const std::vector<unsigned char>* occupied=nullptr,unsigned layoutVersion=1,bool neutral=false,bool* nativeFallback=nullptr,seating::Summary* summary=nullptr){
+ return layoutVersion>=2?seating::assign(positions,tags,share,seed,occupied,neutral,nullptr,layoutVersion>=3,nativeFallback,layoutVersion>=4,layoutVersion>=5,summary):assignLegacy(positions,tags,share,seed,occupied);
 }
 struct Population {
     bool verified=false;uint64_t home=0,away=0,originalHome=0,originalAway=0;
@@ -240,6 +241,7 @@ struct Population {
     int appliedLoss=0,appliedTemporary=0;
     uintptr_t match=0;unsigned epoch=0;
     float homeLoss=-1,awayLoss=-1;
+    uint64_t updated=0,revision=0;
     bool withinOriginal()const{return (!originalHome&&!originalAway)||(home<=originalHome&&away<=originalAway);}
     bool owns(uintptr_t m,unsigned e)const{return verified&&match==m&&epoch==e&&home+away>0&&withinOriginal();}
     float share()const{return verified&&withinOriginal()&&home+away?static_cast<float>(static_cast<double>(away)/(home+away)):0;}

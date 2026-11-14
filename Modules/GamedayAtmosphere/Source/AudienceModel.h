@@ -31,30 +31,24 @@ inline float recent(const Program& p){
 inline float apStrength(int rank){return rank>=1&&rank<=138?1.f-(rank-1)/137.f:0.f;}
 inline std::array<float,4> features(const Program& p){return {p.prestige/10.f,(12-p.atmosphere)/12.f,recent(p),p.ap>0?apStrength(p.ap):-1.f};}
 inline constexpr std::array<float,4> Weights{.40f,.30f,.20f,.10f};
-struct Foundation {double fans=0;std::array<float,4> reference{};bool peers=false;};
+struct Foundation {double fans=0;std::array<float,4> reference{};bool peers=false;int policy=1;};
 inline Foundation peerFoundation(const Program& p){
     struct Peer {double distance,weight;const Calibration* school;};
     std::vector<Peer> peers;auto f=features(p);
     for(const auto& c:CalibrationSchools){
         if(!p.custom&&c.id==p.id)continue;
-        double d=(.4*std::abs(f[0]-c.prestige/10.f)+.3*std::abs(f[1]-(12-c.atmosphere)/12.f))/.7;
+        double d=std::abs(f[0]-c.prestige/10.f); // Comparable brand/tradition calibration is unavailable
         peers.push_back({d,1/((d+.05)*(d+.05)),&c});
     }
     std::sort(peers.begin(),peers.end(),[](const Peer& a,const Peer& b){return a.distance<b.distance;});
     double cutoff=peers[24].distance;peers.erase(std::remove_if(peers.begin(),peers.end(),[&](const Peer& a){return a.distance>cutoff+1e-7;}),peers.end());
-    std::array<float,4> reference{};std::array<double,4> sums{},weights{};
-    for(const auto& x:peers){const auto& c=*x.school;std::array<float,4> cf{c.prestige/10.f,(12-c.atmosphere)/12.f,c.history,apStrength(c.ap)};
-        for(int i=0;i<4;++i)if(cf[i]>=0){sums[i]+=x.weight*cf[i];weights[i]+=x.weight;}}
-    for(int i=0;i<4;++i)reference[i]=weights[i]>0?static_cast<float>(sums[i]/weights[i]):-1.f;
     std::sort(peers.begin(),peers.end(),[](const Peer& a,const Peer& b){return a.school->referenceFans<b.school->referenceFans;});
     double total=0,walk=0,base=0;for(const auto& x:peers)total+=x.weight;
     for(const auto& x:peers){walk+=x.weight;if(walk>=total*.5){base=x.school->referenceFans;break;}}
-    float delta=0,active=0;for(int i=0;i<4;++i)if(f[i]>=0&&reference[i]>=0){delta+=Weights[i]*(f[i]-reference[i]);active+=Weights[i];}
-    double factor=(std::clamp)(std::exp(2.0*delta/active),.70,1.35);
-    // Freeze the program's starting attributes. Peer history is an expectation
-    // reference only, never a fabricated season in the program's history.
-    auto initial=f;for(int i=0;i<4;++i)if(initial[i]<0)initial[i]=reference[i];
-    return {base*factor,initial,true};
+    // No atmosphere/ranking/season boost in the enduring peer foundation.
+    // Missing own history is neutral, not borrowed from a replaced program.
+    auto initial=f;for(auto& value:initial)if(value<0)value=.5f;
+    return {base,initial,true,2};
 }
 inline Foundation foundation(const Program& p){
     if(!valid(p)||!p.identityKnown)return {};
@@ -68,7 +62,7 @@ inline Foundation foundation(const Program& p){
 inline double demand(const Foundation& base,const Program& p){
     if(!valid(p)||!p.identityKnown||!std::isfinite(base.fans)||base.fans<=0)return 0;
     auto f=features(p);float delta=0,total=0;
-    for(int i=0;i<4;++i)if(f[i]>=0&&base.reference[i]>=0){delta+=Weights[i]*(f[i]-base.reference[i]);total+=Weights[i];}
+    for(int i=0;i<4;++i)if(f[i]>=0&&base.reference[i]>=0){float weight=base.policy==2?(i==0?.75f:i==2?.25f:0.f):Weights[i];delta+=weight*(f[i]-base.reference[i]);total+=weight;}
     if(total<=0)return 0;
     // No annual growth bonus or repeated compounding. Equal current attributes
     // always give the same audience, including after a restart or a rewind.
@@ -103,16 +97,17 @@ public:
         entries_.push_back({dynasty,p.row,p.id,p.year,p.custom,out});++revision;return true;
     }
     void write(std::ostream& out)const{
-        out<<"DGA-AUDIENCE-2 "<<entries_.size()<<'\n'<<std::setprecision(17);
-        for(const auto& e:entries_){out<<e.dynasty<<' '<<e.row<<' '<<e.id<<' '<<e.born<<' '<<e.custom<<' '<<e.base.peers<<' '<<e.base.fans;for(float f:e.base.reference)out<<' '<<f;out<<'\n';}
+        out<<"DGA-AUDIENCE-3 "<<entries_.size()<<'\n'<<std::setprecision(17);
+        for(const auto& e:entries_){out<<e.dynasty<<' '<<e.row<<' '<<e.id<<' '<<e.born<<' '<<e.custom<<' '<<e.base.peers<<' '<<e.base.fans;for(float f:e.base.reference)out<<' '<<f;out<<' '<<e.base.policy<<'\n';}
     }
     bool read(std::istream& in){
-        Book next;std::string magic;size_t count=0;if(!(in>>magic>>count)||(magic!="DGA-AUDIENCE-1"&&magic!="DGA-AUDIENCE-2")||count>8192)return false;
+        Book next;std::string magic;size_t count=0;if(!(in>>magic>>count)||(magic!="DGA-AUDIENCE-1"&&magic!="DGA-AUDIENCE-2"&&magic!="DGA-AUDIENCE-3")||count>8192)return false;
         for(size_t n=0;n<count;++n){Entry e;int custom=0,peers=0;
             if(!(in>>e.dynasty>>e.row>>e.id>>e.born>>custom>>peers>>e.base.fans)||custom<0||custom>1||peers<0||peers>1)return false;
             e.custom=custom!=0;e.base.peers=peers!=0;
             if(!e.dynasty||e.row<0||e.row>1000000||e.id<0||e.id>=2047||e.born<0||e.born>100||!std::isfinite(e.base.fans)||e.base.fans<=0||e.base.fans>1000000)return false;
             for(auto& f:e.base.reference)if(!(in>>f)||!std::isfinite(f)||f<0||f>1)return false;
+            if(magic=="DGA-AUDIENCE-3"&&(!(in>>e.base.policy)||(e.base.policy!=1&&e.base.policy!=2)))return false;
             for(const auto& old:next.entries_)if(old.dynasty==e.dynasty&&old.row==e.row&&old.id==e.id&&old.custom==e.custom)return false;
             next.entries_.push_back(e);
         }

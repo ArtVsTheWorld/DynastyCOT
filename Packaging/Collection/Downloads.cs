@@ -57,12 +57,26 @@ namespace DynastyCOT.Collection {
    if(new FileInfo(archive).Length!=release.ArchiveBytes||Paths.HashFile(archive)!=release.ArchiveSha256)throw new IOException("Cached ZIP failed verification.");
    using(var stream=File.OpenRead(archive))using(var zip=new ZipArchive(stream,ZipArchiveMode.Read)){
     var support=new Dictionary<string,string>();object supportRaw;if(proof.TryGetValue("supportFiles",out supportRaw)){var map=supportRaw as Dictionary<string,object>;if(map==null||map.Count>1)throw new IOException("Invalid support manifest.");foreach(var row in map){if(!CollectionInstaller.SupportPath(row.Key,module.Id,release.Version))throw new IOException("Unsafe support path.");string supportHash=row.Value as string;ReleaseRules.Hash(supportHash);support.Add(row.Key,supportHash);}}
-    string pluginEntry=support.Count>0?"Plugins/"+module.FileName:module.FileName;var names=new[]{pluginEntry,"README.txt","FEATURES.md"}.Concat(support.Keys).Concat(zip.GetEntry("LICENSES.txt")!=null?new[]{"LICENSES.txt"}:new string[0]).ToArray();if(zip.Entries.Count!=names.Length||!zip.Entries.Select(x=>x.FullName).OrderBy(x=>x,StringComparer.Ordinal).SequenceEqual(names.OrderBy(x=>x,StringComparer.Ordinal)))throw new IOException("Standalone ZIP contains unexpected files. Expected the plugin, README.txt, FEATURES.md and optional LICENSES.txt.");
-    Func<string,long,byte[]> read=(name,limit)=>{var entry=zip.GetEntry(name);if(entry.Length>limit)throw new IOException("Standalone file exceeds its limit.");using(var input=entry.Open())using(var output=new MemoryStream()){byte[] chunk=new byte[65536];int n;while((n=input.Read(chunk,0,chunk.Length))>0){cancel.ThrowIfCancellationRequested();if(output.Length+n>limit)throw new IOException("Expanded file exceeds its limit.");output.Write(chunk,0,n);}return output.ToArray();}};
+    string pluginEntry=support.Count>0?"Plugins/"+module.FileName:module.FileName;
+    bool hasGuide=zip.GetEntry(module.GuideName)!=null;
+    bool hasLicense=zip.GetEntry("LICENSES.txt")!=null;
+    object guideDigest;bool declaresGuide=proof.TryGetValue("playerGuideSha256",out guideDigest);
+    if(declaresGuide){ReleaseRules.Hash(guideDigest as string);if(!hasGuide)throw new IOException("The release verification lists a player guide, but the ZIP is missing "+module.GuideName+".");}
+    if(hasGuide&&(hasLicense||support.Count!=0))throw new IOException("A guide release must contain exactly its plugin, README.txt, FEATURES.md and "+module.GuideName+".");
+    var names=new List<string>{pluginEntry,"README.txt","FEATURES.md"};names.AddRange(support.Keys);
+    if(hasGuide)names.Add(module.GuideName);if(hasLicense)names.Add("LICENSES.txt");
+    if(!zip.Entries.Select(x=>x.FullName).OrderBy(x=>x,StringComparer.Ordinal).SequenceEqual(names.OrderBy(x=>x,StringComparer.Ordinal)))throw new IOException("Standalone ZIP contains missing, repeated or unexpected files.");
+    Func<string,long,byte[]> read=(name,limit)=>{var entry=zip.GetEntry(name);if(entry.Length>limit)throw new IOException("Standalone file exceeds its limit: "+name);using(var input=entry.Open())using(var output=new MemoryStream()){byte[] chunk=new byte[65536];int n;while((n=input.Read(chunk,0,chunk.Length))>0){cancel.ThrowIfCancellationRequested();if(output.Length+n>limit)throw new IOException("Expanded file exceeds its limit: "+name);output.Write(chunk,0,n);}if(output.Length!=entry.Length)throw new IOException("Incomplete standalone file: "+name);return output.ToArray();}};
     if(zip.GetEntry("LICENSES.txt")!=null)read("LICENSES.txt",1024*1024);
     var plugin=read(pluginEntry,256L*1024*1024);if(Paths.Hash(plugin)!=release.DllSha256)throw new IOException("Plugin failed release SHA-256 verification.");string file=Paths.Resolve(cache,release.DllSha256+".dll");if(Paths.Existing(file)!=release.DllSha256)Paths.Atomic(file,plugin);
     var assembly=System.Reflection.AssemblyName.GetAssemblyName(file);if(assembly.Name!=module.Id||new Version(assembly.Version.Major,assembly.Version.Minor,assembly.Version.Build)!=ReleaseRules.Numeric(release.Version))throw new IOException("Standalone DLL identity/version differs from its module.");
-    var prepared=new PreparedModule{Module=module,Release=release,Dll=file,Readme=read("README.txt",128*1024),Features=read("FEATURES.md",512*1024)};
+    var prepared=new PreparedModule{Module=module,Release=release,Dll=file,Readme=read("README.txt",module.Id=="BeyondTheField"&&hasGuide?512*1024:128*1024),Features=read("FEATURES.md",512*1024)};
+    if(hasGuide){
+     var guide=read(module.GuideName,10L*1024*1024);
+     if(guide.Length<10||Encoding.ASCII.GetString(guide,0,5)!="%PDF-"||!Encoding.ASCII.GetString(guide,Math.Max(0,guide.Length-1024),Math.Min(1024,guide.Length)).TrimEnd(' ','\t','\r','\n','\f').EndsWith("%%EOF",StringComparison.Ordinal))throw new IOException("The player guide has an invalid PDF header or ending: "+module.GuideName);
+     if(declaresGuide&&Paths.Hash(guide)!=(string)guideDigest)throw new IOException("Player guide failed release SHA-256 verification.");
+     prepared.Guide=guide;
+    }
     foreach(var item in support){var bytes=read(item.Key,64L*1024*1024);if(Paths.Hash(bytes)!=item.Value)throw new IOException("Native support SHA-256 differs.");prepared.SupportFiles.Add(item.Key,bytes);prepared.Programs.Add(new KnownFile{Path=item.Key,Module=module.Id,Sha256=item.Value});}
     object rawPrograms;if(proof.TryGetValue("payload",out rawPrograms)){
      var programs=rawPrograms as Dictionary<string,object>;if(programs==null||programs.Count>2000)throw new IOException("Invalid release program metadata.");

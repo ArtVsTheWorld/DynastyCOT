@@ -19,7 +19,7 @@ struct FixtureKey {
 inline FixtureKey key(const turnout::Seed& s){return {s.dynasty,s.home.id,s.away.id,s.home.recordRow,s.away.recordRow,s.stadium,s.week,s.year};}
 struct FixturePlan {FixtureKey key;float share=-1;unsigned seed=0;uint64_t history=0;unsigned layoutVersion=1;int attendance=0,capacity=0,kickoff=0,fill=0;bool exceptional=false;};
 inline bool valid(const FixturePlan& p){return p.key.valid()&&std::isfinite(p.share)&&
-    ((p.share>=.01f&&p.share<=.70f)||(p.share==-1&&p.seed==0&&p.history!=0))&&(p.layoutVersion>=1&&p.layoutVersion<=4)&&
+    ((p.share>=.01f&&p.share<=.70f)||(p.share==-1&&p.seed==0&&p.history!=0))&&(p.layoutVersion>=1&&p.layoutVersion<=CurrentLayoutVersion)&&
     (p.attendance==0&&p.capacity==0||(p.attendance>0&&p.capacity>=1000&&p.capacity<=200000&&p.attendance<=p.capacity&&p.kickoff>=0&&p.kickoff<=100&&p.fill>=0&&p.fill<=100));}
 // Freeze the first verified plan for this exact fixture. The same selection seed
 // regenerates the same outfits before a Midgame Save restores its clock/score.
@@ -31,11 +31,11 @@ struct PlanBook {
         reused=false;if(!fixture.valid()||current.native)return false;
         for(auto& entry:entries)if(entry.key==fixture){
             if(entry.share<0&&entry.layoutVersion==1){out=current;out.valid=out.native=true;out.layoutVersion=1;selectedSeed=0;reused=true;return true;}
-            if(entry.share<0){FixturePlan proposed{fixture,current.share,seed,entry.history};if(!current.valid||!valid(proposed))return false;proposed.layoutVersion=current.layoutVersion;entry=proposed;++revision;out=current;selectedSeed=seed;return true;}
+            if(entry.share<0){FixturePlan proposed{fixture,current.share,seed,entry.history,current.layoutVersion};if(!current.valid||!valid(proposed))return false;entry=proposed;++revision;out=current;selectedSeed=seed;return true;}
             out=current;out.valid=true;out.share=entry.share;out.layoutVersion=entry.layoutVersion;selectedSeed=entry.seed;reused=true;return true;
         }
-        FixturePlan entry{fixture,current.share,seed};if(!current.valid||!valid(entry))return false;
-        entry.layoutVersion=current.layoutVersion;entries.push_back(entry);while(entries.size()>Maximum)entries.pop_front();++revision;
+        FixturePlan entry{fixture,current.share,seed,0,current.layoutVersion};if(!current.valid||!valid(entry))return false;
+        entries.push_back(entry);while(entries.size()>Maximum)entries.pop_front();++revision;
         out=current;selectedSeed=seed;return true;
     }
     const FixturePlan* find(const FixtureKey& fixture)const{if(fixture.valid())for(const auto& e:entries)if(e.key==fixture)return &e;return nullptr;}
@@ -48,7 +48,7 @@ struct PlanBook {
     void importMissing(const PlanBook& legacy){for(const auto& e:legacy.entries){bool found=false;for(const auto& current:entries)if(current.key==e.key){found=true;break;}if(!found&&entries.size()<Maximum){entries.push_back(e);++revision;}}}
     uint64_t source(const FixtureKey& fixture)const{if(fixture.valid())for(const auto& e:entries)if(e.key==fixture)return e.history;return 0;}
     bool bind(const FixtureKey& fixture,uint64_t history,unsigned layoutVersion=1){
-        if(!fixture.valid()||!history)return false;
+        if(!fixture.valid()||!history||layoutVersion<1||layoutVersion>CurrentLayoutVersion)return false;
         for(auto& e:entries)if(e.key==fixture){if(e.history!=history){e.history=history;++revision;}return true;}
         FixturePlan entry{fixture,-1,0,history};entry.layoutVersion=layoutVersion;entries.push_back(entry);while(entries.size()>Maximum)entries.pop_front();++revision;return true;
     }

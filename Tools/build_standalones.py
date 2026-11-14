@@ -4,9 +4,9 @@ import argparse,datetime,hashlib,json,re,shutil,subprocess,zipfile
 from build_package import clean_adapter,analytics_build_id
 ROOT=Path(__file__).resolve().parents[1]
 DEFS={
- 'BeyondTheField':('DynastyEnhancer','Beyond the Field','1.0.23','DynastyEnhancer.LaunchAction',['DynastyEnhancer.dll','PlayerAnalytics.dll']),
- 'ExtraSettings':('ExtraDynastySettings','Extra Settings','0.2.11','OfflineDynastySettings.CombinedSettingsAction',['OfflineDynastySettings.dll','DynastyPlayClock.dll','OfflinePlaycall.dll']),
- 'ExpandedPractice':('DrivePractice','Expanded Practice','0.8.23','SituationalPractice.PracticeAction',['SituationalPractice.dll']),
+ 'BeyondTheField':('DynastyEnhancer','Beyond the Field','1.0.24','DynastyEnhancer.LaunchAction',['DynastyEnhancer.dll','PlayerAnalytics.dll']),
+ 'ExtraSettings':('ExtraDynastySettings','Extra Settings','0.2.12','OfflineDynastySettings.CombinedSettingsAction',['OfflineDynastySettings.dll','DynastyPlayClock.dll','OfflinePlaycall.dll']),
+ 'ExpandedPractice':('DrivePractice','Expanded Practice','0.8.24','SituationalPractice.PracticeAction',['SituationalPractice.dll']),
 }
 def sha(path):return hashlib.sha256(path.read_bytes()).hexdigest()
 def build_social(work,inputs):
@@ -112,14 +112,14 @@ def main():
   payload_manifest=emit('payload.json',json.dumps({path:hashlib.sha256(content).hexdigest() for path,content in sorted(payload.items())},indent=2))
   identity=emit('Identity.cs','namespace DynastyCOTStandalone {internal static class Identity {internal const string Version='+json.dumps(version)+';internal const string Module='+json.dumps(module)+';internal const string Title='+json.dumps(title)+';internal static readonly string[] LegacyDlls=new[]{'+','.join(json.dumps(x) for x in legacy)+'};}}')
   entry=emit('StandaloneEntry.cs','''using System;using System.Diagnostics;using System.Reflection;using System.Threading;using Frosty.Core;using Frosty.Core.Attributes;using FrostySdk.Interfaces;
-[assembly: AssemblyTitle(TITLE)] [assembly: AssemblyProduct(TITLE)] [assembly: AssemblyVersion(VERSION4)] [assembly: AssemblyFileVersion(VERSION4)] [assembly: PluginVersion(VERSION)] [assembly: PluginAuthor("Ace")] [assembly: PluginDisplayName(TITLE)] [assembly: RegisterExecutionAction(typeof(DynastyCOTStandalone.Entry))]
-namespace DynastyCOTStandalone {public sealed class Entry:ExecutionAction {static int starting;static ExecutionAction action;
+[assembly: AssemblyTitle(TITLE)] [assembly: AssemblyProduct(TITLE)] [assembly: AssemblyVersion(VERSION4)] [assembly: AssemblyFileVersion(VERSION4)] [assembly: PluginVersion(VERSION)] [assembly: PluginAuthor("Ace")] [assembly: PluginDisplayName("Ace\u2019s " + TITLE)] [assembly: RegisterExecutionAction(typeof(DynastyCOTStandalone.Entry))]
+namespace DynastyCOTStandalone {public sealed class Entry:ExecutionAction {static int starting,discovered;static ExecutionAction action;
  public Entry(){using(var process=Process.GetCurrentProcess())if(process.ProcessName=="MMCModManager")Start(null,PluginManagerType.ModManager,CancellationToken.None);}
  public override Action<ILogger,PluginManagerType,CancellationToken> PreLaunchAction{get{return Start;}}
  public override Action<ILogger,PluginManagerType,CancellationToken> PostLaunchAction{get{return Start;}}
  static void Start(ILogger log,PluginManagerType type,CancellationToken token){if(Interlocked.CompareExchange(ref starting,1,0)!=0)return;
- new Thread(()=>{try{if(Runtime.Initialize()){if(action==null)action=new ACTION();action.PreLaunchAction(log,type,token);Runtime.Note("Matching embedded payload verified; module startup requested. Native activation is reported separately.");}}
- catch(Exception error){Runtime.Note(error.ToString());if(log!=null)try{log.Log("["+Identity.Title+"] "+error.Message,new object[0]);}catch{}}
+ new Thread(()=>{try{if(Interlocked.Exchange(ref discovered,1)==0)Runtime.Note("Plugin discovered by MMC; verifying matching package. Feature activation is separate.");if(Runtime.Initialize()){if(action==null){action=new ACTION();Runtime.Note("Matching embedded payload verified; module startup requested. Native activation is reported separately.");}action.PreLaunchAction(log,type,token);}}
+ catch(Exception error){Runtime.Note("Package preparation failed for "+Identity.Title+" | Plugin: "+typeof(Entry).Assembly.Location+" | "+error.ToString()+" | Check the named path, permissions and matching download. No feature readiness is established.");if(log!=null)try{log.Log("["+Identity.Title+"] "+error.Message,new object[0]);}catch{}}
  finally{Interlocked.Exchange(ref starting,0);}}){IsBackground=true,Name=Identity.Title+" package preparation"}.Start();}
 }}'''.replace('VERSION4',json.dumps(version+'.0')).replace('VERSION',json.dumps(version)).replace('TITLE',json.dumps(title)).replace('ACTION',action))
   output=stage/(name+'.dll');csc=Path(r'C:\Windows\Microsoft.NET\Framework64\v4.0.30319\csc.exe')
@@ -132,6 +132,7 @@ namespace DynastyCOTStandalone {public sealed class Entry:ExecutionAction {stati
   if name!='BeyondTheField':tracked+=helper_sources
   if name=='BeyondTheField':
    tracked += [p for p in src.iterdir() if p.suffix in ['.h','.cpp','.cs']]
+   tracked += [src/'Analytics.NOTICES.txt']
    tracked += [ROOT/rel for rel in inputs['sourceHashes']]+[ROOT/'cot.build-inputs.json',*[p for p in (ROOT/'Modules/DynastyEnhancer/Tests').iterdir() if p.suffix in ['.cpp','.h']]]
    tracked += [p for folder,pattern in [('Tools','*.mjs'),('Content/Runtime','*.json')] for p in (ROOT/'Modules/DynastyEnhancer'/folder).glob(pattern) if p.name!='audit_rc016_checkpoint.mjs']
   result=dict(name=name,module=module,title=title,version=version,stage=str(stage),work=str(work),dll=str(output),dllSha256=sha(output),referenceArchiveSha256=sha(reference),payload=json.loads(payload_manifest.read_text(encoding='utf-8')),branding=branding,sourceHashes={str(x.relative_to(ROOT).as_posix()):sha(x) for x in tracked},sdk=str(sdk),installed=False,published=False)

@@ -13,6 +13,9 @@ class StandaloneModulesFixture {
    string plugins=Path.Combine(root,"Plugins"),dll=Path.Combine(plugins,name+".dll");var assembly=Assembly.LoadFile(dll);Profile(assembly,root);var runtime=assembly.GetType("DynastyCOTStandalone.Runtime",true);var identity=assembly.GetType("DynastyCOTStandalone.Identity",true);
    string module=(string)identity.GetField("Module",BindingFlags.Static|BindingFlags.NonPublic).GetRawConstantValue();
    Check(assembly.GetName().Name==name,"Branded assembly "+name);
+   string title=name=="BeyondTheField"?"Beyond the Field":name=="ExtraSettings"?"Extra Settings":"Expanded Practice";
+   var label=assembly.GetCustomAttributesData().Single(x=>x.AttributeType.Name=="PluginDisplayNameAttribute");
+   Check((string)label.ConstructorArguments[0].Value=="Ace\u2019s "+title,"MMC display name preserves module identity "+name);
    if(mode=="claim"){
     Check((bool)Call(runtime,"Claim"),"Independent module guard "+module);Check(!(bool)Call(runtime,"Claim"),"Duplicate module guard "+module);continue;
    }

@@ -21,29 +21,35 @@ namespace SituationalPractice
             if(Interlocked.CompareExchange(ref watching,1,0)!=0)return;
             var diagnostics=new SafeFileLog(Path.Combine(BuildIdentity.Folder,"launcher.log"));
             new Thread(()=>{try{
-                diagnostics.Write("INFO","Launch watcher started; plugin="+BuildIdentity.Version+"; MMC PID="+Process.GetCurrentProcess().Id);
-                var launched=new HashSet<string>();
+                diagnostics.Write("INFO","MMC discovered the plugin. Waiting for a game process; plugin="+BuildIdentity.Version+"; MMC PID="+Process.GetCurrentProcess().Id);
+                var launched=new HashSet<string>();var attempts=new Dictionary<string,DateTime>();var lastFailure=new Dictionary<string,string>();
                 while(true){
                     try{foreach(var p in Process.GetProcessesByName("CollegeFB27"))using(p){try{
                         if(p.HasExited)continue;
                         string key=p.Id+":"+p.StartTime.ToUniversalTime().Ticks;
                         if(launched.Contains(key))continue;
+                        DateTime next;if(attempts.TryGetValue(key,out next)&&DateTime.UtcNow<next)continue;
+                        bool firstAttempt=!attempts.ContainsKey(key);attempts[key]=DateTime.UtcNow.AddSeconds(10);
                         string folder=BuildIdentity.Folder;Directory.CreateDirectory(folder);
-                        WriteLaunchContext(folder,p,diagnostics);
+                        if(firstAttempt)WriteLaunchContext(folder,p,diagnostics);
                         string helper=RuntimeFiles.PathIn(Path.GetDirectoryName(typeof(PracticeAction).Assembly.Location));
                         int gamePid=p.Id;long gameStart=p.StartTime.ToUniversalTime().Ticks;
                         Process child;
                         using(RuntimeFiles.OpenVerified(helper))
                             child=Process.Start(new ProcessStartInfo(helper,gamePid.ToString()){UseShellExecute=false,CreateNoWindow=true,WindowStyle=ProcessWindowStyle.Hidden,WorkingDirectory=folder});
                         if(child==null)throw new InvalidOperationException("Helper launch returned no process.");
-                        diagnostics.Write("INFO","Helper started: game="+key+" helper PID="+child.Id+" path="+helper);
+                        diagnostics.Write("INFO","Matching helper verified and started. Practice features wait for an eligible offline practice: game="+key+" helper PID="+child.Id+" path="+helper);
                         launched.Add(key);
                         child.Exited+=(sender,eventArgs)=>ObserveHelperExit(child,gamePid,gameStart,diagnostics);
                         child.EnableRaisingEvents=true;
-                        if(log!=null)try{log.Log("[Expanded Practice] Ready. Normal practice is the default. Use Pause > Mode for Drive Practice or Scrimmage.",new object[0]);}catch(Exception error){diagnostics.Error("MMC readiness message",error);}
+                        if(log!=null)try{log.Log("[Expanded Practice] Helper started. Enter offline Dynasty or main-menu practice to activate the practice modes.",new object[0]);}catch(Exception error){diagnostics.Error("MMC readiness message",error);}
                     }catch(Exception error){
                         diagnostics.Error("Start practice helper for PID "+p.Id,error);
-                        if(log!=null)try{log.Log("[Expanded Practice] Could not start the helper in "+BuildIdentity.Folder+": "+error.Message,new object[0]);}catch{}
+                        string failedKey=p.Id.ToString();string previous;
+                        if(!lastFailure.TryGetValue(failedKey,out previous)||previous!=error.Message){
+                            lastFailure[failedKey]=error.Message;
+                            if(log!=null)try{log.Log("[Expanded Practice] Could not start the helper: "+error.Message,new object[0]);}catch{}
+                        }
                     }}}
                     catch(Exception error){diagnostics.Error("Enumerate game processes",error);}
                     Thread.Sleep(1000);

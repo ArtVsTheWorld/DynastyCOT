@@ -115,9 +115,9 @@ public:
             auto accept=[&](Json feed,const char* event)->std::optional<Json>{
                 social::refresh::validate(feed,Json{{"save",feed.at("source")},{"leagueId",feed.at("leagueId")},{"userTeamIndex",feed.at("userTeamIndex")}});validateRuntimeIdentity(feed,raw.at("status"));
                 if(!verifyFacts()){haveObserved=false;invalidate();return {};}
-                accepted=hash;haveAccepted=true;lastError.clear();failures=0;settledProbe=std::move(candidateProbe);settledIdentity=std::move(candidateIdentity);schedule.accepted(GetTickCount64(),settledIdentity.available()&&!identityLimited);
                 social::refresh::writeAtomic(folder/L"runtime-feed.json.tmp",folder/L"runtime-feed.json",feed);
-                report({{"event",event},{"league",feed.at("leagueId")},{"team",feed.at("userTeamIndex")},{"week",feed.at("week")},{"stories",feed.at("stories").size()},{"saveRequired",false},{"identityProbeEnabled",settledIdentity.available()&&!identityLimited},{"identityProbeBytes",settledIdentity.bytes()},{"identityProbeRanges",settledIdentity.rangeCount()}});return feed;
+                accepted=hash;haveAccepted=true;lastError.clear();failures=0;settledProbe=std::move(candidateProbe);settledIdentity=std::move(candidateIdentity);schedule.accepted(GetTickCount64(),settledIdentity.available()&&!identityLimited);
+                report({{"event",event},{"summary","Weekly Social Media edition verified and ready for the current Dynasty."},{"league",feed.at("leagueId")},{"team",feed.at("userTeamIndex")},{"week",feed.at("week")},{"stories",feed.at("stories").size()},{"saveRequired",false},{"identityProbeEnabled",settledIdentity.available()&&!identityLimited},{"identityProbeBytes",settledIdentity.bytes()},{"identityProbeRanges",settledIdentity.rangeCount()}});return feed;
             };
             if(haveAccepted&&hash==accepted){settledProbe=std::move(candidateProbe);settledIdentity=std::move(candidateIdentity);lastError.clear();failures=0;schedule.accepted(GetTickCount64(),settledIdentity.available()&&!identityLimited);++sameContentRefreshes;
                 if(GetTickCount64()-lastSameReport>=30000){lastSameReport=GetTickCount64();report({{"event","runtime_same_content_refresh"},{"captureMs",captureMs},{"captureAndHashMs",GetTickCount64()-captureBegan},{"sameContentRefreshes",sameContentRefreshes}});}return {};}
@@ -140,7 +140,7 @@ public:
             const auto generationMs=GetTickCount64()-generationBegan,parseBegan=GetTickCount64();auto feed=social::refresh::readJson(output);const auto outputParseMs=GetTickCount64()-parseBegan;
             report({{"event","runtime_generation_timing"},{"captureMs",captureMs},{"captureReused",reusedCapture},{"proofMs",proofMs},{"hashMs",hashMs},{"originalCaptureMs",metrics.at("captureMs")},{"analyticsMs",metrics.at("analyticsMs")},{"wireMs",metrics.at("wireMs")},{"serializeMs",metrics.at("serializeMs")},{"inputBytes",serializedInput.size()},{"inputWriteMs",inputWriteMs},{"generationMs",generationMs},{"outputParseMs",outputParseMs},{"observedToGeneratedMs",GetTickCount64()-observedAt}});
             return accept(std::move(feed),"runtime_feed_published");
-        }catch(const std::exception& e){discardPending();schedule.failed(GetTickCount64());haveObserved=false;if(++failures>=2){haveAccepted=false;invalidate();}if(lastError!=e.what()){lastError=e.what();report({{"event","runtime_waiting"},{"reason",lastError}});}return {};}
+        }catch(const std::exception& e){discardPending();schedule.failed(GetTickCount64());haveObserved=false;if(++failures>=2){haveAccepted=false;invalidate();}if(lastError!=e.what()){lastError=e.what();report({{"event","runtime_waiting"},{"summary","Weekly Social Media edition is waiting: "+lastError},{"reason",lastError}});}return {};}
     }
 };
 }

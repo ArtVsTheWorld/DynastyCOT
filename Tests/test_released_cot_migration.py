@@ -21,7 +21,7 @@ def main():
  run([compiler,'/nologo','/platform:x64','/optimize+','/warnaserror+','/out:'+str(exe),'/reference:System.Web.Extensions.dll','/reference:System.IO.Compression.dll',Path(meta['work'])/'CollectionInfo.cs',*[source/name for name in ['Models.cs','Paths.cs','Installer.cs','Downloads.cs']],ROOT/'Core/UserStorage.cs',ROOT/'Tests/CollectionReleasedMigration.cs'])
  def helper(mode,root):
   nonlocal checks
-  text=run([exe,mode,ROOT,root,work,sdk,meta.get('artifactRoot',str(ROOT/'Release'))]);checks+=int(text.split()[1]);print(text.strip(),flush=True)
+  text=run([exe,mode,ROOT,root,work,sdk,meta.get('artifactRoot',str(ROOT/'Release')),meta.get('catalog',str(source/'catalog.json'))]);checks+=int(text.split()[1]);print(text.strip(),flush=True)
  ids=['DynastyEnhancer','GamedayAtmosphere','ExtraDynastySettings','DrivePractice']
  for version in versions:
   archive=ROOT/f'Release/DynastyCOT-{version}.zip';proof=json.loads((ROOT/f'Release/verification-{version}.json').read_text());assert sha(archive)==proof['archiveSha256'];package=work/('Bundle-'+version)

@@ -17,12 +17,17 @@ SECRET = re.compile(rb'(?:gh[pousr]_[A-Za-z0-9]{30,}|github_pat_[A-Za-z0-9_]{40,
 # Other captures and game assets remain excluded.
 README_IMAGES = {'docs/images/beyond-the-field.png','docs/images/gameday-atmosphere.png',
                  'docs/images/expanded-practice.png','docs/images/extra-settings.png'}
+# Additional screenshots explicitly supplied for the public player guides.
+README_IMAGES.update('docs/player-guides/assets/'+name+'.png' for name in
+                     ['BeyondTheField','GamedayAtmosphere','ExpandedPractice','ExtraSettings'])
 
 
 def check():
     # Include staged files and new nonignored source. This also works on a clone.
-    listed = subprocess.check_output(
-        ['git', 'ls-files', '--cached', '--others', '--exclude-standard', '-z'], cwd=ROOT)
+    args = ['git', 'ls-files', '--cached', '-z']
+    if '--tracked-only' not in sys.argv:
+        args += ['--others', '--exclude-standard']
+    listed = subprocess.check_output(args, cwd=ROOT)
     paths = sorted(set(p.decode('utf-8') for p in listed.split(b'\0') if p))
     errors = []
     for rel in paths:

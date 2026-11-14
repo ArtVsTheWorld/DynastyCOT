@@ -1,16 +1,6 @@
-**GamedayAtmosphere 2.1.35**
-Changes since 2.1.11
+**Ace’s Gameday Atmosphere 2.1.38**
+Changes since public release 2.1.11.
 
-- Visiting support better separates national following, travel and home ticket demand, with a modest lift for low ordinary visiting shares
-- Main visiting sections have a clearer visiting core, softer edges and small scattered groups
-- Poor home seasons matter more to turnout; supported neutral and championship crowds get dynamic supporter splits while keeping EA attendance
-- Dynasty Extensions spring games use the actual school, its colors and a dedicated exhibition turnout model, including supported TeamBuilder fixtures
-- Spring crowds keep native empty seats, take halftime breaks and gradually thin without reacting to the score
-- Background roar settles during big leads and quiets after visiting touchdowns; event reactions have more focused coordination
-- Replay yardage returns to settings with a 12-yard default, plus the supported Broadcast Universe big-play handoff
-- Crowd preparation reuses calculations and avoids repeated work while preserving saved crowds
-- One plugin DLL installs everything needed; settings and history use shared AppData rather than requiring a writable Plugins folder
+New Dynasty crowds can give visiting fans several nearby blocks. Added visiting cheers at home stadiums need at least 20% visiting support among fans present. Spring games use one school's crowd, and saved matchup plans carry forward.
 
-Existing fixture history deliberately keeps old plans. Audible spring boos remain pending listening confirmation. Touchdown replays remain native and are not guaranteed. New crowd visuals and live performance still need acceptance.
-
-Close MMC/game before replacing the DLL. Keep settings/history.
+Close MMC and the game, then copy GamedayAtmosphere.dll from the standalone ZIP into MMC’s Plugins folder. The ZIP includes the full feature list and an illustrated player guide.

@@ -7,6 +7,13 @@
 #include <iostream>
 namespace recruitingfog::resume {
 struct CacheTestAccess {
+ static void staleWaits(){
+    Cache c;auto now=GetTickCount64();
+    for(int i=0;i<64;++i)c.waitingReports[std::to_string(i)]={now-9000,now-9000};
+    NotesProspect p;p.identity="new";assert(c.queue(p)&&c.waitingReports.size()==1);
+    for(int i=0;i<63;++i){p.identity=std::to_string(i);assert(c.queue(p));}
+    p.identity="limit";assert(!c.queue(p)&&c.waitingReports.size()==64);
+ }
  static void fail(Cache& c){c.backgroundFailed=true;c.waitingSince=GetTickCount64();}
  static void reportFailure(Cache& c){c.reportFailed=true;}
  static void delayed(Cache& c,const std::string& key){auto now=GetTickCount64();c.waitingReports[key]={now-9000,now};}
@@ -26,6 +33,7 @@ int main(){
  bool rejected=false;try{decodedIntegerArray(1,16,0);}catch(...){rejected=true;}assert(rejected);
  enhancements::currentOptions=enhancements::Options{}.packed();enhancements::currentOptionsLeague=42;
  NotesProspect p;p.identity="Alex|Bell|Town|LA|123";p.position="TE";p.progress=80;p.observations={{"Catching",83,83,true},{"Run Block",61,61,true}};
+ CacheTestAccess::staleWaits();
  Cache c;bool loading=false;
  auto first=c.compose({},p,123,"Alex","Bell",loading);assert(first.find("Preparing background")!=std::string::npos&&loading);
  CacheTestAccess::fail(c);auto failed=c.compose({},p,123,"Alex","Bell",loading);assert(failed.find("temporarily unavailable")!=std::string::npos&&!loading);

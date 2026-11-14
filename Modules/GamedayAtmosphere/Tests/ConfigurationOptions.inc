@@ -19,7 +19,7 @@ inline NumericOption options[]={
 {L"Dynamic Gameday Broadcast",L"InsetAfterRoutinePlays",1.0,0.0,1.0,1,[]()->double{return static_cast<double>(routineInsets);}},
 {L"Dynamic Gameday Broadcast",L"FullScreenBigPlays",1.0,0.0,1.0,1,[]()->double{return static_cast<double>(bigPlayReplays);}},
 {L"Dynamic Gameday Broadcast",L"DefensiveHighlights",1.0,0.0,1.0,1,[]()->double{return static_cast<double>(defensiveReplays);}},
-{L"Dynamic Gameday Broadcast",L"FullScreenMinimumYards",15.0,10.0,60.0,1,[]()->double{return static_cast<double>(replayMinimumYards);}},
+{L"Dynamic Gameday Broadcast",L"FullScreenMinimumYards",12.0,10.0,60.0,1,[]()->double{return static_cast<double>(replayMinimumYards);}},
 {L"Dynamic Gameday Soundscape",L"Enabled",1.0,0.0,1.0,1,[]()->double{return static_cast<double>(audioSetting);}},
 {L"Dynamic Gameday Soundscape",L"CrowdMixStrengthPercent",100.0,0.0,100.0,1,[]()->double{return static_cast<double>(busMixStrength);}},
 {L"Dynamic Gameday Attendance",L"ArrivalsEnabled",1.0,0.0,1.0,1,[]()->double{return static_cast<double>(arrivalEnabled);}},

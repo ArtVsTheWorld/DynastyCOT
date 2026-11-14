@@ -31,7 +31,7 @@ int main(){
  turnout::Launch launch;launch.home=1212;launch.away=1205;launch.stadium=615;launch.capacity=launch.ea=65000;launch.neutral=true;launch.bowl=47;
  std::shared_ptr<const turnout::CrowdFixture> published=std::make_shared<turnout::CrowdFixture>(turnout::CrowdFixture{seed,launch,true});std::atomic_store(&crowdFixture,published);crowdFixturePublishedAt=GetTickCount64();
  assert(!turnout::turnoutEligible(seed,launch));
- auto plan=visitors::plan(*published,1212,1205);assert(plan.valid&&!plan.native&&plan.layoutVersion==4);
+ auto plan=visitors::plan(*published,1212,1205);assert(plan.valid&&!plan.native&&plan.layoutVersion==attendance::visitors::CurrentLayoutVersion);
  assert(appearanceGenerate(c)==77&&raw==original&&nativeConsumed!=original&&nativeCalls==2);
  assert(appearanceChanged==1&&appearanceStages[unsigned(AppearanceStage::Prepared)]==1&&appearanceCallbacks==2);
  unsigned visitors=0;for(unsigned i=16;i<n;++i)visitors+=nativeConsumed[10*i]&1;assert(visitors==unsigned(std::llround((n-16)*plan.share)));

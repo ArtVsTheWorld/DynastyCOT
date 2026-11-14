@@ -21,6 +21,7 @@ struct Intent {
     uint64_t extraCheer=0,extraCheerUntil=0;int extraType=83;
     uint64_t opponentCheer=0,opponentCheerUntil=0;int opponentType=0,opponentSize=1,supporterSize=0;
     bool opponentPositive=false;
+    bool visitorLayer=false; // Added visiting sustained response, not native bus audio.
     bool deepCheers=false;uint64_t resultCheer=0,resultCheerUntil=0;int resultType=91;
     bool scoringReaction=false;uint64_t diagnosticToken=0;
     // Reaction lifetime, independent of the short one-shot cheer request.

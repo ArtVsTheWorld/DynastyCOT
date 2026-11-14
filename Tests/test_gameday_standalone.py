@@ -26,7 +26,7 @@ def fixture(case,root):
  global checks
  output=run([EXE,case,root,BASE,META['sdk'],META['version'],META['runtimeVersion']]);checks+=int(output.strip().split()[-1])
 compiler=Path(r'C:\Windows\Microsoft.NET\Framework64\v4.0.30319\csc.exe');EXE=BASE/'GamedayStandaloneFixture.exe'
-run([compiler,'/nologo','/platform:x64','/out:'+str(EXE),ROOT/'Tests/GamedayStandaloneFixture.cs'])
+run([compiler,'/nologo','/platform:x64','/out:'+str(EXE),'/reference:'+str(Path(META['sdk'])/'FrostySdk.dll'),ROOT/'Tests/GamedayStandaloneFixture.cs'])
 check(sha(Path(META['dll']))==META['dllSha256'],'Exact source-built managed DLL')
 for relative,digest in META['sourceHashes'].items():check(sha(ROOT/relative)==digest,'Source changed since build: '+relative)
 reference=ROOT/'Release/DynastyCOT-1.0.2.zip'
@@ -43,7 +43,7 @@ with zipfile.ZipFile(reference) as archive:
  bundle=archive.read('Plugins/DynastyCOT.dll')
  check('Local\\Ace.DynamicGamedayAtmosphere.MMC.'.encode('utf-16le') in bundle,'Published COT shared OS guard')
  package=BASE/'COT102';archive.extractall(package)
-for case in ['files','cot-first','standalone-first']:fixture(case,seed(case))
+for case in ['files','cot-first','standalone-first','logs']:fixture(case,seed(case))
 # Actual released installer install/uninstall with shared data and independent DLL.
 root=seed('cot-roundtrip');data=root/'Plugins/DynamicGamedayAtmosphere';(data/'History').mkdir(parents=True)
 preserved={data/'DynamicGamedayAtmosphere.ini':b'[General]\r\nConfigVersion=2\r\nKeepUserChoices=1\r\n'}

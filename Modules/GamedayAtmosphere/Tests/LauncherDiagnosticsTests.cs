@@ -26,9 +26,9 @@ class LauncherDiagnosticsTests {
         p.Start=now.AddSeconds(1);Check(!LaunchReadiness.Read(p,now,out identity,out reason)&&reason==LaunchWait.Startup,"future start time does not bypass wait");p.Start=now.AddSeconds(-20);
         Check(LaunchReadiness.Description(LaunchWait.Window).Contains("no main window")&&LaunchReadiness.Description(LaunchWait.Startup).Contains("20 seconds"),"human readable wait descriptions");
         var progress=new LaunchProgress();
-        Check(progress.Report(0,"no game found",0)&&!progress.Report(0,"no game found",1000)&&!progress.Report(0,"no game found",59999)&&progress.Report(0,"no game found",60000),"no-game notice immediate then once a minute");
+        Check(progress.Report(0,"no game found",0)&&!progress.Report(0,"no game found",1000)&&!progress.Report(0,"no game found",59999)&&!progress.Report(0,"no game found",60000),"no-game transition once; no healthy heartbeat");
         Check(progress.Report(0,"game found",60001)&&progress.Report(123,"Window",60001)&&!progress.Report(123,"Window",61000)&&progress.Report(123,"Startup",61001)&&progress.Report(123,"loading",61002),"independent PID states and immediate transitions");
-        Check(progress.Report(123,"loaded",61003)&&!progress.Report(123,"loaded",62000)&&progress.Report(123,"loaded",121003),"loaded state heartbeat without a reload claim");
+        Check(progress.Report(123,"loaded",61003)&&!progress.Report(123,"loaded",62000)&&!progress.Report(123,"loaded",121003),"loaded state once without a reload claim");
         Check(progress.Retain(new HashSet<int>{123}).Length==0,"active PID retained");
         string[] ended=progress.Retain(new HashSet<int>());Check(ended.Length==1&&ended[0].Contains("123")&&ended[0].Contains("loaded")&&ended[0].Contains("does not establish")&&progress.Retain(new HashSet<int>()).Length==0,"one disappearance report with no crash assumption");
         Check(progress.Report(123,"Window",121004)&&progress.Report(123,"Window",100),"fresh process and monotonic rollback report safely");

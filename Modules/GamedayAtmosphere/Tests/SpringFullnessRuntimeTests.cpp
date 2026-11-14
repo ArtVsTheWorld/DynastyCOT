@@ -88,7 +88,7 @@ int main(){
     assert(resurrected==0);
     // Recolor/rebuild cannot change the number of original occupied seats.
     auto generated=std::make_shared<attendance::visitors::GeneratedAppearance>();
-    generated->component=scene.parts();generated->map=palette.map;generated->data=palette.stream.data;generated->coordinates=palette.coordinates;
+    generated->component=scene.parts();generated->map=palette.map;generated->selectors=palette.stream;generated->points=palette.coordinateStream;
     generated->home=1502;generated->away=1145;generated->side=palette.desired;generatedCrowds[0]=generated;
     base.selection={};prepareSeatPatterns();assert(base.selection.original==scene.occupied);
     assert(base.supporters.home==0&&base.supporters.away==scene.occupied);

@@ -31,15 +31,15 @@ int main(){
     audience::Book withoutAP;assert(withoutAP.resolve(19,unavailable,unknownAP));std::stringstream missingAP;withoutAP.write(missingAP);audience::Book withoutAPReload;assert(withoutAPReload.read(missingAP));
     turnout::Seed s;s.home={1801,71,70,3,0,0,0,8,9,11,8,.416f};s.home.apRank=71;s.away={1251,138,138,0,0,0,1,12,12,12,12,.1f};s.away.apRank=138;
     s.home.audienceFans=25000;s.away.audienceFans=14000;s.stadium=s.homeStadium=650;s.capacity=65000;s.ea=44839;s.schools=138;s.regular=true;s.week=0;s.year=0;
-    turnout::Launch l{1801,1251,650,65000,44839,1170,0,false,false};auto r=turnout::calculateAudience(s,l);assert(r.applied&&r.audienceModel&&r.openerBoost>=.1f&&r.nightBoost>=.05f);
+    turnout::Launch l{1801,1251,650,65000,44839,1170,0,false,false};auto r=turnout::calculateAudienceLegacy(s,l);assert(r.applied&&r.audienceModel&&r.openerBoost>=.1f&&r.nightBoost>=.05f);
     assert(r.kickoff==turnout::calculate(s,l).kickoff&&r.fillPercent==50);
     // Same fans and fixture: different capacity changes fullness, not demand.
-    auto small=s;auto sl=l;small.capacity=sl.capacity=35000;auto sr=turnout::calculateAudience(small,sl);assert(sr.attendance==r.attendance&&sr.percent>r.percent);
-    small.capacity=sl.capacity=100000;auto larger=turnout::calculateAudience(small,sl);assert(larger.attendance==r.attendance&&larger.percent<r.percent);
-    auto fuller=turnout::calculateAudience(s,l,true);assert(std::abs(fuller.percent-r.percent-8)<.001&&fuller.kickoff==r.kickoff+7);
-    l.rivalry=true;l.rivalryEvent=139;assert(turnout::calculateAudience(s,l).percent==100);
-    l.rivalry=false;l.rivalryEvent=-1;l.neutral=true;auto neutral=turnout::calculateAudience(s,l);assert(neutral.applied&&neutral.audienceFans==19500);
-    l.neutral=false;s.home.audienceFans=4000;assert(turnout::calculateAudience(s,l).percent<15); // No phantom percentage-floor audience.
-    s.resumed=true;assert(!turnout::calculateAudience(s,l).applied);s.resumed=false;s.regular=false;assert(!turnout::calculateAudience(s,l).applied);
-    std::cout<<"PASS: fixed audience foundations, 40/30/20/10 response, no repeated compounding, real completed-season recency, TeamBuilder provenance, restart/rewind/dynasty isolation, corrupt storage, venue invariance, preserved boosts/arrival rules/Fuller/showcase and unsupported-context guards.\n";
+    auto small=s;auto sl=l;small.capacity=sl.capacity=35000;auto sr=turnout::calculateAudienceLegacy(small,sl);assert(sr.attendance==r.attendance&&sr.percent>r.percent);
+    small.capacity=sl.capacity=100000;auto larger=turnout::calculateAudienceLegacy(small,sl);assert(larger.attendance==r.attendance&&larger.percent<r.percent);
+    auto fuller=turnout::calculateAudienceLegacy(s,l,true);assert(std::abs(fuller.percent-r.percent-8)<.001&&fuller.kickoff==r.kickoff+7);
+    l.rivalry=true;l.rivalryEvent=139;assert(turnout::calculateAudienceLegacy(s,l).percent==100);
+    l.rivalry=false;l.rivalryEvent=-1;l.neutral=true;auto neutral=turnout::calculateAudienceLegacy(s,l);assert(neutral.applied&&neutral.audienceFans==19500);
+    l.neutral=false;s.home.audienceFans=4000;assert(turnout::calculateAudienceLegacy(s,l).percent<15); // No phantom percentage-floor audience.
+    s.resumed=true;assert(!turnout::calculateAudienceLegacy(s,l).applied);s.resumed=false;s.regular=false;assert(!turnout::calculateAudienceLegacy(s,l).applied);
+    std::cout<<"PASS: fixed audience foundations, policy-aware response and legacy turnout API, no repeated compounding, real completed-season recency, TeamBuilder provenance, restart/rewind/dynasty isolation, corrupt storage, venue invariance, preserved boosts/arrival rules/Fuller/showcase and unsupported-context guards.\n";
 }

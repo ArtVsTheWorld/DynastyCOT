@@ -43,6 +43,7 @@ inline sustained::Intent layer(sustained::Intent home,const sustained::Intent& v
     // Transfer only the sustained layer. The separate home and visiting
     // one-shots retain their IDs and never dispatch the same score twice.
     home.reason=visitor.reason;home.priority=visitor.priority;home.intensity=visitorLevel;
+    home.visitorLayer=true;
     home.continuous=visitor.continuous;home.reaction=visitor.reaction;home.supporting=visitor.supporting;
     home.attackMs=visitor.attackMs;home.releaseMs=visitor.releaseMs;
     home.earnedReaction=visitor.earnedReaction;home.reactionHoldUntil=visitor.reactionHoldUntil;home.reactionUntil=visitor.reactionUntil;

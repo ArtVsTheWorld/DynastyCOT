@@ -1,4 +1,5 @@
 #include "UserRuntimePaths.h"
+#include "RuntimeDiagnostics.h"
 #include "../../../Compatibility/PracticeTextSetter.generated.h"
 #define WIN32_LEAN_AND_MEAN
 #include <windows.h>
@@ -781,7 +782,7 @@ DWORD stop(){
 }
 DWORD WINAPI worker(void*){
     wchar_t path[32768]{};GetModuleFileNameW(self,path,32768);const auto folder=dynasty::userpaths::data(std::filesystem::path(path).parent_path());if(folder.empty()){OutputDebugStringW(L"Beyond the Field: unsupported writable-data location; no hooks changed.\n");return 1;}base=reinterpret_cast<uintptr_t>(GetModuleHandleW(nullptr));enhancements::requireDynastyPresentation(base);
-    auto flush=[&](){std::deque<Json> items;{std::lock_guard<std::mutex> lock(queueMutex);items.swap(pending);}if(!items.empty()){std::ofstream out(folder/L"recruiting-fog.jsonl",std::ios::app);for(const auto& j:items)out<<j.dump(-1,' ',false,Json::error_handler_t::replace)<<'\n';}};
+    auto flush=[&](){std::deque<Json> items;{std::lock_guard<std::mutex> lock(queueMutex);items.swap(pending);}dynasty::diagnostics::write(folder,L"recruiting-fog",items);};
     try{
         enhancementSettings.configure(folder);
 #if defined(PLAYER_PRESENTATION_PREVIEW)
@@ -818,7 +819,7 @@ DWORD WINAPI worker(void*){
             catch(const std::exception& error){const std::string reason=error.what();
                 const bool initializing=reason=="Unsupported Dynasty settings list code"||reason=="Unsupported Dynasty settings writer code";
                 return startup::Result{initializing?startup::State::Waiting:startup::State::Rejected,reason};}
-        },[&](const std::string& reason){note({{"event","recruiting_startup_waiting"},{"reason",reason}});flush();},[]{Sleep(250);})){flush();return 0;}
+        },[&](const std::string& reason){note({{"event","recruiting_startup_waiting"},{"summary","Waiting for the game to finish preparing Dynasty settings."},{"reason",reason}});flush();},[]{Sleep(250);})){flush();return 0;}
         note({{"event","recruiting_startup_verified"},{"elapsedMs",GetTickCount64()-startupBegan}});
         std::array<unsigned char,32> actual{};uintptr_t current=0;
 #if defined(RECRUIT_NOTES_UI)
@@ -850,7 +851,7 @@ DWORD WINAPI worker(void*){
         originalClassRows=reinterpret_cast<ClassRows>(current);
         if(!replace(reinterpret_cast<void*>(originalClassRows),reinterpret_cast<void*>(classRowsHook),classTableRva,0x68))throw std::runtime_error("Class grid provider ownership changed");classRowsInstalled=true;
         installRosterProviders();
-        try{nativeanalytics::install(base);}catch(const std::exception& error){note({{"event","native_analytics_unavailable"},{"reason",error.what()}});}
+        try{nativeanalytics::install(base);}catch(const std::exception& error){note({{"event","native_analytics_unavailable"},{"summary",std::string("Analytics could not activate: ")+error.what()+". Check the matching Beyond the Field build and other menu plugins."},{"reason",error.what()}});}
         uintptr_t keyOwner=0;if(read(base+classTableRva+0x78,&keyOwner,8)){
             HMODULE keyModule=nullptr;if(keyOwner==base+classKeyRva||(GetModuleHandleExW(GET_MODULE_HANDLE_EX_FLAG_FROM_ADDRESS|GET_MODULE_HANDLE_EX_FLAG_UNCHANGED_REFCOUNT,reinterpret_cast<LPCWSTR>(keyOwner),&keyModule)&&keyModule==self)){features::rowKeyAddress=keyOwner;features::rowKeyTableAddress=base+classTableRva+0x78;}
         }
@@ -862,7 +863,7 @@ DWORD WINAPI worker(void*){
         originalScriptLength=reinterpret_cast<ScriptLength>(current);if(!replace(reinterpret_cast<void*>(originalScriptLength),reinterpret_cast<void*>(notesLengthHook),0xbc42fe8,0xb0))throw std::runtime_error("Script length accessor ownership changed");notesProbeInstalled=true;
 #endif
         installEnhancementSettings();
-        note({{"event","active"},{"mode","letter grades, ranges and Playing Time masking"},{"scope","player and recruiting display values; numeric models preserved"}});
+        note({{"event","active"},{"summary","Recruiting runtime and display hooks verified. Each feature follows the active Dynasty settings and supported menu."},{"mode","letter grades, ranges and Playing Time masking"},{"scope","player and recruiting display values; numeric models preserved"}});
         while(!disabled){
 #if defined(PLAYER_FOG_PERF) && defined(RECRUIT_NOTES_UI)
             static uint64_t nextPerformance=0;if(GetTickCount64()>=nextPerformance){nextPerformance=GetTickCount64()+30000;
@@ -897,7 +898,7 @@ DWORD WINAPI worker(void*){
                 if(replace(reinterpret_cast<void*>(notesLengthHook),reinterpret_cast<void*>(originalScriptLength),0xbc42fe8,0xb0))notesProbeInstalled=false;}
 #endif
             flush();Sleep(200);}flush();
-    }catch(const std::exception& error){stop();note({{"event","failed"},{"reason",error.what()}});flush();}
+    }catch(const std::exception& error){stop();flush();note({{"event","failed"},{"summary",std::string("Recruiting activation stopped: ")+error.what()+". Check the game version and other recruiting or settings plugins, then retry in a fresh game."},{"reason",error.what()}});flush();}
     return 0;
 }
 }

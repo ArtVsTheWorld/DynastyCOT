@@ -36,10 +36,14 @@ namespace OfflineDynastySettings
                 log("Settings helper exited (code " + exit + "); restarting it while this game is running.");
             }
             if(helper==null) {
-                string exe=ResolveHelper();
+                string exe=RuntimeFiles.PathIn(Path.GetDirectoryName(typeof(PersistenceController).Assembly.Location));
                 descriptor=Path.Combine(Path.GetDirectoryName(exe),"game-"+context.Pid+"-"+context.Started+"-"+Guid.NewGuid().ToString("N")+".json");
-                File.WriteAllText(descriptor,new JavaScriptSerializer().Serialize(context));
-                try { using(RuntimeFiles.OpenVerified(exe))helper=DetachedProcess.Start(exe,descriptor,log); }
+                try {
+                    using(RuntimeFiles.OpenVerified(exe)){
+                        File.WriteAllText(descriptor,new JavaScriptSerializer().Serialize(context));
+                        helper=DetachedProcess.Start(exe,descriptor,log);
+                    }
+                }
                 catch { try { File.Delete(descriptor); } catch { } throw; }
                 log("Starting verified external read-only settings helper for PID " + context.Pid + ".");
             }

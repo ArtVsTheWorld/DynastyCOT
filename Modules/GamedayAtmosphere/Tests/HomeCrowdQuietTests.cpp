@@ -44,6 +44,17 @@ int main(){
     Fixture paused;paused.td();for(int i=0;i<40;++i)envelope=paused.tick();float beforePause=envelope.quiet;
     paused.model.suspend();envelope=paused.tick(60000);check(envelope.quiet==beforePause);paused.result={};
     for(int i=0;i<40;++i)envelope=paused.tick();check(envelope.quiet==1);
+    // Reproduce the live paused-status false negative: an expired audio lease
+    // must retain its held TD evidence without granting stale mixer access.
+    check(envelope.holding&&envelope.touchdownSequence==paused.seq&&envelope.ageMs>=4000);
+    check(envelope.owns(42,1)&&!envelope.owns(43,1)&&!envelope.owns(42,2));
+    check(!envelope.fresh(42,1,paused.now+5000));
+    check(std::string(envelope.status(42,1,paused.now+5000,false))=="TD hold retained; live application suspended");
+    check(std::string(envelope.status(42,1,paused.now,true))=="TD hold active; live mix eligible");
+    check(std::string(envelope.status(43,1,paused.now,true))=="no matching snapshot");
+    auto beforeSuspend=envelope;paused.model.suspend();envelope=paused.tick(60000);
+    check(envelope.holding&&envelope.ageMs==beforeSuspend.ageMs&&envelope.quiet==beforeSuspend.quiet);
+    check(envelope.fresh(42,1,paused.now)&&!envelope.fresh(42,2,paused.now));
     // PATs (including two-point tries) and kickoff phases retain the lull.
     for(int type:{21,22,23,24,25}){f.p.selectedType=type;f.p.specialTeams=true;f.p.down=type==23?0:-1;++f.seq;f.p.game.phase=1;check(f.tick().quiet==1);f.p.game.phase=3;check(f.tick().quiet==1);}
     f.p.game.phase=1;f.p.down=1;f.p.selectedType=103;f.p.specialTeams=false;check(f.tick().quiet==0);

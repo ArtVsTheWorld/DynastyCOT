@@ -34,6 +34,7 @@ namespace DynastyCOT.Collection {
    }}return result;
   }
   static string Key(Module m){return "Plugins/"+m.FileName;}
+  static string DocumentPath(Module module,string name){return "COT-Collection/Modules/"+module.Id+"/"+name;}
   internal static bool SupportPath(string path,string module,string version){return module=="GamedayAtmosphere"&&path=="COT-Support/"+module+"/"+version+"/GamedayAtmosphereNative-"+version+".dll";}
   void Add(Plan plan,string path,byte[] content,string owner,bool deferred=false){
    if(plan.Operations.Any(x=>x.Path.Equals(path,StringComparison.OrdinalIgnoreCase)))throw new IOException("Duplicate operation.");string file=Paths.Resolve(plan.Root,path),before=Paths.Existing(file),after=content==null?null:Paths.Hash(content);if(!deferred&&before==after)return;
@@ -48,7 +49,8 @@ namespace DynastyCOT.Collection {
     if(current!=null&&current.Version!="unknown"&&ReleaseRules.Numeric(current.Version)>ReleaseRules.Numeric(target.Version)&&(approvedDowngrades==null||!approvedDowngrades.Contains(m.Id)))throw new IOException("Downgrading "+m.Title+" requires choosing and confirming that older version.");
     bool supportNeedsRepair=Catalog.Programs.Any(p=>p.Module==m.Id&&SupportPath(p.Path,m.Id,target.Version)&&Paths.Existing(Paths.Resolve(root,p.Path))!=p.Sha256);
     if(current==null||current.Sha256!=target.DllSha256||supportNeedsRepair){PreparedModule p;if(!prepared.TryGetValue(m.Id,out p)||p.Release.Version!=target.Version||p.Release.ArchiveSha256!=target.ArchiveSha256||Paths.HashFile(p.Dll)!=target.DllSha256)throw new IOException("The selected "+m.Title+" payload has not been verified.");
-     Add(plan,Key(m),File.ReadAllBytes(p.Dll),m.Id);Add(plan,"COT-Collection/Modules/"+m.Id+"/README.txt",p.Readme,m.Id);Add(plan,"COT-Collection/Modules/"+m.Id+"/FEATURES.md",p.Features,m.Id);plan.Programs.AddRange(p.Programs);
+     Add(plan,Key(m),File.ReadAllBytes(p.Dll),m.Id);Add(plan,DocumentPath(m,"README.txt"),p.Readme,m.Id);Add(plan,DocumentPath(m,"FEATURES.md"),p.Features,m.Id);
+     Add(plan,DocumentPath(m,m.GuideName),p.Guide,m.Id);plan.Programs.AddRange(p.Programs);
      foreach(var support in p.SupportFiles){if(!SupportPath(support.Key,m.Id,target.Version))throw new IOException("Invalid native support path.");Add(plan,support.Key,support.Value,m.Id);}
     }
     foreach(var old in inventory.Plugins.Where(x=>x.Module==m.Id&&!x.Path.Equals(Key(m),StringComparison.OrdinalIgnoreCase)))Add(plan,old.Path,null,m.Id);
@@ -66,7 +68,7 @@ namespace DynastyCOT.Collection {
   internal Plan Remove(string value,IEnumerable<string> selected){
    string root=Paths.ValidateRoot(value);var ids=new HashSet<string>(selected);if(ids.Count==0)throw new IOException("Select modules to remove.");foreach(string id in ids)Catalog.Get(id);
    var inv=Inspect(root);var plan=new Plan{Root=root,Action="Remove selected modules",Inventory=inv};foreach(var plugin in inv.Plugins.Where(x=>ids.Contains(x.Module)))Add(plan,plugin.Path,null,plugin.Module);
-   foreach(string id in ids){inv.Receipt.Modules.RemoveAll(x=>x.Module==id);foreach(string name in new[]{"README.txt","FEATURES.md"})Add(plan,"COT-Collection/Modules/"+id+"/"+name,null,id);}
+   foreach(string id in ids){var module=Catalog.Get(id);inv.Receipt.Modules.RemoveAll(x=>x.Module==id);foreach(string name in new[]{"README.txt","FEATURES.md",module.GuideName})Add(plan,DocumentPath(module,name),null,id);}
    foreach(string id in ids)foreach(var support in Catalog.Programs.Where(p=>p.Module==id&&p.Path.StartsWith("COT-Support/"))){string file=Paths.Resolve(root,support.Path);if(Paths.Existing(file)==support.Sha256)Add(plan,support.Path,null,id);}
    if(inv.LegacyHost){var choices=new Dictionary<string,bool>();foreach(var m in Catalog.Modules)choices[m.LegacyId]=inv.LegacyEnabled[m.Id]&&!ids.Contains(m.Id);
     if(choices.Values.Any(x=>x))Add(plan,"Plugins/DynastyCOT/settings.json",Json.Bytes(new{format=1,modules=choices}),"Core");else foreach(var host in inv.Plugins.Where(x=>x.Module=="Core"))Add(plan,host.Path,null,"Core");
@@ -100,17 +102,18 @@ namespace DynastyCOT.Collection {
    if(op.Path.StartsWith("COT-Support/",StringComparison.Ordinal)){var parts=op.Path.Split('/');return parts.Length==4&&SupportPath(op.Path,op.Module,parts[2])&&System.Text.RegularExpressions.Regex.IsMatch(parts[2],@"^\d+[.]\d+[.]\d+$");}
    Paths.Relative(op.Path);if(op.After==null&&!op.Deferred&&Catalog.Programs.Any(x=>x.Module==op.Module&&x.Path.Equals(op.Path,StringComparison.OrdinalIgnoreCase)&&x.Sha256==op.Before))return true;if(op.Module=="Runtime")return op.Deferred&&ProgramPath(op.Path)&&Catalog.Programs.Any(x=>x.Path.Equals(op.Path,StringComparison.OrdinalIgnoreCase))&&op.After==null;
    if(op.Path==Paths.State||op.Path=="Plugins/DynastyCOT/settings.json")return op.Module=="Core";
-   if(op.Path.StartsWith("COT-Collection/Modules/")){return Catalog.Modules.Any(m=>m.Id==op.Module&&new[]{"COT-Collection/Modules/"+m.Id+"/README.txt","COT-Collection/Modules/"+m.Id+"/FEATURES.md"}.Contains(op.Path));}
+   if(op.Path.StartsWith("COT-Collection/Modules/")){return Catalog.Modules.Any(m=>m.Id==op.Module&&new[]{"README.txt","FEATURES.md",m.GuideName}.Any(name=>DocumentPath(m,name)==op.Path));}
    return op.Path.StartsWith("Plugins/",StringComparison.Ordinal)&&op.Path.EndsWith(".dll",StringComparison.OrdinalIgnoreCase)&&(op.Module=="Core"||Catalog.Modules.Any(m=>m.Id==op.Module));
   }
   void Save(string directory,Journal journal){Paths.Atomic(Path.Combine(directory,"transaction.json"),Json.Bytes(journal));}
   static Mutex OperationMutex(string root){return new Mutex(false,"Local\\Ace.DynastyCOT.Collection."+Paths.Hash(Encoding.UTF8.GetBytes(root.ToUpperInvariant())));}
+  static bool NeedsRecovery(string status){return status=="installing"||status=="restoring"||status=="restore_failed";}
   static void Acquire(Mutex mutex){try{if(!mutex.WaitOne(0))throw new IOException("Another collection operation is running for this folder.");}catch(AbandonedMutexException){/* The journal, not mutex ownership, controls interrupted-operation recovery. */}}
   internal string Execute(Plan plan,Dictionary<string,string> reviewed,Action<string> progress,int faultAfter=-1){
    string root=Paths.ValidateRoot(plan.Root);Paths.Closed(fixture,root);if(fixture==null&&faultAfter!=-1)throw new IOException("Failure injection is fixture-only.");
    using(var mutex=OperationMutex(root)){
     Acquire(mutex);try{
-     if(Backups(root).Any(x=>x.Journal.Status=="installing"||x.Journal.Status=="restore_failed"))throw new IOException("An interrupted operation needs restoration first. Open Backups.");
+     if(Backups(root).Any(x=>NeedsRecovery(x.Journal.Status)))throw new IOException("An interrupted operation needs restoration first. Open Backups.");
      foreach(var op in plan.Operations){if(!Allowed(op)||Paths.Existing(Paths.Resolve(root,op.Path))!=op.Before)throw new IOException("An installation file changed after review: "+op.Path);if(op.After!=null&&(!plan.Content.ContainsKey(op.Path)||Paths.Hash(plan.Content[op.Path])!=op.After))throw new IOException("Prepared payload changed.");}
      foreach(var item in Review(plan)){string expected;if(reviewed==null||!reviewed.TryGetValue(item.Path,out expected)||expected!=item.Sha256)throw new IOException("Review and approve backing up this unrecognized plugin: "+item.Path+" ("+item.Sha256+").");}
      Paths.Writable(root,plan.Operations.Select(x=>x.Path).Concat(new[]{Paths.Backups+"/probe",Paths.Log}));
@@ -119,13 +122,29 @@ namespace DynastyCOT.Collection {
      foreach(var op in plan.Operations){op.Backup=journal.Operations.Count.ToString("D4")+".bak";if(op.Before!=null){File.Copy(Paths.Resolve(root,op.Path),Path.Combine(directory,op.Backup));if(Paths.HashFile(Path.Combine(directory,op.Backup))!=op.Before)throw new IOException("Backup verification failed.");}journal.Operations.Add(op);}Save(directory,journal);journal.Status="installing";Save(directory,journal);
      try{int count=0;foreach(var op in journal.Operations){if(op.Deferred)continue;progress((op.After==null?"Removing ":"Installing ")+op.Path);try{if(op.After==null){if(File.Exists(Paths.Resolve(root,op.Path)))File.Delete(Paths.Resolve(root,op.Path));}else Paths.Atomic(Paths.Resolve(root,op.Path),plan.Content[op.Path]);}catch(Exception error){if(!(error is IOException)&&!(error is UnauthorizedAccessException))throw;throw new IOException("Could not "+(op.After==null?"retire":"install")+" file: "+Paths.Resolve(root,op.Path)+". "+error.Message,error);}if(Paths.Existing(Paths.Resolve(root,op.Path))!=op.After)throw new IOException("Installed file verification failed.");if(++count==faultAfter)throw new IOException("Injected transaction failure.");}
       journal.Status="committed";Save(directory,journal);AppendLog(root,plan.Action+" completed; backup "+Path.GetFileName(directory));return directory;
-     }catch(Exception failure){try{RestoreCore(directory,journal,true);throw new IOException("Operation failed; previous managed files were restored. "+failure.Message,failure);}catch(IOException restore){if(journal.Status=="rolled_back")throw;journal.Status="restore_failed";Save(directory,journal);throw new IOException("Operation failed and automatic restoration needs attention. Keep backup "+directory+". "+restore.Message,failure);}}
+     }catch(Exception failure){
+      try{RestoreCore(directory,journal);}
+      catch(Exception restore){throw new IOException("Operation failed: "+failure.Message+". Automatic restoration needs attention. Keep backup "+directory+". "+restore.Message,restore);}
+      throw new IOException("Operation failed; previous managed files were restored. "+failure.Message,failure);
+     }
     }finally{mutex.ReleaseMutex();}
    }
   }
   void AppendLog(string root,string text){try{string path=Paths.Resolve(root,Paths.Log);Directory.CreateDirectory(Path.GetDirectoryName(path));File.AppendAllText(path,DateTime.UtcNow.ToString("o")+" "+text+Environment.NewLine);}catch(IOException){}catch(UnauthorizedAccessException){}}
-  internal List<Backup> Backups(string root){var result=new List<Backup>();string folder=Paths.Resolve(root,Paths.Backups);if(!Directory.Exists(folder))return result;foreach(string directory in Directory.GetDirectories(folder))try{Paths.NoLinks(root,directory);var journal=Json.Read<Journal>(Path.Combine(directory,"transaction.json"));if(journal.Format==1&&String.Equals(journal.Root,root,StringComparison.OrdinalIgnoreCase)&&new[]{"committed","installing","restore_failed"}.Contains(journal.Status)&&journal.Operations.Count>0)result.Add(new Backup{Directory=directory,Journal=journal});}catch(IOException){}catch(ArgumentException){}catch(InvalidOperationException){}return result.OrderByDescending(x=>x.Directory,StringComparer.Ordinal).ToList();}
-  internal void Restore(string root,string directory){root=Paths.ValidateRoot(root);Paths.Closed(fixture,root);using(var mutex=OperationMutex(root)){Acquire(mutex);try{string prefix=Paths.Resolve(root,Paths.Backups)+"\\";directory=Path.GetFullPath(directory);if(!directory.StartsWith(prefix,StringComparison.OrdinalIgnoreCase)||!String.Equals(Path.GetDirectoryName(directory),prefix.TrimEnd('\\'),StringComparison.OrdinalIgnoreCase))throw new IOException("Choose a backup from this Mod Manager.");Paths.NoLinks(root,directory);var journal=Json.Read<Journal>(Path.Combine(directory,"transaction.json"));if(!String.Equals(journal.Root,root,StringComparison.OrdinalIgnoreCase))throw new IOException("Backup belongs to another Mod Manager.");RestoreCore(directory,journal,false);AppendLog(root,"Restored "+Path.GetFileName(directory));}finally{mutex.ReleaseMutex();}}}
+  internal List<Backup> Backups(string root){var result=new List<Backup>();string folder=Paths.Resolve(root,Paths.Backups);if(!Directory.Exists(folder))return result;foreach(string directory in Directory.GetDirectories(folder))try{Paths.NoLinks(root,directory);var journal=Json.Read<Journal>(Path.Combine(directory,"transaction.json"));if(journal.Format==1&&String.Equals(journal.Root,root,StringComparison.OrdinalIgnoreCase)&&(journal.Status=="committed"||NeedsRecovery(journal.Status))&&journal.Operations.Count>0)result.Add(new Backup{Directory=directory,Journal=journal});}catch(IOException){}catch(ArgumentException){}catch(InvalidOperationException){}return result.OrderByDescending(x=>x.Directory,StringComparer.Ordinal).ToList();}
+  internal void Restore(string root,string directory){
+   root=Paths.ValidateRoot(root);Paths.Closed(fixture,root);
+   using(var mutex=OperationMutex(root)){Acquire(mutex);try{
+    string prefix=Paths.Resolve(root,Paths.Backups)+"\\";directory=Path.GetFullPath(directory);
+    if(!directory.StartsWith(prefix,StringComparison.OrdinalIgnoreCase)||!String.Equals(Path.GetDirectoryName(directory),prefix.TrimEnd('\\'),StringComparison.OrdinalIgnoreCase))throw new IOException("Choose a backup from this Mod Manager.");
+    Paths.NoLinks(root,directory);
+    var pending=Backups(root).FirstOrDefault(x=>NeedsRecovery(x.Journal.Status));
+    if(pending!=null&&!String.Equals(pending.Directory,directory,StringComparison.OrdinalIgnoreCase))throw new IOException("Finish the interrupted operation first. Restore this backup: "+pending.Directory);
+    var journal=Json.Read<Journal>(Path.Combine(directory,"transaction.json"));
+    if(!String.Equals(journal.Root,root,StringComparison.OrdinalIgnoreCase))throw new IOException("Backup belongs to another Mod Manager.");
+    RestoreCore(directory,journal);AppendLog(root,"Restored "+Path.GetFileName(directory));
+   }finally{mutex.ReleaseMutex();}}
+  }
   List<KnownFile> RecordedPrograms(string root){
    var result=new List<KnownFile>(Catalog.Programs);string folder=Paths.Resolve(root,Paths.Backups);if(!Directory.Exists(folder))return result;
    foreach(string directory in Directory.GetDirectories(folder).OrderByDescending(x=>x,StringComparer.Ordinal).Take(1000))try{Paths.NoLinks(root,directory);string path=Path.Combine(directory,"transaction.json");if(!File.Exists(path))continue;Paths.NoLinks(root,path);var history=Json.Read<Journal>(path);
@@ -133,14 +152,34 @@ namespace DynastyCOT.Collection {
     foreach(var file in history.Programs){Paths.Relative(file.Path);ReleaseRules.Hash(file.Sha256);if(Catalog.Modules.Any(x=>x.Id==file.Module)&&Catalog.Programs.Any(x=>x.Path.Equals(file.Path,StringComparison.OrdinalIgnoreCase)))result.Add(file);}
    }catch(IOException){}catch(ArgumentException){}catch(InvalidOperationException){}return result;
   }
-  void RestoreCore(string directory,Journal journal,bool automatic){
-   if(journal.Format!=1||journal.Root==null||journal.Status=="rolled_back"||journal.Operations==null||journal.Operations.Count>10000||journal.Operations.Select(x=>x.Path).Distinct(StringComparer.OrdinalIgnoreCase).Count()!=journal.Operations.Count)throw new IOException("Invalid backup journal.");string root=Paths.ValidateRoot(journal.Root);if(!directory.StartsWith(Paths.Resolve(root,Paths.Backups)+"\\",StringComparison.OrdinalIgnoreCase))throw new IOException("Backup belongs to a different Mod Manager.");
+  void RestoreCore(string directory,Journal journal){
+   if(journal.Format!=1||journal.Root==null||(journal.Status!="committed"&&!NeedsRecovery(journal.Status))||journal.Operations==null||journal.Operations.Count>10000||journal.Operations.Select(x=>x.Path).Distinct(StringComparer.OrdinalIgnoreCase).Count()!=journal.Operations.Count)throw new IOException("Invalid backup journal.");string root=Paths.ValidateRoot(journal.Root);if(!directory.StartsWith(Paths.Resolve(root,Paths.Backups)+"\\",StringComparison.OrdinalIgnoreCase))throw new IOException("Backup belongs to a different Mod Manager.");
    var verifiedPrograms=RecordedPrograms(root);
    foreach(var op in journal.Operations){if(!Allowed(op)||op.Backup==null||!System.Text.RegularExpressions.Regex.IsMatch(op.Backup,@"^\d{4}[.]bak$"))throw new IOException("Unsafe backup operation.");if(op.Before!=null){ReleaseRules.Hash(op.Before);Paths.NoLinks(root,Path.Combine(directory,op.Backup));if(Paths.HashFile(Path.Combine(directory,op.Backup))!=op.Before)throw new IOException("Backup hash differs.");}if(op.After!=null)ReleaseRules.Hash(op.After);
     string current=Paths.Existing(Paths.Resolve(root,op.Path));if(current!=op.Before&&current!=op.After&&!(op.Deferred&&verifiedPrograms.Any(x=>x.Path.Equals(op.Path,StringComparison.OrdinalIgnoreCase)&&x.Sha256==current)))throw new IOException("File changed since this backup: "+op.Path+". Restore newer backups first; no files were restored.");
    }
-   foreach(var op in journal.Operations.AsEnumerable().Reverse()){string file=Paths.Resolve(root,op.Path);if(Paths.Existing(file)==op.Before)continue;if(op.Before==null){if(File.Exists(file))File.Delete(file);}else Paths.Atomic(file,File.ReadAllBytes(Path.Combine(directory,op.Backup)));if(Paths.Existing(file)!=op.Before)throw new IOException("Restore verification failed.");}
-   journal.Status="rolled_back";Save(directory,journal);
+   // A crash or lock after the first write must remain visible to the next setup.
+   // Persist recovery state only after validating every operation and backup.
+   journal.Status="restoring";Save(directory,journal);
+   try{
+    foreach(var op in journal.Operations.AsEnumerable().Reverse()){
+     string file=Paths.Resolve(root,op.Path);
+     if(Paths.Existing(file)==op.Before)continue;
+     try{
+      if(op.Before==null)File.Delete(file);
+      else Paths.Atomic(file,File.ReadAllBytes(Path.Combine(directory,op.Backup)));
+      if(Paths.Existing(file)!=op.Before)throw new IOException("Restored file did not match its backup.");
+     }catch(Exception error){
+      if(!(error is IOException)&&!(error is UnauthorizedAccessException))throw;
+      throw new IOException("Could not restore "+file+". "+error.Message,error);
+     }
+    }
+    journal.Status="rolled_back";Save(directory,journal);
+   }catch(Exception error){
+    journal.Status="restore_failed";
+    try{Save(directory,journal);}catch(IOException){}catch(UnauthorizedAccessException){}
+    throw new IOException("Restore incomplete. Keep the backup and retry it after resolving the error: "+directory+". "+error.Message,error);
+   }
   }
  }
 }

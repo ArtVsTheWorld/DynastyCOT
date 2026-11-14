@@ -10,6 +10,7 @@ def sha(path):return hashlib.sha256(path.read_bytes()).hexdigest()
 def main():
  p=argparse.ArgumentParser();p.add_argument('--mmc-sdk',required=True);p.add_argument('--checks-only',action='store_true');p.add_argument('--version',default='2.1.24');p.add_argument('--candidate',default='2.1.24-spring-reactions1');a=p.parse_args();sdk=Path(a.mmc_sdk).resolve()
  src=ROOT/'Modules/GamedayAtmosphere/Source';tests=src.parent/'Tests';version=a.version
+ frozen={p:sha(p) for directory in [src,tests] for p in directory.rglob('*') if p.suffix in ['.h','.cpp','.cs','.inc','.ini','.json']}
  # Private visitor-model candidate; public Product.json/catalog remain unchanged.
  text=(src/'NativeRuntime.cpp').read_text()
  for token in ['TouchdownReplayRequest.h','GAMEDAY_TOUCHDOWN_REPLAY_TEST','touchdownReplayRequest','TDSettleProbe']:
@@ -24,7 +25,7 @@ def main():
  (work/'ProductVersion.h').write_text('#pragma once\n#define GAMEDAY_VERSION "'+version+'"\n#define GAMEDAY_SCHEMA 2\n',encoding='ascii')
  cl=[tool/'bin/Hostx64/x64/cl.exe','/nologo','/O2','/MT','/W4','/WX','/EHsc','/std:c++17','/utf-8',*(f'/I{x}' for x in includes)];link=['/link',*(f'/LIBPATH:{x}' for x in libs),'/INCREMENTAL:NO']
  tested=[]
- for name in ['SupporterConcentrationTests','ChampionshipAppearanceRuntimeTests','SustainedCrowdTests','NativePlacementTests','FumbleContactTests','SackCarryoverTests','SpringTurnoutTests','DiagnosticPreviewTests','ReactionSizingTriggerTests','SpringBehaviorTests','SpringFullnessRuntimeTests','LoggingTests','CrowdRegenerationTests','SpringGameTests','ReactionRuntimeTests','DepartureModelTests','CrowdCohesionTests','HomeCrowdQuietTests','AttendanceAudioTests','AttendanceMixerTests','VisitorModelReviewTests','VisitorPlanTests','AwayCrowdIntegrationTests','AwaySoundReactionsTests','AwayTakeawayTests','ProtectedFanBudgetTests','ProtectedFanBudgetRuntimeTests','NativeAppearanceTests','NativeStartingAttendanceTests','NativeAudienceTests','StartingAttendanceTransitionTests','StartingAttendanceLaunchHookTests','SeatBaselineTests','SeatRuntimeTests','AttendanceTimelineTests','ResumeHistoryTests','ResumeBridgeTests','OfflineMatchScopeTests','ReplayEntryGateTests','ReplayPresentationTests','SettingsMenuTests','BandProtectionTests','BroadcastReplayTests','RuntimePathsTests']:
+ for name in ['VisitorPopulationLeaseTests','FragmentedVisitorTests','VisitorCheerGateTests','AudienceModelTests','PeerQuietTests','AudienceCorrectionTests','SupporterConcentrationTests','ChampionshipAppearanceRuntimeTests','SustainedCrowdTests','NativePlacementTests','FumbleContactTests','SackCarryoverTests','SpringTurnoutTests','DiagnosticPreviewTests','ReactionSizingTriggerTests','SpringBehaviorTests','SpringFullnessRuntimeTests','LoggingTests','CrowdRegenerationTests','SpringGameTests','ReactionRuntimeTests','DepartureModelTests','CrowdCohesionTests','HomeCrowdQuietTests','AttendanceAudioTests','AttendanceMixerTests','VisitorModelReviewTests','VisitorPlanTests','AwayCrowdIntegrationTests','AwaySoundReactionsTests','AwayTakeawayTests','ProtectedFanBudgetTests','ProtectedFanBudgetRuntimeTests','NativeAppearanceTests','NativeStartingAttendanceTests','NativeAudienceTests','StartingAttendanceTransitionTests','StartingAttendanceLaunchHookTests','SeatBaselineTests','SeatRuntimeTests','AttendanceTimelineTests','ResumeHistoryTests','ResumeBridgeTests','OfflineMatchScopeTests','ReplayEntryGateTests','ReplayPresentationTests','SettingsMenuTests','BandProtectionTests','BroadcastReplayTests','RuntimePathsTests']:
   exe=work/(name+'.exe');run([*cl,tests/(name+'.cpp'),'/Fe:'+str(exe),*link]);run([exe]);tested.append(name)
  if a.checks_only:
   print('CHECKS ONLY COMPLETE:',work);return
@@ -52,5 +53,8 @@ def main():
  support_files={} # Native runtime is verified and embedded in the plugin.
 
  result=dict(supportFiles=support_files,format=1,module='GamedayAtmosphere',version=version,runtimeVersion=version,stage=str(stage),work=str(work),dll=str(dll),dllSha256=sha(dll),nativeSourceBuilt=True,nativeSha256=sha(native),nativeTests=tested,defaultChanges=default_changes,performanceEvidence=json.loads((ROOT/'Build/gameday-performance-verification.json').read_text()),referenceVersion='1.0.2',referenceArchiveSha256=sha(reference),resources=[dict(name=name,sha256=sha(file)) for file,name in resources],sourceHashes={x.resolve().relative_to(ROOT).as_posix():sha(x) for x in tracked},sdk=str(sdk),privateCandidate=a.candidate,installed=False,published=False,experimentalTouchdownRouting=False,liveGameAcceptance='Private spring crowd/fullness candidate: no live installation, injection or menu/launch acceptance. Launcher and touchdown replay policy unchanged. Broadcast Universe big-gain handoff has user-reported live success on 2.1.16.')
+ for path,digest in frozen.items():
+  if sha(path)!=digest:raise ValueError('Source/test changed during build; rerun from frozen sources: '+str(path))
+ result['sourceFrozenThroughBuild']=True
  (ROOT/'Build/current-gameday-standalone.json').write_text(json.dumps(result,indent=2)+'\n',encoding='utf-8');print('SOURCE-BUILT PRIVATE SPRING FULLNESS CANDIDATE READY:',stage,flush=True)
 if __name__=='__main__':main()

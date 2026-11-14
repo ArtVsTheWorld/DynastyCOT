@@ -206,7 +206,7 @@ int main(){
     assert(appearanceAdmission(fixture,1153,1193,true)==AppearanceStage::Prepared);
     assert(appearanceAdmission(fixture,1193,1153,true)==AppearanceStage::Ownership);
     assert(appearanceAdmission(fixture,1153,1193,false)==AppearanceStage::Disabled);
-    auto supporterPlan=plan(fixture,1153,1193);assert(supporterPlan.valid&&!supporterPlan.native&&supporterPlan.layoutVersion==4&&supporterPlan.share>=.30f&&supporterPlan.share<=.70f);
+    auto supporterPlan=plan(fixture,1153,1193);assert(supporterPlan.valid&&!supporterPlan.native&&supporterPlan.layoutVersion==attendance::visitors::CurrentLayoutVersion&&supporterPlan.share>=.30f&&supporterPlan.share<=.70f);
     assert(!plan(fixture,1193,1153).valid);auto missing=fixture;missing.seed.away.audienceFans=0;assert(!plan(missing,1153,1193).valid);
     // Every relevant identity and descriptor guard still applies in supporter mode.
     for(int field=0;field<4;++field){auto wrong=postseasonSeed;if(field==0)++wrong.home.id;if(field==1)++wrong.away.id;if(field==2)++wrong.stadium;if(field==3)++wrong.ea;assert(!launch(image,launchInput,wrong,nullptr,false,LaunchUse::Supporters));}

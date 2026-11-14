@@ -39,14 +39,23 @@ class Cache {
             const auto pipeline=evidence::pipelineFor(next->staff,entry?entry->homePipeline:std::string());const auto value=evidence::obtain(next->reports.value(identity,Json()),p,next->staff,pipeline);
             if(!next->reports.contains(identity)||next->reports.at(identity)!=value){next->reports[identity]=value;prepareView(*next,identity);changed=true;}
         }
-        if(!changed)return nullptr;
+        // A completed request releases its wait slot even when the saved report
+        // already contains this evidence or the prospect is no longer eligible.
+        auto finishRequests=[&](){
+            std::lock_guard<std::mutex> lock(reportMutex);
+            for(const auto& item:pending)if(!pendingReports.count(item.first))waitingReports.erase(item.first);
+        };
+        if(!changed){finishRequests();return nullptr;}
         const auto dir=folder/L"ScoutingReports"/next->league;std::filesystem::create_directories(dir);const auto path=dir/(std::to_string(next->season)+".json"),temp=dir/(std::to_string(next->season)+".tmp");
         const Json saved={{"format",1},{"league",next->league},{"season",next->season},{"reports",next->reports}};const auto bytes=saved.dump();if(bytes.size()>64u*1024*1024)throw std::runtime_error("Scouting report journal exceeds bounds");
         {std::ofstream out(temp,std::ios::binary|std::ios::trunc);out<<bytes;out.flush();if(!out)throw std::runtime_error("Cannot write scouting reports");}
         if(!MoveFileExW(temp.c_str(),path.c_str(),MOVEFILE_REPLACE_EXISTING|MOVEFILE_WRITE_THROUGH))throw std::runtime_error("Cannot commit scouting reports");
-        std::atomic_store(&reportEdition,std::shared_ptr<const ReportEdition>(next));{std::lock_guard<std::mutex> lock(reportMutex);for(const auto& item:pending)waitingReports.erase(item.first);}return {{"event","scouting_reports_ready"},{"obtained",pending.size()},{"staffData",evidence::staffDataName(next->staff.staffData)},{"calibration","pipeline-v2"},{"pipelinesKnown",next->staff.pipelinesKnown},{"pipelines",next->staff.pipelines.size()}};
+        std::atomic_store(&reportEdition,std::shared_ptr<const ReportEdition>(next));finishRequests();return {{"event","scouting_reports_ready"},{"obtained",pending.size()},{"staffData",evidence::staffDataName(next->staff.staffData)},{"calibration","pipeline-v2"},{"pipelinesKnown",next->staff.pipelinesKnown},{"pipelines",next->staff.pipelines.size()}};
     }
-    bool queue(const NotesProspect& p){std::lock_guard<std::mutex> lock(reportMutex);const auto now=GetTickCount64();if(!waitingReports.count(p.identity)&&waitingReports.size()>=64)return false;auto& wait=waitingReports[p.identity];if(!wait.first||now-wait.last>2000)wait.first=now;wait.last=now;if(pendingReports.size()<64||pendingReports.count(p.identity))pendingReports[p.identity]=p;return now-wait.first<8000;}
+    bool queue(const NotesProspect& p){std::lock_guard<std::mutex> lock(reportMutex);const auto now=GetTickCount64();if(!waitingReports.count(p.identity)&&waitingReports.size()>=64){
+        for(auto i=waitingReports.begin();i!=waitingReports.end();){if(now-i->second.last>=8000&&!pendingReports.count(i->first))i=waitingReports.erase(i);else ++i;}
+        if(waitingReports.size()>=64)return false;
+    }auto& wait=waitingReports[p.identity];if(!wait.first||now-wait.last>2000)wait.first=now;wait.last=now;if(pendingReports.size()<64||pendingReports.count(p.identity))pendingReports[p.identity]=p;return now-wait.first<8000;}
     std::string report(const std::shared_ptr<const Published>& cache,const NotesProspect& p,bool& loading){
         auto reports=std::atomic_load(&reportEdition);if(reports&&(!cache||reports->league!=cache->data.league||reports->season!=cache->data.season))reports.reset();const auto saved=reports?reports->reports.find(p.identity):Json::const_iterator{};bool obtain=!reports||saved==reports->reports.end()||!saved->contains("displayOrder")||(!p.activeTransfer&&p.progress>=50&&!saved->contains("athleticBackgroundChecked"));if(!obtain&&p.progress>=25)for(const auto& o:p.observations)if(evidence::band(o)>=0&&evidence::relevant(p.position,evidence::family(p,o))&&!saved->at("claims").contains(evidence::family(p,o))){obtain=true;break;}if(obtain)loading=queue(p)&&!reportFailed.load();const Json empty;const Json& reportValue=!reports||saved==reports->reports.end()?empty:*saved;const auto* views=reports?&(p.activeTransfer?reports->transferViews:reports->views):nullptr;const auto view=views?views->find(p.identity):std::map<std::string,std::array<std::string,3>>::const_iterator{};std::string text=reports&&p.progress>=25&&view!=views->end()?view->second[p.progress>=75?2:p.progress>=50?1:0]:evidence::render(Json(),p.progress,false);if(obtain&&p.progress>=25&&!reportValue.is_object())text="SCOUTING NOTES\n"+std::string(!loading?"Observations unavailable or delayed. Reopen Notes to retry.":"Preparing scouting observations...");if(obtain&&reportFailed.load())text+="\nNew observations are temporarily unavailable. Reopen Notes to retry.";
         if(enhancements::options().measurables&&(!enhancements::options().recruiting||enhancements::options().recruitingScale!=enhancements::GradeScale::Blind)){std::map<std::string,double> revealed;for(const auto& o:p.observations)if(o.exact&&(o.low>0||p.progress==100)&&o.low>=0&&o.low<=100)revealed[notesKey(o.name)]=o.low;

@@ -26,7 +26,7 @@ namespace OfflineDynastySettings
                 new Thread(() => {
                     ILaunchEnvironment environment = suppliedEnvironment ?? new RuntimeEnvironment(logger);
                     environment.Log("Extra Settings " + typeof(CombinedSettingsAction).Assembly.GetName().Version
-                        + " launch watcher started from " + typeof(CombinedSettingsAction).Assembly.Location + ".");
+                        + " discovered by MMC. Waiting for a game. Plugin file: " + typeof(CombinedSettingsAction).Assembly.Location + ".");
                     using (LaunchCoordinator coordinator = new LaunchCoordinator(environment)) {
                         while (true) {
                             try { coordinator.Step(); }
@@ -40,7 +40,7 @@ namespace OfflineDynastySettings
                 new RuntimeEnvironment(logger).Log("Could not start launch watcher: " + ex.ToString());
             }
         }
-        private sealed class RuntimeEnvironment : ILaunchEnvironment
+        private sealed class RuntimeEnvironment : ILaunchEnvironment, ILaunchFailureDetails
         {
             private readonly ILogger logger;
             internal RuntimeEnvironment(ILogger logger) { this.logger = logger; }
@@ -74,6 +74,7 @@ namespace OfflineDynastySettings
                 catch (ArgumentException) { return false; }
                 using (process) return !process.HasExited && process.StartTime.ToUniversalTime().Ticks == launch.Started;
             }
+            public void Detail(Exception error){DiagnosticLog.Write(DiagnosticLog.PluginFolder,"Failure",error.ToString());}
             public void Log(string message)
             {
                 try { if (logger != null) logger.Log("[Extra Settings] " + message, new object[0]); } catch { }

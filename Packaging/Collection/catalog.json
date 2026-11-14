@@ -1,6 +1,6 @@
 {
   "Format": 1,
-  "Version": "1.1.4",
+  "Version": "1.1.5",
   "Modules": [
     {
       "Id": "BeyondTheField",
@@ -14,17 +14,17 @@
       ],
       "Current": {
         "Module": "BeyondTheField",
-        "Version": "1.0.23",
-        "Tag": "v1.0.23",
-        "ArchiveName": "BeyondTheField-1.0.23.zip",
-        "ArchiveUrl": "https://github.com/ArtVsTheWorld/BeyondTheField/releases/download/v1.0.23/BeyondTheField-1.0.23.zip",
-        "ArchiveSha256": "0a3e6f94c76c3c388e5c9226be01f5da71bb5acc1eb659d5f7c000d5e6b3dcfd",
-        "DllSha256": "0155244919e88ab804b338ccdd857204fd990dcf0d3148e9a2948cb3a1363381",
-        "ArchiveBytes": 38175263,
-        "ProofUrl": "https://github.com/ArtVsTheWorld/BeyondTheField/releases/download/v1.0.23/BeyondTheField-1.0.23-verification.json",
-        "PageUrl": "https://github.com/ArtVsTheWorld/BeyondTheField/releases/tag/v1.0.23",
-        "Notes": "# BeyondTheField 1.0.23\n\nChanges since public 1.0.7\n\n- Choose separate grade scales for recruiting, rosters and teams, including Off and Blind\n- Use optional Athletic Measurables and interest-display choices independently of Recruiting Fog\n- Recruit Notes load more reliably and offer shorter, more varied observations, coherent ATH secondary roles and improved new prospect backgrounds\n- Previously saved Notes keep their data while technical labels are hidden; compact transfer labels retain year and redshirt status\n- Confirmed signing news now follows the actual signing school, including recruits whose interest list still names another leader\n- Fans and official accounts have more personality, clearer rivalry references and cleaner grammar; unchanged preseason stories and milestone repetition are reduced\n- Social Media reuses unchanged work and handles available historical editions more efficiently without increasing weekly post budgets\n- GPI Season matches the weekly grade when a player has only one graded game\n- Fog covers additional depth-chart, hub and supported Dynasty Extensions report/drill displays; money formatting and navigation fixes remain\n- Settings and history move safely to shared AppData, helping installs in protected folders\n\nFull multi-coach active-school selection and private Notes ownership remain unsupported outside the verified Owner-school perspective. Saved backgrounds are not rerolled. Installed-menu acceptance is still required.\n\nInstall or update: close MMC/game, back up the previous DLL and replace it in Plugins. Keep settings and history. Restore that DLL to roll back.\n",
-        "Compatibility": "Offline scope and native protections stay in each module. Use one provider of each feature. Read the module release notes for known limits.",
+        "Version": "1.0.24",
+        "Tag": "v1.0.24",
+        "ArchiveName": "BeyondTheField-1.0.24.zip",
+        "ArchiveUrl": "https://github.com/ArtVsTheWorld/BeyondTheField/releases/download/v1.0.24/BeyondTheField-1.0.24.zip",
+        "ArchiveSha256": "1de1432af4bd1acc8a3d5c15be604d7b78ef4ed99a791b74a501d17fd4c144c2",
+        "DllSha256": "ea13046e09eefea5f6aeb3531d1f0e97eca8ae0d06fbf1fbaa44b7ce4bc9bcee",
+        "ArchiveBytes": 41004874,
+        "ProofUrl": "https://github.com/ArtVsTheWorld/BeyondTheField/releases/download/v1.0.24/BeyondTheField-1.0.24-verification.json",
+        "PageUrl": "https://github.com/ArtVsTheWorld/BeyondTheField/releases/tag/v1.0.24",
+        "Notes": "# Ace\u00e2\u20ac\u2122s Beyond the Field 1.0.24\n\nChanges since public release 1.0.7.\n\n- Set separate rating styles for recruits, roster players and teams. Use workout estimates or change how a recruit's interest looks even when Recruiting Fog is off.\n- Recruit Notes now give shorter, position-specific scouting observations. New backgrounds better fit each player's workload and can give two-way athletes a second role. Existing Notes keep what you learned.\n- Signing stories follow the school the recruit joined. Fans and school accounts respond to the matchup, repeated preseason stories show up less often, and spring exhibitions stay separate from fall coverage.\n- Season GPI now matches the weekly grade for a player with one graded game. More depth charts, hub comparisons and supported Dynasty Extensions reports and drills follow your fog choices.\n- Settings, Notes, accounts and published editions share one folder across MMC copies on the same Windows account. In a league with several coaches, the verified view is still the owner's school.\n\nDownload the standalone ZIP, close MMC and the game, and copy **BeyondTheField.dll** into MMC\u00e2\u20ac\u2122s **Plugins** folder. The ZIP includes a full feature list and an illustrated player guide.\n",
+        "Compatibility": "Use one provider of each module. Offline scopes, exact hook checks and shared AppData remain. Read the included player guide and release notes for supported modes and live acceptance limits.",
         "Prerelease": false
       }
     },
@@ -40,17 +40,17 @@
       ],
       "Current": {
         "Module": "GamedayAtmosphere",
-        "Version": "2.1.35",
-        "Tag": "v2.1.35",
-        "ArchiveName": "GamedayAtmosphere-2.1.35.zip",
-        "ArchiveUrl": "https://github.com/ArtVsTheWorld/DynamicGamedayAtmosphere/releases/download/v2.1.35/GamedayAtmosphere-2.1.35.zip",
-        "ArchiveSha256": "00fbcabfc031938f45a355356cae0c278fee91d5a305b6d181cdc4f433d269ec",
-        "DllSha256": "5ef0f6fa925d8f2964c502308d5ed853383461a63efe33c8ae94d40198f38ec5",
-        "ArchiveBytes": 852510,
-        "ProofUrl": "https://github.com/ArtVsTheWorld/DynamicGamedayAtmosphere/releases/download/v2.1.35/GamedayAtmosphere-2.1.35-verification.json",
-        "PageUrl": "https://github.com/ArtVsTheWorld/DynamicGamedayAtmosphere/releases/tag/v2.1.35",
-        "Notes": "# GamedayAtmosphere 2.1.35\n\nChanges since public 2.1.11\n\n- Visiting support better separates national following, travel and home ticket demand, with a modest lift for low ordinary visiting shares\n- Main visiting sections have a clearer visiting core, softer edges and small scattered groups\n- Poor home seasons matter more to turnout; supported neutral and championship crowds get dynamic supporter splits while keeping EA attendance\n- Dynasty Extensions spring games use the actual school, its colors and a dedicated exhibition turnout model, including supported TeamBuilder fixtures\n- Spring crowds keep native empty seats, take halftime breaks and gradually thin without reacting to the score\n- Background roar settles during big leads and quiets after visiting touchdowns; event reactions have more focused coordination\n- Replay yardage returns to settings with a 12-yard default, plus the supported Broadcast Universe big-play handoff\n- Crowd preparation reuses calculations and avoids repeated work while preserving saved crowds\n- One plugin DLL installs everything needed; settings and history use shared AppData rather than requiring a writable Plugins folder\n\nExisting fixture history deliberately keeps old plans. Audible spring boos remain pending listening confirmation. Touchdown replays remain native and are not guaranteed. New crowd visuals and live performance still need acceptance.\n\nInstall or update: close MMC/game, back up the previous DLL and replace it in Plugins. Keep settings and history. Restore that DLL to roll back.\n",
-        "Compatibility": "Offline scope and native protections stay in each module. Use one provider of each feature. Read the module release notes for known limits.",
+        "Version": "2.1.38",
+        "Tag": "v2.1.38",
+        "ArchiveName": "GamedayAtmosphere-2.1.38.zip",
+        "ArchiveUrl": "https://github.com/ArtVsTheWorld/DynamicGamedayAtmosphere/releases/download/v2.1.38/GamedayAtmosphere-2.1.38.zip",
+        "ArchiveSha256": "0a2a05046341d0a3422f0ae2c8e6bba8ccfa875cabd036d5783cc26dec62791f",
+        "DllSha256": "f713979de4c8bb6fe05db3520d8e4cceb1bfbf65bf12e14750a358a019ae6e9a",
+        "ArchiveBytes": 8708872,
+        "ProofUrl": "https://github.com/ArtVsTheWorld/DynamicGamedayAtmosphere/releases/download/v2.1.38/GamedayAtmosphere-2.1.38-verification.json",
+        "PageUrl": "https://github.com/ArtVsTheWorld/DynamicGamedayAtmosphere/releases/tag/v2.1.38",
+        "Notes": "# Ace\u00e2\u20ac\u2122s Gameday Atmosphere 2.1.38\n\nChanges since public release 2.1.11.\n\n- On new Dynasty home dates, ticket demand, travel and each school's following help set turnout. A visiting section can stretch across nearby blocks, with mixed edges and scattered groups of friends. Saved matchups keep their old plan unless you choose Regenerate Next Crowd for a newly started game.\n- An added positive visiting cheer at a home stadium needs at least one visitor in five among the supporters actually present. A visiting touchdown can still hush the home background below that mark. A big lead can calm the roar.\n- Supported neutral games keep the game's turnout and split the crowd between both schools. In supported Dynasty Extensions spring games, the actual school's fans wear its colors, take halftime breaks and drift out in the second half, whatever the score.\n- Set Big Play Replay Minimum Yards in the menu from 10 to 60. It starts at 12. Supported Broadcast Universe setups can receive a big-play request when a clip is available. The game handles touchdown replays.\n- A guide in the ZIP shows how to read the stands. The status report can help explain a missed cheer. The new section layouts, spring boos and in-game frame rate still need live checks.\n\nDownload the standalone ZIP, close MMC and the game, and copy **GamedayAtmosphere.dll** into MMC\u00e2\u20ac\u2122s **Plugins** folder. The ZIP includes a full feature list and an illustrated player guide.\n",
+        "Compatibility": "Use one provider of each module. Offline scopes, exact hook checks and shared AppData remain. Read the included player guide and release notes for supported modes and live acceptance limits.",
         "Prerelease": false
       }
     },
@@ -67,17 +67,17 @@
       ],
       "Current": {
         "Module": "ExtraSettings",
-        "Version": "0.2.11",
-        "Tag": "v0.2.11",
-        "ArchiveName": "ExtraSettings-0.2.11.zip",
-        "ArchiveUrl": "https://github.com/ArtVsTheWorld/offline-dynasty-settings/releases/download/v0.2.11/ExtraSettings-0.2.11.zip",
-        "ArchiveSha256": "00e2cd1507cebe54ce9049f9563a3aef0d70c3813bb0064e40edfecc8834cc9f",
-        "DllSha256": "2552a90870e9f88748e1287713966356e2b1abc7a9329cbfc19c440d6a4f9d3a",
-        "ArchiveBytes": 90372,
-        "ProofUrl": "https://github.com/ArtVsTheWorld/offline-dynasty-settings/releases/download/v0.2.11/ExtraSettings-0.2.11-verification.json",
-        "PageUrl": "https://github.com/ArtVsTheWorld/offline-dynasty-settings/releases/tag/v0.2.11",
-        "Notes": "# ExtraSettings 0.2.11\n\nChanges since public 0.2.10\n\n- Settings, diagnostics and verified runtime files now use shared AppData, so a protected MMC folder does not stop normal saving\n- Different MMC copies share your existing choices; legacy files are preserved and explicit AppData preferences take priority\n- Keeps per-Dynasty clocks, separate offensive/defensive playcall controls and existing compatibility checks\n\nOffline Dynasty only. Check persistence after a clean restart; other game layouts still require their own verification.\n\nInstall or update: close MMC/game, back up the previous DLL and replace it in Plugins. Keep settings and history. Restore that DLL to roll back.\n",
-        "Compatibility": "Offline scope and native protections stay in each module. Use one provider of each feature. Read the module release notes for known limits.",
+        "Version": "0.2.12",
+        "Tag": "v0.2.12",
+        "ArchiveName": "ExtraSettings-0.2.12.zip",
+        "ArchiveUrl": "https://github.com/ArtVsTheWorld/offline-dynasty-settings/releases/download/v0.2.12/ExtraSettings-0.2.12.zip",
+        "ArchiveSha256": "10ca8d0da5a5611d4be7fa36fd0b097ae810db3cc117b5f4dfd89d26096c591b",
+        "DllSha256": "62b3804a218f3b0c9b83fb0ea0726a2a8e7f9a9f4a4d1ae57a707642d133a23d",
+        "ArchiveBytes": 397560,
+        "ProofUrl": "https://github.com/ArtVsTheWorld/offline-dynasty-settings/releases/download/v0.2.12/ExtraSettings-0.2.12-verification.json",
+        "PageUrl": "https://github.com/ArtVsTheWorld/offline-dynasty-settings/releases/tag/v0.2.12",
+        "Notes": "# Ace\u00e2\u20ac\u2122s Extra Settings 0.2.12\n\nChanges since public release 0.2.10.\n\n- Your Windows user folder now holds the settings and reports. Copies of MMC on the same account can share your choices, including when the MMC program folder has limited write access.\n- The report now tells you whether Extra Settings is waiting for an offline Dynasty, which controls are ready and where a setting could not be saved. It is easier to tell a startup problem from a saving problem.\n- The league-specific clocks from 0.2.10 carry forward. Fresh leagues still start with the offensive clock On, the defensive clock at 15 seconds and the four playcall restrictions off.\n\nDownload the standalone ZIP, close MMC and the game, and copy **ExtraSettings.dll** into MMC\u00e2\u20ac\u2122s **Plugins** folder. The ZIP includes a full feature list and an illustrated player guide.\n",
+        "Compatibility": "Use one provider of each module. Offline scopes, exact hook checks and shared AppData remain. Read the included player guide and release notes for supported modes and live acceptance limits.",
         "Prerelease": false
       }
     },
@@ -92,17 +92,17 @@
       ],
       "Current": {
         "Module": "ExpandedPractice",
-        "Version": "0.8.23",
-        "Tag": "v0.8.23",
-        "ArchiveName": "ExpandedPractice-0.8.23.zip",
-        "ArchiveUrl": "https://github.com/ArtVsTheWorld/drive-based-practice/releases/download/v0.8.23/ExpandedPractice-0.8.23.zip",
-        "ArchiveSha256": "591338ba578cf3dae729a81e9843fbeaf293cccbeab19ebbb1d99b76016a4b70",
-        "DllSha256": "856275e583c83d8fdc9e9d697f6bd48f0fb0d28081418a1b4d58e4b834925185",
-        "ArchiveBytes": 78021,
-        "ProofUrl": "https://github.com/ArtVsTheWorld/drive-based-practice/releases/download/v0.8.23/ExpandedPractice-0.8.23-verification.json",
-        "PageUrl": "https://github.com/ArtVsTheWorld/drive-based-practice/releases/tag/v0.8.23",
-        "Notes": "# ExpandedPractice 0.8.23\n\nChanges since public 0.8.21\n\n- Avoids the confirmed Dynasty Extensions pregame controller-hook conflict on the supported layout\n- Settings, diagnostics and verified runtime files now use shared AppData, including when MMC is installed in a protected folder\n- Keeps Default, Drive and Scrimmage modes, session statistics and existing native safety checks\n\nOnly the exact supported Dynasty Extensions/controller layout is covered. Check both practice entry routes after a clean restart.\n\nInstall or update: close MMC/game, back up the previous DLL and replace it in Plugins. Keep settings and history. Restore that DLL to roll back.\n",
-        "Compatibility": "Offline scope and native protections stay in each module. Use one provider of each feature. Read the module release notes for known limits.",
+        "Version": "0.8.24",
+        "Tag": "v0.8.24",
+        "ArchiveName": "ExpandedPractice-0.8.24.zip",
+        "ArchiveUrl": "https://github.com/ArtVsTheWorld/drive-based-practice/releases/download/v0.8.24/ExpandedPractice-0.8.24.zip",
+        "ArchiveSha256": "2bfd7184f912dd66431abeda4cc1c065354a1be5cd62ab6b2a0f1c3572bfb3a1",
+        "DllSha256": "107b70943cf07fd44e371f2f767d2820b8ab7aad3a51e1eb0e2dd57c1ba94e5f",
+        "ArchiveBytes": 6595855,
+        "ProofUrl": "https://github.com/ArtVsTheWorld/drive-based-practice/releases/download/v0.8.24/ExpandedPractice-0.8.24-verification.json",
+        "PageUrl": "https://github.com/ArtVsTheWorld/drive-based-practice/releases/tag/v0.8.24",
+        "Notes": "# Ace\u00e2\u20ac\u2122s Expanded Practice 0.8.24\n\nChanges since public release 0.8.21.\n\n- Drive Practice and Scrimmage can now share the recognized Dynasty Extensions pregame controller screen. The fix applies to that specific screen. Other layouts need a separate check.\n- The report tells you when practice is waiting for a session, when Default Practice is active and when a drive mode is running. Your user folder now holds reports across MMC installations.\n- The included guide shows how to switch modes, finish a return, read the scoreboard and start another drive while keeping your totals. Both main-menu Practice and offline Dynasty practice are supported.\n\nDownload the standalone ZIP, close MMC and the game, and copy **ExpandedPractice.dll** into MMC\u00e2\u20ac\u2122s **Plugins** folder. The ZIP includes a full feature list and an illustrated player guide.\n",
+        "Compatibility": "Use one provider of each module. Offline scopes, exact hook checks and shared AppData remain. Read the included player guide and release notes for supported modes and live acceptance limits.",
         "Prerelease": false
       }
     }
@@ -352,6 +352,51 @@
       "Path": "Plugins/ExpandedPractice.dll",
       "Module": "ExpandedPractice",
       "Sha256": "856275e583c83d8fdc9e9d697f6bd48f0fb0d28081418a1b4d58e4b834925185"
+    },
+    {
+      "Path": "Plugins/BeyondTheField.dll",
+      "Module": "BeyondTheField",
+      "Sha256": "6ece3900e820d56d054973a10fa69b736573e9e590a9cf1f74b4de5d79f22091"
+    },
+    {
+      "Path": "Plugins/GamedayAtmosphere.dll",
+      "Module": "GamedayAtmosphere",
+      "Sha256": "d829f143512a02227a47f88a4c38c583905e15199661498bd1721d26306bac20"
+    },
+    {
+      "Path": "Plugins/GamedayAtmosphere.dll",
+      "Module": "GamedayAtmosphere",
+      "Sha256": "85ef361e6b8d7e0ddf5807933825a9d5a560b36aa961906dcfd12973d1808cb9"
+    },
+    {
+      "Path": "Plugins/ExtraSettings.dll",
+      "Module": "ExtraSettings",
+      "Sha256": "808c79648275b93bbe991835a9f3415065504126d0bc3f16bf045e16f5e674f2"
+    },
+    {
+      "Path": "Plugins/ExpandedPractice.dll",
+      "Module": "ExpandedPractice",
+      "Sha256": "0b1fbaeb17ccb5fa52de29bff1e52ec73ee51933bc0699a12f3f39eb5ddff32b"
+    },
+    {
+      "Path": "Plugins/BeyondTheField.dll",
+      "Module": "BeyondTheField",
+      "Sha256": "ea13046e09eefea5f6aeb3531d1f0e97eca8ae0d06fbf1fbaa44b7ce4bc9bcee"
+    },
+    {
+      "Path": "Plugins/GamedayAtmosphere.dll",
+      "Module": "GamedayAtmosphere",
+      "Sha256": "f713979de4c8bb6fe05db3520d8e4cceb1bfbf65bf12e14750a358a019ae6e9a"
+    },
+    {
+      "Path": "Plugins/ExtraSettings.dll",
+      "Module": "ExtraSettings",
+      "Sha256": "62b3804a218f3b0c9b83fb0ea0726a2a8e7f9a9f4a4d1ae57a707642d133a23d"
+    },
+    {
+      "Path": "Plugins/ExpandedPractice.dll",
+      "Module": "ExpandedPractice",
+      "Sha256": "107b70943cf07fd44e371f2f767d2820b8ab7aad3a51e1eb0e2dd57c1ba94e5f"
     }
   ],
   "Programs": [

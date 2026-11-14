@@ -20,7 +20,7 @@ int main(){
         audience::Foundation migrated;assert(book.resolve(1,p,migrated));assert(std::abs(migrated.fans-c.referenceFans)<.000001);
         assert((migrated.reference==std::array<float,4>{.4f,.3f,.2f,.1f}));
         double fans=audience::demand(migrated,p);
-        std::stringstream saved;book.write(saved);assert(saved.str().find("DGA-AUDIENCE-2 ")==0);
+        std::stringstream saved;book.write(saved);assert(saved.str().find("DGA-AUDIENCE-3 ")==0);
         audience::Book again;assert(again.read(saved)&&!again.upgraded&&again.migrated==0&&again.revision==0);
         audience::Foundation repeat;assert(again.resolve(1,p,repeat)&&repeat.fans==migrated.fans&&audience::demand(repeat,p)==fans);
     }
@@ -37,7 +37,7 @@ int main(){
     // Reject a damaged upgrade transaction rather than altering a live book.
     audience::Book intact;audience::Program p;p.id=1168;p.row=28;p.year=0;p.identityKnown=true;p.prestige=8;p.atmosphere=4;p.ap=56;
     audience::Foundation base;assert(intact.resolve(1,p,base));
-    for(const char* text:{"DGA-AUDIENCE-3 0","DGA-AUDIENCE-1 1\n1 28 1168 0 0 0 73353 .4 .3 .2 .1 trailing","DGA-AUDIENCE-2 1\n1 28 1168 0 0 0 nan .4 .3 .2 .1"}){
+    for(const char* text:{"DGA-AUDIENCE-4 0","DGA-AUDIENCE-1 1\n1 28 1168 0 0 0 73353 .4 .3 .2 .1 trailing","DGA-AUDIENCE-2 1\n1 28 1168 0 0 0 nan .4 .3 .2 .1"}){
         std::stringstream bad(text);assert(!intact.read(bad));audience::Foundation after;assert(intact.resolve(1,p,after)&&after.fans==base.fans);
     }
     assert(audience::opponentRetention(base,p)>.99f);

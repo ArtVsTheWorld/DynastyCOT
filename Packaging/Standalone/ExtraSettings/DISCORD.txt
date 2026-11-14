@@ -1,10 +1,6 @@
-**ExtraSettings 0.2.11**
-Changes since 0.2.10
+**Ace’s Extra Settings 0.2.12**
+Changes since public release 0.2.10.
 
-- Settings, diagnostics and verified runtime files now use shared AppData, so a protected MMC folder does not stop normal saving
-- Different MMC copies share your existing choices; legacy files are preserved and explicit AppData preferences take priority
-- Keeps per-Dynasty clocks, separate offensive/defensive playcall controls and existing compatibility checks
+MMC copies on the same Windows account now share your settings. The report explains which controls are ready and where a save failed. Your per-Dynasty clocks and four playcall rules carry forward.
 
-Offline Dynasty only. Check persistence after a clean restart; other game layouts still require their own verification.
-
-Close MMC/game before replacing the DLL. Keep settings/history.
+Close MMC and the game, then copy ExtraSettings.dll from the standalone ZIP into MMC’s Plugins folder. The ZIP includes the full feature list and an illustrated player guide.

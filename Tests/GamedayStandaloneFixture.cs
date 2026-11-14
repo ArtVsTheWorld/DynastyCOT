@@ -37,7 +37,7 @@ class GamedayStandaloneFixture {
    var attributes=assembly.GetCustomAttributesData();
    foreach(string name in new[]{"PluginAuthorAttribute","PluginDisplayNameAttribute","PluginVersionAttribute"}){
     var attr=attributes.Single(x=>x.AttributeType.Name==name);string value=(string)attr.ConstructorArguments[0].Value;
-    Check(value==(name=="PluginAuthorAttribute"?"Ace":name=="PluginDisplayNameAttribute"?"Gameday Atmosphere":(args.Length>4?args[4]:"1.0.2-standalone-test")),"MMC branding "+name);
+    Check(value==(name=="PluginAuthorAttribute"?"Ace":name=="PluginDisplayNameAttribute"?"Ace\u2019s Gameday Atmosphere":(args.Length>4?args[4]:"1.0.2-standalone-test")),"MMC branding "+name);
    }
    var names=assembly.GetManifestResourceNames();Check((names.Length==3||names.Length==2)&&!names.Any(x=>x.Contains("LoadDynamic")),"Exactly engine/defaults/diagnostics resources; no loader EXE");
    if(!names.Any(x=>x.EndsWith(".dll"))){string leaf="GamedayAtmosphereNative-"+runtime+".dll",external=Path.Combine(root,"COT-Support","GamedayAtmosphere",runtime,leaf);byte[] original=Bytes(external);Call(action,"Extract",leaf,false);string cached=Path.Combine((string)Call(storage,"DataFolder",plugins),"Runtime-"+runtime,leaf);Same(cached,original);File.WriteAllText(external,"tampered");bool rejected=false;try{Call(action,"Extract",leaf,false);}catch{rejected=true;}Check(rejected,"External native tampering is rejected before loading");Same(cached,original);File.WriteAllBytes(external,original);}
@@ -79,9 +79,23 @@ class GamedayStandaloneFixture {
    Check(Directory.GetFiles(plugins,"*Native*.dll",SearchOption.AllDirectories).Length==0,"Extracted native engine outside recursive Plugins scan");
    foreach(string name in histories)Check(File.ReadAllText(Path.Combine(data,"History",name))=="keep existing "+name,"History preserved: "+name);
    Same(ini,chosen);
+  }else if(args[0]=="logs"){
+   CheckPrivateLogging(action);
   }else if(args[0]=="extract"){
    Call(action,"Extract","GamedayAtmosphereNative-"+runtime+".dll",false);Call(action,"Extract","DgaDiagnostics.exe",false);
   }else throw new Exception("Unknown case");
   Console.WriteLine("PASS "+args[0]+" "+count);return 0;
  }catch(Exception error){Console.Error.WriteLine(error);return 1;}}
+ [System.Runtime.CompilerServices.MethodImpl(System.Runtime.CompilerServices.MethodImplOptions.NoInlining)]
+ static void CheckPrivateLogging(Type action){
+  var logger=new CapturedGdaLogger();string folder=(string)action.GetProperty("LogsFolder").GetValue(null,null);Directory.CreateDirectory(folder);
+  string path=Path.Combine(folder,"launcher.log");
+  Call(action,"Note",logger,"Private-only state check");
+  Check(logger.Calls==0&&File.ReadAllText(path).Contains("Private-only state check"),"GDA writes AppData diagnostics without host messages");
+  using(var locked=new FileStream(path,FileMode.Open,FileAccess.Read,FileShare.Read))Call(action,"Note",logger,"Locked private log check");
+  Check(logger.Calls==0,"Even log failure does not hijack MMC progress or errors");
+ }
+}
+sealed class CapturedGdaLogger:FrostySdk.Interfaces.ILogger {
+ public int Calls;public void Log(string text,params object[] args){++Calls;}public void LogWarning(string text,params object[] args){++Calls;}public void LogError(string text,params object[] args){++Calls;}
 }

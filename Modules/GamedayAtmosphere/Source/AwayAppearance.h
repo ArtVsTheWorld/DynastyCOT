@@ -8,6 +8,7 @@ using Address=uintptr_t;
 inline constexpr Address Generation=0x3628a00;
 inline const std::vector<unsigned char> GenerationPrefix{0x4c,0x8b,0xdc,0x55,0x53,0x57,0x49,0x8d,0xab,0xc8,0xfc,0xff,0xff,0x48,0x81,0xec,0x20,0x04,0,0};
 struct Stream {Address value=0,holder=0,data=0;size_t count=0;};
+inline bool sameStream(const Stream& a,const Stream& b){return a.value==b.value&&a.holder==b.holder&&a.data==b.data&&a.count==b.count;}
 template<class Read> Stream property(Read read,Address image,Address map,Address key){
     auto q=[&](Address p){Address v=0;return read(p,&v,sizeof(v))?v:Address(0);};
     Address begin=q(map),end=q(map+8);Stream found;
@@ -33,9 +34,9 @@ inline bool writable(Address address,size_t bytes){
 // Change the single native team-appearance bit atomically; don't copy back a
 // whole packed record and overwrite unrelated native flags or instrument tags.
 inline bool writeSides(Address data,const agents::Tags& tags,const std::vector<unsigned char>& sides)noexcept{
-    if(tags.type.size()!=sides.size()||!writable(data,tags.type.size()*10))return false;
+    if(!tags.verified||tags.type.size()!=sides.size()||tags.side.size()!=sides.size()||tags.fixed.size()!=sides.size()||!writable(data,tags.type.size()*10))return false;
     __try{
-        for(size_t i=0;i<tags.type.size();++i)if(agents::regular(tags.type[i])&&!tags.protectedFan(i)){
+        for(size_t i=0;i<tags.type.size();++i)if(sides[i]!=tags.side[i]&&agents::regular(tags.type[i])&&!tags.protectedFan(i)){
             auto p=reinterpret_cast<volatile char*>(data+i*10);
             char current=*p;
             for(;;){char wanted=static_cast<char>((static_cast<unsigned char>(current)&0xfe)|(sides[i]&1));
@@ -46,15 +47,16 @@ inline bool writeSides(Address data,const agents::Tags& tags,const std::vector<u
 struct AppearanceResult {
     bool applied=false,nativeFallback=false;unsigned positions=0,band=0,visitors=0;
     bool occupiedVerified=false;unsigned spectators=0,occupiedVisitors=0;
-    Address component=0,map=0,coordinates=0;Stream stream;
+    bool seatingMeasured=false;seating::Summary seating;
+    Address component=0,map=0;Stream stream,coordinateStream;
     agents::Tags native;std::vector<unsigned char> desired;
 };
 // Restore only the one bit we temporarily owned, preserving other native
 // writes. If native generation changed the side itself, leave that new value.
 inline bool restoreSides(Address data,const agents::Tags& tags,const std::vector<unsigned char>& desired)noexcept{
-    if(tags.side.size()!=desired.size()||!writable(data,desired.size()*10))return false;
+    if(!tags.verified||tags.side.size()!=desired.size()||tags.type.size()!=desired.size()||tags.fixed.size()!=desired.size()||!writable(data,desired.size()*10))return false;
     __try{
-        for(size_t i=0;i<desired.size();++i)if(agents::regular(tags.type[i])&&!tags.protectedFan(i)){
+        for(size_t i=0;i<desired.size();++i)if(desired[i]!=tags.side[i]&&agents::regular(tags.type[i])&&!tags.protectedFan(i)){
             auto p=reinterpret_cast<volatile char*>(data+i*10);char current=*p;
             for(;;){if((static_cast<unsigned char>(current)&1)!=(desired[i]&1))break;
                 char wanted=static_cast<char>((static_cast<unsigned char>(current)&0xfe)|(tags.side[i]&1));
@@ -67,20 +69,20 @@ template<class Read> bool restoreAppearance(Read read,Address image,const Appear
     auto q=[&](Address p){Address v=0;return read(p,&v,sizeof(v))?v:Address(0);};
     if(q(prepared.component)!=image+0xb484f98||q(prepared.component+0x48)!=prepared.map)return false;
     auto current=property(read,image,prepared.map,0xb486033);const auto& previous=prepared.stream;
-    if(current.value!=previous.value||current.holder!=previous.holder||current.data!=previous.data||current.count!=previous.count)return false;
+    if(!sameStream(current,previous))return false;
     return restoreSides(previous.data,prepared.native,prepared.desired);
 }
 // A generated outfit outlives its temporary source selector. Retain only its
 // supporter identity for DGA's population/departure model, not a game object.
 struct GeneratedAppearance {
-    Address component=0,map=0,data=0,coordinates=0;int home=-1,away=-1;
+    Address component=0,map=0;Stream selectors,points;int home=-1,away=-1;
     std::vector<unsigned char> side;
     template<class Read> bool apply(Read read,Address image,Address scene,int homeTeam,int awayTeam,agents::Tags& tags)const{
         if(home!=homeTeam||away!=awayTeam||!tags.verified||tags.side.size()!=side.size())return false;
         auto q=[&](Address p){Address v=0;return read(p,&v,sizeof(v))?v:Address(0);};
         if(q(scene+0x908)!=component||q(component)!=image+0xb484f98||q(component+0x48)!=map)return false;
-        auto current=property(read,image,map,0xb486033),points=property(read,image,map,bindings::CrowdPositionKey);
-        if(current.data!=data||current.count!=side.size()||points.data!=coordinates||points.count!=side.size())return false;
+        auto current=property(read,image,map,0xb486033),coords=property(read,image,map,bindings::CrowdPositionKey);
+        if(!sameStream(current,selectors)||!sameStream(coords,points)||current.count!=side.size()||coords.count!=side.size())return false;
         tags.side=side;return true;
     }
 };
@@ -94,7 +96,7 @@ template<class Read> AppearanceResult appearance(Read read,Address image,Address
     auto q=[&](Address p){Address v=0;return read(p,&v,sizeof(v))?v:Address(0);};
     if(q(component)!=image+0xb484f98)return result;
     Address map=q(component+0x48);auto tags=property(read,image,map,0xb486033),coords=property(read,image,map,bindings::CrowdPositionKey);
-    if(tags.count<512||tags.count>200000||coords.count!=tags.count)return result;
+    if(tags.count<512||tags.count>200000||coords.count!=tags.count||(occupied&&occupied->size()!=tags.count))return result;
     std::vector<unsigned char> raw(tags.count*10);
     std::vector<seats::Position> positions(tags.count);
     if(!read(tags.data,raw.data(),raw.size())||!read(coords.data,positions.data(),positions.size()*sizeof(seats::Position)))return result;
@@ -104,19 +106,20 @@ template<class Read> AppearanceResult appearance(Read read,Address image,Address
     if(!seats::plausible(positions,ordinary))return result;
     std::vector<unsigned char> desired;
     if(singleSchoolSide>=0){desired=types.side;for(unsigned i:ordinary)if(!types.protectedFan(i))desired[i]=static_cast<unsigned char>(singleSchoolSide);}
-    else desired=assign(positions,types,plan.share,seed,occupied,plan.layoutVersion,plan.ceiling==.70,&result.nativeFallback);
+    else desired=assign(positions,types,plan.share,seed,occupied,plan.layoutVersion,plan.ceiling==.70,&result.nativeFallback,&result.seating);
     if(desired.size()!=tags.count)return result;
-    auto current=property(read,image,map,0xb486033);
-    if(q(component+0x48)!=map||current.value!=tags.value||current.holder!=tags.holder||current.data!=tags.data||current.count!=tags.count)return result;
+    auto current=property(read,image,map,0xb486033),points=property(read,image,map,bindings::CrowdPositionKey);
+    if(q(component)!=image+0xb484f98||q(component+0x48)!=map||!sameStream(current,tags)||!sameStream(points,coords))return result;
     if(!writeSides(tags.data,types,desired)){
-        if(q(component+0x48)==map&&q(tags.holder+8)==tags.data)restoreSides(tags.data,types,desired);
+        if(q(component)==image+0xb484f98&&q(component+0x48)==map&&sameStream(property(read,image,map,0xb486033),tags))restoreSides(tags.data,types,desired);
         return result;
     }
     result.applied=true;result.positions=static_cast<unsigned>(tags.count);result.band=types.band;
+    result.seatingMeasured=singleSchoolSide<0&&!result.nativeFallback&&plan.layoutVersion>=2;
     result.occupiedVerified=occupied!=nullptr;
     if(occupied)for(unsigned i=0;i<tags.count;++i)if((*occupied)[i]&&!types.protectedBand(i)){++result.spectators;result.occupiedVisitors+=desired[i];}
     for(unsigned i:ordinary)result.visitors+=desired[i];
-    result.component=component;result.map=map;result.coordinates=coords.data;result.stream=tags;
+    result.component=component;result.map=map;result.coordinateStream=coords;result.stream=tags;
     result.native=std::move(types);result.desired=std::move(desired);return result;
 }
 }

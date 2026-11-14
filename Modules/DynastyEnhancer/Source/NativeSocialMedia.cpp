@@ -1,4 +1,5 @@
 #include "UserRuntimePaths.h"
+#include "RuntimeDiagnostics.h"
 #include "../../../Compatibility/PracticeTextSetter.generated.h"
 #define WIN32_LEAN_AND_MEAN
 #include <windows.h>
@@ -662,7 +663,7 @@ void __fastcall filterChangedHook(void* self,const char* panel,const char* kind,
 // Typed forwarding preserves the native navigation collector contract while
 // recording whether the retained NEWS_MENU destination exists on this build.
 struct InfoProxy {void** vt;void* target;};
-template<class T>void infoValue(InfoProxy* p,const char* key,T v,size_t slot){reinterpret_cast<void(__fastcall*)(void*,const char*,T)>((*reinterpret_cast<void***>(p->target))[slot])(p->target,key,v);note({{"event","news_navigation_info"},{"key",key},{"value",v}});}
+template<class T>void infoValue(InfoProxy* p,const char* key,T v,size_t slot){reinterpret_cast<void(__fastcall*)(void*,const char*,T)>((*reinterpret_cast<void***>(p->target))[slot])(p->target,key,v);}
 void __fastcall infoBool(InfoProxy* p,const char* k,bool v){infoValue(p,k,v,1);}
 void __fastcall infoInt(InfoProxy* p,const char* k,int v){infoValue(p,k,v,2);}
 void __fastcall infoFloat(InfoProxy* p,const char* k,float v){infoValue(p,k,v,3);}
@@ -778,7 +779,7 @@ void publishFeed(const Json& data){
     {std::lock_guard<std::mutex> lock(feedMutex);retiredFeeds.push_back(std::move(latestFeed));latestFeed=std::move(feed);nativeFeedIdentity=runtime;nativeFeedLeague=league;}
     note({{"event","runtime_ui_publication_timing"},{"decodeMs",decodeMs},{"totalMs",GetTickCount64()-began},{"week",data.at("week")},{"phase",data.at("phase")}});
 }
-void flush(){std::deque<Json> batch;{std::lock_guard<std::mutex> lock(logMutex);batch.swap(messages);}if(batch.empty())return;std::ofstream out(folder/L"social-media.jsonl",std::ios::app);for(const auto& x:batch)out<<x.dump()<<'\n';}
+void flush(){std::deque<Json> batch;{std::lock_guard<std::mutex> lock(logMutex);batch.swap(messages);}dynasty::diagnostics::write(folder,L"social-media",batch);}
 DWORD WINAPI worker(void*){
     SetThreadPriority(GetCurrentThread(),THREAD_PRIORITY_BELOW_NORMAL);
     wchar_t path[32768]{};GetModuleFileNameW(module,path,32768);const auto codeFolder=std::filesystem::path(path).parent_path();folder=dynasty::userpaths::data(codeFolder);if(folder.empty()){OutputDebugStringW(L"Beyond the Field: unsupported writable-data location; no hooks changed.\n");return 1;}buildId=std::filesystem::path(path).filename().u8string();base=reinterpret_cast<uintptr_t>(GetModuleHandleW(nullptr));enhancements::requireDynastyPresentation(base);
@@ -795,7 +796,7 @@ DWORD WINAPI worker(void*){
         filterChanged=reinterpret_cast<FilterChanged>(base+0x7a2def0);
         HMODULE pinned=nullptr;if(!GetModuleHandleExW(GET_MODULE_HANDLE_EX_FLAG_FROM_ADDRESS|GET_MODULE_HANDLE_EX_FLAG_PIN,reinterpret_cast<LPCWSTR>(&tileHook),&pinned))throw std::runtime_error("Cannot pin runtime");
         for(auto& b:bindings){if(!replace(reinterpret_cast<void**>(base+b.vt+b.offset),reinterpret_cast<void*>(base+b.rva),b.hook))throw std::runtime_error("UI hook ownership changed during activation");b.installed=true;}
-        note({{"event","menu_hooks_active"},{"pid",GetCurrentProcessId()}});flush();
+        note({{"event","menu_hooks_active"},{"summary","Social Media runtime verified its native menu hooks. Waiting for Dynasty news assets and a current feed."},{"pid",GetCurrentProcessId()}});flush();
         // The read-only collector runs even when no News UI assets exist.
         // In particular, cold loading Training Results must seed the ledger.
         uint64_t uiProbeAt=0,modelScanAt=0;std::string previousUiReason;bool previousSocial=true;uint64_t previousProfile=UINT64_MAX;
@@ -803,7 +804,7 @@ DWORD WINAPI worker(void*){
         while(!disabled){
             const auto feedEnabled=socialEnabled();
             const auto profile=enhancementProfile.load();
-            if(feedEnabled!=previousSocial||profile!=previousProfile){refresh.restart();waitingFeed();previousSocial=feedEnabled;previousProfile=profile;note({{"event","social_media_option"},{"enabled",feedEnabled}});}
+            if(feedEnabled!=previousSocial||profile!=previousProfile){refresh.restart();waitingFeed();previousSocial=feedEnabled;previousProfile=profile;note({{"event","social_media_option"},{"enabled",feedEnabled},{"summary",feedEnabled?"Social Media is enabled for this Dynasty. Waiting for a verified edition.":"Social Media is disabled in this Dynasty's settings."}});}
             collectRetiredFeeds();flush();
             if(feedEnabled)if(auto feed=refresh.tick([]{return disabled.load()||!socialEnabled();},[](Json j){note(std::move(j));},[]{waitingFeed();}))publishFeed(*feed);
             if(uiReady&&!opened&&!layoutDiscoveryNeeded&&!newsLayoutUsable())note({{"event","social_layout_refresh_requested"}});
@@ -815,13 +816,13 @@ DWORD WINAPI worker(void*){
 #endif
                 if(reason.empty()){
                     for(const auto& b:bindings){uintptr_t pointer=0;if(!read(base+b.vt+b.offset,&pointer,8)||pointer!=reinterpret_cast<uintptr_t>(b.hook))throw std::runtime_error("Native UI slot changed while awaiting Dynasty readiness");}
-                    layoutDiscoveryNeeded=false;uiReady.store(true);note({{"event","active"},{"pid",GetCurrentProcessId()},{"scope","Dynasty Enhancer active-Dynasty weekly and midweek feed"},{"posts",feedPostCount},{"listFeed",listFeed},{"selectablePosts",selectablePosts}});
-                }else{uiProbeAt=GetTickCount64()+(uiReady?10000:3000);if(reason!=previousUiReason){previousUiReason=reason;note({{"event","startup_waiting"},{"reason",reason},{"backgroundCapture",true}});}}
+                    layoutDiscoveryNeeded=false;uiReady.store(true);previousUiReason.clear();note({{"event","active"},{"summary","Dynasty news layout verified. The Social Media page can open when its current Dynasty edition is ready."},{"pid",GetCurrentProcessId()},{"scope","Dynasty Enhancer active-Dynasty weekly and midweek feed"},{"posts",feedPostCount},{"listFeed",listFeed},{"selectablePosts",selectablePosts}});
+                }else{uiProbeAt=GetTickCount64()+(uiReady?10000:3000);if(reason!=previousUiReason){previousUiReason=reason;note({{"event","startup_waiting"},{"summary",reason},{"reason",reason},{"backgroundCapture",true}});}}
             }
             if(modelDiscoveryNeeded&&GetTickCount64()>=modelScanAt){modelDiscoveryNeeded=false;modelScanAt=GetTickCount64()+10000;discoverNewsModelInWorker();}
             Sleep(200);
         }note({{"event","stopped"},{"callbacks",callbacks.load()}});flush();
-    }catch(const std::exception& e){stop();note({{"event","activation_failed"},{"error",e.what()}});flush();}
+    }catch(const std::exception& e){stop();flush();note({{"event","activation_failed"},{"summary",std::string("Social Media activation stopped: ")+e.what()+". Check the game version and other News menu plugins, then retry in a fresh game."},{"error",e.what()}});flush();}
     return 0;
 }
 }

@@ -1,10 +1,6 @@
-**ExpandedPractice 0.8.23**
-Changes since 0.8.21
+**Ace’s Expanded Practice 0.8.24**
+Changes since public release 0.8.21.
 
-- Avoids the confirmed Dynasty Extensions pregame controller-hook conflict on the supported layout
-- Settings, diagnostics and verified runtime files now use shared AppData, including when MMC is installed in a protected folder
-- Keeps Default, Drive and Scrimmage modes, session statistics and existing native safety checks
+Drive Practice and Scrimmage can share the recognized Dynasty Extensions pregame controller screen. The report distinguishes waiting for practice from an active session. Both offline practice routes remain supported.
 
-Only the exact supported Dynasty Extensions/controller layout is covered. Check both practice entry routes after a clean restart.
-
-Close MMC/game before replacing the DLL. Keep settings/history.
+Close MMC and the game, then copy ExpandedPractice.dll from the standalone ZIP into MMC’s Plugins folder. The ZIP includes the full feature list and an illustrated player guide.
