@@ -1,3 +1,6 @@
+using File = Ace.DynastyCOT.StorageFile;
+using Directory = Ace.DynastyCOT.StorageDirectory;
+using Path = Ace.DynastyCOT.StoragePath;
 using System;
 using System.Globalization;
 using System.IO;
@@ -39,7 +42,7 @@ namespace OfflineDynastySettings
         {
             if(!Valid(seconds))throw new InvalidDataException("Invalid Defensive Play Clock choice.");
             string path=SettingsFiles.PathFor(folder,FileName),temporary=path+".tmp";
-            using(FileStream file=new FileStream(temporary,FileMode.Create,FileAccess.Write,FileShare.None))
+            using(FileStream file=Ace.DynastyCOT.StorageIO.OpenFile(temporary,FileMode.Create,FileAccess.Write,FileShare.None))
             using(StreamWriter writer=new StreamWriter(file)) { writer.Write("DefensivePlayClockSeconds="+seconds.ToString(CultureInfo.InvariantCulture)+"\r\n");writer.Flush();file.Flush(true); }
             if(File.Exists(path))File.Replace(temporary,path,null);else File.Move(temporary,path);
         }

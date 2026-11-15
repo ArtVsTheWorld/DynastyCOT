@@ -1,3 +1,8 @@
+using FileVersionInfo = Ace.DynastyCOT.StorageVersionInfo;
+using File = Ace.DynastyCOT.StorageFile;
+using Directory = Ace.DynastyCOT.StorageDirectory;
+using Path = Ace.DynastyCOT.StoragePath;
+using FileInfo = Ace.DynastyCOT.StorageFileInfo;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
@@ -12,26 +17,35 @@ namespace DynastyCOT.Collection {
  internal sealed class CollectionInstaller {
   internal readonly Catalog Catalog;
   readonly Fixture fixture;
-  internal CollectionInstaller(Catalog catalog,Fixture test=null){catalog.Validate();Catalog=catalog;fixture=test;}
+  readonly Action<string,string> backupCopy;
+  internal CollectionInstaller(Catalog catalog,Fixture test=null,Action<string,string> testBackupCopy=null){catalog.Validate();if(testBackupCopy!=null&&test==null)throw new IOException("Backup fault injection is fixture-only.");Catalog=catalog;fixture=test;backupCopy=testBackupCopy??((source,destination)=>File.Copy(source,destination));}
+  static bool ProgramContext(KnownFile record,string relative){return !Path.GetFileName(record.Path).Equals("node.exe",StringComparison.OrdinalIgnoreCase)||relative.EndsWith("/COT-Runtime/Shared/node.exe",StringComparison.OrdinalIgnoreCase);}
   internal Inventory Inspect(string value){
    string root=Paths.ValidateRoot(value);var result=new Inventory();string receipt=Paths.Resolve(root,Paths.State);
    if(File.Exists(receipt)){result.Receipt=Json.Read<Receipt>(receipt);if(result.Receipt.Format!=1||result.Receipt.Modules==null||result.Receipt.Modules.Select(x=>x.Module).Distinct().Count()!=result.Receipt.Modules.Count)throw new IOException("Collection receipt is unreadable; no files were changed.");foreach(var m in result.Receipt.Modules){Catalog.Get(m.Module);ReleaseRules.Hash(m.Sha256);ReleaseRules.Numeric(m.Version);}}
    var todo=new Stack<string>();string plugins=Paths.Resolve(root,"Plugins");if(Directory.Exists(plugins))todo.Push(plugins);int files=0;
-   while(todo.Count>0){string folder=todo.Pop();Paths.NoLinks(root,folder);foreach(string child in Directory.GetDirectories(folder)){Paths.NoLinks(root,child);todo.Push(child);}foreach(string file in Directory.GetFiles(folder,"*.dll")){
+   int folders=0;while(todo.Count>0){string folder=todo.Pop();if(++folders>10000)throw new IOException("Plugins folder scan exceeds its limit.");Paths.NoLinks(root,folder);foreach(string child in Directory.GetDirectories(folder)){Paths.NoLinks(root,child);todo.Push(child);}foreach(string file in Directory.GetFiles(folder).Where(p=>Path.GetExtension(p).Equals(".dll",StringComparison.OrdinalIgnoreCase)||Path.GetExtension(p).Equals(".exe",StringComparison.OrdinalIgnoreCase))){
     if(++files>10000)throw new IOException("Plugins scan exceeds its limit.");Paths.NoLinks(root,file);string relative=file.Substring(root.Length+1).Replace('\\','/'),name=Path.GetFileNameWithoutExtension(file),assembly=null;
-    try{assembly=AssemblyName.GetAssemblyName(file).Name;}catch(BadImageFormatException){}catch(FileLoadException){}
+    try{assembly=Ace.DynastyCOT.StorageAssembly.GetAssemblyName(file).Name;}catch(BadImageFormatException){}catch(FileLoadException){}
     string owner=name.Equals("DynastyCOT",StringComparison.OrdinalIgnoreCase)||assembly=="DynastyCOT"?"Core":null;
     foreach(var m in Catalog.Modules)if(m.Aliases.Concat(new[]{m.Id}).Any(x=>String.Equals(x,name,StringComparison.OrdinalIgnoreCase)||String.Equals(x,assembly,StringComparison.OrdinalIgnoreCase)))owner=m.Id;
     var known=Catalog.KnownPlugins.Concat(Catalog.Programs).FirstOrDefault(x=>x.Path.Equals(relative,StringComparison.OrdinalIgnoreCase));if(owner==null&&known!=null)owner=known.Module;
-    string nativeHash=null;if(owner==null&&assembly==null){nativeHash=Paths.HashFile(file);var identified=Catalog.KnownPlugins.Concat(Catalog.Programs).FirstOrDefault(x=>x.Sha256==nativeHash);if(identified!=null)owner=identified.Module;}if(owner==null)continue;
+    string nativeHash=null;if(owner==null){nativeHash=Paths.HashFile(file);var identified=Catalog.KnownPlugins.Concat(Catalog.Programs).FirstOrDefault(x=>x.Sha256==nativeHash&&ProgramContext(x,relative));if(identified!=null)owner=identified.Module;}
+    // Exact historical program basenames are candidates only, never trusted
+    // by name. Unknown bytes require the same explicit review as unknown DLLs.
+    if(owner==null){var candidate=Catalog.Programs.FirstOrDefault(x=>Path.GetFileName(x.Path).Equals(Path.GetFileName(file),StringComparison.OrdinalIgnoreCase)&&ProgramContext(x,relative));if(candidate!=null)owner=candidate.Module;}if(owner==null)continue;
     string hash=nativeHash??Paths.HashFile(file),version="unknown";try{var v=FileVersionInfo.GetVersionInfo(file).FileVersion;if(v!=null){var parsed=new Version(v);version=parsed.Major+"."+parsed.Minor+"."+Math.Max(0,parsed.Build);}}catch(ArgumentException){}
-    bool trusted=Catalog.KnownPlugins.Concat(Catalog.Programs).Any(x=>x.Module==owner&&x.Sha256==hash)||result.Receipt.Modules.Any(x=>x.Module==owner&&x.Sha256==hash&&x.Version==version);result.Plugins.Add(new Plugin{Path=relative,Module=owner,Sha256=hash,Version=version,Known=trusted});if(owner=="Core")result.LegacyHost=true;
+    bool trusted=Catalog.KnownPlugins.Concat(Catalog.Programs).Any(x=>x.Module==owner&&x.Sha256==hash)||result.Receipt.Modules.Any(x=>x.Module==owner&&x.Sha256==hash&&x.Version==version);result.Plugins.Add(new Plugin{Path=relative,Module=owner,Sha256=hash,Version=version,Known=trusted,Identity=assembly,Program=Path.GetExtension(file).Equals(".exe",StringComparison.OrdinalIgnoreCase)||Catalog.Programs.Any(x=>x.Module==owner&&x.Sha256==hash)});if(owner=="Core")result.LegacyHost=true;
    }}
-   foreach(var module in Catalog.Modules)result.LegacyEnabled[module.Id]=true;
-   if(result.LegacyHost){string settings=Paths.Resolve(root,"Plugins/DynastyCOT/settings.json");if(File.Exists(settings)){
-    var doc=Json.Read<Dictionary<string,object>>(settings);object format,raw;if(!doc.TryGetValue("format",out format)||!(format is int)||(int)format!=1||!doc.TryGetValue("modules",out raw)||!(raw is Dictionary<string,object>))throw new IOException("Older COT module choices are unreadable; keep them unchanged and repair them first.");
-    foreach(var entry in (Dictionary<string,object>)raw){var m=Catalog.Modules.SingleOrDefault(x=>x.LegacyId==entry.Key);if(m==null||!(entry.Value is bool))throw new IOException("Older COT module choices are invalid.");result.LegacyEnabled[m.Id]=(bool)entry.Value;}
-   }}return result;
+   foreach(var module in Catalog.Modules)result.LegacyEnabled[module.Id]=!result.LegacyHost;
+   if(result.LegacyHost)foreach(var host in result.Plugins.Where(x=>x.Module=="Core")){
+    string settings=Path.Combine(Path.GetDirectoryName(Paths.Resolve(root,host.Path)),"DynastyCOT","settings.json");Paths.NoLinks(root,settings);
+    if(!File.Exists(settings)){foreach(var module in Catalog.Modules)result.LegacyEnabled[module.Id]=true;continue;}
+    var doc=Json.Read<Dictionary<string,object>>(settings);object format,raw;if(!doc.TryGetValue("format",out format)||!(format is int)||(int)format!=1||!doc.TryGetValue("modules",out raw)||!(raw is Dictionary<string,object>))throw new IOException("Older COT module choices are unreadable: "+settings+". Keep them unchanged and repair that configuration first.");
+    var choices=new Dictionary<string,bool>();foreach(var module in Catalog.Modules)choices[module.Id]=true;
+    foreach(var entry in (Dictionary<string,object>)raw){var m=Catalog.Modules.SingleOrDefault(x=>x.LegacyId==entry.Key);if(m==null||!(entry.Value is bool))throw new IOException("Older COT module choices are invalid: "+settings);choices[m.Id]=(bool)entry.Value;}
+    foreach(var choice in choices)result.LegacyEnabled[choice.Key]|=choice.Value;
+   }return result;
   }
   static string Key(Module m){return "Plugins/"+m.FileName;}
   static string DocumentPath(Module module,string name){return "COT-Collection/Modules/"+module.Id+"/"+name;}
@@ -40,10 +54,10 @@ namespace DynastyCOT.Collection {
    if(plan.Operations.Any(x=>x.Path.Equals(path,StringComparison.OrdinalIgnoreCase)))throw new IOException("Duplicate operation.");string file=Paths.Resolve(plan.Root,path),before=Paths.Existing(file),after=content==null?null:Paths.Hash(content);if(!deferred&&before==after)return;
    plan.Operations.Add(new Operation{Path=path,Before=before,After=after,Module=owner,Deferred=deferred});if(content!=null)plan.Content[path]=content;
   }
-  internal Plan Install(string value,Dictionary<string,ModuleRelease> selected,IEnumerable<PreparedModule> payloads,ISet<string> approvedDowngrades=null){
+  internal Plan Install(string value,Dictionary<string,ModuleRelease> selected,IEnumerable<PreparedModule> payloads,ISet<string> approvedDowngrades=null,bool repair=false,CancellationToken cancel=default(CancellationToken),Action<string> progress=null){
    string root=Paths.ValidateRoot(value);var inventory=Inspect(root);if(selected.Count==0)throw new IOException("Choose at least one module.");foreach(var entry in selected)ReleaseRules.Validate(Catalog.Get(entry.Key),entry.Value);
-   if(inventory.LegacyHost){var missing=Catalog.Modules.Where(m=>inventory.LegacyEnabled[m.Id]&&!selected.ContainsKey(m.Id)).Select(m=>m.Title).ToArray();if(missing.Length>0)throw new IOException("The older COT host still supplies "+String.Join(", ",missing)+". Select those modules to preserve them during this one-time migration, or explicitly remove them first.");}
-   var plan=new Plan{Root=root,Action="Install / update",Inventory=inventory};var receipt=inventory.Receipt;
+   if(inventory.LegacyHost){var missing=Catalog.Modules.Where(m=>inventory.LegacyEnabled[m.Id]&&!selected.ContainsKey(m.Id)&&!(repair&&inventory.Plugins.Any(x=>x.Module==m.Id&&x.Path.Equals(Key(m),StringComparison.OrdinalIgnoreCase)&&x.Known))).Select(m=>m.Title).ToArray();if(missing.Length>0)throw new IOException("The older COT host still supplies "+String.Join(", ",missing)+". Select those modules to preserve them during this one-time migration, or explicitly remove them first.");}
+   var plan=new Plan{Root=root,Action=repair?"Check & Repair":"Install / update",Inventory=inventory,Repair=repair};var receipt=inventory.Receipt;
    var prepared=payloads.ToDictionary(x=>x.Module.Id);
    foreach(var entry in selected){var m=Catalog.Get(entry.Key);var target=entry.Value;var current=inventory.Plugins.SingleOrDefault(x=>x.Path.Equals(Key(m),StringComparison.OrdinalIgnoreCase));
     if(current!=null&&current.Version!="unknown"&&ReleaseRules.Numeric(current.Version)>ReleaseRules.Numeric(target.Version)&&(approvedDowngrades==null||!approvedDowngrades.Contains(m.Id)))throw new IOException("Downgrading "+m.Title+" requires choosing and confirming that older version.");
@@ -61,8 +75,9 @@ namespace DynastyCOT.Collection {
     }
     receipt.Modules.RemoveAll(x=>x.Module==m.Id);receipt.Modules.Add(new Installed{Module=m.Id,Version=target.Version,Sha256=target.DllSha256});
    }
-   if(inventory.LegacyHost){foreach(var host in inventory.Plugins.Where(x=>x.Module=="Core"))Add(plan,host.Path,null,"Core");SnapshotLegacyPrograms(plan);}
-   foreach(var m in Catalog.Modules.Where(m=>!selected.ContainsKey(m.Id)))if(inventory.Plugins.Count(x=>x.Module==m.Id)>1)throw new IOException("Duplicate copies of "+m.Title+" remain. Select it to resolve them before continuing.");
+   if(inventory.LegacyHost){foreach(var host in inventory.Plugins.Where(x=>x.Module=="Core"))Add(plan,host.Path,null,"Core");if(!repair)SnapshotLegacyPrograms(plan);}
+   foreach(var m in Catalog.Modules.Where(m=>!selected.ContainsKey(m.Id)))if(!repair&&inventory.Plugins.Count(x=>x.Module==m.Id)>1)throw new IOException("Duplicate copies of "+m.Title+" remain. Select it to resolve them before continuing.");
+   if(repair)plan.Migration=RepairData.Plan(root,inventory,inventory.LegacyHost?Catalog.Modules.Where(m=>inventory.LegacyEnabled[m.Id]||selected.ContainsKey(m.Id)).Select(m=>m.Id):selected.Keys,cancel,progress);
    Add(plan,Paths.State,Json.Bytes(receipt),"Core");Finish(plan);return plan;
   }
   internal Plan Remove(string value,IEnumerable<string> selected){
@@ -103,7 +118,7 @@ namespace DynastyCOT.Collection {
    Paths.Relative(op.Path);if(op.After==null&&!op.Deferred&&Catalog.Programs.Any(x=>x.Module==op.Module&&x.Path.Equals(op.Path,StringComparison.OrdinalIgnoreCase)&&x.Sha256==op.Before))return true;if(op.Module=="Runtime")return op.Deferred&&ProgramPath(op.Path)&&Catalog.Programs.Any(x=>x.Path.Equals(op.Path,StringComparison.OrdinalIgnoreCase))&&op.After==null;
    if(op.Path==Paths.State||op.Path=="Plugins/DynastyCOT/settings.json")return op.Module=="Core";
    if(op.Path.StartsWith("COT-Collection/Modules/")){return Catalog.Modules.Any(m=>m.Id==op.Module&&new[]{"README.txt","FEATURES.md",m.GuideName}.Any(name=>DocumentPath(m,name)==op.Path));}
-   return op.Path.StartsWith("Plugins/",StringComparison.Ordinal)&&op.Path.EndsWith(".dll",StringComparison.OrdinalIgnoreCase)&&(op.Module=="Core"||Catalog.Modules.Any(m=>m.Id==op.Module));
+   return op.Path.StartsWith("Plugins/",StringComparison.Ordinal)&&(op.Path.EndsWith(".dll",StringComparison.OrdinalIgnoreCase)||op.After==null&&op.Path.EndsWith(".exe",StringComparison.OrdinalIgnoreCase))&&(op.Module=="Core"||Catalog.Modules.Any(m=>m.Id==op.Module));
   }
   void Save(string directory,Journal journal){Paths.Atomic(Path.Combine(directory,"transaction.json"),Json.Bytes(journal));}
   static Mutex OperationMutex(string root){return new Mutex(false,"Local\\Ace.DynastyCOT.Collection."+Paths.Hash(Encoding.UTF8.GetBytes(root.ToUpperInvariant())));}
@@ -117,12 +132,17 @@ namespace DynastyCOT.Collection {
      foreach(var op in plan.Operations){if(!Allowed(op)||Paths.Existing(Paths.Resolve(root,op.Path))!=op.Before)throw new IOException("An installation file changed after review: "+op.Path);if(op.After!=null&&(!plan.Content.ContainsKey(op.Path)||Paths.Hash(plan.Content[op.Path])!=op.After))throw new IOException("Prepared payload changed.");}
      foreach(var item in Review(plan)){string expected;if(reviewed==null||!reviewed.TryGetValue(item.Path,out expected)||expected!=item.Sha256)throw new IOException("Review and approve backing up this unrecognized plugin: "+item.Path+" ("+item.Sha256+").");}
      Paths.Writable(root,plan.Operations.Select(x=>x.Path).Concat(new[]{Paths.Backups+"/probe",Paths.Log}));
+     if(plan.Repair){long programBytes=plan.Operations.Sum(o=>(o.Before==null?0L:new FileInfo(Paths.Resolve(root,o.Path)).Length)+(o.After==null?0L:plan.Content[o.Path].LongLength));RepairData.CheckSpace(plan.Migration,programBytes);}
      string directory=Paths.Resolve(root,Paths.Backups+"/"+DateTime.UtcNow.ToString("yyyyMMddTHHmmssfff")+"-"+Guid.NewGuid().ToString("N"));Directory.CreateDirectory(directory);
      var journal=new Journal{Root=root,Status="preparing",Action=plan.Action,Created=DateTime.Now.ToString("yyyy-MM-dd HH:mm"),Programs=plan.Programs};
-     foreach(var op in plan.Operations){op.Backup=journal.Operations.Count.ToString("D4")+".bak";if(op.Before!=null){File.Copy(Paths.Resolve(root,op.Path),Path.Combine(directory,op.Backup));if(Paths.HashFile(Path.Combine(directory,op.Backup))!=op.Before)throw new IOException("Backup verification failed.");}journal.Operations.Add(op);}Save(directory,journal);journal.Status="installing";Save(directory,journal);
-     try{int count=0;foreach(var op in journal.Operations){if(op.Deferred)continue;progress((op.After==null?"Removing ":"Installing ")+op.Path);try{if(op.After==null){if(File.Exists(Paths.Resolve(root,op.Path)))File.Delete(Paths.Resolve(root,op.Path));}else Paths.Atomic(Paths.Resolve(root,op.Path),plan.Content[op.Path]);}catch(Exception error){if(!(error is IOException)&&!(error is UnauthorizedAccessException))throw;throw new IOException("Could not "+(op.After==null?"retire":"install")+" file: "+Paths.Resolve(root,op.Path)+". "+error.Message,error);}if(Paths.Existing(Paths.Resolve(root,op.Path))!=op.After)throw new IOException("Installed file verification failed.");if(++count==faultAfter)throw new IOException("Injected transaction failure.");}
+     foreach(var op in plan.Operations){op.Backup=journal.Operations.Count.ToString("D4")+".bak";op.BackupVerified=false;journal.Operations.Add(op);}
+     // Persist the complete source-to-backup map before any executable copy.
+     // A preparation failure cannot enter rollback: no programs/data changed.
+     Save(directory,journal);PrepareBackups(root,directory,journal,progress);journal.Status="installing";Save(directory,journal);
+     try{if(plan.Repair)RepairData.Copy(root,plan.Migration,progress);CheckReadyBackups(root,directory,journal,plan.Repair);int count=0;foreach(var op in journal.Operations){if(op.Deferred)continue;progress((op.After==null?"Removing ":"Installing ")+op.Path);try{if(op.Before!=null&&Paths.HashFile(Path.Combine(directory,op.Backup))!=op.Before)throw new IOException("Rollback backup became unavailable before changing "+op.Path);if(op.After==null){if(File.Exists(Paths.Resolve(root,op.Path)))File.Delete(Paths.Resolve(root,op.Path));}else Paths.Atomic(Paths.Resolve(root,op.Path),plan.Content[op.Path]);}catch(Exception error){if(!(error is IOException)&&!(error is UnauthorizedAccessException))throw;throw new IOException("Could not "+(op.After==null?"retire":"install")+" file: "+Paths.Resolve(root,op.Path)+". "+error.Message,error);}if(Paths.Existing(Paths.Resolve(root,op.Path))!=op.After)throw new IOException("Installed file verification failed.");if(++count==faultAfter)throw new IOException("Injected transaction failure.");}
       journal.Status="committed";Save(directory,journal);AppendLog(root,plan.Action+" completed; backup "+Path.GetFileName(directory));return directory;
      }catch(Exception failure){
+      if(journal.Status=="backup_failed")throw;
       try{RestoreCore(directory,journal);}
       catch(Exception restore){throw new IOException("Operation failed: "+failure.Message+". Automatic restoration needs attention. Keep backup "+directory+". "+restore.Message,restore);}
       throw new IOException("Operation failed; previous managed files were restored. "+failure.Message,failure);
@@ -130,8 +150,28 @@ namespace DynastyCOT.Collection {
     }finally{mutex.ReleaseMutex();}
    }
   }
+  void CheckReadyBackups(string root,string directory,Journal journal,bool copiedData){
+   Operation active=null;try{foreach(var op in journal.Operations){if(op.Before==null)continue;active=op;string backup=Path.Combine(directory,op.Backup);if(!File.Exists(backup)||Paths.HashFile(backup)!=op.Before)throw new IOException("A rollback backup disappeared or changed while preparing the operation. Review security history if it was quarantined.");}}
+   catch(Exception error){if(!(error is IOException)&&!(error is UnauthorizedAccessException)&&!(error is System.ComponentModel.Win32Exception))throw;throw StopForBackupFailure(root,directory,journal,active,"recheck before program changes",error,copiedData);}
+  }
+  IOException StopForBackupFailure(string root,string directory,Journal journal,Operation active,string stage,Exception error,bool copiedData){
+   journal.Status="backup_failed";journal.FailureStage=stage;journal.FailureSource=active==null?null:Paths.Resolve(root,active.Path);journal.FailureBackup=active==null?null:Path.Combine(directory,active.Backup);journal.FailureCode=Paths.AntivirusCode(error);if(journal.FailureCode==0)journal.FailureCode=Paths.WindowsCode(error);if(active!=null)active.BackupVerified=false;journal.FailureMessage=error.Message;
+   try{Save(directory,journal);}catch(IOException){}catch(UnauthorizedAccessException){}
+   string message="Stopped before installation: could not prepare a verified rollback backup.\r\nSource: "+journal.FailureSource+"\r\nBackup: "+journal.FailureBackup+"\r\nStage: "+stage+"; Windows code: "+(journal.FailureCode==0?"not reported":journal.FailureCode.ToString())+".\r\n"+(copiedData?"Setup did not change installed program files or replace current data; verified additive data copies may remain.":"No installed programs or module history were changed by this operation.")+" Setup did not remove original files. This incomplete backup cannot be used for restore. Details: "+Path.Combine(directory,"transaction.json")+"\r\n"+error.Message;AppendLog(root,message);return new IOException(message,error);
+  }
+  void PrepareBackups(string root,string directory,Journal journal,Action<string> progress){
+   Operation active=null;string stage="create backup";
+   try{
+    foreach(var op in journal.Operations){if(op.Before==null)continue;active=op;string source=Paths.Resolve(root,op.Path),destination=Path.Combine(directory,op.Backup);progress("Backing up "+op.Path);backupCopy(source,destination);stage="verify backup";if(!File.Exists(destination)||Paths.HashFile(destination)!=op.Before)throw new IOException("Rollback backup is missing or differs from its source. Review security history if a file was quarantined.");op.BackupVerified=true;stage="create backup";}
+    // A scanner can quarantine an earlier copy after it first verified.
+    stage="recheck completed backups";foreach(var op in journal.Operations){if(op.Before==null)continue;active=op;string destination=Path.Combine(directory,op.Backup);if(!File.Exists(destination)||Paths.HashFile(destination)!=op.Before)throw new IOException("A verified rollback backup disappeared or changed before installation. No program files were changed.");}
+   }catch(Exception error){
+    if(!(error is IOException)&&!(error is UnauthorizedAccessException)&&!(error is System.ComponentModel.Win32Exception))throw;
+    throw StopForBackupFailure(root,directory,journal,active,stage,error,false);
+   }
+  }
   void AppendLog(string root,string text){try{string path=Paths.Resolve(root,Paths.Log);Directory.CreateDirectory(Path.GetDirectoryName(path));File.AppendAllText(path,DateTime.UtcNow.ToString("o")+" "+text+Environment.NewLine);}catch(IOException){}catch(UnauthorizedAccessException){}}
-  internal List<Backup> Backups(string root){var result=new List<Backup>();string folder=Paths.Resolve(root,Paths.Backups);if(!Directory.Exists(folder))return result;foreach(string directory in Directory.GetDirectories(folder))try{Paths.NoLinks(root,directory);var journal=Json.Read<Journal>(Path.Combine(directory,"transaction.json"));if(journal.Format==1&&String.Equals(journal.Root,root,StringComparison.OrdinalIgnoreCase)&&(journal.Status=="committed"||NeedsRecovery(journal.Status))&&journal.Operations.Count>0)result.Add(new Backup{Directory=directory,Journal=journal});}catch(IOException){}catch(ArgumentException){}catch(InvalidOperationException){}return result.OrderByDescending(x=>x.Directory,StringComparer.Ordinal).ToList();}
+  internal List<Backup> Backups(string root){var result=new List<Backup>();string folder=Paths.Resolve(root,Paths.Backups);if(!Directory.Exists(folder))return result;foreach(string directory in Directory.GetDirectories(folder))try{Paths.NoLinks(root,directory);var journal=Json.Read<Journal>(Path.Combine(directory,"transaction.json"));if(journal.Format==1&&String.Equals(journal.Root,root,StringComparison.OrdinalIgnoreCase)&&(journal.Status=="committed"||NeedsRecovery(journal.Status)||journal.Status=="preparing"||journal.Status=="backup_failed")&&journal.Operations.Count>0)result.Add(new Backup{Directory=directory,Journal=journal});}catch(IOException){}catch(ArgumentException){}catch(InvalidOperationException){}return result.OrderByDescending(x=>x.Directory,StringComparer.Ordinal).ToList();}
   internal void Restore(string root,string directory){
    root=Paths.ValidateRoot(root);Paths.Closed(fixture,root);
    using(var mutex=OperationMutex(root)){Acquire(mutex);try{
@@ -142,6 +182,7 @@ namespace DynastyCOT.Collection {
     if(pending!=null&&!String.Equals(pending.Directory,directory,StringComparison.OrdinalIgnoreCase))throw new IOException("Finish the interrupted operation first. Restore this backup: "+pending.Directory);
     var journal=Json.Read<Journal>(Path.Combine(directory,"transaction.json"));
     if(!String.Equals(journal.Root,root,StringComparison.OrdinalIgnoreCase))throw new IOException("Backup belongs to another Mod Manager.");
+    if(journal.Status=="preparing"||journal.Status=="backup_failed")throw new IOException("This backup did not finish and cannot be restored. No program changes began in that operation. Keep its transaction.json for diagnosis; setup did not delete original plugins or history. Source: "+journal.FailureSource+"; backup: "+journal.FailureBackup);
     RestoreCore(directory,journal);AppendLog(root,"Restored "+Path.GetFileName(directory));
    }finally{mutex.ReleaseMutex();}}
   }

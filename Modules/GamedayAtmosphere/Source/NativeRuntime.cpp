@@ -1,3 +1,4 @@
+#include "../../../Core/NativeFileIO.h"
 #include <shlobj.h>
 #ifdef small
 #undef small
@@ -927,8 +928,8 @@ bool finishCrowdRegeneration(const attendance::turnout::Seed& seed){
 }
 void resetCrowdRegenerationSetting(){
     if(!regenerationResetPending.exchange(false))return;
-    if(GetPrivateProfileIntW(L"General",L"ConfigVersion",2,(dataFolder/L"DynamicGamedayAtmosphere.ini").c_str())>2){log("crowd-history","Future settings schema preserved; regeneration reset not written.");return;}
-    if(!WritePrivateProfileStringW(L"Dynamic Gameday Attendance",L"RegenerateNextCrowd",L"0",(dataFolder/L"DynamicGamedayAtmosphere.ini").c_str()))
+    if(aceio::ini_int(L"General",L"ConfigVersion",2,(dataFolder/L"DynamicGamedayAtmosphere.ini").c_str())>2){log("crowd-history","Future settings schema preserved; regeneration reset not written.");return;}
+    if(!aceio::ini_write(L"Dynamic Gameday Attendance",L"RegenerateNextCrowd",L"0",(dataFolder/L"DynamicGamedayAtmosphere.ini").c_str()))
         log("crowd-history","Could not reset Regenerate Next Crowd in the INI. This session keeps the request disarmed; switch Off before enabling another request.");
 }
 void initialLaunch(){
@@ -2283,12 +2284,12 @@ void readSettings(){
     auto c=std::make_shared<attendance::Settings>();auto path=dataFolder/L"DynamicGamedayAtmosphere.ini";
     auto location=[&](const wchar_t* section,const wchar_t* key){
         auto mapped=attendance::config::route(section,key);wchar_t found[4]{};
-        GetPrivateProfileStringW(mapped.section,mapped.key,L"\x01",found,4,path.c_str());
+        aceio::ini_string(mapped.section,mapped.key,L"\x01",found,4,path.c_str());
         return found[0]==1?attendance::config::Route{section,key}:mapped;
     };
     auto number=[&](const wchar_t* section,const wchar_t* key,int fallback,int low,int high){
         auto field=location(section,key);
-        wchar_t raw[128]{};GetPrivateProfileStringW(field.section,field.key,L"",raw,128,path.c_str());
+        wchar_t raw[128]{};aceio::ini_string(field.section,field.key,L"",raw,128,path.c_str());
         auto value=attendance::config::integer(raw,fallback,low,high);
         static std::map<std::wstring,std::wstring> warned;std::wstring id=std::wstring(field.section)+L"/"+field.key;
         if(value.status==attendance::config::Status::Invalid||value.status==attendance::config::Status::Clamped){if(warned[id]!=raw){warned[id]=raw;std::string name;for(auto letter:id)name.push_back(letter<=127?static_cast<char>(letter):'?');log("configuration",name+": invalid or out-of-range value; using "+std::to_string(value.value)+" (valid "+std::to_string(low)+" to "+std::to_string(high)+").");}}
@@ -2296,7 +2297,7 @@ void readSettings(){
         return value.value;
     };
     auto percentage=[&](const wchar_t* section,const wchar_t* key,float fallback,float maximum,float minimum=0){
-        wchar_t raw[128]{};auto field=location(section,key);GetPrivateProfileStringW(field.section,field.key,L"",raw,128,path.c_str());
+        wchar_t raw[128]{};auto field=location(section,key);aceio::ini_string(field.section,field.key,L"",raw,128,path.c_str());
         auto value=attendance::config::real(raw,fallback,minimum,maximum);
         static std::map<std::wstring,std::wstring> warned;std::wstring id=std::wstring(field.section)+L"/"+field.key;
         if(value.status==attendance::config::Status::Invalid||value.status==attendance::config::Status::Clamped){if(warned[id]!=raw){warned[id]=raw;std::string name;for(auto letter:id)name.push_back(letter<=127?static_cast<char>(letter):'?');log("configuration",name+": invalid or out-of-range value; using "+std::to_string(value.value)+" (valid "+std::to_string(minimum)+" to "+std::to_string(maximum)+").");}}
@@ -2352,7 +2353,7 @@ void readSettings(){
     auto motion=std::make_shared<attendance::motion::Settings>();
     motion->awayPercent=100.f*static_cast<float>(number(L"Dynamic Gameday Broadcast",L"AwayTeamReactionShakeEnabled",1,0,1));
     dynamicAwayFans=number(L"Dynamic Gameday Attendance",L"DynamicAwayCrowds",1,0,1)!=0;
-    {std::lock_guard<std::mutex> guard(regenerationMutex);crowdRegeneration.observe(GetPrivateProfileIntW(L"General",L"ConfigVersion",2,path.c_str())<=2&&number(L"Dynamic Gameday Attendance",L"RegenerateNextCrowd",0,0,1)!=0);regenerationQueued=crowdRegeneration.pending;}
+    {std::lock_guard<std::mutex> guard(regenerationMutex);crowdRegeneration.observe(aceio::ini_int(L"General",L"ConfigVersion",2,path.c_str())<=2&&number(L"Dynamic Gameday Attendance",L"RegenerateNextCrowd",0,0,1)!=0);regenerationQueued=crowdRegeneration.pending;}
     visitorCrowdInfluence=static_cast<int>(number(L"Dynamic Gameday Attendance",L"VisitorCrowdInfluencePercent",100,0,200));
     motion->neutralPercent=static_cast<float>(number(L"Dynamic Gameday Broadcast",L"NeutralSiteShakePercent",75,0,100));
     motion->widePlayerCompensation=number(L"Dynamic Gameday Broadcast",L"WidePlayerCameraCompensation",0,0,1)!=0;
@@ -2397,7 +2398,7 @@ void readSettings(){
     std::shared_ptr<const attendance::core::Settings> nextCore=core;std::atomic_store(&coreSettings,nextCore);
     energy->lateScoreDepartures=number(L"Retention",L"LateScoreExtra",5,0,25);
     std::shared_ptr<const attendance::energy::Settings> nextEnergy=energy;std::atomic_store(&retentionEventSettings,nextEnergy);
-    wchar_t profile[64]{};auto profileField=location(L"Attendance",L"Profile");GetPrivateProfileStringW(profileField.section,profileField.key,L"Auto",profile,64,path.c_str());
+    wchar_t profile[64]{};auto profileField=location(L"Attendance",L"Profile");aceio::ini_string(profileField.section,profileField.key,L"Auto",profile,64,path.c_str());
     if(!_wcsicmp(profile,L"Default"))c->profile=attendance::Profile::Default;
     else if(!_wcsicmp(profile,L"Reduced"))c->profile=attendance::Profile::Reduced;
     else if(!_wcsicmp(profile,L"BadWeather"))c->profile=attendance::Profile::BadWeather;
@@ -3655,12 +3656,12 @@ void readResumeStatus(uint64_t now){
     attendance::resume::Signal next;
     try{
         auto path=pluginsFolder/L"MidgameSave"/L"midgamesave-status.json";
-        std::error_code error;auto size=std::filesystem::file_size(path,error);
+        std::error_code error;auto size=aceio::file_size(path,error);
         if(!error&&size>0&&size<=65536){
-            auto modified=std::filesystem::last_write_time(path,error);
+            auto modified=aceio::last_write_time(path,error);
             auto age=std::filesystem::file_time_type::clock::now()-modified;
             if(!error&&age>=-std::chrono::seconds(2)&&age<=std::chrono::seconds(10)){
-                std::ifstream f(path,std::ios::binary);std::string text((std::istreambuf_iterator<char>(f)),std::istreambuf_iterator<char>());
+                aceio::ifstream f(path,std::ios::binary);std::string text((std::istreambuf_iterator<char>(f)),std::istreambuf_iterator<char>());
                 if(text.size()<=65536)next=attendance::resume::parse(text,static_cast<int>(GetCurrentProcessId()),now);
             }
         }
@@ -3669,17 +3670,17 @@ void readResumeStatus(uint64_t now){
 }
 void loadAudienceFoundations(){
     auto file=dataFolder/L"History"/L"audience-foundations-v3.txt";std::error_code ec;
-    if(!std::filesystem::exists(file,ec)&&!ec)file=dataFolder/L"History"/L"audience-foundations.txt";
-    if(!std::filesystem::exists(file,ec)&&!ec)return;
-    auto size=std::filesystem::file_size(file,ec);
-    attendance::audience::Book next;std::ifstream input(file);
+    if(!aceio::exists(file,ec)&&!ec)file=dataFolder/L"History"/L"audience-foundations.txt";
+    if(!aceio::exists(file,ec)&&!ec)return;
+    auto size=aceio::file_size(file,ec);
+    attendance::audience::Book next;aceio::ifstream input(file);
     if(ec||size>4*1024*1024||!next.read(input)){
         audienceStorageReady=false;log("audience-history","Unreadable audience foundations preserved. New turnout is inactive until this file is repaired or moved aside; other atmosphere features remain available.");return;
     }
     input.close();
     if(next.upgraded){
         auto backup=dataFolder/L"History"/L"audience-foundations.pre-2.1.4.txt";
-        if(!CopyFileW(file.c_str(),backup.c_str(),TRUE)&&!(GetLastError()==ERROR_FILE_EXISTS&&std::filesystem::is_regular_file(backup,ec)&&!ec)){
+        if(!aceio::copy_file_native(file.c_str(),backup.c_str(),TRUE)&&!(GetLastError()==ERROR_FILE_EXISTS&&aceio::is_regular_file(backup,ec)&&!ec)){
             audienceStorageReady=false;log("audience-history","Audience correction deferred: original foundation backup could not be saved. Existing file preserved; fresh turnout keeps EA attendance.");return;
         }
         log("audience-history","Audience foundations upgraded once: "+std::to_string(next.migrated)+" established-school estimates corrected; frozen references and custom-program estimates retained. Original file saved as audience-foundations.pre-2.1.4.txt.");
@@ -3693,15 +3694,15 @@ void saveAudienceFoundations(){
     auto failed=[&](){if(!warned){log("audience-history","Audience foundations could not be saved in the plugin History folder. This session keeps its in-memory foundation; check folder permissions/free space before restarting.");warned=true;}};
     auto dir=dataFolder/L"History";if(!attendance::ensureFolder(dir)){failed();return;}
     auto pending=dir/L"audience-foundations-v3.pending",file=dir/L"audience-foundations-v3.txt";
-    {std::ofstream output(pending,std::ios::trunc);snapshot.write(output);output.flush();if(!output){failed();return;}}
-    if(MoveFileExW(pending.c_str(),file.c_str(),MOVEFILE_REPLACE_EXISTING|MOVEFILE_WRITE_THROUGH)){written=snapshot.revision;warned=false;}else failed();
+    {aceio::ofstream output(pending,std::ios::trunc);snapshot.write(output);output.flush();if(!output){failed();return;}}
+    if(aceio::move_file(pending.c_str(),file.c_str(),MOVEFILE_REPLACE_EXISTING|MOVEFILE_WRITE_THROUGH)){written=snapshot.revision;warned=false;}else failed();
 }
 void loadVisitorPlans(){
     // Additive journal: old runtimes can still read their untouched v1/v2 file.
     attendance::visitors::PlanBook next;
     auto load=[&](const wchar_t* name,attendance::visitors::PlanBook& target){auto file=dataFolder/L"History"/name;std::error_code ec;
-        if(!std::filesystem::exists(file,ec)&&!ec)return true;
-        auto bytes=std::filesystem::file_size(file,ec);std::ifstream input(file);
+        if(!aceio::exists(file,ec)&&!ec)return true;
+        auto bytes=aceio::file_size(file,ec);aceio::ifstream input(file);
         if(ec||bytes>128*1024||!attendance::visitors::PlanBook::read(input,target)){visitorPlanWritable=false;log("visitor-history","Saved visiting plans unreadable; both original files preserved, new plans remain in memory only.");return false;}return true;};
     if(!load(L"visitor-plans-v5.txt",next))return;
     attendance::visitors::PlanBook v4;if(!load(L"visitor-plans-v4.txt",v4))return;next.importMissing(v4);
@@ -3720,20 +3721,20 @@ void saveVisitorPlans(){
     auto fail=[&](){if(!warned)log("visitor-history","Visiting-fan plans could not be saved in the plugin History folder. Current appearances remain active; check folder permissions/free space before restarting.");warned=true;};
     auto dir=dataFolder/L"History";if(!attendance::ensureFolder(dir)){fail();return;}
     auto pending=dir/L"visitor-plans-v5.pending",file=dir/L"visitor-plans-v5.txt";
-    {std::ofstream output(pending,std::ios::trunc);snapshot.write(output);output.flush();if(!output){fail();return;}}
-    if(MoveFileExW(pending.c_str(),file.c_str(),MOVEFILE_REPLACE_EXISTING|MOVEFILE_WRITE_THROUGH)){written=snapshot.revision;warned=false;}else fail();
+    {aceio::ofstream output(pending,std::ios::trunc);snapshot.write(output);output.flush();if(!output){fail();return;}}
+    if(aceio::move_file(pending.c_str(),file.c_str(),MOVEFILE_REPLACE_EXISTING|MOVEFILE_WRITE_THROUGH)){written=snapshot.revision;warned=false;}else fail();
 }
 void loadAttendanceHistory(){
     auto path=dataFolder/L"History"/L"attendance-history-v8.txt";
-    std::error_code existsError;if(!std::filesystem::exists(path,existsError)&&!existsError)path=dataFolder/L"History"/L"attendance-history.txt";
-    std::error_code error;auto size=std::filesystem::file_size(path,error);if(error||size>8*1024*1024)return;
-    std::ifstream f(path);attendance::timeline::Archive archive;
+    std::error_code existsError;if(!aceio::exists(path,existsError)&&!existsError)path=dataFolder/L"History"/L"attendance-history.txt";
+    std::error_code error;auto size=aceio::file_size(path,error);if(error||size>8*1024*1024)return;
+    aceio::ifstream f(path);attendance::timeline::Archive archive;
     if(attendance::timeline::read(f,archive)){
         attendanceArchive=std::move(archive);
         savedAttendanceGames.clear();for(const auto& game:attendanceArchive.games)if(game.resumeReady&&!game.points.empty())savedAttendanceGames.push_back(game.id);
         f.clear();f.seekg(0);std::string version;f>>version;
         if(version!="DGA-HISTORY-8"){
-            std::filesystem::copy_file(path,path.parent_path()/L"attendance-history.pre-2.1.5.txt",std::filesystem::copy_options::skip_existing,error);
+            aceio::copy_file(path,path.parent_path()/L"attendance-history.pre-2.1.5.txt",std::filesystem::copy_options::skip_existing,error);
             if(error){attendanceHistoryWritable=false;log("history","Could not create pre-2.1.5 crowd-history backup; existing history preserved on disk. This session uses in-memory history; check History folder permissions.");}
         }
     }
@@ -3745,8 +3746,8 @@ void saveAttendanceHistory(){
     {std::lock_guard<std::mutex> guard(timelineMutex);if(attendanceArchive.revision==written)return;snapshot=attendanceArchive;}
     auto dir=dataFolder/L"History";if(!attendance::ensureFolder(dir))return;
     auto file=dir/L"attendance-history-v8.txt",pending=dir/L"attendance-history-v8.pending";
-    {std::ofstream f(pending,std::ios::trunc);attendance::timeline::write(f,snapshot);f.flush();if(!f)return;}
-    if(MoveFileExW(pending.c_str(),file.c_str(),MOVEFILE_REPLACE_EXISTING|MOVEFILE_WRITE_THROUGH)){
+    {aceio::ofstream f(pending,std::ios::trunc);attendance::timeline::write(f,snapshot);f.flush();if(!f)return;}
+    if(aceio::move_file(pending.c_str(),file.c_str(),MOVEFILE_REPLACE_EXISTING|MOVEFILE_WRITE_THROUGH)){
         written=snapshot.revision;savedAttendanceGames.clear();for(const auto& game:snapshot.games)if(game.resumeReady&&!game.points.empty())savedAttendanceGames.push_back(game.id);
     }
 }
@@ -4022,11 +4023,11 @@ void readDiagnosticRequest(uint64_t now){
     auto directory=dataFolder/L"Diagnostics";
     auto source=directory/(L"request-"+std::to_wstring(GetCurrentProcessId())+L".txt"),processing=directory/(L"request-"+std::to_wstring(GetCurrentProcessId())+L"-"+std::to_wstring(now)+L".pending");
     std::error_code error;
-    if(!std::filesystem::exists(source,error)||error)return;
-    std::filesystem::rename(source,processing,error);if(error)return;
-    auto size=std::filesystem::file_size(processing,error);std::string text;
-    if(!error&&size<=256){std::ifstream file(processing);std::getline(file,text);}
-    std::filesystem::remove(processing,error);
+    if(!aceio::exists(source,error)||error)return;
+    aceio::rename(source,processing,error);if(error)return;
+    auto size=aceio::file_size(processing,error);std::string text;
+    if(!error&&size<=256){aceio::ifstream file(processing);std::getline(file,text);}
+    aceio::remove(processing,error);
     FILETIME raw{};GetSystemTimeAsFileTime(&raw);ULARGE_INTEGER clock{};clock.LowPart=raw.dwLowDateTime;clock.HighPart=raw.dwHighDateTime;
     attendance::diagnostic::Request command;
     if(!attendance::diagnostic::parse(text,GetCurrentProcessId(),clock.QuadPart/10000-11644473600000ull,command)){
@@ -4039,7 +4040,7 @@ void readDiagnosticRequest(uint64_t now){
 void writeActivationStatus(const char* activation,const char* reason){
     if(!attendance::ensureFolder(logsFolder))return;
     std::ostringstream text;text<<"Gameday Atmosphere " GAMEDAY_VERSION "\nGame process ID: "<<GetCurrentProcessId()<<"\nActivation: "<<activation<<"\nReason: "<<reason<<"\nSee technical.log and launcher.log for startup details.\n";
-    for(const auto* name:{L"status.txt",L"technical-status.txt"}){std::ofstream file(logsFolder/name,std::ios::trunc);file<<text.str();}
+    for(const auto* name:{L"status.txt",L"technical-status.txt"}){aceio::ofstream file(logsFolder/name,std::ios::trunc);file<<text.str();}
 }
 DWORD WINAPI worker(void*) {
     struct FlushOnExit {~FlushOnExit(){for(unsigned i=0;i<8;++i)drainLogs();}} flushOnExit;
@@ -4063,7 +4064,7 @@ DWORD WINAPI worker(void*) {
     attendance::ensureFolder(logsFolder);attendance::prepareReadableLogs(logsFolder);
     writeActivationStatus("STARTING","Checking runtime ownership and native bindings.");
     readSettings();log("starting","Gameday Atmosphere " GAMEDAY_VERSION "; attendance, retention and crowd audio.");
-    if(GetPrivateProfileIntW(L"General",L"ConfigVersion",GAMEDAY_SCHEMA,(dataFolder/L"DynamicGamedayAtmosphere.ini").c_str())>GAMEDAY_SCHEMA){
+    if(aceio::ini_int(L"General",L"ConfigVersion",GAMEDAY_SCHEMA,(dataFolder/L"DynamicGamedayAtmosphere.ini").c_str())>GAMEDAY_SCHEMA){
         log("inactive","Settings belong to a newer version. Update the plugin before using this configuration.");writeActivationStatus("INACTIVE","Settings belong to a newer plugin version.");return 1;
     }
     HANDLE modules=CreateToolhelp32Snapshot(TH32CS_SNAPMODULE|TH32CS_SNAPMODULE32,GetCurrentProcessId());
@@ -4099,10 +4100,10 @@ DWORD WINAPI worker(void*) {
         // This legacy diagnostic file is not a live gameplay control. Keep its
         // one-second response without opening a usually absent file every tick.
         if(!lastLegacyCommand||now<lastLegacyCommand||now-lastLegacyCommand>=1000){
-            lastLegacyCommand=now;std::ifstream f(dataFolder/L"Diagnostics"/L"legacy-control.txt");std::getline(f,command);
+            lastLegacyCommand=now;aceio::ifstream f(dataFolder/L"Diagnostics"/L"legacy-control.txt");std::getline(f,command);
         }
         if(!command.empty()){
-            {std::ofstream clear(dataFolder/L"Diagnostics"/L"legacy-control.txt",std::ios::trunc);}
+            {aceio::ofstream clear(dataFolder/L"Diagnostics"/L"legacy-control.txt",std::ios::trunc);}
             if(command=="observe")request=1;
             else if(command=="probe")request=2;
             else if(command=="empty")request=4;
@@ -4122,8 +4123,8 @@ DWORD WINAPI worker(void*) {
             resetCrowdRegenerationSetting();readSettings();
             if(attendance::ensureFolder(logsFolder)){
                 std::ostringstream technical;writeStatus(technical,now);auto full=technical.str();
-                {std::ofstream state(logsFolder/L"technical-status.txt",std::ios::trunc);state<<full;}
-                {std::ofstream state(logsFolder/L"status.txt",std::ios::trunc);state<<attendance::readable::status(full);}
+                {aceio::ofstream state(logsFolder/L"technical-status.txt",std::ios::trunc);state<<full;}
+                {aceio::ofstream state(logsFolder/L"status.txt",std::ios::trunc);state<<attendance::readable::status(full);}
             }
             last=now;
         }

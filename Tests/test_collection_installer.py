@@ -9,7 +9,7 @@ def main():
  for rel,digest in meta['sources'].items():assert sha(ROOT/rel)==digest,'Rebuild changed installer: '+rel
  work=ROOT/'Build'/('CC-'+datetime.datetime.now(datetime.timezone.utc).strftime('%m%d%H%M%S'));work.mkdir()
  compiler=Path(r'C:\Windows\Microsoft.NET\Framework64\v4.0.30319\csc.exe');exe=work/'CollectionInstallerChecks.exe'
- args=[str(compiler),'/nologo','/platform:x64','/optimize+','/warnaserror+','/out:'+str(exe),'/reference:System.Web.Extensions.dll','/reference:System.IO.Compression.dll',str(Path(meta['work'])/'CollectionInfo.cs'),*(str(source/name) for name in ['Models.cs','Paths.cs','Installer.cs','Downloads.cs']),str(ROOT/'Core/UserStorage.cs'),str(ROOT/'Tests/CollectionInstallerChecks.cs')]
+ args=[str(compiler),'/nologo','/platform:x64','/optimize+','/warnaserror+','/out:'+str(exe),'/reference:System.Web.Extensions.dll','/reference:System.IO.Compression.dll',str(Path(meta['work'])/'CollectionInfo.cs'),*(str(source/name) for name in ['Models.cs','Paths.cs','Installer.cs','RepairData.cs','Downloads.cs']),str(ROOT/'Core/UserStorage.cs'),str(ROOT/'Tests/CollectionInstallerChecks.cs')]
  compile=subprocess.run(args,capture_output=True,text=True);(work/'compile.log').write_text(compile.stdout+compile.stderr);assert compile.returncode==0,compile.stdout+compile.stderr
  future=work/'FutureModule';future.mkdir();future_source=future/'FutureModule.cs';future_source.write_text('using System.Reflection;[assembly:AssemblyVersion("9.9.9.0")]public static class FutureModule {}')
  future_dll=future/'BeyondTheField.dll';subprocess.run([str(compiler),'/nologo','/target:library','/out:'+str(future_dll),str(future_source)],check=True)

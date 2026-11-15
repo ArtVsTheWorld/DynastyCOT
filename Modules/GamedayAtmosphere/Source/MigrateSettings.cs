@@ -1,3 +1,4 @@
+using File = Ace.DynastyCOT.StorageFile;
 using System;using System.IO;
 class MigrateSettings {
     static int Main(string[] args){try{

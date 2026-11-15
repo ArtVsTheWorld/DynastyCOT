@@ -1,4 +1,5 @@
 #pragma once
+#include "../../../Core/NativeFileIO.h"
 #include "LiveTables.h"
 #include "RecruitResumeCaptureFields.h"
 #include "RecruitResumeSource.h"
@@ -46,10 +47,10 @@ class Cache {
             for(const auto& item:pending)if(!pendingReports.count(item.first))waitingReports.erase(item.first);
         };
         if(!changed){finishRequests();return nullptr;}
-        const auto dir=folder/L"ScoutingReports"/next->league;std::filesystem::create_directories(dir);const auto path=dir/(std::to_string(next->season)+".json"),temp=dir/(std::to_string(next->season)+".tmp");
+        const auto dir=folder/L"ScoutingReports"/next->league;aceio::create_directories(dir);const auto path=dir/(std::to_string(next->season)+".json"),temp=dir/(std::to_string(next->season)+".tmp");
         const Json saved={{"format",1},{"league",next->league},{"season",next->season},{"reports",next->reports}};const auto bytes=saved.dump();if(bytes.size()>64u*1024*1024)throw std::runtime_error("Scouting report journal exceeds bounds");
-        {std::ofstream out(temp,std::ios::binary|std::ios::trunc);out<<bytes;out.flush();if(!out)throw std::runtime_error("Cannot write scouting reports");}
-        if(!MoveFileExW(temp.c_str(),path.c_str(),MOVEFILE_REPLACE_EXISTING|MOVEFILE_WRITE_THROUGH))throw std::runtime_error("Cannot commit scouting reports");
+        {aceio::ofstream out(temp,std::ios::binary|std::ios::trunc);out<<bytes;out.flush();if(!out)throw std::runtime_error("Cannot write scouting reports");}
+        if(!aceio::move_file(temp.c_str(),path.c_str(),MOVEFILE_REPLACE_EXISTING|MOVEFILE_WRITE_THROUGH))throw std::runtime_error("Cannot commit scouting reports");
         std::atomic_store(&reportEdition,std::shared_ptr<const ReportEdition>(next));finishRequests();return {{"event","scouting_reports_ready"},{"obtained",pending.size()},{"staffData",evidence::staffDataName(next->staff.staffData)},{"calibration","pipeline-v2"},{"pipelinesKnown",next->staff.pipelinesKnown},{"pipelines",next->staff.pipelines.size()}};
     }
     bool queue(const NotesProspect& p){std::lock_guard<std::mutex> lock(reportMutex);const auto now=GetTickCount64();if(!waitingReports.count(p.identity)&&waitingReports.size()>=64){
@@ -105,20 +106,20 @@ public:
         auto value=std::make_shared<Published>();value->binding=binding;
         for(const auto& item:capture.identityProof(true))for(const auto& check:item.at("checks")){const auto size=check.at("size").get<unsigned>();auto expected=check.at("expected").get<uint64_t>(),mask=check.at("mask").get<uint64_t>();if(!size||size>8)throw std::runtime_error("Invalid Notes identity proof");std::vector<unsigned char> bytes(size),masks(size);memcpy(bytes.data(),&expected,size);memcpy(masks.data(),&mask,size);value->annualIdentity.recordMasked(check.at("address").get<uintptr_t>(),bytes,masks);}
         value->data=std::move(data);value->capturedAt=GetTickCount64();value->staff=evidence::context(raw);if(existing&&existing->data.league==value->data.league&&existing->data.season==value->data.season){auto reports=std::atomic_load(&reportEdition);if(reports&&reports->league==value->data.league&&reports->season==value->data.season)value->reports=reports->reports;}else {
-            const auto path=folder/L"ScoutingReports"/value->data.league/(std::to_string(value->data.season)+".json");if(std::filesystem::exists(path)){if(std::filesystem::file_size(path)>64u*1024*1024)throw std::runtime_error("Scouting reports exceed read bounds");std::ifstream input(path);Json saved;input>>saved;if(saved.at("format")!=1||saved.at("league")!=value->data.league||saved.at("season")!=value->data.season||!saved.at("reports").is_object()||saved.at("reports").size()>16000)throw std::runtime_error("Scouting report identity differs");value->reports=saved.at("reports");}}
+            const auto path=folder/L"ScoutingReports"/value->data.league/(std::to_string(value->data.season)+".json");if(aceio::exists(path)){if(aceio::file_size(path)>64u*1024*1024)throw std::runtime_error("Scouting reports exceed read bounds");aceio::ifstream input(path);Json saved;input>>saved;if(saved.at("format")!=1||saved.at("league")!=value->data.league||saved.at("season")!=value->data.season||!saved.at("reports").is_object()||saved.at("reports").size()>16000)throw std::runtime_error("Scouting report identity differs");value->reports=saved.at("reports");}}
         // Carry immutable evidence for the same persistent recruit into the
         // next season. A reused native row with a different identity cannot
         // inherit it. Write the additive carry-forward so quiet years persist.
         const auto reportDir=folder/L"ScoutingReports"/value->data.league;
         const auto previousPath=reportDir/(std::to_string(value->data.season-1)+".json");bool carried=false;
-        if(std::filesystem::exists(previousPath)){
-            if(std::filesystem::file_size(previousPath)>64u*1024*1024)throw std::runtime_error("Prior scouting reports exceed bounds");
-            std::ifstream input(previousPath);Json previous;input>>previous;
+        if(aceio::exists(previousPath)){
+            if(aceio::file_size(previousPath)>64u*1024*1024)throw std::runtime_error("Prior scouting reports exceed bounds");
+            aceio::ifstream input(previousPath);Json previous;input>>previous;
             if(previous.at("format")!=1||previous.at("league")!=value->data.league||previous.at("season")!=value->data.season-1||!previous.at("reports").is_object())throw std::runtime_error("Prior scouting report identity differs");
             for(const auto& [id,entry]:value->data.entries){(void)id;if(!value->reports.contains(entry.identity)&&previous.at("reports").contains(entry.identity)){value->reports[entry.identity]=previous.at("reports").at(entry.identity);carried=true;}}
         }
-        if(carried){std::filesystem::create_directories(reportDir);const auto path=reportDir/(std::to_string(value->data.season)+".json"),temp=reportDir/(std::to_string(value->data.season)+".tmp");const Json journal={{"format",1},{"league",value->data.league},{"season",value->data.season},{"reports",value->reports}};
-            const auto bytes=journal.dump();if(bytes.size()>64u*1024*1024)throw std::runtime_error("Carried scouting reports exceed bounds");{std::ofstream out(temp,std::ios::binary|std::ios::trunc);out<<bytes;out.flush();if(!out)throw std::runtime_error("Cannot carry scouting reports");}if(!MoveFileExW(temp.c_str(),path.c_str(),MOVEFILE_REPLACE_EXISTING|MOVEFILE_WRITE_THROUGH))throw std::runtime_error("Cannot commit carried reports");}
+        if(carried){aceio::create_directories(reportDir);const auto path=reportDir/(std::to_string(value->data.season)+".json"),temp=reportDir/(std::to_string(value->data.season)+".tmp");const Json journal={{"format",1},{"league",value->data.league},{"season",value->data.season},{"reports",value->reports}};
+            const auto bytes=journal.dump();if(bytes.size()>64u*1024*1024)throw std::runtime_error("Carried scouting reports exceed bounds");{aceio::ofstream out(temp,std::ios::binary|std::ios::trunc);out<<bytes;out.flush();if(!out)throw std::runtime_error("Cannot carry scouting reports");}if(!aceio::move_file(temp.c_str(),path.c_str(),MOVEFILE_REPLACE_EXISTING|MOVEFILE_WRITE_THROUGH))throw std::runtime_error("Cannot commit carried reports");}
         for(const auto& [id,e]:value->data.entries){(void)id;if(!e.highSchool&&!e.juniorCollege)value->transfers=true;}size_t hs=0;for(const auto& [id,e]:value->data.entries){(void)id;if(e.highSchool)++hs;}
         auto reports=std::make_shared<ReportEdition>();reports->league=value->data.league;reports->season=value->data.season;reports->staff=value->staff;reports->reports=std::move(value->reports);for(const auto& entry:reports->reports.items())prepareView(*reports,entry.key());std::atomic_store(&reportEdition,std::shared_ptr<const ReportEdition>(reports));
         std::atomic_store(&published,std::shared_ptr<const Published>(value));requested=false;
@@ -137,7 +138,7 @@ public:
                 if(fallback->data.season<1800||fallback->data.season>3000||fallback->data.league!=std::to_string(enhancements::currentOptionsLeague.load()))throw std::runtime_error("Notes fallback identity differs");
                 auto reports=std::make_shared<ReportEdition>();reports->league=fallback->data.league;reports->season=fallback->data.season;
                 const auto path=folder/L"ScoutingReports"/reports->league/(std::to_string(reports->season)+".json");
-                if(std::filesystem::exists(path)){if(std::filesystem::file_size(path)>64u*1024*1024)throw std::runtime_error("Report journal exceeds bounds");std::ifstream input(path);Json saved;input>>saved;if(saved.at("format")!=1||saved.at("league")!=reports->league||saved.at("season")!=reports->season||!saved.at("reports").is_object())throw std::runtime_error("Report journal identity differs");reports->reports=saved.at("reports");for(const auto& entry:reports->reports.items())prepareView(*reports,entry.key());}
+                if(aceio::exists(path)){if(aceio::file_size(path)>64u*1024*1024)throw std::runtime_error("Report journal exceeds bounds");aceio::ifstream input(path);Json saved;input>>saved;if(saved.at("format")!=1||saved.at("league")!=reports->league||saved.at("season")!=reports->season||!saved.at("reports").is_object())throw std::runtime_error("Report journal identity differs");reports->reports=saved.at("reports");for(const auto& entry:reports->reports.items())prepareView(*reports,entry.key());}
                 std::atomic_store(&reportEdition,std::shared_ptr<const ReportEdition>(reports));std::atomic_store(&published,std::shared_ptr<const Published>(fallback));
             }catch(...){/* No validated identity: show unavailable, never another save's report. */}
             const bool repeated=lastFailure==error.what();lastFailure=error.what();failures=repeated?(std::min)(failures+1,5u):1u;

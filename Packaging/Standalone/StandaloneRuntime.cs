@@ -1,3 +1,7 @@
+using File = Ace.DynastyCOT.StorageFile;
+using Directory = Ace.DynastyCOT.StorageDirectory;
+using Path = Ace.DynastyCOT.StoragePath;
+using FileInfo = Ace.DynastyCOT.StorageFileInfo;
 // Embedded distribution files only. This class never patches game memory or
 // starts helpers. Native scope/ownership and helper lease checks stay in modules.
 using System;

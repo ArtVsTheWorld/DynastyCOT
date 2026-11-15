@@ -1,4 +1,9 @@
-﻿using System;
+using FileVersionInfo = Ace.DynastyCOT.StorageVersionInfo;
+using File = Ace.DynastyCOT.StorageFile;
+using Directory = Ace.DynastyCOT.StorageDirectory;
+using Path = Ace.DynastyCOT.StoragePath;
+using FileInfo = Ace.DynastyCOT.StorageFileInfo;
+using System;
 using System.Diagnostics;
 using System.IO;
 using System.Reflection;
@@ -33,6 +38,7 @@ namespace SituationalPractice
                         string folder=BuildIdentity.Folder;Directory.CreateDirectory(folder);
                         if(firstAttempt)WriteLaunchContext(folder,p,diagnostics);
                         string helper=RuntimeFiles.PathIn(Path.GetDirectoryName(typeof(PracticeAction).Assembly.Location));
+                        Ace.DynastyCOT.StorageIO.RequireExecutablePath(helper);
                         int gamePid=p.Id;long gameStart=p.StartTime.ToUniversalTime().Ticks;
                         Process child;
                         using(RuntimeFiles.OpenVerified(helper))

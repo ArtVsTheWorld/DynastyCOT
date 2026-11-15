@@ -18,8 +18,8 @@
     },
     {
       "path": "Modules/DrivePractice/Plugin/Diagnostics.cs",
-      "sha256": "ece44733f310a3bfc50b4dec736a4bb1d2f925574ec2b9ac8a279150f3e3bd0a",
-      "reason": "Reviewed public releases: retain readiness fixes; MMC display branding, complete guides and exact archive compatibility; test catalog reflects current 12-yard default and one-shot action"
+      "sha256": "4a9cdcc01b83679cee69568cdbaf1049257cba17a1dfa6f5648f26353f7d1819",
+      "reason": "Bounded long-path I/O audit: preserve logical identities, verified helper leases, atomic persistence, native ownership and fixture-only tests."
     },
     {
       "path": "Modules/DrivePractice/Plugin/DriveEngine.cs",
@@ -33,8 +33,8 @@
     },
     {
       "path": "Modules/DrivePractice/Plugin/NativeCompatibility.cs",
-      "sha256": "d9ead61c992c016de81d1dc0237946ff289b055834a88f3a3257e5dcd939e5d5",
-      "reason": "Approved integrated release-readiness fixes; native contracts and saved data preserved"
+      "sha256": "641b42d7e66dc23f918fa72932095fce040a6de0e640d84893710c4a7f4a7c0e",
+      "reason": "Bounded long-path I/O audit: preserve logical identities, verified helper leases, atomic persistence, native ownership and fixture-only tests."
     },
     {
       "path": "Modules/DrivePractice/Plugin/NativeDrivePolicy.cs",
@@ -48,23 +48,23 @@
     },
     {
       "path": "Modules/DrivePractice/Plugin/PracticeAction.cs",
-      "sha256": "0d1e6b1718946bab068af959b21dbfab15979477008a2fc3b579dcd35e3d2ab9",
-      "reason": "Reviewed public releases: retain readiness fixes; MMC display branding, complete guides and exact archive compatibility; test catalog reflects current 12-yard default and one-shot action"
+      "sha256": "1ab29e0342921ff50f0bd7cbac151b5e18a193f94aa34c595e7c3ef1a556c1c5",
+      "reason": "Bounded long-path I/O audit: preserve logical identities, verified helper leases, atomic persistence, native ownership and fixture-only tests."
     },
     {
       "path": "Modules/DrivePractice/Plugin/PracticeRunner.cs",
-      "sha256": "209fa2234e464322c458ca2d0fd35c52af1e75e443edd51b168371a27d6e9bb6",
-      "reason": "Reviewed public releases: retain readiness fixes; MMC display branding, complete guides and exact archive compatibility; test catalog reflects current 12-yard default and one-shot action"
+      "sha256": "943dcd42fa529a694f59bf8c51c375f46fe97d96d2c944d4c98024bafcff6501",
+      "reason": "Bounded long-path I/O audit: preserve logical identities, verified helper leases, atomic persistence, native ownership and fixture-only tests."
     },
     {
       "path": "Modules/DrivePractice/Plugin/RuntimeFiles.cs",
-      "sha256": "df13ea1a587dd451328d9e58b55e6ae6ee045ce92df83fd561e65c41090a4243",
-      "reason": "Reviewed public releases: retain readiness fixes; MMC display branding, complete guides and exact archive compatibility; test catalog reflects current 12-yard default and one-shot action"
+      "sha256": "bdb297fed2f9d9ab245436d90abe2232452378c69ce79ccb70b0da1a3052acb9",
+      "reason": "Bounded long-path I/O audit: preserve logical identities, verified helper leases, atomic persistence, native ownership and fixture-only tests."
     },
     {
       "path": "Modules/DrivePractice/Plugin/SessionStats.cs",
-      "sha256": "96b987e744c3e3e9b61a8e8002f297365cff5a4424aa0b32c744ff2577ea6ed8",
-      "reason": "Approved integrated release-readiness fixes; native contracts and saved data preserved"
+      "sha256": "6bcc87db96360f58aeaa1b344aaa3ae9b083ffaaeaae94dee6dc0d03b32164b0",
+      "reason": "Bounded long-path I/O audit: preserve logical identities, verified helper leases, atomic persistence, native ownership and fixture-only tests."
     },
     {
       "path": "Modules/DrivePractice/Test.ps1",
@@ -378,8 +378,8 @@
     },
     {
       "path": "Modules/DynastyEnhancer/Source/EnhancementOptionsRuntime.h",
-      "sha256": "50accfc0344873f53c5bfa9def4af18c083602b6df3e0c79a87f4b3ba0fe5188",
-      "reason": "Approved integrated release-readiness fixes; native contracts and saved data preserved"
+      "sha256": "b6d7713f579af5b51f9a748d9e86e5e220c05df27240ca3c8a52e795fa81368c",
+      "reason": "Bounded long-path I/O audit: preserve logical identities, verified helper leases, atomic persistence, native ownership and fixture-only tests."
     },
     {
       "path": "Modules/DynastyEnhancer/Source/EnhancementSettingsMenu.h",
@@ -393,8 +393,8 @@
     },
     {
       "path": "Modules/DynastyEnhancer/Source/FeedRefresh.h",
-      "sha256": "57bece62e4876ff97653537667e17429839f910d9cc511d4021c0d0962208b35",
-      "reason": "Reviewed public releases: retain readiness fixes; MMC display branding, complete guides and exact archive compatibility; test catalog reflects current 12-yard default and one-shot action"
+      "sha256": "90bb79c1f8552450dc91931b4026646fd5d70f138c6e68bf6f57a0de4ce372be",
+      "reason": "Bounded long-path I/O audit: preserve logical identities, verified helper leases, atomic persistence, native ownership and fixture-only tests."
     },
     {
       "path": "Modules/DynastyEnhancer/Source/FogGapUiPrograms.h",
@@ -438,13 +438,13 @@
     },
     {
       "path": "Modules/DynastyEnhancer/Source/MmcPlugin.cs",
-      "sha256": "15a7e61afdde14f0a0fcef8ce9f08a343ba899aff05987ef397b33912fb6c02b",
-      "reason": "Retain prior COT integration; 0.1.6 Beyond the Field: bounded content/selection/voices, native paging, persistent modeled recruit records, supported calendar/draft reference, exact AIO Notes/colors and numeric-preserving money redraw adapters."
+      "sha256": "0826ce69add31f2225013d63c0c9ddc549bffcc0f69345d20b614068c01efb89",
+      "reason": "Bounded long-path I/O audit: preserve logical identities, verified helper leases, atomic persistence, native ownership and fixture-only tests."
     },
     {
       "path": "Modules/DynastyEnhancer/Source/MmcRecruitingPlugin.cs",
-      "sha256": "1f0a1714839c2cf280572023e6ed62280a944c16ecc79c34f70dfe7c3220dcc4",
-      "reason": "Update 2/5 loader hotfix: bounded read-only Windows module-list retries and precise BTF runtime diagnostics; preserve single-load, ownership and integrity guards"
+      "sha256": "1cee057dc85d2710df7300be91d439759fd7cde9e3b2ec6977b5a23f19e71260",
+      "reason": "Bounded long-path I/O audit: preserve logical identities, verified helper leases, atomic persistence, native ownership and fixture-only tests."
     },
     {
       "path": "Modules/DynastyEnhancer/Source/NativeMapValue.h",
@@ -723,13 +723,13 @@
     },
     {
       "path": "Modules/DynastyEnhancer/Source/RecruitResumeRuntime.h",
-      "sha256": "23f86fb7e68d9e161db6f2eb6f95fa26f2a368dce0a9a34c46b83252d7f706c0",
-      "reason": "Reviewed public releases: retain readiness fixes; MMC display branding, complete guides and exact archive compatibility; test catalog reflects current 12-yard default and one-shot action"
+      "sha256": "048097860cdbdc3ebf11e905c1078dc76fda99fe90955b3cc2fec4b313d41096",
+      "reason": "Bounded long-path I/O audit: preserve logical identities, verified helper leases, atomic persistence, native ownership and fixture-only tests."
     },
     {
       "path": "Modules/DynastyEnhancer/Source/RecruitResumeSource.h",
-      "sha256": "684f05b2eaa65f23bbd6c8d34998fbe31a37c54a90e613f3105a9e585e8616ab",
-      "reason": "Approved integrated release-readiness fixes; native contracts and saved data preserved"
+      "sha256": "0002ad4be0d89163f194edc7353ce66804f0974d611e2b08aded1c9605813691",
+      "reason": "Bounded long-path I/O audit: preserve logical identities, verified helper leases, atomic persistence, native ownership and fixture-only tests."
     },
     {
       "path": "Modules/DynastyEnhancer/Source/RecruitResumeStateRanks.h",
@@ -748,8 +748,8 @@
     },
     {
       "path": "Modules/DynastyEnhancer/Source/RecruitingFog.cpp",
-      "sha256": "83f5a7535e10963bf56e6a84ec4c4960144939d00d17fe435f976cdfd8fc7fde",
-      "reason": "Reviewed public releases: retain readiness fixes; MMC display branding, complete guides and exact archive compatibility; test catalog reflects current 12-yard default and one-shot action"
+      "sha256": "644179c8873fc4c9fc16694e4a0e264a49a0f94a8913c0951e3d5a16ec1d0451",
+      "reason": "Bounded long-path I/O audit: preserve logical identities, verified helper leases, atomic persistence, native ownership and fixture-only tests."
     },
     {
       "path": "Modules/DynastyEnhancer/Source/RecruitingGradePolicy.h",
@@ -773,8 +773,8 @@
     },
     {
       "path": "Modules/DynastyEnhancer/Source/RuntimeFeed.h",
-      "sha256": "84ca7a7e0ed247171f05e83d91b53ba4ef0b0af9e6eb36d99c84ff3942514060",
-      "reason": "Reviewed public releases: retain readiness fixes; MMC display branding, complete guides and exact archive compatibility; test catalog reflects current 12-yard default and one-shot action"
+      "sha256": "56fae45f00d8b353429eebd38ee939624dd9c43b08be0b3c333c4a9e11e53a18",
+      "reason": "Bounded long-path I/O audit: preserve logical identities, verified helper leases, atomic persistence, native ownership and fixture-only tests."
     },
     {
       "path": "Modules/DynastyEnhancer/Source/Startup.h",
@@ -1528,8 +1528,8 @@
     },
     {
       "path": "Modules/ExtraDynastySettings/Plugin/ClockPreferences.cs",
-      "sha256": "6aa1fced77603e0cc9d2b6df1457db6d717e550c7378e4cc58958f038e7c2e26",
-      "reason": "Approved integrated release-readiness fixes; native contracts and saved data preserved"
+      "sha256": "0a5729c977b1f71ddfb8714ee55f7a8253e026eb8b4ffd161799896c19253ada",
+      "reason": "Bounded long-path I/O audit: preserve logical identities, verified helper leases, atomic persistence, native ownership and fixture-only tests."
     },
     {
       "path": "Modules/ExtraDynastySettings/Plugin/CombinedClockRuntime.cs",
@@ -1538,8 +1538,8 @@
     },
     {
       "path": "Modules/ExtraDynastySettings/Plugin/CombinedSettingsAction.cs",
-      "sha256": "d934de467b2d2b7fd1d87a53e04596e16ade268414c80c58dbe5bd069bdccec8",
-      "reason": "Reviewed public releases: retain readiness fixes; MMC display branding, complete guides and exact archive compatibility; test catalog reflects current 12-yard default and one-shot action"
+      "sha256": "ecd2b3e320af8569812fe36eaf09020da199a64cf53e00bc6396db67250e4b19",
+      "reason": "Bounded long-path I/O audit: preserve logical identities, verified helper leases, atomic persistence, native ownership and fixture-only tests."
     },
     {
       "path": "Modules/ExtraDynastySettings/Plugin/ControllerSelect.cs",
@@ -1558,8 +1558,8 @@
     },
     {
       "path": "Modules/ExtraDynastySettings/Plugin/DiagnosticLog.cs",
-      "sha256": "3344faf966e68289eaf071eb3129fb27ccb58f3fcfcd0dc514e6978052f89be5",
-      "reason": "Reviewed public releases: retain readiness fixes; MMC display branding, complete guides and exact archive compatibility; test catalog reflects current 12-yard default and one-shot action"
+      "sha256": "221a5dd23e726ff0ddd47c1951f72d1e3bca4014bb2d1bb31cbc25d5982302e9",
+      "reason": "Bounded long-path I/O audit: preserve logical identities, verified helper leases, atomic persistence, native ownership and fixture-only tests."
     },
     {
       "path": "Modules/ExtraDynastySettings/Plugin/GameSettingsMenuRows.cs",
@@ -1578,18 +1578,18 @@
     },
     {
       "path": "Modules/ExtraDynastySettings/Plugin/PersistenceController.cs",
-      "sha256": "64d61917fa69fe094f7eb1ce765c021180347c614e046c60ee1a22aa78479836",
-      "reason": "Reviewed public releases: retain readiness fixes; MMC display branding, complete guides and exact archive compatibility; test catalog reflects current 12-yard default and one-shot action"
+      "sha256": "c004323ab69ee5ae6d9c1ab466326fc28fec63b7b1ef0378935b1fbd260c9584",
+      "reason": "Bounded long-path I/O audit: preserve logical identities, verified helper leases, atomic persistence, native ownership and fixture-only tests."
     },
     {
       "path": "Modules/ExtraDynastySettings/Plugin/PersistenceHelper.cs",
-      "sha256": "37bb40d0af0ef803c3afc54c9df3ac2ce1a68ee32467fa051e832f27eb887c68",
-      "reason": "Approved integrated release-readiness fixes; native contracts and saved data preserved"
+      "sha256": "9c133be05bdfcd0b68167e6cb5a8f58feece57873477da9fa4ed2864aba2dd12",
+      "reason": "Bounded long-path I/O audit: preserve logical identities, verified helper leases, atomic persistence, native ownership and fixture-only tests."
     },
     {
       "path": "Modules/ExtraDynastySettings/Plugin/RuntimeFiles.cs",
-      "sha256": "5dd954816dc3ec92306fcc8a2dbcac8fe4168f7ea4186cdb2f2df13c844c9192",
-      "reason": "Reviewed public releases: retain readiness fixes; MMC display branding, complete guides and exact archive compatibility; test catalog reflects current 12-yard default and one-shot action"
+      "sha256": "a375efcd8be57c1e8d1210e7c675fc81b556636ad1db49f8ed49cab77531d11d",
+      "reason": "Bounded long-path I/O audit: preserve logical identities, verified helper leases, atomic persistence, native ownership and fixture-only tests."
     },
     {
       "path": "Modules/ExtraDynastySettings/Plugin/build.ps1",
@@ -1598,13 +1598,13 @@
     },
     {
       "path": "Modules/ExtraDynastySettings/Shared/Clock/DynastyPlayClockAction.cs",
-      "sha256": "de77bfb783d4cd59d990438d3609359855eb971df4ab7cd9e9599b478e8d0c10",
-      "reason": "Approved integrated release-readiness fixes; native contracts and saved data preserved"
+      "sha256": "4ff5a6ca899b83f1a8775f579960dd9fd20c09745f48fe6dd26c958822f36698",
+      "reason": "Bounded long-path I/O audit: preserve logical identities, verified helper leases, atomic persistence, native ownership and fixture-only tests."
     },
     {
       "path": "Modules/ExtraDynastySettings/Shared/Clock/ExtendedClock.cs",
-      "sha256": "17bfbae0dcd8778c0f85f03522c70cec1826dae4538ff0f33eb04bbe9fabea00",
-      "reason": "Approved integrated release-readiness fixes; native contracts and saved data preserved"
+      "sha256": "3ca0ade07f64f38b6b26e74ab1abc8115e6d95f2682b5868d0ce6abb9172259d",
+      "reason": "Bounded long-path I/O audit: preserve logical identities, verified helper leases, atomic persistence, native ownership and fixture-only tests."
     },
     {
       "path": "Modules/ExtraDynastySettings/Shared/Clock/GameLayouts.cs",
@@ -1618,13 +1618,18 @@
     },
     {
       "path": "Modules/ExtraDynastySettings/Shared/Playcall/SplitSettingsAction.cs",
-      "sha256": "3a125e8c68184a24a3110da430a9bf3d8a80176a5cd799bccec889e01b16e184",
-      "reason": "Approved integrated release-readiness fixes; native contracts and saved data preserved"
+      "sha256": "c940867e93fc4184b57b521a242bea8aee4493b0cba6215d8e91e4e2d38381f7",
+      "reason": "Bounded long-path I/O audit: preserve logical identities, verified helper leases, atomic persistence, native ownership and fixture-only tests."
     },
     {
       "path": "Modules/ExtraDynastySettings/Tools/ClockMigrationChecks.cs",
       "sha256": "e6f1d16ef6afb6ed9bf72764673475cba5bf46e2c6e7f652099f3aa4bb6c9e71",
       "reason": "Adapt inherited fixtures to per-Dynasty clocks and enlarged native data"
+    },
+    {
+      "path": "Modules/ExtraDynastySettings/Tools/CoreChecks.cs",
+      "sha256": "d93c7ac65965b9ee068607e04bc2f3bc6014571c41d653188e1f027d2c69c9a0",
+      "reason": "Bounded long-path I/O audit: preserve logical identities, verified helper leases, atomic persistence, native ownership and fixture-only tests."
     },
     {
       "path": "Modules/ExtraDynastySettings/Tools/GameSettingsMenuChecks.cs",
@@ -1878,8 +1883,8 @@
     },
     {
       "path": "Modules/GamedayAtmosphere/Source/DgaDiagnostics.cs",
-      "sha256": "8f5812429f3eb15fbd1792cec6f03aed768f09edc01a69935f91f16f6730a645",
-      "reason": "Approved integrated release-readiness fixes; native contracts and saved data preserved"
+      "sha256": "1fe6c9f3a5566652d4ed14ef3f165224d94ad65df78614abf9e1b9c7fd06235e",
+      "reason": "Bounded long-path I/O audit: preserve logical identities, verified helper leases, atomic persistence, native ownership and fixture-only tests."
     },
     {
       "path": "Modules/GamedayAtmosphere/Source/DiagnosticPreview.h",
@@ -1933,8 +1938,8 @@
     },
     {
       "path": "Modules/GamedayAtmosphere/Source/GameCompatibilityReport.cs",
-      "sha256": "a76e59fd13708e657d583723081d547052412fb0a30c177c1087ffbf26daa7ff",
-      "reason": "Approved integrated release-readiness fixes; native contracts and saved data preserved"
+      "sha256": "2098714f7b1d117daaa68901d40366a1cb2e18b5122c5ea7cfea80f5c6808eeb",
+      "reason": "Bounded long-path I/O audit: preserve logical identities, verified helper leases, atomic persistence, native ownership and fixture-only tests."
     },
     {
       "path": "Modules/GamedayAtmosphere/Source/GameplayCamera.h",
@@ -2013,8 +2018,8 @@
     },
     {
       "path": "Modules/GamedayAtmosphere/Source/LogFiles.h",
-      "sha256": "a850633b1b4e9edf083a0c795afc40760c393ccad15d958df79cc1adbc6994ee",
-      "reason": "Approved integrated release-readiness fixes; native contracts and saved data preserved"
+      "sha256": "f5d3f499225b8f583af772f14c19d282142c48d70ce5d089ddf494a59d6cc156",
+      "reason": "Bounded long-path I/O audit: preserve logical identities, verified helper leases, atomic persistence, native ownership and fixture-only tests."
     },
     {
       "path": "Modules/GamedayAtmosphere/Source/LogPolicy.h",
@@ -2028,8 +2033,8 @@
     },
     {
       "path": "Modules/GamedayAtmosphere/Source/ManagedRuntimeLoader.cs",
-      "sha256": "00e5dbb992a1721cb3a7224eff0389378b521862ffed003e1ec7cfe402593843",
-      "reason": "Update 2/5 loader hotfix: bounded read-only Windows module-list retries and precise BTF runtime diagnostics; preserve single-load, ownership and integrity guards"
+      "sha256": "97befa151e44194f4b0501523d630333cf9af051fa2c1aa5d7c4010fbf31ee6b",
+      "reason": "Long-path module reads: verified full Unicode paths and bounded read-only PSAPI fallback for Toolhelp buffer errors; no new load retries or weaker ownership."
     },
     {
       "path": "Modules/GamedayAtmosphere/Source/MatchLifecycle.h",
@@ -2043,13 +2048,13 @@
     },
     {
       "path": "Modules/GamedayAtmosphere/Source/MigrateSettings.cs",
-      "sha256": "43e71fa771d46f233a98f5e635afd0abd7f1544b7609e55c2766061d30cd5109",
-      "reason": "Approved integrated release-readiness fixes; native contracts and saved data preserved"
+      "sha256": "e8dded38aa22ba50dc10e9b4e098ddd4825e27e68c18792c2591aee88e2e1459",
+      "reason": "Bounded long-path I/O audit: preserve logical identities, verified helper leases, atomic persistence, native ownership and fixture-only tests."
     },
     {
       "path": "Modules/GamedayAtmosphere/Source/MmcPlugin.cs",
-      "sha256": "f90c0bb61826ed193215fef59d5c4a09ffc693a707950ba77cd139d65fe4efd2",
-      "reason": "Reviewed public releases: retain readiness fixes; MMC display branding, complete guides and exact archive compatibility; test catalog reflects current 12-yard default and one-shot action"
+      "sha256": "bea6792c145aa047f068c687a77d21cb5605f1eda857849350180370dd566a11",
+      "reason": "Bounded long-path I/O audit: preserve logical identities, verified helper leases, atomic persistence, native ownership and fixture-only tests."
     },
     {
       "path": "Modules/GamedayAtmosphere/Source/MotionSoundPairing.h",
@@ -2093,8 +2098,8 @@
     },
     {
       "path": "Modules/GamedayAtmosphere/Source/NativeRuntime.cpp",
-      "sha256": "edc42cc47d48622f6cfcacd2dbeab2db9f734960419c1a73ad9f758e40186c12",
-      "reason": "Reviewed public releases: retain readiness fixes; MMC display branding, complete guides and exact archive compatibility; test catalog reflects current 12-yard default and one-shot action"
+      "sha256": "5c755b25f03862a8a8f238611a65a4f20e21f84cef14c8f0e2a5c51f04d605fa",
+      "reason": "Bounded long-path I/O audit: preserve logical identities, verified helper leases, atomic persistence, native ownership and fixture-only tests."
     },
     {
       "path": "Modules/GamedayAtmosphere/Source/NativeSackFacts.h",
@@ -2103,8 +2108,8 @@
     },
     {
       "path": "Modules/GamedayAtmosphere/Source/NativeSettingsMenu.h",
-      "sha256": "732c5b85dc4c40770318daad330b0a47d9ac05173563a68b161d3c59f4952a96",
-      "reason": "Approved integrated release-readiness fixes; native contracts and saved data preserved"
+      "sha256": "29c94e8d8d3a40d4e9187ff1637f62258ac70c1057499cd6c761cad0263cd170",
+      "reason": "Bounded long-path I/O audit: preserve logical identities, verified helper leases, atomic persistence, native ownership and fixture-only tests."
     },
     {
       "path": "Modules/GamedayAtmosphere/Source/NativeSkillSignals.h",
@@ -2158,13 +2163,13 @@
     },
     {
       "path": "Modules/GamedayAtmosphere/Source/PluginSettings.cs",
-      "sha256": "abe17824e3047e86f02bddc212f2ebc869848fc549d355592960206a5a64680c",
-      "reason": "Approved integrated release-readiness fixes; native contracts and saved data preserved"
+      "sha256": "d2a44dc779d9904cc15a0e0d8b348d433779dba5d5f92412cf9d7e8e181a7f77",
+      "reason": "Bounded long-path I/O audit: preserve logical identities, verified helper leases, atomic persistence, native ownership and fixture-only tests."
     },
     {
       "path": "Modules/GamedayAtmosphere/Source/PluginStorage.cs",
-      "sha256": "69790f827a0a2e317091424213a002b593e23adafe36ee6373944b4b17a5e607",
-      "reason": "Approved integrated release-readiness fixes; native contracts and saved data preserved"
+      "sha256": "78122c1e711f09c39ddc3d843122dbc714dadfe3c379b7b446caa07595174c12",
+      "reason": "Bounded long-path I/O audit: preserve logical identities, verified helper leases, atomic persistence, native ownership and fixture-only tests."
     },
     {
       "path": "Modules/GamedayAtmosphere/Source/PostPlayAtmosphere.h",
@@ -2263,8 +2268,8 @@
     },
     {
       "path": "Modules/GamedayAtmosphere/Source/RuntimePaths.h",
-      "sha256": "d772b39e8ff971160795c22f23e7b7582a7b80421ee71ac2b636d9e6e5ee9661",
-      "reason": "Approved integrated release-readiness fixes; native contracts and saved data preserved"
+      "sha256": "db27e013c98437b71505511b8b7c2bcdfca6e436a0db1e8c35e92edd576f72a7",
+      "reason": "Bounded long-path I/O audit: preserve logical identities, verified helper leases, atomic persistence, native ownership and fixture-only tests."
     },
     {
       "path": "Modules/GamedayAtmosphere/Source/ScoringEnergy.h",
@@ -2318,8 +2323,8 @@
     },
     {
       "path": "Modules/GamedayAtmosphere/Source/SettingsPoll.h",
-      "sha256": "ef52f056f39ab41b00ad905806410d51a89fb0c3c589bd88583a29d9c5ca1910",
-      "reason": "Approved integrated release-readiness fixes; native contracts and saved data preserved"
+      "sha256": "89999d014809d3144816a6e39acc6603eb0dbc412054093b7246289f4f8e756c",
+      "reason": "Bounded long-path I/O audit: preserve logical identities, verified helper leases, atomic persistence, native ownership and fixture-only tests."
     },
     {
       "path": "Modules/GamedayAtmosphere/Source/ShakeProfiles.h",

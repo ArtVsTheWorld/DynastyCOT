@@ -1,3 +1,4 @@
+using Path = Ace.DynastyCOT.StoragePath;
 using System;
 using System.IO;
 using OfflineDynastySettings;

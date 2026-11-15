@@ -1,6 +1,6 @@
 {
   "Format": 1,
-  "Version": "1.1.5",
+  "Version": "1.1.6",
   "Modules": [
     {
       "Id": "BeyondTheField",
@@ -14,16 +14,16 @@
       ],
       "Current": {
         "Module": "BeyondTheField",
-        "Version": "1.0.24",
-        "Tag": "v1.0.24",
-        "ArchiveName": "BeyondTheField-1.0.24.zip",
-        "ArchiveUrl": "https://github.com/ArtVsTheWorld/BeyondTheField/releases/download/v1.0.24/BeyondTheField-1.0.24.zip",
-        "ArchiveSha256": "1de1432af4bd1acc8a3d5c15be604d7b78ef4ed99a791b74a501d17fd4c144c2",
-        "DllSha256": "ea13046e09eefea5f6aeb3531d1f0e97eca8ae0d06fbf1fbaa44b7ce4bc9bcee",
-        "ArchiveBytes": 41004874,
-        "ProofUrl": "https://github.com/ArtVsTheWorld/BeyondTheField/releases/download/v1.0.24/BeyondTheField-1.0.24-verification.json",
-        "PageUrl": "https://github.com/ArtVsTheWorld/BeyondTheField/releases/tag/v1.0.24",
-        "Notes": "# Ace\u00e2\u20ac\u2122s Beyond the Field 1.0.24\n\nChanges since public release 1.0.7.\n\n- Set separate rating styles for recruits, roster players and teams. Use workout estimates or change how a recruit's interest looks even when Recruiting Fog is off.\n- Recruit Notes now give shorter, position-specific scouting observations. New backgrounds better fit each player's workload and can give two-way athletes a second role. Existing Notes keep what you learned.\n- Signing stories follow the school the recruit joined. Fans and school accounts respond to the matchup, repeated preseason stories show up less often, and spring exhibitions stay separate from fall coverage.\n- Season GPI now matches the weekly grade for a player with one graded game. More depth charts, hub comparisons and supported Dynasty Extensions reports and drills follow your fog choices.\n- Settings, Notes, accounts and published editions share one folder across MMC copies on the same Windows account. In a league with several coaches, the verified view is still the owner's school.\n\nDownload the standalone ZIP, close MMC and the game, and copy **BeyondTheField.dll** into MMC\u00e2\u20ac\u2122s **Plugins** folder. The ZIP includes a full feature list and an illustrated player guide.\n",
+        "Version": "1.0.26",
+        "Tag": "v1.0.26",
+        "ArchiveName": "BeyondTheField-1.0.26.zip",
+        "ArchiveUrl": "https://github.com/ArtVsTheWorld/BeyondTheField/releases/download/v1.0.26/BeyondTheField-1.0.26.zip",
+        "ArchiveSha256": "c3449812eebccb59eed805e7b3df04d0c32e9304c440a46776fef95d6c507be5",
+        "DllSha256": "9cd916d27026e39f069dd0ed8cb3b7aaeb2caf1c7332b87a7b56f393f38009eb",
+        "ArchiveBytes": 41028222,
+        "ProofUrl": "https://github.com/ArtVsTheWorld/BeyondTheField/releases/download/v1.0.26/BeyondTheField-1.0.26-verification.json",
+        "PageUrl": "https://github.com/ArtVsTheWorld/BeyondTheField/releases/tag/v1.0.26",
+        "Notes": "# **Update 2 Hotfix 2**\n\n**Startup & Saved Data**\n- Fixed the confirmed missing-path error caused by deeply nested MMC and legacy history folders\n- Improved preparation of runtime files, settings and logs when folder paths are long\n- Improved startup checks for runtimes loaded from long folder paths\n- Keeps saved settings, Recruit Notes, accounts and published Social Media history\n\n**Install**\n- Close MMC and the game, then replace **BeyondTheField.dll** in your usual **Plugins** folder, or select **1.0.26** in the COT installer\n- Keep your existing data folders. This fixes the reproduced long-path failure; genuinely missing, unavailable or blocked files still need their own diagnosis\n",
         "Compatibility": "Use one provider of each module. Offline scopes, exact hook checks and shared AppData remain. Read the included player guide and release notes for supported modes and live acceptance limits.",
         "Prerelease": false
       }
@@ -40,16 +40,16 @@
       ],
       "Current": {
         "Module": "GamedayAtmosphere",
-        "Version": "2.1.38",
-        "Tag": "v2.1.38",
-        "ArchiveName": "GamedayAtmosphere-2.1.38.zip",
-        "ArchiveUrl": "https://github.com/ArtVsTheWorld/DynamicGamedayAtmosphere/releases/download/v2.1.38/GamedayAtmosphere-2.1.38.zip",
-        "ArchiveSha256": "0a2a05046341d0a3422f0ae2c8e6bba8ccfa875cabd036d5783cc26dec62791f",
-        "DllSha256": "f713979de4c8bb6fe05db3520d8e4cceb1bfbf65bf12e14750a358a019ae6e9a",
-        "ArchiveBytes": 8708872,
-        "ProofUrl": "https://github.com/ArtVsTheWorld/DynamicGamedayAtmosphere/releases/download/v2.1.38/GamedayAtmosphere-2.1.38-verification.json",
-        "PageUrl": "https://github.com/ArtVsTheWorld/DynamicGamedayAtmosphere/releases/tag/v2.1.38",
-        "Notes": "# Ace\u00e2\u20ac\u2122s Gameday Atmosphere 2.1.38\n\nChanges since public release 2.1.11.\n\n- On new Dynasty home dates, ticket demand, travel and each school's following help set turnout. A visiting section can stretch across nearby blocks, with mixed edges and scattered groups of friends. Saved matchups keep their old plan unless you choose Regenerate Next Crowd for a newly started game.\n- An added positive visiting cheer at a home stadium needs at least one visitor in five among the supporters actually present. A visiting touchdown can still hush the home background below that mark. A big lead can calm the roar.\n- Supported neutral games keep the game's turnout and split the crowd between both schools. In supported Dynasty Extensions spring games, the actual school's fans wear its colors, take halftime breaks and drift out in the second half, whatever the score.\n- Set Big Play Replay Minimum Yards in the menu from 10 to 60. It starts at 12. Supported Broadcast Universe setups can receive a big-play request when a clip is available. The game handles touchdown replays.\n- A guide in the ZIP shows how to read the stands. The status report can help explain a missed cheer. The new section layouts, spring boos and in-game frame rate still need live checks.\n\nDownload the standalone ZIP, close MMC and the game, and copy **GamedayAtmosphere.dll** into MMC\u00e2\u20ac\u2122s **Plugins** folder. The ZIP includes a full feature list and an illustrated player guide.\n",
+        "Version": "2.1.40",
+        "Tag": "v2.1.40",
+        "ArchiveName": "GamedayAtmosphere-2.1.40.zip",
+        "ArchiveUrl": "https://github.com/ArtVsTheWorld/DynamicGamedayAtmosphere/releases/download/v2.1.40/GamedayAtmosphere-2.1.40.zip",
+        "ArchiveSha256": "fa4f2d18d081dbf1e8ee94a2f75982c87249f3bdd326c2a82a684768f4ee8c36",
+        "DllSha256": "5118e699c90409f12601e5524d30f707b9e1e27b68829ebb1fc878024c75a76a",
+        "ArchiveBytes": 8742142,
+        "ProofUrl": "https://github.com/ArtVsTheWorld/DynamicGamedayAtmosphere/releases/download/v2.1.40/GamedayAtmosphere-2.1.40-verification.json",
+        "PageUrl": "https://github.com/ArtVsTheWorld/DynamicGamedayAtmosphere/releases/tag/v2.1.40",
+        "Notes": "# **Update 5 Hotfix 2**\n\n**Startup & Saved Crowds**\n- Improved startup when runtime files are stored in long folder paths\n- Fixed long-path handling for settings, logs and saved crowd files\n- Keeps existing settings, crowd history, palettes and replay fixes\n- Includes the earlier startup protection while Windows updates the game's loaded-file list\n\n**Install**\n- Close MMC and the game, then replace **GamedayAtmosphere.dll** in your usual **Plugins** folder, or select **2.1.40** in the COT installer\n- Keep your existing settings and History folders. No crowd regeneration is required for this hotfix\n",
         "Compatibility": "Use one provider of each module. Offline scopes, exact hook checks and shared AppData remain. Read the included player guide and release notes for supported modes and live acceptance limits.",
         "Prerelease": false
       }
@@ -397,6 +397,26 @@
       "Path": "Plugins/ExpandedPractice.dll",
       "Module": "ExpandedPractice",
       "Sha256": "107b70943cf07fd44e371f2f767d2820b8ab7aad3a51e1eb0e2dd57c1ba94e5f"
+    },
+    {
+      "Path": "Plugins/BeyondTheField.dll",
+      "Module": "BeyondTheField",
+      "Sha256": "31b7d00b1c03ba56c3431a4a63ee77969881ebeb22b9aec30268425fee7749ea"
+    },
+    {
+      "Path": "Plugins/GamedayAtmosphere.dll",
+      "Module": "GamedayAtmosphere",
+      "Sha256": "16d405de977931fb034ef3bf71125a95ef34f858039a189687974bffac9b5962"
+    },
+    {
+      "Path": "Plugins/BeyondTheField.dll",
+      "Module": "BeyondTheField",
+      "Sha256": "9cd916d27026e39f069dd0ed8cb3b7aaeb2caf1c7332b87a7b56f393f38009eb"
+    },
+    {
+      "Path": "Plugins/GamedayAtmosphere.dll",
+      "Module": "GamedayAtmosphere",
+      "Sha256": "5118e699c90409f12601e5524d30f707b9e1e27b68829ebb1fc878024c75a76a"
     }
   ],
   "Programs": [
@@ -2279,6 +2299,46 @@
       "Path": "Plugins/SituationalPractice/ExpandedPractice.Runtime.exe",
       "Module": "ExpandedPractice",
       "Sha256": "d7ff7369f3e4a58523843654e65a99c010d339aa8b5f96e07f793f7367f397f7"
+    },
+    {
+      "Path": "COT-Runtime/DynastyEnhancer/BeyondTheFieldNative-v103.dll",
+      "Module": "BeyondTheField",
+      "Sha256": "a42fcf840ae1077be32ed0df52c4b6987b9f4736340458ff40f722675dccc847"
+    },
+    {
+      "Path": "COT-Runtime/DynastyEnhancer/BeyondTheFieldRecruitFog-v1.dll",
+      "Module": "BeyondTheField",
+      "Sha256": "cceb294b2f91c1c1cbfd4592be7e0d44459305f17918f1dfe11daf9ca09f88e0"
+    },
+    {
+      "Path": "DGA-Runtime/Runtime-2.1.39/GamedayAtmosphereNative-2.1.39.dll",
+      "Module": "GamedayAtmosphere",
+      "Sha256": "d27ce591200fca75e4c8767104e4258b641ce3e644eb440fcb8b675e1e5ba70d"
+    },
+    {
+      "Path": "Plugins/OfflineDynastySettings/ExtraSettings.Persistence.exe",
+      "Module": "ExtraSettings",
+      "Sha256": "a86d258ea76168253aacf852ce0cb9e9d7b6072ea27647fa9ac7bb7f6b7a1a50"
+    },
+    {
+      "Path": "Plugins/SituationalPractice/ExpandedPractice.Runtime.exe",
+      "Module": "ExpandedPractice",
+      "Sha256": "00ae72cf1e1a5ab5235f3db1b89e0a9ea5c0981447abf8f389c12d020fc882bb"
+    },
+    {
+      "Path": "COT-Runtime/DynastyEnhancer/BeyondTheFieldNative-v103.dll",
+      "Module": "BeyondTheField",
+      "Sha256": "ac94785728318be1745ce10e662e2599d46789fd8475df1f9c1f7de1d9333447"
+    },
+    {
+      "Path": "COT-Runtime/DynastyEnhancer/BeyondTheFieldRecruitFog-v1.dll",
+      "Module": "BeyondTheField",
+      "Sha256": "c1d1d4086bc0fc97580a39bd49db635df2158885e2d6189d40087ca4d4aac107"
+    },
+    {
+      "Path": "DGA-Runtime/Runtime-2.1.40/GamedayAtmosphereNative-2.1.40.dll",
+      "Module": "GamedayAtmosphere",
+      "Sha256": "30499561c088858cb2b8341e6c9fba99d8dad8943cb376213f41252497b1c2ba"
     }
   ]
 }

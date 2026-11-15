@@ -1,4 +1,5 @@
 #pragma once
+#include "../../../Core/NativeFileIO.h"
 #include <filesystem>
 #include <string>
 #include <cwctype>
@@ -13,7 +14,7 @@ inline bool equal(std::wstring a,std::wstring b){
     return true;
 }
 inline bool resolve(const std::filesystem::path& module,Layout& out){
-    auto runtime=module.lexically_normal().parent_path();auto owner=runtime.parent_path();
+    auto runtime=aceio::logical_path(module).lexically_normal().parent_path();auto owner=runtime.parent_path();
     if(runtime.filename().wstring().find(L"Runtime-")!=0)return false;
     Layout next;next.runtime=runtime;
     if(equal(owner.filename().wstring(),L"GamedayAtmosphere")&&equal(owner.parent_path().filename().wstring(),L"DynastyCOT")){
@@ -40,8 +41,8 @@ inline bool originText(const std::string& text,unsigned pid,uint64_t creation,st
 }
 inline bool loadOrigin(Layout& layout,unsigned pid,uint64_t creation){
     auto file=layout.runtime/(L"origin-"+std::to_wstring(pid)+L".txt");std::error_code error;
-    auto size=std::filesystem::file_size(file,error);if(error||size>4096)return false;
-    std::ifstream input(file,std::ios::binary);if(!input)return false;
+    auto size=aceio::file_size(file,error);if(error||size>4096)return false;
+    aceio::ifstream input(file,std::ios::binary);if(!input)return false;
     std::string text(static_cast<size_t>(size),'\0');input.read(text.data(),static_cast<std::streamsize>(text.size()));
     return input&&originText(text,pid,creation,layout.plugins);
 }

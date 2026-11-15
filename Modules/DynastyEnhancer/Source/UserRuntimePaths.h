@@ -1,4 +1,5 @@
 #pragma once
+#include "../../../Core/NativeFileIO.h"
 #include <windows.h>
 #include <shlobj.h>
 #ifdef small
@@ -11,7 +12,8 @@
 #pragma comment(lib,"ole32.lib")
 namespace dynasty::userpaths {
 inline bool equal(std::wstring a,std::wstring b){if(a.size()!=b.size())return false;for(size_t i=0;i<a.size();++i)if(std::towlower(a[i])!=std::towlower(b[i]))return false;return true;}
-inline std::filesystem::path dataFromCode(const std::filesystem::path& code,const std::filesystem::path& expected){
+inline std::filesystem::path dataFromCode(const std::filesystem::path& codePath,const std::filesystem::path& expected){
+    auto code=aceio::logical_path(codePath);
     if(code.filename().wstring().find(L"Runtime-")!=0||!equal(code.parent_path().lexically_normal().wstring(),expected.lexically_normal().wstring()))return {};
     return expected;
 }

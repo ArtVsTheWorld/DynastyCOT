@@ -1,3 +1,7 @@
+using File = Ace.DynastyCOT.StorageFile;
+using Directory = Ace.DynastyCOT.StorageDirectory;
+using Path = Ace.DynastyCOT.StoragePath;
+using FileInfo = Ace.DynastyCOT.StorageFileInfo;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
@@ -69,7 +73,7 @@ namespace DynamicGamedayAtmosphere
                 byte[] entry=Encoding.UTF8.GetBytes(DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss")+" | "+text+Environment.NewLine);
                 const int limit=2*1024*1024;
                 int count=Math.Min(limit,entry.Length);long size=File.Exists(path)?new FileInfo(path).Length:0;
-                using(var file=new FileStream(path,size>=limit||size+count>limit?FileMode.Create:FileMode.Append,FileAccess.Write,FileShare.Read))file.Write(entry,0,count);
+                using(var file=Ace.DynastyCOT.StorageIO.OpenFile(path,size>=limit||size+count>limit?FileMode.Create:FileMode.Append,FileAccess.Write,FileShare.Read))file.Write(entry,0,count);
             }}catch(Exception error){failure=" Log file unavailable: "+error.Message;}
             // MMC owns its progress display and errors. GDA diagnostics stay in
             // AppData even when a host logger is supplied by launch callbacks.

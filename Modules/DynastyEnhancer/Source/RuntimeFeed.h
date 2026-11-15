@@ -1,3 +1,4 @@
+#include "../../../Core/NativeFileIO.h"
 #include "UserRuntimePaths.h"
 #pragma once
 #include "LiveTables.h"
@@ -8,7 +9,7 @@
 namespace dynasty::live {
 struct GeneratorJobFiles {
     std::filesystem::path input,output;
-    ~GeneratorJobFiles(){std::error_code ec;for(const auto& file:{input,output})if(!file.empty()){std::filesystem::remove(file,ec);std::filesystem::remove(std::filesystem::path(file.wstring()+L".tmp"),ec);}}
+    ~GeneratorJobFiles(){std::error_code ec;for(const auto& file:{input,output})if(!file.empty()){aceio::remove(file,ec);aceio::remove(std::filesystem::path(file.wstring()+L".tmp"),ec);}}
 };
 inline uint64_t fingerprint(std::string_view text){uint64_t value=14695981039346656037ull;for(unsigned char c:text){value^=c;value*=1099511628211ull;}return value;}
 inline void validateRuntimeIdentity(const Json& feed,const Json& status){
@@ -40,7 +41,7 @@ public:
             if(hint.value("pid",DWORD(0))==GetCurrentProcessId()&&creation&&hint.value("creation",uint64_t(0))==creation)
                 sessionContextHint()={hint.at("career").get<Address>(),hint.at("database").get<Address>(),hint.at("context").get<Address>()};
         }
-        if(!std::filesystem::is_regular_file(node)||!std::filesystem::is_regular_file(exporter)||!std::filesystem::is_regular_file(resumer))throw std::runtime_error("Dynasty Enhancer runtime generator is unavailable");
+        if(!aceio::is_regular_file(node)||!aceio::is_regular_file(exporter)||!aceio::is_regular_file(resumer))throw std::runtime_error("Dynasty Enhancer runtime generator is unavailable");
     }
     std::optional<Json> tick(const std::function<bool()>& cancelled,const std::function<void(Json)>& report,const std::function<void()>& invalidate){
         auto now=GetTickCount64();if(!schedule.due(now)||cancelled())return {};schedule.begin(now);

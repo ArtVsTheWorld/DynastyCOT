@@ -1,3 +1,8 @@
+using FileVersionInfo = Ace.DynastyCOT.StorageVersionInfo;
+using File = Ace.DynastyCOT.StorageFile;
+using Directory = Ace.DynastyCOT.StorageDirectory;
+using Path = Ace.DynastyCOT.StoragePath;
+using FileInfo = Ace.DynastyCOT.StorageFileInfo;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
@@ -14,7 +19,7 @@ namespace OfflineDynastySettings
     // Diagnostics are best effort. A locked report must never disable gameplay or saving.
     internal static class DiagnosticLog
     {
-        internal const string Version = "0.2.12";
+        internal const string Version = "0.2.13";
         private static readonly object sync = new object();
         internal static string PluginFolder { get { return Path.GetDirectoryName(typeof(DiagnosticLog).Assembly.Location); } }
         private static string Reports(string folder) { return Path.Combine(Ace.DynastyCOT.UserStorage.Folder("ExtraSettings"),"Diagnostics"); }
@@ -144,7 +149,8 @@ namespace OfflineDynastySettings
                 string destination=Path.Combine(Reports(folder),"OfflineDynastySettings-BugReport.zip");
                 Directory.CreateDirectory(Path.GetDirectoryName(destination));string temporary=destination+"."+Guid.NewGuid().ToString("N")+".tmp";
                 try {
-                    using(ZipArchive zip=ZipFile.Open(temporary,ZipArchiveMode.Create)) {
+                    using(var archiveFile=Ace.DynastyCOT.StorageIO.OpenFile(temporary,FileMode.CreateNew,FileAccess.ReadWrite,FileShare.None))
+                    using(ZipArchive zip=new ZipArchive(archiveFile,ZipArchiveMode.Create)) {
                         foreach(string name in new string[]{"OfflineDynastySettings.log","OfflineDynastySettings.log.1","OfflineDynastySettings.Persistence.log","DynastyPlayClock.log","OfflinePlaycall.log"})
                             Add(zip,Path.Combine(SettingsFiles.Folder(folder),name),name);
                         foreach(string name in new string[]{"environment.json","hooks.json","runtime.json","exit.json"})Add(zip,Path.Combine(Reports(folder),name),name);
@@ -156,7 +162,7 @@ namespace OfflineDynastySettings
         private static void Add(ZipArchive zip,string path,string name)
         {
             if(!File.Exists(path))return;
-            try { using(FileStream file=new FileStream(path,FileMode.Open,FileAccess.Read,FileShare.ReadWrite|FileShare.Delete))
+            try { using(FileStream file=Ace.DynastyCOT.StorageIO.OpenFile(path,FileMode.Open,FileAccess.Read,FileShare.ReadWrite|FileShare.Delete))
                 using(Stream output=zip.CreateEntry(name).Open())file.CopyTo(output);
             } catch { }
         }

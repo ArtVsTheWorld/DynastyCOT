@@ -1,4 +1,7 @@
-﻿using Frosty.Core;
+using File = Ace.DynastyCOT.StorageFile;
+using Directory = Ace.DynastyCOT.StorageDirectory;
+using Path = Ace.DynastyCOT.StoragePath;
+using Frosty.Core;
 using FrostySdk.Interfaces;
 using System;
 using System.Collections.Generic;
@@ -381,7 +384,7 @@ namespace OfflinePlaycall
                 string folder = Path.GetDirectoryName(storage);
                 Directory.CreateDirectory(folder);
                 string temp = storage + ".tmp";
-                using (FileStream file = new FileStream(temp, FileMode.Create, FileAccess.Write, FileShare.None))
+                using (FileStream file = Ace.DynastyCOT.StorageIO.OpenFile(temp, FileMode.Create, FileAccess.Write, FileShare.None))
                 using (StreamWriter writer = new StreamWriter(file))
                 {
                     writer.Write(new JavaScriptSerializer().Serialize(updated));

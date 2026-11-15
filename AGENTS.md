@@ -12,3 +12,14 @@
 - Imported module build scripts still build standalone baselines. They do not create an installable COT product.
 - SDKs, game captures, saves, generated history, logs and build outputs must not be committed or packaged.
 - No test may patch the live game by default. Live acceptance is a separate, explicitly reported stage.
+
+## Release-note style
+
+- All four COT standalone modules use Ace's approved Update-style notes: an `Update N` heading, bold feature-category headings and short bullets focused on what players notice.
+- Use simple, natural language. Group related changes; use nested bullets for choices, ranges or reveal stages. Describe important changes since the last public release, rather than pasting the full feature guide or leading with implementation details.
+- User reaffirmed this style for every future release. Continue Hotfix numbering within the existing Update heading (for example, `Update 2 Hotfix 2` and `Update 5 Hotfix 2`); keep bold categories and short player-facing bullets.
+- Check claims against the code and distinguish unconfirmed live behavior. Use the user-authored Beyond the Field Update 2 and Gameday Atmosphere Update 5 GitHub release descriptions as style references.
+
+## Private test handoffs
+
+- User preference: deliver the four standalone plugin DLLs directly together in one folder, with direct file links. Do not package private test kits as ZIPs containing other ZIPs. Keep installer, reports and integrity metadata separate from the four-DLL test folder.

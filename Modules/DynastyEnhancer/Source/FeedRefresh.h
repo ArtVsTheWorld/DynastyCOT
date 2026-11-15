@@ -1,4 +1,5 @@
 #pragma once
+#include "../../../Core/NativeFileIO.h"
 #include <windows.h>
 #include <filesystem>
 #include <fstream>
@@ -18,7 +19,7 @@ struct Stamp {
     bool operator!=(const Stamp& r)const{return !(*this==r);}
 };
 inline Stamp stamp(const fs::path& path){
-    HANDLE h=CreateFileW(path.c_str(),FILE_READ_ATTRIBUTES,FILE_SHARE_READ|FILE_SHARE_WRITE|FILE_SHARE_DELETE,nullptr,OPEN_EXISTING,FILE_ATTRIBUTE_NORMAL,nullptr);
+    HANDLE h=aceio::create_file(path.c_str(),FILE_READ_ATTRIBUTES,FILE_SHARE_READ|FILE_SHARE_WRITE|FILE_SHARE_DELETE,nullptr,OPEN_EXISTING,FILE_ATTRIBUTE_NORMAL,nullptr);
     if(h==INVALID_HANDLE_VALUE)throw std::runtime_error("Watched save is unavailable");
     BY_HANDLE_FILE_INFORMATION i{};BOOL ok=GetFileInformationByHandle(h,&i);CloseHandle(h);
     if(!ok)throw std::runtime_error("Cannot inspect watched save");
@@ -45,8 +46,8 @@ inline std::wstring quote(const std::wstring& input){
     out.append(slashes*2,L'\\');return out+L"\"";
 }
 inline Json readJson(const fs::path& path){
-    if(fs::file_size(path)>128ull*1024*1024)throw std::runtime_error("Weekly feed JSON exceeds size limit");
-    std::ifstream in(path);if(!in)throw std::runtime_error("Cannot read weekly feed JSON");Json j;in>>j;return j;
+    if(aceio::file_size(path)>128ull*1024*1024)throw std::runtime_error("Weekly feed JSON exceeds size limit");
+    aceio::ifstream in(path);if(!in)throw std::runtime_error("Cannot read weekly feed JSON");Json j;in>>j;return j;
 }
 inline int phaseIndex(const std::string& phase){const std::array<const char*,7> phases={"PreSeason","RegularSeason","BowlSeason1","BowlSeason2","BowlSeason3","NationalChampionship","OffSeason"};for(size_t i=0;i<phases.size();++i)if(phase==phases[i])return static_cast<int>(i);return -1;}
 inline bool publicationAtOrBefore(const std::string& phase,int week,const std::string& activePhase,int activeWeek){const int p=phaseIndex(phase),a=phaseIndex(activePhase);return p>=0&&a>=0&&(p<a||(p==a&&week<=activeWeek));}
@@ -86,19 +87,19 @@ struct Settings {fs::path save,node,exporter,config;};
 inline Settings settings(const Json& j,const fs::path& folder){
     auto path=[&](const char* k){auto p=fs::u8path(j.at(k).get<std::string>());return fs::absolute(p.is_absolute()?p:folder/p);};
     Settings s{path("save"),path("node"),path("exporter"),folder/L"social-refresh.json"};
-    for(const auto& p:{s.save,s.node,s.exporter,path("schema"),path("parser")})if(!fs::is_regular_file(p))throw std::runtime_error("A configured feed dependency is missing");return s;
+    for(const auto& p:{s.save,s.node,s.exporter,path("schema"),path("parser")})if(!aceio::is_regular_file(p))throw std::runtime_error("A configured feed dependency is missing");return s;
 }
 inline void writeAtomic(const fs::path& temporary,const fs::path& final,const Json& j);
 struct PublicationGateFiles {
     fs::path prefix;
-    ~PublicationGateFiles(){if(!prefix.empty()){std::error_code ec;fs::remove(fs::path(prefix.wstring()+L".ready"),ec);fs::remove(fs::path(prefix.wstring()+L".allow"),ec);}}
+    ~PublicationGateFiles(){if(!prefix.empty()){std::error_code ec;aceio::remove(fs::path(prefix.wstring()+L".ready"),ec);aceio::remove(fs::path(prefix.wstring()+L".allow"),ec);}}
 };
 inline DWORD exportSave(const Settings& s,const fs::path& output,const fs::path& log,const std::function<bool()>& cancelled,const std::function<bool()>& verifyBeforeCommit={}){
     SECURITY_ATTRIBUTES sa{sizeof(sa),nullptr,TRUE};
     // The bundled generator emits one result per run. Retain the most recent run.
-    HANDLE stream=CreateFileW(log.c_str(),GENERIC_WRITE,FILE_SHARE_READ,&sa,CREATE_ALWAYS,FILE_ATTRIBUTE_NORMAL,nullptr);
-    if(stream==INVALID_HANDLE_VALUE)stream=CreateFileW(L"NUL",GENERIC_WRITE,FILE_SHARE_READ|FILE_SHARE_WRITE,&sa,OPEN_EXISTING,FILE_ATTRIBUTE_NORMAL,nullptr);
-    HANDLE nullIn=CreateFileW(L"NUL",GENERIC_READ,FILE_SHARE_READ|FILE_SHARE_WRITE,&sa,OPEN_EXISTING,FILE_ATTRIBUTE_NORMAL,nullptr);
+    HANDLE stream=aceio::create_file(log.c_str(),GENERIC_WRITE,FILE_SHARE_READ,&sa,CREATE_ALWAYS,FILE_ATTRIBUTE_NORMAL,nullptr);
+    if(stream==INVALID_HANDLE_VALUE)stream=aceio::create_file(L"NUL",GENERIC_WRITE,FILE_SHARE_READ|FILE_SHARE_WRITE,&sa,OPEN_EXISTING,FILE_ATTRIBUTE_NORMAL,nullptr);
+    HANDLE nullIn=aceio::create_file(L"NUL",GENERIC_READ,FILE_SHARE_READ|FILE_SHARE_WRITE,&sa,OPEN_EXISTING,FILE_ATTRIBUTE_NORMAL,nullptr);
     if(stream==INVALID_HANDLE_VALUE||nullIn==INVALID_HANDLE_VALUE){if(stream!=INVALID_HANDLE_VALUE)CloseHandle(stream);if(nullIn!=INVALID_HANDLE_VALUE)CloseHandle(nullIn);throw std::runtime_error("Cannot create exporter log handles");}
     PublicationGateFiles gate;bool approved=false;
     std::wstring command=quote(s.node.wstring())+L" "+quote(s.exporter.wstring())+L" "+quote(s.config.wstring())+L" "+quote(output.wstring());
@@ -113,12 +114,16 @@ inline DWORD exportSave(const Settings& s,const fs::path& output,const fs::path&
     if(!UpdateProcThreadAttribute(attributes,0,PROC_THREAD_ATTRIBUTE_HANDLE_LIST,inherited,sizeof(inherited),nullptr,nullptr)){DeleteProcThreadAttributeList(attributes);CloseHandle(stream);CloseHandle(nullIn);throw std::runtime_error("Cannot isolate exporter handles");}
     STARTUPINFOEXW startup{};startup.StartupInfo.cb=sizeof(startup);startup.StartupInfo.dwFlags=STARTF_USESTDHANDLES;startup.StartupInfo.hStdOutput=stream;startup.StartupInfo.hStdError=stream;startup.StartupInfo.hStdInput=nullIn;startup.lpAttributeList=attributes;
     PROCESS_INFORMATION process{};
-    BOOL launched=CreateProcessW(s.node.c_str(),command.data(),nullptr,nullptr,TRUE,CREATE_NO_WINDOW|EXTENDED_STARTUPINFO_PRESENT|BELOW_NORMAL_PRIORITY_CLASS,nullptr,s.exporter.parent_path().c_str(),&startup.StartupInfo,&process);
+    const auto executable=aceio::io_path(s.node);auto directory=s.exporter.parent_path();
+    // All exporter/import/config paths are absolute. Windows rejects a long
+    // current directory even when the executable path is extended.
+    if(directory.native().size()>=248){wchar_t windows[32768]{};const auto n=GetWindowsDirectoryW(windows,32768);if(!n||n>=32768){DeleteProcThreadAttributeList(attributes);CloseHandle(stream);CloseHandle(nullIn);throw std::runtime_error("Cannot locate a supported worker directory");}directory=windows;}
+    BOOL launched=CreateProcessW(executable.c_str(),command.data(),nullptr,nullptr,TRUE,CREATE_NO_WINDOW|EXTENDED_STARTUPINFO_PRESENT|BELOW_NORMAL_PRIORITY_CLASS,nullptr,directory.c_str(),&startup.StartupInfo,&process);
     DeleteProcThreadAttributeList(attributes);
     CloseHandle(stream);CloseHandle(nullIn);if(!launched)throw std::runtime_error("Cannot start save exporter");
     CloseHandle(process.hThread);uint64_t start=GetTickCount64();
     while(WaitForSingleObject(process.hProcess,25)==WAIT_TIMEOUT){
-        if(verifyBeforeCommit&&!approved&&fs::is_regular_file(fs::path(gate.prefix.wstring()+L".ready"))){
+        if(verifyBeforeCommit&&!approved&&aceio::is_regular_file(fs::path(gate.prefix.wstring()+L".ready"))){
             bool valid=false;try{const auto ready=readJson(fs::path(gate.prefix.wstring()+L".ready"));valid=ready.at("request")==gate.prefix.filename().u8string()&&!cancelled()&&verifyBeforeCommit();}catch(...){valid=false;}
             if(!valid){TerminateProcess(process.hProcess,ERROR_CANCELLED);WaitForSingleObject(process.hProcess,5000);CloseHandle(process.hProcess);throw std::runtime_error("Dynasty changed before publication commit; history unchanged");}
             try{const auto allow=fs::path(gate.prefix.wstring()+L".allow");writeAtomic(fs::path(allow.wstring()+L".tmp"),allow,Json{{"format",1},{"request",gate.prefix.filename().u8string()},{"approved",true}});approved=true;}
@@ -130,8 +135,8 @@ inline DWORD exportSave(const Settings& s,const fs::path& output,const fs::path&
     if(verifyBeforeCommit&&code==0&&!approved)throw std::runtime_error("Generator exited without publication approval");return code;
 }
 inline void writeTextAtomic(const fs::path& temporary,const fs::path& final,const std::string& text){
-    {std::ofstream out(temporary,std::ios::binary|std::ios::trunc);if(!out)throw std::runtime_error("Cannot create refreshed cache");out.write(text.data(),static_cast<std::streamsize>(text.size()));out.flush();if(!out)throw std::runtime_error("Cannot finish refreshed cache");}
-    if(!MoveFileExW(temporary.c_str(),final.c_str(),MOVEFILE_REPLACE_EXISTING|MOVEFILE_WRITE_THROUGH))throw std::runtime_error("Cannot publish refreshed cache");
+    {aceio::ofstream out(temporary,std::ios::binary|std::ios::trunc);if(!out)throw std::runtime_error("Cannot create refreshed cache");out.write(text.data(),static_cast<std::streamsize>(text.size()));out.flush();if(!out)throw std::runtime_error("Cannot finish refreshed cache");}
+    if(!aceio::move_file(temporary.c_str(),final.c_str(),MOVEFILE_REPLACE_EXISTING|MOVEFILE_WRITE_THROUGH))throw std::runtime_error("Cannot publish refreshed cache");
 }
 inline void writeAtomic(const fs::path& temporary,const fs::path& final,const Json& j){writeTextAtomic(temporary,final,j.dump());}
 class Worker {
@@ -154,10 +159,10 @@ public:
             if(cancelled())throw std::runtime_error("Feed refresh stopped");
             const auto hash=feed.at("sha256").get<std::string>();
             writeAtomic(directory/L"social-feed.json.tmp",directory/L"social-feed.json",feed);
-            std::error_code ec;fs::remove(raw,ec);raw.clear();watch.success(before);lastError.clear();
+            std::error_code ec;aceio::remove(raw,ec);raw.clear();watch.success(before);lastError.clear();
             if(hash==lastHash)return {};lastHash=hash;
             report({{"event","feed_refresh_ready"},{"sha256",hash},{"week",feed.at("week")},{"posts",feed.at("posts").size()}});return feed;
-        }catch(const std::exception& e){watch.failure(GetTickCount64());if(lastError!=e.what()){lastError=e.what();report({{"event","feed_refresh_failed"},{"reason",lastError},{"lastGoodFeedRetained",true}});}std::error_code ec;if(!raw.empty())fs::remove(raw,ec);return {};}
+        }catch(const std::exception& e){watch.failure(GetTickCount64());if(lastError!=e.what()){lastError=e.what();report({{"event","feed_refresh_failed"},{"reason",lastError},{"lastGoodFeedRetained",true}});}std::error_code ec;if(!raw.empty())aceio::remove(raw,ec);return {};}
     }
 };
 }

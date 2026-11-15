@@ -1,3 +1,5 @@
+using File = Ace.DynastyCOT.StorageFile;
+using Path = Ace.DynastyCOT.StoragePath;
 using System;
 using System.ComponentModel;
 using System.IO;
@@ -69,6 +71,7 @@ namespace OfflineDynastySettings
             internal bool HasExited { get { return ExitCode!=259; } }
             internal static DetachedProcess Start(string exe,string descriptor,Action<string> log)
             {
+                Ace.DynastyCOT.StorageIO.RequireExecutablePath(exe);
                 StartupInfo startup=new StartupInfo { Size=(uint)Marshal.SizeOf(typeof(StartupInfo)),Flags=1,ShowWindow=0 };
                 ProcessInfo info;uint flags=0x08000000;bool inJob;
                 if(IsProcessInJob(new IntPtr(-1),IntPtr.Zero,out inJob) && inJob)flags|=0x01000000;

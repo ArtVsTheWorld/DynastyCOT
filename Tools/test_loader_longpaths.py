@@ -1,0 +1,12 @@
+from pathlib import Path
+import subprocess,datetime,json
+r=Path.cwd();w=r/'Build/LongPathAudit'/('Loader-'+datetime.datetime.now().strftime('%H%M%S'));w.mkdir();p=w/'ManagedRuntimeLoaderTests.cs';s=(r/'Modules/GamedayAtmosphere/Tests/ManagedRuntimeLoaderTests.cs').read_text();s='using File=Ace.DynastyCOT.StorageFile;using Directory=Ace.DynastyCOT.StorageDirectory;using Path=Ace.DynastyCOT.StoragePath;\n'+s
+needle='            // Native marshalling and read-only queries against this test itself.'
+extra='''            string longFolder=Path.Combine(folder,new string('a',120),new string('b',120));Directory.CreateDirectory(longFolder);string longFile=Path.Combine(longFolder,"GamedayAtmosphereNative-2.1.40.dll");File.WriteAllText(longFile,"never loaded");
+            var longApi=new Fake{File=longFile};ManagedRuntimeLoader.Load(42,longFile,longApi,s=>{});Check(longApi.Starts==1&&Encoding.Unicode.GetString(longApi.Bytes)==Ace.DynastyCOT.StorageIO.IoPath(longFile)+"\\0","Long remote load uses extended path exactly once");
+            var longExisting=new Fake{File=longFile,Existing=true};ManagedRuntimeLoader.Load(42,Ace.DynastyCOT.StorageIO.IoPath(longFile),longExisting,s=>{});Check(longExisting.Starts==0,"Prefix is not a different runtime identity");
+            var wrongLong=new Fake{File=longFile,Existing=true,WrongExistingPath=true};Failure(wrongLong);Check(wrongLong.Starts==0,"Long path cannot bypass exact ownership");
+''';assert needle in s;s=s.replace(needle,extra+needle);p.write_text(s);exe=w/'ManagedRuntimeLoaderTests.exe';src=r/'Modules/GamedayAtmosphere/Source';subprocess.run([r'C:\Windows\Microsoft.NET\Framework64\v4.0.30319\csc.exe','/nologo','/platform:x64','/warnaserror+','/out:'+str(exe),str(p),str(src/'ManagedRuntimeLoader.cs'),str(src/'LaunchDiagnostics.cs'),str(r/'Core/UserStorage.cs')],check=True);result=[]
+for legacy,block in [('true','true'),('true','false'),('false','true'),('false','false')]:
+ Path(str(exe)+'.config').write_text('<configuration><runtime><AppContextSwitchOverrides value="Switch.System.IO.UseLegacyPathHandling='+legacy+';Switch.System.IO.BlockLongPaths='+block+'" /></runtime></configuration>');v=subprocess.run([str(exe)],capture_output=True,text=True);print(legacy,block,v.stdout+v.stderr);result.append(dict(legacy=legacy,block=block,code=v.returncode,result=v.stdout+v.stderr))
+(r/'Build/LongPathAudit/loader-results.json').write_text(json.dumps(result,indent=2));assert all(x['code']==0 for x in result)

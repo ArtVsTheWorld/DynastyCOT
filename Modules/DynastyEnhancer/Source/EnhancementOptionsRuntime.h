@@ -1,4 +1,5 @@
 #pragma once
+#include "../../../Core/NativeFileIO.h"
 #include "EnhancementOptions.h"
 #include <filesystem>
 #include <fstream>
@@ -67,9 +68,9 @@ public:
         // fails during a Dynasty switch. The next worker pass can retry them.
         flush();std::lock_guard<std::mutex> ioGuard(ioMutex);
         const auto file=root/(std::to_string(number)+".json");
-        if(std::filesystem::exists(file)){
-            if(std::filesystem::file_size(file)>4096)throw std::runtime_error("Dynasty Enhancement settings exceed bounds");
-            std::ifstream input(file);nlohmann::json saved;input>>saved;
+        if(aceio::exists(file)){
+            if(aceio::file_size(file)>4096)throw std::runtime_error("Dynasty Enhancement settings exceed bounds");
+            aceio::ifstream input(file);nlohmann::json saved;input>>saved;
             selected=decodeOptions(saved,static_cast<uint32_t>(number));
         }
         std::lock_guard<std::mutex> guard(mutex);league=static_cast<uint32_t>(number);selectedProfile=selected;currentRecruitInterest=unsigned(selected.interest);ready=true;dirty=false;++revision;currentOptions=selected.packed();currentOptionsLeague=league;shared.publish(league,selected);
@@ -86,10 +87,10 @@ public:
         std::lock_guard<std::mutex> ioGuard(ioMutex);
         uint32_t id=0;unsigned serial=0;Options value;
         {std::lock_guard<std::mutex> guard(mutex);if(!dirty)return;id=league;serial=revision;value=selectedProfile;}
-        std::filesystem::create_directories(root);const auto file=root/(std::to_string(id)+".json"),temp=root/(std::to_string(id)+".tmp");
+        aceio::create_directories(root);const auto file=root/(std::to_string(id)+".json"),temp=root/(std::to_string(id)+".tmp");
         nlohmann::json saved={{"format",2},{"fogDomainsVersion",1},{"league",id},{"socialMedia",value.social},{"recruitingFog",value.recruiting},{"rosterFog",value.roster},{"teamFog",value.team},{"dollarValues",value.dollars},{"playerGradeScale",unsigned(value.scale)},{"recruitingGradeScale",unsigned(value.recruitingScale)},{"athleticMeasurables",value.measurables},{"teamGradeScale",unsigned(value.teamScale)},{"ratingColors",value.colors},{"recruitInterestDisplay",unsigned(value.interest)}};
-        {std::ofstream out(temp,std::ios::binary|std::ios::trunc);out<<saved.dump(2);out.flush();if(!out)throw std::runtime_error("Cannot write Dynasty Enhancement settings");}
-        if(!MoveFileExW(temp.c_str(),file.c_str(),MOVEFILE_REPLACE_EXISTING|MOVEFILE_WRITE_THROUGH))throw std::runtime_error("Cannot commit Dynasty Enhancement settings");
+        {aceio::ofstream out(temp,std::ios::binary|std::ios::trunc);out<<saved.dump(2);out.flush();if(!out)throw std::runtime_error("Cannot write Dynasty Enhancement settings");}
+        if(!aceio::move_file(temp.c_str(),file.c_str(),MOVEFILE_REPLACE_EXISTING|MOVEFILE_WRITE_THROUGH))throw std::runtime_error("Cannot commit Dynasty Enhancement settings");
         std::lock_guard<std::mutex> guard(mutex);if(league==id&&revision==serial)dirty=false;
     }
 };

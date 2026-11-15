@@ -1,3 +1,6 @@
+using File = Ace.DynastyCOT.StorageFile;
+using Directory = Ace.DynastyCOT.StorageDirectory;
+using Path = Ace.DynastyCOT.StoragePath;
 using System;
 using System.Collections.Generic;
 using System.Globalization;
@@ -78,7 +81,7 @@ namespace OfflineDynastySettings {
             string path=FilePath(plugins),temp=path+"."+Guid.NewGuid().ToString("N")+".tmp";
             Directory.CreateDirectory(Path.GetDirectoryName(path));
             try {
-                using(var file=new FileStream(temp,FileMode.CreateNew,FileAccess.Write,FileShare.None))
+                using(var file=Ace.DynastyCOT.StorageIO.OpenFile(temp,FileMode.CreateNew,FileAccess.Write,FileShare.None))
                 using(var writer=new StreamWriter(file)) {
                     writer.Write(new JavaScriptSerializer().Serialize(new Dictionary<string,object>{{"format",1},{"dynasties",records}}));
                     writer.Flush();file.Flush(true);

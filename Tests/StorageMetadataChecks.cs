@@ -1,0 +1,10 @@
+using System;using System.IO;using System.Reflection;using Ace.DynastyCOT;
+[assembly:System.Reflection.AssemblyFileVersion("3.4.5.6")]
+class StorageMetadataChecks {
+ static volatile bool stop;
+ static int Main(string[] args){try{int count=0;foreach(string path in args){var expected=AssemblyName.GetAssemblyName(path);var actual=StorageAssembly.GetAssemblyName(path);if(actual.Name!=expected.Name||actual.Version!=expected.Version)throw new Exception("Metadata mismatch "+path);count++;}
+ var collector=new System.Threading.Thread(()=>{while(!stop){GC.Collect(2,GCCollectionMode.Forced,true,true);System.Threading.Thread.Sleep(1);}});collector.IsBackground=true;collector.Start();try{for(int i=0;i<500;i++){var version=StorageVersionInfo.GetVersionInfo(typeof(StorageMetadataChecks).Assembly.Location);if(version.FileVersion!="3.4.5.6")throw new Exception("Version resource moved during collection");}}finally{stop=true;collector.Join(5000);}
+ string root=Path.Combine(Path.GetTempPath(),"CotMetadataFixture-"+Guid.NewGuid().ToString("N"));Directory.CreateDirectory(root);try{byte[] original=File.ReadAllBytes(args[0]);int[] lengths={0,1,2,60,64,100,300,512,1024};foreach(int n in lengths){var file=Path.Combine(root,"truncated-"+n+".dll");var b=new byte[Math.Min(n,original.Length)];Array.Copy(original,b,b.Length);File.WriteAllBytes(file,b);bool rejected=false;try{StorageAssembly.GetAssemblyName(file);}catch(BadImageFormatException){rejected=true;}if(!rejected)throw new Exception("Malformed PE accepted "+n);count++;}
+ for(int i=0;i<32;i++){var b=(byte[])original.Clone();b[60]=(byte)(i*8);b[61]=255;b[62]=255;b[63]=127;string file=Path.Combine(root,"bad-rva.dll");File.WriteAllBytes(file,b);bool rejected=false;try{StorageAssembly.GetAssemblyName(file);}catch(BadImageFormatException){rejected=true;}if(!rejected)throw new Exception("Out-of-bounds PE accepted");count++;}
+ }finally{Directory.Delete(root,true);}Console.WriteLine("PASS "+count+" metadata identity parity / malformed PE rejection checks plus 500 version-resource reads during compacting GC; no assembly execution.");return 0;}catch(Exception e){Console.Error.WriteLine(e);return 1;}}
+}

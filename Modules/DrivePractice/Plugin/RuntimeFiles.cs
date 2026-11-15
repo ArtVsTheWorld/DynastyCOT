@@ -1,3 +1,5 @@
+using File = Ace.DynastyCOT.StorageFile;
+using Path = Ace.DynastyCOT.StoragePath;
 using System;
 using System.IO;
 using System.Security.Cryptography;
@@ -19,7 +21,7 @@ namespace SituationalPractice {
    const string repair="Restore the plugin DLL and matching SituationalPractice runtime folder from the same release ZIP.";
 #endif
    if(!File.Exists(path))throw new FileNotFoundException("Missing runtime helper: "+path+". "+repair,path);
-   FileStream file=new FileStream(path,FileMode.Open,FileAccess.Read,FileShare.Read);
+   FileStream file=Ace.DynastyCOT.StorageIO.OpenFile(path,FileMode.Open,FileAccess.Read,FileShare.Read);
    try { string actual;using(var sha=SHA256.Create())actual=BitConverter.ToString(sha.ComputeHash(file)).Replace("-","").ToLowerInvariant();
     if(!String.Equals(actual,ExpectedRuntime.Hash,StringComparison.OrdinalIgnoreCase))throw new InvalidDataException("Runtime helper hash mismatch: "+path+". Expected SHA-256 "+ExpectedRuntime.Hash+"; actual "+actual+". "+repair+" No helper launched.");
     file.Position=0;return file;

@@ -1,0 +1,3 @@
+#include "../Modules/DynastyEnhancer/Source/FeedRefresh.h"
+#include <iostream>
+int wmain(int argc,wchar_t** argv){try{if(argc!=5)return 2;social::refresh::Settings s;s.node=argv[1];s.exporter=argv[2];s.config=argv[3];s.save=s.config;auto output=std::filesystem::path(argv[4]);auto code=social::refresh::exportSave(s,output,output.parent_path()/L"worker.log",[]{return false;});auto j=social::refresh::readJson(output);if(code||j.at("history")!="preserved words")return 1;std::cout<<"PASS real packaged Node worker: long executable/script/input/output, absolute context, verified inherited handles and safe short cwd\n";return 0;}catch(const std::exception& e){std::cerr<<e.what()<<'\n';return 1;}}

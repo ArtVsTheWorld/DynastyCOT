@@ -1,4 +1,5 @@
 #pragma once
+#include "../../../Core/NativeFileIO.h"
 #include "RecruitResumeNotes.h"
 #include "RecruitResumeStateRanks.h"
 #include "RecruitCollegeBackground.h"
@@ -79,14 +80,14 @@ inline NativeClass parseNativeClass(const Json& raw){
     if((result.entries.empty()&&result.unavailable.empty())||result.entries.size()+result.unavailable.size()>16000)throw std::runtime_error("Native recruit class unavailable or oversized");return result;
 }
 inline Json loadJournal(const std::filesystem::path& file,const std::string& league){
-    if(!std::filesystem::exists(file))return {{"format",1},{"league",league},{"entries",Json::object()}};
-    if(std::filesystem::file_size(file)>16u*1024*1024)throw std::runtime_error("Resume journal exceeds bounds");
-    std::ifstream in(file,std::ios::binary);Json data;in>>data;if(!in||data.at("format")!=1||data.at("league")!=league||!data.at("entries").is_object()||data.at("entries").size()>16000)throw std::runtime_error("Unsupported resume journal");
+    if(!aceio::exists(file))return {{"format",1},{"league",league},{"entries",Json::object()}};
+    if(aceio::file_size(file)>16u*1024*1024)throw std::runtime_error("Resume journal exceeds bounds");
+    aceio::ifstream in(file,std::ios::binary);Json data;in>>data;if(!in||data.at("format")!=1||data.at("league")!=league||!data.at("entries").is_object()||data.at("entries").size()>16000)throw std::runtime_error("Unsupported resume journal");
     for(const auto& v:data.at("entries")){if(v.at("modelVersion")!=2&&v.at("modelVersion")!=3)throw std::runtime_error("Unsupported saved resume model");
         if(v.value("kind",std::string())=="transfer"){if(!v.contains("gpa")||!v.at("gpa").is_number()||v.at("gpa").get<double>()<2||v.at("gpa").get<double>()>4.5)throw std::runtime_error("Invalid transfer academic record");}else validate(v);}return data;
 }
 inline void persistClass(NativeClass& c,const std::filesystem::path& root){
-    const auto folder=root/L"RecruitResumeHistory"/c.league;std::filesystem::create_directories(folder);
+    const auto folder=root/L"RecruitResumeHistory"/c.league;aceio::create_directories(folder);
     const auto path=folder/(std::to_string(c.season)+".json");auto data=loadJournal(path,c.league);const auto previous=loadJournal(folder/(std::to_string(c.season-1)+".json"),c.league);bool dirty=false;
     for(auto& [id,entry]:c.entries){(void)id;
         if(data["entries"].contains(entry.identity))entry.saved=data["entries"].at(entry.identity);
@@ -112,7 +113,7 @@ inline void persistClass(NativeClass& c,const std::filesystem::path& root){
         }
         if(!data["entries"].contains(entry.identity)||data["entries"].at(entry.identity)!=entry.saved){data["entries"][entry.identity]=entry.saved;dirty=true;}
     }
-    if(dirty){const auto text=data.dump();if(text.size()>16u*1024*1024)throw std::runtime_error("Resume journal exceeds write bounds");auto temp=path;temp+=L".tmp";{std::ofstream out(temp,std::ios::binary|std::ios::trunc);out<<text;out.flush();if(!out)throw std::runtime_error("Cannot write resume journal");}
-        if(!MoveFileExW(temp.c_str(),path.c_str(),MOVEFILE_REPLACE_EXISTING|MOVEFILE_WRITE_THROUGH))throw std::runtime_error("Cannot atomically publish resume journal");}
+    if(dirty){const auto text=data.dump();if(text.size()>16u*1024*1024)throw std::runtime_error("Resume journal exceeds write bounds");auto temp=path;temp+=L".tmp";{aceio::ofstream out(temp,std::ios::binary|std::ios::trunc);out<<text;out.flush();if(!out)throw std::runtime_error("Cannot write resume journal");}
+        if(!aceio::move_file(temp.c_str(),path.c_str(),MOVEFILE_REPLACE_EXISTING|MOVEFILE_WRITE_THROUGH))throw std::runtime_error("Cannot atomically publish resume journal");}
 }
 }

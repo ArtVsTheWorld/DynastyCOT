@@ -1,3 +1,4 @@
+#include "../../../Core/NativeFileIO.h"
 #include "UserRuntimePaths.h"
 #include "RuntimeDiagnostics.h"
 #include "../../../Compatibility/PracticeTextSetter.generated.h"
@@ -894,7 +895,7 @@ DWORD WINAPI worker(void*){
             }
 #endif
 #if defined(RECRUIT_NOTES_PROBE)
-            if(notesProbeInstalled&&notesObservedAsset){std::ofstream out(folder/L"recruit-notes-observed.json");out<<Json({{"pid",GetCurrentProcessId()},{"asset",notesObservedAsset.load()},{"owner",notesObservedOwner.load()}}).dump();
+            if(notesProbeInstalled&&notesObservedAsset){aceio::ofstream out(folder/L"recruit-notes-observed.json");out<<Json({{"pid",GetCurrentProcessId()},{"asset",notesObservedAsset.load()},{"owner",notesObservedOwner.load()}}).dump();
                 if(replace(reinterpret_cast<void*>(notesLengthHook),reinterpret_cast<void*>(originalScriptLength),0xbc42fe8,0xb0))notesProbeInstalled=false;}
 #endif
             flush();Sleep(200);}flush();

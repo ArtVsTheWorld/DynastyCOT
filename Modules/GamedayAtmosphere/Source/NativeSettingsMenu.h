@@ -1,4 +1,5 @@
 #pragma once
+#include "../../../Core/NativeFileIO.h"
 #include <windows.h>
 #include <filesystem>
 #include <atomic>
@@ -128,9 +129,9 @@ template<bool Pause> class BasicMenu {
         return true;
     }
     double readOption(size_t i){
-        const auto& o=Options[i];wchar_t raw[128]{};GetPrivateProfileStringW(o.section,o.key,L"",raw,128,path_.c_str());
+        const auto& o=Options[i];wchar_t raw[128]{};aceio::ini_string(o.section,o.key,L"",raw,128,path_.c_str());
         // Preserve the threshold from pre-layout INIs until the user edits it.
-        if(!raw[0]&&!std::wcscmp(o.key,L"FullScreenMinimumYards"))GetPrivateProfileStringW(L"Replays",o.key,L"",raw,128,path_.c_str());
+        if(!raw[0]&&!std::wcscmp(o.key,L"FullScreenMinimumYards"))aceio::ini_string(L"Replays",o.key,L"",raw,128,path_.c_str());
         if(o.kind==Kind::Profile){for(int n=0;n<4;++n)if(!_wcsicmp(raw,ProfileValues[n]))return n;return 0;}
         if(o.kind!=Kind::Choice)return config::integer(raw,static_cast<int>(o.factory),static_cast<int>(o.low),static_cast<int>(o.high)).value;
         return config::real(raw,static_cast<float>(o.factory),static_cast<float>(o.low),static_cast<float>(o.high)).value;
@@ -139,9 +140,9 @@ template<bool Pause> class BasicMenu {
         if(!active_||failed_||!owned(key)||!std::isfinite(value))return;
         size_t i=static_cast<size_t>(key-FirstKey);const auto& o=Options[i];
         if(value<o.low||value>o.high||std::abs(value-current_[i])<.00001)return;
-        if(GetPrivateProfileIntW(L"General",L"ConfigVersion",2,path_.c_str())>2)return;
+        if(aceio::ini_int(L"General",L"ConfigVersion",2,path_.c_str())>2)return;
         wchar_t text[64]{};std::swprintf(text,64,L"%.9g",value);const wchar_t* saved=o.kind==Kind::Profile?ProfileValues[static_cast<int>(value)]:text;
-        if(!WritePrivateProfileStringW(o.section,o.key,saved,path_.c_str())){fault("Could not save a DGA setting to its INI; menu writes disabled for this session.");return;}
+        if(!aceio::ini_write(o.section,o.key,saved,path_.c_str())){fault("Could not save a DGA setting to its INI; menu writes disabled for this session.");return;}
         current_[i]=value;
     }
 public:
@@ -160,7 +161,7 @@ public:
         int category=number(in);
         if(!failed_&&knownProvider(p)){
             if(category==Category&&scriptReady_){ArrayWriter writer{out};settingsmenu::list(writer);if(!writer.okay)fault("Could not render DGA settings controls; menu writes disabled for this session.");return;}
-            if(category==3&&GetPrivateProfileIntW(L"General",L"ConfigVersion",2,path_.c_str())<=2&&root(p,out))return;
+            if(category==3&&aceio::ini_int(L"General",L"ConfigVersion",2,path_.c_str())<=2&&root(p,out))return;
         }
         invoke(original_,p,out,in);
     }

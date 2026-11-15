@@ -1,3 +1,7 @@
+using File = Ace.DynastyCOT.StorageFile;
+using Directory = Ace.DynastyCOT.StorageDirectory;
+using Path = Ace.DynastyCOT.StoragePath;
+using DirectoryInfo = Ace.DynastyCOT.StorageDirectoryInfo;
 using System;
 using System.IO;
 using System.Text;

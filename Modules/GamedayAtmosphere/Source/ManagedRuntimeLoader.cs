@@ -1,3 +1,5 @@
+using File = Ace.DynastyCOT.StorageFile;
+using Path = Ace.DynastyCOT.StoragePath;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
@@ -82,7 +84,7 @@ namespace DynamicGamedayAtmosphere {
                 foreach(var module in modules)if(String.Equals(module.Name,localOwner.Name,StringComparison.OrdinalIgnoreCase)&&String.Equals(Path.GetFullPath(module.Path),Path.GetFullPath(localOwner.Path),StringComparison.OrdinalIgnoreCase)){remoteOwner=module;break;}
                 if(remoteOwner==null||offset>=remoteOwner.Size)throw new InvalidOperationException("Matching Windows loader module is unavailable in the game.");
                 long entry=checked(remoteOwner.Base+offset);
-                byte[] path=Encoding.Unicode.GetBytes(file+"\0");
+                byte[] path=Encoding.Unicode.GetBytes(Ace.DynastyCOT.StorageIO.IoPath(file)+"\0");
                 step="allocate game runtime-path buffer";allocation=api.Allocate(process,path.Length);
                 step="write native runtime path";api.Write(process,allocation,path);
                 step="start direct native runtime load";thread=api.Start(process,entry,allocation);started=true;
@@ -122,6 +124,8 @@ namespace DynamicGamedayAtmosphere {
         [DllImport("kernel32.dll",CharSet=CharSet.Ansi,ExactSpelling=true,SetLastError=true)] static extern IntPtr GetProcAddress(IntPtr module,string name);
         [DllImport("kernel32.dll",SetLastError=true)] static extern UIntPtr VirtualQuery(IntPtr address,out MemoryInfo info,UIntPtr size);
         [DllImport("kernel32.dll",CharSet=CharSet.Unicode,SetLastError=true)] static extern uint GetModuleFileName(IntPtr module,StringBuilder value,int size);
+        [DllImport("psapi.dll",ExactSpelling=true,SetLastError=true)] static extern bool EnumProcessModulesEx(IntPtr process,[Out] IntPtr[] modules,uint bytes,out uint needed,uint filter);
+        [DllImport("psapi.dll",CharSet=CharSet.Unicode,ExactSpelling=true,SetLastError=true)] static extern uint GetModuleFileNameExW(IntPtr process,IntPtr module,StringBuilder value,int size);
         [DllImport("psapi.dll",SetLastError=true)] static extern bool GetModuleInformation(IntPtr process,IntPtr module,out ModuleInfo info,uint size);
         [DllImport("kernel32.dll")] static extern IntPtr GetCurrentProcess();
         [DllImport("kernel32.dll",SetLastError=true)] static extern IntPtr VirtualAllocEx(IntPtr process,IntPtr address,UIntPtr size,uint allocation,uint protect);
@@ -134,16 +138,47 @@ namespace DynamicGamedayAtmosphere {
         static Exception Error(){return new Win32Exception(Marshal.GetLastWin32Error());}
         public IntPtr Open(int pid){var p=OpenProcess(0x103a,false,pid);if(p==IntPtr.Zero)throw Error();return p;}
         public string Image(IntPtr process){var text=new StringBuilder(32768);int size=text.Capacity;if(!QueryFullProcessImageName(process,0,text,ref size))throw Error();return text.ToString();}
+        static bool PathBufferFailure(int error){return error==234||error==122;}
+        // Toolhelp can fail with ERROR_MORE_DATA on a long image path before
+        // returning any row. This alternate snapshot is read-only and bounded.
+        static IList<RuntimeModule> FullPathModules(int pid){
+            IntPtr query=OpenProcess(0x410,false,pid);if(query==IntPtr.Zero)throw Error();
+            try{
+                var handles=new IntPtr[4096];uint needed;
+                if(!EnumProcessModulesEx(query,handles,(uint)(handles.Length*IntPtr.Size),out needed,2))throw Error();
+                if(needed==0||needed>handles.Length*IntPtr.Size||needed%IntPtr.Size!=0)throw new Win32Exception(122,"Module snapshot exceeded its bounded buffer.");
+                var list=new List<RuntimeModule>();
+                for(int i=0;i<needed/IntPtr.Size;++i){
+                    var full=new StringBuilder(32768);uint count=GetModuleFileNameExW(query,handles[i],full,full.Capacity);
+                    if(count==0)throw Error();if(count>=full.Capacity)throw new Win32Exception(122);
+                    ModuleInfo info;if(!GetModuleInformation(query,handles[i],out info,(uint)Marshal.SizeOf(typeof(ModuleInfo))))throw Error();
+                    if(info.Base!=handles[i]||info.Size==0)throw new Win32Exception(299,"Module changed while reading ownership information.");
+                    string path=full.ToString();list.Add(new RuntimeModule(Path.GetFileName(path),path,info.Base.ToInt64(),info.Size));
+                }
+                return list;
+            }finally{CloseHandle(query);}
+        }
         public IList<RuntimeModule> Modules(int pid){
-            IntPtr snapshot=CreateToolhelp32Snapshot(0x18,pid);if(snapshot==new IntPtr(-1))throw Error();
+            IntPtr snapshot=CreateToolhelp32Snapshot(0x18,pid);if(snapshot==new IntPtr(-1)){int error=Marshal.GetLastWin32Error();if(PathBufferFailure(error))return FullPathModules(pid);throw new Win32Exception(error);}
+            IntPtr query=IntPtr.Zero;
             try{
                 var entry=new ModuleEntry();entry.Size=(uint)Marshal.SizeOf(typeof(ModuleEntry));
                 var list=new List<RuntimeModule>();bool found=Module32FirstW(snapshot,ref entry);
-                if(!found)throw Error();
-                do{list.Add(new RuntimeModule(entry.Name,entry.Path,entry.Base.ToInt64(),entry.Bytes));found=Module32NextW(snapshot,ref entry);}while(found);
-                int error=Marshal.GetLastWin32Error();if(error!=18)throw new Win32Exception(error);
+                if(!found){int firstError=Marshal.GetLastWin32Error();if(PathBufferFailure(firstError))return FullPathModules(pid);throw new Win32Exception(firstError);}
+                do{
+                    string path=entry.Path;
+                    // Toolhelp has a fixed MAX_PATH buffer. Never accept a
+                    // truncated path as ownership evidence for a COT runtime.
+                    if(path!=null&&path.Length>=259){
+                        if(query==IntPtr.Zero){query=OpenProcess(0x410,false,pid);if(query==IntPtr.Zero)throw Error();}
+                        var full=new StringBuilder(32768);uint count=GetModuleFileNameExW(query,entry.Module,full,full.Capacity);
+                        if(count==0)throw Error();if(count>=full.Capacity)throw new Win32Exception(122);path=full.ToString();
+                    }
+                    list.Add(new RuntimeModule(entry.Name,path,entry.Base.ToInt64(),entry.Bytes));found=Module32NextW(snapshot,ref entry);
+                }while(found);
+                int error=Marshal.GetLastWin32Error();if(error!=18){if(PathBufferFailure(error))return FullPathModules(pid);throw new Win32Exception(error);}
                 return list;
-            }finally{CloseHandle(snapshot);}
+            }finally{if(query!=IntPtr.Zero)CloseHandle(query);CloseHandle(snapshot);}
         }
         public long LocalLoadLibrary(out RuntimeModule owner){
             IntPtr module=GetModuleHandle("kernel32.dll");if(module==IntPtr.Zero)throw Error();

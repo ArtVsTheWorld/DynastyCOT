@@ -1,4 +1,5 @@
 #pragma once
+#include "../../../Core/NativeFileIO.h"
 #include <cstdint>
 #include <filesystem>
 
@@ -13,10 +14,10 @@ class SettingsPoll {
 public:
     bool due(const std::filesystem::path& path,uint64_t now){
         std::error_code ec;
-        auto nextStamp=std::filesystem::last_write_time(path,ec);
+        auto nextStamp=aceio::last_write_time(path,ec);
         bool available=!ec;
         uintmax_t nextBytes=0;
-        if(available){nextBytes=std::filesystem::file_size(path,ec);available=!ec;}
+        if(available){nextBytes=aceio::file_size(path,ec);available=!ec;}
         bool changed=!seen||available!=hadFile||(available&&(stamp!=nextStamp||bytes!=nextBytes));
         bool refresh=changed||now<lastRead||now-lastRead>=10000;
         seen=true;hadFile=available;stamp=nextStamp;bytes=nextBytes;

@@ -1,3 +1,6 @@
+using File = Ace.DynastyCOT.StorageFile;
+using Directory = Ace.DynastyCOT.StorageDirectory;
+using Path = Ace.DynastyCOT.StoragePath;
 using System;
 using System.Drawing;
 using System.Collections.Generic;

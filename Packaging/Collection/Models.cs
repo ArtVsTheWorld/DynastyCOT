@@ -1,3 +1,5 @@
+using File = Ace.DynastyCOT.StorageFile;
+using FileInfo = Ace.DynastyCOT.StorageFileInfo;
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -28,6 +30,10 @@ namespace DynastyCOT.Collection {
   public long ArchiveBytes;
   public bool Prerelease;
   public override string ToString(){return Version+(Prerelease?" (test release)":"");}
+ }
+ internal static class VersionSelection {
+  internal static ModuleRelease LatestStable(Module module,IEnumerable<ModuleRelease> releases){return releases.Where(r=>!r.Prerelease).Concat(module.Current.Prerelease?new ModuleRelease[0]:new[]{module.Current}).OrderByDescending(r=>ReleaseRules.Numeric(r.Version)).FirstOrDefault();}
+  internal static bool KeepNewer(Plugin installed,ModuleRelease target,bool explicitlyChosen){return !explicitlyChosen&&installed!=null&&installed.Version!="unknown"&&(target==null||ReleaseRules.Numeric(installed.Version)>ReleaseRules.Numeric(target.Version));}
  }
  internal sealed class KnownFile {public string Path {get;set;} public string Module {get;set;} public string Sha256 {get;set;}}
  internal sealed class Catalog {
@@ -61,7 +67,7 @@ namespace DynastyCOT.Collection {
  }
  internal sealed class Installed {public string Module,Version,Sha256;}
  internal sealed class Receipt {public int Format=1;public List<Installed> Modules=new List<Installed>();}
- internal sealed class Plugin {public string Path,Module,Sha256,Version;public bool Known;}
+ internal sealed class Plugin {public string Path,Module,Sha256,Version,Identity;public bool Known,Program;}
  internal sealed class Inventory {
   public List<Plugin> Plugins=new List<Plugin>();
   public Dictionary<string,bool> LegacyEnabled=new Dictionary<string,bool>();
@@ -77,11 +83,13 @@ namespace DynastyCOT.Collection {
  }
  internal sealed class Operation {
   public string Path,Before,After,Backup,Module;
-  public bool Deferred;
+  public bool Deferred,BackupVerified;
  }
  internal sealed class Journal {
   public int Format=1;
   public string Root,Status,Action,Created;
+  public string FailureStage,FailureSource,FailureBackup,FailureMessage;
+  public int FailureCode;
   public List<Operation> Operations=new List<Operation>();
   public List<KnownFile> Programs=new List<KnownFile>();
  }
@@ -92,9 +100,13 @@ namespace DynastyCOT.Collection {
   internal Inventory Inventory;
   internal List<KnownFile> Programs=new List<KnownFile>();
   internal string Summary;
+  internal bool Repair;
+  internal List<MigrationFile> Migration=new List<MigrationFile>();
  }
+ internal sealed class MigrationFile {internal string Source,Destination,Hash;internal long Bytes;}
  internal sealed class Backup {
   internal string Directory;internal Journal Journal;
-  public override string ToString(){return Journal.Created+" — "+Journal.Action+(Journal.Status=="installing"?" (interrupted)":"");}
+  internal bool Restorable{get{return Journal.Status!="preparing"&&Journal.Status!="backup_failed";}}
+  public override string ToString(){return Journal.Created+" — "+Journal.Action+(!Restorable?" (backup incomplete; no program changes)":Journal.Status=="installing"?" (interrupted)":"");}
  }
 }

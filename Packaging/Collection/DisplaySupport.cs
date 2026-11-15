@@ -9,7 +9,7 @@ namespace DynastyCOT.Collection {
  internal static class DpiSupport {
   internal static void Initialize(){
    string config=Application.ExecutablePath+".config";
-   if(!System.IO.File.Exists(config)||Paths.HashFile(config)!=CollectionInfo.ConfigSha256)throw new System.IO.IOException("The installer's display configuration is missing or changed. Extract the complete setup ZIP and keep its .exe.config file beside the .exe. No installed plugins were changed.");
+   if(!Ace.DynastyCOT.StorageFile.Exists(config)||Paths.HashFile(config)!=CollectionInfo.ConfigSha256)throw new System.IO.IOException("The installer's display configuration is missing or changed. Extract the complete setup ZIP and keep its .exe.config file beside the .exe. No installed plugins were changed.");
   }
  }
  // A bounded Markdown subset rendered as native text. No browser, HTML, remote
@@ -37,7 +37,7 @@ namespace DynastyCOT.Collection {
    Clear();links.Clear();foreach(var font in fonts)font.Dispose();fonts.Clear();fontCache.Clear();
    string value=(markdown??"").Replace("\r\n","\n").Replace('\r','\n');if(value.Length>100000)value=value.Substring(0,100000)+"\n[Notes shortened]";
    bool code=false;foreach(string raw in value.Split('\n')){string line=raw;if(line.TrimStart().StartsWith("```")){code=!code;continue;}float size=Font.SizeInPoints;FontStyle style=FontStyle.Regular;
-    if(code)Add(line,size,style,true);else {var heading=Regex.Match(line,@"^ {0,3}(#{1,6})\s+(.+)$");if(heading.Success){size+=Math.Max(1,5-heading.Groups[1].Length);style=FontStyle.Bold;line=heading.Groups[2].Value;}else if(Regex.IsMatch(line,@"^\s*[-*+]\s+"))line=Regex.Replace(line,@"^\s*[-*+]\s+","• ");else if(line.StartsWith("> "))line="  "+line.Substring(2);Inline(line,size,style);}AppendText("\n");
+    if(code)Add(line,size,style,true);else {var heading=Regex.Match(line,@"^ {0,3}(#{1,6})\s+(.+)$");if(heading.Success){size+=Math.Max(1,5-heading.Groups[1].Length);style=FontStyle.Bold;line=heading.Groups[2].Value;}else if(Regex.IsMatch(line,@"^\s*[-*+]\s+"))line=Regex.Replace(line,@"^\s*[-*+]\s+","â€¢ ");else if(line.StartsWith("> "))line="  "+line.Substring(2);Inline(line,size,style);}AppendText("\n");
    }Select(0,0);ScrollToCaret();
   }
   protected override void Dispose(bool disposing){if(disposing)foreach(var font in fonts)font.Dispose();base.Dispose(disposing);}

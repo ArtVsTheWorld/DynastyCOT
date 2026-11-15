@@ -1,3 +1,7 @@
+using File = Ace.DynastyCOT.StorageFile;
+using Directory = Ace.DynastyCOT.StorageDirectory;
+using Path = Ace.DynastyCOT.StoragePath;
+using FileInfo = Ace.DynastyCOT.StorageFileInfo;
 // Standalone read-only settings monitor. No MMC/Frosty dependency, no game patches.
 using System;
 using System.Collections.Generic;
@@ -160,7 +164,7 @@ namespace OfflineDynastySettings
         private static void AtomicSave(string path, string contents, bool backup)
         {
             Directory.CreateDirectory(Path.GetDirectoryName(path)); string temporary=path+".helper.tmp";
-            using(FileStream file=new FileStream(temporary,FileMode.Create,FileAccess.Write,FileShare.None))
+            using(FileStream file=Ace.DynastyCOT.StorageIO.OpenFile(temporary,FileMode.Create,FileAccess.Write,FileShare.None))
             using(StreamWriter writer=new StreamWriter(file)) { writer.Write(contents); writer.Flush(); file.Flush(true); }
             if(File.Exists(path))File.Replace(temporary,path,backup?path+".bak":null); else File.Move(temporary,path);
         }

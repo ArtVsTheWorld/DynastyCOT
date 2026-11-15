@@ -1,4 +1,5 @@
 #pragma once
+#include "../../../Core/NativeFileIO.h"
 #include <filesystem>
 #include <fstream>
 #include <string>
@@ -39,8 +40,8 @@ public:
 inline bool ensureFolder(const std::filesystem::path& path){
     if(path.empty())return true;
     std::error_code ec;
-    if(std::filesystem::is_directory(path,ec))return true;
-    ec.clear();std::filesystem::create_directories(path,ec);
+    if(aceio::is_directory(path,ec))return true;
+    ec.clear();aceio::create_directories(path,ec);
     return !ec;
 }
 // Clear before the next entry would exceed the cap. No archives accumulate.
@@ -50,18 +51,18 @@ inline bool appendLog(const std::filesystem::path& path,const std::string& entry
     if(!ensureFolder(path.parent_path()))return false;
     size_t bytes=static_cast<size_t>((std::min)(limit,static_cast<uintmax_t>(entry.size())));
     uintmax_t existing=0;
-    if(std::filesystem::exists(path,ec)){existing=std::filesystem::file_size(path,ec);if(ec)return false;}
+    if(aceio::exists(path,ec)){existing=aceio::file_size(path,ec);if(ec)return false;}
     if(ec)return false;
     bool clear=existing>=limit||bytes>limit-existing;
-    std::ofstream file(path,std::ios::binary|std::ios::out|(clear?std::ios::trunc:std::ios::app));
+    aceio::ofstream file(path,std::ios::binary|std::ios::out|(clear?std::ios::trunc:std::ios::app));
     file.write(entry.data(),static_cast<std::streamsize>(bytes));return file.good();
 }
 // One worker-side open per batch/file. Caps still apply at entry boundaries.
 inline bool appendLogBatch(const std::filesystem::path& path,const std::vector<std::string>& entries,uintmax_t limit){
     if(!limit||!ensureFolder(path.parent_path()))return false;
     std::error_code ec;uintmax_t existing=0;
-    if(std::filesystem::exists(path,ec)){existing=std::filesystem::file_size(path,ec);if(ec)return false;}if(ec)return false;
-    std::ofstream file;bool okay=true;
+    if(aceio::exists(path,ec)){existing=aceio::file_size(path,ec);if(ec)return false;}if(ec)return false;
+    aceio::ofstream file;bool okay=true;
     for(const auto& entry:entries){
         if(entry.empty())continue;size_t n=static_cast<size_t>((std::min)(limit,static_cast<uintmax_t>(entry.size())));
         bool clear=existing>=limit||n>limit-existing;
@@ -74,8 +75,8 @@ inline bool appendLogBatch(const std::filesystem::path& path,const std::vector<s
 // readable one. Copy failure never destroys the old troubleshooting evidence.
 inline void prepareReadableLogs(const std::filesystem::path& folder){
     std::error_code ec;auto human=folder/L"DynamicGamedayAtmosphere.log",technical=folder/L"technical.log";
-    if(!std::filesystem::exists(technical,ec)&&!ec&&std::filesystem::exists(human,ec)&&!ec){
-        if(std::filesystem::copy_file(human,technical,std::filesystem::copy_options::none,ec)&&!ec){std::ofstream fresh(human,std::ios::trunc);}
+    if(!aceio::exists(technical,ec)&&!ec&&aceio::exists(human,ec)&&!ec){
+        if(aceio::copy_file(human,technical,std::filesystem::copy_options::none,ec)&&!ec){aceio::ofstream fresh(human,std::ios::trunc);}
     }
 }
 

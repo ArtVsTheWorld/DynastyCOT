@@ -1,3 +1,7 @@
+using File = Ace.DynastyCOT.StorageFile;
+using Directory = Ace.DynastyCOT.StorageDirectory;
+using Path = Ace.DynastyCOT.StoragePath;
+using DirectoryInfo = Ace.DynastyCOT.StorageDirectoryInfo;
 using System;
 using System.IO;
 using System.Text;
@@ -41,7 +45,7 @@ namespace DynamicGamedayAtmosphere.Diagnostics {
             try{
                 string path=Path.Combine(data,"Logs","status.txt");fresh=File.Exists(path)&&DateTime.UtcNow-File.GetLastWriteTimeUtc(path)<TimeSpan.FromSeconds(4);
                 if(!fresh){fullness.Text="Stadium fullness: waiting for the game";state.Text="Start MMC and an offline game with the current working DLL loaded.";pid=0;return;}
-                string text;using(var file=new FileStream(path,FileMode.Open,FileAccess.Read,FileShare.ReadWrite|FileShare.Delete))using(var reader=new StreamReader(file))text=reader.ReadToEnd();
+                string text;using(var file=Ace.DynastyCOT.StorageIO.OpenFile(path,FileMode.Open,FileAccess.Read,FileShare.ReadWrite|FileShare.Delete))using(var reader=new StreamReader(file))text=reader.ReadToEnd();
                 Match process=Regex.Match(text,@"Game process ID\s*:\s*(\d+)");pid=process.Success?Int32.Parse(process.Groups[1].Value,CultureInfo.InvariantCulture):0;
                 Match crowd=Regex.Match(text,@"Audio stadium fullness\s*:\s*([\d.]+)%");
                 fullness.Text=crowd.Success?"Stadium Fullness: "+crowd.Groups[1].Value+"%":"Stadium fullness: waiting for mapped seating";

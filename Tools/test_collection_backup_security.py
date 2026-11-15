@@ -1,0 +1,6 @@
+from pathlib import Path
+import datetime,json,subprocess,hashlib
+R=Path(__file__).resolve().parents[1];m=json.loads((R/'Build/current-collection-setup.json').read_text());w=R/'Build/DefenderBackupAudit'/('Tests-'+datetime.datetime.now().strftime('%H%M%S'));w.mkdir();src=R/'Packaging/Collection';exe=w/'BackupSecurityChecks.exe'
+subprocess.run([r'C:\Windows\Microsoft.NET\Framework64\v4.0.30319\csc.exe','/nologo','/platform:x64','/optimize+','/warnaserror+','/out:'+str(exe),'/reference:System.Web.Extensions.dll','/reference:System.IO.Compression.dll',str(Path(m['work'])/'CollectionInfo.cs'),*[str(src/(s+'.cs')) for s in ['Models','Paths','Installer','RepairData','Downloads']],str(R/'Core/UserStorage.cs'),str(R/'Tests/CollectionBackupSecurityChecks.cs')],check=True)
+p=subprocess.run([str(exe),str(w/'Fixtures'),m['catalog'],m['artifactRoot']],capture_output=True,text=True);(w/'results.log').write_text(p.stdout+p.stderr);print(p.stdout+p.stderr);assert p.returncode==0
+(R/'Build/DefenderBackupAudit/security-verification.json').write_text(json.dumps(dict(result=p.stdout.strip(),fixture=str(w),exeSha256=m['sha256'],sources=m['sources'],tests={str(p.relative_to(R)):hashlib.sha256(p.read_bytes()).hexdigest() for p in [Path(__file__),R/'Tests/CollectionBackupSecurityChecks.cs']},liveChanges=False,antivirusSettingsChanged=False),indent=2)+'\n')

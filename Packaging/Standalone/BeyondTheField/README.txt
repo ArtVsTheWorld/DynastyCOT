@@ -1,4 +1,4 @@
-Ace’s Beyond the Field 1.0.25 — Update 2 Hotfix
+Ace’s Beyond the Field 1.0.26 — Update 2 Hotfix 2
 
 Install or update
 Close MMC and the game. Find your usual MMC shortcut, right-click it and open Properties. Follow Target to MMCModManager.exe. Open the Plugins folder beside that file. Back up your old BeyondTheField.dll outside Plugins, then copy BeyondTheField.dll from this ZIP into Plugins. Replace the old copy.
@@ -6,7 +6,7 @@ Close MMC and the game. Find your usual MMC shortcut, right-click it and open Pr
 Settings and help
 Open Dynasty Settings > Beyond the Field. Press Win+R, paste %LOCALAPPDATA%\Ace\DynastyCOT\BeyondTheField and press Enter. For startup, open Logs for BeyondTheField-launcher.log. For scouting or feed problems, the guide names the other files.
 Open BeyondTheField-Player-Guide.pdf in this ZIP for examples and help. FEATURES.md lists the features.
-The included guide covers the unchanged gameplay features from 1.0.24. This hotfix improves startup and error details. Reports about missing paths remain under investigation.
+The included guide covers the unchanged gameplay features from 1.0.24. This hotfix fixes the reproduced long-path startup/history failure and improves runtime file handling. A genuinely missing or unavailable file remains a separate issue. Existing settings, Notes and published posts are preserved.
 
 Roll back
 Close MMC and the game. Restore your backed-up DLL. If you used the collection installer, open Backups and restore the matching change. Keep your settings and history folders.

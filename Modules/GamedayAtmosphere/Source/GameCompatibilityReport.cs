@@ -1,3 +1,6 @@
+using FileVersionInfo = Ace.DynastyCOT.StorageVersionInfo;
+using Directory = Ace.DynastyCOT.StorageDirectory;
+using Path = Ace.DynastyCOT.StoragePath;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
@@ -70,7 +73,7 @@ namespace DynamicGamedayAtmosphere.Diagnostics {
         internal static string Write(string data,GameReport report){
             string directory=Path.Combine(data,"Diagnostics");Directory.CreateDirectory(directory);
             string destination=Path.Combine(directory,"game-report-"+DateTime.UtcNow.ToString("yyyyMMdd-HHmmss",CultureInfo.InvariantCulture)+"-"+Guid.NewGuid().ToString("N")+".json");
-            using(var file=new FileStream(destination,FileMode.CreateNew,FileAccess.Write,FileShare.Read))new DataContractJsonSerializer(typeof(GameReport)).WriteObject(file,report);
+            using(var file=Ace.DynastyCOT.StorageIO.OpenFile(destination,FileMode.CreateNew,FileAccess.Write,FileShare.Read))new DataContractJsonSerializer(typeof(GameReport)).WriteObject(file,report);
             return destination;
         }
         internal static void SampleProcess(GameReport report,Process process,List<ReportSite> sites){

@@ -15,6 +15,7 @@ def build_social(work,inputs):
  native=work/'Native';de=native/'Modules/DynastyEnhancer';src=de/'Source'
  shutil.copytree(ROOT/'Modules/DynastyEnhancer/Source',src)
  shutil.copytree(ROOT/'Modules/DynastyEnhancer/Vendor',de/'Vendor')
+ (native/'Core').mkdir();shutil.copyfile(ROOT/'Core/NativeFileIO.h',native/'Core/NativeFileIO.h')
  (native/'Compatibility').mkdir();shutil.copyfile(ROOT/'Compatibility/PracticeTextSetter.generated.h',native/'Compatibility/PracticeTextSetter.generated.h')
  p=src/'RuntimeFeed.h';old=p.read_bytes();needle=b'folder/L"dynasty-enhancer.json"';assert old.count(needle)==1
  p.write_bytes(old.replace(needle,b'folder/L"beyond-the-field.json"'))

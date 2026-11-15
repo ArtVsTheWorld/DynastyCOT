@@ -1,3 +1,4 @@
+using Path = Ace.DynastyCOT.StoragePath;
 using System;
 using System.Diagnostics;
 using System.Globalization;

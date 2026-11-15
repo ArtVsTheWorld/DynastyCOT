@@ -1,4 +1,5 @@
 #pragma once
+#include "../../../Core/NativeFileIO.h"
 #include <filesystem>
 #include <fstream>
 #include <memory>
@@ -12,22 +13,22 @@ namespace dynasty::diagnostics {
 // Called only by the native worker after swapping out the bounded callback queue.
 class RollingText {
     std::filesystem::path path;
-    std::ofstream file;
+    aceio::ofstream file;
     uintmax_t used=0;
     static constexpr uintmax_t limit=2u*1024*1024;
 public:
     explicit RollingText(std::filesystem::path name):path(std::move(name)){
         std::error_code ec;
-        if(std::filesystem::exists(path,ec))used=std::filesystem::file_size(path,ec);
+        if(aceio::exists(path,ec))used=aceio::file_size(path,ec);
         if(ec)used=limit;
     }
     void line(const std::string& text){
         if(used+text.size()+1>limit){
             file.close();file.clear();
             auto backup=path;backup+=L".1";
-            std::error_code ec;std::filesystem::remove(backup,ec);
+            std::error_code ec;aceio::remove(backup,ec);
             if(ec)return;
-            std::filesystem::rename(path,backup,ec);if(ec)return;
+            aceio::rename(path,backup,ec);if(ec)return;
             used=0;
         }
         if(!file.is_open())file.open(path,std::ios::app|std::ios::binary);

@@ -1,3 +1,8 @@
+using FileVersionInfo = Ace.DynastyCOT.StorageVersionInfo;
+using File = Ace.DynastyCOT.StorageFile;
+using Directory = Ace.DynastyCOT.StorageDirectory;
+using Path = Ace.DynastyCOT.StoragePath;
+using FileInfo = Ace.DynastyCOT.StorageFileInfo;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
@@ -11,7 +16,7 @@ namespace SituationalPractice
 {
     internal static class BuildIdentity
     {
-        internal const string Version="0.8.24";
+        internal const string Version="0.8.25";
         internal static string Folder {get{return FolderForAssembly(typeof(BuildIdentity).Assembly.Location);}}
         internal static string FolderForAssembly(string assemblyPath)
         {
@@ -42,7 +47,7 @@ namespace SituationalPractice
                 }
                 if(message.Length>32768)message=message.Substring(0,32768)+" [truncated]";
                 byte[] bytes=new UTF8Encoding(false).GetBytes(DateTimeOffset.Now.ToString("O")+" ["+level+"] "+message+Environment.NewLine);
-                using(var stream=new FileStream(path,FileMode.Append,FileAccess.Write,FileShare.ReadWrite)){
+                using(var stream=Ace.DynastyCOT.StorageIO.OpenFile(path,FileMode.Append,FileAccess.Write,FileShare.ReadWrite)){
                     stream.Write(bytes,0,bytes.Length);stream.Flush(true);
                 }
                 return true;
@@ -166,7 +171,7 @@ namespace SituationalPractice
             try{
                 Directory.CreateDirectory(Path.GetDirectoryName(path));
                 byte[] bytes=new UTF8Encoding(false).GetBytes(text);
-                using(var stream=new FileStream(temporary,FileMode.Create,FileAccess.Write,FileShare.Read)){
+                using(var stream=Ace.DynastyCOT.StorageIO.OpenFile(temporary,FileMode.Create,FileAccess.Write,FileShare.Read)){
                     stream.Write(bytes,0,bytes.Length);stream.Flush(true);
                 }
                 if(File.Exists(path))File.Replace(temporary,path,null);else File.Move(temporary,path);
@@ -221,7 +226,7 @@ namespace SituationalPractice
         static void BundleFiles(string root,string run)
         {
             string reportZip=Path.Combine(run,"report.zip"),temporary=reportZip+".tmp";
-            using(var stream=new FileStream(temporary,FileMode.Create,FileAccess.Write,FileShare.None))
+            using(var stream=Ace.DynastyCOT.StorageIO.OpenFile(temporary,FileMode.Create,FileAccess.Write,FileShare.None))
             using(var zip=new ZipArchive(stream,ZipArchiveMode.Create)){
                 foreach(string name in new[]{"report.txt","last-state.txt","windows-events.txt","observer-exit.txt","windows-events-helper.txt","launcher-context.txt","events.log","events.log.1","events.log.2","events.log.3"})
                     AddFile(zip,Path.Combine(run,name),name);
@@ -261,7 +266,7 @@ namespace SituationalPractice
         static void AddFile(ZipArchive zip,string path,string name)
         {
             if(!File.Exists(path))return;
-            using(var input=new FileStream(path,FileMode.Open,FileAccess.Read,FileShare.ReadWrite|FileShare.Delete))
+            using(var input=Ace.DynastyCOT.StorageIO.OpenFile(path,FileMode.Open,FileAccess.Read,FileShare.ReadWrite|FileShare.Delete))
             using(var output=zip.CreateEntry(name).Open())input.CopyTo(output);
         }
         internal static bool RelatedWindowsEvent(int id,DateTime timestamp,DateTime since,string message)

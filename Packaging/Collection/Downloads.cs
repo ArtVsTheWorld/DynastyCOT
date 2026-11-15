@@ -1,3 +1,7 @@
+using File = Ace.DynastyCOT.StorageFile;
+using Directory = Ace.DynastyCOT.StorageDirectory;
+using Path = Ace.DynastyCOT.StoragePath;
+using FileInfo = Ace.DynastyCOT.StorageFileInfo;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
@@ -23,20 +27,28 @@ namespace DynastyCOT.Collection {
     }}catch(WebException e){cancel.ThrowIfCancellationRequested();throw new IOException("Could not download "+module.Title+". Check your connection or GitHub rate limits; installed files are unchanged. You can keep your current version or use its standalone ZIP.",e);}
    }throw new IOException("Too many download redirects.");
   }
+  ModuleRelease Parse(Module module,Dictionary<string,object> doc){try{
+    if(doc==null||(bool)doc["draft"])return null;string tag=(string)doc["tag_name"];if(!tag.StartsWith("v"))return null;string version=tag.Substring(1);ReleaseRules.Numeric(version);
+    var assets=(object[])doc["assets"];string name=module.Id+"-"+version+".zip",proof=module.Id+"-"+version+"-verification.json";
+    var zip=assets.Cast<Dictionary<string,object>>().SingleOrDefault(x=>(string)x["name"]==name);if(zip==null||!assets.Cast<Dictionary<string,object>>().Any(x=>(string)x["name"]==proof))return null;
+    object digest;if(!zip.TryGetValue("digest",out digest)||!(digest is string)||!((string)digest).StartsWith("sha256:"))return null;
+    var release=new ModuleRelease{Module=module.Id,Version=version,Tag=tag,ArchiveName=name,ArchiveUrl=(string)zip["browser_download_url"],ArchiveBytes=Convert.ToInt64(zip["size"]),ArchiveSha256=((string)digest).Substring(7),ProofUrl="https://github.com/"+module.Repository+"/releases/download/"+tag+"/"+proof,PageUrl=(string)doc["html_url"],Notes=doc.ContainsKey("body")?(string)doc["body"]:"No notes supplied.",Prerelease=(bool)doc["prerelease"],Compatibility="Read the release notes for game/mode limits. Unknown native hooks remain protected. Use one provider of each feature; older mixed modules may require matching versions."};
+    ReleaseRules.Validate(module,release);if(release.Notes!=null&&release.Notes.Length>100000)throw new IOException("Release notes exceed their limit.");return release;
+   }catch(InvalidCastException){}catch(KeyNotFoundException){}catch(ArgumentException){}catch(IOException){}return null;
+  }
+  internal List<ModuleRelease> Latest(Module module,CancellationToken cancel){
+   string url="https://api.github.com/repos/"+module.Repository+"/releases/latest";
+   var doc=Json.Serializer().DeserializeObject(Encoding.UTF8.GetString(Read(module,url,2*1024*1024,true,cancel))) as Dictionary<string,object>;var release=Parse(module,doc);
+   if(release==null||release.Prerelease)throw new IOException("Latest stable release has no supported installer package for "+module.Title+". Bundled or newer installed files are kept; use Check updates to review compatible versions.");
+   return new List<ModuleRelease>{release};
+  }
   internal List<ModuleRelease> Check(Module module,CancellationToken cancel){
    var result=new List<ModuleRelease>();
    for(int page=1;page<=1000;++page){
    cancel.ThrowIfCancellationRequested();
    string url="https://api.github.com/repos/"+module.Repository+"/releases?per_page=100&page="+page;
    var docs=Json.Serializer().DeserializeObject(Encoding.UTF8.GetString(Read(module,url,8*1024*1024,true,cancel))) as object[];if(docs==null)throw new IOException("Invalid GitHub releases response.");
-   foreach(var raw in docs){var doc=raw as Dictionary<string,object>;try{
-    if(doc==null||(bool)doc["draft"])continue;string tag=(string)doc["tag_name"];if(!tag.StartsWith("v"))continue;string version=tag.Substring(1);ReleaseRules.Numeric(version);
-    var assets=(object[])doc["assets"];string name=module.Id+"-"+version+".zip",proof=module.Id+"-"+version+"-verification.json";
-    var zip=assets.Cast<Dictionary<string,object>>().SingleOrDefault(x=>(string)x["name"]==name);if(zip==null||!assets.Cast<Dictionary<string,object>>().Any(x=>(string)x["name"]==proof))continue;
-    object digest;if(!zip.TryGetValue("digest",out digest)||!(digest is string)||!((string)digest).StartsWith("sha256:"))continue;
-    var release=new ModuleRelease{Module=module.Id,Version=version,Tag=tag,ArchiveName=name,ArchiveUrl=(string)zip["browser_download_url"],ArchiveBytes=Convert.ToInt64(zip["size"]),ArchiveSha256=((string)digest).Substring(7),ProofUrl="https://github.com/"+module.Repository+"/releases/download/"+tag+"/"+proof,PageUrl=(string)doc["html_url"],Notes=doc.ContainsKey("body")?(string)doc["body"]:"No notes supplied.",Prerelease=(bool)doc["prerelease"],Compatibility="Read the release notes for game/mode limits. Unknown native hooks remain protected. Use one provider of each feature; older mixed modules may require matching versions."};
-    ReleaseRules.Validate(module,release);if(release.Notes!=null&&release.Notes.Length>100000)throw new IOException("Release notes exceed their limit.");result.Add(release);
-   }catch(InvalidCastException){}catch(KeyNotFoundException){}catch(ArgumentException){}catch(IOException){} }
+   foreach(var raw in docs){var release=Parse(module,raw as Dictionary<string,object>);if(release!=null)result.Add(release);}
    if(docs.Length<100)return result.GroupBy(x=>x.Tag,StringComparer.Ordinal).Select(x=>x.First()).OrderByDescending(x=>ReleaseRules.Numeric(x.Version)).ThenBy(x=>x.Prerelease).ToList();
    }throw new IOException("Release history exceeded the supported limit. No partial version list was used.");
   }
@@ -47,11 +59,15 @@ namespace DynastyCOT.Collection {
    if(fixtureRead==null&&File.Exists(path)){Paths.Relative(leaf);if(Path.GetFileName(leaf)!=leaf)throw new IOException("Invalid local asset name.");Paths.NoLinks(folder,path);if(new FileInfo(path).Length>maximum)throw new IOException("Local release file is too large.");return File.ReadAllBytes(path);}
    return Read(module,url,maximum,false,cancel);
   }
-  internal PreparedModule Prepare(Module module,ModuleRelease release,string cache,CancellationToken cancel,Action<string> progress){
-   ReleaseRules.Validate(module,release);progress("Verifying "+module.Title+" "+release.Version+"...");
+  internal Dictionary<string,object> Metadata(Module module,ModuleRelease release,CancellationToken cancel){
+   ReleaseRules.Validate(module,release);
+   if(release.Version==module.Current.Version&&release.ArchiveSha256!=module.Current.ArchiveSha256)throw new IOException("The pinned release changed on GitHub: "+module.Title+" "+release.Version+". Keep the installed copy and send this message; no plugin was downloaded.");
    var proof=Json.Serializer().DeserializeObject(Encoding.UTF8.GetString(Artifact(module,release.ProofUrl,module.Id+"-"+release.Version+"-verification.json",2*1024*1024,cancel))) as Dictionary<string,object>;object version,hash,dll,owner;
    if(proof==null||!proof.TryGetValue("version",out version)||(string)version!=release.Version||!proof.TryGetValue("archiveSha256",out hash)||(string)hash!=release.ArchiveSha256||!proof.TryGetValue("dllSha256",out dll)||!(dll is string)||!((proof.TryGetValue("name",out owner)||proof.TryGetValue("module",out owner))&&owner is string&&(string)owner==module.Id))throw new IOException("Release integrity metadata belongs to a different module/version.");
-   ReleaseRules.Hash((string)dll);if(release.DllSha256!=null&&release.DllSha256!=(string)dll)throw new IOException("Pinned plugin hash differs from release metadata.");release.DllSha256=(string)dll;
+   ReleaseRules.Hash((string)dll);if(release.DllSha256!=null&&release.DllSha256!=(string)dll)throw new IOException("Pinned plugin hash differs from release metadata.");release.DllSha256=(string)dll;return proof;
+  }
+  internal PreparedModule Prepare(Module module,ModuleRelease release,string cache,CancellationToken cancel,Action<string> progress){
+   progress("Verifying "+module.Title+" "+release.Version+"...");var proof=Metadata(module,release,cancel);
    Directory.CreateDirectory(cache);Paths.NoLinks(cache,cache);string archive=Paths.Resolve(cache,release.ArchiveSha256+".zip");
    if(!File.Exists(archive)||Paths.HashFile(archive)!=release.ArchiveSha256){progress("Downloading "+module.Title+" "+release.Version+" only...");var bytes=Artifact(module,release.ArchiveUrl,release.ArchiveName,release.ArchiveBytes,cancel);if(bytes.LongLength!=release.ArchiveBytes||Paths.Hash(bytes)!=release.ArchiveSha256)throw new IOException("Downloaded ZIP failed size/SHA-256 checks. Nothing was installed.");cancel.ThrowIfCancellationRequested();Paths.Atomic(archive,bytes);}
    if(new FileInfo(archive).Length!=release.ArchiveBytes||Paths.HashFile(archive)!=release.ArchiveSha256)throw new IOException("Cached ZIP failed verification.");
@@ -69,7 +85,7 @@ namespace DynastyCOT.Collection {
     Func<string,long,byte[]> read=(name,limit)=>{var entry=zip.GetEntry(name);if(entry.Length>limit)throw new IOException("Standalone file exceeds its limit: "+name);using(var input=entry.Open())using(var output=new MemoryStream()){byte[] chunk=new byte[65536];int n;while((n=input.Read(chunk,0,chunk.Length))>0){cancel.ThrowIfCancellationRequested();if(output.Length+n>limit)throw new IOException("Expanded file exceeds its limit: "+name);output.Write(chunk,0,n);}if(output.Length!=entry.Length)throw new IOException("Incomplete standalone file: "+name);return output.ToArray();}};
     if(zip.GetEntry("LICENSES.txt")!=null)read("LICENSES.txt",1024*1024);
     var plugin=read(pluginEntry,256L*1024*1024);if(Paths.Hash(plugin)!=release.DllSha256)throw new IOException("Plugin failed release SHA-256 verification.");string file=Paths.Resolve(cache,release.DllSha256+".dll");if(Paths.Existing(file)!=release.DllSha256)Paths.Atomic(file,plugin);
-    var assembly=System.Reflection.AssemblyName.GetAssemblyName(file);if(assembly.Name!=module.Id||new Version(assembly.Version.Major,assembly.Version.Minor,assembly.Version.Build)!=ReleaseRules.Numeric(release.Version))throw new IOException("Standalone DLL identity/version differs from its module.");
+    var assembly=Ace.DynastyCOT.StorageAssembly.GetAssemblyName(file);if(assembly.Name!=module.Id||new Version(assembly.Version.Major,assembly.Version.Minor,assembly.Version.Build)!=ReleaseRules.Numeric(release.Version))throw new IOException("Standalone DLL identity/version differs from its module.");
     var prepared=new PreparedModule{Module=module,Release=release,Dll=file,Readme=read("README.txt",module.Id=="BeyondTheField"&&hasGuide?512*1024:128*1024),Features=read("FEATURES.md",512*1024)};
     if(hasGuide){
      var guide=read(module.GuideName,10L*1024*1024);

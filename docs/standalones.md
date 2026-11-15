@@ -1,10 +1,10 @@
 # Standalone installation, updates and compatibility
 
-Want one feature? Download its standalone ZIP. Want several? Use the [collection installer 1.1.5](https://github.com/ArtVsTheWorld/DynastyCOT/releases/tag/v1.1.5).
+Want one feature? Download its standalone ZIP. Want several? Use the [collection installer 1.1.6](https://github.com/ArtVsTheWorld/DynastyCOT/releases/tag/v1.1.6).
 
 Each current module ZIP has exactly four files: its existing DLL, README.txt, FEATURES.md and a module-specific Player-Guide.pdf. Copy only the DLL into the Plugins folder beside your MMCModManager.exe. Read the included guide for settings, examples, limitations and help. Third-party notices are retained in the README appendix where needed. DLL filenames and compatibility IDs do not change when MMC displays the Ace’s prefix.
 
-The installer manages these same DLLs. It downloads only selected changes, verifies them, backs up recognized older copies and supports selected/full removal and restore. Updates and older-version choices require user action. The current archive reader also accepts previously supported three-file ZIPs, license-bearing ZIPs and verified older external-support layouts. Unknown DLLs require review instead of being silently deleted.
+The installer manages these same DLLs. It downloads only selected changes, verifies them, backs up recognized older copies and supports selected/full removal and restore. Version information is checked automatically; downloading, installing and older-version choices require user action. Use Check & Repair to review recognized duplicate program files, including copies inside nested Plugins subfolders. The current archive reader also accepts previously supported three-file ZIPs, license-bearing ZIPs and verified older external-support layouts. Unknown DLLs require review instead of being silently deleted.
 
 ## Existing installations
 

@@ -4,16 +4,16 @@
 
 Dynasty COT is the home for four optional plugins. The installer manages the same standalone DLLs, so you can switch installation methods without starting a new Dynasty or losing settings and published posts.
 
-[Download the collection installer 1.1.5](https://github.com/ArtVsTheWorld/DynastyCOT/releases/tag/v1.1.5)
+[Download the collection installer 1.1.6](https://github.com/ArtVsTheWorld/DynastyCOT/releases/tag/v1.1.6)
 
-Already using COT? Download installer **1.1.5** first to manage these new ZIPs with player guides. Older compatible releases remain available in its update picker. Manual DLL installation works as before.
+Already using COT? Download installer **1.1.6** first to manage these new ZIPs with player guides. Older compatible releases remain available in its update picker. Manual DLL installation works as before.
 
-For the startup hotfixes, explicitly **Check for updates** and choose **BTF 1.0.25** and/or **GDA 2.1.39**. Installer 1.1.5 remains compatible; the other modules do not need an update. Separate missing-path reports still need diagnostic logs.
+**Hotfix 2:** BTF **1.0.26** and GDA **2.1.40** improve startup and file handling for long folder paths. Installer **1.1.6** adds automatic version checks and **Check & Repair** for obsolete or duplicate components. Downloads and installation remain explicit choices; Extra Settings and Expanded Practice keep their current public versions.
 
 | Module | Download | Player guide | All features |
 |---|---|---|---|
-| Beyond the Field | [Version 1.0.25 ZIP](https://github.com/ArtVsTheWorld/BeyondTheField/releases/download/v1.0.25/BeyondTheField-1.0.25.zip) | [Illustrated PDF](https://github.com/ArtVsTheWorld/BeyondTheField/releases/download/v1.0.25/BeyondTheField-Player-Guide.pdf) | [Feature list](Packaging/Standalone/BeyondTheField/FEATURES.md) |
-| Gameday Atmosphere | [Version 2.1.39 ZIP](https://github.com/ArtVsTheWorld/DynamicGamedayAtmosphere/releases/download/v2.1.39/GamedayAtmosphere-2.1.39.zip) | [Illustrated PDF](https://github.com/ArtVsTheWorld/DynamicGamedayAtmosphere/releases/download/v2.1.39/GamedayAtmosphere-Player-Guide.pdf) | [Feature list](Packaging/Standalone/GamedayAtmosphere/FEATURES.md) |
+| Beyond the Field | [Version 1.0.26 ZIP](https://github.com/ArtVsTheWorld/BeyondTheField/releases/download/v1.0.26/BeyondTheField-1.0.26.zip) | [Illustrated PDF](https://github.com/ArtVsTheWorld/BeyondTheField/releases/download/v1.0.26/BeyondTheField-Player-Guide.pdf) | [Feature list](Packaging/Standalone/BeyondTheField/FEATURES.md) |
+| Gameday Atmosphere | [Version 2.1.40 ZIP](https://github.com/ArtVsTheWorld/DynamicGamedayAtmosphere/releases/download/v2.1.40/GamedayAtmosphere-2.1.40.zip) | [Illustrated PDF](https://github.com/ArtVsTheWorld/DynamicGamedayAtmosphere/releases/download/v2.1.40/GamedayAtmosphere-Player-Guide.pdf) | [Feature list](Packaging/Standalone/GamedayAtmosphere/FEATURES.md) |
 | Extra Settings | [Version 0.2.12 ZIP](https://github.com/ArtVsTheWorld/offline-dynasty-settings/releases/download/v0.2.12/ExtraSettings-0.2.12.zip) | [Illustrated PDF](https://github.com/ArtVsTheWorld/offline-dynasty-settings/releases/download/v0.2.12/ExtraSettings-Player-Guide.pdf) | [Feature list](Packaging/Standalone/ExtraSettings/FEATURES.md) |
 | Expanded Practice | [Version 0.8.24 ZIP](https://github.com/ArtVsTheWorld/drive-based-practice/releases/download/v0.8.24/ExpandedPractice-0.8.24.zip) | [Illustrated PDF](https://github.com/ArtVsTheWorld/drive-based-practice/releases/download/v0.8.24/ExpandedPractice-Player-Guide.pdf) | [Feature list](Packaging/Standalone/ExpandedPractice/FEATURES.md) |
 
@@ -52,7 +52,7 @@ Choose separate offensive and defensive playcall limits, cooldowns and play cloc
 3. For several modules or migration from older COT/standalones, extract the complete installer ZIP, run setup, confirm the detected MMC location and select your modules. It backs up recognized conflicting copies; do not delete settings/history to fix duplicates.
 4. Restart MMC and launch normally. MMC displays the four names with an **Ace’s** prefix. A listed plugin and an active in-game feature are different states.
 
-The installer does not install a separate DynastyCOT.dll. Updates are optional and per module: check, read the notes, choose a version and install it yourself. Older installer-compatible versions stay selectable. Existing three-file and license-bearing ZIP layouts remain supported by the updated installer.
+The installer does not install a separate DynastyCOT.dll. Version information is checked automatically on startup. Updates are optional and per module: read the notes, choose a version and install it yourself. Older installer-compatible versions stay selectable. Existing three-file and license-bearing ZIP layouts remain supported by the updated installer.
 
 ## Keep your data and undo changes
 
