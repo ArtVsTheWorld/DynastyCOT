@@ -6,7 +6,7 @@ Private extracted game assets are read at development time and never distributed
 from pathlib import Path
 import json
 import sys
-from build_recruit_notes_ui import Assembler, fnv, GRADE_COLORS
+from build_recruit_notes_ui import Assembler, NativeFrameAssembler, fnv, GRADE_COLORS
 
 
 def path(a, register, *members):
@@ -558,8 +558,9 @@ def skill_slots_suffix(a):
     a.label('skillSlotsDone')
 
 
-def append_program(size, suffix, copy_bytes=None):
-    a=Assembler(); a.code.extend(bytes(size if copy_bytes is None else copy_bytes))
+def append_program(size, suffix, copy_bytes=None, registers=None):
+    a=Assembler() if registers is None else NativeFrameAssembler(registers)
+    a.code.extend(bytes(size if copy_bytes is None else copy_bytes))
     suffix(a); a.ret()
     return a.finish()
 
@@ -597,6 +598,7 @@ def generate(destination):
     for name,(asset,specs) in SPECS.items():
         apt=load(Path(asset)); lines.append(f'inline std::vector<notesui::Program> {name}(){{std::vector<notesui::Program> result;')
         for off,argc,regs,flags,size,expected,newregs,suffix,copy_bytes in specs:
+            fixed=newregs>regs
             original=apt.data[off+48:off+48+size]
             if fnv(original)!=expected:raise ValueError(f'Unsupported native player method {asset}:{off:x}')
             count=size if copy_bytes is None else copy_bytes
@@ -606,13 +608,14 @@ def generate(destination):
                 # presentation array first, then retain the exact native clear/add
                 # prefix. Never replace numerical ratings or progression values.
                 from build_ratings_publication_ui import prepare
-                a=Assembler();prepare(a)
+                a=NativeFrameAssembler(regs);prepare(a)
                 while len(a.code)%8:a.raw(0x09)
                 copy_at=len(a.code);count=18;a.code.extend(bytes(count));a.ret();program=a.finish()
             elif name=='skillPrograms' and off==0x54E20:
                 from build_ratings_publication_ui import fit_level,fit_title
-                a=Assembler();a.code.extend(bytes(size));suffix(a);fit_level(a);fit_title(a);a.ret();program=a.finish()
-            else:program=append_program(size,suffix,copy_bytes)
+                a=NativeFrameAssembler(regs);a.code.extend(bytes(size));suffix(a);fit_level(a);fit_title(a);a.ret();program=a.finish()
+            else:program=append_program(size,suffix,copy_bytes,regs if fixed else None)
+            if fixed:newregs=regs
             code='{'+','.join(hex(b) for b in program.code)+'}'
             lines.append(f'result.push_back({{{off},{argc},{regs},{flags},{size},{expected}ull,{newregs},{copy_at},{count},{code}}});')
             if name=='cardPrograms' and off==0x3EF0:

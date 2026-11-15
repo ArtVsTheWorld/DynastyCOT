@@ -14,16 +14,16 @@
       ],
       "Current": {
         "Module": "BeyondTheField",
-        "Version": "1.0.26",
-        "Tag": "v1.0.26",
-        "ArchiveName": "BeyondTheField-1.0.26.zip",
-        "ArchiveUrl": "https://github.com/ArtVsTheWorld/BeyondTheField/releases/download/v1.0.26/BeyondTheField-1.0.26.zip",
-        "ArchiveSha256": "c3449812eebccb59eed805e7b3df04d0c32e9304c440a46776fef95d6c507be5",
-        "DllSha256": "9cd916d27026e39f069dd0ed8cb3b7aaeb2caf1c7332b87a7b56f393f38009eb",
-        "ArchiveBytes": 41028222,
-        "ProofUrl": "https://github.com/ArtVsTheWorld/BeyondTheField/releases/download/v1.0.26/BeyondTheField-1.0.26-verification.json",
-        "PageUrl": "https://github.com/ArtVsTheWorld/BeyondTheField/releases/tag/v1.0.26",
-        "Notes": "# **Update 2 Hotfix 2**\n\n**Startup & Saved Data**\n- Fixed the confirmed missing-path error caused by deeply nested MMC and legacy history folders\n- Improved preparation of runtime files, settings and logs when folder paths are long\n- Improved startup checks for runtimes loaded from long folder paths\n- Keeps saved settings, Recruit Notes, accounts and published Social Media history\n\n**Install**\n- Close MMC and the game, then replace **BeyondTheField.dll** in your usual **Plugins** folder, or select **1.0.26** in the COT installer\n- Keep your existing data folders. This fixes the reproduced long-path failure; genuinely missing, unavailable or blocked files still need their own diagnosis\n",
+        "Version": "1.0.32",
+        "Tag": "v1.0.32",
+        "ArchiveName": "BeyondTheField-1.0.32.zip",
+        "ArchiveUrl": "https://github.com/ArtVsTheWorld/BeyondTheField/releases/download/v1.0.32/BeyondTheField-1.0.32.zip",
+        "ArchiveSha256": "b7f32c89f82bad532625186de77a3580d8a89cfecb482ab958d0785b2638c86b",
+        "DllSha256": "60bc5e5ba29ab33fba8e8aef2fabd013ee78cb80f2c3437920737de39c9f66f9",
+        "ArchiveBytes": 41326911,
+        "ProofUrl": "https://github.com/ArtVsTheWorld/BeyondTheField/releases/download/v1.0.32/BeyondTheField-1.0.32-verification.json",
+        "PageUrl": "https://github.com/ArtVsTheWorld/BeyondTheField/releases/tag/v1.0.32",
+        "Notes": "# **Update 2 Hotfix 3**\n\n**Ratings & Menu Compatibility**\n- Improved matching across supported UI overhauls, including menus whose methods have moved\n- Fixed missing Recruit Notes on the first visit and rating leaks in player cards, NIL rows and Weekly Practice Plan team banners\n- Keeps each UI mod's native layout, money formatting, sorting and player data\n- Unsupported modified menus remain protected by compatibility checks\n\n**Menu Responsiveness**\n- Reduced repeated adapter work when opening, closing and navigating roster screens, player cards and other Dynasty menus\n- Offline callback tests show substantially lower overhead; whole-menu input delays still need confirmation on each setup\n\n**Recruiting & Saved Data**\n- Fixed precise interest labels and progress bars showing through Recruit Feedback on supported modified menus\n- Keeps manual Recruiting Board position numbers and native visibility for special recruit states\n- Preserves settings, Notes, accounts and published history, including the earlier startup and long-path fixes\n\n**Install**\n- Close MMC and the game, then replace **BeyondTheField.dll** in your usual **Plugins** folder, or select **1.0.32** in the COT installer after its version check\n- Keep existing data folders. No reset or history clearing is needed\n",
         "Compatibility": "Use one provider of each module. Offline scopes, exact hook checks and shared AppData remain. Read the included player guide and release notes for supported modes and live acceptance limits.",
         "Prerelease": false
       }
@@ -417,6 +417,11 @@
       "Path": "Plugins/GamedayAtmosphere.dll",
       "Module": "GamedayAtmosphere",
       "Sha256": "5118e699c90409f12601e5524d30f707b9e1e27b68829ebb1fc878024c75a76a"
+    },
+    {
+      "Path": "Plugins/BeyondTheField.dll",
+      "Module": "BeyondTheField",
+      "Sha256": "60bc5e5ba29ab33fba8e8aef2fabd013ee78cb80f2c3437920737de39c9f66f9"
     }
   ],
   "Programs": [
@@ -2339,6 +2344,16 @@
       "Path": "DGA-Runtime/Runtime-2.1.40/GamedayAtmosphereNative-2.1.40.dll",
       "Module": "GamedayAtmosphere",
       "Sha256": "30499561c088858cb2b8341e6c9fba99d8dad8943cb376213f41252497b1c2ba"
+    },
+    {
+      "Path": "COT-Runtime/DynastyEnhancer/BeyondTheFieldNative-v103.dll",
+      "Module": "BeyondTheField",
+      "Sha256": "f98047ebd4a876bac79dfa938b1da9d2ba099ec01bb710f912a2d4ace52c4ae8"
+    },
+    {
+      "Path": "COT-Runtime/DynastyEnhancer/BeyondTheFieldRecruitFog-v1.dll",
+      "Module": "BeyondTheField",
+      "Sha256": "f17a25bc921582280e828411aa2795629b4ce0b1bbed3bd469a7a304a3fd3ef5"
     }
   ]
 }

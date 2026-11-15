@@ -31,9 +31,10 @@ class Assembler:
         self.labels = {}
         self.scale_offsets, self.color_offsets, self.fog_offsets, self.team_offsets, self.dollar_offsets = [], [], [], [], []
         self.team_scale_offsets=[]
+        self.max_register=0
 
     def raw(self, *values): self.code.extend(values)
-    def reg(self, n): self.raw(0xB9, n)
+    def reg(self, n): self.max_register=max(self.max_register,n);self.raw(0xB9, n)
     def align(self):
         while len(self.code) % 8: self.raw(0)
     def string(self, value):
@@ -67,6 +68,7 @@ class Assembler:
         self.raw(0xB5);self.dollar_offsets.append(len(self.code));self.raw(0)
     def member(self, name): self.string(name); self.raw(0x4E)
     def store(self, n):
+        self.max_register=max(self.max_register,n)
         self.raw(0x87); self.align(); self.code.extend(struct.pack('<I', n)); self.raw(0x17)
     def branch(self, name, op=0x9D):
         self.raw(op); self.align(); self.branches.append((len(self.code), name)); self.code.extend(bytes(4))
@@ -97,6 +99,23 @@ class Assembler:
         return Program(bytes(self.code), self.literals, self.references, self.scale_offsets, self.color_offsets, self.fog_offsets, self.team_offsets, self.dollar_offsets,self.team_scale_offsets)
 
 
+class NativeFrameAssembler(Assembler):
+    """Invocation-local AS2 scratch, using the verified DefineLocal subset.
+
+    This is also used by the existing draft/currency adapters. It makes no
+    receiver/global scratch fields and cannot enlarge a caller's native frame.
+    Only use it where all native input registers are below the frame count.
+    """
+    def __init__(self, registers, prefix='_BTFCardLocal'):
+        super().__init__();self.native_registers=registers;self.local_prefix=prefix
+    def reg(self,n):
+        if n<self.native_registers:super().reg(n)
+        else:self.string(self.local_prefix+str(n));self.raw(0x1C)
+    def store(self,n):
+        if n<self.native_registers:super().store(n)
+        else:self.string(self.local_prefix+str(n));self.raw(0x4D,0x3C)
+
+
 HIDDEN = ('mcCircularBar', 'mcBarIcon', 'mcScoutBtn', 'mcTotalHours',
           'mcAttributesTitle', 'mcAbilitiesTitle', 'mcMentalsTitle',
           'mcDevelopmentTitle', 'mcDevelopmentDesc', 'mcDevTrait', 'mcList',
@@ -104,34 +123,70 @@ HIDDEN = ('mcCircularBar', 'mcBarIcon', 'mcScoutBtn', 'mcTotalHours',
 ALL = HIDDEN + ('mcTitle', 'mcDescription')
 
 
+def append_notes_row(a, rows, scratch):
+    a.reg(rows); a.number(2); a.raw(0x4E); a.store(scratch)
+    a.reg(scratch); a.string('display'); a.reg(scratch); a.member('display'); a.string(' (100%)'); a.raw(0x47, 0x4F)
+    a.empty_object(scratch)
+    a.set_field(scratch, 'display', 'Notes')
+    a.set_field(scratch, 'DENotes', True)
+    a.set_field(scratch, 'isDefault', False)
+    a.reg(scratch); a.string('StateMachineKey')
+    a.global_object('shared_enum_career', 'recruitinghub', 'StateMachine', 'STATE_SCOUTING_TAB'); a.raw(0x4F)
+    a.reg(scratch); a.string('ScreenKey')
+    a.global_object('shared_enum_career', 'recruitinghub', 'ScreenKey', 'SUBSCREEN_RECRUITINGHUB_BOARD_SCOUTING'); a.raw(0x4F)
+    a.reg(scratch); a.number(1); a.reg(rows); a.call('push')
+
+
 def append_tab(a):
     # The native method's register 1 contains the three-element return array.
     # The navigation builder assigns a fresh screen-layer key to every row.
     # Native tabs cache their widths before the board replaces the Scouting
     # label with its percentage. Reserve its longest label before adding Notes.
-    a.reg(1); a.number(2); a.raw(0x4E); a.store(8)
-    a.reg(8); a.string('display'); a.reg(8); a.member('display'); a.string(' (100%)'); a.raw(0x47, 0x4F)
-    a.empty_object(0)
-    a.set_field(0, 'display', 'Notes')
-    a.set_field(0, 'DENotes', True)
-    a.set_field(0, 'isDefault', False)
-    a.reg(0); a.string('StateMachineKey')
-    a.global_object('shared_enum_career', 'recruitinghub', 'StateMachine', 'STATE_SCOUTING_TAB'); a.raw(0x4F)
-    a.reg(0); a.string('ScreenKey')
-    a.global_object('shared_enum_career', 'recruitinghub', 'ScreenKey', 'SUBSCREEN_RECRUITINGHUB_BOARD_SCOUTING'); a.raw(0x4F)
-    a.reg(0); a.number(1); a.reg(1); a.call('push')
+    # Register 0 is dead until the new Notes row is created below. Reuse it
+    # instead of expanding Navigation's native two-register frame.
+    append_notes_row(a, 1, 0)
     a.reg(1); a.raw(0x3E)
+
+
+def ensure_init_tab(a):
+    # Board.Init receives the already-built navigation array through its view
+    # argument. Navigation may have run before the worker prepared this group.
+    # Repair only the exact native three-tab array before Init consumes it.
+    # r3 is dead until native GetInitParams assigns it; all arguments survive.
+    done='initTabsDone'
+    a.missing(4,done)
+    a.number(0);a.reg(4);a.string('GetScreenInfo');a.raw(0x52);a.store(3);a.missing(3,done)
+    a.number(0);a.reg(3);a.string('GetInitParams');a.raw(0x52);a.store(3);a.missing(3,done)
+    a.reg(3);a.member('SubscreensData');a.store(3);a.missing(3,done)
+    a.reg(3);a.raw(0x44);a.string('object');a.raw(0x66);a.branch(done,0xB8)
+    a.reg(3);a.member('length');a.number(3);a.raw(0x66);a.branch(done,0xB8)
+    a.reg(3);a.number(2);a.raw(0x4E);a.store(0);a.missing(0,done)
+    a.reg(0);a.raw(0x44);a.string('object');a.raw(0x66);a.branch(done,0xB8)
+    a.reg(0);a.member('StateMachineKey')
+    a.global_object('shared_enum_career','recruitinghub','StateMachine','STATE_SCOUTING_TAB');a.raw(0x66);a.branch(done,0xB8)
+    a.reg(0);a.member('ScreenKey')
+    a.global_object('shared_enum_career','recruitinghub','ScreenKey','SUBSCREEN_RECRUITINGHUB_BOARD_SCOUTING');a.raw(0x66);a.branch(done,0xB8)
+    # Navigation already registered this layer before Board.Init. Reuse the
+    # Scouting donor's key; never introduce an unregistered screen layer here.
+    # The Board category callback routes both views by StateMachineKey and
+    # DENotes, without asking the navigator to create a fourth native state.
+    a.reg(0);a.member('key');a.raw(0x44);a.string('number');a.raw(0x66);a.branch(done,0xB8)
+    append_notes_row(a,3,0)
+    a.reg(0);a.string('key');a.reg(3);a.number(2);a.raw(0x4E);a.member('key');a.raw(0x4F)
+    a.label(done)
 
 
 def category_changed(a):
     a.reg(2); a.member('Data'); a.store(3)
-    a.reg(3); a.member('WidgetData'); a.member('ExtraInfo'); a.store(4)
+    a.reg(3); a.member('WidgetData'); a.member('ExtraInfo'); a.store(0)
     a.global_object('cafe'); a.string('DynastyEnhancerRecruitNotesSelected')
-    a.reg(4); a.member('DENotes'); a.raw(0x73, 0x66, 0x4F)
+    a.reg(0); a.member('DENotes'); a.raw(0x73, 0x66, 0x4F)
     a.reg(1); a.string('mCurrentTabIndex'); a.reg(3); a.member('Index'); a.raw(0x4F)
-    a.reg(4); a.member('StateMachineKey'); a.store(5)
+    # The event argument in register 2 is no longer needed after Data was
+    # captured in register 3. Retain the native frame for internal VM calls.
+    a.reg(0); a.member('StateMachineKey'); a.store(2)
     a.number(0); a.reg(1); a.member('mRecruitingBoardService'); a.member('mStateMachine'); a.string('GetCurrentStateKey'); a.raw(0x52)
-    a.reg(5); a.raw(0x66); a.branch('change_state', 0xB8)
+    a.reg(2); a.raw(0x66); a.branch('change_state', 0xB8)
     # Notes and Scouting intentionally share the read-only/presentation donor
     # state. Do not acquire an input lock waiting for a no-op state transition.
     a.ret()
@@ -141,7 +196,7 @@ def category_changed(a):
     a.reg(1); a.member('mParentNode'); a.number(1)
     a.global_object('cafe', 'manager', 'InputLockManagerService'); a.string('Get'); a.raw(0x52)
     a.call('LockInput')
-    a.reg(5); a.number(1); a.reg(1); a.member('mRecruitingBoardService'); a.call('TransitionToState')
+    a.reg(2); a.number(1); a.reg(1); a.member('mRecruitingBoardService'); a.call('TransitionToState')
     a.ret()
 
 
@@ -338,7 +393,8 @@ def generate_header(destination, evidence):
         elif mode=='cancel':
             clear_refresh(a);a.set_field(1,'mDENotesRetries',0);a.pad_code();copy_at=len(a.code);copy_size=size;a.code.extend(bytes(size))
         elif mode=='reset':
-            a.global_object('cafe');a.string('DynastyEnhancerRecruitNotesSelected');a.raw(0x74,0x4F);a.pad_code()
+            a.global_object('cafe');a.string('DynastyEnhancerRecruitNotesSelected');a.raw(0x74,0x4F)
+            ensure_init_tab(a);a.pad_code()
             copy_at=len(a.code);copy_size=size;a.code.extend(bytes(size))
         elif mode in ('grade_colors','grade_focus'):
             assert original[-1]==0x4F if mode=='grade_colors' else original[-2:]==bytes([0xB2,56])
@@ -352,10 +408,11 @@ def generate_header(destination, evidence):
             a.label('normal')
             if mode=='draw':restore_layout(a)
             a.label('native');a.pad_code();copy_at=len(a.code);copy_size=size;a.code.extend(bytes(size))
-        p=a.finish();newregs=registers[0] if mode in ('grade_colors','grade_focus') else max(registers[0],10)
+        if a.max_register>registers[0]:raise ValueError(f'Notes {name} exceeds its native register frame')
+        p=a.finish();newregs=registers[0]
         programs.append((offset-0x30,argc,registers[0],registers[1],size,fnv(original),newregs,copy_at,copy_size,p))
         report.append(dict(name=cls+name,definition=offset-0x30,argc=argc,registers=registers[0],flags=registers[1],size=size,hash=fnv(original),customBytes=len(p.code),copyAt=copy_at,copyBytes=copy_size))
-    lines=['// Generated by Tools/build_recruit_notes_ui.py; custom bytecode only.','#pragma once','#include <vector>','#include <cstdint>','#include <cstring>','namespace recruitingfog::notesui {','struct SourcePointer {unsigned offset;uintptr_t value;};struct NestedDefinition {unsigned offset;uintptr_t name,params;bool emptyPool=false;};','struct Program {uintptr_t offset;unsigned argc,registers,flags,size;uint64_t hash;unsigned newRegisters,copyAt,copyBytes;std::vector<unsigned char> code;std::vector<NestedDefinition> nestedDefinitions{};std::vector<unsigned> scaleOffsets{};std::vector<unsigned> colorOffsets{};std::vector<unsigned> fogOffsets{};std::vector<unsigned> teamOffsets{};std::vector<unsigned> dollarOffsets{};std::vector<unsigned> teamScaleOffsets{};std::vector<SourcePointer> sourcePointers{};};','inline std::vector<Program> programs(){std::vector<Program> result;']
+    lines=['// Generated by Tools/build_recruit_notes_ui.py; custom bytecode only.','#pragma once','#include <vector>','#include <string>','#include <cstdint>','#include <cstring>','#include <utility>','namespace recruitingfog::notesui {','struct SourcePointer {unsigned offset;uintptr_t value;std::string text{};bool byText=false;};struct NestedDefinition {unsigned offset;uintptr_t name,params;bool emptyPool=false;bool semantic=false;std::string nameText{};std::vector<std::pair<unsigned,std::string>> arguments{};};','struct Program {uintptr_t offset;unsigned argc,registers,flags,size;uint64_t hash;unsigned newRegisters,copyAt,copyBytes;std::vector<unsigned char> code;std::vector<NestedDefinition> nestedDefinitions{};std::vector<unsigned> scaleOffsets{};std::vector<unsigned> colorOffsets{};std::vector<unsigned> fogOffsets{};std::vector<unsigned> teamOffsets{};std::vector<unsigned> dollarOffsets{};std::vector<unsigned> teamScaleOffsets{};std::vector<SourcePointer> sourcePointers{};};','inline std::vector<Program> programs(){std::vector<Program> result;']
     for offset,argc,regs,flags,size,hash_,newregs,copy_at,copy_size,p in programs:
         array='{'+','.join(hex(b) for b in p.code)+'}'
         lines.append(f'result.push_back({{{offset},{argc},{regs},{flags},{size},{hash_}ull,{newregs},{copy_at},{copy_size},{array}}});')

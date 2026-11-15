@@ -3,7 +3,7 @@ from pathlib import Path
 import json
 import struct
 import sys
-from build_recruit_notes_ui import Assembler,fnv
+from build_recruit_notes_ui import Assembler,NativeFrameAssembler,fnv
 from build_player_card_ui import path,numeric_grade,palette,text_label
 
 
@@ -107,7 +107,7 @@ def generate(destination):
         original=apt.data[off+48:off+48+size]
         if fnv(original)!=expected:raise ValueError(f'Unsupported native hub method {off:x}')
         if count<size and original[count:]!=bytes([0xB9,2,0x3E]):raise ValueError('Unsupported native hub return')
-        a=Assembler();a.code.extend(bytes(count));suffix(a);p=a.finish()
+        a=NativeFrameAssembler(original_regs+1);a.code.extend(bytes(count));suffix(a);p=a.finish();regs=original_regs
         if len(p.code)>32768:raise ValueError('Player hub adapter exceeds runtime bytecode bound')
         code='{'+','.join(hex(b) for b in p.code)+'}'
         lines.append(f'result.push_back({{{off},{argc},{original_regs},41,{size},{expected}ull,{regs},0,{count},{code}}});')

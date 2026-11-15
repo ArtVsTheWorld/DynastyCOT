@@ -1,7 +1,7 @@
 """Grade only player-name/OVR text in the fingerprinted FullReport renderer."""
 from pathlib import Path
 import json,struct,sys
-from build_recruit_notes_ui import Assembler,fnv
+from build_recruit_notes_ui import Assembler,NativeFrameAssembler,fnv
 from build_player_card_ui import path,numeric_display_grade,palette,text_label
 
 POSITIONS=['QB','RB','HB','FB','WR','TE','LT','LG','C','RG','RT','LE','RE','DT','LOLB','MLB','ROLB','CB','FS','SS','EDGE','LEDG','REDG','WILL','MIKE','SAM','OLB','K','P']
@@ -118,7 +118,7 @@ def generate(asset,destination):
         assert (struct.unpack_from('<I',header,8)[0],struct.unpack_from('<H',header,12)[0],struct.unpack_from('<H',header,14)[0])==(argc,regs,flags)
         original=apt.data[off+48:off+48+size];assert len(original)==size
         assert fnv(original)=={5264:9462526817822673144,10096:13331554265108800653,28248:3931116635804362792}[off]
-        a=Assembler();a.code.extend(bytes(copy));emit(a);p=a.finish();assert len(p.code)<=32768
+        a=NativeFrameAssembler(regs+1);a.code.extend(bytes(copy));emit(a);p=a.finish();newregs=regs;assert len(p.code)<=32768
         lines.append(f'result.push_back({{{off},{argc},{regs},{flags},{size},{fnv(original)}ull,{newregs},0,{copy},{{'+','.join(hex(b) for b in p.code)+'}});')
         for name,values in [('scaleOffsets',p.scale_offsets),('fogOffsets',p.fog_offsets),('colorOffsets',p.color_offsets),('teamScaleOffsets',p.team_scale_offsets)]:
             for at in values:lines.append(f'result.back().{name}.push_back({at});')

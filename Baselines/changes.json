@@ -283,8 +283,8 @@
     },
     {
       "path": "Modules/DynastyEnhancer/Source/AioCurrencyUiPrograms.h",
-      "sha256": "a171190e1fd8742eb2540e9d1205a0603a601ea9222607b4a1c2a6767c740d8d",
-      "reason": "Approved integrated release-readiness fixes; native contracts and saved data preserved"
+      "sha256": "efc0f6a4df4794fe97c2c70158bcebe57c69694e705c584927f779b8e0145dac",
+      "reason": "Preserve verified universal UI discovery and apply hub-audit NIL/interest display fixes, native visibility restoration, and bounded callback fast paths."
     },
     {
       "path": "Modules/DynastyEnhancer/Source/Analytics.NOTICES.txt",
@@ -548,8 +548,8 @@
     },
     {
       "path": "Modules/DynastyEnhancer/Source/PlayerCardUiPrograms.h",
-      "sha256": "37cede7887b795020345b66bdfe90dc0fe0202ebb198074f35598984dc513ce6",
-      "reason": "Approved integrated release-readiness fixes; native contracts and saved data preserved"
+      "sha256": "877cabee64794bb9679a3fabc0ed4f644c256dcef86c813e7e2d83577d8430ab",
+      "reason": "Verified class/method discovery across ratings, currency, recruiting and GPI adapters; preserve native frames and scopes; first-visit Notes and real Practice Plan banner coverage."
     },
     {
       "path": "Modules/DynastyEnhancer/Source/PlayerDepthProbe.cpp",
@@ -573,18 +573,18 @@
     },
     {
       "path": "Modules/DynastyEnhancer/Source/PlayerHubUiPrograms.h",
-      "sha256": "8fda1966f66268b8527480d63da09a791a56c4be71df844c7c9a4087197b2de1",
-      "reason": "Approved integrated release-readiness fixes; native contracts and saved data preserved"
+      "sha256": "cbb07d4e13d0c461b3174484ccc1da24a4c38907d980ce62a75eec075d57b2d1",
+      "reason": "Verified class/method discovery across ratings, currency, recruiting and GPI adapters; preserve native frames and scopes; first-visit Notes and real Practice Plan banner coverage."
     },
     {
       "path": "Modules/DynastyEnhancer/Source/PlayerInGameUiPrograms.h",
-      "sha256": "65eab954315e3da345db20284fa77bd83359c7d6535fd0e5cc1929af4e459872",
-      "reason": "Approved integrated release-readiness fixes; native contracts and saved data preserved"
+      "sha256": "390ec99eca209c8eea877426ebfdf4b075ba8c43490ce286e94c6aebac9b80fa",
+      "reason": "Verified class/method discovery across ratings, currency, recruiting and GPI adapters; preserve native frames and scopes; first-visit Notes and real Practice Plan banner coverage."
     },
     {
       "path": "Modules/DynastyEnhancer/Source/PlayerNilUiPrograms.h",
-      "sha256": "1b9ee8510ee4cf74ee1bd848b5dc38348706c3de4fa0332762ebe32779e098b8",
-      "reason": "Approved integrated release-readiness fixes; native contracts and saved data preserved"
+      "sha256": "0856777efa061174fbad5c8471b74e3dd654406f6b1f7593bddfcc0eadc21d98",
+      "reason": "Preserve verified universal UI discovery and apply hub-audit NIL/interest display fixes, native visibility restoration, and bounded callback fast paths."
     },
     {
       "path": "Modules/DynastyEnhancer/Source/PlayerPlaycallUiPrograms.h",
@@ -683,13 +683,13 @@
     },
     {
       "path": "Modules/DynastyEnhancer/Source/RecruitNotesUiPrograms.h",
-      "sha256": "709a4d04731ce07718b2baa5339de1e8e0741fcbc6e6531a6bb1f36ab853dd59",
-      "reason": "Approved integrated release-readiness fixes; native contracts and saved data preserved"
+      "sha256": "7e518ee9940d3955db41699d7ff660481ca7792498132af333d18bd31aa75870",
+      "reason": "Verified class/method discovery across ratings, currency, recruiting and GPI adapters; preserve native frames and scopes; first-visit Notes and real Practice Plan banner coverage."
     },
     {
       "path": "Modules/DynastyEnhancer/Source/RecruitNotesUiRuntime.h",
-      "sha256": "3231844b32387417ac29e3ee236d5d56fcad6c9748ed1ecaeff67a113cc66309",
-      "reason": "Approved integrated release-readiness fixes; native contracts and saved data preserved"
+      "sha256": "a23bb8775450636d91ba1c0ef8688e93d3083ea3a75725236eefbdec5de35588",
+      "reason": "Verified class/method discovery across ratings, currency, recruiting and GPI adapters; preserve native frames and scopes; first-visit Notes and real Practice Plan banner coverage."
     },
     {
       "path": "Modules/DynastyEnhancer/Source/RecruitPreviewProbe.cpp",
@@ -748,8 +748,8 @@
     },
     {
       "path": "Modules/DynastyEnhancer/Source/RecruitingFog.cpp",
-      "sha256": "644179c8873fc4c9fc16694e4a0e264a49a0f94a8913c0951e3d5a16ec1d0451",
-      "reason": "Bounded long-path I/O audit: preserve logical identities, verified helper leases, atomic persistence, native ownership and fixture-only tests."
+      "sha256": "d223415e63953f6430b2722f1fea3965679fc28cce3e9d0c80fe11f5455d89a3",
+      "reason": "Preserve verified universal UI discovery and apply hub-audit NIL/interest display fixes, native visibility restoration, and bounded callback fast paths."
     },
     {
       "path": "Modules/DynastyEnhancer/Source/RecruitingGradePolicy.h",
@@ -858,8 +858,8 @@
     },
     {
       "path": "Modules/DynastyEnhancer/Tests/aio_currency_ui_test.py",
-      "sha256": "4e65a56038e982d78b3caefcce71555a1e33c2195191d9b0112aa07661f48895",
-      "reason": "COT 0.1.3: independent Weekly Advance adapters with exact loader-pointer normalization, creation-page per-Dynasty options, requested defaults and fitted dollar prefixes"
+      "sha256": "31537739403298913bd0c883c76ad058e8c9bc4d4b7854118b9b19449edf903c",
+      "reason": "Preserve verified universal UI discovery and apply hub-audit NIL/interest display fixes, native visibility restoration, and bounded callback fast paths."
     },
     {
       "path": "Modules/DynastyEnhancer/Tests/conversations.test.mjs",
@@ -967,6 +967,11 @@
       "reason": "Release-readiness provenance and approved integrated regression coverage"
     },
     {
+      "path": "Modules/DynastyEnhancer/Tests/player_nil_ui_test.py",
+      "sha256": "713c8a751dc03a521fb10c2bc006b6a9a95bd891e052907bb9a78beadf9a0ffe",
+      "reason": "Preserve verified universal UI discovery and apply hub-audit NIL/interest display fixes, native visibility restoration, and bounded callback fast paths."
+    },
+    {
       "path": "Modules/DynastyEnhancer/Tests/portal_draft.test.mjs",
       "sha256": "4e3710cb1540a81856c22d4ff3bc3e265a77f915b8ec8c2ecd0ddc72585d452d",
       "reason": "0.1.7: source-level weekly routine budget, complete continuous scope lists, concise native sidebar and header presentation."
@@ -1068,8 +1073,8 @@
     },
     {
       "path": "Modules/DynastyEnhancer/Tools/build_aio_currency_ui.py",
-      "sha256": "17d4b384b64064bdd8ff60ecc46a8548d00a9203626dc257421df9a5d10e8cf1",
-      "reason": "Retain prior COT integration; 0.1.6 Beyond the Field: bounded content/selection/voices, native paging, persistent modeled recruit records, supported calendar/draft reference, exact AIO Notes/colors and numeric-preserving money redraw adapters."
+      "sha256": "82d49c86b4e0f314518e34f0741c52c78832468df345ff86f0e6d5e4e94158f2",
+      "reason": "Preserve verified universal UI discovery and apply hub-audit NIL/interest display fixes, native visibility restoration, and bounded callback fast paths."
     },
     {
       "path": "Modules/DynastyEnhancer/Tools/build_currency_recruiteditor_ui.py",
@@ -1093,28 +1098,28 @@
     },
     {
       "path": "Modules/DynastyEnhancer/Tools/build_player_card_ui.py",
-      "sha256": "f56706985a9abf40ee27cb4f483d47f401760691958785618d41bbfe32d81e72",
-      "reason": "Release-readiness provenance and approved integrated regression coverage"
+      "sha256": "ef5d37e6ceefaef547a793387489360371d246f556cdb9052b6b4fc610e9df05",
+      "reason": "Verified class/method discovery across ratings, currency, recruiting and GPI adapters; preserve native frames and scopes; first-visit Notes and real Practice Plan banner coverage."
     },
     {
       "path": "Modules/DynastyEnhancer/Tools/build_player_hub_ui.py",
-      "sha256": "358c5278cb111907edddf00802bccae7d65c767f3ea958ebc28986a5b6fd4594",
-      "reason": "Release-readiness provenance and approved integrated regression coverage"
+      "sha256": "0356e108f90042611710b1428356b835ac2eb7b17f416ce5ad55f2bfde1aa154",
+      "reason": "Verified class/method discovery across ratings, currency, recruiting and GPI adapters; preserve native frames and scopes; first-visit Notes and real Practice Plan banner coverage."
     },
     {
       "path": "Modules/DynastyEnhancer/Tools/build_player_ingame_ui.py",
-      "sha256": "8cfa93bad28c6d6a780fd17a42ceef6822ad81cbb66a15bf7ad5ebb075f286ac",
-      "reason": "Release-readiness provenance and approved integrated regression coverage"
+      "sha256": "15ab4824ae3bdc744ba88ddf3add0a7280fb4f4157780b7a94e18ae13306d218",
+      "reason": "Verified class/method discovery across ratings, currency, recruiting and GPI adapters; preserve native frames and scopes; first-visit Notes and real Practice Plan banner coverage."
     },
     {
       "path": "Modules/DynastyEnhancer/Tools/build_player_nil_ui.py",
-      "sha256": "d365c947e969ab67cbb6b29e2c92acec4f5746cbac53c2eb7f3f89a4c72e60fe",
-      "reason": "1.0 branded source-built runtime names, direct verified loading and preserved data/hook contracts"
+      "sha256": "e1e72a8d1b71c67290ef39f1997598c88ea2f831b2257b0ed5a834da6b48553b",
+      "reason": "Preserve verified universal UI discovery and apply hub-audit NIL/interest display fixes, native visibility restoration, and bounded callback fast paths."
     },
     {
       "path": "Modules/DynastyEnhancer/Tools/build_recruit_notes_ui.py",
-      "sha256": "3ecdc39080e07e77ca51608f0e4c38b660e318717d4be7b6ebfe4c903968baf0",
-      "reason": "RC013 native Analytics roster-card/action/return, delayed week visibility, safe filter transitions, isolated full-card fog adapters, glyph repair, installer footer and winning visitor departures"
+      "sha256": "35c710a6f4c351bd6311f1657ba589a4864fb215a5bd24e602f0b7fc766428bc",
+      "reason": "Verified class/method discovery across ratings, currency, recruiting and GPI adapters; preserve native frames and scopes; first-visit Notes and real Practice Plan banner coverage."
     },
     {
       "path": "Modules/DynastyEnhancer/Tools/clean_language.mjs",

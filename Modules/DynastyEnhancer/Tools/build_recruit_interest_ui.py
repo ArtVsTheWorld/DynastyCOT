@@ -1,6 +1,6 @@
 """Recruiting-only display suffixes; native bodies verified/copied at runtime."""
 from pathlib import Path
-import argparse,json,sys
+import argparse,json,sys,struct
 from build_recruit_notes_ui import Assembler,fnv
 from build_player_card_ui import path
 
@@ -35,12 +35,40 @@ def interest_row(a):
  a.label('done');a.ret()
 
 def scout_row(a):
- # This row uses native currencies; interest mode is an independent immutable
- # renderer choice, not a new property that native SetData might discard.
- a.grade_scale();a.number(1);a.raw(0x66);a.branch('hideRank')
- a.grade_scale();a.number(3);a.raw(0x66);a.branch('hideRank')
- visible(a,'mcUserRanking',True,'rankRestored');a.branch('done',0x99)
- a.label('hideRank');visible(a,'mcUserRanking',False,'rankHidden')
+ # Verified native Draw formats RECRUITING_INT + InterestedStatus into
+ # mcInterestedStatus. mcUserRanking is the MANUAL board position and must
+ # remain entirely native. Keep this policy independent of money and grades.
+ a.grade_scale();a.store(0)
+ path(a,1,'mData');a.store(3);a.missing(3,'boardExtraMissing')
+ path(a,3,'ExtraInfo');a.store(3);a.missing(3,'boardExtraMissing');a.branch('boardExtraReady',0x99)
+ a.label('boardExtraMissing');a.empty_object(3);a.label('boardExtraReady')
+ for index,widget in enumerate(['mcInterestedStatus','mcUpArrow','mcDownArrow']):
+  tag='boardInterest'+str(index);done=tag+'Done';capture=tag+'Capture';hide=tag+'Hide'
+  path(a,1,widget);a.store(2);a.missing(2,done)
+  a.reg(0);a.number(3);a.raw(0x66);a.branch(hide)
+  if index==0:a.reg(0);a.number(1);a.raw(0x66);a.branch(hide)
+  # Restore only our own visibility on this exact native widget/data pair.
+  path(a,1,tag+'Target');a.reg(2);a.raw(0x66);a.branch(done,0xB8)
+  path(a,1,tag+'Data');path(a,1,'mData');a.raw(0x66);a.branch(tag+'Clear',0xB8)
+  for field in ['InterestedStatus','RecruitStage','CurrentUserTeamRankChange']:
+   path(a,1,tag+field);path(a,3,field);a.raw(0x66);a.branch(tag+'Clear',0xB8)
+  a.reg(2);a.string('_visible');path(a,1,tag+'Visible');a.raw(0x4F)
+  a.label(tag+'Clear');a.reg(1);a.string(tag+'Target');a.raw(0x76,0x4F);a.branch(done,0x99)
+  a.label(hide)
+  path(a,1,tag+'Target');a.reg(2);a.raw(0x66);a.branch(capture,0xB8)
+  path(a,1,tag+'Data');path(a,1,'mData');a.raw(0x66);a.branch(capture,0xB8)
+  for field in ['InterestedStatus','RecruitStage','CurrentUserTeamRankChange']:
+   path(a,1,tag+field);path(a,3,field);a.raw(0x66);a.branch(capture,0xB8)
+  a.branch(tag+'Captured',0x99)
+  a.label(capture)
+  a.reg(1);a.string(tag+'Target');a.reg(2);a.raw(0x4F)
+  a.reg(1);a.string(tag+'Data');path(a,1,'mData');a.raw(0x4F)
+  for field in ['InterestedStatus','RecruitStage','CurrentUserTeamRankChange']:
+   a.reg(1);a.string(tag+field);path(a,3,field);a.raw(0x4F)
+  a.reg(1);a.string(tag+'Visible');path(a,2,'_visible');a.raw(0x4F)
+  a.label(tag+'Captured')
+  path(a,2,'_visible');a.raw(0x74,0x66);a.branch(done)
+  a.set_field(2,'_visible',False);a.label(done)
  a.label('done');a.ret()
 
 def target_cell(a):
@@ -198,7 +226,17 @@ def generate(asset,output):
   original=apt.data[body:body+size];a=Assembler()
   if prefix:builder(a);copyat=len(a.code);a.code.extend(bytes(size));copybytes=size
   else:copyat=0;copybytes=size;a.code.extend(bytes(size));builder(a)
-  p=a.finish();lines.append(f'inline std::vector<notesui::Program> {name}(){{std::vector<notesui::Program> result;');emit(lines,p,body-48,argc,regs,flags,size,fnv(original),copyat,copybytes);lines.append('return result;}')
+  p=a.finish();lines.append(f'inline std::vector<notesui::Program> {name}(){{std::vector<notesui::Program> result;');emit(lines,p,body-48,argc,regs,flags,size,fnv(original),copyat,copybytes)
+  if name=='progress':
+   # Same typed owner with native currency/layout additions. Complete source
+   # instructions and typed string operands are verified before appending.
+   from apt_source_pointers import source_pointers
+   extended=load(Path('C:/Apps/CFB 27/MMC/ModComparisons/ZEO101-TeamBuilder/combo/Assets/common/ui/node_cfm/recruitinghub/corenode.ast'))
+   off,n,digest=399936,3086,11528656320847582138
+   assert struct.unpack_from('<IHH',extended.data,off+8)==(0,20,25) and fnv(extended.data[off+48:off+48+n])==digest
+   extra=Assembler();extra.code.extend(bytes(n));progress(extra);ep=extra.finish();emit(lines,ep,off,0,20,25,n,digest,0,n)
+   for at,value in source_pointers(extended,off,n,[]):lines.append(f'result.back().sourcePointers.push_back({{{at},{value}}});')
+  lines.append('return result;}')
  # Compose the existing currency adapter rather than replacing or disabling it.
  a=Assembler();scout_row(a);p=a.finish();lines.append('inline std::vector<notesui::Program> scouts(){auto all=currencytopbarui::recruitingPrograms();std::vector<notesui::Program> result;for(auto old:all)if(old.offset=='+str(0x2c548-48)+'){')
  lines.append('if(!old.scaleOffsets.empty()||!old.teamScaleOffsets.empty())throw std::runtime_error("Currency row acquired grade-scale controls");if(old.code.size()<2||old.code[old.code.size()-2]!=0x76||old.code.back()!=0x3e)throw std::runtime_error("Unexpected currency suffix ending");old.code.back()=0x17;const auto start=old.code.size();')
@@ -206,7 +244,16 @@ def generate(asset,output):
  # Appending must be 8-byte aligned because suffix literal positions are absolute.
  lines[-2]=lines[-2].replace('const auto start=old.code.size();','size_t padding=(8-old.code.size()%8)%8;if(padding==1)padding=9;if(padding%2){old.code.push_back(0x59);old.code.push_back(0x50);old.code.push_back(0x17);padding-=3;}for(;padding;padding-=2){old.code.push_back(0x76);old.code.push_back(0x17);}const auto start=old.code.size();')
  for at,text in p.literals:lines.append('{const auto pointer=reinterpret_cast<uintptr_t>('+json.dumps(text)+f');memcpy(old.code.data()+start+{at},&pointer,8);}}')
- lines.append('result.push_back(std::move(old));}return result;}')
+ lines.append('result.push_back(std::move(old));}')
+ # Native focus styling redraws this caption after the parent row's Draw.
+ # Reapply the same independent visibility policy at both verified boundaries.
+ extended=load(Path('C:/Apps/CFB 27/MMC/ModComparisons/ZEO101-TeamBuilder/combo/Assets/common/ui/node_cfm/recruitinghub/corenode.ast'))
+ for off,n,digest in [(389056,612,6753933695585567227),(389728,588,4689005749271494068)]:
+  assert struct.unpack_from('<IHH',extended.data,off+8)==(1,6,25) and fnv(extended.data[off+48:off+48+n])==digest
+  a=Assembler();a.code.extend(bytes(n));scout_row(a);p=a.finish();emit(lines,p,off,1,6,25,n,digest,0,n)
+  from apt_source_pointers import source_pointers
+  for at,value in source_pointers(extended,off,n,[]):lines.append(f'result.back().sourcePointers.push_back({{{at},{value}}});')
+ lines.append('return result;}')
  target_asset=asset.parent.parent.parent/'PlayerFog'/'Gaps'/'current-common__ui__art_control__scriptpod.ast'
  target=load(target_asset);body,size,argc,regs,flags=0x5ff50,580,1,5,25
  a=Assembler();a.code.extend(bytes(size));target_cell(a);p=a.finish();lines.append('inline std::vector<notesui::Program> targets(){std::vector<notesui::Program> result;');emit(lines,p,body-48,argc,regs,flags,size,fnv(target.data[body:body+size]),0,size);lines.append('return result;}')

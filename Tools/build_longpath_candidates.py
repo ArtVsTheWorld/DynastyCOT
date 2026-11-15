@@ -9,9 +9,10 @@ def main():
  import sys
  reuse='--reuse-native' in sys.argv
  onlyBtf='--only-btf' in sys.argv
+ btfVersion=next((x.split('=',1)[1] for x in sys.argv if x.startswith('--btf-version=')),'1.0.26')
  results=[];stamp=datetime.datetime.now().strftime('%Y%m%dT%H%M%S');sdk=Path(r'C:\Apps\CFB 27\MMC\MMC_ModManager_v1.1.0.6');csc=Path(r'C:\Windows\Microsoft.NET\Framework64\v4.0.30319\csc.exe')
- inputs=json.loads((R/'cot.build-inputs.json').read_text());out=R/'Build/LongPathAudit';template=next(n.value for n in ast.walk(ast.parse((R/'Tools/build_standalones.py').read_text())) if isinstance(n,ast.Constant) and isinstance(n.value,str) and '[assembly: AssemblyTitle(TITLE)]' in n.value and 'public sealed class Entry:' in n.value)
- for name,version in [('BeyondTheField','1.0.26'),('ExtraSettings','0.2.13'),('ExpandedPractice','0.8.25')]:
+ inputs=json.loads((R/'cot.build-inputs.json').read_text());out=R/next((x.split('=',1)[1] for x in sys.argv if x.startswith('--output-root=')),'Build/LongPathAudit');out.mkdir(parents=True,exist_ok=True);template=next(n.value for n in ast.walk(ast.parse((R/'Tools/build_standalones.py').read_text())) if isinstance(n,ast.Constant) and isinstance(n.value,str) and '[assembly: AssemblyTitle(TITLE)]' in n.value and 'public sealed class Entry:' in n.value)
+ for name,version in [('BeyondTheField',btfVersion),('ExtraSettings','0.2.13'),('ExpandedPractice','0.8.25')]:
   if onlyBtf and name!='BeyondTheField':continue
   original=json.loads((R/'Build'/('current-standalone-'+name+'.json')).read_text());work=out/(name+'-'+stamp);work.mkdir();generated=work/'Generated';generated.mkdir();stage=work/'Package';stage.mkdir();previous=Path(original['work']).resolve();payload={}
   with zipfile.ZipFile(previous/'payload.zip') as z:payload={n:z.read(n) for n in z.namelist()}
@@ -51,10 +52,10 @@ def main():
   for p in oldStage.iterdir():
    if p.suffix.lower() in ['.txt','.md','.pdf']:shutil.copyfile(p,stage/p.name)
   tracked=[p for p in [*sources,*helperSources] if not p.is_relative_to(work)]
-  if name=='BeyondTheField':tracked += [R/p for p in json.loads((out/'native-active.json').read_text()) if p.startswith('Modules/DynastyEnhancer/')]+[R/'Core/NativeFileIO.h']
+  if name=='BeyondTheField':tracked += [p for p in (R/'Modules/DynastyEnhancer/Source').rglob('*') if p.is_file() and p.suffix in ['.cpp','.h','.inc']]+[R/'Core/NativeFileIO.h',R/'Compatibility/PracticeTextSetter.generated.h']
   record=dict(name=name,version=version,privateCandidate='longpath2' if name=='BeyondTheField' else 'longpath1',stage=str(stage),work=str(work),dll=str(dll),dllSha256=sha(dll),publicBaseline=dict(version=original['version'],dllSha256=original['dllSha256']),payload=json.loads(manifest.read_text()),changedPayload=[n for n,b in payload.items() if hashlib.sha256(b).hexdigest()!=original['payload'].get(n)],sourceHashes={p.relative_to(R).as_posix():sha(p) for p in tracked},nativeProof=nativeProof,managedSourceBuilt=True,helperSourceBuilt=name!='BeyondTheField',sdk=str(sdk),installed=False,published=False)
   (out/(name+'-candidate.json')).write_text(json.dumps(record,indent=2));results.append(record);print('BUILT',name,version,flush=True)
- if onlyBtf:
+ if onlyBtf and (out/'candidates.json').exists():
   prior=json.loads((out/'candidates.json').read_text(encoding='utf8'));results=[results[0] if x['name']=='BeyondTheField' else x for x in prior]
  (out/'candidates.json').write_text(json.dumps(results,indent=2))
 if __name__=='__main__':main()

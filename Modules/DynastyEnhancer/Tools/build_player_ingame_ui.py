@@ -2,7 +2,7 @@
 from pathlib import Path
 import json
 import sys
-from build_recruit_notes_ui import Assembler,fnv
+from build_recruit_notes_ui import Assembler,NativeFrameAssembler,fnv
 from build_player_card_ui import path,numeric_grade,palette,text_label,value_item_suffix
 
 
@@ -139,7 +139,7 @@ def generate(destination):
         for offset,argc,regs,flags,size,expected,newregs,suffix in specs:
             if fnv(apt.data[offset+48:offset+48+size])!=expected:
                 raise ValueError(f'Unsupported native in-game player renderer {offset:x}')
-            a=Assembler();a.code.extend(bytes(size));suffix(a);p=a.finish()
+            a=NativeFrameAssembler(regs+1);a.code.extend(bytes(size));suffix(a);p=a.finish();newregs=regs
             if len(p.code)>32768:raise ValueError(f'In-game adapter exceeds runtime bytecode bound: {offset:x}: {len(p.code)}')
             code='{'+','.join(hex(b) for b in p.code)+'}'
             lines.append(f'result.push_back({{{offset},{argc},{regs},{flags},{size},{expected}ull,{newregs},0,{size},{code}}});')

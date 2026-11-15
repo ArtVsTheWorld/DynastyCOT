@@ -45,6 +45,10 @@ SPECS=[(0x1A90,0,6,25,665,0x14CEAC0385098E7D,nil_draw_suffix),
        (0x1FC0,1,2,41,104,0xD0ACDF397686B473,nil_unfocus_suffix)]
 EMBEDDED_SPECS=[(0x2610,0,6,25,665,0x14CEAC0385098E7D,nil_draw_suffix),
                 (0x2B40,1,2,41,104,0xD0ACDF397686B473,nil_unfocus_suffix)]
+# Reviewed layout with native dollar formatting. Match by class, resolved
+# constants and complete normalized body; the RVA is source metadata only.
+EXTENDED_SOURCE=Path('C:/Apps/CFB 27/MMC/ModComparisons/ZEO101-TeamBuilder/combo/Assets/common/ui/art_control/programpoints/rosternilrowitem.ast')
+EXTENDED_SPECS=[(17152,0,6,25,1209,9638856941613167606,nil_draw_suffix)]
 
 
 def generate(destination):
@@ -59,13 +63,21 @@ def generate(destination):
         if hashlib.sha256(source.read_bytes()).hexdigest()!=sha:raise ValueError('Unsupported NIL player source asset')
         apt=load(source)
         lines.append(f'inline std::vector<notesui::Program> {name}(){{std::vector<notesui::Program> result;')
-        for off,argc,regs,flags,size,expected,suffix in specs:
+        variants=[(apt,spec) for spec in specs]
+        if name=='programs':variants.extend((load(EXTENDED_SOURCE),spec) for spec in EXTENDED_SPECS)
+        for apt,(off,argc,regs,flags,size,expected,suffix) in variants:
             h=apt.data[off:off+48]
             if (struct.unpack_from('<I',h,8)[0],struct.unpack_from('<H',h,12)[0],struct.unpack_from('<H',h,14)[0])!=(argc,regs,flags):raise ValueError('Unsupported NIL player frame')
             if fnv(apt.data[off+48:off+48+size])!=expected:raise ValueError('Unsupported native NIL player row')
             a=Assembler();a.code.extend(bytes(size));suffix(a);p=a.finish()
             code='{'+','.join(hex(b) for b in p.code)+'}'
             lines.append(f'result.push_back({{{off},{argc},{regs},{flags},{size},{expected}ull,{regs},0,{size},{code}}});')
+            if size==1209:
+                from apt_source_pointers import source_pointers
+                nested=[]
+                for at,value in source_pointers(apt,off,size,nested):
+                    lines.append(f'result.back().sourcePointers.push_back({{{at},{value}}});')
+                if nested:raise ValueError('Unexpected nested NIL method')
             for at in p.color_offsets:lines.append(f"result.back().colorOffsets.push_back({at});")
             for at in p.scale_offsets:lines.append(f"result.back().scaleOffsets.push_back({at});")
             for at in p.team_scale_offsets:lines.append(f"result.back().teamScaleOffsets.push_back({at});")
@@ -75,7 +87,7 @@ def generate(destination):
             for at,text in p.literals:lines.append('{const auto pointer=reinterpret_cast<uintptr_t>('+json.dumps(text)+f');memcpy(result.back().code.data()+{at},&pointer,8);}}')
         lines.append('return result;}')
     lines.append('}');destination.write_text('\n'.join(lines)+'\n',encoding='utf8')
-    print(json.dumps({'nilPlayerRatingMethods':len(SPECS)+len(EMBEDDED_SPECS),'budgetModelChanges':False}))
+    print(json.dumps({'nilPlayerRatingMethods':len(SPECS)+len(EMBEDDED_SPECS)+len(EXTENDED_SPECS),'budgetModelChanges':False}))
 
 
 if __name__=='__main__':generate(Path('Source/PlayerNilUiPrograms.h'))

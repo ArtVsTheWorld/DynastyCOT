@@ -31,6 +31,8 @@
 #endif
 #if defined(RECRUIT_NOTES_UI)
 #include "RecruitNotesUiRuntime.h"
+#include "UiMethodDiscovery.h"
+#include "UiAdapterContracts.generated.h"
 #include "AnalyticsActionsUiPrograms.h"
 #include "RecruitResumeRuntime.h"
 #include "RecruitClassGrid.h"
@@ -134,13 +136,31 @@ notesui::Runtime gapCoreUi(gapui::corePrograms()),gapHubUi(gapui::hubPrograms())
 notesui::Runtime gapWeeklyUi(gapui::weeklyPrograms()),gapTopPlayersUi(gapui::topPlayersPrograms());
 notesui::Runtime gapAioTopPlayersUi(gapui::aioTopPlayersPrograms());
 notesui::Runtime draftOvrStrategyUi(draftovrui::strategyPrograms()),draftOvrCurrentStrategyUi(draftovrui::currentStrategyPrograms()),draftOvrRowsUi(draftovrui::rowPrograms());
-notesui::Runtime aioCurrency0(aiocurrencyui::group0()),aioCurrency1(aiocurrencyui::group1()),aioCurrency2(aiocurrencyui::group2()),aioCurrency3(aiocurrencyui::group3());
+std::vector<notesui::Program> legacyCurrencyWithoutTeam(){auto p=aiocurrencyui::group0();p.erase(std::remove_if(p.begin(),p.end(),[](const auto& item){return item.argc==0&&item.registers==5&&item.flags==25&&item.size==4514;}),p.end());return p;}
+notesui::Runtime aioCurrency0(legacyCurrencyWithoutTeam()),aioCurrency1(aiocurrencyui::group1()),aioCurrency2(aiocurrencyui::group2()),aioCurrency3(aiocurrencyui::group3());
 notesui::Runtime aioNotesUi(aiorecruitnotesui::programs());
+std::unique_ptr<uidiscovery::Service> symbolicUi;
 notesui::Runtime analyticsRowUi(analyticsactions::hubRowPrograms()),analyticsCurrentRowUi(analyticsactions::currentRowPrograms());
 notesui::Runtime positionChangesUi(positionchangesui::programs());
 const std::array<notesui::Runtime*,66> cardUiBanks={&playerControlUi,&playerCardUi,&playerTemplateUi,&playerSkillUi,&playerHubUi,&playerSliderUi,&playerInGameUi,&playerRecruitUi,&playerFormationUi,&playerLegacyOvrUi,&playerNilUi,&playerBlueprintUi,&playerPracticeUi,&playerNilEmbeddedUi,&playerKickerUi,&playerIndividualPanelUi,&playerComparisonPanelUi,&playerImpactPanelUi,&playerLineupPanelUi,&playerTrenchPanelUi,&playerInjuryScreenUi,&currencyIconUi,&currencySlotUi,&currencyCellUi,&gapCoreUi,&gapHubUi,&gapRecruitUi,&gapTeamSelectUi,&draftOvrStrategyUi,&draftOvrCurrentStrategyUi,&draftOvrRowsUi,&currencyTopbarUi,&currencyRecruitingUi,&currencyBudgetUi,&currencyAnimationUi,&currencyBudgetArtUi,&currencyRecruitDetailUi,&currencyRecruitEditorUi,&aioCurrency0,&aioCurrency1,&aioCurrency2,&aioCurrency3,&playerBlueprintAioUi,&gapWeeklyUi,&gapTopPlayersUi,&gapAioTopPlayersUi,&aioNotesUi,&analyticsMainUi,&analyticsCurrentUi,&analyticsCleanupUi,&analyticsCurrentCleanupUi,&analyticsHintsUi,&playerTeamModuleUi,&analyticsRefreshUi,&analyticsCurrentRefreshUi,&analyticsCurrentHintsUi,&analyticsRowUi,&analyticsCurrentRowUi,&nilToggleUi,&currencyRecruitingOfferUi,&currencyRecruitingHoursUi,&positionChangesUi,&playerDepthScreenUi,&weeklyReportUi,&weeklyProfileUi,&weeklyPickerUi};
+std::array<std::vector<uidiscovery::Contract>,2> analyticsUiContracts;
+void configureUniversalUi(){
+    for(size_t i=0;i<cardUiBanks.size();++i){const bool dependency=i==47||i==48;auto contracts=uidiscovery::configureAdapter("card."+std::to_string(i),*cardUiBanks[i],dependency);if(dependency)analyticsUiContracts[i-47]=std::move(contracts);}
+    uidiscovery::configureAdapter("grid.legacy",playerUi);uidiscovery::configureAdapter("grid.modern",modernPlayerUi);
+    for(size_t i=0;i<features::banks.size();++i)if(features::banks[i]->methodCount())uidiscovery::configureAdapter("recruiting."+std::to_string(i),*features::banks[i]);
+}
 bool recruitBank(size_t bank){const auto* r=cardUiBanks[bank];return r==&gapRecruitUi||r==&aioNotesUi;}
-bool cardBankEnabled(size_t bank,enhancements::Options selected=enhancements::options()){const auto* runtime=cardUiBanks[bank];
+bool legacyCardBank(size_t bank){if(!symbolicUi)return true;const auto* r=cardUiBanks[bank];return r!=&aioNotesUi&&r!=&aioCurrency3&&r!=&playerTeamModuleUi;}
+bool read(uintptr_t at,void* out,size_t size);
+void note(Json value)noexcept;
+void attachSymbolicUi(void* object,bool fixed){
+    if(!symbolicUi)return;uintptr_t definition=0;uidiscovery::Header h{};
+    if(!uidiscovery::invocationSnapshot(object,definition,h)||!symbolicUi->interested(h,fixed))return;
+    const auto s=enhancements::options();
+    try{symbolicUi->invokeSnapshot(object,definition,h,read,fixed,enhancements::presentationAllowed(),unsigned(s.recruitingScale),unsigned(s.scale),unsigned(s.teamScale),s.colors,s.recruiting,s.roster,s.team,s.dollars,interest::effective(s.recruiting,unsigned(s.recruitingScale),unsigned(s.interest)));}
+    catch(const std::exception& error){static std::atomic<unsigned> reported{0};if(reported.fetch_add(1)<8)note({{"event","ui_method_invocation_deferred"},{"reason",error.what()},{"action","Native method preserved; check ui_method_discovery diagnostics for the affected surface."}});}
+}
+bool cardBankEnabled(size_t bank,enhancements::Options selected=enhancements::options()){if(!enhancements::presentationAllowed())return false;const auto* runtime=cardUiBanks[bank];
     if(runtime==&weeklyReportUi||runtime==&weeklyProfileUi||runtime==&weeklyPickerUi)return selected.roster||selected.colors;
     if(runtime==&nilToggleUi)return selected.dollars;
     if(runtime==&analyticsMainUi||runtime==&analyticsCurrentUi)return nativeanalytics::opened;
@@ -452,13 +472,16 @@ void installPresentation(bool preflightOnly){
 }
 void attachPlayerGridUi(void* object,bool fixedFrame,const unsigned char* header=nullptr){
     if(disabled||playerUiFailed)return;
+    uintptr_t definition=0;uidiscovery::Header snapshot{};
+    if(!header){if(!uidiscovery::invocationSnapshot(object,definition,snapshot))return;header=snapshot.data();}
     const std::array<notesui::Runtime*,2> banks={&playerUi,&modernPlayerUi};
     for(size_t bank=0;bank<banks.size();++bank){
         // The length accessor has already allocated the caller's frame.
         // Only definitions with identical argc/flags/registers may attach.
-        if(fixedFrame&&(!header||!banks[bank]->acceptsFrame(header,true)))continue;
+        if(!banks[bank]->acceptsFrame(header,fixedFrame))continue;
         try{CallGuard guard;if(disabled)return;
-            const auto index=banks[bank]->beforeInvoke(object,read,fixedFrame,(enhancements::options().roster||enhancements::options().colors),unsigned(enhancements::options().scale),enhancements::options().colors,enhancements::options().roster,enhancements::options().team,enhancements::options().dollars,unsigned(enhancements::options().teamScale));
+            const auto selected=enhancements::options();
+            const auto index=banks[bank]->beforeInvoke(object,read,fixedFrame,(selected.roster||selected.colors),unsigned(selected.scale),selected.colors,selected.roster,selected.team,selected.dollars,unsigned(selected.teamScale));
             if(index>=0){
                 if(!playerUiLogged.exchange(true))note({{"event","player_fog_color_adapter_attached"},{"legacy",bank==0}});
                 const auto bit=1u<<index;
@@ -478,16 +501,17 @@ unsigned __fastcall colorLengthHook(void* object){
         const auto definition=*reinterpret_cast<const uintptr_t*>(static_cast<const unsigned char*>(object)+0x58);
         const auto* h=reinterpret_cast<const unsigned char*>(definition);
         recruitingfog::features::beforeInvoke(object,read,true);
+        attachSymbolicUi(object,true);
 #if !defined(PLAYER_FOG_PREVIEW) || defined(PLAYER_FOG_COLORS)
         attachPlayerGridUi(object,true,h);
 #endif
         static const notesui::FrameDispatch<cardUiBanks.size()> fixedDispatch(cardUiBanks);
         const auto candidates=fixedDispatch.candidates(h,true);
-        for(size_t bank=0;bank<cardUiBanks.size();++bank)if(candidates.test(bank)&&!cardUiFailed[bank]&&(enhancements::presentationAllowed()||cardUiBanks[bank]->retainedDefinitionCount()!=0))
+        if(candidates.any())for(size_t bank=0;bank<cardUiBanks.size();++bank)if(candidates.test(bank)&&legacyCardBank(bank)&&!cardUiFailed[bank]&&(enhancements::presentationAllowed()||cardUiBanks[bank]->retainedDefinitionCount()!=0))
         try{CallGuard guard;if(disabled)return originalColorLength(object);const auto selected=enhancements::options();const auto index=cardUiBanks[bank]->beforeInvoke(object,read,true,cardBankEnabled(bank,selected),unsigned(recruitBank(bank)?selected.recruitingScale:selected.scale),selected.colors,recruitBank(bank)?selected.recruiting:selected.roster,selected.team,selected.dollars,unsigned(selected.teamScale));
             if(index>=0){const auto bit=1u<<index;if(!(cardUiAttached[bank].fetch_or(bit)&bit))note({{"event","player_fog_card_adapter_attached"},{"bank",bank},{"method",index},{"path","fixed frame body accessor"}});}}
         catch(const std::exception& error){cardUiFailed[bank]=true;note({{"event","player_fog_card_adapter_failed"},{"bank",bank},{"reason",error.what()}});}
-        if(!notesAttachmentFailed&&notesUi.acceptsFrame(h,true))
+        if(!symbolicUi&&!notesAttachmentFailed&&notesUi.acceptsFrame(h,true))
         try{CallGuard guard;if(disabled)return originalColorLength(object);const auto index=notesUi.beforeInvoke(object,read,true,true,unsigned(enhancements::options().recruitingScale),enhancements::options().colors);if(index>=0){const auto bit=1u<<index;if(!(notesAttachedMethods.fetch_or(bit)&bit))note({{"event","recruit_color_focus_attached"},{"program",index}});}}
         catch(const std::exception& error){notesAttachmentFailed=true;note({{"event","recruit_color_focus_failed"},{"reason",error.what()}});}
     }
@@ -586,6 +610,7 @@ template<size_t Index>void __fastcall playerMapHook(void* source,void* target){
 const PlayerMap mapHooks[]={playerMapHook<0>,playerMapHook<1>};
 uintptr_t __fastcall notesSetupHook(void* object,void* saved,uintptr_t receiver,uintptr_t parent,uintptr_t super){
     CallGuard guard;
+    if(!disabled)attachSymbolicUi(object,false);
     if(!disabled)recruitingfog::features::beforeInvoke(object,read);
     {
     playerperf::Sample performance(playerperf::scriptAdapters);
@@ -608,13 +633,13 @@ uintptr_t __fastcall notesSetupHook(void* object,void* saved,uintptr_t receiver,
     }
     static const notesui::FrameDispatch<cardUiBanks.size()> cardDispatch(cardUiBanks);
     const auto candidates=cardDispatch.candidates(liveHeader);
-    for(size_t bank=0;bank<cardUiBanks.size();++bank)if(candidates.test(bank)&&!cardUiFailed[bank]&&(enhancements::presentationAllowed()||cardUiBanks[bank]->retainedDefinitionCount()!=0))try{
+    if(candidates.any())for(size_t bank=0;bank<cardUiBanks.size();++bank)if(candidates.test(bank)&&legacyCardBank(bank)&&!cardUiFailed[bank]&&(enhancements::presentationAllowed()||cardUiBanks[bank]->retainedDefinitionCount()!=0))try{
         const auto selected=enhancements::options();const auto index=cardUiBanks[bank]->beforeInvoke(object,read,false,cardBankEnabled(bank,selected),unsigned(recruitBank(bank)?selected.recruitingScale:selected.scale),selected.colors,recruitBank(bank)?selected.recruiting:selected.roster,selected.team,selected.dollars,unsigned(selected.teamScale));
         if(index>=0){const auto bit=1u<<index;if(!(cardUiAttached[bank].fetch_or(bit)&bit))note({{"event","player_fog_card_adapter_attached"},{"bank",bank},{"method",index}});}
     }catch(const std::exception& error){cardUiFailed[bank]=true;note({{"event","player_fog_card_adapter_failed"},{"bank",bank},{"reason",error.what()}});}
     }
 #endif
-    if(!disabled&&!notesAttachmentFailed)try{const auto index=notesUi.beforeInvoke(object,read,false,true,unsigned(enhancements::options().recruitingScale),enhancements::options().colors);if(index>=0){const auto bit=1u<<index;
+    if(!disabled&&!symbolicUi&&!notesAttachmentFailed)try{const auto index=notesUi.beforeInvoke(object,read,false,true,unsigned(enhancements::options().recruitingScale),enhancements::options().colors);if(index>=0){const auto bit=1u<<index;
         if(!(notesAttachedMethods.fetch_or(bit)&bit))note({{"event","recruit_notes_method_attached"},{"program",index}});}}
     catch(const std::exception& error){notesAttachmentFailed=true;note({{"event","recruit_notes_attachment_failed"},{"reason",error.what()}});}
     }
@@ -749,7 +774,8 @@ DWORD stop(){
     if(retainedPlayerUi){note({{"event","player_ui_restart_required"},{"reason","Native player UI retains a copied script definition"}});return 4;}
 #endif
     for(const auto* bank:features::banks)if(bank->ownerCount())return 4;
-    if(notesUi.ownerCount()){note({{"event","notes_ui_restart_required"},{"reason","The game can retain cloned Notes definitions; use a clean restart"}});return 4;}
+    bool symbolicOwned=false;if(symbolicUi)for(const auto& g:symbolicUi->surfaces())symbolicOwned|=g->runtime.ownerCount()!=0;
+    if(notesUi.ownerCount()||symbolicOwned){note({{"event","notes_ui_restart_required"},{"reason","The game can retain cloned Notes definitions; use a clean restart"}});return 4;}
 #endif
     disabled=true;
     try{enhancementSettings.flush();}catch(const std::exception& error){note({{"event","enhancement_settings_write_failed"},{"reason",error.what()}});}
@@ -838,7 +864,7 @@ DWORD WINAPI worker(void*){
         for(size_t i=0;i<detailCount;++i){const auto& gate=playingTimeGates[i];detailOriginal[i]=reinterpret_cast<DetailGetter>(base+gate.rva);if(!replace(reinterpret_cast<void*>(detailOriginal[i]),reinterpret_cast<void*>(hooks[i]),gate.vtable,gate.slot))throw std::runtime_error("Playing-time getter ownership changed");detailInstalled[i]=true;}
 #if defined(RECRUIT_NOTES_UI)
         if(!read(base+scriptSetupRva,actual.data(),scriptSetupPrefix.size())||memcmp(actual.data(),scriptSetupPrefix.data(),scriptSetupPrefix.size())||!read(base+scriptTableRva+scriptSetupSlot,&current,8)||current!=base+scriptSetupRva)throw std::runtime_error("Unsupported or already-owned script invocation setup");
-        notesUi.prepare();playerUi.prepare();modernPlayerUi.prepare();for(auto* bank:cardUiBanks)bank->prepare();features::prepare();originalScriptSetup=reinterpret_cast<ScriptSetup>(current);
+        configureUniversalUi();symbolicUi=std::make_unique<uidiscovery::Service>();symbolicUi->registerDependency("GPI Roster navigation",analyticsUiContracts[0],analyticsMainUi);symbolicUi->registerDependency("GPI current Roster navigation",analyticsUiContracts[1],analyticsCurrentUi);notesUi.prepare();playerUi.prepare();modernPlayerUi.prepare();for(auto* bank:cardUiBanks)bank->prepare();features::prepare();originalScriptSetup=reinterpret_cast<ScriptSetup>(current);
         if(!replace(reinterpret_cast<void*>(originalScriptSetup),reinterpret_cast<void*>(notesSetupHook),scriptTableRva,scriptSetupSlot))throw std::runtime_error("Notes invocation setup ownership changed");
         notesSetupInstalled=true;
         constexpr unsigned char colorLengthPrefix[]={0x48,0x8b,0x41,0x58,0x8b,0x40,0x18,0xc3};
@@ -876,6 +902,10 @@ DWORD WINAPI worker(void*){
             }
 #endif
 #if defined(RECRUIT_NOTES_UI)
+            if(symbolicUi)try{symbolicUi->tick(read,base,[](const auto& surface,const auto& state,const auto& reason,uintptr_t asset){note({{"event","ui_method_discovery"},{"surface",surface},{"state",state},{"reason",reason},{"asset",asset}});});}
+            catch(const std::exception& error){static unsigned failures=0;if(failures++<8)note({{"event","ui_method_discovery_deferred"},{"reason",error.what()},{"otherAdaptersPreserved",true}});}
+            for(size_t i=0;i<cardUiBanks.size();++i)for(const auto& reason:cardUiBanks[i]->takeDiscoveryMessages())note({{"event","ui_method_discovery"},{"surface","card."+std::to_string(i)},{"reason",reason}});
+            for(size_t i=0;i<features::banks.size();++i)for(const auto& reason:features::banks[i]->takeDiscoveryMessages())note({{"event","ui_method_discovery"},{"surface","recruiting."+std::to_string(i)},{"reason",reason}});
             static uint64_t nextResumeTick=0;if(GetTickCount64()>=nextResumeTick){nextResumeTick=GetTickCount64()+1000;
                 nativeanalytics::tick();
                 // The verified active-career binding plus native LeagueID is

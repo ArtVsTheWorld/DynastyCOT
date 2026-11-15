@@ -54,9 +54,26 @@ for invalid in [-1,33,'10',float('nan')]:
  called=[];provider={'GetNumItems':lambda:invalid,'GetItemData':lambda i:called.append(i),'RemoveItem':lambda i:called.append(i)}
  Machine(loc,[]).run(program(cutoff,1),{1:{'mTopSchoolItemProvider':provider}});assert not called;checks+=1
 for mode_index,mode in enumerate(['Native','Feedback','RankOnly','Blind']):
- r={'mData':{'ExtraInfo':{'BTFPreviouslyScouted':True,'BTFInterestMode':mode}},'mcName':widget('S. Edwards'),'mcUserRanking':widget('3')}
+ r={'mData':{'ExtraInfo':{'BTFPreviouslyScouted':True,'BTFInterestMode':mode}},'mcName':widget('S. Edwards'),'mcUserRanking':widget('3'),'mcInterestedStatus':widget('Int: 1st'),'mcUpArrow':widget(),'mcDownArrow':widget()}
  for i in range(4):Machine(styles,[]).run(program(scout_row,mode_index),{1:r});assert r['mcName']['mData']['display']=='S. Edwards';checks+=1
- assert r['mcUserRanking']['_visible']==(mode in ['Native','RankOnly']);checks+=1
+ assert r['mcUserRanking']['_visible'] and r['mcUserRanking']['mData']['display']=='3';checks+=1
+ assert r['mcInterestedStatus']['_visible']==(mode in ['Native','RankOnly']);checks+=1
+ assert r['mcUpArrow']['_visible']==(mode!='Blind') and r['mcDownArrow']['_visible']==(mode!='Blind');checks+=1
+ # Same-widget toggles restore native visibility, including committed/locked
+ # rows whose native interest caption is intentionally absent.
+ for native_visible in [False,True]:
+  r={'mData':{'record':100},'mcUserRanking':widget('3'),'mcInterestedStatus':widget('Int: 1st',visible=native_visible),'mcUpArrow':widget(visible=native_visible),'mcDownArrow':widget(visible=False)}
+  for selected in [1,3,2,1,0]:Machine(styles,[]).run(program(scout_row,selected),{1:r})
+  assert r['mcInterestedStatus']['_visible']==native_visible and r['mcUpArrow']['_visible']==native_visible and not r['mcDownArrow']['_visible']
+  assert r['mcUserRanking']['_visible'];checks+=4
+ # Native rows can reuse the same data dictionary when a recruit's state or
+ # direction changes. A prior BTF hide must not resurrect a native-hidden row.
+ r={'mData':{'ExtraInfo':{'InterestedStatus':1,'RecruitStage':1,'CurrentUserTeamRankChange':1}},'mcUserRanking':widget('7'),'mcInterestedStatus':widget('Int: 1st'),'mcUpArrow':widget(),'mcDownArrow':widget(visible=False)}
+ Machine(styles,[]).run(program(scout_row,3),{1:r})
+ r['mData']['ExtraInfo'].update(RecruitStage=2,CurrentUserTeamRankChange=0)
+ for key in ['mcInterestedStatus','mcUpArrow','mcDownArrow']:r[key]['_visible']=False
+ Machine(styles,[]).run(program(scout_row,3),{1:r});Machine(styles,[]).run(program(scout_row,0),{1:r})
+ assert all(not r[key]['_visible'] for key in ['mcInterestedStatus','mcUpArrow','mcDownArrow']) and r['mcUserRanking']['_visible'];checks+=4
 for fn in [interest_row,progress,cutoff,scout_row,target_cell,small_card]:
  Machine(loc,[]).run(program(fn,1),{1:{}});checks+=1
 

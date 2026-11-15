@@ -14,6 +14,15 @@ import build_currency_recruiteditor_ui as ce
 
 native_money=cu.money
 
+def recruit_row_policy(a):
+    # Run concealment after the original Draw and before currency formatting.
+    # Currency builders have their own early returns, so appending afterward
+    # would silently skip this independent policy when money is Off or hidden.
+    from build_recruit_interest_ui import scout_row
+    scout_row(a)
+    assert a.code[-2:]==bytes([0x76,0x3e])
+    del a.code[-2:]
+
 def aio_money(a,done,prefix):
     a.reg(0);a.raw(0x44);a.string('string');a.raw(0x66);a.branch(prefix+'plain',0xB8)
     a.number(0);a.number(1);a.reg(0);a.string('charAt');a.raw(0x52);a.string('$');a.raw(0x66);a.branch(prefix+'plain',0xB8)
@@ -68,6 +77,7 @@ def generate():
         a=ce.FixedFrameAssembler(r['registers']) if r['group']=='editor' else Assembler()
         if pre:pre(a);a.pad_code()
         copy_at=len(a.code);a.code.extend(bytes(size))
+        if post is ct.recruit_list_offer_suffix:recruit_row_policy(a)
         if post:post(a)
         a.ret()
         p=a.finish();assert len(p.code)<=32768

@@ -6,7 +6,7 @@ from pathlib import Path
 import json
 import struct
 import sys
-from build_recruit_notes_ui import Assembler, fnv
+from build_recruit_notes_ui import Assembler,NativeFrameAssembler, fnv
 from build_player_card_ui import path
 from apt_source_pointers import source_pointers
 
@@ -172,7 +172,7 @@ def emit(lines, apt, specs, function):
             if struct.unpack_from('<I',data,params)[0]!=expected_event:
                 raise ValueError('Unsupported native Analytics event parameter register')
         original = data[off+48:off+48+size]
-        a = Assembler()
+        a = NativeFrameAssembler(regs+1)
         if kind == 'init':
             copy_at, count = 0, size; a.code.extend(bytes(count)); init(a)
         elif kind == 'refresh':
@@ -187,7 +187,7 @@ def emit(lines, apt, specs, function):
             copy_at, count = len(a.code), size; a.code.extend(bytes(count))
         program = a.finish()
         code = '{' + ','.join(hex(x) for x in program.code) + '}'
-        lines.append(f'result.push_back({{{off},{argc},{regs},{flags},{size},{fnv(original)}ull,{max(regs,8)},{copy_at},{count},{code}}});')
+        lines.append(f'result.push_back({{{off},{argc},{regs},{flags},{size},{fnv(original)}ull,{regs},{copy_at},{count},{code}}});')
         for at, value in program.literals:
             lines.append('{const auto pointer=reinterpret_cast<uintptr_t>(' + json.dumps(value) +
                          f');memcpy(result.back().code.data()+{at},&pointer,8);}}')

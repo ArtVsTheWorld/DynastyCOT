@@ -3,7 +3,7 @@ import sys,math,copy
 from pathlib import Path
 from dataclasses import replace
 sys.path.insert(0,str(Path(__file__).resolve().parents[1]/'Tools'))
-from build_aio_currency_ui import aio_money
+from build_aio_currency_ui import aio_money,recruit_row_policy
 from build_recruit_notes_ui import Assembler
 from recruit_notes_vm import Machine
 from currency_expectations import usd
@@ -36,3 +36,18 @@ for enabled in [False,True]:
     Machine(g,[]).run(replace(base,code=bytes(code)),{1:receiver})
     assert calls==(['$8.7M'] if enabled else []) and data==before
 print('Passed: Blueprint and topbar output, Off no-op, unchanged source data.')
+
+# Native Draw, interest concealment and currency formatting share one owner.
+# In particular, money's early returns must never bypass Feedback/Blind.
+a=Assembler();recruit_row_policy(a);ct.recruit_list_offer_suffix(a);composed=a.finish()
+for mode in range(4):
+ for dollars in [False,True]:
+  code=bytearray(composed.code)
+  for at in composed.scale_offsets:code[at]=mode
+  for at in composed.dollar_offsets:code[at]=int(dollars)
+  fields={'CurrentNILOffer':40,'InterestRank':2,'PlayerKey':711};before=copy.deepcopy(fields)
+  receiver={'mData':{'ExtraInfo':fields},'mcUserRanking':{'_visible':True},'mcInterestedStatus':{'_visible':True}}
+  Machine(g,[]).run(replace(composed,code=bytes(code)),{1:receiver})
+  assert receiver['mcUserRanking']['_visible'] and receiver['mcInterestedStatus']['_visible']==(mode in [0,2])
+  assert fields==before
+print('Passed: independent Native/Feedback/Rank Only/Blind policy before every native currency-return path, including Dollar Values Off and missing money widgets.')
