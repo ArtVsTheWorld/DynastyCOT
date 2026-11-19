@@ -71,12 +71,12 @@
         "Tag": "v0.2.21",
         "ArchiveName": "ExtraSettings-0.2.21.zip",
         "ArchiveUrl": "https://github.com/ArtVsTheWorld/offline-dynasty-settings/releases/download/v0.2.21/ExtraSettings-0.2.21.zip",
-        "ArchiveSha256": "eba555ed1dde06beef5ea3189578474c2299853f369a6864571014bd2671231e",
-        "DllSha256": "e1a6d71cdd1e0083732632a302c8b9acc7be16559e66bdcd9a3b259368088994",
-        "ArchiveBytes": 428588,
+        "ArchiveSha256": "311546a9e5810dd2534b22ea3e87daa338df6b1c996db6b6ffde64fa41c78e79",
+        "DllSha256": "e4d08fc86603729bb9bd27c23859f7bd06cc28843117a9c88c5842ae42611efe",
+        "ArchiveBytes": 427987,
         "ProofUrl": "https://github.com/ArtVsTheWorld/offline-dynasty-settings/releases/download/v0.2.21/ExtraSettings-0.2.21-verification.json",
         "PageUrl": "https://github.com/ArtVsTheWorld/offline-dynasty-settings/releases/tag/v0.2.21",
-        "Notes": "# **November 17 Update**\n\n## **Update 1**\n\n**Game Update Compatibility**\n- Restored the extra Dynasty settings rows, play clocks, playcall rules and offline Controller Select for the November 17 game update. Existing league settings carry forward.\n\n**Special Teams Formation Subs**\n- Added optional **Kickoff** and **Kickoff Return** entries under **Special Teams** on the offense and defense tabs, respectively. The return preview fits the full unit on the field.\n- To turn them on, create **FormationSubs.ini** in `%LOCALAPPDATA%\\Ace\\DynastyCOT\\ExtraSettings` with one line, `KickoffAndKickReturn=On`, before launching the game. The option starts off.\n\n**Install**\n- Close MMC and the game, then update to **0.2.21** in Dynasty COT or replace **ExtraSettings.dll** in your usual MMC **Plugins** folder.\n",
+        "Notes": "# **November 17 Update**\n\n## **Update 1**\n\n**Game Update Compatibility**\n- Restored the extra Dynasty settings rows, play clocks, playcall rules and offline Controller Select for the November 17 game update. Existing league settings carry forward.\n\n**Special Teams Formation Subs**\n- **Kickoff** and **Kickoff Return** now appear automatically under **Special Teams** in supported offline Dynasty Formation Subs. Kickoff is on offense and Kickoff Return is on defense. The return preview fits the full unit on the field.\n- If you downloaded the first 0.2.21 build, download it again or run **Install / Update** in Dynasty COT. The revised build ignores any old FormationSubs.ini and leaves it on disk.\n\n**Install**\n- Close MMC and the game, then update to **0.2.21** in Dynasty COT or replace **ExtraSettings.dll** in your usual MMC **Plugins** folder.\n",
         "Compatibility": "Use one provider of each module. Offline scopes, exact hook checks and shared AppData remain. Read the included player guide and release notes for supported modes and live acceptance limits.",
         "Prerelease": false
       }
@@ -442,6 +442,11 @@
       "Path": "Plugins/ExpandedPractice.dll",
       "Module": "ExpandedPractice",
       "Sha256": "094c8eb3c4a93acb8dd276c3d35f9cabae4632e02c39ae8a50307e6a300d0372"
+    },
+    {
+      "Path": "Plugins/ExtraSettings.dll",
+      "Module": "ExtraSettings",
+      "Sha256": "e4d08fc86603729bb9bd27c23859f7bd06cc28843117a9c88c5842ae42611efe"
     }
   ],
   "Programs": [

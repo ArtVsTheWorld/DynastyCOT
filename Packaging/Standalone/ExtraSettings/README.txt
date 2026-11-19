@@ -6,7 +6,7 @@ Close MMC and the game. Find your usual MMC shortcut, right-click it and open Pr
 Settings and help
 Open Dynasty > League Settings > Game Settings. Press Win+R, paste %LOCALAPPDATA%\Ace\DynastyCOT\ExtraSettings and press Enter. Open Diagnostics for OfflineDynastySettings-BugReport.zip. The main log is OfflineDynastySettings.log.
 Open ExtraSettings-Player-Guide.pdf in this ZIP for examples and help. FEATURES.md lists the features.
-Use this version with the November 17 game update. The included guide covers the core features. See the GitHub release notes for changes in this version. See FEATURES.md for how to enable the optional Kickoff and Kickoff Return entries.
+Use this version with the November 17 game update. The included guide covers the core features. See the GitHub release notes for changes in this version. Kickoff and Kickoff Return appear automatically under Special Teams in supported offline Dynasty Formation Subs.
 
 Roll back
 Close MMC and the game. Restore your backed-up DLL. If you used the collection installer, open Backups and restore the matching change. Keep your settings and history folders.

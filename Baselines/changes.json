@@ -1592,6 +1592,11 @@
       "reason": "Verified CFB 27 November 19 native relocation and unchanged ownership boundaries across BTF, GDA, settings and practice"
     },
     {
+      "path": "Modules/ExtraDynastySettings/Plugin/FormationSubsNative.cs",
+      "sha256": "b6ee99c190fd816cfba45daafd9c617e4198c624802f8b39fbd2c81bd0a68648",
+      "reason": "Enable Kickoff and Kickoff Return Formation Subs automatically in supported offline Dynasty. Ignore legacy preferences without modifying them."
+    },
+    {
       "path": "Modules/ExtraDynastySettings/Plugin/GameSettingsMenuRows.cs",
       "sha256": "41f42afb3d38686dc57b9b03e1bcd6776f3921f7fee9155754640362898cf26f",
       "reason": "Verified CFB 27 November 19 native relocation and unchanged ownership boundaries across BTF, GDA, settings and practice"
@@ -1623,8 +1628,8 @@
     },
     {
       "path": "Modules/ExtraDynastySettings/Plugin/build.ps1",
-      "sha256": "148bdc8fda1258ea0c90c36c78525e4c00344a6aa4a5811c58fce05a75c9b132",
-      "reason": "Display-only names for the current owned native kickoff sets. Preserve meaningful native names, source metadata, grouped filters, preview positions and saved assignments."
+      "sha256": "f3c0b54e4dcfa6f39dc04ee3425cbf40b1ae1dac0354ce30fc8937e7e5022145",
+      "reason": "Compile the verified Formation Subs source alongside the other Extra Settings features."
     },
     {
       "path": "Modules/ExtraDynastySettings/Shared/Clock/DynastyPlayClockAction.cs",

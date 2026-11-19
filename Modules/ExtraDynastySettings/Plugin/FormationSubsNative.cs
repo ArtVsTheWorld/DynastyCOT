@@ -7,7 +7,7 @@ namespace DynastyPlayClock
 {
     public sealed partial class DynastyPlayClockAction
     {
-        private static long formationSubsStart,formationSubsDisabledStart;
+        private static long formationSubsStart,formationSubsUnavailableStart;
         private static List<OfflineDynastySettings.MemoryCheck> formationSubsChecks;
 
         internal static void InstallFormationSubs(int pid)
@@ -15,14 +15,11 @@ namespace DynastyPlayClock
             lock(Sync) using(Process game=Process.GetProcessById(pid)){
                 long start=game.StartTime.ToUniversalTime().Ticks;
                 if(installedPid!=pid||installedStart!=start)throw new InvalidOperationException("Settings installation not ready.");
-                if(formationSubsStart==start||formationSubsDisabledStart==start)return;
-                bool enabled;
-                try{enabled=OfflineDynastySettings.FormationSubsPreferences.Enabled();}
-                catch(Exception ex){formationSubsDisabledStart=start;Log(null,"Kickoff/return Formation Subs unavailable: "+ex.Message+" Other settings remain available.");return;}
-                if(!enabled){formationSubsDisabledStart=start;Log(null,"Kickoff/return Formation Subs Off (native menu retained).");return;}
-                IntPtr h=OpenProcess(0x1038,false,pid);if(h==IntPtr.Zero)throw new InvalidOperationException("Could not open Formation Subs installation.");
-                IntPtr allocation=IntPtr.Zero;bool published=false;
+                if(formationSubsStart==start||formationSubsUnavailableStart==start)return;
+                IntPtr h=IntPtr.Zero,allocation=IntPtr.Zero;bool published=false;
                 try{
+                    h=OpenProcess(0x1038,false,pid);
+                    if(h==IntPtr.Zero)throw new InvalidOperationException("Could not open Formation Subs installation (Windows error "+Marshal.GetLastWin32Error()+").");
                     long b=installedBase;
                     List<OfflineDynastySettings.MemoryCheck> originals=new List<OfflineDynastySettings.MemoryCheck>();
                     foreach(Region region in FormationSubsRegions){
@@ -111,13 +108,13 @@ namespace DynastyPlayClock
                     checks.Add(new OfflineDynastySettings.MemoryCheck(b+0xb3324d0+0x520,BitConverter.GetBytes(b+0x2f25700)));
                     checks.Add(new OfflineDynastySettings.MemoryCheck(b+0xda1dda0,BitConverter.GetBytes(b+0xb5757a8)));
                     formationSubsChecks=checks;formationSubsStart=start;
-                    Log(null,"Private kickoff/return Formation Subs enabled with display-only return-depth fitting. Native IDs, eligibility, submit/reset and save store retained. Offline Dynasty hub only; on-field override acceptance pending. Code=0x"+remote.ToString("x"));
-                }catch(Exception ex){formationSubsDisabledStart=start;Log(null,"Kickoff/return Formation Subs unavailable; other settings remain active. "+ex.ToString());}
+                    Log(null,"Kickoff and Kickoff Return Formation Subs ready for the supported offline Dynasty hub. Code=0x"+remote.ToString("x"));
+                }catch(Exception ex){formationSubsUnavailableStart=start;Log(null,"Kickoff/return Formation Subs unavailable; other settings remain active. "+ex.ToString());}
                 finally{
                     // Never free code that another thread might have observed,
                     // even after successful rollback. Published blocks live to exit.
                     if(allocation!=IntPtr.Zero&&!published)FormationSubsFree(h,allocation,UIntPtr.Zero,0x8000);
-                    CloseHandle(h);
+                    if(h!=IntPtr.Zero)CloseHandle(h);
                 }
             }
         }
@@ -129,36 +126,5 @@ namespace DynastyPlayClock
             }
         }
         [DllImport("kernel32.dll",EntryPoint="VirtualFreeEx",SetLastError=true)]private static extern bool FormationSubsFree(IntPtr process,IntPtr address,UIntPtr size,uint type);
-    }
-}
-
-namespace OfflineDynastySettings
-{
-    internal static class FormationSubsPreferences
-    {
-        // Opt-in for this private candidate. No setting or live data is written.
-        internal static bool Enabled(){
-            string path=Ace.DynastyCOT.StoragePath.Combine(Ace.DynastyCOT.UserStorage.Folder("ExtraSettings"),"FormationSubs.ini");
-            return ReadPreference(path);
-        }
-        internal static bool ReadPreference(string path){
-            if(!Ace.DynastyCOT.StorageFile.Exists(path))return false;
-            string value;
-            using(var file=Ace.DynastyCOT.StorageIO.OpenFile(path,System.IO.FileMode.Open,System.IO.FileAccess.Read,System.IO.FileShare.Read))
-            using(var reader=new System.IO.StreamReader(file)){
-                char[] buffer=new char[4097];int length=0,n;
-                while(length<buffer.Length&&(n=reader.Read(buffer,length,buffer.Length-length))!=0)length+=n;
-                if(length>4096)throw new System.IO.InvalidDataException("FormationSubs.ini exceeds 4 KB; file preserved.");
-                value=new string(buffer,0,length).Trim();
-            }
-            return Parse(value);
-        }
-        internal static bool Parse(string value){
-            if(value==null)return false;
-            value=value.Trim();
-            if(value=="KickoffAndKickReturn=Off")return false;
-            if(value=="KickoffAndKickReturn=On")return true;
-            throw new System.IO.InvalidDataException("FormationSubs.ini must contain KickoffAndKickReturn=On or KickoffAndKickReturn=Off; file preserved.");
-        }
     }
 }
