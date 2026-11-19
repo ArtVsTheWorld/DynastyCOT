@@ -63,7 +63,7 @@ int main(){
     assert(trace.row==7&&trace.custom==1&&trace.historyCount==5);s.away.id=1251;gt.refs[0x12]=&ar;
     manager.vt=rv;failure("launch statistics manager identity unavailable","dynasty");manager.vt=mv;
     assert(capture()&&!trace.failure&&borrowed==0); // Failure state cannot leak into a subsequent successful launch.
-    struct Label {A address;int key;const char* name;};Label labels[]={{0xbdd30b8,0x184,"TeamSeasonStats"},{0xbdc5208,0,"LeagueData"},{0xbdc5218,1,"LeagueHistoryManager"},{0xbde1278,0,"Dynasty"},{0xbded4e8,0x1b,"League"},{0xbdd20f8,0x88,"IsTeamBuilder"},{0xbded4f8,0x1c,"LeagueID"},{0xbdeeca8,57,"WINS"},{0xbdeea78,22,"LOSSES"},{0xbdeec68,53,"TIES"}};
+    struct Label {A address;int key;const char* name;};Label labels[]={{0xbdd3038,0x184,"TeamSeasonStats"},{0xbdc5188,0,"LeagueData"},{0xbdc5198,1,"LeagueHistoryManager"},{0xbde11f8,0,"Dynasty"},{0xbded468,0x1b,"League"},{0xbdd2078,0x88,"IsTeamBuilder"},{0xbded478,0x1c,"LeagueID"},{0xbdeec28,57,"WINS"},{0xbdee9f8,22,"LOSSES"},{0xbdeebe8,53,"TIES"}};
     for(auto l:labels){page(image+l.address);put(image+l.address,reinterpret_cast<A>(l.name));put(image+l.address-8,l.key);}
     assert(audiencenative::bindingsReady(image));
     for(auto l:labels){put<int>(image+l.address-8,999);assert(!audiencenative::bindingsReady(image));put<int>(image+l.address-8,l.key);}

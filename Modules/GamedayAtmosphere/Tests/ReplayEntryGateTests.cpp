@@ -31,7 +31,7 @@ int main(){
  global(0xd9eb808,14);global(0xf3fddbc,3);global(0xf63f9f0,reinterpret_cast<A>(cfg));global(attendance::bindings::MatchWrapper,reinterpret_cast<A>(wrapper));put(reinterpret_cast<A>(wrapper)+16,mt);
  global(attendance::bindings::GameStates,st);global(attendance::bindings::ClockManager,cl);global(attendance::bindings::ReplayManager,rec);global(attendance::bindings::PauseFlag,reinterpret_cast<A>(&paused));
  global(attendance::bindings::PlayStats,A(0));global(attendance::bindings::SelectedPlayer,-1);global(0xd9fba20,1119);global(0xd9fba24,1120);
- put(mt,image+attendance::bindings::MatchVtable);put(st,image+attendance::bindings::GameStatesVtable);put(st+0xa0,4);put(cl,image+A(0xb47eec8));put(cl+8,1);put(cl+0x28,reinterpret_cast<A>(time));put(reinterpret_cast<A>(time)+0x28,600.f);put(reinterpret_cast<A>(time)+0x2c,720.f);
+ put(mt,image+attendance::bindings::MatchVtable);put(st,image+attendance::bindings::GameStatesVtable);put(st+0xa0,4);put(cl,image+A(0xb47ee68));put(cl+8,1);put(cl+0x28,reinterpret_cast<A>(time));put(reinterpret_cast<A>(time)+0x28,600.f);put(reinterpret_cast<A>(time)+0x2c,720.f);
  put(rec,image+attendance::bindings::ReplayVtable);put(rec+0x1030,20.0);put(mt+0x1d0,1);put(mt+0x1c8,0);put(mt+0x16c,0.f);stub(attendance::bindings::FirstDownLine);
  enabled=true;mode=0;extraReplays=true;bigPlayReplays=true;routineInsets=true;replayPresentationInstalled=true;replayPresentationFailed=false;pauseBinding=true;replayBinding=true;majorReplayBindings=true;playBindingsAvailable=true;originalMuseLogic=logic;originalReplayEventNode=event;
  unsigned checks=0;

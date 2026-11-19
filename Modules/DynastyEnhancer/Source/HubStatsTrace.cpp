@@ -26,7 +26,7 @@ constexpr std::array<Candidate,4> candidates={{
     {"InfoPanelPregameTeamStats.BindingFinished",0x11d98,0,2,41,128,0x2f3c594f678e456cull},
     {"InfoPanelPregameTeamStats.BindWidget",0x114f8,2,5,25,1284,0x6347b3585977d943ull},
 }};
-constexpr uintptr_t table=0xbc42fe8,setupSlot=0xc8,lengthSlot=0xb0;
+constexpr uintptr_t table=0xbc42f88,setupSlot=0xc8,lengthSlot=0xb0;
 HMODULE self;uintptr_t base;Setup originalSetup=nullptr;Length originalLength=nullptr;
 std::atomic<bool> disabled{false};std::atomic<unsigned> inflight{0},observed{0};
 std::array<std::atomic<uintptr_t>,1024> satisfied{};

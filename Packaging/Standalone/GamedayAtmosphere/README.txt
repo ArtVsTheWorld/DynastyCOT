@@ -1,4 +1,4 @@
-Ace’s Gameday Atmosphere 2.1.40 — Update 5 Hotfix 2
+Ace’s Gameday Atmosphere 2.1.41 — November 17 Update
 
 Install or update
 Close MMC and the game. Find your usual MMC shortcut, right-click it and open Properties. Follow Target to MMCModManager.exe. Open the Plugins folder beside that file. Back up your old GamedayAtmosphere.dll outside Plugins, then copy GamedayAtmosphere.dll from this ZIP into Plugins. Replace the old copy.
@@ -6,7 +6,7 @@ Close MMC and the game. Find your usual MMC shortcut, right-click it and open Pr
 Settings and help
 Open Dynasty Central > User Settings > Gameday Atmosphere. Press Win+R, paste %LOCALAPPDATA%\Ace\DynastyCOT\GamedayAtmosphere and press Enter. Open Logs. Start with status.txt for a game issue or launcher.log for startup.
 Open GamedayAtmosphere-Player-Guide.pdf in this ZIP for examples and help. FEATURES.md lists the features.
-The included guide covers the unchanged gameplay features from 2.1.38. This hotfix improves long-path runtime, settings and history handling. Existing crowd plans, audio and replay behavior are preserved.
+Use this version with the November 17 game update. The included guide covers the core features. See the GitHub release notes for changes in this version.
 
 Roll back
 Close MMC and the game. Restore your backed-up DLL. If you used the collection installer, open Backups and restore the matching change. Keep your settings and history folders.

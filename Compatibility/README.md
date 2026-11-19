@@ -1,5 +1,10 @@
 # Compatibility maintenance
 
+The bounded pre-update checker and clean-capture handoff are documented in
+[PRE_UPDATE.txt](PRE_UPDATE.txt). It checks explicit private evidence through
+source-built production validation probes and reports partial coverage honestly;
+it does not update/install/inject or approve a new game patch.
+
 The generated [inventory](inventory.json) collects validation ranges, extracted patch spans, vtable slots, native address references and source lines for hook ownership and UI contracts. Regenerate with `python Tools/export_compatibility.py`; use `--check` to detect stale sources. Symbolic and dynamically located UI patches still require review of the cited code. The inventory does not certify a game build or overhaul.
 
 Practice patches 15 bytes at RVA `0x25a3e60`, while both Enhancer engines fingerprint 32 bytes there. COT verifies three exact Practice entry jumps, complete emitted bodies and image/data relocations before normalizing the first 15 bytes in a local comparison buffer. It never rewrites the other hook. The remaining 17 bytes must still match. The contract passed 4,949 ownership/mutation checks, including relocated images, unreadable pages, changed tails and every body byte.

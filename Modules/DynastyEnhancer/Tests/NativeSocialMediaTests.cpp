@@ -48,6 +48,21 @@ int main(int argc,char** argv){
     try {
         socialtexttests::run();
         {
+            social::FeedPost post{"Recruit","@Prospect","Test post","Recruiting",1,146};
+            post.voice="recruit";
+            post.defaultRecruitJersey=true;
+            require(social::newsJerseyAsset(post)==799,"Neutral recruit jersey did not select the verified default texture alias");
+            post.defaultRecruitJersey=false;
+            post.uniformTeamLogo=0;
+            require(social::newsJerseyAsset(post)==1,"Verified Air Force jersey lost the school mapping");
+            post.uniformTeamLogo=11;
+            require(social::newsJerseyAsset(post)==12,"Verified school jersey changed");
+            post.voice="beat";
+            post.defaultRecruitJersey=true;
+            post.uniformTeamLogo=-1;
+            require(social::newsJerseyAsset(post)==-1,"Neutral recruit jersey leaked to another account type");
+        }
+        {
             dynasty::live::FeedSchedule cadence;
             require(cadence.due(0),"Fresh feed schedule did not start immediately");
             cadence.accepted(1000);
@@ -164,7 +179,7 @@ int main(int argc,char** argv){
             put(screenAt+0x8a0-8,modelAt);require(!social::assets::screen(screenAt+0x8a0,726,dropdownPatches,q),"External template constant pool passed discovery");
             put(modelAt+0x24970-16,unsigned(42));require(!social::assets::model(modelAt+0x24970,91,dropdownPatches,q),"Foreign News model constant pool passed discovery");
         }
-        for(const auto& binding:bindings)require(binding.vt!=0xbac63a8||binding.offset!=0x20,"Recovery build must leave native MenuPanelsReady unhooked");
+        for(const auto& binding:bindings)require(binding.vt!=0xbac6348||binding.offset!=0x20,"Recovery build must leave native MenuPanelsReady unhooked");
         {
             auto c=std::make_shared<social::Catalog>();c->scopes={{"all","For You"},{"team:1","Team"}};social::Edition e;e.key="paged";
             for(int n=0;n<38;++n){auto id=std::to_string(n);social::FeedPost parent{"Beat","@Beat","Report","Recruiting"};parent.category="recruiting";e.stories.emplace(id,parent);auto reply=parent;reply.replyTo=id;reply.voice="fan";e.stories.emplace(id+"r",reply);e.views["team:1"].push_back(id);e.views["team:1"].push_back(id+"r");}c->weeks.push_back(e);
@@ -181,18 +196,18 @@ int main(int argc,char** argv){
         {auto savedChanged=filterChanged;filterChanged=originalChanged;opened=true;for(const char* kind:{"news_category","filter_one","SOCIAL_TYPE","SOCIAL_TYPE_PREV"})filterChangedHook(nullptr,"CM_NEWSSUB",kind,nullptr);require(changedForwardCalls==0,"Preparing-page filters escaped to the stock custom-panel lookup");filterChanged=savedChanged;opened=false;}
         {
             using dynasty::live::Address;const Address image=0x140000000,svc=0x100000,career=0x110000,ui=0x120000,owner=0x130000,db=0x140000;
-            std::map<Address,Address> cells={{image+0xfa519b8,svc},{svc,image+0xbaa8998},{svc+0x468,career},{svc+0x470,ui},{svc+0x460,owner},{svc+0x7b1,1},{career,image+0xbce9b08},{ui,image+0xbd7a538},{career+0x20,owner},{career+0x238,db},{db,image+0xbd0d2d8}};
-            auto q=[&](Address a){return cells.at(a);};const auto bound=dynasty::live::activeSession(image,q);require(bound.career==career&&bound.database==db,"Canonical CareerManager ownership did not resolve the shared database");cells[db]=image+0xbd0d378;require(dynasty::live::activeSession(image,q).database==db,"Direct active child context was rejected");
+            std::map<Address,Address> cells={{image+0xfa519b8,svc},{svc,image+0xbaa8938},{svc+0x468,career},{svc+0x470,ui},{svc+0x460,owner},{svc+0x7b1,1},{career,image+0xbce9a78},{ui,image+0xbd7a4b8},{career+0x20,owner},{career+0x238,db},{db,image+0xbd0d258}};
+            auto q=[&](Address a){return cells.at(a);};const auto bound=dynasty::live::activeSession(image,q);require(bound.career==career&&bound.database==db,"Canonical CareerManager ownership did not resolve the shared database");cells[db]=image+0xbd0d2f8;require(dynasty::live::activeSession(image,q).database==db,"Direct active child context was rejected");
             for(const auto& fault:std::vector<std::pair<Address,Address>>{{svc+0x7b1,0},{svc+0x468,0},{career,0},{ui,0},{career+0x20,0},{db,0}}){const auto old=cells.at(fault.first);cells[fault.first]=fault.second;bool rejected=false;try{dynasty::live::activeSession(image,q);}catch(...){rejected=true;}require(rejected,"Inactive or foreign career ownership was accepted");cells[fault.first]=old;}
             require(dynasty::live::supportedRecordLayout(true,1,8100,9)&&!dynasty::live::supportedRecordLayout(false,1,8100,9)&&!dynasty::live::supportedRecordLayout(true,1,16385,9),"Award-array capacity exception escaped its array-only bounds");
-            const Address child=0x150000;cells[child]=image+0xbd0d378;cells[child+0x1a8]=db;
+            const Address child=0x150000;cells[child]=image+0xbd0d2f8;cells[child+0x1a8]=db;
             const Address viewOwner=0x160000,binding=0x170000,nextChild=0x180000;
-            cells[career+0x230]=viewOwner;cells[career+0x240]=binding;cells[viewOwner]=image+0xb4dbb18;cells[binding]=viewOwner;cells[binding+8]=child;
+            cells[career+0x230]=viewOwner;cells[career+0x240]=binding;cells[viewOwner]=image+0xb4dbab8;cells[binding]=viewOwner;cells[binding+8]=child;
             require(dynasty::live::ownedCareerContext(image,bound,q)==child,"Career-owned live view was not resolved");
-            cells[nextChild]=image+0xbd0d378;cells[nextChild+0x1a8]=db;cells[binding+8]=nextChild;
+            cells[nextChild]=image+0xbd0d2f8;cells[nextChild+0x1a8]=db;cells[binding+8]=nextChild;
             require(dynasty::live::ownedCareerContext(image,bound,q)==nextChild,"Postgame replacement did not supersede the still-valid old view");
             for(const auto& fault:std::vector<std::pair<Address,Address>>{{binding,viewOwner+8},{binding+8,0},{nextChild,0},{nextChild+0x1a8,db+8}}){const auto old=cells.at(fault.first);cells[fault.first]=fault.second;bool rejected=false;try{dynasty::live::ownedCareerContext(image,bound,q);}catch(...){rejected=true;}require(rejected,"Changing/foreign owned view was accepted or silently fell back");cells[fault.first]=old;}
-            cells[viewOwner]=0;require(!dynasty::live::ownedCareerContext(image,bound,q),"Unknown binding layout must use validated fallback");cells[viewOwner]=image+0xb4dbb18;cells[binding+8]=child;
+            cells[viewOwner]=0;require(!dynasty::live::ownedCareerContext(image,bound,q),"Unknown binding layout must use validated fallback");cells[viewOwner]=image+0xb4dbab8;cells[binding+8]=child;
             const dynasty::live::SessionContextHint hint{career,db,child};
             require(dynasty::live::verifiedContextHint(image,bound,hint,q)==child,"Verified same-session context hint was not accepted");
             auto foreign=hint;foreign.career+=8;require(!dynasty::live::verifiedContextHint(image,bound,foreign,q),"Hint from another CareerManager was accepted");

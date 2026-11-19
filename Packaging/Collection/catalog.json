@@ -14,16 +14,16 @@
       ],
       "Current": {
         "Module": "BeyondTheField",
-        "Version": "1.0.32",
-        "Tag": "v1.0.32",
-        "ArchiveName": "BeyondTheField-1.0.32.zip",
-        "ArchiveUrl": "https://github.com/ArtVsTheWorld/BeyondTheField/releases/download/v1.0.32/BeyondTheField-1.0.32.zip",
-        "ArchiveSha256": "b7f32c89f82bad532625186de77a3580d8a89cfecb482ab958d0785b2638c86b",
-        "DllSha256": "60bc5e5ba29ab33fba8e8aef2fabd013ee78cb80f2c3437920737de39c9f66f9",
-        "ArchiveBytes": 41326911,
-        "ProofUrl": "https://github.com/ArtVsTheWorld/BeyondTheField/releases/download/v1.0.32/BeyondTheField-1.0.32-verification.json",
-        "PageUrl": "https://github.com/ArtVsTheWorld/BeyondTheField/releases/tag/v1.0.32",
-        "Notes": "# **Update 2 Hotfix 3**\n\n**Ratings & Menu Compatibility**\n- Improved matching across supported UI overhauls, including menus whose methods have moved\n- Fixed missing Recruit Notes on the first visit and rating leaks in player cards, NIL rows and Weekly Practice Plan team banners\n- Keeps each UI mod's native layout, money formatting, sorting and player data\n- Unsupported modified menus remain protected by compatibility checks\n\n**Menu Responsiveness**\n- Reduced repeated adapter work when opening, closing and navigating roster screens, player cards and other Dynasty menus\n- Offline callback tests show substantially lower overhead; whole-menu input delays still need confirmation on each setup\n\n**Recruiting & Saved Data**\n- Fixed precise interest labels and progress bars showing through Recruit Feedback on supported modified menus\n- Keeps manual Recruiting Board position numbers and native visibility for special recruit states\n- Preserves settings, Notes, accounts and published history, including the earlier startup and long-path fixes\n\n**Install**\n- Close MMC and the game, then replace **BeyondTheField.dll** in your usual **Plugins** folder, or select **1.0.32** in the COT installer after its version check\n- Keep existing data folders. No reset or history clearing is needed\n",
+        "Version": "1.0.43",
+        "Tag": "v1.0.43",
+        "ArchiveName": "BeyondTheField-1.0.43.zip",
+        "ArchiveUrl": "https://github.com/ArtVsTheWorld/BeyondTheField/releases/download/v1.0.43/BeyondTheField-1.0.43.zip",
+        "ArchiveSha256": "aea03bfd8fad4ffb358c162eafc8fc2e7c73a495c0a8b3ac83c9147ce90fe0ba",
+        "DllSha256": "158acc02daef6fd1b3ee8f0aec12ca151ae91134bfde49bbd678000e2eb112ee",
+        "ArchiveBytes": 41368354,
+        "ProofUrl": "https://github.com/ArtVsTheWorld/BeyondTheField/releases/download/v1.0.43/BeyondTheField-1.0.43-verification.json",
+        "PageUrl": "https://github.com/ArtVsTheWorld/BeyondTheField/releases/tag/v1.0.43",
+        "Notes": "# **November 17 Update**\n\n## **Update 2 Hotfix 4**\n\n**Game Update Compatibility**\n- Restored Beyond the Field on the November 17 game update, including Social Media, recruiting, roster grades and GPI.\n\n**Recruit Notes**\n- Moved Notes higher on the card and split the write-up into bulleted Background and Scouting Notes sections. Previous-season stats and position history stay on the card.\n- A fully scouted high school or JUCO recruit gets one background note. The note stays the same when you reopen the card. Transfers skip this section.\n- Athletic Measurables now appear in their own section as plain estimates. Added the 10-yard split and made room for all seven measurements at 100% scouting when the ratings needed to calculate them can be verified. Partial scouting and Blind rules still apply.\n\n**Ratings & Social Media**\n- Fixed numeric ratings in the Attributes panel of the in-game Player Stats card. The stats table still shows its original numbers.\n- Improved GPI roster navigation matching for supported menu layouts and input variants.\n- Uncommitted recruits now use the default jersey in new Social Media portraits. Previously published posts and saved scouting reports stay intact.\n\n**Install**\n- Close MMC and the game, then update to **1.0.43** in Dynasty COT or replace **BeyondTheField.dll** in your usual MMC **Plugins** folder.\n",
         "Compatibility": "Use one provider of each module. Offline scopes, exact hook checks and shared AppData remain. Read the included player guide and release notes for supported modes and live acceptance limits.",
         "Prerelease": false
       }
@@ -40,16 +40,16 @@
       ],
       "Current": {
         "Module": "GamedayAtmosphere",
-        "Version": "2.1.40",
-        "Tag": "v2.1.40",
-        "ArchiveName": "GamedayAtmosphere-2.1.40.zip",
-        "ArchiveUrl": "https://github.com/ArtVsTheWorld/DynamicGamedayAtmosphere/releases/download/v2.1.40/GamedayAtmosphere-2.1.40.zip",
-        "ArchiveSha256": "fa4f2d18d081dbf1e8ee94a2f75982c87249f3bdd326c2a82a684768f4ee8c36",
-        "DllSha256": "5118e699c90409f12601e5524d30f707b9e1e27b68829ebb1fc878024c75a76a",
-        "ArchiveBytes": 8742142,
-        "ProofUrl": "https://github.com/ArtVsTheWorld/DynamicGamedayAtmosphere/releases/download/v2.1.40/GamedayAtmosphere-2.1.40-verification.json",
-        "PageUrl": "https://github.com/ArtVsTheWorld/DynamicGamedayAtmosphere/releases/tag/v2.1.40",
-        "Notes": "# **Update 5 Hotfix 2**\n\n**Startup & Saved Crowds**\n- Improved startup when runtime files are stored in long folder paths\n- Fixed long-path handling for settings, logs and saved crowd files\n- Keeps existing settings, crowd history, palettes and replay fixes\n- Includes the earlier startup protection while Windows updates the game's loaded-file list\n\n**Install**\n- Close MMC and the game, then replace **GamedayAtmosphere.dll** in your usual **Plugins** folder, or select **2.1.40** in the COT installer\n- Keep your existing settings and History folders. No crowd regeneration is required for this hotfix\n",
+        "Version": "2.1.41",
+        "Tag": "v2.1.41",
+        "ArchiveName": "GamedayAtmosphere-2.1.41.zip",
+        "ArchiveUrl": "https://github.com/ArtVsTheWorld/DynamicGamedayAtmosphere/releases/download/v2.1.41/GamedayAtmosphere-2.1.41.zip",
+        "ArchiveSha256": "799810ee4e7f451873f616858669fa14b70b168a8cd0170538cfa3eee440795e",
+        "DllSha256": "b77771860c6199ba945b7c4267658227ca050c313f753d09f9fda070ea0c3710",
+        "ArchiveBytes": 8788406,
+        "ProofUrl": "https://github.com/ArtVsTheWorld/DynamicGamedayAtmosphere/releases/download/v2.1.41/GamedayAtmosphere-2.1.41-verification.json",
+        "PageUrl": "https://github.com/ArtVsTheWorld/DynamicGamedayAtmosphere/releases/tag/v2.1.41",
+        "Notes": "# **November 17 Update**\n\n## **Update 5 Hotfix 3**\n\n**Game Update Compatibility**\n- Restored Gameday Atmosphere's crowd and presentation features for the November 17 game update in supported offline Dynasty and Play Now games.\n- Updated crowd seating, attendance, audio, camera, replay and settings support for the new game build. Existing crowd plans and settings carry forward.\n\n**Install**\n- Close MMC and the game, then update to **2.1.41** in Dynasty COT or replace **GamedayAtmosphere.dll** in your usual MMC **Plugins** folder.\n",
         "Compatibility": "Use one provider of each module. Offline scopes, exact hook checks and shared AppData remain. Read the included player guide and release notes for supported modes and live acceptance limits.",
         "Prerelease": false
       }
@@ -67,16 +67,16 @@
       ],
       "Current": {
         "Module": "ExtraSettings",
-        "Version": "0.2.12",
-        "Tag": "v0.2.12",
-        "ArchiveName": "ExtraSettings-0.2.12.zip",
-        "ArchiveUrl": "https://github.com/ArtVsTheWorld/offline-dynasty-settings/releases/download/v0.2.12/ExtraSettings-0.2.12.zip",
-        "ArchiveSha256": "10ca8d0da5a5611d4be7fa36fd0b097ae810db3cc117b5f4dfd89d26096c591b",
-        "DllSha256": "62b3804a218f3b0c9b83fb0ea0726a2a8e7f9a9f4a4d1ae57a707642d133a23d",
-        "ArchiveBytes": 397560,
-        "ProofUrl": "https://github.com/ArtVsTheWorld/offline-dynasty-settings/releases/download/v0.2.12/ExtraSettings-0.2.12-verification.json",
-        "PageUrl": "https://github.com/ArtVsTheWorld/offline-dynasty-settings/releases/tag/v0.2.12",
-        "Notes": "# Ace\u00e2\u20ac\u2122s Extra Settings 0.2.12\n\nChanges since public release 0.2.10.\n\n- Your Windows user folder now holds the settings and reports. Copies of MMC on the same account can share your choices, including when the MMC program folder has limited write access.\n- The report now tells you whether Extra Settings is waiting for an offline Dynasty, which controls are ready and where a setting could not be saved. It is easier to tell a startup problem from a saving problem.\n- The league-specific clocks from 0.2.10 carry forward. Fresh leagues still start with the offensive clock On, the defensive clock at 15 seconds and the four playcall restrictions off.\n\nDownload the standalone ZIP, close MMC and the game, and copy **ExtraSettings.dll** into MMC\u00e2\u20ac\u2122s **Plugins** folder. The ZIP includes a full feature list and an illustrated player guide.\n",
+        "Version": "0.2.21",
+        "Tag": "v0.2.21",
+        "ArchiveName": "ExtraSettings-0.2.21.zip",
+        "ArchiveUrl": "https://github.com/ArtVsTheWorld/offline-dynasty-settings/releases/download/v0.2.21/ExtraSettings-0.2.21.zip",
+        "ArchiveSha256": "eba555ed1dde06beef5ea3189578474c2299853f369a6864571014bd2671231e",
+        "DllSha256": "e1a6d71cdd1e0083732632a302c8b9acc7be16559e66bdcd9a3b259368088994",
+        "ArchiveBytes": 428588,
+        "ProofUrl": "https://github.com/ArtVsTheWorld/offline-dynasty-settings/releases/download/v0.2.21/ExtraSettings-0.2.21-verification.json",
+        "PageUrl": "https://github.com/ArtVsTheWorld/offline-dynasty-settings/releases/tag/v0.2.21",
+        "Notes": "# **November 17 Update**\n\n## **Update 1**\n\n**Game Update Compatibility**\n- Restored the extra Dynasty settings rows, play clocks, playcall rules and offline Controller Select for the November 17 game update. Existing league settings carry forward.\n\n**Special Teams Formation Subs**\n- Added optional **Kickoff** and **Kickoff Return** entries under **Special Teams** on the offense and defense tabs, respectively. The return preview fits the full unit on the field.\n- To turn them on, create **FormationSubs.ini** in `%LOCALAPPDATA%\\Ace\\DynastyCOT\\ExtraSettings` with one line, `KickoffAndKickReturn=On`, before launching the game. The option starts off.\n\n**Install**\n- Close MMC and the game, then update to **0.2.21** in Dynasty COT or replace **ExtraSettings.dll** in your usual MMC **Plugins** folder.\n",
         "Compatibility": "Use one provider of each module. Offline scopes, exact hook checks and shared AppData remain. Read the included player guide and release notes for supported modes and live acceptance limits.",
         "Prerelease": false
       }
@@ -92,16 +92,16 @@
       ],
       "Current": {
         "Module": "ExpandedPractice",
-        "Version": "0.8.24",
-        "Tag": "v0.8.24",
-        "ArchiveName": "ExpandedPractice-0.8.24.zip",
-        "ArchiveUrl": "https://github.com/ArtVsTheWorld/drive-based-practice/releases/download/v0.8.24/ExpandedPractice-0.8.24.zip",
-        "ArchiveSha256": "2bfd7184f912dd66431abeda4cc1c065354a1be5cd62ab6b2a0f1c3572bfb3a1",
-        "DllSha256": "107b70943cf07fd44e371f2f767d2820b8ab7aad3a51e1eb0e2dd57c1ba94e5f",
-        "ArchiveBytes": 6595855,
-        "ProofUrl": "https://github.com/ArtVsTheWorld/drive-based-practice/releases/download/v0.8.24/ExpandedPractice-0.8.24-verification.json",
-        "PageUrl": "https://github.com/ArtVsTheWorld/drive-based-practice/releases/tag/v0.8.24",
-        "Notes": "# Ace\u00e2\u20ac\u2122s Expanded Practice 0.8.24\n\nChanges since public release 0.8.21.\n\n- Drive Practice and Scrimmage can now share the recognized Dynasty Extensions pregame controller screen. The fix applies to that specific screen. Other layouts need a separate check.\n- The report tells you when practice is waiting for a session, when Default Practice is active and when a drive mode is running. Your user folder now holds reports across MMC installations.\n- The included guide shows how to switch modes, finish a return, read the scoreboard and start another drive while keeping your totals. Both main-menu Practice and offline Dynasty practice are supported.\n\nDownload the standalone ZIP, close MMC and the game, and copy **ExpandedPractice.dll** into MMC\u00e2\u20ac\u2122s **Plugins** folder. The ZIP includes a full feature list and an illustrated player guide.\n",
+        "Version": "0.8.26",
+        "Tag": "v0.8.26",
+        "ArchiveName": "ExpandedPractice-0.8.26.zip",
+        "ArchiveUrl": "https://github.com/ArtVsTheWorld/drive-based-practice/releases/download/v0.8.26/ExpandedPractice-0.8.26.zip",
+        "ArchiveSha256": "56a2e59bb353df8704fd264706bd982c84169278c8e8596e47854f1bdddb5be6",
+        "DllSha256": "094c8eb3c4a93acb8dd276c3d35f9cabae4632e02c39ae8a50307e6a300d0372",
+        "ArchiveBytes": 6677687,
+        "ProofUrl": "https://github.com/ArtVsTheWorld/drive-based-practice/releases/download/v0.8.26/ExpandedPractice-0.8.26-verification.json",
+        "PageUrl": "https://github.com/ArtVsTheWorld/drive-based-practice/releases/tag/v0.8.26",
+        "Notes": "# **November 17 Update**\n\n## **Update 1**\n\n**Game Update Compatibility**\n- Restored the Practice pause-menu mode switch and support for **Drive Practice** and **Scrimmage** after the November 17 game update.\n- Updated the supported Dynasty Extensions controller handoff for the new game build. Default Practice is still available from the same menu.\n\n**Install**\n- Close MMC and the game, then update to **0.8.26** in Dynasty COT or replace **ExpandedPractice.dll** in your usual MMC **Plugins** folder.\n",
         "Compatibility": "Use one provider of each module. Offline scopes, exact hook checks and shared AppData remain. Read the included player guide and release notes for supported modes and live acceptance limits.",
         "Prerelease": false
       }
@@ -422,6 +422,26 @@
       "Path": "Plugins/BeyondTheField.dll",
       "Module": "BeyondTheField",
       "Sha256": "60bc5e5ba29ab33fba8e8aef2fabd013ee78cb80f2c3437920737de39c9f66f9"
+    },
+    {
+      "Path": "Plugins/BeyondTheField.dll",
+      "Module": "BeyondTheField",
+      "Sha256": "158acc02daef6fd1b3ee8f0aec12ca151ae91134bfde49bbd678000e2eb112ee"
+    },
+    {
+      "Path": "Plugins/GamedayAtmosphere.dll",
+      "Module": "GamedayAtmosphere",
+      "Sha256": "b77771860c6199ba945b7c4267658227ca050c313f753d09f9fda070ea0c3710"
+    },
+    {
+      "Path": "Plugins/ExtraSettings.dll",
+      "Module": "ExtraSettings",
+      "Sha256": "e1a6d71cdd1e0083732632a302c8b9acc7be16559e66bdcd9a3b259368088994"
+    },
+    {
+      "Path": "Plugins/ExpandedPractice.dll",
+      "Module": "ExpandedPractice",
+      "Sha256": "094c8eb3c4a93acb8dd276c3d35f9cabae4632e02c39ae8a50307e6a300d0372"
     }
   ],
   "Programs": [
@@ -2354,6 +2374,31 @@
       "Path": "COT-Runtime/DynastyEnhancer/BeyondTheFieldRecruitFog-v1.dll",
       "Module": "BeyondTheField",
       "Sha256": "f17a25bc921582280e828411aa2795629b4ce0b1bbed3bd469a7a304a3fd3ef5"
+    },
+    {
+      "Path": "COT-Runtime/DynastyEnhancer/BeyondTheFieldNative-v103.dll",
+      "Module": "BeyondTheField",
+      "Sha256": "024b7f45bd54958d503a4627f29254daabf6e3340a12b4f1efa90444e7c191fe"
+    },
+    {
+      "Path": "COT-Runtime/DynastyEnhancer/BeyondTheFieldRecruitFog-v1.dll",
+      "Module": "BeyondTheField",
+      "Sha256": "ac3a8d7ff67f3d0876c410d9eca94889d01b86798651a9f2707721160afe0774"
+    },
+    {
+      "Path": "DGA-Runtime/Runtime-2.1.41/GamedayAtmosphereNative-2.1.41.dll",
+      "Module": "GamedayAtmosphere",
+      "Sha256": "769a0e099f28d515c334b347d19bda1103ffebb77e8c567c0c5c3d2c81e39467"
+    },
+    {
+      "Path": "Plugins/OfflineDynastySettings/ExtraSettings.Persistence.exe",
+      "Module": "ExtraSettings",
+      "Sha256": "70352679dd96d461fdd6f7c2f4cde1853565dafaeb815386c6832e2512f2be3c"
+    },
+    {
+      "Path": "Plugins/SituationalPractice/ExpandedPractice.Runtime.exe",
+      "Module": "ExpandedPractice",
+      "Sha256": "2fa21f61ad4c8c5d6247014f9c2b75b4f1738e67d5a4d8cd82fc5a526be29e62"
     }
   ]
 }

@@ -38,8 +38,8 @@ class Runtime {
     bool owner(Address tickThis,Address& primary,int& volume){
         if(tickThis<0x10040)return false;
         primary=tickThis-0x40;Address a=0,b=0,c=0;
-        return read(primary,a)&&a==image_+0xb227098&&read(tickThis,b)&&b==image_+0xb227178&&
-            read(primary+0x48,c)&&c==image_+0xb227188&&read(primary+0x1f4,volume)&&volume>=0&&volume<=100;
+        return read(primary,a)&&a==image_+0xb227038&&read(tickThis,b)&&b==image_+0xb227118&&
+            read(primary+0x48,c)&&c==image_+0xb227128&&read(primary+0x1f4,volume)&&volume>=0&&volume<=100;
     }
     bool guardedPost(Address primary,float value){
         Parameter parameter{0x9f7d7b40,{0,0,0},value,{0,0,0}};

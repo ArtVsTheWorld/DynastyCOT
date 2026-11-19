@@ -81,14 +81,14 @@ struct TestWorld {
         testGlobal(0xd9eb808,14);testGlobal(0xf3fddbc,3);testGlobal(0xf63f9f0,reinterpret_cast<A>(config.data()));
         testGlobal(attendance::bindings::GameStates,reinterpret_cast<A>(states.data()));states[0]=image+attendance::bindings::GameStatesVtable;phase(6);
         testGlobal(attendance::bindings::MatchWrapper,reinterpret_cast<A>(wrapper.data()));wrapper[2]=reinterpret_cast<A>(match.data());match[0]=image+attendance::bindings::MatchVtable;
-        testGlobal(attendance::bindings::ClockManager,reinterpret_cast<A>(manager.data()));manager[0]=image+0xb47eec8;testPut(reinterpret_cast<A>(manager.data())+8,0);manager[5]=reinterpret_cast<A>(clock.data());
+        testGlobal(attendance::bindings::ClockManager,reinterpret_cast<A>(manager.data()));manager[0]=image+0xb47ee68;testPut(reinterpret_cast<A>(manager.data())+8,0);manager[5]=reinterpret_cast<A>(clock.data());
         testPut(reinterpret_cast<A>(clock.data())+0x28,900.0f);testPut(reinterpret_cast<A>(clock.data())+0x2c,900.0f);
         // Start with comparable teams so the later severe/FCS game has a different
         // opening target instead of both hitting the new regular-season floor.
         testGlobal(0xd9fba20,1119);testGlobal(0xd9fba24,1120);testGlobal(attendance::bindings::PauseFlag,reinterpret_cast<A>(&paused));pauseBinding=true;
-        testGlobal(0xf506000,reinterpret_cast<A>(weather.data()));weather[0]=image+0xb32a290;testPut(reinterpret_cast<A>(weather.data())+0xe8,70);
-        testGlobal(0xe2e53e8,reinterpret_cast<A>(service.data()));service[0]=image+0xb29ee30;testPage(service[0]);testPut(service[0]+0x68,image+0x9099440);
-        testGlobal(0xfc90fb8,A(0));testFunction(0x9099440,testOption);testFunction(attendance::bindings::NeutralGetter,testNeutral);testFunction(0xa0b3000,testRank);
+        testGlobal(0xf506000,reinterpret_cast<A>(weather.data()));weather[0]=image+0xb32a230;testPut(reinterpret_cast<A>(weather.data())+0xe8,70);
+        testGlobal(0xe2e53e8,reinterpret_cast<A>(service.data()));service[0]=image+0xb29edd0;testPage(service[0]);testPut(service[0]+0x68,image+0x90994a0);
+        testGlobal(0xfc90f78,A(0));testFunction(0x90994a0,testOption);testFunction(attendance::bindings::NeutralGetter,testNeutral);testFunction(0xa0b3060,testRank);
     }
     void phase(int value){testPut(reinterpret_cast<A>(states.data())+0xa0,value);}
 };
@@ -207,7 +207,7 @@ void testAudioCameraCallbacks(TestWorld& world){
 }
 void testEmptyMode(TestWorld& world){
     auto savedEntities=entities;auto savedScenes=testScenes;TestScene stadium(1536);
-    std::vector<A> controller(8),link(2);controller[0]=image+0xb485368;controller[7]=reinterpret_cast<A>(link.data());link[1]=image+0xf50ab30;
+    std::vector<A> controller(8),link(2);controller[0]=image+0xb485308;controller[7]=reinterpret_cast<A>(link.data());link[1]=image+0xf50ab30;
     entities={reinterpret_cast<A>(controller.data())};testScenes={&stadium};world.phase(1);
     testGlobal(0xf3fddbc,1);attendance::State noDynasty;A match=0;assert(!gameState(noDynasty,match));
     auto revision=attendanceArchive.revision;activeLoss=17;arrivalMissing=34;emptyMode2020=true;emptyModePending=true;
@@ -251,17 +251,17 @@ int main(){
     // Reproduce the reported incompatible visibility entry in this private
     // test executable. The required check must exit BEFORE creating hooks,
     // touching any game code, or enabling the audio/presentation subsystems.
-    testPage(image);testPage(image+0x64b3930);
+    testPage(image);testPage(image+0x64b39c0);
     const unsigned char incompatible[]={0x48,0x8b,0xce,0x44,0x89,0x7d,0xd0,0xc5,0xfa,0x7f,0x45,0xe0,0x89,0x5d,0xd4};
-    std::memcpy(reinterpret_cast<void*>(image+0x64b3930),incompatible,sizeof(incompatible));
+    std::memcpy(reinterpret_cast<void*>(image+0x64b39c0),incompatible,sizeof(incompatible));
     assert(!install()&&!signatures&&patches.empty()&&!audioHookInstalled&&!replayPresentationInstalled);
     assert(originalSet==testSet&&originalAttendanceUpdate==testUpdate);
-    assert(!std::memcmp(reinterpret_cast<void*>(image+0x64b3930),incompatible,sizeof(incompatible)));
+    assert(!std::memcmp(reinterpret_cast<void*>(image+0x64b39c0),incompatible,sizeof(incompatible)));
     // A resolver shim in this executable's own memory supplies the verified
     // native ABI expected by the production part resolver.
-    A resolver=image+0x6508340,page=resolver&~A(0xffff);void* allocation=VirtualAlloc(reinterpret_cast<void*>(page),65536,MEM_RESERVE|MEM_COMMIT,PAGE_EXECUTE_READWRITE);assert(allocation==reinterpret_cast<void*>(page));
+    A resolver=image+0x65083d0,page=resolver&~A(0xffff);void* allocation=VirtualAlloc(reinterpret_cast<void*>(page),65536,MEM_RESERVE|MEM_COMMIT,PAGE_EXECUTE_READWRITE);assert(allocation==reinterpret_cast<void*>(page));
     unsigned char thunk[]={0x48,0xb8,0,0,0,0,0,0,0,0,0xff,0xe0};A target=reinterpret_cast<A>(&testPart);std::memcpy(thunk+2,&target,8);std::memcpy(reinterpret_cast<void*>(resolver),thunk,sizeof(thunk));FlushInstructionCache(GetCurrentProcess(),reinterpret_cast<void*>(resolver),sizeof(thunk));
-    std::vector<A> controller(8),link(2);controller[0]=image+0xb485368;controller[7]=reinterpret_cast<A>(link.data());link[1]=image+0xf50ab30;entities={reinterpret_cast<A>(controller.data())};
+    std::vector<A> controller(8),link(2);controller[0]=image+0xb485308;controller[7]=reinterpret_cast<A>(link.data());link[1]=image+0xf50ab30;entities={reinterpret_cast<A>(controller.data())};
     TestScene bowl(1536),deck(1536),sideline(60);for(auto& p:deck.xyz)p.y+=15;testScenes={&bowl,&deck,&sideline};
     assert(guardedApply(false,false,true));assert(shownSeatPatterns==2&&shownSeatFallbacks==1&&!seatPatternPending);
     assert(startingCrowds.at(bowl.render()).selection.policy==attendance::seats::Policy::Position);
@@ -641,10 +641,10 @@ int main(){
     {std::ifstream f(logsFolder/"technical.log");std::string logText((std::istreambuf_iterator<char>(f)),{});assert(logText.find("Test audit: native cheer dispatched.")!=std::string::npos&&logText.find("Test audit: play result observed.")!=std::string::npos&&logText.find("Test audit: turnover exits queued.")!=std::string::npos&&logText.find("Test audit: visitor camera request.")!=std::string::npos);}
     {std::ifstream f(logsFolder/"DynamicGamedayAtmosphere.log");std::string logText((std::istreambuf_iterator<char>(f)),{});assert(logText.find("Test audit: play result observed.")!=std::string::npos&&logText.find("Test audit: turnover exits queued.")!=std::string::npos&&logText.find("Test audit: visitor camera request.")==std::string::npos);}
     void* unused=reinterpret_cast<void*>(1);auto patchCount=patches.size();
-    assert(!makePatch(0x64b3930,reinterpret_cast<void*>(testUpdate),&unused,14)); // Incomplete guarded prologue is rejected before allocation.
-    assert(!makePatch(0x64b3930,reinterpret_cast<void*>(testUpdate),&unused,13));
-    assert(!makePatch(0x64b3930,reinterpret_cast<void*>(testUpdate),&unused,33));
-    assert(!makePatch(0x64b3930,nullptr,&unused,15)&&patches.size()==patchCount&&unused==reinterpret_cast<void*>(1));
+    assert(!makePatch(0x64b39c0,reinterpret_cast<void*>(testUpdate),&unused,14)); // Incomplete guarded prologue is rejected before allocation.
+    assert(!makePatch(0x64b39c0,reinterpret_cast<void*>(testUpdate),&unused,13));
+    assert(!makePatch(0x64b39c0,reinterpret_cast<void*>(testUpdate),&unused,33));
+    assert(!makePatch(0x64b39c0,nullptr,&unused,15)&&patches.size()==patchCount&&unused==reinterpret_cast<void*>(1));
     // Production snapshot refresh must preserve a restored Q1 crowd plan,
     // while different matches/venues and explicit fresh plans stay isolated.
     attendance::State plan{1,0,0,5,600,720};plan.team0=1153;plan.team1=1193;

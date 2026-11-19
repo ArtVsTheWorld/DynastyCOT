@@ -20,7 +20,7 @@ def layout():
         if path.name == 'DynastyPlayClockAction.cs':
             scan = ''  # Current combined layout comes from GameLayouts.cs.
         if path.name == 'GameLayouts.cs':
-            scan = source[source.index('new Layout("October 29, 2026 update"'):]
+            scan = source[source.index('new Layout("November 19, 2026 update"'):]
         named = r'new Region\("([^"]+)",\s*(0x[\da-f]+),\s*(0x[\da-f]+|\d+),\s*"([\da-f]{64})"\)'
         plain = r'new Region\((0x[\da-f]+),\s*(0x[\da-f]+|\d+),\s*"([\da-f]{64})"\)'
         for label, rva, size, digest in re.findall(named, scan, re.I):
@@ -42,7 +42,7 @@ def layout():
         data = bytes.fromhex('c5fa1005e45cdb04c3')
         regions.append(dict(name='Defensive duration getter', source='Plugin/DefensivePlayClock.cs', rva='0x5ff6100', length=len(data), sha256=hashlib.sha256(data).hexdigest()))
     version = re.search(r'PluginVersion\("([^"]+)"\)', (ROOT / 'Plugin/AssemblyInfo.cs').read_text()).group(1)
-    return dict(pluginVersion=version, layout='October 29, 2026', wholeExeHashGate=False,
+    return dict(pluginVersion=version, layout='November 19, 2026', wholeExeHashGate=False,
                 regions=regions, references=dict(sorted(references.items(), key=lambda item: int(item[0], 16))))
 
 

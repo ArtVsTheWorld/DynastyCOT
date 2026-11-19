@@ -55,7 +55,7 @@ int main(){
     Address page=image+(attendance::bindings::SwellAllocator&~Address(0xffff));
     void* allocation=VirtualAlloc(reinterpret_cast<void*>(page),0x10000,MEM_COMMIT|MEM_RESERVE,PAGE_READWRITE);assert(reinterpret_cast<Address>(allocation)==page);
     put(image+attendance::bindings::SwellAllocator,Address(0x1234));
-    put(address(owner),image+0xb227098);put(address(owner)+0x40,image+0xb227178);put(address(owner)+0x48,image+0xb227188);
+    put(address(owner),image+0xb227038);put(address(owner)+0x40,image+0xb227118);put(address(owner)+0x48,image+0xb227128);
     put(address(owner)+0x30,Address(0x2345));put(address(owner)+0x38,Address(0x3456));
     put(address(resultObject),address(resultVtable));put(address(resultVtable)+0x60,reinterpret_cast<Address>(weakGet));
     put(address(weak),address(endpoint)+8);put(address(endpoint),address(endpointVtable));put(address(endpointVtable)+0xe0,image+attendance::bindings::SwellManagerGetter);

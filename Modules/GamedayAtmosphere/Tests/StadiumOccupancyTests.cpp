@@ -12,7 +12,7 @@ int nativeAttendance=9000,nativeCapacity=30000,code=0;unsigned queries=0,lookups
 template<class T>void put(A p,T value){memcpy(reinterpret_cast<void*>(p),&value,sizeof(value));}
 template<size_t N>A addr(unsigned char (&p)[N]){return reinterpret_cast<A>(p);}
 bool __fastcall query(A object,unsigned key,occupancy::Variant* value,A a,A b){
-    ++queries;assert(object==addr(service)&&key==bindings::AttendanceOption&&!a&&!b&&value->vt==image+0xb135818);
+    ++queries;assert(object==addr(service)&&key==bindings::AttendanceOption&&!a&&!b&&value->vt==image+0xb1357b8);
     value->data=badPointer?1:reinterpret_cast<A>(&nativeAttendance);return queryOkay;
 }
 int __fastcall capacity(int stadium,int* out){
@@ -20,15 +20,15 @@ int __fastcall capacity(int stadium,int* out){
 }
 int main(){
     std::vector<void*> pages;
-    for(A offset:{A(0xe2e53e8),A(0xf506000),A(0xf85f700),A(0xfc90fb8)}){
+    for(A offset:{A(0xe2e53e8),A(0xf506000),A(0xf85f700),A(0xfc90f78)}){
         A p=image+(offset&~A(0xffff));void* page=VirtualAlloc(reinterpret_cast<void*>(p),0x10000,MEM_COMMIT|MEM_RESERVE,PAGE_READWRITE);assert(reinterpret_cast<A>(page)==p);pages.push_back(page);
     }
-    put(image+0xe2e53e8,addr(service));put(addr(service),image+0xb29ee30);
+    put(image+0xe2e53e8,addr(service));put(addr(service),image+0xb29edd0);
     // Native service vtable stays verified; the injected API replaces only calls.
     void* svcPage=VirtualAlloc(reinterpret_cast<void*>(image+0xb290000),0x10000,MEM_COMMIT|MEM_RESERVE,PAGE_READWRITE);assert(svcPage);pages.push_back(svcPage);
-    put(image+0xb29ee30+0x68,image+bindings::OptionQuery);
-    put(image+0xf506000,addr(weather));put(addr(weather),image+0xb32a290);put(addr(weather)+0x358,501);
-    put(image+bindings::MatchWrapper,addr(wrapper));put(addr(wrapper)+16,addr(matchData));put(addr(matchData),image+bindings::MatchVtable);put(image+0xfc90fb8,A(123));
+    put(image+0xb29edd0+0x68,image+bindings::OptionQuery);
+    put(image+0xf506000,addr(weather));put(addr(weather),image+0xb32a230);put(addr(weather)+0x358,501);
+    put(image+bindings::MatchWrapper,addr(wrapper));put(addr(wrapper)+16,addr(matchData));put(addr(matchData),image+bindings::MatchVtable);put(image+0xfc90f78,A(123));
     occupancy::Api api{query,capacity};occupancy::Snapshot sample;
     assert(occupancy::nativeSnapshot(image,addr(matchData),7,sample,&api));assert(sample.attendance==9000&&sample.capacity==30000&&sample.stadium==501);
     assert(std::fabs(occupancy::fraction(sample,addr(matchData),7,.8f)-.24f)<.00001f);

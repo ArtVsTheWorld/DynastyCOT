@@ -85,7 +85,7 @@ void log(const char* event,const std::string& message) {
 std::string hex(A a){char s[32]{};sprintf_s(s,"0x%llx",static_cast<unsigned long long>(a));return s;}
 bool read(A p,void* out,size_t n){SIZE_T done=0;return p>=0x10000&&ReadProcessMemory(GetCurrentProcess(),reinterpret_cast<void*>(p),out,n,&done)&&done==n;}
 template<class T>T at(A p){T v{};read(p,&v,sizeof(v));return v;}
-bool entityValid(A p){return at<A>(p)==image+0xb485368&&at<A>(at<A>(p+0x38)+8)==image+0xf50ab30;}
+bool entityValid(A p){return at<A>(p)==image+0xb485308&&at<A>(at<A>(p+0x38)+8)==image+0xf50ab30;}
 bool bytes(A rva,const std::vector<unsigned char>& expected){
     std::vector<unsigned char> got(expected.size());if(!read(image+rva,got.data(),got.size()))return false;
     if(got==expected)return true;
@@ -100,8 +100,8 @@ bool bytes(A rva,const std::vector<unsigned char>& expected){
 void* __fastcall property(void* reader,void* type) {
     if(applying){
         A caller=reinterpret_cast<A>(_ReturnAddress())-image;
-        if(caller==0x3635248)return &threshold;
-        if(caller==0x363521f)return &hide;
+        if(caller==0x36352d8)return &threshold;
+        if(caller==0x36352af)return &hide;
     }
     return originalRead(reader,type);
 }
@@ -123,7 +123,7 @@ void apply(bool thin) {
     for(A entity:entities){
         if(!entityValid(entity)){log("skipped","Crowd entity lifetime changed; no native call");continue;}
         calls=changed=0;applying=true;thinning=thin;
-        reinterpret_cast<void(__fastcall*)(A)>(image+0x3635190)(entity);
+        reinterpret_cast<void(__fastcall*)(A)>(image+0x3635220)(entity);
         applying=false;thinning=false;total+=calls;culled+=changed;++valid;
     }
     log(thin?"probe-applied":"restored","entities="+std::to_string(valid)+" setter_calls="+std::to_string(total)+" hidden_overrides="+std::to_string(culled));
@@ -133,7 +133,7 @@ bool guardedApply(bool thin) {
     __except(EXCEPTION_EXECUTE_HANDLER){applying=false;thinning=false;return false;}
 }
 void findEntities() {
-    const A needle=image+0xb485368;std::vector<unsigned char> buffer(0x100007);
+    const A needle=image+0xb485308;std::vector<unsigned char> buffer(0x100007);
     for(A addr=0x10000;addr<0x100000000;){
         MEMORY_BASIC_INFORMATION m{};if(!VirtualQuery(reinterpret_cast<void*>(addr),&m,sizeof(m)))break;
         A start=reinterpret_cast<A>(m.BaseAddress),end=start+m.RegionSize;if(end<=addr)break;addr=end;
@@ -149,15 +149,15 @@ void findEntities() {
 }
 bool install() {
     if(at<unsigned int>(image+0x3c)>0x1000)return false;
-    if(!bytes(0x3601860,{0x4c,0x8b,0xdc,0x55,0x53,0x56,0x41,0x55,0x49,0x8d,0x6b,0xa1,0x48,0x81,0xec,0xd8,0,0,0})||
-       !bytes(0x5b2d1c0,{0x48,0x89,0x5c,0x24,0x10,0x57,0x48,0x83,0xec,0x20})||
-       !bytes(0x64b3930,{0x48,0x89,0x5c,0x24,0x08,0x48,0x89,0x6c,0x24,0x10})||
-       !bytes(0x3635190,{0x40,0x55,0x56,0x41,0x57}))return false;
+    if(!bytes(0x36018f0,{0x4c,0x8b,0xdc,0x55,0x53,0x56,0x41,0x55,0x49,0x8d,0x6b,0xa1,0x48,0x81,0xec,0xd8,0,0,0})||
+       !bytes(0x5b2d250,{0x48,0x89,0x5c,0x24,0x10,0x57,0x48,0x83,0xec,0x20})||
+       !bytes(0x64b39c0,{0x48,0x89,0x5c,0x24,0x08,0x48,0x89,0x6c,0x24,0x10})||
+       !bytes(0x3635220,{0x40,0x55,0x56,0x41,0x57}))return false;
     signatures=true;
     findEntities();if(entities.empty()||entities.size()>8)return false;
-    if(!makePatch(0x3601860,reinterpret_cast<void*>(CrowdTickGate),&TickOriginal,19)||
-       !makePatch(0x5b2d1c0,reinterpret_cast<void*>(property),reinterpret_cast<void**>(&originalRead),16)||
-       !makePatch(0x64b3930,reinterpret_cast<void*>(visibility),reinterpret_cast<void**>(&originalSet),15))return false;
+    if(!makePatch(0x36018f0,reinterpret_cast<void*>(CrowdTickGate),&TickOriginal,19)||
+       !makePatch(0x5b2d250,reinterpret_cast<void*>(property),reinterpret_cast<void**>(&originalRead),16)||
+       !makePatch(0x64b39c0,reinterpret_cast<void*>(visibility),reinterpret_cast<void**>(&originalSet),15))return false;
     if(!commitPatches())return false;
     enabled=true;return true;
 }

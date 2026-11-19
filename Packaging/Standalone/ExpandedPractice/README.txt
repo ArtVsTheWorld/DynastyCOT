@@ -1,4 +1,4 @@
-Ace’s Expanded Practice 0.8.24
+Ace’s Expanded Practice 0.8.26 — November 17 Update
 
 Install or update
 Close MMC and the game. Find your usual MMC shortcut, right-click it and open Properties. Follow Target to MMCModManager.exe. Open the Plugins folder beside that file. Back up your old ExpandedPractice.dll outside Plugins, then copy ExpandedPractice.dll from this ZIP into Plugins. Replace the old copy.
@@ -6,6 +6,7 @@ Close MMC and the game. Find your usual MMC shortcut, right-click it and open Pr
 Settings and help
 Open Practice > Pause > Mode. Press Win+R, paste %LOCALAPPDATA%\Ace\DynastyCOT\ExpandedPractice and press Enter. Look for latest-report.zip. If there is no report yet, start with launcher.log.
 Open ExpandedPractice-Player-Guide.pdf in this ZIP for examples and help. FEATURES.md lists the features.
+Use this version with the November 17 game update. The included guide covers the core features. See the GitHub release notes for changes in this version.
 
 Roll back
 Close MMC and the game. Restore your backed-up DLL. If you used the collection installer, open Backups and restore the matching change. Keep your settings and history folders.

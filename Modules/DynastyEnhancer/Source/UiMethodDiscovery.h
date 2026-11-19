@@ -27,7 +27,7 @@ inline bool invocationSnapshot(void* object,uintptr_t& definition,Header& header
 // This is deliberately separate from the unrelated native UI-response values.
 template<class Read>bool constantString(uintptr_t value,std::string& out,Read read,uintptr_t game){
     std::array<unsigned char,24> v{};std::array<unsigned char,12> s{};
-    if(value<0x10000||!read(value,v.data(),v.size())||notesui::field<uintptr_t>(v.data(),0)!=game+0xbc41750)return false;
+    if(value<0x10000||!read(value,v.data(),v.size())||notesui::field<uintptr_t>(v.data(),0)!=game+0xbc416f0)return false;
     const auto text=notesui::field<uintptr_t>(v.data(),16);
     if(text<0x10000||!read(text,s.data(),s.size()))return false;
     const auto length=notesui::field<unsigned short>(s.data(),4),capacity=notesui::field<unsigned short>(s.data(),6);
@@ -63,14 +63,16 @@ template<class Read>bool declarationMatches(uintptr_t definition,const Contract&
     }return false;
 }
 struct Group {
-    std::string surface;bool recruiting,coldSingle;std::vector<Contract> contracts;std::vector<notesui::Program> programs;std::unique_ptr<notesui::Runtime> owned;notesui::Runtime& runtime;bool prepareOnly=false,interestPolicy=false;
+    std::string surface,alternative;std::vector<Group*> alternatives;bool recruiting,coldSingle;std::vector<Contract> contracts;std::vector<notesui::Program> programs;std::unique_ptr<notesui::Runtime> owned;notesui::Runtime& runtime;bool prepareOnly=false,interestPolicy=false;
     static std::vector<notesui::Program> annotate(std::vector<notesui::Program> p){for(auto& item:p)semanticPointers(item);return p;}
     Group(std::string name,std::vector<Contract> ids,std::vector<notesui::Program> p,bool recruit=false,bool cold=false):surface(std::move(name)),recruiting(recruit),coldSingle(cold),contracts(std::move(ids)),programs(annotate(std::move(p))),owned(std::make_unique<notesui::Runtime>(programs,true)),runtime(*owned){
-        if(cold&&(programs.size()!=1||!programs[0].sourcePointers.empty()||!programs[0].nestedDefinitions.empty()||programs[0].size>2048||programs[0].registers!=programs[0].newRegisters))throw std::runtime_error("Invalid bounded cold UI contract");runtime.prepare();}
-    Group(std::string name,std::vector<Contract> ids,notesui::Runtime& existing):surface(std::move(name)),recruiting(false),coldSingle(false),contracts(std::move(ids)),programs(existing.discoveryPrograms()),runtime(existing),prepareOnly(true){}
+        if(cold&&(programs.size()!=1||!programs[0].sourcePointers.empty()||!programs[0].nestedDefinitions.empty()||programs[0].size>2048||programs[0].registers!=programs[0].newRegisters))throw std::runtime_error("Invalid bounded cold UI contract");runtime.prepare();alternatives.push_back(this);}
+    Group(std::string name,std::vector<Contract> ids,notesui::Runtime& existing):surface(std::move(name)),recruiting(false),coldSingle(false),contracts(std::move(ids)),programs(existing.discoveryPrograms()),runtime(existing),prepareOnly(true){alternatives.push_back(this);}
 };
 class Service {
     std::vector<std::unique_ptr<Group>> groups;
+    std::vector<Group*> alternativeGroups;
+    using DeclarationOwners=std::map<std::pair<uint64_t,unsigned>,std::set<uintptr_t>>;
     using Method=std::pair<size_t,size_t>;
     std::map<notesui::FrameKey,std::vector<Method>> frames;
     using CoarseFrame=std::tuple<unsigned,unsigned short,unsigned short>;
@@ -123,12 +125,32 @@ class Service {
                 if(at+i<definition&&!memcmp(bytes.data()+i,"Apt Data:1:",11))return at+i;
         }return 0;
     }
+    template<class Read>void alternativeOwners(uintptr_t definition,const Header& h,const std::vector<Group*>& candidates,DeclarationOwners& owners,std::map<std::pair<uintptr_t,uint64_t>,bool>& pools,Read read,uintptr_t game){
+        const auto count=notesui::field<unsigned>(h.data(),32),size=notesui::field<unsigned>(h.data(),24),argc=notesui::field<unsigned>(h.data(),8);
+        const auto regs=notesui::field<unsigned short>(h.data(),12),flags=notesui::field<unsigned short>(h.data(),14);
+        if(!count||count>8192||!size||size>32768||argc>64||!regs||regs>128||(flags!=25&&flags!=41&&flags!=42))return;
+        for(const auto* group:candidates)for(const auto& contract:group->contracts){
+            if(!declarationMatches(definition,contract,read))continue;
+            const auto key=std::make_pair(notesui::field<uintptr_t>(h.data(),40),contract.poolHash);const auto known=pools.find(key);
+            if(known==pools.end()?(pools[key]=poolMatches(contract,h,read,game)):known->second)owners[{contract.poolHash,contract.methodIndex}].insert(definition);
+        }
+    }
+    static std::string ambiguousOwner(const Group& group,const DeclarationOwners& owners){
+        for(const auto& contract:group.contracts){const auto found=owners.find({contract.poolHash,contract.methodIndex});
+            if(found!=owners.end()&&found->second.size()>1)return contract.method;
+        }return {};
+    }
     // One-time menu construction boundary, never Draw/focus. The worker is
     // normally ready; this bounded fallback prevents its scheduling from
     // deciding whether the first opening gets a tab. All ten dependencies
     // still validate atomically. No absolute method offsets are used.
     template<class Read>bool prepareOpeningNotes(uintptr_t definition,const Header& h,Read read,Group& group){
-        const size_t entries=group.prepareOnly?1:2;size_t index=0;for(;index<entries;++index)if(notesui::headerMatches(group.programs[index],h))break;if(index==entries)return false;if(group.runtime.admitted(definition,h))return true;const auto& entry=group.programs[index];const auto& identity=group.contracts[index];
+        // Owned definitions are immutable runtime allocations. Recognize both
+        // native and owned callbacks of the selected alternative without a new
+        // asset search, including input/show callbacks after the first Init.
+        for(const auto* peer:group.alternatives)if(peer->runtime.admitted(definition,h,group.prepareOnly))return true;
+        const size_t entries=group.prepareOnly?1:2;size_t index=0;for(;index<entries;++index)if(notesui::headerMatches(group.programs[index],h))break;if(index==entries)return false;
+        const auto& entry=group.programs[index];const auto& identity=group.contracts[index];
         if(!notesui::headerMatches(entry,h)||!declarationMatches(definition,identity,read)||!poolMatches(identity,h,read,gameImage))return false;
         {std::lock_guard<std::mutex> lock(queueMutex);const auto prior=openingRetry.find(definition);if(prior!=openingRetry.end()&&prior->second.first==h&&now()<prior->second.second)return false;
             if(openingRetry.size()>=128)openingRetry.erase(openingRetry.begin());openingRetry[definition]={h,now()+1000};}
@@ -137,31 +159,56 @@ class Service {
         const auto begin=std::chrono::steady_clock::now();uintptr_t asset=0;bool ready=false;std::string reason;
         try{
             std::vector<unsigned char> entryBody(entry.size);if(!read(definition+48,entryBody.data(),entryBody.size())||notesui::bodyHash(entryBody)!=entry.hash)throw std::runtime_error(identity.method+" complete fingerprint differs; native initialization preserved.");
-            asset=assetBefore(definition,read);if(!asset)throw std::runtime_error("Recruiting asset root is unavailable; native initialization preserved.");
+            asset=assetBefore(definition,read);if(!asset)throw std::runtime_error(group.surface+" asset root is unavailable; native initialization preserved.");
             constexpr size_t cap=2*1024*1024,chunk=64*1024;std::vector<unsigned char> bytes;bytes.reserve(cap);std::vector<unsigned char> block(chunk);
             bool end=false;for(size_t at=0;at<cap&&!end;at+=chunk){
                 if(read(asset+at,block.data(),block.size()))bytes.insert(bytes.end(),block.begin(),block.end());
                 else for(size_t page=0;page<chunk;page+=4096){if(!read(asset+at+page,block.data(),4096)){end=true;break;}bytes.insert(bytes.end(),block.begin(),block.begin()+4096);}
             }
             for(size_t at=14;at+14<bytes.size();++at)if(!memcmp(bytes.data()+at,"Apt Data:1:",11)){bytes.resize(at);break;}
-            std::vector<uintptr_t> definitions(group.programs.size(),0);std::map<std::pair<uintptr_t,uint64_t>,bool> pools;
+            const auto& family=group.alternatives;
+            std::vector<std::vector<uintptr_t>> definitions;
+            std::vector<std::string> incompatible(family.size());
+            for(const auto* member:family)definitions.emplace_back(member->programs.size(),0);
+            std::map<std::pair<uintptr_t,uint64_t>,bool> pools;DeclarationOwners owners;
             for(size_t at=16;at+48<=bytes.size();at+=8){
-                const auto* p=bytes.data()+at;const auto flags=notesui::field<unsigned short>(p,14);
+                const auto* p=bytes.data()+at;Header candidate{};memcpy(candidate.data(),p,48);
+                if(!group.alternative.empty())alternativeOwners(asset+at,candidate,family,owners,pools,read,gameImage);
+                const auto flags=notesui::field<unsigned short>(p,14);
                 if(notesui::field<unsigned>(p,8)>3||notesui::field<unsigned short>(p,12)<2||(flags!=25&&flags!=41&&flags!=42))continue;
-                Header candidate{};memcpy(candidate.data(),p,48);
-                for(size_t i=0;i<group.programs.size();++i){const auto& program=group.programs[i];const auto& contract=group.contracts[i];
+                for(size_t f=0;f<family.size();++f)for(size_t i=0;i<family[f]->programs.size();++i){
+                    const auto& program=family[f]->programs[i];const auto& contract=family[f]->contracts[i];
                     if(!notesui::headerMatches(program,candidate)||!declarationMatches(asset+at,contract,read))continue;
                     const auto key=std::make_pair(notesui::field<uintptr_t>(p,40),contract.poolHash);auto known=pools.find(key);
                     if(!(known==pools.end()?(pools[key]=poolMatches(contract,candidate,read,gameImage)):known->second))continue;
-                    std::vector<unsigned char> body(program.size);if(!read(asset+at+48,body.data(),body.size())||notesui::sourceBodyHash(program,candidate,body,asset,read)!=program.hash)throw std::runtime_error("Required "+group.surface+" callback "+contract.method+" failed its complete fingerprint; native initialization preserved.");
-                    if(definitions[i])throw std::runtime_error("Ambiguous "+group.surface+" declaration "+contract.method+"; native initialization preserved.");definitions[i]=asset+at;
+                    std::vector<unsigned char> body(program.size);
+                    try{
+                        if(!read(asset+at+48,body.data(),body.size())||notesui::sourceBodyHash(program,candidate,body,asset,read)!=program.hash)throw std::runtime_error("complete fingerprint differs");
+                        if(definitions[f][i])throw std::runtime_error("ambiguous declarations");
+                        definitions[f][i]=asset+at;
+                    }catch(const std::exception& error){incompatible[f]=contract.method+": "+error.what();}
                 }
             }
-            if(std::any_of(definitions.begin(),definitions.end(),[](uintptr_t p){return !p;}))throw std::runtime_error("Required "+group.surface+" callbacks are unresolved or outside the bounded opening catalogue; native initialization preserved.");
-            ready=group.runtime.admit(definitions,read,asset);reason=ready?"All "+std::to_string(definitions.size())+" "+group.surface+" callbacks verified at "+identity.method+" before native construction.":group.surface+" dependencies became unavailable during opening verification; native initialization preserved.";
+            std::vector<size_t> complete;
+            for(size_t f=0;f<family.size();++f)if(incompatible[f].empty()&&std::all_of(definitions[f].begin(),definitions[f].end(),[](uintptr_t p){return p!=0;}))complete.push_back(f);
+            if(complete.size()!=1){
+                if(complete.size()>1)throw std::runtime_error("Ambiguous complete "+group.alternative+" alternatives; native navigation preserved.");
+                std::string missing="No complete "+(group.alternative.empty()?group.surface:group.alternative)+" dependency group: ";
+                for(size_t f=0;f<family.size();++f){
+                    if(f)missing+="; ";missing+=family[f]->surface+" [";
+                    if(!incompatible[f].empty())missing+=incompatible[f];
+                    else for(size_t i=0;i<definitions[f].size();++i)if(!definitions[f][i])missing+=family[f]->contracts[i].method+" unresolved ";
+                    missing+="]";
+                }
+                throw std::runtime_error(missing+"; native navigation preserved.");
+            }
+            const auto selected=complete.front();auto& winner=*family[selected];
+            const auto duplicate=ambiguousOwner(winner,owners);if(!duplicate.empty())throw std::runtime_error("Ambiguous "+duplicate+" declarations in "+group.alternative+"; native navigation preserved.");
+            ready=winner.runtime.admit(definitions[selected],read,asset);
+            reason=ready?"All "+std::to_string(definitions[selected].size())+" callbacks verified at "+identity.method+" before native construction. Selected "+winner.surface+"; other reviewed alternatives are not required.":winner.surface+" dependencies became unavailable during opening verification; native initialization preserved.";
         }catch(const std::exception& error){reason=error.what();}
         const auto elapsed=std::chrono::duration_cast<std::chrono::microseconds>(std::chrono::steady_clock::now()-begin).count();
-        {std::lock_guard<std::mutex> lock(queueMutex);if(openingResults.size()<32)openingResults.push_back({asset,ready,static_cast<uint64_t>(elapsed),std::move(reason),group.surface});}
+        {std::lock_guard<std::mutex> lock(queueMutex);if(openingResults.size()<32)openingResults.push_back({asset,ready,static_cast<uint64_t>(elapsed),std::move(reason),group.alternative.empty()?group.surface:group.alternative});}
         return ready;
     }
     template<class Report>void diagnostic(uintptr_t asset,const std::string& surface,const std::string& state,const std::string& reason,Report report){
@@ -177,10 +224,12 @@ class Service {
         std::vector<std::vector<bool>> ambiguous;
         std::vector<std::string> incompatible(groups.size());
         for(const auto& g:groups){definitions.emplace_back(g->programs.size(),0);ambiguous.emplace_back(g->programs.size(),false);}
-        std::map<std::pair<uintptr_t,uint64_t>,bool> pools;
-        for(size_t at=16;at+48<=bytes.size();at+=8){const auto key=notesui::frameKey(bytes.data()+at);const auto frame=frames.find(key);if(frame==frames.end())continue;
+        std::map<std::pair<uintptr_t,uint64_t>,bool> pools;DeclarationOwners owners;
+        for(size_t at=16;at+48<=bytes.size();at+=8){
             Header h{};memcpy(h.data(),bytes.data()+at,48);
             if(!notesui::field<unsigned>(h.data(),32)||notesui::field<unsigned>(h.data(),32)>8192)continue;
+            alternativeOwners(asset+at,h,alternativeGroups,owners,pools,read,game);
+            const auto frame=frames.find(notesui::frameKey(h.data()));if(frame==frames.end())continue;
             for(const auto& method:frame->second){const auto g=method.first,i=method.second;const auto& c=groups[g]->contracts[i];const auto& program=groups[g]->programs[i];
                 if(!declarationMatches(asset+at,c,read))continue;
                 const auto pool=std::make_pair(notesui::field<uintptr_t>(h.data(),40),c.poolHash);auto known=pools.find(pool);
@@ -193,8 +242,28 @@ class Service {
                 definitions[g][i]=asset+at;
             }
         }
-        bool pending=false;
-        for(size_t g=0;g<groups.size();++g){auto& group=*groups[g];const auto found=std::count_if(definitions[g].begin(),definitions[g].end(),[](uintptr_t x){return x!=0;});
+        bool pending=false;std::vector<bool> skip(groups.size(),false);std::set<std::string> families;
+        for(size_t g=0;g<groups.size();++g){const auto& family=groups[g]->alternative;
+            if(family.empty()||!families.insert(family).second)continue;
+            std::vector<size_t> members,complete;bool touched=false;std::string problems;
+            for(size_t i=0;i<groups.size();++i)if(groups[i]->alternative==family){
+                members.push_back(i);const auto found=std::count_if(definitions[i].begin(),definitions[i].end(),[](uintptr_t p){return p!=0;});
+                touched|=found!=0||!incompatible[i].empty();
+                if(found==static_cast<ptrdiff_t>(definitions[i].size())&&incompatible[i].empty())complete.push_back(i);
+                if(!incompatible[i].empty())problems+=groups[i]->surface+": "+incompatible[i]+"; ";
+            }
+            if(!touched)continue;
+            if(complete.size()==1){
+                const auto duplicate=ambiguousOwner(*groups[complete[0]],owners);
+                if(duplicate.empty()){for(auto i:members)skip[i]=i!=complete[0];continue;}
+                for(auto i:members)skip[i]=true;diagnostic(asset,family,"unsupported","Ambiguous "+duplicate+" declarations; native navigation preserved.",report);continue;
+            }
+            for(auto i:members)skip[i]=true;
+            if(complete.size()>1)diagnostic(asset,family,"unsupported","Ambiguous complete alternatives; native navigation preserved.",report);
+            else if(!problems.empty())diagnostic(asset,family,"unsupported","No complete verified alternative. "+problems+"Native navigation preserved.",report);
+            else{pending=true;diagnostic(asset,family,"waiting","No complete dependency alternative is verified yet; no partial navigation group was installed.",report);}
+        }
+        for(size_t g=0;g<groups.size();++g){if(skip[g])continue;auto& group=*groups[g];const auto found=std::count_if(definitions[g].begin(),definitions[g].end(),[](uintptr_t x){return x!=0;});
             if(!found&&incompatible[g].empty())continue;
             if(found!=static_cast<ptrdiff_t>(definitions[g].size())){
                 if(!incompatible[g].empty())diagnostic(asset,group.surface,"unsupported","Modified callback "+incompatible[g]+" failed its complete fingerprint; native method preserved.",report);
@@ -203,15 +272,20 @@ class Service {
             try{if(!group.runtime.admit(definitions[g],read,asset)){pending=true;continue;}
                 std::vector<Header> verified(definitions[g].size());for(size_t i=0;i<definitions[g].size();++i)read(definitions[g][i],verified[i].data(),48);
                 {std::lock_guard<std::mutex> lock(queueMutex);for(size_t i=0;i<definitions[g].size();++i)rememberLocked(definitions[g][i],verified[i],UINT64_MAX);}
-                diagnostic(asset,group.surface,"ready","Asset catalogue verified class/method identities, resolved constants and complete bodies.",report);
+                diagnostic(asset,group.alternative.empty()?group.surface:group.alternative,"ready","Asset catalogue verified class/method identities, resolved constants and complete bodies. Selected "+group.surface+".",report);
             }catch(const std::exception& error){diagnostic(asset,group.surface,"unsupported",error.what(),report);}
         }
         return pending;
     }
 public:
-    void registerDependency(std::string surface,std::vector<Contract> contracts,notesui::Runtime& runtime){
+    void registerDependency(std::string surface,std::vector<Contract> contracts,notesui::Runtime& runtime,std::string alternative={}){
         if(contracts.size()!=runtime.methodCount()||contracts.empty())throw std::runtime_error("Incomplete UI dependency contracts");const size_t g=groups.size();groups.emplace_back(std::make_unique<Group>(std::move(surface),std::move(contracts),runtime));
         for(size_t i=0;i<groups.back()->programs.size();++i){const auto& p=groups.back()->programs[i];frames[{p.argc,p.registers,p.flags,p.size}].emplace_back(g,i);}
+        auto& added=*groups.back();added.alternative=std::move(alternative);
+        if(!added.alternative.empty())alternativeGroups.push_back(&added);
+        if(!added.alternative.empty())for(size_t i=0;i<g;++i)if(groups[i]->alternative==added.alternative){
+            added.alternatives.push_back(groups[i].get());groups[i]->alternatives.push_back(&added);
+        }
         indexInvocationGroup(g);
     }
     Service(){
@@ -252,8 +326,10 @@ public:
         if(foundFrame!=invocationFrames[fixed?1:0].end())for(const auto groupIndex:foundFrame->second){auto& group=groups[groupIndex];
             const bool notes=group->recruiting;
             if(!group->prepareOnly)group->runtime.beforeInvoke(object,read,fixed,dynasty,group->interestPolicy?interestMode:notes?recruitScale:rosterScale,colors,notes?recruiting:roster,team,dollars,teamScale,&recognized);candidate=true;
-            if(!recognized&&dynasty&&(group.get()==groups.front().get()||group->prepareOnly)&&prepareOpeningNotes(definition,h,read,*group)&&!group->prepareOnly)
+            if(!recognized&&dynasty&&(group.get()==groups.front().get()||group->prepareOnly)&&prepareOpeningNotes(definition,h,read,*group)){
+                if(group->prepareOnly){recognized=true;break;}
                 group->runtime.beforeInvoke(object,read,fixed,dynasty,recruitScale,colors,recruiting,team,dollars,teamScale,&recognized);
+            }
             // Small, independent, pointer-free callbacks may bind at their
             // first invocation. This verifies a fixed class dictionary and
             // complete method body; it performs no asset search or scan.

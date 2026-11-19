@@ -41,7 +41,7 @@ def export():
     analytics_source=ROOT/'Modules/DynastyEnhancer/Source/AnalyticsNative.h'
     for vt,slot,native in re.findall(r'\{(0x[0-9a-f]+),(0x[0-9a-f]+),(0x[0-9a-f]+),reinterpret_cast<void\*>',analytics_source.read_text()):
         spans.append(dict(module='DynastyEnhancer',rva=hex(int(vt,16)+int(slot,16)),length=8,kind='Analytics dedicated vtable slot',native=native))
-    return dict(format=1,gameLayout='October 29, 2026 candidate',wholeExeHashGate=False,
+    return dict(format=1,gameLayout='November 19, 2026 private candidate',wholeExeHashGate=False,
         scope='Static source inventory: validation ranges, exact extracted spans, all address references and source contracts. Dynamic UI asset offsets and symbolic patches remain visible in source lines; this is not live compatibility certification.',
         modules=modules,extractedPatchSpans=spans,sourceHashes=inputs,
         sharedContracts=[
@@ -51,13 +51,13 @@ def export():
             dict(id='practice-text-setter',rva='0x25a3e60',patchLength=15,validationLength=32,
                  owners=['DrivePractice','DynastyEnhancer'],policy='Exact known Practice entry/code/data contract; normalize local fingerprint buffer only; reject unknown detours',
                  source='Compatibility/PracticeTextSetter.generated.h',evidence='Tests/PracticeContractChecks.cpp'),
-            dict(id='settings-writer-chain',rva='0x79a5cc3',owners=['ExtraDynastySettings','DynastyEnhancer'],
-                 policy='Extra Settings owns inner text hook; Enhancer owns list/writer vtable slots 0xbab9a08+0x38/+0x50 and forwards foreign keys',
+            dict(id='settings-writer-chain',rva='0x79a5d53',owners=['ExtraDynastySettings','DynastyEnhancer'],
+                 policy='Extra Settings owns inner text hook; Enhancer owns list/writer vtable slots 0xbab99a8+0x38/+0x50 and forwards foreign keys',
                  evidence='Modules/ExtraDynastySettings/Tools/GameSettingsMenuChecks.cs'),
-            dict(id='controller-phase-bridge',rva='0x5d12420',owners=['ExtraDynastySettings','DrivePractice'],
+            dict(id='controller-phase-bridge',rva='0x5d124b0',owners=['ExtraDynastySettings','DrivePractice'],
                  policy='Practice accepts only exact known Extra Settings controller bridge; retain native practice exclusions'),
             dict(id='pause-text',owners=['GamedayAtmosphere','DrivePractice'],
-                 policy='Atmosphere hooks named pause-tile output at 0x7a1bf6b; Practice owns shared setter 0x25a3e60; do not broaden either binding')
+                 policy='Atmosphere hooks named pause-tile output at 0x7a1bffb; Practice owns shared setter 0x25a3e60; do not broaden either binding')
         ])
 def main():
     destination=ROOT/'Compatibility/inventory.json';doc=export()

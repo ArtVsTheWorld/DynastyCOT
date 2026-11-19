@@ -41,7 +41,7 @@ inline std::string nativeRecruitClassLabel(const NativeEntry& entry,const char* 
     // Use the same compact transfer label in tables and profile panels.
     return nativeTransferClass(entry);
 }
-struct NativeClass {std::string league;int season=0,relativeYear=0;std::set<std::string> activeSchools;std::map<int,std::string> teams;std::map<uint32_t,NativeEntry> entries;std::map<uint32_t,std::pair<std::string,std::string>> unavailable;std::set<uint32_t> unavailableTransfers;};
+struct NativeClass {std::string league;int season=0,relativeYear=0;std::set<std::string> activeSchools;std::map<int,std::string> teams;std::map<uint32_t,NativeEntry> entries;std::map<uint32_t,std::pair<std::string,std::string>> unavailable;std::set<uint32_t> unavailableTransfers,unavailableSchoolRecruits;};
 inline NativeClass parseNativeClass(const Json& raw){
     if(raw.at("format")!=1||raw.at("sourceKind")!="runtime")throw std::runtime_error("Not a native resume snapshot");
     NativeClass result;result.league=std::to_string(static_cast<uint32_t>(raw.at("status").at("league").get<int64_t>()));result.season=raw.at("status").at("season").at("CurrentSeasonYear");
@@ -58,14 +58,18 @@ inline NativeClass parseNativeClass(const Json& raw){
         const auto& r=row.at("v");if(r.at("Player").is_null())continue;const auto& v=records.at(r.at("Player").get<std::string>()).at("v");
         const auto key=row.at("key").get<std::string>();const auto colon=key.find(':');if(colon==std::string::npos)throw std::runtime_error("Invalid recruit record key");
         const auto table=std::stoull(key.substr(0,colon)),index=std::stoull(key.substr(colon+1));if(table>=16384||index>=131072)throw std::runtime_error("Recruit key exceeds native bounds");
-        NativeEntry entry;entry.nativeId=static_cast<uint32_t>(table*131072+index);entry.first=v.at("FirstName");entry.last=v.at("LastName");entry.highSchool=r.at("Class")=="HighSchool";
+        const auto classification=r.at("Class").get<std::string>();
+        NativeEntry entry;entry.nativeId=static_cast<uint32_t>(table*131072+index);entry.first=v.at("FirstName");entry.last=v.at("LastName");entry.highSchool=classification=="HighSchool";
+        entry.juniorCollege=classification.rfind("JuniorCollege_",0)==0;
         // Hometown participates in the existing persistent identity. Never
         // manufacture a new identity/record when that optional context is absent.
         // Other prospects remain usable and old journal entries stay untouched.
         if(!v.contains("PLYR_HOME_TOWN")||!v.at("PLYR_HOME_TOWN").is_string()||!v.contains("PLYR_HOME_STATE")||!v.at("PLYR_HOME_STATE").is_string()){
-            result.unavailable.emplace(entry.nativeId,std::make_pair(entry.first,entry.last));if(r.at("Class").is_string()&&r.at("Class").get<std::string>().rfind("Transfer_",0)==0)result.unavailableTransfers.insert(entry.nativeId);continue;
+            result.unavailable.emplace(entry.nativeId,std::make_pair(entry.first,entry.last));
+            if(classification.rfind("Transfer_",0)==0)result.unavailableTransfers.insert(entry.nativeId);
+            if(entry.highSchool||entry.juniorCollege)result.unavailableSchoolRecruits.insert(entry.nativeId);
+            continue;
         }
-        const auto classification=r.at("Class").get<std::string>();entry.juniorCollege=classification.rfind("JuniorCollege_",0)==0;
         entry.classYear=nativeClassYear(classification);
         if(!entry.highSchool&&!entry.juniorCollege){if(entry.classYear.empty())entry.classYear=nativeClassYear(v.value("SchoolYear",std::string()));entry.redshirt=v.value("RedshirtStatus",std::string())=="Previous";}
         {

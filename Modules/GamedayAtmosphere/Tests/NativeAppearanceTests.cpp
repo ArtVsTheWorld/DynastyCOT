@@ -16,9 +16,9 @@ int main(){
     for(unsigned i=16;i<96;++i)raw[10*i]&=0xfe;raw[100*10+6]=10;
     auto original=raw;uintptr_t tagHolder[]={1024,address(raw.data())},posHolder[]={1024,address(points.data())};
     uintptr_t tagValue[]={0,address(tagHolder)},posValue[]={0,address(posHolder)};
-    struct Entry {uintptr_t key,value;};Entry entries[]={{image+0xb486033,address(tagValue)},{image+bindings::CrowdPositionKey,address(posValue)}};
+    struct Entry {uintptr_t key,value;};Entry entries[]={{image+0xb485fd3,address(tagValue)},{image+bindings::CrowdPositionKey,address(posValue)}};
     uintptr_t map[]={address(entries),address(entries+2)};auto c=address(component.data()),s=address(scene.data());
-    put(c,image+0xb484f98);put(c+0x48,address(map));put(s+0x908,c);
+    put(c,image+0xb484f38);put(c+0x48,address(map));put(s+0x908,c);
     Plan plan;plan.valid=true;plan.share=.25f;
     auto prepared=appearance(memory,image,c,plan,123,true,false);assert(prepared.applied&&prepared.band==16&&raw!=original);
     // Native generation consumes the overridden side bits once. Protect tags

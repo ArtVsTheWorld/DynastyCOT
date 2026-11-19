@@ -357,6 +357,58 @@ def formation_parent_suffix(a):
     a.label(done)
 
 
+# Native PlayerModule's legacy active-player skill DTO. Names establish field
+# semantics; numeric values alone never identify a rating. Recruit DTOs use a
+# different identity/reveal schema. All work is bounded to the existing six slots.
+LEGACY_SKILL_LABELS=('speed','acceleration','agility','awareness','strength',
+    'carrying','trucking','change of direction','jumping','break tackle','stiff arm',
+    'spin move','juke move','ball carrier vision','catching','catch in traffic',
+    'catch in traff','spectacular catch','release','short route running','medium route running',
+    'deep route running','throw power','throw accuracy short','throw accuracy mid',
+    'throw accuracy deep','throw on the run','throw under pressure','play action',
+    'pass block','pass block power','pass block finesse','run block','run block power',
+    'run block finesse','impact blocking','lead block','tackle','hit power',
+    'block shedding','power moves','finesse moves','pursuit','play recognition',
+    'man coverage','zone coverage','press','kick power','kick accuracy',
+    'throw accuracy','short acc','mid acc','deep acc')
+
+
+def legacy_skill_owner_suffix(a):
+    done='legacySkillsDone'
+    path(a,1,'mcInfoSlotAttributes');a.store(21);a.missing(21,done)
+    path(a,21,'mData');a.raw(0x76,0x49);a.branch(done)
+    path(a,21,'mData','ExtraInfo');a.store(21);a.missing(21,done)
+    # Recycled native widgets must lose this permission when their producer
+    # no longer supplies an active-player skill layout.
+    a.reg(21);a.string('DELegacyPlayerSkillRatings');a.raw(0x74,0x4F)
+    path(a,1,'_visible');a.raw(0x73,0x66);a.branch(done,0xB8)
+    path(a,1,'mData');a.raw(0x76,0x49);a.branch(done)
+    path(a,1,'mData','ExtraInfo');a.raw(0x76,0x49);a.branch(done)
+    path(a,1,'mData','ExtraInfo','PlayerId');a.store(17);a.missing(17,done)
+    path(a,1,'mData','ExtraInfo','attributesSubpanelInfo');a.store(18);a.missing(18,done)
+    # Native GetRelevantSkillsFromPlayer supplies an indexed native container,
+    # not necessarily an AS2 Array with a length property. Validate exactly
+    # the six records consumed by the verified Attributes renderer below.
+    a.number(0);a.store(22)
+    a.label('legacySkillsLoop');a.reg(22);a.number(6);a.raw(0x48);a.branch('legacySkillsOwn',0xB8)
+    # PlayerModule._UpdateSubscreen reads legacy PlayerId skills at i + 1.
+    # Index zero is not one of the six displayed attribute records.
+    a.reg(18);a.reg(22);a.number(1);a.raw(0x47,0x4E);a.store(19);a.missing(19,done)
+    path(a,19,'skillLabel');a.store(20)
+    a.reg(20);a.raw(0x44);a.string('string');a.raw(0x66);a.branch(done,0xB8)
+    a.number(0);a.reg(20);a.string('toLowerCase');a.raw(0x52);a.store(20)
+    # Reuse the existing verified full-position rating identities as aliases.
+    from build_player_hub_ui import ATTRIBUTE_NAMES
+    names=tuple(dict.fromkeys(LEGACY_SKILL_LABELS+tuple(n.lower() for n in ATTRIBUTE_NAMES)))
+    for name in names:
+        a.reg(20);a.string(name);a.raw(0x66);a.branch('legacySkillsKnown')
+    a.branch(done,0x99)
+    a.label('legacySkillsKnown');a.reg(22);a.raw(0x50);a.store(22);a.branch('legacySkillsLoop',0x99)
+    a.label('legacySkillsOwn')
+    a.reg(21);a.string('DELegacyPlayerSkillRatings');a.raw(0x73,0x4F)
+    a.label(done)
+
+
 def badge_suffix(a):
     formation_parent_suffix(a)
     # Formation's verified source/value guard owns this badge. Do not let the
@@ -365,6 +417,7 @@ def badge_suffix(a):
     path(a,1,'mData','ExtraInfo');a.raw(0x76,0x49);a.branch('badgeContinue')
     path(a,1,'mData','ExtraInfo','DEFormationPlayerRatings');a.raw(0x73,0x66);a.branch('badgeDone')
     a.label('badgeContinue')
+    legacy_skill_owner_suffix(a)
     # Pause Injury Report uses legacy skillValue data. It owns this private
     # marker; forward it only to that screen's attribute-label renderer. The
     # native module defaults roster=false even for these active players.
@@ -511,6 +564,7 @@ def attribute_slots_suffix(a):
     path(a,1,'mData','ExtraInfo');a.string('AttributesData');a.reg(3);a.raw(0x47,0x4E);a.store(4);a.missing(4,'slotsNext')
     path(a,4,'isFullyScouted');a.raw(0x73,0x66);a.branch('slotsNext',0xB8)
     path(a,4,'ratingValue');a.store(5)
+    path(a,1,'mData','ExtraInfo','DELegacyPlayerSkillRatings');a.raw(0x73,0x66);a.branch('slotsInjuryRating')
     path(a,1,'mData','ExtraInfo','DEDepthChartPlayerRatings');a.raw(0x73,0x66);a.branch('slotsInjuryRating')
     path(a,1,'mData','ExtraInfo','DEInjuryPlayerRatings');a.raw(0x73,0x66);a.branch('slotsInjuryRating')
     a.reg(5);a.raw(0x44);a.string('number');a.raw(0x66);a.branch('slotsExistingGrade',0xB8)
@@ -573,7 +627,10 @@ SPECS={
         (0x44BF8,0,12,25,204,0xC3220200E8D796CA,21,skill_slots_suffix,None),
         (0x22150,0,9,25,1730,0x444360923A963AB5,9,rating_value_draw_suffix,None),
         (0x21AF8,1,4,25,20,0x6D730F72E674695B,4,kicker_value_set_suffix,None),
-        (0x1CDA8,1,4,25,57,0x78F056F002C47EF3,4,ovr_item_suffix,None)]),
+        (0x1CDA8,1,4,25,57,0x78F056F002C47EF3,4,ovr_item_suffix,None),
+        # A page switch builds fresh attribute data without another full Draw.
+        # Reapply the same semantic permission after the native callback.
+        (0x38A30,1,3,41,88,0x97CD91FBB3B3ADDF,23,legacy_skill_owner_suffix,None)]),
     'sliderPrograms': ('C:/Apps/CFB 27/MMC/PlayerAnalytics/Research/assets/common/ui/node_com/scriptpod.ast', [
         (0x3EEB0,0,10,25,2587,0xF364EAE7B6CB59CA,10,generic_slider_draw_suffix,None)]),
     'cardPrograms': ('Evidence/PlayerFog/manageplayerart.ast', [

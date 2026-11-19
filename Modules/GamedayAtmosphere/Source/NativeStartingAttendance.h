@@ -6,12 +6,12 @@
 
 namespace attendance::turnout::native {
 using A=sustained::Address;
-inline constexpr A Formula=0x856a4b0,LaunchCopy=0x7f17060,StatManagerVtable=0xbdc7eb8;
+inline constexpr A Formula=0x856a510,LaunchCopy=0x7f170c0,StatManagerVtable=0xbdc7e38;
 // Reset publication is unconditional; final rivalry publication is optional.
 // The shared launchhook boundary runs after both paths join.
-inline constexpr A LaunchResetReturn=0x7f17429;
-inline constexpr A PlayableFormulaReturn=0x871e3c4;
-inline constexpr A OptionService=0xe2e53e8,OptionVtable=0xb29ee30,OptionType=0xe3ac8d0,OptionSet=0x90a18b0,UnsignedType=0xe2e2b38;
+inline constexpr A LaunchResetReturn=0x7f17489;
+inline constexpr A PlayableFormulaReturn=0x871e424;
+inline constexpr A OptionService=0xe2e53e8,OptionVtable=0xb29edd0,OptionType=0xe3ac8d0,OptionSet=0x90a1910,UnsignedType=0xe2e2b38;
 inline constexpr std::array<unsigned char,17> FormulaPrefix={0x48,0x89,0x4c,0x24,0x08,0x55,0x53,0x56,0x41,0x56,0x41,0x57,0x48,0x8d,0x6c,0x24,0xb0};
 inline constexpr std::array<unsigned char,16> LaunchPrefix={0x48,0x89,0x5c,0x24,0x18,0x55,0x56,0x57,0x41,0x54,0x41,0x55,0x41,0x56,0x41,0x57};
 inline constexpr std::array<unsigned char,15> SetterPrefix={0x48,0x89,0x5c,0x24,0x08,0x48,0x89,0x74,0x24,0x10,0x57,0x48,0x83,0xec,0x30};
@@ -20,7 +20,7 @@ struct Api {
     using Same=bool(__fastcall*)(A,A*,A*);
     using Set=bool(__fastcall*)(A,unsigned,A);
     Count count;Same same;Set set;
-    static Api engine(A image){return {reinterpret_cast<Count>(image+0x37f40a0),reinterpret_cast<Same>(image+0x8603b00),reinterpret_cast<Set>(image+OptionSet)};}
+    static Api engine(A image){return {reinterpret_cast<Count>(image+0x37f4130),reinterpret_cast<Same>(image+0x8603b60),reinterpret_cast<Set>(image+OptionSet)};}
 };
 struct Reader {
     A image;
@@ -117,7 +117,7 @@ inline bool team(const Reader& r,A p,Team& t){
        !r.integer(p,0x7a,hw)||!r.integer(p,0x77,hl)||!r.integer(p,0xec,rw)||!r.integer(p,0xe9,rl))return false;
     t.wins=hw+rw;t.losses=hl+rl;t.homeGames=hw+hl;
     A prestigeName=0;int prestigeOrdinal=-1;
-    t.prestigeKnown=r.value(r.image+0xbdd3070,prestigeOrdinal)&&prestigeOrdinal==0x180&&r.value(r.image+0xbdd3078,prestigeName)&&sustained::named(prestigeName,"TeamPrestige")&&t.prestige>=0&&t.prestige<=10;
+    t.prestigeKnown=r.value(r.image+0xbdd2ff0,prestigeOrdinal)&&prestigeOrdinal==0x180&&r.value(r.image+0xbdd2ff8,prestigeName)&&sustained::named(prestigeName,"TeamPrestige")&&t.prestige>=0&&t.prestige<=10;
     return true;
 }
 inline bool school(const Reader& r,A p,Team& t){
@@ -131,7 +131,7 @@ inline void military(const Reader& r,A teamRecord,Team& t){
     t.militaryKnown=false;t.military=false;
     t.recordRow=-1;int row=-1;if(r.value(teamRecord+0x18,row)&&row>=0&&row<=1000000)t.recordRow=row;
     A name=0;int ordinal=-1,value=-1;
-    if(r.value(r.image+0xbdd20b0,ordinal)&&ordinal==0x84&&r.value(r.image+0xbdd20b8,name)&&
+    if(r.value(r.image+0xbdd2030,ordinal)&&ordinal==0x84&&r.value(r.image+0xbdd2038,name)&&
        sustained::named(name,"IsMilitary")&&r.integer(teamRecord,0x84,value,true)){
         t.militaryKnown=true;t.military=value!=0;
     }
@@ -182,9 +182,9 @@ inline bool capture(A image,A manager,A gameRef,int ea,Seed& s,const Api* custom
         // Press Box uses the same game key60 and team key15. Verify their
         // title-update labels before using the stamped launch contract.
         A label=0;int ordinal=-1;
-        s.springNumberKnown=r.value(image+0xbdd9e50,ordinal)&&ordinal==0x3c&&r.value(image+0xbdd9e58,label)&&
+        s.springNumberKnown=r.value(image+0xbdd9dd0,ordinal)&&ordinal==0x3c&&r.value(image+0xbdd9dd8,label)&&
             sustained::named(label,"SeasonGameNum")&&r.integer(game,0x3c,number);s.springNumber=number;
-        if(number==250&&s.home.id==1502&&r.value(image+0xbdd1960,ordinal)&&ordinal==0xf&&r.value(image+0xbdd1968,label)&&sustained::named(label,"BlacklistUserIdLower"))
+        if(number==250&&s.home.id==1502&&r.value(image+0xbdd18e0,ordinal)&&ordinal==0xf&&r.value(image+0xbdd18e8,label)&&sustained::named(label,"BlacklistUserIdLower"))
             r.integer(home.p,0xf,s.springStamp);
         if(s.springNumberKnown){
             int side=spring::actualSide(type,number,practice!=0,bowl.p!=0,s.home.id,s.away.id,hs||hv,as||av,s.springStamp);
@@ -225,8 +225,8 @@ inline bool capture(A image,A manager,A gameRef,int ea,Seed& s,const Api* custom
         if(r.integer(city.p,0x18,value,false,true)&&value>=0&&value<=50){t.state=value;
             auto center=r.stateCenter(city.p,0x18,value);t.stateLatitude=center.latitude;t.stateLongitude=center.longitude;}
         A name=0;int ordinal=-1;float lat=NAN,lon=NAN;
-        bool labels=r.value(image+0xbde66a0,ordinal)&&ordinal==17&&r.value(image+0xbde66a8,name)&&sustained::named(name,"Latitude")&&
-            r.value(image+0xbde66b0,ordinal)&&ordinal==18&&r.value(image+0xbde66b8,name)&&sustained::named(name,"Longitude");
+        bool labels=r.value(image+0xbde6620,ordinal)&&ordinal==17&&r.value(image+0xbde6628,name)&&sustained::named(name,"Latitude")&&
+            r.value(image+0xbde6630,ordinal)&&ordinal==18&&r.value(image+0xbde6638,name)&&sustained::named(name,"Longitude");
         if(labels&&r.real(city.p,17,lat)&&r.real(city.p,18,lon)&&std::abs(lat)<=90&&std::abs(lon)<=180&&std::abs(lat)+std::abs(lon)>1){t.latitude=lat;t.longitude=lon;}
     };
     location(home.p,s.home);location(away.p,s.away);
@@ -236,7 +236,7 @@ inline bool capture(A image,A manager,A gameRef,int ea,Seed& s,const Api* custom
         // Same native condition as EA's conference-championship attendance bonus.
         A schema=0;fn=r.method(league,0x38);
         if(!fn||!sustained::obtain(schema,reinterpret_cast<A(__fastcall*)(A)>(fn),league))return false;
-        A wrapper[5]={image+0xbd244a8,league,schema,0,0},same=0;
+        A wrapper[5]={image+0xbd24428,league,schema,0,0},same=0;
         if(!api.same||!sustained::obtain(same,api.same,reinterpret_cast<A>(wrapper),&home.p,&away.p))return false;
         if(same)s.regular=false;
     }
@@ -311,7 +311,7 @@ inline bool setAttendance(A image,int count,const Api* custom=nullptr,bool trans
     Api api=custom?*custom:Api::engine(image);
     Reader r{image};A service=0,vt=0,set=0;
     if(count<1||count>200000||!dynastySetup(image,transition)||!r.value(image+OptionService,service)||!r.value(service,vt)||vt!=image+OptionVtable||
-       !r.value(vt+0x80,set)||set!=image+0x90a1670)return false;
+       !r.value(vt+0x80,set)||set!=image+0x90a16d0)return false;
     unsigned before=0,bowl=127;if(!option(r,service,0x9e2b2900,"gameBowlId",1,bowl)||bowl!=127||!option(r,service,0x9e1d2500,"gameAttendance",4,before))return false;
     struct Reference {A type,data;} ref{image+UnsignedType,reinterpret_cast<A>(&count)};
     A okay=0;if(!api.set||!sustained::obtain(okay,api.set,service,bindings::AttendanceOption,reinterpret_cast<A>(&ref))||!okay)return false;

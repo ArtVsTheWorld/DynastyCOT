@@ -37,6 +37,7 @@ class Machine:
             return receiver.get(key, UNDEFINED)
         if isinstance(receiver,str):
             if key=='charAt':return lambda i:receiver[i:i+1]
+            if key=='toLowerCase':return lambda:receiver.lower()
             if key=='length':return len(receiver)
             if key=='split':return lambda delimiter:receiver.split(delimiter)
         if isinstance(receiver, list):
@@ -67,6 +68,7 @@ class Machine:
         references = dict(program.references)
         end = len(code) if end is None else end
         pc, stack = begin, []
+        locals_ = {}
         self.depth += 1
         if self.depth > 16:
             raise AssertionError('Unexpected recursive action execution')
@@ -131,7 +133,14 @@ class Machine:
                 elif op == 0x17:
                     stack.pop()
                 elif op == 0x1C:
-                    stack.append(self.globals[stack.pop()])
+                    name=stack.pop()
+                    stack.append(locals_[name] if name in locals_ else self.globals[name])
+                elif op == 0x4D:
+                    stack[-1],stack[-2]=stack[-2],stack[-1]
+                elif op == 0x3C:
+                    value,name=stack.pop(),stack.pop()
+                    if not isinstance(name,str):raise AssertionError('Local name must be text')
+                    locals_[name]=value
                 elif op in (0x42, 0x43):
                     count = stack.pop()
                     if not isinstance(count, int) or count < 0 or count > 128:

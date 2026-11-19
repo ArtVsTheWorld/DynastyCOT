@@ -22,16 +22,16 @@ struct CaptureTrace {
 // layouts disable only the new turnout model, not ordinary native gameplay.
 inline bool bindingsReady(A image){
     Reader r{image};A name=0;int ordinal=-1;
-    return r.value(image+0xbdd30b8,name)&&sustained::named(name,"TeamSeasonStats")&&r.value(image+0xbdd30b0,ordinal)&&ordinal==0x184&&
-        r.value(image+0xbdc5208,name)&&sustained::named(name,"LeagueData")&&r.value(image+0xbdc5200,ordinal)&&ordinal==0&&
-        r.value(image+0xbdc5218,name)&&sustained::named(name,"LeagueHistoryManager")&&r.value(image+0xbdc5210,ordinal)&&ordinal==1&&
-        r.value(image+0xbde1278,name)&&sustained::named(name,"Dynasty")&&r.value(image+0xbde1270,ordinal)&&ordinal==0&&
-        r.value(image+0xbded4e8,name)&&sustained::named(name,"League")&&r.value(image+0xbded4e0,ordinal)&&ordinal==0x1b&&
-        r.value(image+0xbdd20f8,name)&&sustained::named(name,"IsTeamBuilder")&&r.value(image+0xbdd20f0,ordinal)&&ordinal==0x88&&
-        r.value(image+0xbded4f8,name)&&sustained::named(name,"LeagueID")&&r.value(image+0xbded4f0,ordinal)&&ordinal==0x1c&&
-        r.value(image+0xbdeeca8,name)&&sustained::named(name,"WINS")&&r.value(image+0xbdeeca0,ordinal)&&ordinal==57&&
-        r.value(image+0xbdeea78,name)&&sustained::named(name,"LOSSES")&&r.value(image+0xbdeea70,ordinal)&&ordinal==22&&
-        r.value(image+0xbdeec68,name)&&sustained::named(name,"TIES")&&r.value(image+0xbdeec60,ordinal)&&ordinal==53;
+    return r.value(image+0xbdd3038,name)&&sustained::named(name,"TeamSeasonStats")&&r.value(image+0xbdd3030,ordinal)&&ordinal==0x184&&
+        r.value(image+0xbdc5188,name)&&sustained::named(name,"LeagueData")&&r.value(image+0xbdc5180,ordinal)&&ordinal==0&&
+        r.value(image+0xbdc5198,name)&&sustained::named(name,"LeagueHistoryManager")&&r.value(image+0xbdc5190,ordinal)&&ordinal==1&&
+        r.value(image+0xbde11f8,name)&&sustained::named(name,"Dynasty")&&r.value(image+0xbde11f0,ordinal)&&ordinal==0&&
+        r.value(image+0xbded468,name)&&sustained::named(name,"League")&&r.value(image+0xbded460,ordinal)&&ordinal==0x1b&&
+        r.value(image+0xbdd2078,name)&&sustained::named(name,"IsTeamBuilder")&&r.value(image+0xbdd2070,ordinal)&&ordinal==0x88&&
+        r.value(image+0xbded478,name)&&sustained::named(name,"LeagueID")&&r.value(image+0xbded470,ordinal)&&ordinal==0x1c&&
+        r.value(image+0xbdeec28,name)&&sustained::named(name,"WINS")&&r.value(image+0xbdeec20,ordinal)&&ordinal==57&&
+        r.value(image+0xbdee9f8,name)&&sustained::named(name,"LOSSES")&&r.value(image+0xbdee9f0,ordinal)&&ordinal==22&&
+        r.value(image+0xbdeebe8,name)&&sustained::named(name,"TIES")&&r.value(image+0xbdeebe0,ordinal)&&ordinal==53;
 }
 inline bool sameRecord(const Reader& r,A left,A right){
     A a=0,b=0;int ar=-1,br=-1;

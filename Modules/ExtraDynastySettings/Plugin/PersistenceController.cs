@@ -73,14 +73,14 @@ namespace OfflineDynastySettings
             {
                 Ace.DynastyCOT.StorageIO.RequireExecutablePath(exe);
                 StartupInfo startup=new StartupInfo { Size=(uint)Marshal.SizeOf(typeof(StartupInfo)),Flags=1,ShowWindow=0 };
-                ProcessInfo info;uint flags=0x08000000;bool inJob;
+                ProcessInfo info;uint flags=0x8000060;bool inJob;
                 if(IsProcessInJob(new IntPtr(-1),IntPtr.Zero,out inJob) && inJob)flags|=0x01000000;
                 StringBuilder command=new StringBuilder("\""+exe+"\" \""+descriptor+"\"");
                 if(!CreateProcessW(exe,command,IntPtr.Zero,IntPtr.Zero,false,flags,IntPtr.Zero,Path.GetDirectoryName(exe),ref startup,out info)) {
                     int error=Marshal.GetLastWin32Error();
                     if((flags&0x01000000)==0 || error!=5)throw new Win32Exception(error);
                     command=new StringBuilder("\""+exe+"\" \""+descriptor+"\"");
-                    if(!CreateProcessW(exe,command,IntPtr.Zero,IntPtr.Zero,false,0x08000000,IntPtr.Zero,Path.GetDirectoryName(exe),ref startup,out info))throw new Win32Exception(Marshal.GetLastWin32Error());
+                    if(!CreateProcessW(exe,command,IntPtr.Zero,IntPtr.Zero,false,0x8000060,IntPtr.Zero,Path.GetDirectoryName(exe),ref startup,out info))throw new Win32Exception(Marshal.GetLastWin32Error());
                     log("Windows restricted job breakaway; helper started with handle inheritance disabled.");
                 }
                 CloseHandle(info.Thread);return new DetachedProcess(info.Process,info.Pid);

@@ -424,7 +424,7 @@ std::string argument(void* p) {
     uintptr_t vt=0,fn=0;
     if(!read(reinterpret_cast<uintptr_t>(p),&vt,8))return {};
     if(vt==reinterpret_cast<uintptr_t>(aliasVt))return static_cast<Alias*>(p)->value;
-    if(vt!=base+0xb575928||!read(vt+0x30,&fn,8)||fn!=base+0x3f07c50)return {};
+    if(vt!=base+0xb5758c8||!read(vt+0x30,&fn,8)||fn!=base+0x3f07ce0)return {};
     char text[128]{};reinterpret_cast<void(__fastcall*)(void*,char*,unsigned)>(fn)(p,text,sizeof(text));text[127]=0;return text;
 }
 void __fastcall aliasRead(Alias* a,char* out,unsigned n){if(n)strncpy_s(out,n,a->value,_TRUNCATE);}
@@ -446,11 +446,11 @@ void tileText(void* tile,const char* name,const char* value){reinterpret_cast<vo
 void tileInt(void* tile,const char* name,int value){reinterpret_cast<void(__fastcall*)(void*,const char*,int)>(base+0x2b075c0)(tile,name,value);}
 void tileBool(void* tile,const char* name,bool value){reinterpret_cast<void(__fastcall*)(void*,const char*,bool)>(base+0x2b07670)(tile,name,value);}
 void releaseValue(void* value);
-void* makeObject(){void* result=nullptr;auto manager=reinterpret_cast<void*(__fastcall*)()>(base+0x3f0a1d0)();reinterpret_cast<void*(__fastcall*)(void*,void**)>(base+0x8aec980)(manager,&result);return result;}
+void* makeObject(){void* result=nullptr;auto manager=reinterpret_cast<void*(__fastcall*)()>(base+0x3f0a260)();reinterpret_cast<void*(__fastcall*)(void*,void**)>(base+0x8aec9e0)(manager,&result);return result;}
 void objectValue(void* target,const char* name,void* value){
     // The captured native string/int setters both acquire a map node through
     // this helper, retain the replacement, release node+0x10, then assign it.
-    const auto result=social::native::findOrInsert(reinterpret_cast<social::native::Lookup>(base+0x8aed560),target,name);
+    const auto result=social::native::findOrInsert(reinterpret_cast<social::native::Lookup>(base+0x8aed5c0),target,name);
     if(!result.node){note({{"event","native_map_lookup_rejected"},{"key",name}});return;}
     auto slot=reinterpret_cast<void**>(reinterpret_cast<uintptr_t>(result.node)+0x10);
     if(value)InterlockedIncrement(reinterpret_cast<volatile LONG*>(reinterpret_cast<uintptr_t>(value)+0x14));
@@ -538,7 +538,8 @@ void populatePost(void* tile,unsigned number){
             // AllowFocus controls the card accent separately; DO_NOTHING keeps
             // the posts read-only even though the input route remains enabled.
             tileText(tile,"linkage","art_control.paneltile.NewsStoryTile");tileText(tile,"display",author.c_str());tileInt(tile,"Width",1200);tileInt(tile,"Height",(post.bodyHeight?post.bodyHeight:social::postHeight(post.body))+32);tileBool(tile,"isFocusable",true);tileBool(tile,"isInteractive",true);tileBool(tile,"ForceContainer",listFeed);
-            void* extra=makeObject();tileText(extra,"SubText",post.body.c_str());const auto& stamp=post.displayStamp.empty()?post.stamp:post.displayStamp;tileText(extra,"DateText",stamp.c_str());const auto likes=post.bodyHeight?post.displayLikes:post.likes>=0?social::compactCount(post.likes)+" likes":std::string();tileText(extra,"TertiaryText",likes.c_str());tileBool(extra,"UseJersey",post.uniformTeamLogo>=0);tileInt(extra,"UniformTeamLogo",post.uniformTeamLogo);tileInt(extra,"AltImageLibrary",92);tileInt(extra,"AltImageValue",post.uniformTeamLogo>=0?post.uniformTeamLogo+1:0);tileText(extra,"AltImageRenderType","SwappableImage");tileInt(extra,"ImageLibrary",post.imageLibrary);tileInt(extra,"ImageValue",post.imageValue);tileText(extra,"ImageRenderType","SwappableImage");tileInt(extra,"VisualStyle",2);tileBool(extra,"UseFrame",false);tileBool(extra,"AllowFocus",selectablePosts);tileBool(extra,"ShowDisableOverlay",false);tileInt(extra,"DisableButtonAlpha",0);tileInt(extra,"FillFocusAlpha",100);tileInt(extra,"FillUnFocusAlpha",100);tileInt(extra,"FillUnfocusAlpha",100);tileBool(extra,"StrokeEnabled",false);tileBool(extra,"SendAsData",true);tileBool(extra,"ImmediateUpdate",true);tileInt(tile,"VisualStyle",2);
+            const auto jerseyAsset=social::newsJerseyAsset(post);
+            void* extra=makeObject();tileText(extra,"SubText",post.body.c_str());const auto& stamp=post.displayStamp.empty()?post.stamp:post.displayStamp;tileText(extra,"DateText",stamp.c_str());const auto likes=post.bodyHeight?post.displayLikes:post.likes>=0?social::compactCount(post.likes)+" likes":std::string();tileText(extra,"TertiaryText",likes.c_str());tileBool(extra,"UseJersey",jerseyAsset>=0);tileInt(extra,"UniformTeamLogo",post.uniformTeamLogo);tileInt(extra,"AltImageLibrary",92);tileInt(extra,"AltImageValue",jerseyAsset>=0?jerseyAsset:0);tileText(extra,"AltImageRenderType","SwappableImage");tileInt(extra,"ImageLibrary",post.imageLibrary);tileInt(extra,"ImageValue",post.imageValue);tileText(extra,"ImageRenderType","SwappableImage");tileInt(extra,"VisualStyle",2);tileBool(extra,"UseFrame",false);tileBool(extra,"AllowFocus",selectablePosts);tileBool(extra,"ShowDisableOverlay",false);tileInt(extra,"DisableButtonAlpha",0);tileInt(extra,"FillFocusAlpha",100);tileInt(extra,"FillUnFocusAlpha",100);tileInt(extra,"FillUnfocusAlpha",100);tileBool(extra,"StrokeEnabled",false);tileBool(extra,"SendAsData",true);tileBool(extra,"ImmediateUpdate",true);tileInt(tile,"VisualStyle",2);
             objectValue(tile,"ExtraInfo",extra);releaseValue(extra);
             // Per-card logging is intentionally omitted from this hot UI callback.
 }
@@ -551,12 +552,12 @@ void populateSidebar(void* tile,unsigned number){
     tileText(tile,"Id",("SOCIAL_SUMMARY_"+std::to_string(number)).c_str());tileText(tile,"Coordinates",std::to_string(number).c_str());tileText(tile,"linkage","art_control.paneltile.NewsStoryTile");tileText(tile,"Linkage","art_control.paneltile.NewsStoryTile");tileText(tile,"display",card.title.c_str());tileText(tile,"Text0",card.title.c_str());tileText(tile,"Text1",body.c_str());tileText(tile,"NavigationId","DO_NOTHING");tileInt(tile,"Width",520);tileInt(tile,"Height",number==1?208:172);tileBool(tile,"isFocusable",false);tileBool(tile,"isInteractive",false);tileBool(tile,"ForceContainer",true);
     void* extra=makeObject();tileText(extra,"SubText",body.c_str());tileText(extra,"DateText","");tileText(extra,"TertiaryText","");tileInt(extra,"ImageLibrary",79);tileInt(extra,"ImageValue",598);tileBool(extra,"AllowFocus",false);tileBool(extra,"UseFrame",false);tileInt(extra,"VisualStyle",2);tileBool(extra,"ImmediateUpdate",true);objectValue(tile,"ExtraInfo",extra);releaseValue(extra);
 }
-void* makeArray(){void* value=nullptr;auto manager=reinterpret_cast<void*(__fastcall*)()>(base+0x3f0a1d0)();reinterpret_cast<void*(__fastcall*)(void*,void**)>(base+0x8ae99d0)(manager,&value);return value;}
+void* makeArray(){void* value=nullptr;auto manager=reinterpret_cast<void*(__fastcall*)()>(base+0x3f0a260)();reinterpret_cast<void*(__fastcall*)(void*,void**)>(base+0x8ae9a30)(manager,&value);return value;}
 void appendArray(void* array,void* value){
     // The native vector copies a pointer without retaining. Transfer one
     // explicit reference to the array, whose destructor releases its items.
     InterlockedIncrement(reinterpret_cast<volatile LONG*>(reinterpret_cast<uintptr_t>(value)+0x14));
-    reinterpret_cast<void(__fastcall*)(void*,void**)>(base+0x8aed930)(reinterpret_cast<void*>(reinterpret_cast<uintptr_t>(array)+0x18),&value);
+    reinterpret_cast<void(__fastcall*)(void*,void**)>(base+0x8aed990)(reinterpret_cast<void*>(reinterpret_cast<uintptr_t>(array)+0x18),&value);
 }
 void* __fastcall tileHook(void* self,void** out,void* panel,void* coords){
     Guard guard;const auto p=argument(panel),c=argument(coords);void* result=nullptr;
@@ -596,7 +597,7 @@ void* __fastcall tileHook(void* self,void** out,void* panel,void* coords){
 }
 // The native category binding reads indexed display/key/isDefault/icon fields.
 std::string nativeString(const char* p);
-std::string filterArgument(void* value){uintptr_t vt=0;if(read(reinterpret_cast<uintptr_t>(value),&vt,8)&&(vt==reinterpret_cast<uintptr_t>(aliasVt)||vt==base+0xb575928))return argument(value);return nativeString(static_cast<const char*>(value));}
+std::string filterArgument(void* value){uintptr_t vt=0;if(read(reinterpret_cast<uintptr_t>(value),&vt,8)&&(vt==reinterpret_cast<uintptr_t>(aliasVt)||vt==base+0xb5758c8))return argument(value);return nativeString(static_cast<const char*>(value));}
 void __fastcall filterDataHook(void* self,void* out,void* panel,void* kind){
     Guard guard;
     const auto panelName=filterArgument(panel),filterKind=filterArgument(kind);
@@ -731,7 +732,7 @@ void __fastcall checkInt(CheckCollector* c,unsigned r,const char* k,int v){c->ro
 void __fastcall checkFloat(CheckCollector* c,unsigned r,const char* k,float v){c->rows[r][k]=v;}
 void __fastcall checkString(CheckCollector* c,unsigned r,const char* k,const char* v){c->rows[r][k]=v;}
 void* checkVt[]={nullptr,nullptr,nullptr,reinterpret_cast<void*>(checkBool),reinterpret_cast<void*>(checkInt),reinterpret_cast<void*>(checkFloat),reinterpret_cast<void*>(checkString)};
-void releaseValue(void* value){if(value&&InterlockedDecrement(reinterpret_cast<volatile LONG*>(reinterpret_cast<uintptr_t>(value)+0x14))==0)reinterpret_cast<void(__fastcall*)(void*)>(base+0x8aeb1f0)(value);}
+void releaseValue(void* value){if(value&&InterlockedDecrement(reinterpret_cast<volatile LONG*>(reinterpret_cast<uintptr_t>(value)+0x14))==0)reinterpret_cast<void(__fastcall*)(void*)>(base+0x8aeb250)(value);}
 bool runPreflight(){
     // Called only from the genuine UI navigation-info callback. Suppress the
     // synthetic ready notification so no live screen is entered or rebound.
@@ -739,8 +740,8 @@ bool runPreflight(){
     preflightRunning=true;preflightReady=false;
     try {
         if(!read(base+0xfa5a290,&adapter,8)||!adapter)throw std::runtime_error("Panel adapter is unavailable");
-        auto manager=reinterpret_cast<void*(__fastcall*)()>(base+0x3f0a1d0)();
-        reinterpret_cast<void*(__fastcall*)(void*,void**)>(base+0x8aec980)(manager,&params);
+        auto manager=reinterpret_cast<void*(__fastcall*)()>(base+0x3f0a260)();
+        reinterpret_cast<void*(__fastcall*)(void*,void**)>(base+0x8aec9e0)(manager,&params);
         if(!params)throw std::runtime_error("Native parameter object is unavailable");
         requested=requestSocialPanel(adapter,params);
         releaseValue(params);params=nullptr;
@@ -761,15 +762,15 @@ bool runPreflight(){
 }
 struct Binding{uintptr_t vt,offset,rva;void* hook;bool installed=false;};
 Binding bindings[]={
-    {0xbc42fe8,0xa8,0x7c34e10,reinterpret_cast<void*>(scriptBodyHook)},
-    {0xbac63a8,0xa0,0x7a1af50,reinterpret_cast<void*>(containerHook)},
-    {0xbac63a8,0xb0,0x7a1b4c0,reinterpret_cast<void*>(tileHook)},
-    {0xbac8c40,0x50,0x7a1c8e0,reinterpret_cast<void*>(navInfoHook)},
-    {0xbac8c40,0x40,0x7a2cca0,reinterpret_cast<void*>(navRequestHook)},
-    {0xbac63a8,0x88,0x7a2cdd0,reinterpret_cast<void*>(requestPanelHook)},
-    {0xbac63a8,0x40,0x7a27f10,reinterpret_cast<void*>(panelReadyHook)},
-    {0xbac63a8,0xc8,0x7a19370,reinterpret_cast<void*>(filterDataHook)},
-    {0xbac63a8,0xd0,0x7a2def0,reinterpret_cast<void*>(filterChangedHook)}
+    {0xbc42f88,0xa8,0x7c34ea0,reinterpret_cast<void*>(scriptBodyHook)},
+    {0xbac6348,0xa0,0x7a1afe0,reinterpret_cast<void*>(containerHook)},
+    {0xbac6348,0xb0,0x7a1b550,reinterpret_cast<void*>(tileHook)},
+    {0xbac8be0,0x50,0x7a1c970,reinterpret_cast<void*>(navInfoHook)},
+    {0xbac8be0,0x40,0x7a2cd30,reinterpret_cast<void*>(navRequestHook)},
+    {0xbac6348,0x88,0x7a2ce60,reinterpret_cast<void*>(requestPanelHook)},
+    {0xbac6348,0x40,0x7a27fa0,reinterpret_cast<void*>(panelReadyHook)},
+    {0xbac6348,0xc8,0x7a19400,reinterpret_cast<void*>(filterDataHook)},
+    {0xbac6348,0xd0,0x7a2df80,reinterpret_cast<void*>(filterChangedHook)}
 };
 void stop(){disabled=true;opened=false;if(uiReady){configureNewsPolish(false);configureNewsDropdowns(false);configureNewsScroll(false);configureNewsFlow(false);alignNewsFrame(false);}for(auto& b:bindings)if(b.installed)replace(reinterpret_cast<void**>(base+b.vt+b.offset),b.hook,reinterpret_cast<void*>(base+b.rva));}
 void publishFeed(const Json& data){
@@ -788,12 +789,12 @@ DWORD WINAPI worker(void*){
         dynasty::live::FeedWorker refresh;refresh.configure(folder,base,codeFolder);waitingFeed();adoptFeed();
         for(const auto& g:socialGates){unsigned char bytes[32]{};if(!read(base+g.rva,bytes,32))throw std::runtime_error("Unreadable game code");if(memcmp(bytes,g.bytes,32))cotcompat::practice::normalize(base,g.rva,bytes,g.bytes,32,read);if(memcmp(bytes,g.bytes,32))throw std::runtime_error("Unsupported game code at "+std::to_string(g.rva));}
         for(const auto& b:bindings){uintptr_t pointer=0;if(!read(base+b.vt+b.offset,&pointer,8)||pointer!=base+b.rva)throw std::runtime_error("Native UI slot is owned or unsupported");}
-        scriptBody=reinterpret_cast<ScriptBody>(base+0x7c34e10);
-        tiles=reinterpret_cast<Tiles>(base+0x7a1b4c0);containers=reinterpret_cast<Containers>(base+0x7a1af50);navInfo=reinterpret_cast<NavInfo>(base+0x7a1c8e0);navRequest=reinterpret_cast<NavRequest>(base+0x7a2cca0);
-        requestPanel=reinterpret_cast<RequestPanel>(base+0x7a2cdd0);
-        panelReady=reinterpret_cast<PanelReady>(base+0x7a27f10);
-        filterData=reinterpret_cast<FilterData>(base+0x7a19370);
-        filterChanged=reinterpret_cast<FilterChanged>(base+0x7a2def0);
+        scriptBody=reinterpret_cast<ScriptBody>(base+0x7c34ea0);
+        tiles=reinterpret_cast<Tiles>(base+0x7a1b550);containers=reinterpret_cast<Containers>(base+0x7a1afe0);navInfo=reinterpret_cast<NavInfo>(base+0x7a1c970);navRequest=reinterpret_cast<NavRequest>(base+0x7a2cd30);
+        requestPanel=reinterpret_cast<RequestPanel>(base+0x7a2ce60);
+        panelReady=reinterpret_cast<PanelReady>(base+0x7a27fa0);
+        filterData=reinterpret_cast<FilterData>(base+0x7a19400);
+        filterChanged=reinterpret_cast<FilterChanged>(base+0x7a2df80);
         HMODULE pinned=nullptr;if(!GetModuleHandleExW(GET_MODULE_HANDLE_EX_FLAG_FROM_ADDRESS|GET_MODULE_HANDLE_EX_FLAG_PIN,reinterpret_cast<LPCWSTR>(&tileHook),&pinned))throw std::runtime_error("Cannot pin runtime");
         for(auto& b:bindings){if(!replace(reinterpret_cast<void**>(base+b.vt+b.offset),reinterpret_cast<void*>(base+b.rva),b.hook))throw std::runtime_error("UI hook ownership changed during activation");b.installed=true;}
         note({{"event","menu_hooks_active"},{"summary","Social Media runtime verified its native menu hooks. Waiting for Dynasty news assets and a current feed."},{"pid",GetCurrentProcessId()}});flush();

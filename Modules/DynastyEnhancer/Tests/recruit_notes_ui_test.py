@@ -52,7 +52,14 @@ def main():
     assert view['mcDescription']['label']==recruit['DENotesBody'] and view['mcTitle']['label']=='Recruit Notes'
     assert view['mcDescription']['style']['resizeWidth']==1180
     assert not timers
-    for name,lift in [('mcTitle',140),('mcDescription',154)]:
+    if len(sys.argv) > 1:
+        full_card = Path(sys.argv[1]).read_text(encoding='utf-8').rstrip('\n')
+        recruit['DENotesBody'] = full_card
+        machine.run(program(draw_notes), {1: model})
+        rendered = view['mcDescription']['label']
+        assert rendered == full_card and rendered.splitlines()[-1].startswith('Vertical Jump: ')
+        print(f'Full ATH card delivered to Notes widget: {len(rendered.splitlines())} lines, {len(rendered)} characters.')
+    for name,lift in [('mcTitle',188),('mcDescription',202)]:
         assert view[name]['_x']==saved[name]['_x'] and view[name]['_y']==saved[name]['_y']-lift, 'Notes escaped the native panel anchors'
     assert all(not view[name]['_visible'] for name in ALL if name not in ('mcTitle','mcDescription'))
     saved_snapshot=dict(view['mDENotesSaved'])

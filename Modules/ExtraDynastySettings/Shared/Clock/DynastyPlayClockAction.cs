@@ -107,7 +107,7 @@ namespace DynastyPlayClock
                     }
                     if (layout == null || WaitForPlaycallGate(game, layout)) return "Waiting for decrypted code";
 #if COMBINED_DYNASTY_SETTINGS
-                    if (layout.Map(ListRva) != 0x7997a0c)
+                    if (layout.Map(ListRva) != 0x7997a9c)
                         return "The combined plugin requires the inspected October 29 game layout; no hooks installed";
                     ValidateCombinedDefensiveReadSite(h,b);
 #endif

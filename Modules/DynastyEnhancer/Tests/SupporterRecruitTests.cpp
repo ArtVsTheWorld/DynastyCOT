@@ -7,7 +7,7 @@
 using namespace recruitingfog;
 int main(){
  using namespace resume;
- {Prospect p;p.identity="legacy-proof";p.position="QB";p.stars=5;auto stored=generate(p).publicData;stored["heading"]="Previous high school season (modeled)";stored["background"]="Shared a role in his modeled previous season.";const auto canonical=stored.dump();const auto shown=renderResume(stored);assert(shown.find("MODELED")==std::string::npos&&shown.find("modeled")==std::string::npos&&shown.find("Shared reps last season.")!=std::string::npos);assert(stored.dump()==canonical);assert(evidence::presentNote("Fictional scouting reports; assessments may be mistaken.").empty());}
+ {Prospect p;p.identity="legacy-proof";p.position="QB";p.stars=5;auto stored=generate(p).publicData;stored["heading"]="Previous high school season (modeled)";stored["background"]="Shared a role in his modeled previous season.";const auto canonical=stored.dump();const auto shown=renderResume(stored);assert(shown.find("MODELED")==std::string::npos&&shown.find("modeled")==std::string::npos&&shown.find("Shared reps last season.")==std::string::npos);assert(stored.dump()==canonical);assert(evidence::presentNote("Fictional scouting reports; assessments may be mistaken.").empty());}
  std::vector<std::string> positions={"QB","HB","WR","TE","LT","DT","CB","K","P"};
  auto started=std::chrono::steady_clock::now();
  for(const auto& pos:positions)for(int stars=1;stars<=5;++stars){unsigned reserve=0,starts=0;std::vector<int> yards;
@@ -27,7 +27,7 @@ int main(){
   auto v=evidence::obtain(nullptr,p,context,.6);const auto immutable=v;auto text=evidence::render(v,100,false);assert(evidence::obtain(v,p,context,.6)==immutable);
   std::istringstream lines(text);std::string line;std::set<std::string> local;while(std::getline(lines,line))if(!line.empty()&&line!="SCOUTING NOTES"){assert(local.insert(line).second);++displayed;++repeated[line];different.insert(line);}
   auto old=v;old["athleticBackground"]="Background lead: the report mentions qualifying for a regional track meet. No official result is attached.";old["flavor"]="Background lead: he reportedly competes in track. No verified meet result is included in this scouting file.";
-  const auto canonical=old;const auto transfer=evidence::render(old,100,false,true);assert(transfer.find("regional track meet")==std::string::npos&&transfer.find("runs track")==std::string::npos&&old==canonical);
+  const auto canonical=old;const auto transfer=evidence::render(old,100,false);assert(transfer.find("regional track meet")==std::string::npos&&transfer.find("runs track")==std::string::npos&&old==canonical);
  }
  unsigned worst=0;for(const auto& item:repeated)worst=(std::max)(worst,item.second);
  std::vector<std::pair<unsigned,std::string>> frequent;for(const auto& item:repeated)frequent.emplace_back(item.second,item.first);std::sort(frequent.rbegin(),frequent.rend());for(unsigned i=0;i<5&&i<frequent.size();++i)std::cout<<"frequent|"<<frequent[i].first<<'|'<<frequent[i].second<<'\n';

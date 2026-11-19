@@ -36,7 +36,14 @@ int main(){
  currentOptionsLeague=42;
  assert(measurables::interpolate(40,95,500)==95&&measurables::interpolate(99,95,500)==500&&measurables::interpolate(-5,95,500)==95);
  std::map<std::string,double> inputs={{"speed",90},{"acceleration",80},{"strength",78},{"agility",86},{"change of direction",85},{"jumping",80}};
- const auto dash=measurables::estimate("speed",inputs,"recruit").value;assert(dash==measurables::estimate("acceleration",inputs,"recruit").value);inputs.erase("acceleration");assert(measurables::estimate("speed",inputs,"recruit").value=="?");inputs["acceleration"]=80;
+ const auto dash=measurables::estimate("speed",inputs,"recruit").value;
+ const auto split=measurables::estimate("acceleration",inputs,"recruit").value;
+ assert(dash!=split);
+ inputs.erase("speed");assert(measurables::estimate("speed",inputs,"recruit").value=="?");
+ assert(measurables::estimate("acceleration",inputs,"recruit").value==split);
+ inputs["speed"]=90;inputs.erase("acceleration");
+ assert(measurables::estimate("speed",inputs,"recruit").value=="?");
+ assert(measurables::estimate("acceleration",inputs,"recruit").value=="?");inputs["acceleration"]=80;
  std::set<std::string> dashValues;double minimum=10,maximum=0,mean=0;
  for(unsigned n=0;n<10000;++n){const auto id=std::to_string(n);const auto v=measurables::estimate("speed",inputs,id);dashValues.insert(v.value);const auto value=std::stod(v.value);mean+=value;minimum=(std::min)(minimum,value);maximum=(std::max)(maximum,value);assert(std::abs(value-measurables::interpolate(86,6.5,4.21))<=.086);
   auto lifts=measurables::estimate("strength",inputs,id).value;assert(std::stoi(lifts)%5==0);
@@ -52,7 +59,7 @@ int main(){
   Json recruitUi={{"FirstName","Alex"},{"LastName","Test"},{"Hometown","Town"},{"State","OH"},{"RecordId",77},{"PercentageScouted",progress},{"ScoutingAttributes",Json::array({attr("Speed",90,false),attr("Acceleration",80,progress<80),attr("Strength",0,false)})}};
   auto root=v.add(Json::array({recruitUi}));Options opt;opt.measurables=true;opt.recruitingScale=blind?GradeScale::Blind:GradeScale::PlusMinus;currentOptions=opt.packed();
   convertRecruitingResponse(v,root,[&](A at,const char* k,const char* text){reinterpret_cast<Node*>(at)->object[k]=v.add(text);},[&](A at,const char* k,bool b){reinterpret_cast<Node*>(at)->object[k]=v.add(b);});auto out=v.dump(root)[0]["ScoutingAttributes"];
-  if(blind)assert(out[0]["SliderStart"]==u8"–");else if(progress<80)assert(out[0]["SliderStart"]=="?");else assert(out[0]["SliderStart"]==out[1]["SliderStart"]&&out[0]["Name"]=="40-Yard Dash (est.)");
+  if(blind)assert(out[0]["SliderStart"]==u8"–");else if(progress<80)assert(out[0]["SliderStart"]=="?");else assert(out[0]["SliderStart"]!=out[1]["SliderStart"]&&out[0]["Name"]=="40-Yard Dash"&&out[1]["Name"]=="10-Yard Split");
   if(progress<100)assert(out[2]["SliderStart"]==0);
  }
  {View v;auto root=v.add(Json::array({{{"PercentageScouted",100},{"ScoutingAttributes",Json::array({{{"Name","Speed"},{"HaveSlider",false},{"SliderStart",90},{"SliderEnd",90}}})}}}));Options off;off.recruiting=false;off.measurables=true;currentOptions=off.packed();bool changed=false;convertRecruitingResponse(v,root,[&](A,const char*,const char*){changed=true;},[&](A,const char*,bool){changed=true;});assert(changed);}
@@ -62,7 +69,7 @@ int main(){
   auto root=v.add(Json::array({{{"FirstName","Test"},{"LastName","Recruit"},{"RecordId",77},{"PercentageScouted",100},{"ScoutingAttributes",Json::array({attr("Speed",90),attr("Acceleration",80),attr("Catching",75)})}}}));
   Options opt;opt.recruiting=fog;opt.measurables=measurements;opt.recruitingScale=blind?GradeScale::Blind:GradeScale::PlusMinus;currentOptions=opt.packed();
   convertRecruitingResponse(v,root,[&](A at,const char* k,const char* text){reinterpret_cast<Node*>(at)->object[k]=v.add(text);},[&](A at,const char* k,bool b){reinterpret_cast<Node*>(at)->object[k]=v.add(b);});auto out=v.dump(root)[0]["ScoutingAttributes"];
-  if(!fog){assert(out[2]["SliderStart"]==75);if(measurements){assert(out[0]["Name"]=="40-Yard Dash (est.)"&&out[0]["SliderStart"].is_string());}else assert(out[0]["SliderStart"]==90);}
+  if(!fog){assert(out[2]["SliderStart"]==75);if(measurements){assert(out[0]["Name"]=="40-Yard Dash"&&out[0]["SliderStart"].is_string());}else assert(out[0]["SliderStart"]==90);}
   if(fog&&blind)assert(out[0]["SliderStart"]==u8"–");
  }
  for(int progress:{40,100})for(bool concealed:{false,true}){
@@ -71,12 +78,20 @@ int main(){
   auto root=v.add(Json::array({{{"PercentageScouted",progress},{"ScoutingAttributes",attributes}}}));Options opt;opt.measurables=true;currentOptions=opt.packed();int calls=0;
   convertRecruitingResponse(v,root,[&](A at,const char* key,const char* text){reinterpret_cast<Node*>(at)->object[key]=v.add(text);},[&](A at,const char* key,bool value){reinterpret_cast<Node*>(at)->object[key]=v.add(value);},[&](auto&,const auto&,auto& extra){++calls;extra["acceleration"]=80;});
   const auto value=v.dump(root)[0]["ScoutingAttributes"][0]["SliderStart"];
-  assert(calls==(progress==100?1:0));if(progress<100)assert(value=="?");else if(concealed)assert(value=="Unavailable");else assert(value.is_string()&&value.get<std::string>().find(" s")!=std::string::npos);
+  assert(calls==(progress==100?1:0));if(progress<100)assert(value=="?");else if(concealed)assert(value=="Unavailable");else assert(value.is_string()&&value.get<std::string>().back()=='s'&&value.get<std::string>().find(" s")==std::string::npos);
  }
  evidence::Context context;context.staffData=evidence::StaffData::CapturedEffects;NotesProspect recruit;recruit.identity="42|test";recruit.position="QB";recruit.progress=40;recruit.observations={{"Throw Power",83,83,true},{"Awareness",70,75,false}};
  assert(!evidence::relevant("QB","kick power")&&!evidence::relevant("LT","short accuracy")&&evidence::relevant("K","kick accuracy")&&evidence::relevant("DT","tackle"));
  const auto report=evidence::obtain(nullptr,recruit,context,.5),again=evidence::obtain(report,recruit,context,1);assert(report==again);recruit.progress=100;recruit.observations.push_back({"Short Accuracy",60,60,true});auto expanded=evidence::obtain(report,recruit,context,1);assert(expanded["claims"].size()==3&&expanded["claims"]["throw power"]==report["claims"]["throw power"]);
  assert(evidence::render(expanded,100,true).find("zip")==std::string::npos);
+ const Json savedView={{"version",1},{"claims",{{"speed",{{"text","Gets into space quickly."}}},{"strength",{{"text","Needs more strength through contact."}}}}},{"displayOrder",{"speed","strength"}},{"flavor",""},{"athleticBackground","His coach mentioned a school track meet."}};
+ const auto book=savedView;
+ const auto shown=evidence::render(savedView,75,false);
+ assert(shown=="SCOUTING NOTES\n- Gets into space quickly.\n- Needs more strength through contact.");
+ assert(savedView==book);
+ assert(evidence::render(savedView,15,false)=="SCOUTING NOTES\n- Scout further for individual observations.");
+ std::cout<<shown<<'\n';
+
  auto begin=std::chrono::steady_clock::now();size_t sink=0;for(unsigned i=0;i<10000;++i)sink+=evidence::render(expanded,100,false).size();auto end=std::chrono::steady_clock::now();
  std::cout<<"PASS: 1000 domain combinations, legacy migration, native scope, measurement reveal/noise/rounding/Dynasty isolation, reliability/stable evidence. Cached Notes render 10000: "<<std::chrono::duration<double,std::milli>(end-begin).count()<<" ms; "<<sink<<" bytes; dash distinct="<<dashValues.size()<<" range="<<minimum<<'-'<<maximum<<"\n";
 }

@@ -20,12 +20,12 @@ namespace OfflineDynastySettings {
    Array.Copy(BitConverter.GetBytes(remote+0x1b40L),0,rows,0x175,8);
    Array.Copy(BitConverter.GetBytes(remote+0x1bc0L),0,rows,0x187,8);
    Array.Copy(BitConverter.GetBytes(image+0xf55c998L),0,rows,0x199,8);
-   Array.Copy(BitConverter.GetBytes(image+0x799fa10L),0,rows,0x1f2,8);
-   Array.Copy(BitConverter.GetBytes(image+0x799fa10L),0,rows,0x218,8);
-   Array.Copy(BitConverter.GetBytes(image+0x799fa10L),0,rows,0x243,8);
-   Array.Copy(BitConverter.GetBytes(image+0x799fa10L),0,rows,0x269,8);
-   Array.Copy(BitConverter.GetBytes(image+0x7997998L),0,rows,0x287,8);
-   Array.Copy(BitConverter.GetBytes(image+0x7997950L),0,rows,0x2a5,8);
+   Array.Copy(BitConverter.GetBytes(image+0x799faa0L),0,rows,0x1f2,8);
+   Array.Copy(BitConverter.GetBytes(image+0x799faa0L),0,rows,0x218,8);
+   Array.Copy(BitConverter.GetBytes(image+0x799faa0L),0,rows,0x243,8);
+   Array.Copy(BitConverter.GetBytes(image+0x799faa0L),0,rows,0x269,8);
+   Array.Copy(BitConverter.GetBytes(image+0x7997a28L),0,rows,0x287,8);
+   Array.Copy(BitConverter.GetBytes(image+0x79979e0L),0,rows,0x2a5,8);
    Array.Copy(rows,code,rows.Length);
    byte[] clock=DynastyPlayClock.DynastyPlayClockAction.BuildCombinedSectionClockRow(image,DynastyPlayClock.DynastyPlayClockAction.CombinedData);
    if(clock.Length>0x100)throw new InvalidOperationException("Clock menu code exceeds reserved space");

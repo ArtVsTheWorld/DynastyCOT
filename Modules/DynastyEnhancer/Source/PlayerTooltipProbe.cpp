@@ -17,7 +17,7 @@ using Getter=void(__fastcall*)(void*,int,void*);
 HMODULE self;uintptr_t base;Getter original=nullptr;
 std::atomic<bool> disabled{false};std::atomic<unsigned> calls{0},inflight{0};
 std::mutex lifecycle,queueMutex;std::deque<Json> pending;bool installed=false;
-constexpr uintptr_t table=0xbab5778,slot=0xa8,native=0x796e160;
+constexpr uintptr_t table=0xbab5718,slot=0xa8,native=0x796e1f0;
 constexpr std::array<unsigned char,32> prefix={0x4c,0x8b,0xdc,0x48,0x81,0xec,0x18,0x01,0x00,0x00,0x48,0x8b,0x05,0xcf,0x46,0x12,0x06,0x48,0x33,0xc4,0x48,0x89,0x84,0x24,0xe0,0x00,0x00,0x00,0x48,0x8b,0x89,0x20};
 bool read(uintptr_t at,void* out,size_t bytes){SIZE_T got=0;return ReadProcessMemory(GetCurrentProcess(),reinterpret_cast<void*>(at),out,bytes,&got)&&got==bytes;}
 void note(Json row){std::lock_guard<std::mutex> lock(queueMutex);if(pending.size()<10)pending.push_back(std::move(row));}

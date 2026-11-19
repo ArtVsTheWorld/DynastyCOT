@@ -13,9 +13,9 @@ k.VirtualAlloc.argtypes=[c.c_void_p,c.c_size_t,c.c_ulong,c.c_ulong];k.VirtualAll
 
 B=0x140000000;D=0x200000000;M=0x50000000
 
-sites=[0x4ff70be,0x4ff70eb,0x4ff7456]; skips=[0x4ff70eb,0x4ff7187,0x4ff74f3]; sizes=[16,20,20]
+sites=[0x4ff714e,0x4ff717b,0x4ff74e6]; skips=[0x4ff717b,0x4ff7217,0x4ff7583]; sizes=[16,20,20]
 
-pages={ (B+r)&~0xffff for r in sites+skips+[0x35ff940,0x3601240,0xd9eb808,0xf3fddbc,0xf85f700,0xf85f5f0,0xf63f9f0,0xf54fa00,0xf54f540,0x36a1450,0x5d5d000,0x5d5d040,0x5d5d090,0x35e4850,0x377e340,0x7b9d930,0x5d4d900,0x5d4daff,0x5d75f61,0x5d5e921,0x3601860,0x7b82380,0x7baf6d0,0xfa602a0,0xdae5480,0x5d12420,0x7baf970,0x3f0a300,0x2ad9200,0xf8b3ba0,0x5d5d9f0,0x7bce8f0,0x7c1b8c0,0xbaebe78,0x25a3e60,0x5d4e130] }
+pages={ (B+r)&~0xffff for r in sites+skips+[0x35ff9d0,0x36012d0,0xd9eb808,0xf3fddbc,0xf85f700,0xf85f5f0,0xf63f9f0,0xf54fa00,0xf54f540,0x36a14e0,0x5d5d090,0x5d5d0d0,0x5d5d120,0x35e48e0,0x377e3d0,0x7b9d9c0,0x5d4d990,0x5d4db8f,0x5d75f61,0x5d5e9b1,0x36018f0,0x7b82410,0x7baf760,0xfa602a0,0xdae5480,0x5d124b0,0x7bafa00,0x3f0a390,0x2ad9200,0xf8b3ba0,0x5d5da80,0x7bce980,0x7c1b950,0xbaebe18,0x25a3e60,0x5d4e1c0] }
 
 for a,n in [(M,0x10000),(D,0x10000)]+[(a,0x10000) for a in pages]:
 
@@ -117,11 +117,11 @@ q(states+0x50,0);i(states+0xa0,1)
 
 # Execute initial scenario commands at the safe gate using mocked native setters.
 
-put(B+0x5d5d000,bytes.fromhex('8991d0010000c3'))
+put(B+0x5d5d090,bytes.fromhex('8991d0010000c3'))
 
-put(B+0x5d5d040,bytes.fromhex('f30f1189c0010000c3'))
+put(B+0x5d5d0d0,bytes.fromhex('f30f1189c0010000c3'))
 
-put(B+0x5d5d090,bytes.fromhex('488b02488981680100008b4208898170010000c3'))
+put(B+0x5d5d120,bytes.fromhex('488b02488981680100008b4208898170010000c3'))
 
 put(M+0x100,Path('Evidence/Gate0.bin').read_bytes());put(M,bytes.fromhex('53564883ec28')+imm('48bb',obj)+bytes.fromhex('33f6')+jump(M+0x100))
 
@@ -139,7 +139,7 @@ assert get(D+4)==0 and get(D+28)==19;checks+=1
 
 ui=M+0x9000;q(B+0xf54f540,ui)
 
-put(B+0x36a1450,bytes.fromhex('89512044884124c3'))
+put(B+0x36a14e0,bytes.fromhex('89512044884124c3'))
 
 i(D+80,1);i(D+4,1);i(ui+0x20,-1);i(ui+0x24,0)
 
@@ -155,7 +155,7 @@ i(D+80,0)
 
 # Absolute score updates execute once with the scenario on the game thread.
 
-put(B+0x35e4850,bytes.fromhex('44898491d8010000c3'))
+put(B+0x35e48e0,bytes.fromhex('44898491d8010000c3'))
 
 i(D+4,1);i(D+84,1);i(D+88,6);i(D+92,10)
 
@@ -171,7 +171,7 @@ assert get(match+0x1dc)==10;checks+=1
 
 put(M+0x100,Path('Evidence/Trace.bin').read_bytes())
 
-put(B+0x5d5d090+19,bytes.fromhex('4881c4d00000005f488b5c2408488b742410c3'))
+put(B+0x5d5d120+19,bytes.fromhex('4881c4d00000005f488b5c2408488b742410c3'))
 
 v=M+0x7000;f(v,2);f(v+4,24);i(match+0x1d0,2);f(match+0x168,0);f(match+0x16c,20)
 
@@ -187,7 +187,7 @@ assert get(D+64)==1 and get(slot)==1 and c.c_float.from_address(slot+28).value==
 
 put(M+0x100,Path('Evidence/HudEntry.bin').read_bytes())
 
-put(B+0x36a1450+14,bytes.fromhex('8911488b9c24800000004883c4605dc3'))
+put(B+0x36a14e0+14,bytes.fromhex('8911488b9c24800000004883c4605dc3'))
 
 cfg=M+0xa000;pause=M+0xb000;q(B+0xf63f9f0,cfg);q(B+0xf54fa00,pause)
 
@@ -229,11 +229,11 @@ for enabled in [0,1]:
 
 put(M+0x100,Path('Evidence/LineGuard.bin').read_bytes())
 
-put(B+0x5d5d040,jump(M+0x100))
+put(B+0x5d5d0d0,jump(M+0x100))
 
-put(B+0x5d5d040+16,bytes.fromhex('f30f1189c0010000c5f8287424304883c448c3'))
+put(B+0x5d5d0d0+16,bytes.fromhex('f30f1189c0010000c5f8287424304883c448c3'))
 
-put(B+0x4ff781e,b'\xe8'+struct.pack('<i',0x5d5d040-0x4ff781e-5)+b'\xc3')
+put(B+0x4ff78ae,b'\xe8'+struct.pack('<i',0x5d5d0d0-0x4ff78ae-5)+b'\xc3')
 
 for enabled in [0,1]:
 
@@ -247,7 +247,7 @@ for enabled in [0,1]:
 
      i(D,enabled);i(B+0xd9eb808,mode);i(B+0xf3fddbc,kind);q(D+16,bound);f(match+0x1c0,44)
 
-     target=B+0x4ff781e if practice_caller else B+0x5d5d040
+     target=B+0x4ff78ae if practice_caller else B+0x5d5d0d0
 
      # The extra call frame at the fake practice site must remain aligned.
 
@@ -267,7 +267,7 @@ for enabled in [0,1]:
 
 put(M+0x100,Path('Evidence/StatsVisibility.bin').read_bytes())
 
-put(B+0x377e340+14,bytes.fromhex('31c04883c4405bc3'))
+put(B+0x377e3d0+14,bytes.fromhex('31c04883c4405bc3'))
 
 expression=M+0xd000;q(expression,M+0xd100);q(D+120,expression)
 
@@ -317,11 +317,11 @@ put(M,bytes.fromhex('4883ec28')+imm('48ba',stat_ui)+imm('48b8',M+0x100)+bytes.fr
 
 c.WINFUNCTYPE(None)(M)()
 
-assert out==[(0,B+0xbab7020,'Practice plays'),(0,B+0xbab7030,'7'),(0,B+0xbab7040,'0'),(0,B+0xbab7050,0),(1,B+0xbab7020,'Defensive points'),(1,B+0xbab7030,'0'),(1,B+0xbab7040,'10'),(1,B+0xbab7050,0)];checks+=1
+assert out==[(0,B+0xbab6fc0,'Practice plays'),(0,B+0xbab6fd0,'7'),(0,B+0xbab6fe0,'0'),(0,B+0xbab6ff0,0),(1,B+0xbab6fc0,'Defensive points'),(1,B+0xbab6fd0,'0'),(1,B+0xbab6fe0,'10'),(1,B+0xbab6ff0,0)];checks+=1
 
 # Outside the practice scope, the original native provider remains selected.
 
-put(B+0x7b9d930+15,imm('48b8',telemetry)+bytes.fromhex('c70003000000488b5c2408488b6c2410488b742418c3'))
+put(B+0x7b9d9c0+15,imm('48b8',telemetry)+bytes.fromhex('c70003000000488b5c2408488b6c2410488b742418c3'))
 
 for disabled in ['enabled','mode','kind','match','practice','rows']:
 
@@ -347,15 +347,15 @@ for disabled in ['enabled','mode','kind','match','practice','rows']:
 
 put(M+0x100,Path('Evidence/ReturnGuard.bin').read_bytes())
 
-put(B+0x5d4d900,jump(M+0x100))
+put(B+0x5d4d990,jump(M+0x100))
 
-put(B+0x5d4d911,imm('48b8',telemetry)+bytes.fromhex('c700010000004883c438c3'))
+put(B+0x5d4d9a1,imm('48b8',telemetry)+bytes.fromhex('c700010000004883c438c3'))
 
-put(B+0x5d4daff,imm('48b8',telemetry)+bytes.fromhex('c700020000004883c438c3'))
+put(B+0x5d4db8f,imm('48b8',telemetry)+bytes.fromhex('c700020000004883c438c3'))
 
-for caller in [0x5d75e26,0x5d5e7e6]:
+for caller in [0x5d75eb6,0x5d5e876]:
 
- put(B+caller-5,b'\xe8'+struct.pack('<i',0x5d4d900-caller)+b'\xc3')
+ put(B+caller-5,b'\xe8'+struct.pack('<i',0x5d4d990-caller)+b'\xc3')
 
 def practice_scope(disabled=None):
 
@@ -381,7 +381,7 @@ for disabled in [None,'enabled','mode','kind','match','practice']:
 
    for changed in [False,True]:
 
-    for caller in [0x5d75e26,0x5d5e7e6,None]:
+    for caller in [0x5d75eb6,0x5d5e876,None]:
 
      for already_ending in [0,1]:
 
@@ -391,13 +391,13 @@ for disabled in [None,'enabled','mode','kind','match','practice']:
 
       i(telemetry,0);i(D+160,0)
 
-      target=B+caller-5 if caller else B+0x5d4d900;adjust=0x20 if caller else 0x28
+      target=B+caller-5 if caller else B+0x5d4d990;adjust=0x20 if caller else 0x28
 
       put(M,bytes.fromhex('4883ec')+bytes([adjust])+imm('48b9',match)+imm('48b8',target)+bytes.fromhex('ffd04883c4')+bytes([adjust])+b'\xc3')
 
       c.WINFUNCTYPE(None)(M)()
 
-      suppressed=disabled is None and phase==3 and not scored and (caller==0x5d5e7e6 or caller==0x5d75e26 and changed)
+      suppressed=disabled is None and phase==3 and not scored and (caller==0x5d5e876 or caller==0x5d75eb6 and changed)
 
       assert get(D+160)==int(suppressed)
 
@@ -411,7 +411,7 @@ for disabled in [None,'enabled','mode','kind','match','practice']:
 
 put(M+0x100,Path('Evidence/PlayCallTick.bin').read_bytes())
 
-put(B+0x3601860+19,bytes.fromhex('4881c4d8000000415d5e5b5dc3'))
+put(B+0x36018f0+19,bytes.fromhex('4881c4d8000000415d5e5b5dc3'))
 
 play_manager=M+0xa800;q(B+0xfa602a0,play_manager)
 
@@ -437,9 +437,9 @@ ui_mock=UiShow(lambda this,delay:ui_calls.append((this,delay)))
 
 # The callbacks also validate actual Win64 argument passing and stack alignment.
 
-put(B+0x7b82380,jump(c.cast(cpu_mock,c.c_void_p).value));put(B+0x7baf6d0,jump(c.cast(ui_mock,c.c_void_p).value))
+put(B+0x7b82410,jump(c.cast(cpu_mock,c.c_void_p).value));put(B+0x7baf760,jump(c.cast(ui_mock,c.c_void_p).value))
 
-put(B+0x5d12420,jump(c.cast(transition_mock,c.c_void_p).value))
+put(B+0x5d124b0,jump(c.cast(transition_mock,c.c_void_p).value))
 
 for disabled in [None,'enabled','mode','kind','match','practice']:
 
@@ -481,7 +481,7 @@ for disabled in [None,'enabled','mode','kind','match','practice']:
 
 put(M+0x100,Path('Evidence/EarlyPlayCall.bin').read_bytes())
 
-put(B+0x5d4e130+15,imm('48b8',telemetry)+bytes.fromhex('ff4010c3'))
+put(B+0x5d4e1c0+15,imm('48b8',telemetry)+bytes.fromhex('ff4010c3'))
 
 for disabled in [None,'enabled','mode','kind','match','practice']:
 
@@ -549,7 +549,7 @@ clobber=bytes.fromhex('31c031c931d24531c04531c94531d24531db')
 
 for x in range(6):clobber+=bytes.fromhex('660fef')+bytes([0xc0+x*9])
 
-for site,offset in [(0x7b82380,0x200),(0x7baf6d0,0x220)]:
+for site,offset in [(0x7b82410,0x200),(0x7baf760,0x220)]:
 
  put(B+site,imm('48b8',saved+offset)+bytes.fromhex('4889088950084889e14883e10f89480c')+clobber+b'\xc3')
 
@@ -599,11 +599,11 @@ for picker in ['PlayCallTick','EarlyPlayCall']:
 
 put(M+0x100,Path('Evidence/PracticePlayCallUi.bin').read_bytes())
 
-put(B+0x7baf6d0,imm('48b8',telemetry)+bytes.fromhex('c70001000000895004c3'))
+put(B+0x7baf760,imm('48b8',telemetry)+bytes.fromhex('c70001000000895004c3'))
 
-put(B+0x3f0a300,imm('48b8',telemetry)+bytes.fromhex('ff4008c3'))
+put(B+0x3f0a390,imm('48b8',telemetry)+bytes.fromhex('ff4008c3'))
 
-put(B+0x7baf970+16,imm('48b8',telemetry)+bytes.fromhex('c700020000004883c438c3'))
+put(B+0x7bafa00+16,imm('48b8',telemetry)+bytes.fromhex('c700020000004883c438c3'))
 
 for disabled in [None,'enabled','mode','kind','match','practice']:
 
@@ -650,7 +650,7 @@ i(D+12448,0);i(D+12368,0)
 
 # Published filtered choice and matching offense payload for the phase-5 hook.
 
-service=M+0xc000;q(B+0xf8b3ba0,service);q(D+12000,B+0x7b82380)
+service=M+0xc000;q(B+0xf8b3ba0,service);q(D+12000,B+0x7b82410)
 
 def ready_choice(user,defending=False):
 
@@ -668,13 +668,13 @@ def ready_choice(user,defending=False):
 
 put(M+0x100,Path('Evidence/InitialPlayCallTick.bin').read_bytes())
 
-put(B+0x35ff940+14,bytes.fromhex('415f5dc3'))
+put(B+0x35ff9d0+14,bytes.fromhex('415f5dc3'))
 
 initial_state=M+0xa600;q(states+0x58,initial_state);q(B+0xfa602a0,manager)
 
 i(manager+0x50c,0x101)
 
-put(B+0x7b82380,jump(c.cast(cpu_mock,c.c_void_p).value))
+put(B+0x7b82410,jump(c.cast(cpu_mock,c.c_void_p).value))
 
 for disabled in [None,'enabled','mode','kind','match','practice']:
 
@@ -776,7 +776,7 @@ i(manager+0x50c,0x101)
 
 # and native VMOVSS prologue survive both user-team indices.
 
-put(B+0x7b82380,imm('48b8',saved+0x200)+bytes.fromhex('4889088950084889e14883e10f89480c')+clobber+b'\xc3')
+put(B+0x7b82410,imm('48b8',saved+0x200)+bytes.fromhex('4889088950084889e14883e10f89480c')+clobber+b'\xc3')
 
 for user_team in [0,1]:
 
@@ -814,13 +814,13 @@ assert len(Path('Evidence/InitialPlayCallTick.bin').read_bytes())<=1024
 
 put(M+0x100,Path('Evidence/InitialSetupTick.bin').read_bytes())
 
-put(B+0x3601240+18,bytes.fromhex('4883c4785e5dc3'))
+put(B+0x36012d0+18,bytes.fromhex('4883c4785e5dc3'))
 
 put(B+0x2ad9200,b'\x50'+imm('48b8',telemetry)+bytes.fromhex('ff0058c3'))
 
 setup_state=M+0xa700;q(states+0x60,setup_state);q(B+0xfa602a0,manager)
 
-put(B+0x7b82380,jump(c.cast(cpu_mock,c.c_void_p).value))
+put(B+0x7b82410,jump(c.cast(cpu_mock,c.c_void_p).value))
 
 for disabled in [None,'enabled','mode','kind','match','practice']:
 
@@ -878,7 +878,7 @@ for owner in [False,True]:
 
    checks+=1
 
-put(B+0x7b82380,imm('48b8',saved+0x200)+bytes.fromhex('4889088950084889e14883e10f89480c')+clobber+b'\xc3')
+put(B+0x7b82410,imm('48b8',saved+0x200)+bytes.fromhex('4889088950084889e14883e10f89480c')+clobber+b'\xc3')
 
 q(B+0xfa602a0,manager)
 
@@ -916,7 +916,7 @@ assert len(Path('Evidence/InitialSetupTick.bin').read_bytes())<=1024
 
 put(M+0x1000,Path('Evidence/InitialPlayCallTick.bin').read_bytes())
 
-put(B+0x7b82380,jump(c.cast(cpu_mock,c.c_void_p).value))
+put(B+0x7b82410,jump(c.cast(cpu_mock,c.c_void_p).value))
 
 for user_team in [0,1]:
 
@@ -950,7 +950,7 @@ i(manager+0x50c,0x101)
 
 put(M+0x1000,Path('Evidence/InitialPlayCallTick.bin').read_bytes())
 
-put(B+0x7b82380,jump(c.cast(cpu_mock,c.c_void_p).value))
+put(B+0x7b82410,jump(c.cast(cpu_mock,c.c_void_p).value))
 
 for user_team in [0,1]:
 
@@ -982,9 +982,9 @@ recovery_state=M+0xa600
 
 put(M+0x100,recovery_build(D,B,recovery_state))
 
-put(B+0x35ff940+14,bytes.fromhex('415f5dc3'))
+put(B+0x35ff9d0+14,bytes.fromhex('415f5dc3'))
 
-put(B+0x7baf970,imm('48b8',telemetry)+bytes.fromhex('ff00')+clobber+b'\xc3')
+put(B+0x7bafa00,imm('48b8',telemetry)+bytes.fromhex('ff00')+clobber+b'\xc3')
 
 for phase in [1,3,4,5]:
 
@@ -1034,7 +1034,7 @@ checks+=1
 
 put(M+0x100,Path('Evidence/InitialPlayCallTick.bin').read_bytes())
 
-put(B+0x7b82380,jump(c.cast(cpu_mock,c.c_void_p).value));q(B+0xfa602a0,manager)
+put(B+0x7b82410,jump(c.cast(cpu_mock,c.c_void_p).value));q(B+0xfa602a0,manager)
 
 for user in [0,1]:
 
@@ -1056,7 +1056,7 @@ for user in [0,1]:
 
 # Execute the real filtered submission wrapper with native registration mocked.
 
-for rva in [0xe2d3918,0xae3a190,0x4ff8c10,0x5f0d5c0]:
+for rva in [0xe2d3918,0xae3a1b0,0x4ff8ca0,0x5f0d650]:
 
  page=(B+rva)&~0xffff
 
@@ -1092,9 +1092,9 @@ configuration_mock=Configure(lambda this,team,mode,form,set:configure_calls.appe
 
 q(vtable+0x418,c.cast(registration_mock,c.c_void_p).value)
 
-put(B+0x5f0d5c0,jump(c.cast(submission_mock,c.c_void_p).value));put(B+0x4ff8c10,jump(c.cast(configuration_mock,c.c_void_p).value))
+put(B+0x5f0d650,jump(c.cast(submission_mock,c.c_void_p).value));put(B+0x4ff8ca0,jump(c.cast(configuration_mock,c.c_void_p).value))
 
-put(B+0xae3a190,struct.pack('<iiii',-1,-1,-1,0))
+put(B+0xae3a1b0,struct.pack('<iiii',-1,-1,-1,0))
 
 put(M+0x100,Path('Evidence/DefenseCommit.bin').read_bytes())
 
@@ -1128,7 +1128,7 @@ put(M+0x100,Path('Evidence/InitialPlayCallTick.bin').read_bytes())
 
 put(M+0x1000,Path('Evidence/PlayCallRefresh.bin').read_bytes());q(D+12392,M+0x1000)
 
-put(B+0x7baf6d0,imm('48b8',saved+0x200)+bytes.fromhex('4889088950084889e14883e10f89480c')+clobber+b'\xc3')
+put(B+0x7baf760,imm('48b8',saved+0x200)+bytes.fromhex('4889088950084889e14883e10f89480c')+clobber+b'\xc3')
 
 practice_scope();i(states+0xa0,5);i(initial_state+0x10,2);i(D+12016,1);i(D+164,1);i(D+180,1)
 
@@ -1160,7 +1160,7 @@ i(saved+0x208,999);c.WINFUNCTYPE(None)(M)();assert get(saved+0x208)==999;checks+
 
 put(M+0x100,Path('Evidence/InitialPlayCallTick.bin').read_bytes())
 
-put(B+0x7b82380,jump(c.cast(cpu_mock,c.c_void_p).value))
+put(B+0x7b82410,jump(c.cast(cpu_mock,c.c_void_p).value))
 
 for user in [0,1]:
 
@@ -1222,7 +1222,7 @@ for user in [0,1]:
 
 put(M+0x100,Path('Evidence/InitialPlayCallTick.bin').read_bytes())
 
-put(B+0x7b82380,jump(c.cast(cpu_mock,c.c_void_p).value))
+put(B+0x7b82410,jump(c.cast(cpu_mock,c.c_void_p).value))
 
 for user in [0,1]:
 
@@ -1270,11 +1270,11 @@ for user in [0,1]:
 
 put(M+0x100,Path('Evidence/PlayCallTick.bin').read_bytes())
 
-put(B+0x5d5d000,bytes.fromhex('8991d0010000c3'))
+put(B+0x5d5d090,bytes.fromhex('8991d0010000c3'))
 
-put(B+0x5d5d040,bytes.fromhex('f30f1189c0010000c3'))
+put(B+0x5d5d0d0,bytes.fromhex('f30f1189c0010000c3'))
 
-put(B+0x5d5d090,bytes.fromhex('488b02488981680100008b4208898170010000c3'))
+put(B+0x5d5d120,bytes.fromhex('488b02488981680100008b4208898170010000c3'))
 
 for disabled in [None,'enabled','mode','kind','match','practice']:
 
@@ -1312,9 +1312,9 @@ for disabled in [None,'enabled','mode','kind','match','practice']:
 
 # together on the game thread; a second tick cannot apply the handoff again.
 
-put(B+0x5d5d9f0,bytes.fromhex('8991c8010000')+imm('48b8',telemetry)+bytes.fromhex('ff00c3'))
+put(B+0x5d5da80,bytes.fromhex('8991c8010000')+imm('48b8',telemetry)+bytes.fromhex('ff00c3'))
 
-put(B+0x35e4850,bytes.fromhex('44898491d8010000c3'))
+put(B+0x35e48e0,bytes.fromhex('44898491d8010000c3'))
 
 for target in [0,1]:
 
@@ -1358,9 +1358,9 @@ assert len(Path('Evidence/PlayCallTick.bin').read_bytes())<=1024
 
 put(M+0x100,Path('Evidence/PlayCallTick.bin').read_bytes())
 
-put(B+0x5d12420,jump(c.cast(transition_mock,c.c_void_p).value))
+put(B+0x5d124b0,jump(c.cast(transition_mock,c.c_void_p).value))
 
-put(B+0x7baf6d0,jump(c.cast(ui_mock,c.c_void_p).value))
+put(B+0x7baf760,jump(c.cast(ui_mock,c.c_void_p).value))
 
 for team in [0,1]:
 
@@ -1404,9 +1404,9 @@ for team in [0,1]:
 
 put(M+0x100,Path('Evidence/PlayCallTick.bin').read_bytes())
 
-put(B+0x5d12420,jump(c.cast(transition_mock,c.c_void_p).value))
+put(B+0x5d124b0,jump(c.cast(transition_mock,c.c_void_p).value))
 
-put(B+0x7baf6d0,jump(c.cast(ui_mock,c.c_void_p).value))
+put(B+0x7baf760,jump(c.cast(ui_mock,c.c_void_p).value))
 
 for target in [0,1]:
 
@@ -1452,9 +1452,9 @@ for target in [0,1]:
 
 put(M+0x100,Path('Evidence/ModeDispatch.bin').read_bytes())
 
-put(B+0x7c1b8c0,bytes.fromhex('b86f000000c3'))
+put(B+0x7c1b950,bytes.fromhex('b86f000000c3'))
 
-put(B+0x7bce8f0+19,imm('48b8',telemetry)+bytes.fromhex('488908c700de0000004883c4205bc3'))
+put(B+0x7bce980+19,imm('48b8',telemetry)+bytes.fromhex('488908c700de0000004883c4205bc3'))
 
 for disabled in [None,'enabled','mode','kind','match','practice']:
 
@@ -1472,7 +1472,7 @@ for disabled in [None,'enabled','mode','kind','match','practice']:
 
   if active:assert result==111
 
-  else:assert c.c_uint64.from_address(telemetry).value==((B+0xbaebe78)&~0xffffffff)|222
+  else:assert c.c_uint64.from_address(telemetry).value==((B+0xbaebe18)&~0xffffffff)|222
 
   checks+=1
 
@@ -1538,14 +1538,14 @@ assert len(restore_body)<=2048
 put(restore_address,restore_body)
 native_ui_calls=[]
 native_ui_mock=UiShow(lambda this,delay:native_ui_calls.append((this,delay)))
-put(B+0x7baf970,jump(c.cast(native_ui_mock,c.c_void_p).value))
-put(B+0x7baf6d0,jump(c.cast(ui_mock,c.c_void_p).value))
-put(B+0x5d12420,jump(c.cast(transition_mock,c.c_void_p).value))
-put(B+0x5d5d000,bytes.fromhex('8991d0010000c3'))
-put(B+0x5d5d040,bytes.fromhex('f30f1189c0010000c3'))
-put(B+0x5d5d090,bytes.fromhex('488b02488981680100008b4208898170010000c3'))
-put(B+0x35e4850,bytes.fromhex('44898491d8010000c3'))
-put(B+0x36a1450,bytes.fromhex('89512044884124c3'))
+put(B+0x7bafa00,jump(c.cast(native_ui_mock,c.c_void_p).value))
+put(B+0x7baf760,jump(c.cast(ui_mock,c.c_void_p).value))
+put(B+0x5d124b0,jump(c.cast(transition_mock,c.c_void_p).value))
+put(B+0x5d5d090,bytes.fromhex('8991d0010000c3'))
+put(B+0x5d5d0d0,bytes.fromhex('f30f1189c0010000c3'))
+put(B+0x5d5d120,bytes.fromhex('488b02488981680100008b4208898170010000c3'))
+put(B+0x35e48e0,bytes.fromhex('44898491d8010000c3'))
+put(B+0x36a14e0,bytes.fromhex('89512044884124c3'))
 q(B+0xf54f540,ui);q(B+0xf54fa00,pause)
 for request in [0,1,2,3]:
  for enabled in [0,1]:
@@ -1699,7 +1699,7 @@ def finish_first_snap(this,delay):
  q(states+0x50,play);i(play+0x250,0);c.c_ubyte.from_address(play+0x3a8).value=0;f(play+0x234,4)
  c.WINFUNCTYPE(None)(first_snap_entry)()
 first_snap_mock=UiShow(finish_first_snap)
-put(B+0x7baf6d0,jump(c.cast(first_snap_mock,c.c_void_p).value))
+put(B+0x7baf760,jump(c.cast(first_snap_mock,c.c_void_p).value))
 for team in [0,1]:
  practice_scope();i(D+12368,1);i(D+12372,2);i(D+12384,0)
  i(D+24,151);i(D+28,0);i(D+72,17);i(initial_state+0x10,0);i(D+12448,0);i(states+0xa0,1);c.c_ubyte.from_address(pause).value=0
@@ -1737,13 +1737,13 @@ for team in [0,1]:
  assert c.c_float.from_address(D+12424).value==-15 and c.c_float.from_address(match+0x16c).value==-11
  assert get(manager+0x50c)==0 and not cpu_calls
  checks+=1
-put(B+0x5d12420,jump(c.cast(transition_mock,c.c_void_p).value))
+put(B+0x5d124b0,jump(c.cast(transition_mock,c.c_void_p).value))
 
 # CPU possession is a 32-bit field. It must never overwrite the high half of
 # the 64-bit refresh-helper pointer, including after both teams have called plays.
 refresh_high=D+0x5000
 put(refresh_high,Path('Evidence/PlayCallRefresh.bin').read_bytes())
-put(B+0x7baf6d0,jump(c.cast(ui_mock,c.c_void_p).value))
+put(B+0x7baf760,jump(c.cast(ui_mock,c.c_void_p).value))
 put(M+0x100,Path('Evidence/InitialPlayCallTick.bin').read_bytes())
 for team in [0,1,0,1]:
  practice_scope();i(states+0xa0,5);i(initial_state+0x10,2)

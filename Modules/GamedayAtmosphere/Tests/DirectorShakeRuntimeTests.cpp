@@ -17,7 +17,7 @@ int main(){
     std::vector<A> wrapper(4),match(0x200/8),replay(0x80/8),settings(0x500/8),owner(2),data(0x300/8),views(4*0x68/8),view(0x800/8),foreign(0x800/8);
     std::vector<A> configuration(0x100/8);global(0xf63f9f0,addr(configuration[0]));
     std::vector<A> gameStates(0x200/8);put(addr(gameStates[0])+0xa0,1);global(bindings::GameStates,addr(gameStates[0]));
-    unsigned char paused=0;match[0]=image+0xb47e908;wrapper[2]=addr(match[0]);
+    unsigned char paused=0;match[0]=image+0xb47e8a8;wrapper[2]=addr(match[0]);
     replay[0]=image+bindings::ReplayVtable;settings[0]=image+bindings::CameraSettingsVtable;
     put(addr(settings[0])+0x3e6,static_cast<unsigned short>(1));put(addr(settings[0])+0x41a,static_cast<unsigned short>(1));
     owner[0]=addr(data[0]);put(addr(data[0])+0x1f0,addr(views[0]));views[0]=addr(foreign[0]);views[0x68/8]=addr(view[0]);view[0]=foreign[0]=image+bindings::CameraVtable;

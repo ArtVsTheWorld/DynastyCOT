@@ -19,7 +19,7 @@ recruitingfog::notesui::Runtime previewUi(previewPrograms());
 std::mutex mutex;std::deque<Json> pending;
 bool read(uintptr_t at,void* out,size_t size){SIZE_T copied=0;return ReadProcessMemory(GetCurrentProcess(),reinterpret_cast<const void*>(at),out,size,&copied)&&copied==size;}
 void note(Json row){std::lock_guard<std::mutex> lock(mutex);pending.push_back(std::move(row));}
-bool swap(void* before,void* after){auto at=reinterpret_cast<PVOID volatile*>(base+0xbc42fe8+0xc8);DWORD old=0,unused=0;if(!VirtualProtect(const_cast<PVOID*>(at),8,PAGE_READWRITE,&old))return false;const auto prior=InterlockedCompareExchangePointer(at,after,before);VirtualProtect(const_cast<PVOID*>(at),8,old,&unused);return prior==before;}
+bool swap(void* before,void* after){auto at=reinterpret_cast<PVOID volatile*>(base+0xbc42f88+0xc8);DWORD old=0,unused=0;if(!VirtualProtect(const_cast<PVOID*>(at),8,PAGE_READWRITE,&old))return false;const auto prior=InterlockedCompareExchangePointer(at,after,before);VirtualProtect(const_cast<PVOID*>(at),8,old,&unused);return prior==before;}
 uintptr_t __fastcall setupHook(void* object,void* saved,uintptr_t receiver,uintptr_t parent,uintptr_t super){
     ++inflight;
     if(!disabled&&!failed)try{const auto index=previewUi.beforeInvoke(object,read);if(index>=0){const auto bit=1u<<index;if(!(attached.fetch_or(bit)&bit))note({{"event","player_ui_preview_attached"},{"method",index}});}}
@@ -29,7 +29,7 @@ uintptr_t __fastcall setupHook(void* object,void* saved,uintptr_t receiver,uintp
 DWORD stop(){if(previewUi.ownerCount())return 4;disabled=true;if(previousSetup&&!swap(reinterpret_cast<void*>(setupHook),reinterpret_cast<void*>(previousSetup)))return 2;const auto deadline=GetTickCount64()+5000;while(inflight&&GetTickCount64()<deadline)Sleep(1);return inflight?3:previewUi.ownerCount()?4:0;}
 DWORD WINAPI worker(void*){
     base=reinterpret_cast<uintptr_t>(GetModuleHandleW(nullptr));wchar_t path[32768]{};GetModuleFileNameW(self,path,32768);const auto file=std::filesystem::path(path).parent_path()/L"player-ui-preview.jsonl";
-    const auto current=*reinterpret_cast<void**>(base+0xbc42fe8+0xc8);HMODULE owner=nullptr;wchar_t ownerPath[32768]{};
+    const auto current=*reinterpret_cast<void**>(base+0xbc42f88+0xc8);HMODULE owner=nullptr;wchar_t ownerPath[32768]{};
     if(!GetModuleHandleExW(GET_MODULE_HANDLE_EX_FLAG_FROM_ADDRESS|GET_MODULE_HANDLE_EX_FLAG_UNCHANGED_REFCOUNT,reinterpret_cast<LPCWSTR>(current),&owner)||!GetModuleFileNameW(owner,ownerPath,32768)||std::filesystem::path(ownerPath).filename()!=L"DynastyEnhancerRecruitFog-p43.dll")return 1;
     HMODULE pin=nullptr;if(!GetModuleHandleExW(GET_MODULE_HANDLE_EX_FLAG_FROM_ADDRESS|GET_MODULE_HANDLE_EX_FLAG_PIN,reinterpret_cast<LPCWSTR>(&worker),&pin))return 2;
     previewUi.prepare();previousSetup=reinterpret_cast<Setup>(current);if(!swap(current,reinterpret_cast<void*>(setupHook))){previousSetup=nullptr;return 3;}

@@ -19,7 +19,7 @@ inline bool nativePresentationScope(){
         if((mode!=14&&mode!=-1)||session!=3)return false;
         const auto career=*reinterpret_cast<volatile uintptr_t*>(image+0xfa519b8);
         if(!career)return false;
-        return presentationScope(mode,session,*reinterpret_cast<volatile uintptr_t*>(career)==image+0xbaa8998,
+        return presentationScope(mode,session,*reinterpret_cast<volatile uintptr_t*>(career)==image+0xbaa8938,
             *reinterpret_cast<volatile unsigned char*>(career+0x7b1)==1,
             *reinterpret_cast<volatile uint32_t*>(image+0xf55c998),currentOptionsLeague.load(std::memory_order_relaxed));
     }__except(EXCEPTION_EXECUTE_HANDLER){return false;}

@@ -6,8 +6,8 @@
 #include <vector>
 
 namespace enhancements::menu {
-constexpr uintptr_t tableRva=0xbab9a08,listSlot=0x38,writerSlot=0x50;
-constexpr uintptr_t listRva=0x7998c00,writerRva=0x79a5c30;
+constexpr uintptr_t tableRva=0xbab99a8,listSlot=0x38,writerSlot=0x50;
+constexpr uintptr_t listRva=0x7998c90,writerRva=0x79a5cc0;
 constexpr int firstKey=0xDE100;
 using List=void(__fastcall*)(void*,void*,void*);
 using Writer=void(__fastcall*)(void*,void*,void*);

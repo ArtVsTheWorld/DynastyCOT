@@ -6,16 +6,14 @@ Dynasty COT is the home for four optional plugins. The installer manages the sam
 
 [Download the collection installer 1.1.6](https://github.com/ArtVsTheWorld/DynastyCOT/releases/tag/v1.1.6)
 
-Already using COT? Download installer **1.1.6** first to manage these new ZIPs with player guides. Older compatible releases remain available in its update picker. Manual DLL installation works as before.
-
-**Hotfix 2:** BTF **1.0.26** and GDA **2.1.40** improve startup and file handling for long folder paths. Installer **1.1.6** adds automatic version checks and **Check & Repair** for obsolete or duplicate components. Downloads and installation remain explicit choices; Extra Settings and Expanded Practice keep their current public versions.
+**November 17 Update:** All four modules have new builds for the game update. COT installer **1.1.6** checks for them when it opens. Select the modules you use, then click **Install / Update**. Standalone users can download and replace each module's DLL as usual.
 
 | Module | Download | Player guide | All features |
 |---|---|---|---|
-| Beyond the Field | [Version 1.0.26 ZIP](https://github.com/ArtVsTheWorld/BeyondTheField/releases/download/v1.0.26/BeyondTheField-1.0.26.zip) | [Illustrated PDF](https://github.com/ArtVsTheWorld/BeyondTheField/releases/download/v1.0.26/BeyondTheField-Player-Guide.pdf) | [Feature list](Packaging/Standalone/BeyondTheField/FEATURES.md) |
-| Gameday Atmosphere | [Version 2.1.40 ZIP](https://github.com/ArtVsTheWorld/DynamicGamedayAtmosphere/releases/download/v2.1.40/GamedayAtmosphere-2.1.40.zip) | [Illustrated PDF](https://github.com/ArtVsTheWorld/DynamicGamedayAtmosphere/releases/download/v2.1.40/GamedayAtmosphere-Player-Guide.pdf) | [Feature list](Packaging/Standalone/GamedayAtmosphere/FEATURES.md) |
-| Extra Settings | [Version 0.2.12 ZIP](https://github.com/ArtVsTheWorld/offline-dynasty-settings/releases/download/v0.2.12/ExtraSettings-0.2.12.zip) | [Illustrated PDF](https://github.com/ArtVsTheWorld/offline-dynasty-settings/releases/download/v0.2.12/ExtraSettings-Player-Guide.pdf) | [Feature list](Packaging/Standalone/ExtraSettings/FEATURES.md) |
-| Expanded Practice | [Version 0.8.24 ZIP](https://github.com/ArtVsTheWorld/drive-based-practice/releases/download/v0.8.24/ExpandedPractice-0.8.24.zip) | [Illustrated PDF](https://github.com/ArtVsTheWorld/drive-based-practice/releases/download/v0.8.24/ExpandedPractice-Player-Guide.pdf) | [Feature list](Packaging/Standalone/ExpandedPractice/FEATURES.md) |
+| Beyond the Field | [Version 1.0.43 ZIP](https://github.com/ArtVsTheWorld/BeyondTheField/releases/download/v1.0.43/BeyondTheField-1.0.43.zip) | [Illustrated PDF](https://github.com/ArtVsTheWorld/BeyondTheField/releases/download/v1.0.43/BeyondTheField-Player-Guide.pdf) | [Feature list](Packaging/Standalone/BeyondTheField/FEATURES.md) |
+| Gameday Atmosphere | [Version 2.1.41 ZIP](https://github.com/ArtVsTheWorld/DynamicGamedayAtmosphere/releases/download/v2.1.41/GamedayAtmosphere-2.1.41.zip) | [Illustrated PDF](https://github.com/ArtVsTheWorld/DynamicGamedayAtmosphere/releases/download/v2.1.41/GamedayAtmosphere-Player-Guide.pdf) | [Feature list](Packaging/Standalone/GamedayAtmosphere/FEATURES.md) |
+| Extra Settings | [Version 0.2.21 ZIP](https://github.com/ArtVsTheWorld/offline-dynasty-settings/releases/download/v0.2.21/ExtraSettings-0.2.21.zip) | [Illustrated PDF](https://github.com/ArtVsTheWorld/offline-dynasty-settings/releases/download/v0.2.21/ExtraSettings-Player-Guide.pdf) | [Feature list](Packaging/Standalone/ExtraSettings/FEATURES.md) |
+| Expanded Practice | [Version 0.8.26 ZIP](https://github.com/ArtVsTheWorld/drive-based-practice/releases/download/v0.8.26/ExpandedPractice-0.8.26.zip) | [Illustrated PDF](https://github.com/ArtVsTheWorld/drive-based-practice/releases/download/v0.8.26/ExpandedPractice-Player-Guide.pdf) | [Feature list](Packaging/Standalone/ExpandedPractice/FEATURES.md) |
 
 ## Beyond the Field
 

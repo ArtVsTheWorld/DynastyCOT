@@ -11,7 +11,13 @@ def main():
   if b['bank']=='notes' or not b['methods']:continue
   candidates=[next((c for c in row['candidates'] if 'contract'in c),None) for row in b['methods']]
   if any(c is None or row['distinctContracts']!=1 for row,c in zip(b['methods'],candidates)):raise ValueError('Unresolved '+b['bank'])
-  lines.append('if(bank=='+json.dumps(b['bank'])+'){contracts={'+','.join(cpp(c['contract']) for c in candidates)+'};')
+  extra=[]
+  if b['bank']=='card.0':
+   from build_ui_method_contracts import contract
+   from build_player_card_ui import SPECS
+   asset,specs=SPECS['controlPrograms'];apt=load(Path(asset))
+   extra=[contract(apt,spec[0]) for spec in specs[len(candidates):]]
+  lines.append('if(bank=='+json.dumps(b['bank'])+'){contracts={'+','.join([*(cpp(c['contract']) for c in candidates),*(cpp(c) for c in extra)])+'};')
   for row,c in zip(b['methods'],candidates):
    m=row['method'];i=row['index'];apt=load(c['asset'])
    def text(at):return apt.data[at:apt.data.index(0,at)].decode('latin1')

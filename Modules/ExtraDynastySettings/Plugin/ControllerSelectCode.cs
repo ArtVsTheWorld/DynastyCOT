@@ -9,7 +9,7 @@ namespace DynastyPlayClock {
    Array.Copy(BitConverter.GetBytes(image+0xf63f9f0L),0,code,0x34,8);
    Array.Copy(BitConverter.GetBytes(image+0xf54fa00L),0,code,0x58,8);
    Array.Copy(BitConverter.GetBytes(image+0xf85f120L),0,code,0x109,8);
-   Array.Copy(BitConverter.GetBytes(image+0xb32a410L),0,code,0x11f,8);
+   Array.Copy(BitConverter.GetBytes(image+0xb32a3b0L),0,code,0x11f,8);
    Array.Copy(BitConverter.GetBytes(image+0xf85f700L),0,code,0x16c,8);
    Array.Copy(BitConverter.GetBytes(remote+0x1920L),0,code,0x18f,8);
    Array.Copy(BitConverter.GetBytes(remote+0x1900L),0,code,0x19c,8);
@@ -29,7 +29,7 @@ namespace DynastyPlayClock {
    Array.Copy(BitConverter.GetBytes(remote+0x1920L),0,code,0x9d,8);
    Array.Copy(BitConverter.GetBytes(image+0xfa5b900L),0,code,0xf5,8);
    Array.Copy(BitConverter.GetBytes(remote+0x800L+0x0L),0,code,0x127,8);
-   Array.Copy(BitConverter.GetBytes(image+0x5d1242fL),0,code,0x166,8);
+   Array.Copy(BitConverter.GetBytes(image+0x5d124bfL),0,code,0x166,8);
    return code;
   }
   private static byte[] BuildControllerApply(long image,long remote,long original) {
@@ -39,7 +39,7 @@ namespace DynastyPlayClock {
    Array.Copy(BitConverter.GetBytes(image+0xf3fddbcL),0,code,0x31,8);
    Array.Copy(BitConverter.GetBytes(image+0xf63f9f0L),0,code,0x45,8);
    Array.Copy(BitConverter.GetBytes(image+0xf85f120L),0,code,0xfa,8);
-   Array.Copy(BitConverter.GetBytes(image+0xb32a410L),0,code,0x110,8);
+   Array.Copy(BitConverter.GetBytes(image+0xb32a3b0L),0,code,0x110,8);
    Array.Copy(BitConverter.GetBytes(image+0xf3da7d0L),0,code,0x1fa,8);
    Array.Copy(BitConverter.GetBytes(image+0x2eb4c30L),0,code,0x21b,8);
    Array.Copy(BitConverter.GetBytes(remote+0x1800L),0,code,0x22d,8);
@@ -53,9 +53,9 @@ namespace DynastyPlayClock {
    Array.Copy(BitConverter.GetBytes(image+0xf54fa00L),0,code,0x4e,8);
    Array.Copy(BitConverter.GetBytes(image+0xfa5b900L),0,code,0x6e,8);
    Array.Copy(BitConverter.GetBytes(image+0xf85f120L),0,code,0x110,8);
-   Array.Copy(BitConverter.GetBytes(image+0xb32a410L),0,code,0x126,8);
+   Array.Copy(BitConverter.GetBytes(image+0xb32a3b0L),0,code,0x126,8);
    Array.Copy(BitConverter.GetBytes(remote+0x1818L),0,code,0x176,8);
-   Array.Copy(BitConverter.GetBytes(image+0x91364c0L),0,code,0x189,8);
+   Array.Copy(BitConverter.GetBytes(image+0x9136520L),0,code,0x189,8);
    Array.Copy(BitConverter.GetBytes(remote+0xe00L),0,code,0x199,8);
    return code;
   }

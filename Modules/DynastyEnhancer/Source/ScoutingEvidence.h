@@ -5,6 +5,8 @@
 #include "ScoutingTechniqueLibrary.h"
 #include <optional>
 #include "NotesPresentation.h"
+#include "ScoutingNoteSelection.h"
+#include "RecruitBackgroundNotes.h"
 namespace recruitingfog::evidence {
 using Json=nlohmann::json;
 struct Reliability {double accurate=0,exaggerated=0,misleading=0;};
@@ -47,7 +49,10 @@ inline Context context(const Json& raw){
  }if(!out.pipelinesKnown)out.pipelines.clear();}
  return out;
 }
-inline int band(const NotesObservation& o){return o.low>=80?0:o.low>=70&&o.high<80?1:o.high<70?2:-1;}
+inline int band(const NotesObservation& o){
+ if(!std::isfinite(o.low)||!std::isfinite(o.high)||o.low<0||o.high>100||o.low>o.high)return -1;
+ return o.low>=80?0:o.low>=70&&o.high<80?1:o.high<70?2:-1;
+}
 inline std::string family(const NotesProspect& p,const NotesObservation& o){const auto k=notesKey(o.name);if(k=="tackling")return "tackle";if(k!="awareness")return k;
  const auto pos=notesKey(p.position);if(pos=="qb")return "awareness qb";if(pos=="wr"||pos=="te")return "awareness receiver";if(pos=="hb"||pos=="rb"||pos=="fb")return "awareness back";if(pos=="lt"||pos=="lg"||pos=="c"||pos=="rg"||pos=="rt")return "awareness line";if(pos=="k"||pos=="p")return "awareness specialist";return "awareness defense";
 }
@@ -63,68 +68,195 @@ inline bool relevant(const std::string& position,const std::string& f){
  else allowed="|tackle|hit power|block shedding|power moves|finesse moves|pursuit|play recognition|";
  return allowed.find("|"+f+"|")!=std::string::npos;
 }
-inline const char* flavor(const std::string& position,uint64_t seed){
- constexpr const char* common[]={
- "Background note: he keeps a notebook of corrections rather than just watching the highlights.",
- "Background note: his coach describes a quiet player who asks detailed questions after practice.",
- "Background note: the staff's early impression is of a talkative competitor who likes to set the tone.",
- "Development note: he reportedly learned a second position before settling into this role.",
- "Development note: the camp report emphasizes repeatable technique over his best single rep.",
- "Availability note: the scouting file does not establish a medical history. Durability remains unverified.",
- "Camp note: the early account favors his effort; the staff still wants a broader sample.",
- "Background note: he reportedly balances football with another school activity. The details are unconfirmed.",
- "Coach's account: he takes correction well, though that impression still needs checking.",
- "Development note: the report describes a late start in organized football, rather than years in one system.",
- "Camp note: one strong session should not outweigh the rest of the evaluation.",
- "Background note: teammates reportedly lean on his sense of humor when practice gets repetitive."};
- const auto pos=notesKey(position);
- if(seed%5==0){if(pos=="lt"||pos=="lg"||pos=="c"||pos=="rg"||pos=="rt")return "Background lead: he reportedly also wrestles. Treat the claimed leverage benefit as something to verify on football film.";
- if(pos=="wr"||pos=="cb"||pos=="hb"||pos=="rb")return "Background lead: he reportedly competes in track. No verified meet result is included in this scouting file.";
- if(pos=="qb")return "Background lead: his coach mentions another throwing sport. That does not establish football placement under pressure.";
- if(pos=="k"||pos=="p")return "Background lead: the report mentions soccer experience. Repeatable football contact still needs its own evaluation.";
- return "Background lead: he reportedly also plays basketball. The staff wants to see how the footwork carries over to football.";}
- return common[seed%(sizeof(common)/sizeof(*common))];
+
+inline int currentReportVersion(NoteRole role){return role==NR::Unknown?1:3;}
+inline std::string observationKey(const NotesProspect& p,const NotesObservation& o,int version,NoteRole role){
+ if(band(o)<0)return {};
+ auto key=family(p,o);
+ if(version<3)return key!="jumping"&&relevant(p.position,key)?key:std::string();
+ if(key.rfind("awareness",0)==0){
+  if(role==NR::Snapper)key="awareness specialist";
+  if(role==NR::Athlete)key="awareness";
+ }
+ if(key=="long snapping")key="long snap";
+ if(key=="bc vision"||key=="ball-carrier vision")key="ball carrier vision";
+ return roleEligible(role,key)?key:std::string();
+}
+
+inline bool hasNewEvidence(const Json& saved,const NotesProspect& p){
+ if(p.progress<25)return false;
+ const NoteRole role=noteRole(p.position);
+ const auto version=saved.value("version",1);
+ const auto& claims=saved.at("claims");
+ for(const auto& o:p.observations){auto key=observationKey(p,o,version,role);if(!key.empty()&&!claims.contains(key))return true;}
+ return false;
+}
+inline std::string storedBackground(const Json& saved){
+ if(!saved.is_object())return {};
+ for(const auto* key:{"backgroundNote","athleticBackground","flavor"}){
+  const auto field=saved.find(key);
+  if(field==saved.end()||!field->is_string())continue;
+  std::string line;
+  noteLines(field->get_ref<const std::string&>(),[&](std::string_view part){
+   line=presentNote(std::string(part));
+   return line.empty();
+  });
+  if(!line.empty())return line;
+ }
+ return {};
 }
 // Append immutable claims as evidence is obtained. Existing keys/wording survive
 // better scouting, staff changes and reloads; no native records are changed.
 inline Json obtain(Json saved,const NotesProspect& p,const Context& context,std::optional<double> pipeline){
- if(!saved.is_object())saved={{"version",1},{"claims",Json::object()},{"flavor",p.activeTransfer?"Film review continues.":flavor(p.position,notesHash(p.identity+"|background"))}};
- if(!saved.contains("displayOrder"))saved["displayOrder"]=Json::array();
- if(p.progress<25)return saved;
- const auto chances=reliability(pipeline);
- for(const auto& o:p.observations){const auto b=band(o);if(b<0||o.low<0||o.high>100||o.low>o.high)continue;const auto f=family(p,o);if(!relevant(p.position,f)||saved["claims"].contains(f))continue;
-  for(const auto& entry:resume::prose)if(f==entry.attribute){
-   const auto h=notesHash(p.identity+"|"+f+"|report-v1");const auto roll=double(h%10000)/10000.;
-   const int quality=roll<chances.accurate?0:roll<chances.accurate+chances.exaggerated?1:2;
-   const int claim=quality==0?b:quality==1?(std::max)(0,b-1):b==0?1:b==1?2:1;
-   constexpr const char* sources[]={"Film assessment: ","Coach's early assessment: ","Unverified camp impression: ","Scouting observation: "};
-   std::string text=sources[(h>>18)%4];
-   const auto specific=technique(p.position,f,claim,h);text+=specific?specific:entry.bands[claim][(h>>24)%3];
-   saved["claims"][f]={{"text",text},{"truthBand",b},{"claimBand",claim},{"quality",quality},{"priority",universal(f)?40:100},{"order",h},{"calibration","pipeline-v2"},{"staffData",staffDataName(context.staffData)},{"pipelineKnown",bool(pipeline)&&std::isfinite(*pipeline)},{"pipeline",pipeline&&std::isfinite(*pipeline)?Json(*pipeline):Json()},{"progress",p.progress}};break;
-  }
+ const auto role=noteRole(p.position);
+ const bool hadReport=saved.is_object();
+ if(!hadReport){
+  const auto version=currentReportVersion(role);
+  saved={{"version",version},{"claims",Json::object()},{"flavor",""}};
+  if(version>=2)saved["position"]=p.position;
  }
- if(!p.activeTransfer&&p.progress>=50&&!saved.contains("athleticBackgroundChecked")){
-  saved["athleticBackgroundChecked"]=true;const auto h=notesHash(p.identity+"|athletic-background");
-  if(h%11==0)for(const auto& o:p.observations)if(o.low>=85&&o.high<=100){
-   const auto key=notesKey(o.name);
-   if(key=="speed"||key=="acceleration"){saved["athleticBackground"]="Background lead: the report mentions qualifying for a regional track meet. No official result is attached.";break;}
-   if(key=="strength"){saved["athleticBackground"]="Background lead: his coach mentions reaching a school weight-room milestone. The reported lift has not been independently checked.";break;}
+ const auto version=saved.value("version",1);
+ const bool focused=version>=2;
+ const bool preserveOrder=hadReport&&!focused;
+ if(!saved.contains("displayOrder")){
+  auto& order=saved["displayOrder"]=Json::array();
+  const auto& claims=saved.at("claims");
+  if(preserveOrder)for(auto it=claims.begin();it!=claims.end();++it)order.push_back(it.key());
+ }
+ if(p.progress<25)return saved;
+ if(revealBackground(p)&&storedBackground(saved).empty())saved["backgroundNote"]=std::string(newBackground(p));
+ const auto chances=reliability(pipeline);
+ for(const auto& o:p.observations){
+  const auto f=observationKey(p,o,version,role);
+  if(f.empty()||saved["claims"].contains(f))continue;
+  const auto b=band(o);
+  const auto h=notesHash(p.identity+"|"+f+"|report-v1");const auto roll=double(h%10000)/10000.;
+  const int quality=roll<chances.accurate?0:roll<chances.accurate+chances.exaggerated?1:2;
+  const int claim=quality==0?b:quality==1?(std::max)(0,b-1):b==0?1:b==1?2:1;
+  const auto emphasis=focused?noteEmphasis(o.low,o.high,b,claim):0;
+  const char* phrasing=nullptr;
+  if(version>=3){
+   if((noteKickers|roles(NR::Snapper))&roles(role))phrasing=roleVariant(role,f,claim,h);
+   else phrasing=fieldVariant(role,f,claim,emphasis!=0,h);
   }
+  if(focused&&!phrasing){
+   phrasing=roleNote(f,p.position,claim,emphasis,h);
+   if(!phrasing&&emphasis&&(version==2||focusedNotes(p.position)))phrasing=emphaticNote(f,p.position,claim,h);
+  }
+  std::string text;
+  if(phrasing)text=phrasing;
+  else for(const auto& entry:resume::prose)if(f==entry.attribute){
+   constexpr const char* sources[]={"Film assessment: ","Coach's early assessment: ","Unverified camp impression: ","Scouting observation: "};
+   if(version<3)text=sources[(h>>18)%4];
+   const auto specific=technique(p.position,f,claim,h);text+=specific?specific:entry.bands[claim][(h>>24)%3];break;
+  }
+  if(text.empty())continue;
+  saved["claims"][f]={{"text",text},{"truthBand",b},{"claimBand",claim},{"quality",quality},{"priority",universal(f)?40:100},{"order",h},{"calibration","pipeline-v2"},{"staffData",staffDataName(context.staffData)},{"pipelineKnown",bool(pipeline)&&std::isfinite(*pipeline)},{"pipeline",pipeline&&std::isfinite(*pipeline)?Json(*pipeline):Json()},{"progress",p.progress}};
+  if(focused)saved["claims"][f]["emphasis"]=emphasis;
  }
  std::vector<std::string> order;for(auto i=saved.at("claims").begin();i!=saved.at("claims").end();++i)order.push_back(i.key());
- std::stable_sort(order.begin(),order.end(),[&](const std::string& a,const std::string& b){const auto& x=saved.at("claims").at(a);const auto& y=saved.at("claims").at(b);const auto xp=x.value("priority",40),yp=y.value("priority",40);return xp!=yp?xp>yp:x.value("order",uint64_t(0))<y.value("order",uint64_t(0));});saved["displayOrder"]=order;
+ std::stable_sort(order.begin(),order.end(),[&](const std::string& a,const std::string& b){const auto& x=saved.at("claims").at(a);const auto& y=saved.at("claims").at(b);const auto xp=x.value("priority",40),yp=y.value("priority",40);return xp!=yp?xp>yp:x.value("order",uint64_t(0))<y.value("order",uint64_t(0));});
+ if(preserveOrder){
+  auto& prior=saved.at("displayOrder");
+  for(const auto& key:order)if(std::find(prior.begin(),prior.end(),key)==prior.end())prior.push_back(key);
+ }else saved["displayOrder"]=order;
  return saved;
 }
-inline std::string render(const Json& saved,double progress,bool blind,bool transfer=false){
- if(blind)return "SCOUTING NOTES\nPlayer evaluation is hidden by Recruiting Blind.";
+
+struct DisplayedNote {std::string key,pairedWith,text;};
+
+inline std::vector<DisplayedNote> focusedDisplay(const Json& saved,unsigned limit){
+ struct Choice {
+  std::string_view key,paired;
+  const Json* claim=nullptr;
+  const char* combined=nullptr;
+  int score=0;
+  unsigned directions=0; // Bit 0: standout strength. Bit 1: standout concern.
+  uint64_t order=0;
+ };
+ const auto& claims=saved.at("claims");
+ const auto pos=saved.at("position").get_ref<const std::string&>();
+ const bool expanded=saved.value("version",1)>=3;
+ const auto role=noteRole(pos);
+ auto topicFor=[&](std::string_view key){return expanded?roleTopic(role,key):noteTopic(key);};
+ std::map<std::string_view,Choice> available,topics;
+ auto offer=[&](const Choice& choice){
+  auto [it,inserted]=topics.try_emplace(topicFor(choice.key),choice);
+  if(!inserted&&(choice.score>it->second.score||(choice.score==it->second.score&&choice.order<it->second.order)))it->second=choice;
+ };
+ for(auto it=claims.begin();it!=claims.end();++it){
+  if(noteLimit(it->value("progress",0.))>limit)continue;
+  const std::string_view key=it.key();
+  const auto topic=topicFor(key);
+  const auto band=it->at("claimBand").get<int>();
+  const auto emphasis=it->value("emphasis",0);
+  int score=it->value("priority",40)+(band==1?0:20)+emphasis*34;
+  if(tackleNotes(pos)&&(topic=="speed"||topic=="change of direction"||key=="strength"))score-=30;
+  if(key=="carrying")score-=30;
+  if(pos=="WR"&&key=="run block"&&!emphasis)score-=24;
+  if(pos=="TE"&&(key=="run block"||key=="catch in traffic"))score+=12;
+  if(expanded)score+=roleWeight(role,key,emphasis);
+  const Choice choice{key,{},&*it,nullptr,score,emphasis&&band!=1?(band==0?1u:2u):0u,it->at("order").get<uint64_t>()};
+  available.emplace(key,choice);
+  offer(choice);
+ }
+ auto offerPair=[&](std::string_view firstKey,std::string_view secondKey,const char* const* lines){
+  const auto a=available.find(firstKey),b=available.find(secondKey);
+  if(a==available.end()||b==available.end())return;
+  const auto& x=a->second;
+  const auto& y=b->second;
+  const auto directions=x.directions|y.directions;
+  const auto first=x.claim->at("claimBand").get<int>(),second=y.claim->at("claimBand").get<int>();
+  if(!directions||first==1||second==1)return;
+  const auto variant=first==second?(first==0?0:1):(first==0?2:3);
+  offer({x.key,y.key,nullptr,lines[variant],(std::max)(x.score,y.score)+7,directions,(std::min)(x.order,y.order)});
+ };
+ for(const auto& pair:coupledNotes){
+  if(!expanded){if(pair.tackle==tackleNotes(pos))offerPair(pair.first,pair.second,pair.lines);continue;}
+  if(pair.tackle?(noteLine&roles(role)):(role==NR::Receiver||role==NR::TightEnd))offerPair(pair.first,pair.second,pair.lines);
+ }
+ if(expanded)for(const auto& pair:rolePairs)if(pair.positions&roles(role))offerPair(pair.first,pair.second,pair.lines);
+ std::vector<Choice> sorted;
+ for(const auto& topic:topics)sorted.push_back(topic.second);
+ auto better=[](const Choice& a,const Choice& b){return a.score!=b.score?a.score>b.score:a.order!=b.order?a.order<b.order:a.key<b.key;};
+ std::sort(sorted.begin(),sorted.end(),better);
+ const auto count=(std::min)(sorted.size(),size_t(limit));
+ // If the best few subjects are all positive or all negative, make space
+ // for the other side only when there is a clear, distinct standout.
+ unsigned directions=0;
+ for(size_t i=0;i<count;++i)directions|=sorted[i].directions;
+ if(count>=2&&(directions==1||directions==2)){
+  const auto other=std::find_if(sorted.begin()+count,sorted.end(),[&](const Choice& c){return (c.directions&~directions)!=0;});
+  if(other!=sorted.end())sorted[count-1]=*other;
+ }
+ std::vector<DisplayedNote> result;
+ for(size_t i=0;i<count;++i){
+  const auto& choice=sorted[i];
+  result.push_back({std::string(choice.key),std::string(choice.paired),choice.combined?choice.combined:presentNote(choice.claim->at("text").get<std::string>())});
+ }
+ return result;
+}
+
+inline std::vector<DisplayedNote> displayedNotes(const Json& saved,double progress){
+ const auto limit=noteLimit(progress);
+ if(!limit||!saved.is_object())return {};
+ if(saved.value("version",1)>=2)return focusedDisplay(saved,limit);
+ const auto& claims=saved.at("claims");
+ std::vector<DisplayedNote> result;
+ auto add=[&](const std::string& key){result.push_back({key,{},presentNote(claims.at(key).at("text").get<std::string>())});};
+ if(saved.contains("displayOrder")){
+  for(const auto& key:saved.at("displayOrder")){if(result.size()==limit)break;add(key.get_ref<const std::string&>());}
+ }else for(auto it=claims.begin();it!=claims.end()&&result.size()<limit;++it)add(it.key());
+ return result;
+}
+
+inline std::string render(const Json& saved,double progress,bool blind){
+ if(blind)return "SCOUTING NOTES\n- Player evaluation is hidden by Recruiting Blind.";
  std::string out="SCOUTING NOTES";
- if(!saved.is_object()||progress<25)return out+"\nScout further for individual observations.";
- unsigned count=0,limit=progress>=75?4:progress>=50?3:2;
- if(saved.contains("displayOrder")){for(const auto& key:saved.at("displayOrder"))if(count++<limit)out+="\n"+presentNote(saved.at("claims").at(key.get<std::string>()).at("text").get<std::string>());}
- else for(const auto& claim:saved.at("claims"))if(count++<limit)out+="\n"+presentNote(claim.at("text").get<std::string>());
- if(!count)out+="\nNeed a closer look before judging individual traits.";
- if(!transfer&&progress>=50&&saved.contains("athleticBackground"))out+="\n"+presentNote(saved.at("athleticBackground").get<std::string>());
- if(!transfer&&progress>=50&&notesHash(saved.at("flavor").get<std::string>())%3==0)out+="\n"+presentNote(saved.at("flavor").get<std::string>());
+ if(!saved.is_object()||progress<25)return out+"\n- Scout further for individual observations.";
+ const auto notes=displayedNotes(saved,progress);
+ for(const auto& note:notes)appendNoteBullets(out,note.text);
+ if(notes.empty())out+="\n- Need a closer look before judging individual traits.";
  return out;
 }
 }

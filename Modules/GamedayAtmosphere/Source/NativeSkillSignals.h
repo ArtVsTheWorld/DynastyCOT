@@ -57,7 +57,7 @@ public:
         Address counters=counts?at<Address>(image_+bindings::SkillCounters):0;int hurdles=-1;
         if(counters&&at<Address>(counters)==image_+bindings::SkillCountersVtable&&field(counters+0x860,hurdles)&&hurdles>=0&&hurdles<=32&&at<Address>(image_+bindings::SkillCounters)==counters)out.hurdleCount=hurdles;
         Address root=at<Address>(image_+EventRoot);std::array<unsigned char,45*32> raw{};
-        if(at<Address>(root)!=image_+0xbc90128||!read_(root+0x10,raw.data(),raw.size())||at<Address>(image_+EventRoot)!=root)return out;
+        if(at<Address>(root)!=image_+0xbc900c8||!read_(root+0x10,raw.data(),raw.size())||at<Address>(image_+EventRoot)!=root)return out;
         out.eventsValid=true;
         for(unsigned n=0;n<45;++n){const auto* b=raw.data()+n*32;int type=-1;double time=0;uint32_t actor=0;
             std::memcpy(&type,b+24,4);std::memcpy(&time,b+16,8);std::memcpy(&actor,b+28,4);

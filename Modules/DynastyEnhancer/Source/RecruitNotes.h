@@ -12,7 +12,7 @@ namespace recruitingfog {
 inline uint64_t notesHash(const std::string& text){uint64_t hash=14695981039346656037ull;for(unsigned char c:text){hash^=c;hash*=1099511628211ull;}return hash;}
 inline std::string notesKey(std::string text){while(!text.empty()&&text.back()==' ')text.pop_back();for(auto& c:text)c=static_cast<char>(std::tolower(static_cast<unsigned char>(c)));return text;}
 struct NotesObservation {std::string name;double low=0,high=0;bool exact=false;};
-struct NotesProspect {std::string identity,measurementIdentity,position,tendency,hometown,classification;bool activeTransfer=false;double progress=0;std::vector<NotesObservation> observations;};
+struct NotesProspect {std::string identity,measurementIdentity,position,tendency,hometown,classification;bool activeTransfer=false;double progress=0;std::vector<NotesObservation> observations;bool schoolBackgroundEligible=false;std::string backgroundDevelopment;};
 struct NotesLanguage {const char* attribute;const char* strong;const char* developing;};
 inline constexpr NotesLanguage notesLanguage[]={
     {"throw power","There is real zip on his throws, including when he has to reach the far sideline.","The deep and opposite-hash throws will need a closer look before the staff builds around them."},

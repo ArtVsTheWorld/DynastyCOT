@@ -102,37 +102,37 @@ namespace OfflinePlaycall
             try
             {
                 byte[] uiOriginal = Hex("488b871804000041b80a000000488bd6");
-                if (!Equal(Read(handle, image + 0x7997940, 16), uiOriginal)) return null;
+                if (!Equal(Read(handle, image + 0x79979d0, 16), uiOriginal)) return null;
                 ClockHooks clock = CheckClockHooks(handle, image);
                 if (clock == null && ClockAssemblyLoaded()) return null;
                 Region[] regions = {
-                    new Region(0x7997640, 0x15c0, "9b3536b4f2add376575d1d6614946d59ec18246468283b28ef0f813fed601688"),
-                    new Region(0x799fa10, 0x2a2, "88bcf0b978e43c1f2fa0acbfb49cd3b2a29806e31fafd83a2e2becfb84dbb6c6"),
-                    new Region(0x86b5c70, 0x4e14, "f96c4ad8a09651bd268756d02e8ca0b49f44180429456b2d810895d957271f68"),
-                    new Region(0x79a5c30, 0x2d2c, "0942a0605c37c185b2bbeaa85c43b4d3e010d85b10a60428c332e040c71d0e10"),
+                    new Region(0x79976d0, 0x15c0, "8df427414dbc6de1b99dda566d00de2e9a20b8f2e68ed7f494646aacd47c4123"),
+                    new Region(0x799faa0, 0x2a2, "5d30cb50c5cd3afa720e764b01b8e11c3c1bb32f70077b64f3df75899d8735e0"),
+                    new Region(0x86b5cd0, 0x4e14, "623a24eb6678ca36d4ce4ef575496052bc1f1d3efa18a7369ae20437836433bd"),
+                    new Region(0x79a5cc0, 0x2d2c, "526f6a0d95140ff7a8a70ee22d9d34192ac0fb1f49882507cce8ed0d608c09a4"),
                     new Region(0x2e94cd0, 0x3e, "be0cbab362fb39cf031308be44e61a398e1ebaf5b897015ddff93cedde9f8d22"),
-                    new Region(0x4f99e30, 0xc4, "c9d484970b493cd6015715d106942a8db6d0b784d8a220a9c594f318f744c077"),
-                    new Region(0x2e8d030, 0x338, "dd645c7474510692f1703b5cccd01d9444641191c7d00a9ce46bf7e25e1c3e71"),
-                    new Region(0x8459ff0, 3, "01cb47d078b4841b8408ec4fe278efa83115c6f6e101972987507d2b2b57dcf0"),
-                    new Region(0x7997630, 7, "423013aa333e68f6b9450e0f0e151a0c9a83c403f1dfabf01daeb7d9e33d0ba8"),
-                    new Region(0x7ee5b50, 0x45, "6151f4b9a3b2d7a8722c2595a97f21f472536e917e7bb307336af3f6f75a7605"),
-                    new Region(0x3002a10, 0x10, "80aa4ff731824c4dac865ca0ad2c7547ccfc52d30c19b9fb363296b643488fa2")
+                    new Region(0x4f99ec0, 0xc4, "15b7b955c783620da175a2c757d9c058cbbab45d4dc32cdceeba8a993716d052"),
+                    new Region(0x2e8d030, 0x338, "99d1e6caf61f1957ff54fbe0631f2ea940c33b180f350a6e65ef23a231e9fe4d"),
+                    new Region(0x845a050, 3, "01cb47d078b4841b8408ec4fe278efa83115c6f6e101972987507d2b2b57dcf0"),
+                    new Region(0x79976c0, 7, "f5f109bc0428429f6f5a8692b26eb7a051d1201f3342dc885bad6b903174e1ea"),
+                    new Region(0x7ee5be0, 0x45, "9337f5162f1d4eae3c66bddf942cece2303e4a4371342537b15f87540eb5b140"),
+                    new Region(0x3002a30, 0x10, "18297b2b90f0fadca9b12d6188e65cb8f3dba8b07f351f097e0f292a57f437cd")
                 };
                 foreach (Region r in regions)
                 {
                     byte[] data = Read(handle, image + r.Rva, r.Size);
                     if (data == null) return null;
-                    if (r.Rva == 0x7997640)
+                    if (r.Rva == 0x79976d0)
                     {
-                        int offset = (int)(0x799793e - r.Rva);
+                        int offset = (int)(0x79979ce - r.Rva);
                         byte[] currentGate = new byte[] { data[offset], data[offset + 1] };
                         if (!Equal(currentGate, Hex("7458")) && !Equal(currentGate, Hex("9090")))
                             throw new InvalidOperationException("Unrecognized native Playcall gate.");
                         data[offset] = 0x74; data[offset + 1] = 0x58;
-                        if (clock != null) Array.Copy(clock.ListOriginal, 0, data, (int)(0x7997a0c - r.Rva), clock.ListOriginal.Length);
+                        if (clock != null) Array.Copy(clock.ListOriginal, 0, data, (int)(0x7997a9c - r.Rva), clock.ListOriginal.Length);
                     }
-                    if (r.Rva == 0x79a5c30 && clock != null)
-                        Array.Copy(Hex("83c0fe3ddb0000000f87ac270000"), 0, data, (int)(0x79a5cc3 - r.Rva), 14);
+                    if (r.Rva == 0x79a5cc0 && clock != null)
+                        Array.Copy(Hex("83c0fe3ddb0000000f87ac270000"), 0, data, (int)(0x79a5d53 - r.Rva), 14);
                     if (Hash(data) != r.Hash) {
 #if COMBINED_DYNASTY_SETTINGS
                         throw new InvalidOperationException(OfflineDynastySettings.DiagnosticLog.Mismatch("Playcall settings",r.Rva,r.Hash,data));
@@ -142,8 +142,8 @@ namespace OfflinePlaycall
                     }
                 }
                 Site[] sites = {
-                    new Site(image + 0x7997940, 0, uiOriginal),
-                    new Site(image + 0x79a5cc3, 0x600, clock == null ? Hex("83c0fe3ddb0000000f87ac270000") : clock.WriterDetour),
+                    new Site(image + 0x79979d0, 0, uiOriginal),
+                    new Site(image + 0x79a5d53, 0x600, clock == null ? Hex("83c0fe3ddb0000000f87ac270000") : clock.WriterDetour),
                     new Site(image + 0x2e94cfb, 0x900, Hex("8b81100d00004189008b81140d0000"))
                 };
                 foreach (Site site in sites)
@@ -177,7 +177,7 @@ namespace OfflinePlaycall
                 {
                     // Install the consumer and writer before exposing the row.
                     foreach (int i in new int[] { 2, 1, 0 }) Patch(handle, sites[i].Address, sites[i].Replacement);
-                    Patch(handle, image + 0x799793e, Hex("9090"));
+                    Patch(handle, image + 0x79979ce, Hex("9090"));
                     foreach (Site site in sites)
                         if (!Equal(Read(handle, site.Address, site.Replacement.Length), site.Replacement))
                             throw new InvalidOperationException("Installed split hook verification failed.");
@@ -222,8 +222,8 @@ namespace OfflinePlaycall
         private static ClockHooks CheckClockHooks(IntPtr handle, long image)
         {
             byte[] listOriginal = Hex("488b8f18040000ffc3488b01ff9010050000");
-            byte[] list = Read(handle, image + 0x7997a0c, listOriginal.Length);
-            byte[] writer = Read(handle, image + 0x79a5cc3, 14);
+            byte[] list = Read(handle, image + 0x7997a9c, listOriginal.Length);
+            byte[] writer = Read(handle, image + 0x79a5d53, 14);
             if (Equal(list, listOriginal) && Equal(writer, Hex("83c0fe3ddb0000000f87ac270000"))) return null;
             if (list == null || writer == null || !Equal(Slice(list, 0, 6), Hex("ff2500000000"))
                 || !Equal(Slice(writer, 0, 6), Hex("ff2500000000")))
@@ -314,7 +314,7 @@ namespace OfflinePlaycall
                 List<OfflineDynastySettings.MemoryCheck> checks=new List<OfflineDynastySettings.MemoryCheck>();
                 foreach(Site site in sites)checks.Add(new OfflineDynastySettings.MemoryCheck(site.Address,site.Replacement));
                 checks.Add(new OfflineDynastySettings.MemoryCheck(sites[0].Address-2,Hex("9090")));
-                byte[] code=SplitHookCode.Create(sites[0].Address-0x7997940,remote,previousWriter);
+                byte[] code=SplitHookCode.Create(sites[0].Address-0x79979d0,remote,previousWriter);
                 byte[] immutable=new byte[0x1400]; Array.Copy(code,immutable,immutable.Length);
                 checks.Add(new OfflineDynastySettings.MemoryCheck(remote,immutable));
                 return checks;

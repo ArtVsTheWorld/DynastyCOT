@@ -17,7 +17,10 @@ inline std::set<std::string> resumeCaptureFields(const std::string& name){
 }
 // Background identity/history does not depend on optional coaching graphs.
 inline std::set<std::string> resumeBackgroundFields(const std::string& name){
-    auto fields=resumeCaptureFields(name);if(name=="Team"){fields.erase("CoachTalentEffects");fields.erase("SchoolPipelineInfluenceList");}return fields;
+    auto fields=resumeCaptureFields(name);if(name=="Team"){fields.erase("CoachTalentEffects");fields.erase("SchoolPipelineInfluenceList");}
+    // Optional native Player field, read by the same typed capture as other ratings.
+    if(name=="Player")fields.insert("JumpingRating");
+    return fields;
 }
 inline std::set<std::string> resumeIdentityFields(const std::string& name){
     if(name=="Franchise"||name=="SeasonInfo"||name=="FranchiseServer_CareerFlow")return resumeCaptureFields(name);

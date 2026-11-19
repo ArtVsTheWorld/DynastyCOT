@@ -1,8 +1,26 @@
 #pragma once
 #include <cctype>
 #include <string>
+#include <string_view>
 #include <utility>
 namespace recruitingfog::evidence {
+template<class Visitor>void noteLines(std::string_view text,Visitor visit){
+ while(!text.empty()){
+  const auto end=text.find('\n');
+  auto line=text.substr(0,end);
+  const auto start=line.find_first_not_of(" \t\r");
+  if(start!=line.npos){
+   line=line.substr(start,line.find_last_not_of(" \t\r")-start+1);
+   if(line.substr(0,2)=="- ")line.remove_prefix(2);
+   if(!line.empty()&&!visit(line))return;
+  }
+  if(end==text.npos)break;
+  text.remove_prefix(end+1);
+ }
+}
+inline void appendNoteBullets(std::string& output,std::string_view text){
+ noteLines(text,[&](std::string_view line){output+="\n- ";output+=line;return true;});
+}
 // Presentation only: preserve saved provenance, evidence and assessment bands.
 inline std::string naturalNotesText(std::string text){
  for(const auto& edit:{std::pair<const char*,const char*>{" (modeled)",""},{" (MODELED)",""},

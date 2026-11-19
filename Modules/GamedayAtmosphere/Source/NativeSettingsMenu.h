@@ -10,8 +10,8 @@
 
 namespace attendance::settingsmenu::native {
 using A=uintptr_t;
-inline constexpr A ListSite=0x7f34030,ProviderGlobal=0xfb46b98,ProviderVtable=0xbcfbcf8,FileManagerGlobal=0xfa62218;
-inline constexpr A PauseListSite=0x7f341f0,PauseProviderGlobal=0xfb46ba0,PauseProviderVtable=0xbcfc400;
+inline constexpr A ListSite=0x7f34090,ProviderGlobal=0xfb46b58,ProviderVtable=0xbcfbc68,FileManagerGlobal=0xfa62218;
+inline constexpr A PauseListSite=0x7f34250,PauseProviderGlobal=0xfb46b60,PauseProviderVtable=0xbcfc370;
 inline constexpr std::array<unsigned char,16> ListPrefix={0x40,0x56,0x41,0x56,0x41,0x57,0x48,0x83,0xec,0x30,0x49,0x8b,0,0x48,0x8b,0xf1};
 inline constexpr std::array<unsigned char,16> PauseListPrefix={0x41,0x55,0x41,0x56,0x48,0x83,0xec,0x48,0x48,0x83,0x79,0x08,0x00,0x4c,0x8b,0xea};
 template<class T>inline T peek(A p){T v{};__try{std::memcpy(&v,reinterpret_cast<const void*>(p),sizeof(v));}__except(EXCEPTION_EXECUTE_HANDLER){return T{};}return v;}
@@ -65,7 +65,7 @@ template<bool Pause> class BasicMenu {
         bool ready=false;A node=peek<A>(cache);
         for(unsigned i=0;node&&i<2048;++i){
             A file=peek<A>(node),name=peek<A>(file+0x10);
-            if(same(name+12,"fb_node_com/Scriptpod")&&peek<A>(file)==image_+0xbc403d8){
+            if(same(name+12,"fb_node_com/Scriptpod")&&peek<A>(file)==image_+0xbc40378){
                 A data=peek<A>(file+0x30),root=peek<A>(file+0x38);
                 const auto replacement=categoryFallback();size_t offset=0;
                 auto read=[&](size_t at,void* out,size_t size){return data&&data<=UINTPTR_MAX-routing::MaxOffset&&root==data+0x14a8&&at<=routing::MaxOffset&&size<=routing::MaxOffset-at&&copy(data+at,out,size);};
@@ -114,7 +114,7 @@ template<bool Pause> class BasicMenu {
             if(!layoutNoted_&&note_)note_("Settings tab not added: the active frontend routing or provider did not match. Native tabs and INI editing remain available.");
             layoutNoted_=true;return false;
         }
-        uint64_t mask=0;if(!obtain(mask,image_+(Pause?0x7f2d890:0x7f2d3a0),p))return false;
+        uint64_t mask=0;if(!obtain(mask,image_+(Pause?0x7f2d8f0:0x7f2d400),p))return false;
         ArrayWriter out{output};int i=0;
         for(const auto& row:rows){
             if(row.hidden&mask)continue;
@@ -147,12 +147,12 @@ template<bool Pause> class BasicMenu {
     }
 public:
     bool bindings()const{
-        constexpr A entries[]={0x7f27c90,0x7f31cd0,0x7f32010,0x7f33cc0,0x7f34030,0x7f34fe0,0x7f305d0,0x7f34a40,0x7f2f830,0x7f339e0,0x7f2f7b0,0x7f440a0,0x7f34670,0x7f34650,0x7f345f0,0x7f34610,0x7f34630,0x7f2d360,0x7f40dc0,0x7f47b80,0x7f471c0,0x7f471b0,0x7f471d0,0x7f47b90,0x7f47710,0x7f471e0,0x7f32cf0,0x7f43680,0x7f42c80,0x7f27f40,0x78cd63a,0x78cd63a,0x7f27ee0,0x78cd63a,0x78cd63a,0x78cd63a,0x78cd63a,0x78cd63a,0x78cd63a,0x78cd63a,0x78cd63a,0x78cd63a};
-        constexpr A pauseEntries[]={0x7f27d90,0x7f31f50,0x7f321b0,0x7f33cd0,0x7f341f0,0x7f35240,0x7f30e10,0x7f34c10,0x7f2fda0,0x7f33a30,0x7f2f820,0x7f440b0,0x7f34680,0x7f34660,0x7f34600,0x7f34620,0x7f34640,0x7f42fe0,0x7f27f10};
-        for(size_t i=0;i<stock_.size();++i){A expected=Pause?(i<std::size(pauseEntries)?pauseEntries[i]:0x78cd63a):entries[i];if(peek<A>(image_+ConcreteVtable+8*i)!=image_+expected)return false;}
+        constexpr A entries[]={0x7f27cf0,0x7f31d30,0x7f32070,0x7f33d20,0x7f34090,0x7f35040,0x7f30630,0x7f34aa0,0x7f2f890,0x7f33a40,0x7f2f810,0x7f44100,0x7f346d0,0x7f346b0,0x7f34650,0x7f34670,0x7f34690,0x7f2d3c0,0x7f40e20,0x7f47be0,0x7f47220,0x7f47210,0x7f47230,0x7f47bf0,0x7f47770,0x7f47240,0x7f32d50,0x7f436e0,0x7f42ce0,0x7f27fa0,0x78cd6ca,0x78cd6ca,0x7f27f40,0x78cd6ca,0x78cd6ca,0x78cd6ca,0x78cd6ca,0x78cd6ca,0x78cd6ca,0x78cd6ca,0x78cd6ca,0x78cd6ca};
+        constexpr A pauseEntries[]={0x7f27df0,0x7f31fb0,0x7f32210,0x7f33d30,0x7f34250,0x7f352a0,0x7f30e70,0x7f34c70,0x7f2fe00,0x7f33a90,0x7f2f880,0x7f44110,0x7f346e0,0x7f346c0,0x7f34660,0x7f34680,0x7f346a0,0x7f43040,0x7f27f70};
+        for(size_t i=0;i<stock_.size();++i){A expected=Pause?(i<std::size(pauseEntries)?pauseEntries[i]:0x78cd6ca):entries[i];if(peek<A>(image_+ConcreteVtable+8*i)!=image_+expected)return false;}
         return true;
     }
-    void configure(A moduleBase,const std::filesystem::path& path,Note note){image_=moduleBase;path_=path;note_=note;instance_=this;initNotify_=moduleBase+0x7a6b950;shutdownNotify_=moduleBase+0x7a6bb90;}
+    void configure(A moduleBase,const std::filesystem::path& path,Note note){image_=moduleBase;path_=path;note_=note;instance_=this;initNotify_=moduleBase+0x7a6b9e0;shutdownNotify_=moduleBase+0x7a6bc20;}
     void original(A p){original_=p;}
     static A callback(){return reinterpret_cast<A>(list);}
     bool ready()const{return scriptReady_&&!failed_;}

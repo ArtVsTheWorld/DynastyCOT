@@ -2,7 +2,7 @@
 import struct
 def jump(address):return bytes.fromhex('ff2500000000')+struct.pack('<Q',address)
 
-RVA = 0x35ff940
+RVA = 0x35ff9d0
 ORIGINAL = bytes.fromhex('c5fa114c2410554157488d6c24b1')
 
 def build(data, base, state_object):
@@ -24,7 +24,7 @@ def build(data, base, state_object):
     for x in range(6):
         emit('f30f7f'); body.append(0x84+x*8); emit('24'); body.extend(struct.pack('<I',32+x*16))
     address('48b9',base+0xdae5480)
-    address('48b8',base+0x7baf970)
+    address('48b8',base+0x7bafa00)
     emit('ffd0')
     address('49ba',data); emit('41c7420401000000')
     for x in range(6):

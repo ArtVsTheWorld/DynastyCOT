@@ -5,7 +5,7 @@
 
 namespace attendance::visitors {
 using Address=uintptr_t;
-inline constexpr Address Generation=0x3628a00;
+inline constexpr Address Generation=0x3628a90;
 inline const std::vector<unsigned char> GenerationPrefix{0x4c,0x8b,0xdc,0x55,0x53,0x57,0x49,0x8d,0xab,0xc8,0xfc,0xff,0xff,0x48,0x81,0xec,0x20,0x04,0,0};
 struct Stream {Address value=0,holder=0,data=0;size_t count=0;};
 inline bool sameStream(const Stream& a,const Stream& b){return a.value==b.value&&a.holder==b.holder&&a.data==b.data&&a.count==b.count;}
@@ -67,8 +67,8 @@ inline bool restoreSides(Address data,const agents::Tags& tags,const std::vector
 template<class Read> bool restoreAppearance(Read read,Address image,const AppearanceResult& prepared){
     if(!prepared.applied)return true;
     auto q=[&](Address p){Address v=0;return read(p,&v,sizeof(v))?v:Address(0);};
-    if(q(prepared.component)!=image+0xb484f98||q(prepared.component+0x48)!=prepared.map)return false;
-    auto current=property(read,image,prepared.map,0xb486033);const auto& previous=prepared.stream;
+    if(q(prepared.component)!=image+0xb484f38||q(prepared.component+0x48)!=prepared.map)return false;
+    auto current=property(read,image,prepared.map,0xb485fd3);const auto& previous=prepared.stream;
     if(!sameStream(current,previous))return false;
     return restoreSides(previous.data,prepared.native,prepared.desired);
 }
@@ -80,8 +80,8 @@ struct GeneratedAppearance {
     template<class Read> bool apply(Read read,Address image,Address scene,int homeTeam,int awayTeam,agents::Tags& tags)const{
         if(home!=homeTeam||away!=awayTeam||!tags.verified||tags.side.size()!=side.size())return false;
         auto q=[&](Address p){Address v=0;return read(p,&v,sizeof(v))?v:Address(0);};
-        if(q(scene+0x908)!=component||q(component)!=image+0xb484f98||q(component+0x48)!=map)return false;
-        auto current=property(read,image,map,0xb486033),coords=property(read,image,map,bindings::CrowdPositionKey);
+        if(q(scene+0x908)!=component||q(component)!=image+0xb484f38||q(component+0x48)!=map)return false;
+        auto current=property(read,image,map,0xb485fd3),coords=property(read,image,map,bindings::CrowdPositionKey);
         if(!sameStream(current,selectors)||!sameStream(coords,points)||current.count!=side.size()||coords.count!=side.size())return false;
         tags.side=side;return true;
     }
@@ -94,8 +94,8 @@ template<class Read> AppearanceResult appearance(Read read,Address image,Address
     if(singleSchoolSide<0&&(!plan.valid||plan.native))return result;
     if(singleSchoolSide>1)return result;
     auto q=[&](Address p){Address v=0;return read(p,&v,sizeof(v))?v:Address(0);};
-    if(q(component)!=image+0xb484f98)return result;
-    Address map=q(component+0x48);auto tags=property(read,image,map,0xb486033),coords=property(read,image,map,bindings::CrowdPositionKey);
+    if(q(component)!=image+0xb484f38)return result;
+    Address map=q(component+0x48);auto tags=property(read,image,map,0xb485fd3),coords=property(read,image,map,bindings::CrowdPositionKey);
     if(tags.count<512||tags.count>200000||coords.count!=tags.count||(occupied&&occupied->size()!=tags.count))return result;
     std::vector<unsigned char> raw(tags.count*10);
     std::vector<seats::Position> positions(tags.count);
@@ -108,10 +108,10 @@ template<class Read> AppearanceResult appearance(Read read,Address image,Address
     if(singleSchoolSide>=0){desired=types.side;for(unsigned i:ordinary)if(!types.protectedFan(i))desired[i]=static_cast<unsigned char>(singleSchoolSide);}
     else desired=assign(positions,types,plan.share,seed,occupied,plan.layoutVersion,plan.ceiling==.70,&result.nativeFallback,&result.seating);
     if(desired.size()!=tags.count)return result;
-    auto current=property(read,image,map,0xb486033),points=property(read,image,map,bindings::CrowdPositionKey);
-    if(q(component)!=image+0xb484f98||q(component+0x48)!=map||!sameStream(current,tags)||!sameStream(points,coords))return result;
+    auto current=property(read,image,map,0xb485fd3),points=property(read,image,map,bindings::CrowdPositionKey);
+    if(q(component)!=image+0xb484f38||q(component+0x48)!=map||!sameStream(current,tags)||!sameStream(points,coords))return result;
     if(!writeSides(tags.data,types,desired)){
-        if(q(component)==image+0xb484f98&&q(component+0x48)==map&&sameStream(property(read,image,map,0xb486033),tags))restoreSides(tags.data,types,desired);
+        if(q(component)==image+0xb484f38&&q(component+0x48)==map&&sameStream(property(read,image,map,0xb485fd3),tags))restoreSides(tags.data,types,desired);
         return result;
     }
     result.applied=true;result.positions=static_cast<unsigned>(tags.count);result.band=types.band;

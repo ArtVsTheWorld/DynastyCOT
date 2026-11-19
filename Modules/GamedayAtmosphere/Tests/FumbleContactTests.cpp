@@ -22,7 +22,7 @@ int main(){
     // Captured native contact records: 8 = home carrier 0x4,
     // 9 = away contact player 0x50104, both at native time 508.8.
     constexpr A image=0x140000000,root=0x100000,actors=0x110000,buckets=0x120000,nodes=0x130000,array=0x140000,actor=0x150000,data=0x160000;
-    put(image+skills::EventRoot,root);put(root,image+0xbc90128);for(unsigned n=0;n<45*32;++n)put(root+16+n,(unsigned char)0);
+    put(image+skills::EventRoot,root);put(root,image+0xbc900c8);for(unsigned n=0;n<45*32;++n)put(root+16+n,(unsigned char)0);
     put(image+skills::ActorRoot,actors);put(actors+0x170,buckets);put(actors+0x178,1u);put(actors+0x28,array);put(actors+0x30,array+16);put(buckets,nodes);
     for(unsigned n=0;n<2;++n){A node=nodes+n*0x40,object=actor+n*0x100,player=data+n*0x400;uint32_t key=n?0x50104u:4u;
         put(node,key);put(node+4,static_cast<int>(n));put(node+8,n?A(0):nodes+0x40);put(array+n*8,object);put(object+0x18,player);
@@ -31,7 +31,7 @@ int main(){
     }
     auto sample=fumblecontact::snapshot(image,read);assert(sample.valid&&sample.took==508.8&&sample.made==508.8&&sample.carrier==0&&sample.defender==1);
     assert(fumblecontact::snapshot(image,read,509).carrier==-1);torn=true;assert(!fumblecontact::snapshot(image,read).valid);torn=false;
-    put(root,A(0));assert(!fumblecontact::snapshot(image,read).valid);put(root,image+0xbc90128);
+    put(root,A(0));assert(!fumblecontact::snapshot(image,read).valid);put(root,image+0xbc900c8);
     // Mirrored home/away cases: the away defender caused the captured home
     // fumble, so that case must prove ownership without a positive home shake.
     for(int owner:{0,1})for(bool neutral:{false,true})for(int down:{0,1,2,3,4})for(int phase:{3,4,5}){

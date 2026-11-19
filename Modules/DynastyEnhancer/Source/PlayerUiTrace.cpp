@@ -17,7 +17,7 @@ using Length=unsigned(__fastcall*)(void*);
 HMODULE self;uintptr_t base;Setup setup=nullptr;Length originalLength=nullptr;
 std::atomic<bool> disabled{false};std::atomic<unsigned> calls{0},inflight{0};
 std::mutex mutex,lifecycle;std::set<uintptr_t> seen;std::deque<Json> pending;bool setupInstalled=false,lengthInstalled=false;
-constexpr uintptr_t table=0xbc42fe8,setupSlot=0xc8,lengthSlot=0xb0;
+constexpr uintptr_t table=0xbc42f88,setupSlot=0xc8,lengthSlot=0xb0;
 bool swap(uintptr_t slot,void* before,void* after){auto at=reinterpret_cast<PVOID volatile*>(base+table+slot);DWORD old=0,unused=0;if(!VirtualProtect(const_cast<PVOID*>(at),8,PAGE_READWRITE,&old))return false;auto prior=InterlockedCompareExchangePointer(at,after,before);VirtualProtect(const_cast<PVOID*>(at),8,old,&unused);return prior==before;}
 template<class T>T value(const unsigned char* p,size_t at){T v{};memcpy(&v,p+at,sizeof(v));return v;}
 void observe(void* receiver,const char* path){

@@ -24,7 +24,7 @@ int main(){
     auto put=[&](A address,const auto& value){std::vector<unsigned char> bytes(sizeof(value));std::memcpy(bytes.data(),&value,sizeof(value));memory[address]=bytes;};
     unsigned reads=0;auto read=[&](A address,void* out,size_t n){++reads;auto found=memory.find(address);if(found==memory.end()||found->second.size()!=n)return false;std::memcpy(out,found->second.data(),n);return true;};
     put(image+bindings::CameraSettings,settings);put(settings,image+bindings::CameraSettingsVtable);
-    put(image+bindings::TeamInputManager,manager);put(manager,image+bindings::TeamInputManagerVtable);put(match,image+A(0xb47e908));
+    put(image+bindings::TeamInputManager,manager);put(manager,image+bindings::TeamInputManagerVtable);put(match,image+A(0xb47e8a8));
     std::array<int,22> records{};records[0]=0;records[1]=0;records[5]=35;records[11]=-1;put(manager+0x148,records);
     auto selection=[&](unsigned short offense,unsigned short defense,int user,int possession){
         put(settings+0x68,offense);put(settings+0x6a,defense);records[1]=user;put(manager+0x148,records);put(match+0x1c8,possession);return sample(image,match,read);

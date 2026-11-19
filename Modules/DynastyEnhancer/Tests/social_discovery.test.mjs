@@ -1,10 +1,11 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
 import {scopeCatalog,discoveryViews,filterConversations} from '../Tools/social_discovery.mjs';
-import {conversationOrder,curate} from '../Tools/feed_selection.mjs';
+import {buildCatalog,conversationOrder,curate} from '../Tools/feed_selection.mjs';
 import {brandAudience,likesFor,ENGAGEMENT_VERSION} from '../Tools/story_engagement.mjs';
 import {avatarFor} from '../Tools/story_avatars.mjs';
 import {buildFeed} from '../Tools/feed_engine.mjs';
+import {renderStories} from '../Tools/story_renderer.mjs';
 const snapshot=()=>({format:2,gameYear:27,sourceUnchanged:true,sha256:'a'.repeat(64),leagueId:1,userTeamIndex:1,source:'runtime',season:{CurrentYear:1,CurrentSeasonYear:2027,CurrentWeek:9,CurrentWeekType:'RegularSeason',CurrentStage:'NFLSeason'},
  teams:[{id:1,name:'Zebra',logo:1,conferenceId:'actual-z',pipelines:['EastTexas'],homeState:'Texas'},{id:2,name:'Alpha',logo:2,conferenceId:'actual-a'},{id:3,name:'Beta',logo:3,conferenceId:'actual-a'},{id:255,name:'Generic'}],
  conferences:[{id:'actual-z',name:'Z Conference',teams:[1]},{id:'actual-a',name:'A Conference',teams:[2,3]}],players:[],games:[],performances:[],heisman:[],offers:[],commitments:[]});
@@ -36,11 +37,58 @@ test('flavor engagement is deterministic, respects brand/rank and freezes same-w
  const a=likesFor(s,'story','official',high,e);assert.equal(likesFor(s,'story','official',high,e),a);assert.ok(a>likesFor(s,'story','official',low,e));
  assert.equal(likesFor(s,'story','official',low,e,{likes:a,engagementVersion:ENGAGEMENT_VERSION}),a);assert.ok(a>likesFor(s,'story','fan',high,e));
 });
-test('official accounts get on-white logos and Barstool gets secondary logos; uniforms require active-team membership and valid portrait',()=>{
+test('official accounts get on-white logos and Barstool gets secondary logos; a verified portrait can carry a jersey',()=>{
  const t={id:1,logo:11},p={team:1,portrait:146};assert.deepEqual(avatarFor('player',t,p),{imageLibrary:1,imageValue:146,uniformTeamLogo:11});
- assert.equal(avatarFor('recruit',t,{...p,team:255}).uniformTeamLogo,undefined);
+ assert.equal(avatarFor('recruit',t,{...p,team:255}).defaultRecruitJersey,true);
+ assert.equal(avatarFor('recruit',t,{...p,team:255,portraitForcedSilhouette:true}).defaultRecruitJersey,undefined);
  assert.equal(avatarFor('beat',t,p).imageLibrary,61);assert.equal(avatarFor('fan',t,p).imageLibrary,87);assert.equal(avatarFor('analyst',t,p).imageLibrary,34);assert.equal(avatarFor('model',t,p).imageLibrary,79);
  assert.equal(new Set(['beat','analyst','fan'].map(role=>JSON.stringify(avatarFor(role,t,p)))).size,3);
  assert.deepEqual(avatarFor('official',t,p),{imageLibrary:64,imageValue:11});
  assert.equal(avatarFor('player',t,{...p,portrait:0}).uniformTeamLogo,undefined);
+});
+
+test('Social Media recruit portraits use the neutral jersey until a destination is verified',()=>{
+ const s=snapshot();
+ Object.assign(s.season,{CurrentWeek:0,CurrentWeekType:'PreSeason',CurrentStage:'PreSeason'});
+ s.players=[{id:'prospect',name:'Evan Mercer',team:255,portrait:146,position:'QB',starRating:5}];
+ s.recruitStatuses=[{player:'prospect',stage:'Top3',nationalRank:2,topSchools:[1,2]}];
+ const event=buildFeed(s).events.find(e=>e.facts.family==='preseason.recruit.self');
+ assert.ok(event);
+ const portrait=()=>renderStories(s,[event]).stories.find(p=>p.voice==='recruit');
+ assert.equal(portrait().defaultRecruitJersey,true);
+ s.commitments=[{player:'prospect',team:2,stage:'SoftCommitted'}];
+ assert.equal(portrait().defaultRecruitJersey,true);
+ s.commitments[0].stage='HardCommitted';
+ assert.equal(portrait().uniformTeamLogo,2);
+ assert.equal(portrait().defaultRecruitJersey,false);
+ s.commitments.push({player:'prospect',team:3,stage:'HardCommitted'});
+ assert.equal(portrait().defaultRecruitJersey,true);
+ s.commitments=[];
+ s.signings=[{player:'prospect',team:3,stage:'Signed'}];
+ assert.equal(portrait().uniformTeamLogo,3);
+});
+
+test('legacy recruit posts gain a neutral jersey in the catalog without changing published history',()=>{
+ const s=snapshot();
+ Object.assign(s.season,{CurrentWeek:0,CurrentWeekType:'PreSeason',CurrentStage:'PreSeason'});
+ s.players=[{id:'prospect',name:'Evan Mercer',team:255,portrait:146,position:'QB',starRating:5}];
+ s.recruitStatuses=[{player:'prospect',stage:'Top3',nationalRank:2,topSchools:[1,2]}];
+ const old=buildFeed(s),p=old.stories.find(p=>p.voice==='recruit');
+ delete p.defaultRecruitJersey;
+ const display=()=>buildCatalog(old).weeks[0].stories.find(post=>post.id===p.id);
+ for(const prior of [undefined,0]){
+  p.uniformTeamLogo=prior;
+  const untouched=structuredClone(old);
+  assert.equal(display().defaultRecruitJersey,true);
+  assert.equal(display().uniformTeamLogo,undefined);
+  assert.deepEqual(old,untouched);
+ }
+ const event=old.events.find(event=>event.id===p.eventId);
+ event.facts.commitment='HardCommitted';
+ assert.equal(display().defaultRecruitJersey,undefined);
+ assert.equal(display().uniformTeamLogo,0);
+ delete event.facts.commitment;
+ p.defaultRecruitJersey=false;
+ assert.equal(display().defaultRecruitJersey,false);
+ assert.equal(display().uniformTeamLogo,0);
 });

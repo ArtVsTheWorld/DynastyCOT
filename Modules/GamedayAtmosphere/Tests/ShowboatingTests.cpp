@@ -16,7 +16,7 @@ struct Case {
 int main(){
     constexpr uintptr_t image=0x140000000,root=0x110000,control=0x120000,player=0x130000,tag=0x140000,value=0x150000,text=0x160000;
     constexpr unsigned char signature[]{0xb8,0x1f,0,0x40,0,0xc3};for(size_t n=0;n<sizeof(signature);++n)put(image+bindings::ShowboatPlayerType+n,signature[n]);
-    put(image+bindings::BallControl,root);put(root+0x10,control);put(control,image+0xb47bb10);put(control+0x1a0,player);put(control+0x168,9);
+    put(image+bindings::BallControl,root);put(root+0x10,control);put(control,image+0xb47bab0);put(control+0x1a0,player);put(control+0x168,9);
     put(player,image+bindings::ShowboatPlayerVtable);put(player+0x64,0x80004u);put(player+0x138,0);put(player+0x13c,8);
     put(player+0x1418,tag);put(player+0x1420,uintptr_t(0));put(player+0x1428,uintptr_t(0));
     put(tag,image+bindings::ShowboatAudioTagVtable);put(tag+0x48,value);put(value,image+bindings::ShowboatEnumValueVtable);

@@ -10,7 +10,7 @@ namespace SituationalPractice {
    Array.Copy(BitConverter.GetBytes(image+0xf63f9f0L),0,code,0x34,8);
    Array.Copy(BitConverter.GetBytes(image+0xf54fa00L),0,code,0x58,8);
    Array.Copy(BitConverter.GetBytes(image+0xf85f120L),0,code,0x109,8);
-   Array.Copy(BitConverter.GetBytes(image+0xb32a410L),0,code,0x11f,8);
+   Array.Copy(BitConverter.GetBytes(image+0xb32a3b0L),0,code,0x11f,8);
    Array.Copy(BitConverter.GetBytes(image+0xf85f700L),0,code,0x16c,8);
    Array.Copy(BitConverter.GetBytes(remote+0x1920L),0,code,0x18f,8);
    Array.Copy(BitConverter.GetBytes(remote+0x1900L),0,code,0x19c,8);
@@ -30,7 +30,7 @@ namespace SituationalPractice {
    Array.Copy(BitConverter.GetBytes(remote+0x1920L),0,code,0x9d,8);
    Array.Copy(BitConverter.GetBytes(image+0xfa5b900L),0,code,0xf5,8);
    Array.Copy(BitConverter.GetBytes(remote+0x800L+0x0L),0,code,0x127,8);
-   Array.Copy(BitConverter.GetBytes(image+0x5d1242fL),0,code,0x166,8);
+   Array.Copy(BitConverter.GetBytes(image+0x5d124bfL),0,code,0x166,8);
    return code;
   }
   private static byte[] BuildControllerApply(long image,long remote,long original) {
@@ -40,7 +40,7 @@ namespace SituationalPractice {
    Array.Copy(BitConverter.GetBytes(image+0xf3fddbcL),0,code,0x31,8);
    Array.Copy(BitConverter.GetBytes(image+0xf63f9f0L),0,code,0x45,8);
    Array.Copy(BitConverter.GetBytes(image+0xf85f120L),0,code,0xfa,8);
-   Array.Copy(BitConverter.GetBytes(image+0xb32a410L),0,code,0x110,8);
+   Array.Copy(BitConverter.GetBytes(image+0xb32a3b0L),0,code,0x110,8);
    Array.Copy(BitConverter.GetBytes(image+0xf3da7d0L),0,code,0x1fa,8);
    Array.Copy(BitConverter.GetBytes(image+0x2eb4c30L),0,code,0x21b,8);
    Array.Copy(BitConverter.GetBytes(remote+0x1800L),0,code,0x22d,8);
@@ -54,16 +54,16 @@ namespace SituationalPractice {
    Array.Copy(BitConverter.GetBytes(image+0xf54fa00L),0,code,0x4e,8);
    Array.Copy(BitConverter.GetBytes(image+0xfa5b900L),0,code,0x6e,8);
    Array.Copy(BitConverter.GetBytes(image+0xf85f120L),0,code,0x110,8);
-   Array.Copy(BitConverter.GetBytes(image+0xb32a410L),0,code,0x126,8);
+   Array.Copy(BitConverter.GetBytes(image+0xb32a3b0L),0,code,0x126,8);
    Array.Copy(BitConverter.GetBytes(remote+0x1818L),0,code,0x176,8);
-   Array.Copy(BitConverter.GetBytes(image+0x91364c0L),0,code,0x189,8);
+   Array.Copy(BitConverter.GetBytes(image+0x9136520L),0,code,0x189,8);
    Array.Copy(BitConverter.GetBytes(remote+0xe00L),0,code,0x199,8);
    return code;
   }
 
   private static byte[] Hex(string s){byte[] b=new byte[s.Length/2];for(int i=0;i<b.Length;i++)b[i]=Convert.ToByte(s.Substring(i*2,2),16);return b;}
   private static bool Equal(byte[] a,byte[] b){if(a==null||b==null||a.Length!=b.Length)return false;for(int i=0;i<a.Length;i++)if(a[i]!=b[i])return false;return true;}
-  internal static byte[][] Blocks(long image,long remote) {return new[]{BuildControllerQueue(image,remote,image+0x7a9abf0),BuildControllerBoundary(image,remote,0),BuildControllerApply(image,remote,image+0x7a9abf0),BuildControllerEligibility(image,remote,0)};}
+  internal static byte[][] Blocks(long image,long remote) {return new[]{BuildControllerQueue(image,remote,image+0x7a9ac80),BuildControllerBoundary(image,remote,0),BuildControllerApply(image,remote,image+0x7a9ac80),BuildControllerEligibility(image,remote,0)};}
   internal static byte[] Entry(long target,int length){byte[] b=new byte[length];for(int i=0;i<length;i++)b[i]=0x90;b[0]=0xff;b[1]=0x25;for(int i=2;i<6;i++)b[i]=0;Array.Copy(BitConverter.GetBytes(target),0,b,6,8);return b;}
   internal static byte[] Normalize(Func<long,int,byte[]> read,long image,byte[] bytes) {
    // Never skip a region. Restore ONLY the known 15-byte entry in a local copy
@@ -71,10 +71,10 @@ namespace SituationalPractice {
    if(bytes.Length<15 || bytes[0]!=0xff || bytes[1]!=0x25)return bytes;
    long target=BitConverter.ToInt64(bytes,6),remote=target-0x400;
    bool owned=remote>0 && (remote&4095)==0 && Equal(Slice(bytes,0,15),Entry(target,15))
-       && Equal(read(image+0xbaced38,8),BitConverter.GetBytes(remote))
-       && Equal(read(image+0x7fae660,17),Entry(remote+0xc00,17));
+       && Equal(read(image+0xbacecd8,8),BitConverter.GetBytes(remote))
+       && Equal(read(image+0x7fae6c0,17),Entry(remote+0xc00,17));
    if(owned){byte[][] blocks=Blocks(image,remote);for(int i=0;i<blocks.Length;i++)if(!Equal(read(remote+i*1024,blocks[i].Length),blocks[i])){owned=false;break;}}
-   if(!owned)throw new InvalidOperationException("Required native code differs at RVA 5d12420: unknown controller hook; no hooks installed.");
+   if(!owned)throw new InvalidOperationException("Required native code differs at RVA 5d124b0: unknown controller hook; no hooks installed.");
    byte[] copy=(byte[])bytes.Clone();byte[] prefix=Hex("48895c241048896c24184889742420");Array.Copy(prefix,copy,prefix.Length);return copy;
   }
   private static byte[] Slice(byte[] b,int offset,int length){byte[] result=new byte[length];Array.Copy(b,offset,result,0,length);return result;}

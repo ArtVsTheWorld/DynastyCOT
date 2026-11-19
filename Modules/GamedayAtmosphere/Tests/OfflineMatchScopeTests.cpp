@@ -13,7 +13,7 @@ int main(){
     alignas(16) unsigned char configuration[512]{},wrapper[64]{},match[1024]{},states[512]{},clock[512]{},time[128]{};
     A cfg=reinterpret_cast<A>(configuration),w=reinterpret_cast<A>(wrapper),mt=reinterpret_cast<A>(match),st=reinterpret_cast<A>(states),cl=reinterpret_cast<A>(clock),tm=reinterpret_cast<A>(time);
     put(image+0xf63f9f0,cfg);put(image+attendance::bindings::MatchWrapper,w);put(w+16,mt);put(image+attendance::bindings::GameStates,st);put(image+attendance::bindings::ClockManager,cl);
-    put(mt,image+A(0xb47e908));put(st,image+A(0xb47f790));put(cl,image+A(0xb47eec8));put(cl+0x28,tm);put(cl+8,1);put(st+0xa0,1);put(tm+0x28,600.f);put(tm+0x2c,720.f);
+    put(mt,image+A(0xb47e8a8));put(st,image+A(0xb47f730));put(cl,image+A(0xb47ee68));put(cl+0x28,tm);put(cl+8,1);put(st+0xa0,1);put(tm+0x28,600.f);put(tm+0x2c,720.f);
     for(int m:{13,14,17,18})for(int session:{2,3,4})for(int practice:{0,1,2}){
         put(image+0xd9eb808,m);put(image+0xf3fddbc,session);configuration[0x84]=static_cast<unsigned char>(practice);
         attendance::State state;A actual=0;assert(gameState(state,actual)==((m==14||m==17)&&session==3&&practice==0));++checks;

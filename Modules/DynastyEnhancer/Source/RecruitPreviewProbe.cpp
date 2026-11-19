@@ -15,7 +15,7 @@ using Json=nlohmann::json;using Getter=void*(__fastcall*)(void*,void**,uintptr_t
 HMODULE self;uintptr_t base;Getter original=nullptr;
 std::atomic<bool> disabled{false};std::atomic<unsigned> inflight{0},calls{0};
 std::mutex queueMutex,lifecycle;std::deque<Json> pending;bool installed=false;
-constexpr uintptr_t table=0xc752560,slot=0x40,native=0xa0e0cc0;
+constexpr uintptr_t table=0xc752560,slot=0x40,native=0xa0e0d20;
 bool read(uintptr_t at,void* out,size_t size){SIZE_T got=0;return at>=0x10000&&ReadProcessMemory(GetCurrentProcess(),reinterpret_cast<void*>(at),out,size,&got)&&got==size;}
 Json snapshot(recruitingfog::UiResponse<decltype(&read)>& view,uintptr_t value,unsigned depth=0){
     if(depth>3)return "<bounded>";

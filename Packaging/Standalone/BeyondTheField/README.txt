@@ -1,4 +1,4 @@
-Ace’s Beyond the Field 1.0.32 — Update 2 Hotfix 3
+Ace’s Beyond the Field 1.0.43 — November 17 Update
 
 Install or update
 Close MMC and the game. Find your usual MMC shortcut, right-click it and open Properties. Follow Target to MMCModManager.exe. Open the Plugins folder beside that file. Back up your old BeyondTheField.dll outside Plugins, then copy BeyondTheField.dll from this ZIP into Plugins. Replace the old copy.
@@ -6,7 +6,7 @@ Close MMC and the game. Find your usual MMC shortcut, right-click it and open Pr
 Settings and help
 Open Dynasty Settings > Beyond the Field. Press Win+R, paste %LOCALAPPDATA%\Ace\DynastyCOT\BeyondTheField and press Enter. For startup, open Logs for BeyondTheField-launcher.log. For scouting or feed problems, the guide names the other files.
 Open BeyondTheField-Player-Guide.pdf in this ZIP for examples and help. FEATURES.md lists the features.
-The included guide covers the core gameplay features from 1.0.24. Hotfix 3 improves verified menu compatibility, first-visit Recruit Notes, rating displays and repeated adapter work across Dynasty menus. It retains the earlier long-path and startup fixes. Read the release notes for supported contexts and remaining live checks. Existing settings, Notes and published posts are preserved.
+Use this version with the November 17 game update. The included guide covers the core features. See the GitHub release notes for changes in this version.
 
 Roll back
 Close MMC and the game. Restore your backed-up DLL. If you used the collection installer, open Backups and restore the matching change. Keep your settings and history folders.

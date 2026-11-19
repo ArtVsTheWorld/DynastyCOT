@@ -19,14 +19,14 @@ int main(){
     put(image+skills::TypeCount,1u);put(image+skills::TypeBuckets,typeBuckets);put(typeBuckets,node);put(node,0x3784eae8u);put(node+8,type);
     put(type+0xc8,storage);put(storage+0x20,A(1));put(storage+0x38,1u);put(storage+0x30,buckets);put(buckets,entityNode);put(entityNode,0x4f00000000000000ull);put(entityNode+8,component);
     for(unsigned i=0;i<6;++i)put(component+0x1640+i*8,double(i));
-    put(image+skills::EventRoot,root);put(root,image+0xbc90128);for(unsigned i=0;i<45*32;++i)put(root+0x10+i,(unsigned char)0);
+    put(image+skills::EventRoot,root);put(root,image+0xbc900c8);for(unsigned i=0;i<45*32;++i)put(root+0x10+i,(unsigned char)0);
     put(root+0x10+16,50.0);put(root+0x10+24,52);put(root+0x10+28,0x30004u);
     put(image+skills::ActorRoot,actors);put(actors+0x170,actorBuckets);put(actors+0x178,1u);put(actors+0x28,actorArray);put(actors+0x30,actorArray+8);put(actorBuckets,actorNode);put(actorNode,0x30004u);put(actorNode+4,0);put(actorArray,actor);put(actor+0x18,data);put(data+0x44,(unsigned char)1);put(data+0x304,0);put(data+0x308,3);put(data+0x310,500);
     skills::View v(image,read);auto s=v.snapshot();assert(s.timesValid&&s.times[2]==2&&s.eventsValid&&s.events[0].side==0&&s.events[0].type==52);
     std::array<double,4> seen{0,0,50,0};assert(v.snapshot(seen).events[0].side==-1); // Old records need no actor lookup.
     put(data+0x308,4);assert(v.snapshot().events[0].side==-1);put(data+0x308,3);
     put(actors+0x178,100001u);assert(v.snapshot().events[0].side==-1);put(actors+0x178,1u);
-    put(root,A(0));assert(!v.snapshot().eventsValid);put(root,image+0xbc90128);
+    put(root,A(0));assert(!v.snapshot().eventsValid);put(root,image+0xbc900c8);
     put<double>(component+0x1650,NAN);assert(!v.snapshot().timesValid);put(component+0x1650,2.0);
     put(image+skills::TypeCount,100001u);assert(!v.snapshot().timesValid);put(image+skills::TypeCount,1u);
     constexpr live::Event events[]{live::Event::Truck,live::Event::None,live::Event::StiffArm,live::Event::Juke,live::Event::Spin,live::Event::Hurdle};

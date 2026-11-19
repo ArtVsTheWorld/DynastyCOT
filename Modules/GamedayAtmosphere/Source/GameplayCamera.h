@@ -25,7 +25,7 @@ template<class Read>inline Selection sample(uintptr_t image,uintptr_t match,Read
     unsigned short offense=0xffff,defense=0xffff;
     if(!load(optionsObject+0x68,offense)||!load(optionsObject+0x6a,defense))return result;
     result.offense=known(offense)?offense:-1;result.defense=known(defense)?defense:-1;
-    if(!load(match,vt)||vt!=image+0xb47e908)return result;
+    if(!load(match,vt)||vt!=image+0xb47e8a8)return result;
     // The two controller records are the existing native team-control contract.
     // Player-lock/RTG and ambiguous mixed-camera multiplayer contexts retain
     // normal motion instead of borrowing a preset from the wrong participant.

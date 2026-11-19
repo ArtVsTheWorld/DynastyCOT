@@ -8,6 +8,7 @@
 #include <stdexcept>
 #include <string>
 #include <vector>
+#include "RecruitSeasonBackground.h"
 
 namespace recruitingfog::resume {
 using Json=nlohmann::json;
@@ -159,29 +160,21 @@ inline Result generate(const Prospect& p){
         if(offensiveLine){const auto passSnaps=stats.at("passProtectionSnaps").get<int>();
             rates["sacksAllowedPercent"]=passSnaps?Json(std::round(1000.*stats.at("sacksAllowed").get<int>()/passSnaps)/10.):Json(nullptr);}
     }
-    // Development is deliberately absent from every public output, including
-    // background wording. The previous positional-settling hint is retired.
-    std::string context;
-    if(role=="No varsity appearances")context="Did not appear in a varsity game; spent the season behind an established starter.";
-    else if(role=="Reserve")context="Most of his work came in a reserve role behind older players.";
-    else if(role=="Late-season starter")context="Took over a starting role during the second half of the season.";
-    else if(role=="Shared role")context="Shared the workload rather than playing every available series.";
-    else context=schedule>.75?"The schedule included several opponents above the school's usual competition level.":schedule<.25?"Most opponents came from the same small regional pool.":"Played a full role against a mixed schedule of regional opponents.";
-    Json publicData={{"modelVersion",2},{"heading","Previous High School Season"},{"state",p.state},{"hometown",p.town},{"competitionClass",std::to_string(classification)+"A"},{"games",games},{"starts",starts},{"role",role},{"stats",stats},{"rates",rates},{"background",context}};
+    Json publicData={{"modelVersion",2},{"heading","Previous High School Season"},{"state",p.state},{"hometown",p.town},{"competitionClass",std::to_string(classification)+"A"},{"games",games},{"starts",starts},{"role",role},{"stats",stats},{"rates",rates}};
     if(!p.collegeLevel.empty()){
         publicData["heading"]="Previous College Season";publicData["competitionClass"]=p.collegeLevel;publicData["collegeSchool"]=p.collegeSchool;
-        if(role=="No varsity appearances"){publicData["role"]="No appearances";publicData["background"]="Did not appear in a game; spent the season behind an established starter.";}
-        else if(role=="Reserve")publicData["background"]="Most of his work came in a reserve role.";
-        else if(role=="Regular starter")publicData["background"]="Played a full role against the program's schedule.";
+        if(role=="No varsity appearances")publicData["role"]="No appearances";
     }
-    publicData["productionModelVersion"]=4;if(p.collegeLevel.empty())publicData["heading"]="Previous High School Season (modeled)";
+    publicData["productionModelVersion"]=4;
     if(!secondary.empty()){
         const auto snaps=count(games*workload*60*secondaryShare);Json secondaryStats;
         if(secondary=="DB")secondaryStats={{"defensiveSnaps",snaps},{"tackles",count(snaps*twoWay.between(.10,.18))},{"interceptions",count(snaps*twoWay.between(.005,.018))},{"passesDefended",count(snaps*twoWay.between(.025,.05))}};
         else {const auto touches=count(snaps*twoWay.between(.12,.23));secondaryStats={{"touches",touches},{"yards",count(touches*twoWay.between(6,14))}};}
         publicData["modeledSecondary"]={{"position",secondary},{"share",secondaryShare},{"stats",secondaryStats}};
-        publicData["background"]="Played both ways at "+p.position+" and "+secondary+". Split the available reps.";
     }
+    // This reads only published season facts. It stays out of the update path
+    // for a stored profile, and uses its own deterministic seed.
+    publicData["background"]=seasonBackground(pos,publicData,hash(p.identity+"|season-background-v1"));
     addResumeDetails(publicData,p);
     return {publicData,{{"overall",r("OverallRating")},{"positionSkill",ability},{"development",p.development},{"competition",level},{"stateRank",p.stateRank},{"schedule",schedule}}};
 }

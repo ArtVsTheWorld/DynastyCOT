@@ -9,7 +9,7 @@ import {createHash} from 'node:crypto';
 import {recruitRankDetail} from './recruit_ranks.mjs';
 import {hash,authorRegistry,analystPersona} from './story_authors.mjs';
 import {likesFor,replyLikesFor,ENGAGEMENT_VERSION,engagementContext} from './story_engagement.mjs';
-import {avatarFor} from './story_avatars.mjs';
+import {avatarFor,recruitJerseys} from './story_avatars.mjs';
 import {chooseTemplate,templateHistory,contentPack as pack} from './story_templates.mjs';
 import {addConversations} from './story_conversations.mjs';
 import {publishOffer,publishReply} from './publication_policy.mjs';
@@ -58,6 +58,7 @@ function renderPass(s,events,{authors={},history=[],sameWeek=null,onTemplates=nu
  if(!pack.enabled)return {stories:[],authors};
  const qualify=playerReferenceQualifier(s.players,{staffNames:s.teams.flatMap(t=>[t.headCoach?.name,t.offensiveCoordinator?.name,t.defensiveCoordinator?.name]).filter(Boolean)});
  const coverage=nationalCoverage(s),registry=authorRegistry(authors),teams=new Map(s.teams.filter(t=>t.id!==255).map(t=>[t.id,t])),players=new Map(s.players.map(p=>[p.id,p])),games=new Map(s.games.map(g=>[g.id,g]));
+ const recruitUniforms=recruitJerseys(s,teams);
  const budget=weeklyBudget();
  const stories=[],byId=new Map(),reactionGames=new Set(),welcomedRecruits=new Set(),sameStories=new Map((sameWeek?.stories??[]).map(p=>[p.id,p])),publishedEvents=new Map((sameWeek?.events??[]).map(e=>[e.id,e])),reactionAccounts=new Map(),reactionTopics=new Map(),replyCounts=new Map();
  const edition=`${s.leagueId}/${s.season.CurrentSeasonYear}/${s.season.CurrentWeekType}/${s.season.CurrentWeek}`,usedBodies=new Set(),publication={leagueId:s.leagueId,userTeamIndex:s.userTeamIndex,season:s.season.CurrentSeasonYear,phase:s.season.CurrentWeekType,week:s.season.CurrentWeek};
@@ -116,7 +117,7 @@ function renderPass(s,events,{authors={},history=[],sameWeek=null,onTemplates=nu
   const reaction=['player','fan'].includes(role),accountKey=account.handle.toLowerCase(),topic=e.facts.gameId?e.facts.gameId+':'+team?.id:null;
   if(reaction&&!important&&((reactionAccounts.get(accountKey)??0)>=pack.publicationPolicy.reactionPostsPerAccount||(topic&&(reactionTopics.get(topic)??0)>=pack.publicationPolicy.reactionsPerGameTeam)))return null;
   if(parent&&(replyCounts.get(parent.id)??0)>=pack.publicationPolicy.maximumRepliesPerParent)return null;
-  const p={id,eventId:e.id,category:e.category,templateFamily:family,voice:role,author:account.author,handle:account.handle,...chosen,...(voiceTemplateId?{rawBody}:{}),voiceTemplateId,renderKey,stamp:parent?'Reply':stampFor(e.category),...avatarFor(role,team,player,persona),likes:likesFor(s,id,role,team,e,sameStories.get(id),engagement),priority,scopes:parent?parent.scopes:e.scopes,teamIds:e.teamIds,playerId:['player','recruit'].includes(role)?player.id:e.playerId,eventWeek:e.eventWeek,thread:e.thread,curated:curated!==false&&parent?.curated!==false,primaryScope:e.primaryScope,contentRevision:CONTENT_REVISION,...(e.facts.eventFocus?{eventFocus:e.facts.eventFocus,focusTier:e.facts.focusTier,focusTeams:e.facts.focusTeams}:{}),newsCycle:e.newsCycle??null};
+  const p={id,eventId:e.id,category:e.category,templateFamily:family,voice:role,author:account.author,handle:account.handle,...chosen,...(voiceTemplateId?{rawBody}:{}),voiceTemplateId,renderKey,stamp:parent?'Reply':stampFor(e.category),...avatarFor(role,team,player,persona,role==='recruit'?recruitUniforms.get(player.id):undefined),likes:likesFor(s,id,role,team,e,sameStories.get(id),engagement),priority,scopes:parent?parent.scopes:e.scopes,teamIds:e.teamIds,playerId:['player','recruit'].includes(role)?player.id:e.playerId,eventWeek:e.eventWeek,thread:e.thread,curated:curated!==false&&parent?.curated!==false,primaryScope:e.primaryScope,contentRevision:CONTENT_REVISION,...(e.facts.eventFocus?{eventFocus:e.facts.eventFocus,focusTier:e.facts.focusTier,focusTeams:e.facts.focusTeams}:{}),newsCycle:e.newsCycle??null};
   p.userRelevant=!!(s.recruitInterests?.includes(e.playerId)||parent?.userRelevant);p.canonicalTopic=canonicalTopic(e);p.budgetProtected=!parent&&protectedNews(e,role);
   // Verified honors and primary commitment/signing announcements remain in
   // the browsable edition when flavor budgets are full. This does not expand

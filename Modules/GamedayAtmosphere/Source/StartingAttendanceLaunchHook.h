@@ -6,7 +6,7 @@
 namespace attendance::turnout::launchhook {
 // Both the ordinary branch (7f1463c -> 7f146f8) and optional rivalry
 // publication join here. All launch options are final; team setup follows.
-inline constexpr uintptr_t Site=0x7f182c8,NativeTeamSetup=0x7f20c60;
+inline constexpr uintptr_t Site=0x7f18328,NativeTeamSetup=0x7f20cc0;
 inline constexpr size_t SourceBytes=17,TrampolineBytes=42;
 // lea r8,[r13+9f0]; mov edx,edi; mov rcx,r14; call NativeTeamSetup.
 inline constexpr std::array<unsigned char,SourceBytes> Prefix={0x4d,0x8d,0x85,0xf0,0x09,0,0,0x8b,0xd7,0x49,0x8b,0xce,0xe8,0x87,0x89,0,0};

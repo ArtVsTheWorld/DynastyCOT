@@ -186,7 +186,7 @@ std::array<std::atomic<unsigned>,2> gridUiAttached{};
 resume::Cache resumeCache;
 using ClassRows=void(__fastcall*)(void*,void*,int,int,void*);
 ClassRows originalClassRows=nullptr;bool classRowsInstalled=false;
-constexpr uintptr_t classTableRva=0xbacd668,classRowsRva=0x7a88cd0,classKeyRva=0x7a89180,classParseRva=0x376f6d0;
+constexpr uintptr_t classTableRva=0xbacd608,classRowsRva=0x7a88d60,classKeyRva=0x7a89210,classParseRva=0x376f760;
 std::atomic<unsigned> classGridChanges{0};
 using RosterColumns=void(__fastcall*)(void*,void*,int);
 using GridClose=void(__fastcall*)(void*,int);
@@ -195,44 +195,44 @@ RosterColumns originalRosterColumns=nullptr;GridClose originalGridClose=nullptr;
 bool rosterColumnsInstalled=false,gridCloseInstalled=false,rosterPlayerInstalled=false;
 std::atomic<uint64_t> ratingGridState{0};std::atomic<unsigned> rosterCells{0},rosterPanels{0};
 std::atomic<unsigned> rosterColumnCalls{0};
-constexpr uintptr_t rosterColumnsTable=0xbaa78b8,rosterColumnsRva=0x78ef740,gridCloseRva=0x7a88c90,rosterPlayerTable=0xbab18c0,rosterPlayerRva=0x79472b0;
+constexpr uintptr_t rosterColumnsTable=0xbaa7858,rosterColumnsRva=0x78ef7d0,gridCloseRva=0x7a88d20,rosterPlayerTable=0xbab1860,rosterPlayerRva=0x7947340;
 struct PlayerBinding{uintptr_t table,slot,rva;const char* prefix;playerfog::Surface surface;};
 constexpr PlayerBinding playerBindings[]={
-    {0xbab1b28,0x228,0x7955fc0,"405553565741554156488d6c24c84881ec38010000488b0564c813064833c448",playerfog::Surface::TopAttributes},
-    {0xbab0e60,0xc0,0x793d8c0,"48895c240855565741564157488d6c24c94881ec900000004c8bf24c8bf9e8ed",playerfog::Surface::Comparison},
-    {0xbac4e50,0xb8,0x7a0f320,"405557415441564157488d6c24c94881ec00010000488b05043508064833c448",playerfog::Surface::PlaycallSubstitution},
-    {0xbab5778,0xd0,0x796ee90,"48894c24085553565741554157488d6c24d14881ecf8000000498bd84c8bfa48",playerfog::Surface::RosterNIL},
-    {0xc74ed78,0x28,0xa0b6110,"48895c24085556574154415541564157488dac2420faffff4881ec2007000048",playerfog::Surface::ContextPlayer},
-    {0xbab5b70,0x40,0x7975c70,"488bc448894808554156488d68b84881ec38010000488958e84c8bf2488970e0",playerfog::Surface::RosterNIL},
-    {0xc7522c8,0x38,0xa0ddfe0,"405553574156488d6c24c14881ec88000000498bd8488bfa4c8bf1e8d0c1e2f9",playerfog::Surface::RosterNIL},
-    {0xc74fd70,0x58,0xa0c03f0,"4c8944241848894c2408555357415441554156488d6c24d14881ecd80000004d",playerfog::Surface::RosterNIL},
-    {0xc751ea0,0x58,0xa0da9c0,"488bc448894808554157488d68b84881ec38010000488958e84c8bfa488970e0",playerfog::Surface::RosterNIL},
-    {0xc753aa0,0x38,0xa0f2e20,"48894c2408555356574154415541564157488d6c24f84881ec08010000498bf0",playerfog::Surface::RosterNIL},
-    {0xc754328,0x38,0xa0f9fb0,"488bc448894808554156488d68a14881ecc8000000488958e84c8bf2488970e0",playerfog::Surface::RosterNIL}};
+    {0xbab1ac8,0x228,0x7956050,"405553565741554156488d6c24c84881ec38010000488b05d4c713064833c448",playerfog::Surface::TopAttributes},
+    {0xbab0e00,0xc0,0x793d950,"48895c240855565741564157488d6c24c94881ec900000004c8bf24c8bf9e8ed",playerfog::Surface::Comparison},
+    {0xbac4df0,0xb8,0x7a0f3b0,"405557415441564157488d6c24c94881ec00010000488b05743408064833c448",playerfog::Surface::PlaycallSubstitution},
+    {0xbab5718,0xd0,0x796ef20,"48894c24085553565741554157488d6c24d14881ecf8000000498bd84c8bfa48",playerfog::Surface::RosterNIL},
+    {0xc74ed78,0x28,0xa0b6170,"48895c24085556574154415541564157488dac2420faffff4881ec2007000048",playerfog::Surface::ContextPlayer},
+    {0xbab5b10,0x40,0x7975d00,"488bc448894808554156488d68b84881ec38010000488958e84c8bf2488970e0",playerfog::Surface::RosterNIL},
+    {0xc7522c8,0x38,0xa0de040,"405553574156488d6c24c14881ec88000000498bd8488bfa4c8bf1e800c2e2f9",playerfog::Surface::RosterNIL},
+    {0xc74fd70,0x58,0xa0c0450,"4c8944241848894c2408555357415441554156488d6c24d14881ecd80000004d",playerfog::Surface::RosterNIL},
+    {0xc751ea0,0x58,0xa0daa20,"488bc448894808554157488d68b84881ec38010000488958e84c8bfa488970e0",playerfog::Surface::RosterNIL},
+    {0xc753aa0,0x38,0xa0f2e80,"48894c2408555356574154415541564157488d6c24f84881ec08010000498bf0",playerfog::Surface::RosterNIL},
+    {0xc754328,0x38,0xa0fa010,"488bc448894808554156488d68a14881ecc8000000488958e84c8bf2488970e0",playerfog::Surface::RosterNIL}};
 constexpr size_t playerBindingCount=sizeof(playerBindings)/sizeof(playerBindings[0]);
 std::array<DetailGetter,playerBindingCount> playerOriginal{};std::array<bool,playerBindingCount> playerInstalled{};std::array<std::atomic<unsigned>,playerBindingCount> playerCalls{};
 // These native wrappers take exactly one opaque key after the output pointer.
 // Keep the ABI separate from the four-argument roster/detail wrappers.
 using KeyedPlayerGetter=void*(__fastcall*)(void*,void**,void*);
 constexpr PlayerBinding keyedPlayerBindings[]={
-    {0xc7502f8,0x58,0xa0c5180,"40555356574154415541564157488d6c24e84881ec180100004d8bf0488bda4c",playerfog::Surface::AnnualAwardsPlayer},
-    {0xc7502f8,0x60,0xa0c71f0,"488bc448894808554157488d68b84881ec38010000488958e84c8bfa488970e0",playerfog::Surface::RosterNIL},
-    {0xc7502f8,0x68,0xa0c63b0,"488bc448894808554156488d68a14881ecc8000000488958e84c8bf2488970e0",playerfog::Surface::RosterNIL},
-    {0xbaa78b8,0x80,0x78efa70,"488bc45557488d68884881ec68010000488958e8488bfa488970e04c8960d84c",playerfog::Surface::RosterNIL},
-    {0xbab1408,0x48,0x79414b0,"40555356574154415541564157488d6c24e14881ece80000004d8bf0488bf24c",playerfog::Surface::RosterNIL},
-    {0xbab1408,0x50,0x7941e00,"40555356574154415541564157488d6c24e14881ece80000004d8bf0488bfa4c",playerfog::Surface::RosterNIL},
-    {0xbab5958,0x68,0x79734e0,"488bc448894808554156488d68a14881ecb8000000488958e84c8bf2488970e0",playerfog::Surface::RosterNIL}};
+    {0xc7502f8,0x58,0xa0c51e0,"40555356574154415541564157488d6c24e84881ec180100004d8bf0488bda4c",playerfog::Surface::AnnualAwardsPlayer},
+    {0xc7502f8,0x60,0xa0c7250,"488bc448894808554157488d68b84881ec38010000488958e84c8bfa488970e0",playerfog::Surface::RosterNIL},
+    {0xc7502f8,0x68,0xa0c6410,"488bc448894808554156488d68a14881ecc8000000488958e84c8bf2488970e0",playerfog::Surface::RosterNIL},
+    {0xbaa7858,0x80,0x78efb00,"488bc45557488d68884881ec68010000488958e8488bfa488970e04c8960d84c",playerfog::Surface::RosterNIL},
+    {0xbab13a8,0x48,0x7941540,"40555356574154415541564157488d6c24e14881ece80000004d8bf0488bf24c",playerfog::Surface::RosterNIL},
+    {0xbab13a8,0x50,0x7941e90,"40555356574154415541564157488d6c24e14881ece80000004d8bf0488bfa4c",playerfog::Surface::RosterNIL},
+    {0xbab58f8,0x68,0x7973570,"488bc448894808554156488d68a14881ecb8000000488958e84c8bf2488970e0",playerfog::Surface::RosterNIL}};
 constexpr size_t keyedPlayerBindingCount=sizeof(keyedPlayerBindings)/sizeof(keyedPlayerBindings[0]);
 std::array<KeyedPlayerGetter,keyedPlayerBindingCount> keyedPlayerOriginal{};std::array<bool,keyedPlayerBindingCount> keyedPlayerInstalled{};std::array<std::atomic<unsigned>,keyedPlayerBindingCount> keyedPlayerCalls{};
 using PlayerMap=void(__fastcall*)(void*,void*);
 struct MapBinding{uintptr_t slot,rva;const char* prefix;const char* ratingKey;};
 constexpr MapBinding mapBindings[]={
-    {0x58,0x794ba00,"48896c24104889742418574883ec50488bb118040000488bfa488be94885f60f","overall"},
-    {0x118,0x7951580,"48896c2420565741564883ec70488b05ac1214064833c44889442468488be948","Overall"}};
+    {0x58,0x794ba90,"48896c24104889742418574883ec50488bb118040000488bfa488be94885f60f","overall"},
+    {0x118,0x7951610,"48896c2420565741564883ec70488b051c1214064833c44889442468488be948","Overall"}};
 std::array<PlayerMap,2> mapOriginal{};std::array<bool,2> mapInstalled{};std::array<std::atomic<unsigned>,2> mapCalls{};
 using PlayerAbilities=void*(__fastcall*)(void*,void**,bool);
 PlayerAbilities originalAbilities=nullptr;bool abilitiesInstalled=false;std::atomic<unsigned> abilityCalls{0};
-constexpr uintptr_t abilitiesTable=0xbab1b28,abilitiesSlot=0xa0,abilitiesRva=0x794d200;
+constexpr uintptr_t abilitiesTable=0xbab1ac8,abilitiesSlot=0xa0,abilitiesRva=0x794d290;
 constexpr std::array<unsigned char,32> abilitiesPrefix={0x44,0x88,0x44,0x24,0x18,0x48,0x89,0x54,0x24,0x10,0x48,0x89,0x4c,0x24,0x08,0x55,0x53,0x56,0x41,0x54,0x41,0x56,0x41,0x57,0x48,0x8d,0x6c,0x24,0x88,0x48,0x81,0xec};
 using ScriptSetup=uintptr_t(__fastcall*)(void*,void*,uintptr_t,uintptr_t,uintptr_t);
 ScriptSetup originalScriptSetup=nullptr;bool notesSetupInstalled=false;
@@ -251,10 +251,10 @@ PresentationDestroy destroyPresentationValue=nullptr;
 PresentationEnvironment presentationEnvironment=nullptr;
 bool presentationInstalled=false;std::atomic<unsigned> presentationChanges{0};
 std::atomic<bool> notesAttachmentFailed{false};
-constexpr uintptr_t scriptSetupRva=0x7c36850,scriptTableRva=0xbc42fe8,scriptSetupSlot=0xc8;
+constexpr uintptr_t scriptSetupRva=0x7c368e0,scriptTableRva=0xbc42f88,scriptSetupSlot=0xc8;
 constexpr std::array<unsigned char,24> scriptSetupPrefix={0x48,0x89,0x5c,0x24,0x10,0x48,0x89,0x6c,0x24,0x18,0x48,0x89,0x74,0x24,0x20,0x57,0x41,0x56,0x41,0x57,0x48,0x83,0xec,0x20};
 #endif
-constexpr uintptr_t vtableRva=0xc752bc8,slot=0x40,getterRva=0xa0e91a0;
+constexpr uintptr_t vtableRva=0xc752bc8,slot=0x40,getterRva=0xa0e9200;
 constexpr std::array<unsigned char,32> prefix={0x48,0x89,0x54,0x24,0x10,0x48,0x89,0x4c,0x24,0x08,0x55,0x53,0x41,0x56,0x48,0x8d,0xac,0x24,0xd0,0xfc,0xff,0xff,0x48,0x81,0xec,0x30,0x04,0x00,0x00,0x48,0x8b,0xda};
 bool read(uintptr_t at,void* out,size_t size){SIZE_T got=0;return at>=0x10000&&ReadProcessMemory(GetCurrentProcess(),reinterpret_cast<const void*>(at),out,size,&got)&&got==size;}
 void note(Json value)noexcept{try{std::lock_guard<std::mutex> lock(queueMutex);if(pending.size()<16)pending.push_back(std::move(value));}catch(...){}}
@@ -438,20 +438,20 @@ void __fastcall presentationFormatHook(void* object,const presentation::Value* i
 void installPresentation(bool preflightOnly){
     struct Gate{uintptr_t rva;const char* prefix;};
     constexpr Gate helpers[]={
-        {0x91363e0,"48895c2408488974241048897c241841564883ec204c8bf1c741080300000048"},
-        {0x9136580,"48895c2408574883ec208b7a08488bd9488b0283ff03740583ff057508488bc8"},
-        {0x91364f0,"40534883ec208b4108488bd983f803740583f805750f488b09e852a4c6fa48c7"},
-        {0x7d966b0,"488b05c1d7d307c3cccccccccccccccc488b05e1d5d307c3cccccccccccccccc"},
-        {0x7d78cb0,"48895c240848896c2410488974241848897c24204154415641574883ec30488b"},
-        {0x7d7b560,"40534883ec30488bd9488b49184885c9743e488b01ff5018488b4b18488d5424"}};
+        {0x9136440,"48895c2408488974241048897c241841564883ec204c8bf1c741080300000048"},
+        {0x91365e0,"48895c2408574883ec208b7a08488bd9488b0283ff03740583ff057508488bc8"},
+        {0x9136550,"40534883ec208b4108488bd983f803740583f805750f488b09e882a4c6fa48c7"},
+        {0x7d96740,"488b0531d7d307c3cccccccccccccccc488b0551d5d307c3cccccccccccccccc"},
+        {0x7d78d40,"48895c240848896c2410488974241848897c24204154415641574883ec30488b"},
+        {0x7d7b5f0,"40534883ec30488bd9488b49184885c9743e488b01ff5018488b4b18488d5424"}};
     uintptr_t current=0;
     if(!read(base+presentation::textTable+presentation::formatSlot,&current,8)||current!=base+presentation::formatRva)
         throw std::runtime_error("Unsupported or owned football presentation formatter");
     std::vector<unsigned char> body(437);
-    if(!read(current,body.data(),body.size())||notesui::bodyHash(body)!=0x45e37a1d2780bcbfull)
+    if(!read(current,body.data(),body.size())||notesui::bodyHash(body)!=0x26ab2d488ce1f9e7ull)
         throw std::runtime_error("Unsupported football presentation formatter body");
-    if(!read(base+presentation::queryTable+0x48,&current,8)||current!=base+0x7d78cb0||
-       !read(base+presentation::textTable+0x18,&current,8)||current!=base+0x7d7b560)
+    if(!read(base+presentation::queryTable+0x48,&current,8)||current!=base+0x7d78d40||
+       !read(base+presentation::textTable+0x18,&current,8)||current!=base+0x7d7b5f0)
         throw std::runtime_error("Unsupported football presentation expression layout");
     for(const auto& helper:helpers){
         std::array<unsigned char,32> bytes{};
@@ -462,10 +462,10 @@ void installPresentation(bool preflightOnly){
     }
     if(preflightOnly)return;
     originalPresentationFormat=reinterpret_cast<PresentationFormat>(base+presentation::formatRva);
-    makePresentationString=reinterpret_cast<PresentationString>(base+0x91363e0);
-    assignPresentationValue=reinterpret_cast<PresentationAssign>(base+0x9136580);
-    destroyPresentationValue=reinterpret_cast<PresentationDestroy>(base+0x91364f0);
-    presentationEnvironment=reinterpret_cast<PresentationEnvironment>(base+0x7d966b0);
+    makePresentationString=reinterpret_cast<PresentationString>(base+0x9136440);
+    assignPresentationValue=reinterpret_cast<PresentationAssign>(base+0x91365e0);
+    destroyPresentationValue=reinterpret_cast<PresentationDestroy>(base+0x9136550);
+    presentationEnvironment=reinterpret_cast<PresentationEnvironment>(base+0x7d96740);
     if(!replace(reinterpret_cast<void*>(originalPresentationFormat),reinterpret_cast<void*>(presentationFormatHook),presentation::textTable,presentation::formatSlot))
         throw std::runtime_error("Football presentation formatter ownership changed");
     presentationInstalled=true;
@@ -696,7 +696,7 @@ void* __fastcall getterHook(void* object,void** out){
             const auto notesCount=appendRecruitNotes(view,value,[&](uintptr_t at,const char* key,const char* text){
                 reinterpret_cast<void(__fastcall*)(void*,const char*,const char*)>(base+0x25a3e60)(reinterpret_cast<void*>(at),key,text);
                 reinterpret_cast<void(__fastcall*)(void*,const char*,bool)>(base+0x2bf6720)(reinterpret_cast<void*>(at),"DENotesLoading",notesLoading);
-            },[&](NotesProspect& p,double id,const std::string& first,const std::string& last){try{return resumeCache.compose(cached,p,id,first,last,notesLoading);}catch(...){notesLoading=false;return std::string("SCOUTING NOTES\nReport unavailable. Rating concealment remains active.");}});
+            },[&](NotesProspect& p,double id,const std::string& first,const std::string& last){try{return resumeCache.compose(cached,p,id,first,last,notesLoading);}catch(...){notesLoading=false;return std::string("SCOUTING NOTES\n- Report unavailable. Rating concealment remains active.");}});
             if(call<=5)note({{"event","recruit_notes_prepared"},{"recruits",notesCount},{"resumes",bool(cached)}});
 #elif defined(RECRUIT_NOTES_PROBE)
             const auto notesCount=appendRecruitNotes(view,value,[&](uintptr_t at,const char* key,const char* text){reinterpret_cast<void(__fastcall*)(void*,const char*,const char*)>(base+0x25a3e60)(reinterpret_cast<void*>(at),key,text);});
@@ -737,7 +737,7 @@ void installRosterProviders(bool preflightOnly=false){
         const auto digit=[](char c){return c<='9'?c-'0':c-'a'+10;};for(size_t b=0;b<32;++b)if(actual[b]!=(digit(binding.prefix[2*b])*16+digit(binding.prefix[2*b+1])))throw std::runtime_error("Unsupported player response fingerprint");
     }
     for(size_t i=0;i<mapOriginal.size();++i){const auto& binding=mapBindings[i];uintptr_t current=0;std::array<unsigned char,32> actual{};
-        if(!read(base+0xbab1b28+binding.slot,&current,8)||current!=base+binding.rva||!read(current,actual.data(),32))throw std::runtime_error("Unsupported or owned card map provider");
+        if(!read(base+0xbab1ac8+binding.slot,&current,8)||current!=base+binding.rva||!read(current,actual.data(),32))throw std::runtime_error("Unsupported or owned card map provider");
         const auto digit=[](char c){return c<='9'?c-'0':c-'a'+10;};for(size_t b=0;b<32;++b)if(actual[b]!=(digit(binding.prefix[2*b])*16+digit(binding.prefix[2*b+1])))throw std::runtime_error("Unsupported card map fingerprint");
     }
     uintptr_t currentAbilities=0;std::array<unsigned char,32> actualAbilities{};
@@ -755,7 +755,7 @@ void installRosterProviders(bool preflightOnly=false){
         if(!replace(reinterpret_cast<void*>(playerOriginal[i]),reinterpret_cast<void*>(playerHooks[i]),binding.table,binding.slot))throw std::runtime_error("Player response ownership changed");playerInstalled[i]=true;
     }
     for(size_t i=0;i<mapOriginal.size();++i){const auto& binding=mapBindings[i];mapOriginal[i]=reinterpret_cast<PlayerMap>(base+binding.rva);
-        if(!replace(reinterpret_cast<void*>(mapOriginal[i]),reinterpret_cast<void*>(mapHooks[i]),0xbab1b28,binding.slot))throw std::runtime_error("Card map ownership changed");mapInstalled[i]=true;
+        if(!replace(reinterpret_cast<void*>(mapOriginal[i]),reinterpret_cast<void*>(mapHooks[i]),0xbab1ac8,binding.slot))throw std::runtime_error("Card map ownership changed");mapInstalled[i]=true;
     }
     originalAbilities=reinterpret_cast<PlayerAbilities>(base+abilitiesRva);
     if(!replace(reinterpret_cast<void*>(originalAbilities),reinterpret_cast<void*>(playerAbilitiesHook),abilitiesTable,abilitiesSlot))throw std::runtime_error("Player abilities ownership changed");abilitiesInstalled=true;
@@ -790,7 +790,7 @@ DWORD stop(){
     if(presentationInstalled){if(replace(reinterpret_cast<void*>(presentationFormatHook),reinterpret_cast<void*>(originalPresentationFormat),presentation::textTable,presentation::formatSlot))presentationInstalled=false;else ownershipFailed=true;}
     for(size_t i=0;i<keyedPlayerOriginal.size();++i)if(keyedPlayerInstalled[i]){const auto& binding=keyedPlayerBindings[i];if(replace(reinterpret_cast<void*>(keyedPlayerHooks[i]),reinterpret_cast<void*>(keyedPlayerOriginal[i]),binding.table,binding.slot))keyedPlayerInstalled[i]=false;else ownershipFailed=true;}
     if(abilitiesInstalled){if(replace(reinterpret_cast<void*>(playerAbilitiesHook),reinterpret_cast<void*>(originalAbilities),abilitiesTable,abilitiesSlot))abilitiesInstalled=false;else ownershipFailed=true;}
-    for(size_t i=0;i<mapOriginal.size();++i)if(mapInstalled[i]){const auto& binding=mapBindings[i];if(replace(reinterpret_cast<void*>(mapHooks[i]),reinterpret_cast<void*>(mapOriginal[i]),0xbab1b28,binding.slot))mapInstalled[i]=false;else ownershipFailed=true;}
+    for(size_t i=0;i<mapOriginal.size();++i)if(mapInstalled[i]){const auto& binding=mapBindings[i];if(replace(reinterpret_cast<void*>(mapHooks[i]),reinterpret_cast<void*>(mapOriginal[i]),0xbab1ac8,binding.slot))mapInstalled[i]=false;else ownershipFailed=true;}
     for(size_t i=0;i<playerOriginal.size();++i)if(playerInstalled[i]){const auto& binding=playerBindings[i];if(replace(reinterpret_cast<void*>(playerHooks[i]),reinterpret_cast<void*>(playerOriginal[i]),binding.table,binding.slot))playerInstalled[i]=false;else ownershipFailed=true;}
     if(rosterPlayerInstalled){if(replace(reinterpret_cast<void*>(rosterPlayerHook),reinterpret_cast<void*>(originalRosterPlayer),rosterPlayerTable,0x50))rosterPlayerInstalled=false;else ownershipFailed=true;}
     if(gridCloseInstalled){if(replace(reinterpret_cast<void*>(gridCloseHook),reinterpret_cast<void*>(originalGridClose),classTableRva,0x60))gridCloseInstalled=false;else ownershipFailed=true;}
@@ -800,7 +800,7 @@ DWORD stop(){
     if(notesSetupInstalled){if(replace(reinterpret_cast<void*>(notesSetupHook),reinterpret_cast<void*>(originalScriptSetup),scriptTableRva,scriptSetupSlot))notesSetupInstalled=false;else ownershipFailed=true;}
 #endif
 #if defined(RECRUIT_NOTES_PROBE)
-    if(notesProbeInstalled){if(replace(reinterpret_cast<void*>(notesLengthHook),reinterpret_cast<void*>(originalScriptLength),0xbc42fe8,0xb0))notesProbeInstalled=false;else ownershipFailed=true;}
+    if(notesProbeInstalled){if(replace(reinterpret_cast<void*>(notesLengthHook),reinterpret_cast<void*>(originalScriptLength),0xbc42f88,0xb0))notesProbeInstalled=false;else ownershipFailed=true;}
 #endif
     for(size_t i=0;i<detailCount;++i)if(detailInstalled[i]){const auto& gate=playingTimeGates[i];if(replace(reinterpret_cast<void*>(hooks[i]),reinterpret_cast<void*>(detailOriginal[i]),gate.vtable,gate.slot))detailInstalled[i]=false;else ownershipFailed=true;}
     if(installed){if(!replace(reinterpret_cast<void*>(getterHook),reinterpret_cast<void*>(original)))return 2;installed=false;}
@@ -864,15 +864,15 @@ DWORD WINAPI worker(void*){
         for(size_t i=0;i<detailCount;++i){const auto& gate=playingTimeGates[i];detailOriginal[i]=reinterpret_cast<DetailGetter>(base+gate.rva);if(!replace(reinterpret_cast<void*>(detailOriginal[i]),reinterpret_cast<void*>(hooks[i]),gate.vtable,gate.slot))throw std::runtime_error("Playing-time getter ownership changed");detailInstalled[i]=true;}
 #if defined(RECRUIT_NOTES_UI)
         if(!read(base+scriptSetupRva,actual.data(),scriptSetupPrefix.size())||memcmp(actual.data(),scriptSetupPrefix.data(),scriptSetupPrefix.size())||!read(base+scriptTableRva+scriptSetupSlot,&current,8)||current!=base+scriptSetupRva)throw std::runtime_error("Unsupported or already-owned script invocation setup");
-        configureUniversalUi();symbolicUi=std::make_unique<uidiscovery::Service>();symbolicUi->registerDependency("GPI Roster navigation",analyticsUiContracts[0],analyticsMainUi);symbolicUi->registerDependency("GPI current Roster navigation",analyticsUiContracts[1],analyticsCurrentUi);notesUi.prepare();playerUi.prepare();modernPlayerUi.prepare();for(auto* bank:cardUiBanks)bank->prepare();features::prepare();originalScriptSetup=reinterpret_cast<ScriptSetup>(current);
+        configureUniversalUi();symbolicUi=std::make_unique<uidiscovery::Service>();symbolicUi->registerDependency("GPI Roster navigation - standard input",analyticsUiContracts[0],analyticsMainUi,"GPI Roster navigation");symbolicUi->registerDependency("GPI Roster navigation - extended input",analyticsUiContracts[1],analyticsCurrentUi,"GPI Roster navigation");notesUi.prepare();playerUi.prepare();modernPlayerUi.prepare();for(auto* bank:cardUiBanks)bank->prepare();features::prepare();originalScriptSetup=reinterpret_cast<ScriptSetup>(current);
         if(!replace(reinterpret_cast<void*>(originalScriptSetup),reinterpret_cast<void*>(notesSetupHook),scriptTableRva,scriptSetupSlot))throw std::runtime_error("Notes invocation setup ownership changed");
         notesSetupInstalled=true;
         constexpr unsigned char colorLengthPrefix[]={0x48,0x8b,0x41,0x58,0x8b,0x40,0x18,0xc3};
-        if(!read(base+scriptTableRva+0xb0,&current,8)||current!=base+0x7c34e40||!read(current,actual.data(),sizeof(colorLengthPrefix))||memcmp(actual.data(),colorLengthPrefix,sizeof(colorLengthPrefix)))throw std::runtime_error("Unsupported or already-owned color focus accessor");
+        if(!read(base+scriptTableRva+0xb0,&current,8)||current!=base+0x7c34ed0||!read(current,actual.data(),sizeof(colorLengthPrefix))||memcmp(actual.data(),colorLengthPrefix,sizeof(colorLengthPrefix)))throw std::runtime_error("Unsupported or already-owned color focus accessor");
         originalColorLength=reinterpret_cast<ColorLength>(current);
         if(!replace(reinterpret_cast<void*>(originalColorLength),reinterpret_cast<void*>(colorLengthHook),scriptTableRva,0xb0))throw std::runtime_error("Color focus accessor ownership changed");colorLengthInstalled=true;
-        constexpr unsigned char classRowsPrefix[]={0x40,0x53,0x55,0x56,0x41,0x56,0x41,0x57,0x48,0x81,0xec,0x70,0x01,0,0,0x48,0x8b,0x05,0x5a,0x9b,0,0x06,0x48,0x33,0xc4,0x48,0x89,0x84,0x24,0x60,0x01,0};
-        constexpr unsigned char classKeyPrefix[]={0x48,0x89,0x5c,0x24,0x08,0x48,0x89,0x74,0x24,0x20,0x57,0x48,0x81,0xec,0x70,0x01,0,0};
+        constexpr unsigned char classRowsPrefix[]={0x40,0x53,0x55,0x56,0x41,0x56,0x41,0x57,0x48,0x81,0xec,0x70,0x01,0x00,0x00,0x48,0x8b,0x05,0xca,0x9a,0x00,0x06,0x48,0x33,0xc4,0x48,0x89,0x84,0x24,0x60,0x01,0x00};
+        constexpr unsigned char classKeyPrefix[]={0x48,0x89,0x5c,0x24,0x08,0x48,0x89,0x74,0x24,0x20,0x57,0x48,0x81,0xec,0x70,0x01,0x00,0x00};
         constexpr unsigned char classParsePrefix[]={0x48,0x89,0x5c,0x24,0x08,0x57,0x48,0x83,0xec,0x20,0x48,0x8b,0xf9};
         if(!read(base+classRowsRva,actual.data(),sizeof(classRowsPrefix))||memcmp(actual.data(),classRowsPrefix,sizeof(classRowsPrefix))||!read(base+classKeyRva,actual.data(),sizeof(classKeyPrefix))||memcmp(actual.data(),classKeyPrefix,sizeof(classKeyPrefix))||!read(base+classParseRva,actual.data(),sizeof(classParsePrefix))||memcmp(actual.data(),classParsePrefix,sizeof(classParsePrefix))||!read(base+classTableRva+0x78,&current,8)||current!=base+classKeyRva||!read(base+classTableRva+0x68,&current,8)||current!=base+classRowsRva)throw std::runtime_error("Unsupported or already-owned recruit Class grid provider");
         originalClassRows=reinterpret_cast<ClassRows>(current);
@@ -886,8 +886,8 @@ DWORD WINAPI worker(void*){
 #endif
 #if defined(RECRUIT_NOTES_PROBE)
         constexpr unsigned char lengthPrefix[]={0x48,0x8b,0x41,0x58,0x8b,0x40,0x18,0xc3};
-        if(!read(base+0xbc42fe8+0xb0,&current,8)||current!=base+0x7c34e40||!read(current,actual.data(),sizeof(lengthPrefix))||memcmp(actual.data(),lengthPrefix,sizeof(lengthPrefix)))throw std::runtime_error("Unsupported script length accessor; Notes probe stopped");
-        originalScriptLength=reinterpret_cast<ScriptLength>(current);if(!replace(reinterpret_cast<void*>(originalScriptLength),reinterpret_cast<void*>(notesLengthHook),0xbc42fe8,0xb0))throw std::runtime_error("Script length accessor ownership changed");notesProbeInstalled=true;
+        if(!read(base+0xbc42f88+0xb0,&current,8)||current!=base+0x7c34ed0||!read(current,actual.data(),sizeof(lengthPrefix))||memcmp(actual.data(),lengthPrefix,sizeof(lengthPrefix)))throw std::runtime_error("Unsupported script length accessor; Notes probe stopped");
+        originalScriptLength=reinterpret_cast<ScriptLength>(current);if(!replace(reinterpret_cast<void*>(originalScriptLength),reinterpret_cast<void*>(notesLengthHook),0xbc42f88,0xb0))throw std::runtime_error("Script length accessor ownership changed");notesProbeInstalled=true;
 #endif
         installEnhancementSettings();
         note({{"event","active"},{"summary","Recruiting runtime and display hooks verified. Each feature follows the active Dynasty settings and supported menu."},{"mode","letter grades, ranges and Playing Time masking"},{"scope","player and recruiting display values; numeric models preserved"}});
@@ -926,7 +926,7 @@ DWORD WINAPI worker(void*){
 #endif
 #if defined(RECRUIT_NOTES_PROBE)
             if(notesProbeInstalled&&notesObservedAsset){aceio::ofstream out(folder/L"recruit-notes-observed.json");out<<Json({{"pid",GetCurrentProcessId()},{"asset",notesObservedAsset.load()},{"owner",notesObservedOwner.load()}}).dump();
-                if(replace(reinterpret_cast<void*>(notesLengthHook),reinterpret_cast<void*>(originalScriptLength),0xbc42fe8,0xb0))notesProbeInstalled=false;}
+                if(replace(reinterpret_cast<void*>(notesLengthHook),reinterpret_cast<void*>(originalScriptLength),0xbc42f88,0xb0))notesProbeInstalled=false;}
 #endif
             flush();Sleep(200);}flush();
     }catch(const std::exception& error){stop();flush();note({{"event","failed"},{"summary",std::string("Recruiting activation stopped: ")+error.what()+". Check the game version and other recruiting or settings plugins, then retry in a fresh game."},{"reason",error.what()}});flush();}

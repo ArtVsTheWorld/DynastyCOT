@@ -98,7 +98,7 @@ namespace OfflineDynastySettings
                 checks.Add(new { address="0x"+check.Address.ToString("x"),length=bytes.Length,sha256=Digest(bytes) });
             }
             Report(context.PluginFolder,"hooks.json",new { plugin=Version,pid=context.Pid,utc=DateTime.UtcNow.ToString("O"),checks=checks,
-                defensiveInitializerRva="0x35fa471",legacyDefensiveTimerHook=false,wholeExeHashGate=false });
+                defensiveInitializerRva="0x35fa501",legacyDefensiveTimerHook=false,wholeExeHashGate=false });
         }
         internal static string ClockContext(int? mode,int? matchType)
         {

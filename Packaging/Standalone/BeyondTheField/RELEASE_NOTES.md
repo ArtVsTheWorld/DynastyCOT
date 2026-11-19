@@ -1,20 +1,19 @@
-# **Update 2 Hotfix 3**
+# **November 17 Update**
 
-**Ratings & Menu Compatibility**
-- Improved matching across supported UI overhauls, including menus whose methods have moved
-- Fixed missing Recruit Notes on the first visit and rating leaks in player cards, NIL rows and Weekly Practice Plan team banners
-- Keeps each UI mod's native layout, money formatting, sorting and player data
-- Unsupported modified menus remain protected by compatibility checks
+## **Update 2 Hotfix 4**
 
-**Menu Responsiveness**
-- Reduced repeated adapter work when opening, closing and navigating roster screens, player cards and other Dynasty menus
-- Offline callback tests show substantially lower overhead; whole-menu input delays still need confirmation on each setup
+**Game Update Compatibility**
+- Restored Beyond the Field on the November 17 game update, including Social Media, recruiting, roster grades and GPI.
 
-**Recruiting & Saved Data**
-- Fixed precise interest labels and progress bars showing through Recruit Feedback on supported modified menus
-- Keeps manual Recruiting Board position numbers and native visibility for special recruit states
-- Preserves settings, Notes, accounts and published history, including the earlier startup and long-path fixes
+**Recruit Notes**
+- Moved Notes higher on the card and split the write-up into bulleted Background and Scouting Notes sections. Previous-season stats and position history stay on the card.
+- A fully scouted high school or JUCO recruit gets one background note. The note stays the same when you reopen the card. Transfers skip this section.
+- Athletic Measurables now appear in their own section as plain estimates. Added the 10-yard split and made room for all seven measurements at 100% scouting when the ratings needed to calculate them can be verified. Partial scouting and Blind rules still apply.
+
+**Ratings & Social Media**
+- Fixed numeric ratings in the Attributes panel of the in-game Player Stats card. The stats table still shows its original numbers.
+- Improved GPI roster navigation matching for supported menu layouts and input variants.
+- Uncommitted recruits now use the default jersey in new Social Media portraits. Previously published posts and saved scouting reports stay intact.
 
 **Install**
-- Close MMC and the game, then replace **BeyondTheField.dll** in your usual **Plugins** folder, or select **1.0.32** in the COT installer after its version check
-- Keep existing data folders. No reset or history clearing is needed
+- Close MMC and the game, then update to **1.0.43** in Dynasty COT or replace **BeyondTheField.dll** in your usual MMC **Plugins** folder.

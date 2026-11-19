@@ -18,8 +18,8 @@
     },
     {
       "path": "Modules/DrivePractice/Plugin/Diagnostics.cs",
-      "sha256": "4a9cdcc01b83679cee69568cdbaf1049257cba17a1dfa6f5648f26353f7d1819",
-      "reason": "Bounded long-path I/O audit: preserve logical identities, verified helper leases, atomic persistence, native ownership and fixture-only tests."
+      "sha256": "bb4f5fd0921ce73edfd58912cbc35a310157f3088be928c942c54cff0a354a9b",
+      "reason": "Keep the private Expanded Practice helper and host on the same verified runtime version"
     },
     {
       "path": "Modules/DrivePractice/Plugin/DriveEngine.cs",
@@ -28,13 +28,13 @@
     },
     {
       "path": "Modules/DrivePractice/Plugin/DynastyControllerCompatibility.cs",
-      "sha256": "0386a0c0426de3e39b402f5ff84521e05e44229297dcc80bd8396ac2e432544a",
-      "reason": "Approved integrated release-readiness fixes; native contracts and saved data preserved"
+      "sha256": "f4a18b4c1f9e17c7b2d4c795a247ef2c33f511cf77fb519e9be77b694cce8b68",
+      "reason": "Verified CFB 27 November 19 native relocation and unchanged ownership boundaries across BTF, GDA, settings and practice"
     },
     {
       "path": "Modules/DrivePractice/Plugin/NativeCompatibility.cs",
-      "sha256": "641b42d7e66dc23f918fa72932095fce040a6de0e640d84893710c4a7f4a7c0e",
-      "reason": "Bounded long-path I/O audit: preserve logical identities, verified helper leases, atomic persistence, native ownership and fixture-only tests."
+      "sha256": "545648f4c7e8ebb240b16d864d58708ea2cc180d24e3fc6c5f4f2ca32aed65de",
+      "reason": "Verified CFB 27 November 19 native relocation and unchanged ownership boundaries across BTF, GDA, settings and practice"
     },
     {
       "path": "Modules/DrivePractice/Plugin/NativeDrivePolicy.cs",
@@ -43,8 +43,8 @@
     },
     {
       "path": "Modules/DrivePractice/Plugin/NativeRuntime.cs",
-      "sha256": "6d9f9959e5527fa9ab32938efa563b82d13cac52581135a36cb30015885ad915",
-      "reason": "Reviewed public releases: retain readiness fixes; MMC display branding, complete guides and exact archive compatibility; test catalog reflects current 12-yard default and one-shot action"
+      "sha256": "df8794f5ba4d690217d3891d4081873c2c18ebe0da686e6606d3cd24b1fe2174",
+      "reason": "Verified CFB 27 November 19 native relocation and unchanged ownership boundaries across BTF, GDA, settings and practice"
     },
     {
       "path": "Modules/DrivePractice/Plugin/PracticeAction.cs",
@@ -53,8 +53,8 @@
     },
     {
       "path": "Modules/DrivePractice/Plugin/PracticeRunner.cs",
-      "sha256": "943dcd42fa529a694f59bf8c51c375f46fe97d96d2c944d4c98024bafcff6501",
-      "reason": "Bounded long-path I/O audit: preserve logical identities, verified helper leases, atomic persistence, native ownership and fixture-only tests."
+      "sha256": "edede4734c51b700754a20d9fdf107c7aac36acf0788f0df46b37c1023e9c61d",
+      "reason": "Verified CFB 27 November 19 native relocation and unchanged ownership boundaries across BTF, GDA, settings and practice"
     },
     {
       "path": "Modules/DrivePractice/Plugin/RuntimeFiles.cs",
@@ -72,9 +72,19 @@
       "reason": "Add verified offline main-menu practice mode 17 alongside Dynasty mode 14; preserve native fingerprints, exact offline and bound-match guards; execute hook regressions in both contexts."
     },
     {
+      "path": "Modules/DrivePractice/Tools/CompatibilityChecks.cs",
+      "sha256": "1f821836ec6e5e56ced923717310e7a722abc5bd95eee14b4f2f43602e0c4d59",
+      "reason": "Verified CFB 27 November 19 native relocation and unchanged ownership boundaries across BTF, GDA, settings and practice"
+    },
+    {
       "path": "Modules/DrivePractice/Tools/DiagnosticsChecks.cs",
       "sha256": "c3044743619a363f6dd16631729cec9359220a9483e761a04176304b46256619",
       "reason": "Reviewed public releases: retain readiness fixes; MMC display branding, complete guides and exact archive compatibility; test catalog reflects current 12-yard default and one-shot action"
+    },
+    {
+      "path": "Modules/DrivePractice/Tools/FirstDownLineChecks.cs",
+      "sha256": "1971165efe04e1d951a3f0c22b8288c9b650b0e03ce6888a4653ef6c533f8994",
+      "reason": "Verified CFB 27 November 19 native relocation and unchanged ownership boundaries across BTF, GDA, settings and practice"
     },
     {
       "path": "Modules/DrivePractice/Tools/ModeChecks.cs",
@@ -82,14 +92,24 @@
       "reason": "Add verified offline main-menu practice mode 17 alongside Dynasty mode 14; preserve native fingerprints, exact offline and bound-match guards; execute hook regressions in both contexts."
     },
     {
+      "path": "Modules/DrivePractice/Tools/export_layout.py",
+      "sha256": "a1ef6e3617b601656f2075ffdfdc831dd1a44a87090cee3d53cc16c27cc5b3c3",
+      "reason": "Verified CFB 27 November 19 native relocation and unchanged ownership boundaries across BTF, GDA, settings and practice"
+    },
+    {
+      "path": "Modules/DrivePractice/Tools/recovery_fixture.py",
+      "sha256": "c965a9e2bfa8017247d732544726ce2e7c56f664484781541983c4fd2efbc284",
+      "reason": "Verified CFB 27 November 19 native relocation and unchanged ownership boundaries across BTF, GDA, settings and practice"
+    },
+    {
       "path": "Modules/DrivePractice/Tools/test_hooks.py",
-      "sha256": "00bf204d4e7e102108b0cd7083e82e2d6e330d1ef5cb97cea89b8bcadc896c95",
-      "reason": "Add verified offline main-menu practice mode 17 alongside Dynasty mode 14; preserve native fingerprints, exact offline and bound-match guards; execute hook regressions in both contexts."
+      "sha256": "058a8c380aca46445315b29707af902eea7f1757b8fc9bf134ee308e86216e13",
+      "reason": "Verified CFB 27 November 19 native relocation and unchanged ownership boundaries across BTF, GDA, settings and practice"
     },
     {
       "path": "Modules/DrivePractice/docs/native-layout.json",
-      "sha256": "1138365443dc2f33e5712b4c2c0f8f0206d7844b1ed4cc979e3d72cd4c5ba8ea",
-      "reason": "Release-readiness provenance and approved integrated regression coverage"
+      "sha256": "70ee4880a5705a390d77158190dcd4b7a0d3e99acfb0cd9c23348a3f1b544495",
+      "reason": "Verified CFB 27 November 19 native relocation and unchanged ownership boundaries across BTF, GDA, settings and practice"
     },
     {
       "path": "Modules/DrivePractice/docs/updating.md",
@@ -298,8 +318,8 @@
     },
     {
       "path": "Modules/DynastyEnhancer/Source/AnalyticsNative.h",
-      "sha256": "9173ec285e8f0a6d003d44b6fd092355bfde750d559afabd44f915081cd934c6",
-      "reason": "Approved integrated release-readiness fixes; native contracts and saved data preserved"
+      "sha256": "6c1bb968f02b7e774638bbb562f4d69e1ba88e61e41d7c90149f9e92c659d32a",
+      "reason": "Verified CFB 27 November 19 native relocation and unchanged ownership boundaries across BTF, GDA, settings and practice"
     },
     {
       "path": "Modules/DynastyEnhancer/Source/AnalyticsPage.h",
@@ -338,8 +358,8 @@
     },
     {
       "path": "Modules/DynastyEnhancer/Source/CurrentBindings.h",
-      "sha256": "58a27ba42ae7c0d4646a4cf052037a78bab66d0643408c241b0ea69e7f072fc8",
-      "reason": "Approved integrated release-readiness fixes; native contracts and saved data preserved"
+      "sha256": "9eaa6fff3cd7e52e6c9c0a714760687519a029fb20fe91a65620646282ef3bb2",
+      "reason": "Verified CFB 27 November 19 native relocation and unchanged ownership boundaries across BTF, GDA, settings and practice"
     },
     {
       "path": "Modules/DynastyEnhancer/Source/DraftOvrUiPrograms.h",
@@ -348,8 +368,8 @@
     },
     {
       "path": "Modules/DynastyEnhancer/Source/DraftResultsBinding.h",
-      "sha256": "04aba2fe475e99d3d3f27ef8d42395843389f90f9e6ed1415b1bdcfc1885c187",
-      "reason": "Approved integrated release-readiness fixes; native contracts and saved data preserved"
+      "sha256": "a5ba2a177f224cf91ad359e448d9d96685fcb3203bb3767d8d2cb475374bc958",
+      "reason": "Verified CFB 27 November 19 native relocation and unchanged ownership boundaries across BTF, GDA, settings and practice"
     },
     {
       "path": "Modules/DynastyEnhancer/Source/DraftResultsCapture.h",
@@ -383,13 +403,13 @@
     },
     {
       "path": "Modules/DynastyEnhancer/Source/EnhancementSettingsMenu.h",
-      "sha256": "faa695e4ec9e5aab9ee2e79e9c1d53e13d46f28e83a2452df90feee0d9831847",
-      "reason": "Reviewed public releases: retain readiness fixes; MMC display branding, complete guides and exact archive compatibility; test catalog reflects current 12-yard default and one-shot action"
+      "sha256": "9f2a2f507278346442e61d17ec569a2e8b41aa22c34f246d14d5c827b37006dc",
+      "reason": "Verified CFB 27 November 19 native relocation and unchanged ownership boundaries across BTF, GDA, settings and practice"
     },
     {
       "path": "Modules/DynastyEnhancer/Source/FeedData.h",
-      "sha256": "21268878cce4fc2eff4923206886d8a39d6cc8717c13d4542aad963d56ebaba9",
-      "reason": "Approved integrated release-readiness fixes; native contracts and saved data preserved"
+      "sha256": "e1bae75dfafbfba955b42a49736fc30488cb8189435f66bb4a921a7d140c29ce",
+      "reason": "Use compact second units in all timed measurables, add position articles and display-only scouting bullets, and route neutral Social Media jerseys to the verified default texture."
     },
     {
       "path": "Modules/DynastyEnhancer/Source/FeedRefresh.h",
@@ -403,8 +423,8 @@
     },
     {
       "path": "Modules/DynastyEnhancer/Source/HubStatsTrace.cpp",
-      "sha256": "6409647326a60f32159db0b8467a6f3ef21144d4a276e4c0ce0ddeb1387fb9c6",
-      "reason": "Approved integrated release-readiness fixes; native contracts and saved data preserved"
+      "sha256": "1a5109ddb47f4d247510c983fc9945d0a056b7fd4a278cac3f0c219dad9b07ad",
+      "reason": "Verified CFB 27 November 19 native relocation and unchanged ownership boundaries across BTF, GDA, settings and practice"
     },
     {
       "path": "Modules/DynastyEnhancer/Source/HubStatsTraceCatalog.h",
@@ -428,8 +448,8 @@
     },
     {
       "path": "Modules/DynastyEnhancer/Source/LiveTables.h",
-      "sha256": "2d808b22dca7597a01853af635be0d65d6cec30f8f0240d20fc4b241cae37cf0",
-      "reason": "Approved integrated release-readiness fixes; native contracts and saved data preserved"
+      "sha256": "5af5b3c19f47ae57d8392abe62826a9d8cd9d555c0339f51c45da72578426e8b",
+      "reason": "Verified CFB 27 November 19 native relocation and unchanged ownership boundaries across BTF, GDA, settings and practice"
     },
     {
       "path": "Modules/DynastyEnhancer/Source/LoadRuntime.cpp",
@@ -448,13 +468,13 @@
     },
     {
       "path": "Modules/DynastyEnhancer/Source/NativeMapValue.h",
-      "sha256": "04c62fc519a340e1c798a213253deec81b3c6ba88f3ead5e8778f88280c77a5a",
-      "reason": "Approved integrated release-readiness fixes; native contracts and saved data preserved"
+      "sha256": "b11fb9272c25e868f75515817393bbc6f07dc97a3890142c579666c263b7d344",
+      "reason": "Verified CFB 27 November 19 native relocation and unchanged ownership boundaries across BTF, GDA, settings and practice"
     },
     {
       "path": "Modules/DynastyEnhancer/Source/NativeSocialMedia.cpp",
-      "sha256": "553ff5bcaa30f2acb7fedb8b5185f963c9fa877fc79a3510275275c12b76d17c",
-      "reason": "Reviewed public releases: retain readiness fixes; MMC display branding, complete guides and exact archive compatibility; test catalog reflects current 12-yard default and one-shot action"
+      "sha256": "90eb24908c4a4f5470fe8c985db1b564e66e38763c44f1b76a49838eda21e833",
+      "reason": "Verified CFB 27 November 19 native relocation and unchanged ownership boundaries across BTF, GDA, settings and practice"
     },
     {
       "path": "Modules/DynastyEnhancer/Source/NewsAssetDiscovery.h",
@@ -538,8 +558,8 @@
     },
     {
       "path": "Modules/DynastyEnhancer/Source/PlayerAbilityProbe.cpp",
-      "sha256": "0d6948c45222d3fe5ca034804e4762eab74ae1f5d98a321e497b1837860a56da",
-      "reason": "Approved integrated release-readiness fixes; native contracts and saved data preserved"
+      "sha256": "05665791e2a5d7d6906ee27cc7889b7d10c1a88d7c93e5d3c624c5c89df6f0e9",
+      "reason": "Verified CFB 27 November 19 native relocation and unchanged ownership boundaries across BTF, GDA, settings and practice"
     },
     {
       "path": "Modules/DynastyEnhancer/Source/PlayerBlueprintUiPrograms.h",
@@ -548,13 +568,13 @@
     },
     {
       "path": "Modules/DynastyEnhancer/Source/PlayerCardUiPrograms.h",
-      "sha256": "877cabee64794bb9679a3fabc0ed4f644c256dcef86c813e7e2d83577d8430ab",
-      "reason": "Verified class/method discovery across ratings, currency, recruiting and GPI adapters; preserve native frames and scopes; first-visit Notes and real Practice Plan banner coverage."
+      "sha256": "d960713bebf7b42349ace30701bf27c9e63f274e41a6a222da1b0e57399cf061",
+      "reason": "Final live-confirmed 1-based Stats skill records, native three-register page publication and regression VM locals."
     },
     {
       "path": "Modules/DynastyEnhancer/Source/PlayerDepthProbe.cpp",
-      "sha256": "20e376163f7cba9aa468e5a2c8e9f5ada20905f2636b4e4c0393e110f7dd61df",
-      "reason": "Approved integrated release-readiness fixes; native contracts and saved data preserved"
+      "sha256": "6c7315a0b8cb77bb773be3972bd575451f0d6b74214b23292c95f7d108543eaf",
+      "reason": "Verified CFB 27 November 19 native relocation and unchanged ownership boundaries across BTF, GDA, settings and practice"
     },
     {
       "path": "Modules/DynastyEnhancer/Source/PlayerFogPerformance.h",
@@ -598,8 +618,8 @@
     },
     {
       "path": "Modules/DynastyEnhancer/Source/PlayerPresentationPolicy.h",
-      "sha256": "2c406bb003fb804fbdc65584151a94b4b91605706663b926fa93148a0ac3d37b",
-      "reason": "Approved integrated release-readiness fixes; native contracts and saved data preserved"
+      "sha256": "430dfa391b6a1023dd171f3c910a8f950926155ca30d8b9d928147517f72dea5",
+      "reason": "Verified CFB 27 November 19 native relocation and unchanged ownership boundaries across BTF, GDA, settings and practice"
     },
     {
       "path": "Modules/DynastyEnhancer/Source/PlayerRatingGrid.h",
@@ -623,28 +643,28 @@
     },
     {
       "path": "Modules/DynastyEnhancer/Source/PlayerRimeProbe.cpp",
-      "sha256": "ea3a4672d3be381e1a09f5e4e988b62e05ea0c3a38ad327830b24fef35b02309",
-      "reason": "Approved integrated release-readiness fixes; native contracts and saved data preserved"
+      "sha256": "31b9ff1ab3b31a05a98f6c94f156ce4859fab1f458dc64f7983a05fa3074db2c",
+      "reason": "Verified CFB 27 November 19 native relocation and unchanged ownership boundaries across BTF, GDA, settings and practice"
     },
     {
       "path": "Modules/DynastyEnhancer/Source/PlayerTooltipProbe.cpp",
-      "sha256": "762129f7e4dcff3f3bf4c5b59bced43c7aa88fccfea0cd9257d7d1a258304f30",
-      "reason": "Approved integrated release-readiness fixes; native contracts and saved data preserved"
+      "sha256": "6a1d5837d86709b88d1f9d7270ca4c052c5032f62c9ca1edabc0002e26cc533d",
+      "reason": "Verified CFB 27 November 19 native relocation and unchanged ownership boundaries across BTF, GDA, settings and practice"
     },
     {
       "path": "Modules/DynastyEnhancer/Source/PlayerUiPreview.cpp",
-      "sha256": "2ff74b39b69a2c853c5a90628e500daeaea9fa278bb5af96a2de52d131a62325",
-      "reason": "Approved integrated release-readiness fixes; native contracts and saved data preserved"
+      "sha256": "0ec0d3cd4927d450e41accec742759f04cd7a510e08673bef687be9b1ad4648b",
+      "reason": "Verified CFB 27 November 19 native relocation and unchanged ownership boundaries across BTF, GDA, settings and practice"
     },
     {
       "path": "Modules/DynastyEnhancer/Source/PlayerUiTrace.cpp",
-      "sha256": "79e333c4e0627e4f938bbe7c85aa781782bc309dc2974b41b96a8a48527113c2",
-      "reason": "Approved integrated release-readiness fixes; native contracts and saved data preserved"
+      "sha256": "f61a1f8ba3db618403dc4000c68d0b98fc843a37e31eaeabe6aecd23d0dd9ecf",
+      "reason": "Verified CFB 27 November 19 native relocation and unchanged ownership boundaries across BTF, GDA, settings and practice"
     },
     {
       "path": "Modules/DynastyEnhancer/Source/PlayingTimeGates.h",
-      "sha256": "4f37e377c2177b2061da68eb69ac0460f45410e4d567157dddabe63006445613",
-      "reason": "Approved integrated release-readiness fixes; native contracts and saved data preserved"
+      "sha256": "806fbabbe12d660687394343213ef7a93f9d1223cb799eaeefd94162eb7af546",
+      "reason": "Verified CFB 27 November 19 native relocation and unchanged ownership boundaries across BTF, GDA, settings and practice"
     },
     {
       "path": "Modules/DynastyEnhancer/Source/PlayingTimePolicy.h",
@@ -668,13 +688,13 @@
     },
     {
       "path": "Modules/DynastyEnhancer/Source/RecruitListProbe.cpp",
-      "sha256": "11965bc0f7835cebc3d567dc4342cbd21a77920309456fde1f31c53ad1e42a68",
-      "reason": "Approved integrated release-readiness fixes; native contracts and saved data preserved"
+      "sha256": "b630b7b981ff561a7dc907e971502e0d3e401923afe7cd394d65e13bbec4bea7",
+      "reason": "Verified CFB 27 November 19 native relocation and unchanged ownership boundaries across BTF, GDA, settings and practice"
     },
     {
       "path": "Modules/DynastyEnhancer/Source/RecruitNotes.h",
-      "sha256": "5331debf9397bd1d2dccffda43d7a61f395b378133c9bc978962cb2dfb3250c6",
-      "reason": "Approved integrated release-readiness fixes; native contracts and saved data preserved"
+      "sha256": "3f4b77675b4ce36aeba718385c01dea590d22bc033ad041b424a4f70933fbed7",
+      "reason": "BTF 1.0.41: full-scout Background note library, preserved legacy wording, and display bullets"
     },
     {
       "path": "Modules/DynastyEnhancer/Source/RecruitNotesProse.h",
@@ -683,23 +703,23 @@
     },
     {
       "path": "Modules/DynastyEnhancer/Source/RecruitNotesUiPrograms.h",
-      "sha256": "7e518ee9940d3955db41699d7ff660481ca7792498132af333d18bd31aa75870",
-      "reason": "Verified class/method discovery across ratings, currency, recruiting and GPI adapters; preserve native frames and scopes; first-visit Notes and real Practice Plan banner coverage."
+      "sha256": "a26a3a8fc727055d1f4f786dcbb6ca5cfcec6ba189185da88808679f5136447d",
+      "reason": "Lift the Notes card, separate saved background prose, and show plain verified full-scout measurables without a class cutoff calculation."
     },
     {
       "path": "Modules/DynastyEnhancer/Source/RecruitNotesUiRuntime.h",
-      "sha256": "a23bb8775450636d91ba1c0ef8688e93d3083ea3a75725236eefbdec5de35588",
-      "reason": "Verified class/method discovery across ratings, currency, recruiting and GPI adapters; preserve native frames and scopes; first-visit Notes and real Practice Plan banner coverage."
+      "sha256": "c5dc6fce25de2b337b9934d9a9dbad20237b464a7beb9ec413970e838532e0da",
+      "reason": "Treat verified GPI input implementations as alternatives; retain ownership and full fingerprint guards, avoid false sibling failures and repeat preparation reads; add focused regressions."
     },
     {
       "path": "Modules/DynastyEnhancer/Source/RecruitPreviewProbe.cpp",
-      "sha256": "0a51b00cc88c20f938c5ae860416f8e1326fa83cf152dd40fe37962208aafd50",
-      "reason": "Approved integrated release-readiness fixes; native contracts and saved data preserved"
+      "sha256": "cd9b5da875611e337e56658c6cf6948fe7c1079045aad9cd3a441f71e8309d90",
+      "reason": "Verified CFB 27 November 19 native relocation and unchanged ownership boundaries across BTF, GDA, settings and practice"
     },
     {
       "path": "Modules/DynastyEnhancer/Source/RecruitResume.h",
-      "sha256": "2a969eda3370c531db06d5309b119cac3e2127d237edb44156075ec32f414c8d",
-      "reason": "Approved integrated release-readiness fixes; native contracts and saved data preserved"
+      "sha256": "1bc1c7cce8749a09baec70f90541c20af2c15fdbc839b7774ec4970dca754ed7",
+      "reason": "Expand new Recruit Notes by verified position and distinguish prior-season summaries from staff follow-ups while preserving saved reports."
     },
     {
       "path": "Modules/DynastyEnhancer/Source/RecruitResumeAudit.cpp",
@@ -708,8 +728,8 @@
     },
     {
       "path": "Modules/DynastyEnhancer/Source/RecruitResumeCaptureFields.h",
-      "sha256": "6cd5656c3892f04aa50a27dd074997a5ee1fd50032d2524c584d593ab29fee1f",
-      "reason": "Approved integrated release-readiness fixes; native contracts and saved data preserved"
+      "sha256": "397b13e6e97d595b953d992b6ee4b23568d49ca922218c8e03d9c1ea084c0c97",
+      "reason": "Lift the Notes card, separate saved background prose, and show plain verified full-scout measurables without a class cutoff calculation."
     },
     {
       "path": "Modules/DynastyEnhancer/Source/RecruitResumeMinimal.cpp",
@@ -718,18 +738,18 @@
     },
     {
       "path": "Modules/DynastyEnhancer/Source/RecruitResumeNotes.h",
-      "sha256": "690183732899bbc5716fd107bfac6b6558aac1a2fc972b86f2ccf68c792f4bbd",
-      "reason": "Approved integrated release-readiness fixes; native contracts and saved data preserved"
+      "sha256": "73e04ae0676f665180b80b42a17f8279bcc4a993280c8f2d7cc91a2721476520",
+      "reason": "BTF 1.0.41: full-scout Background note library, preserved legacy wording, and display bullets"
     },
     {
       "path": "Modules/DynastyEnhancer/Source/RecruitResumeRuntime.h",
-      "sha256": "048097860cdbdc3ebf11e905c1078dc76fda99fe90955b3cc2fec4b313d41096",
-      "reason": "Bounded long-path I/O audit: preserve logical identities, verified helper leases, atomic persistence, native ownership and fixture-only tests."
+      "sha256": "c2493416a3d6244bafeb0f11c8f57cb14ca18ce33021272eee1b89f5689d46cf",
+      "reason": "BTF 1.0.41: full-scout Background note library, preserved legacy wording, and display bullets"
     },
     {
       "path": "Modules/DynastyEnhancer/Source/RecruitResumeSource.h",
-      "sha256": "0002ad4be0d89163f194edc7353ce66804f0974d611e2b08aded1c9605813691",
-      "reason": "Bounded long-path I/O audit: preserve logical identities, verified helper leases, atomic persistence, native ownership and fixture-only tests."
+      "sha256": "2aab497f49eb06526086c4b075ef6070bed7f2df49e178c44fd06afa390060da",
+      "reason": "BTF 1.0.41: full-scout Background note library, preserved legacy wording, and display bullets"
     },
     {
       "path": "Modules/DynastyEnhancer/Source/RecruitResumeStateRanks.h",
@@ -748,8 +768,8 @@
     },
     {
       "path": "Modules/DynastyEnhancer/Source/RecruitingFog.cpp",
-      "sha256": "d223415e63953f6430b2722f1fea3965679fc28cce3e9d0c80fe11f5455d89a3",
-      "reason": "Preserve verified universal UI discovery and apply hub-audit NIL/interest display fixes, native visibility restoration, and bounded callback fast paths."
+      "sha256": "be930a032a5f79f5a60455590fd9475094b4bc128ab6e202e1d8f4c1f7286257",
+      "reason": "Update exact relocated player and card-map provider fingerprints proven by live native-slot readback"
     },
     {
       "path": "Modules/DynastyEnhancer/Source/RecruitingGradePolicy.h",
@@ -758,18 +778,18 @@
     },
     {
       "path": "Modules/DynastyEnhancer/Source/RecruitingUiGates.h",
-      "sha256": "fa04f9dac21c6177fce3973e4522a07afc42c33779c230f627a0b3b9f0cb099e",
-      "reason": "Approved integrated release-readiness fixes; native contracts and saved data preserved"
+      "sha256": "f36d41013d14bed19b9bd9e55ea5d2045f9485c668d8df2a7baffd125021e804",
+      "reason": "Verified CFB 27 November 19 native relocation and unchanged ownership boundaries across BTF, GDA, settings and practice"
     },
     {
       "path": "Modules/DynastyEnhancer/Source/RecruitingUiResponse.h",
-      "sha256": "e90439b17f35dadba35e618830bfde427e55a1f0d9a3acd3fe86aacf26d4238a",
-      "reason": "Approved integrated release-readiness fixes; native contracts and saved data preserved"
+      "sha256": "b5e54b8d1a62bc91b80100d11aacafc692a8a5b081436ebc43ba96971fe13d50",
+      "reason": "Separate the 10-yard split from the legacy dash, remove estimate suffixes, and add scoped worker-prepared recruiting class measurement bands."
     },
     {
       "path": "Modules/DynastyEnhancer/Source/RosterViewProbe.cpp",
-      "sha256": "ccad4274f7fe60f7c0039576914bee7985c27694b7f39936fdbbf53de6904856",
-      "reason": "Approved integrated release-readiness fixes; native contracts and saved data preserved"
+      "sha256": "724a116699698675914ad317b0e837ab2a0b291a5cf5112582cf328dc8374d81",
+      "reason": "Verified CFB 27 November 19 native relocation and unchanged ownership boundaries across BTF, GDA, settings and practice"
     },
     {
       "path": "Modules/DynastyEnhancer/Source/RuntimeFeed.h",
@@ -833,8 +853,8 @@
     },
     {
       "path": "Modules/DynastyEnhancer/Tests/NativeSocialMediaTests.cpp",
-      "sha256": "f0caf8997403de390a21648e289c0649a85eb96ec6eb51e723cfa9826e9a2007",
-      "reason": "Approved integrated release-readiness fixes; native contracts and saved data preserved"
+      "sha256": "8129f389020f8d20aa8ea5e2567b20775eea236c3f6f399cc18c308f9b43ea49",
+      "reason": "Verified CFB 27 November 19 native relocation and unchanged ownership boundaries across BTF, GDA, settings and practice"
     },
     {
       "path": "Modules/DynastyEnhancer/Tests/RecruitResumeExpansionTests.h",
@@ -863,8 +883,8 @@
     },
     {
       "path": "Modules/DynastyEnhancer/Tests/conversations.test.mjs",
-      "sha256": "7991d0eb59654dadc37f2a059e3e0e3f98204482dfea32c3c09ae315bcfa2030",
-      "reason": "0.1.7: source-level weekly routine budget, complete continuous scope lists, concise native sidebar and header presentation."
+      "sha256": "9b2c12997af3d9a7332412f27b583ff86c2a6e023639dfe62d79ffe6324f4d3f",
+      "reason": "Use compact second units in all timed measurables, add position articles and display-only scouting bullets, and route neutral Social Media jerseys to the verified default texture."
     },
     {
       "path": "Modules/DynastyEnhancer/Tests/currency_budget_ui_test.py",
@@ -992,6 +1012,11 @@
       "reason": "Release-readiness provenance and approved integrated regression coverage"
     },
     {
+      "path": "Modules/DynastyEnhancer/Tests/recruit_notes_ui_test.py",
+      "sha256": "151942221c0f1cf6e82e01bd2ab94c18ee7a46824dee21266c463dd2327ae97d",
+      "reason": "Lift the Notes card, separate saved background prose, and show plain verified full-scout measurables without a class cutoff calculation."
+    },
+    {
       "path": "Modules/DynastyEnhancer/Tests/runtime_archive.test.mjs",
       "sha256": "01041548a955d5b4f39672ed12092152970ec2cff6bf92e7c418479455d3a307",
       "reason": "COT 0.1.4: factual social perspectives, persistent voices, four-edition structure memory, required news retention and frozen publication wording; compact archive metadata and native UI performance; motion-driven sound companions and mixed visitor sections with strong-host travel resistance. Workspace only."
@@ -1003,8 +1028,8 @@
     },
     {
       "path": "Modules/DynastyEnhancer/Tests/social_discovery.test.mjs",
-      "sha256": "7bc78e27832620b4e17cc7710cc7995a5a56bfd14d25ca2998941bd53cf406af",
-      "reason": "Retain prior COT integration; 0.1.6 Beyond the Field: bounded content/selection/voices, native paging, persistent modeled recruit records, supported calendar/draft reference, exact AIO Notes/colors and numeric-preserving money redraw adapters."
+      "sha256": "f607142e41df904f8389bf699ac90d132a2778dca64de7364b86c3869d4fb90a",
+      "reason": "Use compact second units in all timed measurables, add position articles and display-only scouting bullets, and route neutral Social Media jerseys to the verified default texture."
     },
     {
       "path": "Modules/DynastyEnhancer/Tests/story_generation.test.mjs",
@@ -1098,8 +1123,8 @@
     },
     {
       "path": "Modules/DynastyEnhancer/Tools/build_player_card_ui.py",
-      "sha256": "ef5d37e6ceefaef547a793387489360371d246f556cdb9052b6b4fc610e9df05",
-      "reason": "Verified class/method discovery across ratings, currency, recruiting and GPI adapters; preserve native frames and scopes; first-visit Notes and real Practice Plan banner coverage."
+      "sha256": "bc093ce99d4a0b12fdf811543b90fe3c068ff3a686102aef66a4ded37c09a3fb",
+      "reason": "Final live-confirmed 1-based Stats skill records, native three-register page publication and regression VM locals."
     },
     {
       "path": "Modules/DynastyEnhancer/Tools/build_player_hub_ui.py",
@@ -1118,8 +1143,8 @@
     },
     {
       "path": "Modules/DynastyEnhancer/Tools/build_recruit_notes_ui.py",
-      "sha256": "35c710a6f4c351bd6311f1657ba589a4864fb215a5bd24e602f0b7fc766428bc",
-      "reason": "Verified class/method discovery across ratings, currency, recruiting and GPI adapters; preserve native frames and scopes; first-visit Notes and real Practice Plan banner coverage."
+      "sha256": "5c944349bb44ed90fd8a69b44b1f7adb8e673841000099d08faf576951f9ca73",
+      "reason": "Lift the Notes card, separate saved background prose, and show plain verified full-scout measurables without a class cutoff calculation."
     },
     {
       "path": "Modules/DynastyEnhancer/Tools/clean_language.mjs",
@@ -1198,8 +1223,8 @@
     },
     {
       "path": "Modules/DynastyEnhancer/Tools/feed_selection.mjs",
-      "sha256": "c1d09808b7dd889dd50934fd9f45921bbb9a7bddaf3bcf122dcba330626dc9b0",
-      "reason": "Approved integrated release-readiness fixes; native contracts and saved data preserved"
+      "sha256": "db043b099d9bb497eb199da4220e62a486d3ce5d69c2076b5f73f5e4ee0402d2",
+      "reason": "Use compact second units in all timed measurables, add position articles and display-only scouting bullets, and route neutral Social Media jerseys to the verified default texture."
     },
     {
       "path": "Modules/DynastyEnhancer/Tools/football_context.mjs",
@@ -1363,8 +1388,8 @@
     },
     {
       "path": "Modules/DynastyEnhancer/Tools/recruit_notes_vm.py",
-      "sha256": "cdfa6a83c5ccbabb5892ab53735f00b03db81b753d2af6022be927636ef5799a",
-      "reason": "Release-readiness provenance and approved integrated regression coverage"
+      "sha256": "2436c1931e9daf97350a3b3fc6e7ef4a5b801813c582b5e99f7491f5c32e75ca",
+      "reason": "Final live-confirmed 1-based Stats skill records, native three-register page publication and regression VM locals."
     },
     {
       "path": "Modules/DynastyEnhancer/Tools/recruit_ranks.mjs",
@@ -1448,8 +1473,8 @@
     },
     {
       "path": "Modules/DynastyEnhancer/Tools/story_avatars.mjs",
-      "sha256": "d98cecd63cc1436f098299f536002345bfacdf32b53111967f563601c689ef61",
-      "reason": "Approved integrated release-readiness fixes; native contracts and saved data preserved"
+      "sha256": "644642064d220c2722e8d2a86624ec42b0b0e652de844926ce25b8c05099815b",
+      "reason": "Use compact second units in all timed measurables, add position articles and display-only scouting bullets, and route neutral Social Media jerseys to the verified default texture."
     },
     {
       "path": "Modules/DynastyEnhancer/Tools/story_conversations.mjs",
@@ -1468,8 +1493,8 @@
     },
     {
       "path": "Modules/DynastyEnhancer/Tools/story_renderer.mjs",
-      "sha256": "4ed96c93cc27a7aadda65f29e40bff9742873b03f3ddb8f4eae1104353072e2f",
-      "reason": "Approved integrated release-readiness fixes; native contracts and saved data preserved"
+      "sha256": "e5189d412e63c683c707f3e84ac81eb9c36c354d756ce2430968d285084ab4f3",
+      "reason": "Draw the native neutral jersey on Social Media recruit portraits before a verified hard commitment or signing. Keep archive updates display-only."
     },
     {
       "path": "Modules/DynastyEnhancer/Tools/story_templates.mjs",
@@ -1538,38 +1563,38 @@
     },
     {
       "path": "Modules/ExtraDynastySettings/Plugin/CombinedClockRuntime.cs",
-      "sha256": "ae7e6ef01e5aed42450f0ffdccab9a6c086225595dd96b4d3c432d65ac3dfc4c",
-      "reason": "Approved integrated release-readiness fixes; native contracts and saved data preserved"
+      "sha256": "b10c70b9d94501b8ddf3cc5bf2637cd88d943ea7acb2bf2b9b6c51ddfb8b005f",
+      "reason": "Verified CFB 27 November 19 native relocation and unchanged ownership boundaries across BTF, GDA, settings and practice"
     },
     {
       "path": "Modules/ExtraDynastySettings/Plugin/CombinedSettingsAction.cs",
-      "sha256": "ecd2b3e320af8569812fe36eaf09020da199a64cf53e00bc6396db67250e4b19",
-      "reason": "Bounded long-path I/O audit: preserve logical identities, verified helper leases, atomic persistence, native ownership and fixture-only tests."
+      "sha256": "e0b1ade360f173a46c80d9f495ddf88e1b09ff2a117df5ab7c373efa4e3b785d",
+      "reason": "Private kickoff/return extension: verified native ownership, display-only fit/offset and bounded grouping under existing native Special Teams filters without changing saved IDs."
     },
     {
       "path": "Modules/ExtraDynastySettings/Plugin/ControllerSelect.cs",
-      "sha256": "f377451940e8e12c41d9dc270db175ebb2cfba55ca414670b24adf905299e68e",
-      "reason": "Approved integrated release-readiness fixes; native contracts and saved data preserved"
+      "sha256": "48fd2f6a95b6699b796eec833ca0e8e61a5af8d0d025a0da43301e21bf272f7a",
+      "reason": "Verified CFB 27 November 19 native relocation and unchanged ownership boundaries across BTF, GDA, settings and practice"
     },
     {
       "path": "Modules/ExtraDynastySettings/Plugin/ControllerSelectCode.cs",
-      "sha256": "81c824ec40c1b509dcf13399e0e5f8763360936775cc330939432d18f3b0c6f5",
-      "reason": "Approved integrated release-readiness fixes; native contracts and saved data preserved"
+      "sha256": "cb96634f93f44a49316756d03a76d68da05c13244d8e8475c5dc1846615edd7c",
+      "reason": "Verified CFB 27 November 19 native relocation and unchanged ownership boundaries across BTF, GDA, settings and practice"
     },
     {
       "path": "Modules/ExtraDynastySettings/Plugin/DefensivePlayClock.cs",
-      "sha256": "477df2cef3048e4883891a996428e8c45b86da6672910d3a5988889b6de2cefd",
-      "reason": "Approved integrated release-readiness fixes; native contracts and saved data preserved"
+      "sha256": "ef4703ced73a2917f6d2595c85d1422bc2571e4e374b5d0e18f282279883a240",
+      "reason": "Verified CFB 27 November 19 native relocation and unchanged ownership boundaries across BTF, GDA, settings and practice"
     },
     {
       "path": "Modules/ExtraDynastySettings/Plugin/DiagnosticLog.cs",
-      "sha256": "221a5dd23e726ff0ddd47c1951f72d1e3bca4014bb2d1bb31cbc25d5982302e9",
-      "reason": "Bounded long-path I/O audit: preserve logical identities, verified helper leases, atomic persistence, native ownership and fixture-only tests."
+      "sha256": "7948276d99bbb82461c00bf8c34efd43a221a62ac7e9fa50191d7d11af09024e",
+      "reason": "Verified CFB 27 November 19 native relocation and unchanged ownership boundaries across BTF, GDA, settings and practice"
     },
     {
       "path": "Modules/ExtraDynastySettings/Plugin/GameSettingsMenuRows.cs",
-      "sha256": "b6497d934d6e09e7b6ea18e9c360b601555a4daed4a9c599eca5febbdd62e989",
-      "reason": "Approved integrated release-readiness fixes; native contracts and saved data preserved"
+      "sha256": "41f42afb3d38686dc57b9b03e1bcd6776f3921f7fee9155754640362898cf26f",
+      "reason": "Verified CFB 27 November 19 native relocation and unchanged ownership boundaries across BTF, GDA, settings and practice"
     },
     {
       "path": "Modules/ExtraDynastySettings/Plugin/LaunchCoordinator.cs",
@@ -1583,8 +1608,8 @@
     },
     {
       "path": "Modules/ExtraDynastySettings/Plugin/PersistenceController.cs",
-      "sha256": "c004323ab69ee5ae6d9c1ab466326fc28fec63b7b1ef0378935b1fbd260c9584",
-      "reason": "Bounded long-path I/O audit: preserve logical identities, verified helper leases, atomic persistence, native ownership and fixture-only tests."
+      "sha256": "00f966b49d3cce31b6e410576f1562c2fbb118c3cda02151d12c578fa4d4330d",
+      "reason": "Verified CFB 27 November 19 native relocation and unchanged ownership boundaries across BTF, GDA, settings and practice"
     },
     {
       "path": "Modules/ExtraDynastySettings/Plugin/PersistenceHelper.cs",
@@ -1598,13 +1623,13 @@
     },
     {
       "path": "Modules/ExtraDynastySettings/Plugin/build.ps1",
-      "sha256": "05b0bba8d63226652165b930a20065410b5a5d7ce3d895b88caa73a73128b252",
-      "reason": "COT per-Dynasty clock table, native reads/writes and detached persistence"
+      "sha256": "148bdc8fda1258ea0c90c36c78525e4c00344a6aa4a5811c58fce05a75c9b132",
+      "reason": "Display-only names for the current owned native kickoff sets. Preserve meaningful native names, source metadata, grouped filters, preview positions and saved assignments."
     },
     {
       "path": "Modules/ExtraDynastySettings/Shared/Clock/DynastyPlayClockAction.cs",
-      "sha256": "4ff5a6ca899b83f1a8775f579960dd9fd20c09745f48fe6dd26c958822f36698",
-      "reason": "Bounded long-path I/O audit: preserve logical identities, verified helper leases, atomic persistence, native ownership and fixture-only tests."
+      "sha256": "c024bff6d648194637b76d277a2bc62cf3228a06bda068373670adce80951665",
+      "reason": "Verified CFB 27 November 19 native relocation and unchanged ownership boundaries across BTF, GDA, settings and practice"
     },
     {
       "path": "Modules/ExtraDynastySettings/Shared/Clock/ExtendedClock.cs",
@@ -1613,18 +1638,18 @@
     },
     {
       "path": "Modules/ExtraDynastySettings/Shared/Clock/GameLayouts.cs",
-      "sha256": "9d95a19c49eadd06ad7de7541dc499f91e2900578323dbae08d50f16153b53b1",
-      "reason": "Approved integrated release-readiness fixes; native contracts and saved data preserved"
+      "sha256": "1d853664abeafdb4e2ecdb9f2d0a53180e6f9a1097686b33e84f90d0efd7b09f",
+      "reason": "Verified CFB 27 November 19 native relocation and unchanged ownership boundaries across BTF, GDA, settings and practice"
     },
     {
       "path": "Modules/ExtraDynastySettings/Shared/Playcall/SplitHookCode.cs",
-      "sha256": "1766b7a562a2c1d75bca964bc2195de23c8f5d2c91d5eb0215e819f4694fa25a",
-      "reason": "Approved integrated release-readiness fixes; native contracts and saved data preserved"
+      "sha256": "8dbe9e744375006054b6c374552bd49ff449abba0ae27f5de6ca9ed390ffa554",
+      "reason": "Verified CFB 27 November 19 native relocation and unchanged ownership boundaries across BTF, GDA, settings and practice"
     },
     {
       "path": "Modules/ExtraDynastySettings/Shared/Playcall/SplitSettingsAction.cs",
-      "sha256": "c940867e93fc4184b57b521a242bea8aee4493b0cba6215d8e91e4e2d38381f7",
-      "reason": "Bounded long-path I/O audit: preserve logical identities, verified helper leases, atomic persistence, native ownership and fixture-only tests."
+      "sha256": "d2f6317e669516806caa0bcaf1cd78b0a796761e93f65d5b8ebccb75dd098631",
+      "reason": "Verified CFB 27 November 19 native relocation and unchanged ownership boundaries across BTF, GDA, settings and practice"
     },
     {
       "path": "Modules/ExtraDynastySettings/Tools/ClockMigrationChecks.cs",
@@ -1638,13 +1663,33 @@
     },
     {
       "path": "Modules/ExtraDynastySettings/Tools/GameSettingsMenuChecks.cs",
-      "sha256": "6715546d2ad88ecd69e6529a145a45726ce093616381e91e7ff71d3895ec9b63",
-      "reason": "COT hub clock scope, fresh practice picker and recruit star account presentation"
+      "sha256": "25c07154764d88ce1e714e87089d22cb28f6c4a81addd8d83bc369a60ff6ee25",
+      "reason": "Verified CFB 27 November 19 native relocation and unchanged ownership boundaries across BTF, GDA, settings and practice"
     },
     {
       "path": "Modules/ExtraDynastySettings/Tools/LaunchChecks.cs",
       "sha256": "60c2ed11ca16df9ac134b366f1162f8950cc4e7f717b65abcdd49bfcc401e3b4",
       "reason": "Verify detached persistence ownership and absence of global clock writes"
+    },
+    {
+      "path": "Modules/ExtraDynastySettings/Tools/export_layout.py",
+      "sha256": "f117799ed3347ffaf8c7bdefe83e5e46665f1f73109223c9ad6967ff8112ee2b",
+      "reason": "Verified CFB 27 November 19 native relocation and unchanged ownership boundaries across BTF, GDA, settings and practice"
+    },
+    {
+      "path": "Modules/ExtraDynastySettings/Tools/test_controller_deferred.py",
+      "sha256": "a968e7b0a78162c18d0fb29e70bae5c90cc18cde1d5965fb28e07a4a9484caea",
+      "reason": "Verified CFB 27 November 19 native relocation and unchanged ownership boundaries across BTF, GDA, settings and practice"
+    },
+    {
+      "path": "Modules/ExtraDynastySettings/Tools/test_controller_eligibility.py",
+      "sha256": "051c211aa1bd9eb17ab4c5304af5b7407c9c10811cdd96378d85be80a0983900",
+      "reason": "Verified CFB 27 November 19 native relocation and unchanged ownership boundaries across BTF, GDA, settings and practice"
+    },
+    {
+      "path": "Modules/ExtraDynastySettings/docs/native-layout.json",
+      "sha256": "de06683e7f7d2dea312b187a07d829b1c700ef433d7362a8705a3b46898f7fda",
+      "reason": "Verified CFB 27 November 19 native relocation and unchanged ownership boundaries across BTF, GDA, settings and practice"
     },
     {
       "path": "Modules/GamedayAtmosphere/.gitattributes",
@@ -1683,8 +1728,8 @@
     },
     {
       "path": "Modules/GamedayAtmosphere/Source/AttendanceMixer.h",
-      "sha256": "1d6a5b2cb29c16b0db3d42397e49850b1dc24af4b362e8b68f9a761fad6c0930",
-      "reason": "Approved integrated release-readiness fixes; native contracts and saved data preserved"
+      "sha256": "31c51cf12c6140fcef58a126f93fee2d45d9ad3129deb2694fa528eac3e3daa0",
+      "reason": "Verified CFB 27 November 19 native relocation and unchanged ownership boundaries across BTF, GDA, settings and practice"
     },
     {
       "path": "Modules/GamedayAtmosphere/Source/AttendanceRules.h",
@@ -1723,8 +1768,8 @@
     },
     {
       "path": "Modules/GamedayAtmosphere/Source/AwayAppearance.h",
-      "sha256": "fdf189810c43f929fc163e1cf7c8f009e869dfbea5954e9e37d510c8593f2232",
-      "reason": "Reviewed public releases: retain readiness fixes; MMC display branding, complete guides and exact archive compatibility; test catalog reflects current 12-yard default and one-shot action"
+      "sha256": "b4e0ab727649abcddc972688cb13cab65cda7e735cf3bc2bab67a0819d11b851",
+      "reason": "Verified CFB 27 November 19 native relocation and unchanged ownership boundaries across BTF, GDA, settings and practice"
     },
     {
       "path": "Modules/GamedayAtmosphere/Source/AwayCrowd.h",
@@ -1793,8 +1838,8 @@
     },
     {
       "path": "Modules/GamedayAtmosphere/Source/ChantMixerRuntime.h",
-      "sha256": "ea167a3ce8fe8ae86a990c63829416ce25ca86e2034dbf320dfa7b4823f288f8",
-      "reason": "Approved integrated release-readiness fixes; native contracts and saved data preserved"
+      "sha256": "e4e3eaea1f402ae2c063c728995b67f995834d1956e212834827d99f1ac9dfb6",
+      "reason": "Verified CFB 27 November 19 native relocation and unchanged ownership boundaries across BTF, GDA, settings and practice"
     },
     {
       "path": "Modules/GamedayAtmosphere/Source/ConfigSections.h",
@@ -1818,8 +1863,8 @@
     },
     {
       "path": "Modules/GamedayAtmosphere/Source/CrowdAgents.h",
-      "sha256": "e43e0f6fa9037009200d7551eb715b0950c5710ce86cd7319bbc819758cea0f2",
-      "reason": "Approved integrated release-readiness fixes; native contracts and saved data preserved"
+      "sha256": "7cbc0f10937ae8b8046e3eebde46354733823e4005f7730041e2f87461a0345c",
+      "reason": "Verified CFB 27 November 19 native relocation and unchanged ownership boundaries across BTF, GDA, settings and practice"
     },
     {
       "path": "Modules/GamedayAtmosphere/Source/CrowdAudioModel.h",
@@ -1828,8 +1873,8 @@
     },
     {
       "path": "Modules/GamedayAtmosphere/Source/CrowdAudioRuntime.h",
-      "sha256": "7ca368817ffef4f86e26de640dc2e3c85600c7198dfb48e591acf38bb17e5ed6",
-      "reason": "Approved integrated release-readiness fixes; native contracts and saved data preserved"
+      "sha256": "deecdd5c78bca5fd0d49ec38508611300c84c0bf2e24065ad58aa1a0ec02a79a",
+      "reason": "Verified CFB 27 November 19 native relocation and unchanged ownership boundaries across BTF, GDA, settings and practice"
     },
     {
       "path": "Modules/GamedayAtmosphere/Source/CrowdChangeWindow.h",
@@ -1868,8 +1913,8 @@
     },
     {
       "path": "Modules/GamedayAtmosphere/Source/DefensiveAccents.h",
-      "sha256": "3021529a5a1034f4bfa086a9ccab223a58eacf9339efaa8025de5c0813504530",
-      "reason": "Approved integrated release-readiness fixes; native contracts and saved data preserved"
+      "sha256": "4ec186436819b5e6ce3dc839be7242ee2fb56eb46dcfc8342678810688c75066",
+      "reason": "Verified CFB 27 November 19 native relocation and unchanged ownership boundaries across BTF, GDA, settings and practice"
     },
     {
       "path": "Modules/GamedayAtmosphere/Source/DefensiveMotion.h",
@@ -1903,8 +1948,8 @@
     },
     {
       "path": "Modules/GamedayAtmosphere/Source/DirectorShakeRuntime.h",
-      "sha256": "adb0d9bbf225864e3f7ef3aa854ccc12642f2ef5ff253a101e282a71272f9194",
-      "reason": "Approved integrated release-readiness fixes; native contracts and saved data preserved"
+      "sha256": "3e036f7d3cd0b3ea5fc773265bd2f3d6503d56c06efbe253ed697e3cb58e9e48",
+      "reason": "Verified CFB 27 November 19 native relocation and unchanged ownership boundaries across BTF, GDA, settings and practice"
     },
     {
       "path": "Modules/GamedayAtmosphere/Source/DriveEscalation.h",
@@ -1933,13 +1978,13 @@
     },
     {
       "path": "Modules/GamedayAtmosphere/Source/FumbleContact.h",
-      "sha256": "04e337f7e08c2c24a86ac4b08ff8dcf5ea5cb3998c10f857e8a9d704da59b3c6",
-      "reason": "Approved integrated release-readiness fixes; native contracts and saved data preserved"
+      "sha256": "f442216c28b7e758c889f99be95f192394dcfdea548cfa1afcfcfcb06ec6ae8f",
+      "reason": "Verified CFB 27 November 19 native relocation and unchanged ownership boundaries across BTF, GDA, settings and practice"
     },
     {
       "path": "Modules/GamedayAtmosphere/Source/GameBindings.h",
-      "sha256": "c5e5e42508c359376445aa0dcd54150ccecda82c2d4fdf38a45ad7076fb1ffa3",
-      "reason": "Approved integrated release-readiness fixes; native contracts and saved data preserved"
+      "sha256": "f991fc11058920afade396b64b37e0dfed4b954c4527e3de51342cef1b402216",
+      "reason": "Verified CFB 27 November 19 native relocation and unchanged ownership boundaries across BTF, GDA, settings and practice"
     },
     {
       "path": "Modules/GamedayAtmosphere/Source/GameCompatibilityReport.cs",
@@ -1948,8 +1993,8 @@
     },
     {
       "path": "Modules/GamedayAtmosphere/Source/GameplayCamera.h",
-      "sha256": "3b0fcc9fbdf1d8fc6998ea78d6e6ff463ae4bfb1ec002656954a575aef873306",
-      "reason": "Approved integrated release-readiness fixes; native contracts and saved data preserved"
+      "sha256": "c8de13c8eba561c3afcd91a243f1ea7538741478dabdcb58cd3efd0d83c975ac",
+      "reason": "Verified CFB 27 November 19 native relocation and unchanged ownership boundaries across BTF, GDA, settings and practice"
     },
     {
       "path": "Modules/GamedayAtmosphere/Source/HailMaryPass.h",
@@ -2073,8 +2118,8 @@
     },
     {
       "path": "Modules/GamedayAtmosphere/Source/NativeAudience.h",
-      "sha256": "19a0b007708f771bd8a66c80c4d3a01b4d789a3f44b82e2a69ecc1db0255224d",
-      "reason": "Approved integrated release-readiness fixes; native contracts and saved data preserved"
+      "sha256": "af99a1e1d3d5b4476eab057128a00701ac49bd290a9038df32a47115bd309e47",
+      "reason": "Verified CFB 27 November 19 native relocation and unchanged ownership boundaries across BTF, GDA, settings and practice"
     },
     {
       "path": "Modules/GamedayAtmosphere/Source/NativeCameraAdmission.h",
@@ -2083,8 +2128,8 @@
     },
     {
       "path": "Modules/GamedayAtmosphere/Source/NativeCapacity.h",
-      "sha256": "06b5d05687570599daf4cc6619110e96d17152525cae1ce94c302ac16c069828",
-      "reason": "Approved integrated release-readiness fixes; native contracts and saved data preserved"
+      "sha256": "f32314886bc0be3106e3180aadb477f254bd2f382a73a8d57648333ab0534210",
+      "reason": "Verified CFB 27 November 19 native relocation and unchanged ownership boundaries across BTF, GDA, settings and practice"
     },
     {
       "path": "Modules/GamedayAtmosphere/Source/NativePlayCall.h",
@@ -2103,8 +2148,8 @@
     },
     {
       "path": "Modules/GamedayAtmosphere/Source/NativeRuntime.cpp",
-      "sha256": "5c755b25f03862a8a8f238611a65a4f20e21f84cef14c8f0e2a5c51f04d605fa",
-      "reason": "Bounded long-path I/O audit: preserve logical identities, verified helper leases, atomic persistence, native ownership and fixture-only tests."
+      "sha256": "498c2723762d6a13da401ad16c1b1c79bb7f38311ba65dff77525642bff8275c",
+      "reason": "Verified CFB 27 November 19 native relocation and unchanged ownership boundaries across BTF, GDA, settings and practice"
     },
     {
       "path": "Modules/GamedayAtmosphere/Source/NativeSackFacts.h",
@@ -2113,18 +2158,18 @@
     },
     {
       "path": "Modules/GamedayAtmosphere/Source/NativeSettingsMenu.h",
-      "sha256": "29c94e8d8d3a40d4e9187ff1637f62258ac70c1057499cd6c761cad0263cd170",
-      "reason": "Bounded long-path I/O audit: preserve logical identities, verified helper leases, atomic persistence, native ownership and fixture-only tests."
+      "sha256": "d47fdb051e36e72b350917ca07940a501173baa34af663f537a945baee91e669",
+      "reason": "Verified CFB 27 November 19 native relocation and unchanged ownership boundaries across BTF, GDA, settings and practice"
     },
     {
       "path": "Modules/GamedayAtmosphere/Source/NativeSkillSignals.h",
-      "sha256": "28efa131bfd1f02f4fec21afb33572ff48cd036005a532c80063d978ef783ab3",
-      "reason": "Approved integrated release-readiness fixes; native contracts and saved data preserved"
+      "sha256": "5d1be1432000c4712726005441fb14989acc5701639bac6e67a9fc7d9f729f95",
+      "reason": "Verified CFB 27 November 19 native relocation and unchanged ownership boundaries across BTF, GDA, settings and practice"
     },
     {
       "path": "Modules/GamedayAtmosphere/Source/NativeStartingAttendance.h",
-      "sha256": "ccc57519eff9d333c0de5a0ea9ae628dcf49468d350f09de570b59b579d4e903",
-      "reason": "Approved integrated release-readiness fixes; native contracts and saved data preserved"
+      "sha256": "0eeac451a7cc9567910b941f329516b9fb6f422bb8fdb13925c1ca53c0ef646e",
+      "reason": "Verified CFB 27 November 19 native relocation and unchanged ownership boundaries across BTF, GDA, settings and practice"
     },
     {
       "path": "Modules/GamedayAtmosphere/Source/OpeningAtmosphere.h",
@@ -2193,8 +2238,8 @@
     },
     {
       "path": "Modules/GamedayAtmosphere/Source/Probe.cpp",
-      "sha256": "7a2eb282e7382268d9977abce385a0a6f2c876d4505ef489f847f8a793e32cc2",
-      "reason": "Approved integrated release-readiness fixes; native contracts and saved data preserved"
+      "sha256": "965ad51ef09b278c13c476b4265323c1fef2b39000b0a6f410da8aaaf406e57f",
+      "reason": "Verified CFB 27 November 19 native relocation and unchanged ownership boundaries across BTF, GDA, settings and practice"
     },
     {
       "path": "Modules/GamedayAtmosphere/Source/Product.json",
@@ -2338,8 +2383,8 @@
     },
     {
       "path": "Modules/GamedayAtmosphere/Source/Showboating.h",
-      "sha256": "b5f42c238b354c654f5805b87dc8a46f5a37e8ccbddeb4d0c9e590cadadf6d28",
-      "reason": "Approved integrated release-readiness fixes; native contracts and saved data preserved"
+      "sha256": "c2170faeeb6dcb5dfcbb5370b30b975059c75d785b888d412536f859757b5874",
+      "reason": "Verified CFB 27 November 19 native relocation and unchanged ownership boundaries across BTF, GDA, settings and practice"
     },
     {
       "path": "Modules/GamedayAtmosphere/Source/ShowcaseAttendance.h",
@@ -2383,8 +2428,8 @@
     },
     {
       "path": "Modules/GamedayAtmosphere/Source/StartingAttendanceLaunchHook.h",
-      "sha256": "844c02bb17c31bd2cfcd495381d2bd9e1716d5f8f95465d4364cf5f3208223bf",
-      "reason": "Approved integrated release-readiness fixes; native contracts and saved data preserved"
+      "sha256": "44093bca192c85a611a6be7fec65364707f5a6cf66b11e213ef81718326441c1",
+      "reason": "Verified CFB 27 November 19 native relocation and unchanged ownership boundaries across BTF, GDA, settings and practice"
     },
     {
       "path": "Modules/GamedayAtmosphere/Source/StartingAttendanceTransition.h",
@@ -2408,8 +2453,8 @@
     },
     {
       "path": "Modules/GamedayAtmosphere/Source/SwellAudioRuntime.h",
-      "sha256": "444644e9285ae8bb3fc42b7780ab8278fc74a6afa4cb9f4246cd011f0914d340",
-      "reason": "Approved integrated release-readiness fixes; native contracts and saved data preserved"
+      "sha256": "e32404bf0af8e5528b4ef81d5b260d2de87fe76fbbec24131eb89336243fb9fc",
+      "reason": "Verified CFB 27 November 19 native relocation and unchanged ownership boundaries across BTF, GDA, settings and practice"
     },
     {
       "path": "Modules/GamedayAtmosphere/Source/UpsetAtmosphere.h",
@@ -2433,8 +2478,8 @@
     },
     {
       "path": "Modules/GamedayAtmosphere/Tests/AttendanceMixerTests.cpp",
-      "sha256": "f468fa396542f2b706c370e03a47eec7285d7745a69d466c8f5aa66738e6a26a",
-      "reason": "Approved integrated release-readiness fixes; native contracts and saved data preserved"
+      "sha256": "568c06a061f74d3a6fa315dc766bd9c939166525ff9abb10eb99a5c09fa5dd98",
+      "reason": "Verified CFB 27 November 19 native relocation and unchanged ownership boundaries across BTF, GDA, settings and practice"
     },
     {
       "path": "Modules/GamedayAtmosphere/Tests/AttendanceTimelineTests.cpp",
@@ -2477,14 +2522,29 @@
       "reason": "Approved integrated release-readiness fixes; native contracts and saved data preserved"
     },
     {
+      "path": "Modules/GamedayAtmosphere/Tests/ChantRuntimeTests.cpp",
+      "sha256": "4c6ecfb393a9c1a91b18572e2c5cfa46340e17b05aee43bdf38afeca1246f74f",
+      "reason": "Verified CFB 27 November 19 native relocation and unchanged ownership boundaries across BTF, GDA, settings and practice"
+    },
+    {
       "path": "Modules/GamedayAtmosphere/Tests/ConfigurationOptions.inc",
       "sha256": "52f7e1dd87f00a6781a01eef9ee672eaba8a44a00d2d0e62f4720ea75c42bb6f",
       "reason": "Reviewed public releases: retain readiness fixes; MMC display branding, complete guides and exact archive compatibility; test catalog reflects current 12-yard default and one-shot action"
     },
     {
+      "path": "Modules/GamedayAtmosphere/Tests/CrowdAudioRuntimeTests.cpp",
+      "sha256": "af562cc85e359e9da66f787da36ff132ecf474a6ab6b33420fc5c97bcf6f6b88",
+      "reason": "Verified CFB 27 November 19 native relocation and unchanged ownership boundaries across BTF, GDA, settings and practice"
+    },
+    {
       "path": "Modules/GamedayAtmosphere/Tests/CrowdCohesionTests.cpp",
       "sha256": "6219178a0161b2e65420dac676f7c0f0ff207dd6b695f405be3516352f494c88",
       "reason": "Approved integrated release-readiness fixes; native contracts and saved data preserved"
+    },
+    {
+      "path": "Modules/GamedayAtmosphere/Tests/DefensiveAccentTests.cpp",
+      "sha256": "c397e75bc5f41fa7c938287e0596b19c89c9db941e6f8e7a540b899c97b39a79",
+      "reason": "Verified CFB 27 November 19 native relocation and unchanged ownership boundaries across BTF, GDA, settings and practice"
     },
     {
       "path": "Modules/GamedayAtmosphere/Tests/DepartureModelTests.cpp",
@@ -2498,13 +2558,18 @@
     },
     {
       "path": "Modules/GamedayAtmosphere/Tests/DirectorShakeRuntimeTests.cpp",
-      "sha256": "6f118e45da8583a932b5ff0329ecd4942c5d9f049b4efd60b3463f58b0200cd8",
-      "reason": "Verify new explicit configuration guard and both offline Dynasty/Play Now camera scopes; reject practice and online sessions while preserving the full camera regression suite."
+      "sha256": "2c381dbe9378fa2e95c6383827254078946392b47d9b7c837b483cb0996b7a9c",
+      "reason": "Verified CFB 27 November 19 native relocation and unchanged ownership boundaries across BTF, GDA, settings and practice"
     },
     {
       "path": "Modules/GamedayAtmosphere/Tests/FumbleContactTests.cpp",
-      "sha256": "98c6d4abfc8fc0e32cbcba5b8d724fa622e2eb8753ec65f132caf8c336669878",
-      "reason": "Approved integrated release-readiness fixes; native contracts and saved data preserved"
+      "sha256": "d36d5741515a9b563017fca52fc4c69a4e6d3e8c8979da570eee39e408223f6a",
+      "reason": "Verified CFB 27 November 19 native relocation and unchanged ownership boundaries across BTF, GDA, settings and practice"
+    },
+    {
+      "path": "Modules/GamedayAtmosphere/Tests/GameplayCameraTests.cpp",
+      "sha256": "ff2a9b75156b29690f03c07e5a291972a65b7d534fc9569729256477087ef49b",
+      "reason": "Verified CFB 27 November 19 native relocation and unchanged ownership boundaries across BTF, GDA, settings and practice"
     },
     {
       "path": "Modules/GamedayAtmosphere/Tests/HomeCrowdQuietTests.cpp",
@@ -2543,18 +2608,23 @@
     },
     {
       "path": "Modules/GamedayAtmosphere/Tests/NativeAppearanceTests.cpp",
-      "sha256": "c44681933147c3479a10333f93d98875bfe8fa929c2fd2e42604ead570fb3f8e",
-      "reason": "Reviewed public releases: retain readiness fixes; MMC display branding, complete guides and exact archive compatibility; test catalog reflects current 12-yard default and one-shot action"
+      "sha256": "889add4f91420b878e5d11727bb6ac9c03971200639d4539494b7932510f8554",
+      "reason": "Verified CFB 27 November 19 native relocation and unchanged ownership boundaries across BTF, GDA, settings and practice"
     },
     {
       "path": "Modules/GamedayAtmosphere/Tests/NativeAudienceTests.cpp",
-      "sha256": "cbdbf65a7eca751f4edab2c973f92f35ab4fc9ce54c71b46ad79b92e0d73c0c4",
-      "reason": "Approved integrated release-readiness fixes; native contracts and saved data preserved"
+      "sha256": "4c6f669b73bda3631978b373c73524a519680c4057f8f1a45cc181594df9a614",
+      "reason": "Verified CFB 27 November 19 native relocation and unchanged ownership boundaries across BTF, GDA, settings and practice"
+    },
+    {
+      "path": "Modules/GamedayAtmosphere/Tests/NativeSkillSignalsTests.cpp",
+      "sha256": "b4f257a8b4926e06d75bce4ec4177e5a2d574391946e37931a0023d7f2179f2c",
+      "reason": "Verified CFB 27 November 19 native relocation and unchanged ownership boundaries across BTF, GDA, settings and practice"
     },
     {
       "path": "Modules/GamedayAtmosphere/Tests/NativeStartingAttendanceTests.cpp",
-      "sha256": "07d647ee92e7de75d720e65c811e09ac012d701879d6e4e78159e791cfa79c31",
-      "reason": "Reviewed public releases: retain readiness fixes; MMC display branding, complete guides and exact archive compatibility; test catalog reflects current 12-yard default and one-shot action"
+      "sha256": "162449cd28ecd2e6c2d42b2d5225a98f5c7ab1bf32fe73d71773717c134663a4",
+      "reason": "Verified CFB 27 November 19 native relocation and unchanged ownership boundaries across BTF, GDA, settings and practice"
     },
     {
       "path": "Modules/GamedayAtmosphere/Tests/PopulationReactionsTests.cpp",
@@ -2613,8 +2683,8 @@
     },
     {
       "path": "Modules/GamedayAtmosphere/Tests/SeatRuntimeTests.cpp",
-      "sha256": "b3ae3961068e68547eae48aa5ab3a8324a3684e5dc8765d82e0786a22234d229",
-      "reason": "Approved integrated release-readiness fixes; native contracts and saved data preserved"
+      "sha256": "14a73660a1ca4db3effff338c2a41a15dc661e09c6996ba95954990ea8966aeb",
+      "reason": "Verified CFB 27 November 19 native relocation and unchanged ownership boundaries across BTF, GDA, settings and practice"
     },
     {
       "path": "Modules/GamedayAtmosphere/Tests/SettingsMenuTests.cpp",
@@ -2625,6 +2695,21 @@
       "path": "Modules/GamedayAtmosphere/Tests/SettingsTests.cs",
       "sha256": "9f36d2024569e8a531a06385675bb461522b1aad4bc636fb5fd043ce39a79991",
       "reason": "Release-readiness provenance and approved integrated regression coverage"
+    },
+    {
+      "path": "Modules/GamedayAtmosphere/Tests/ShowboatingTests.cpp",
+      "sha256": "08c29d0ed34e55eacc7bbf2f9e2b5fd7576135eb8f84d7f8848ed3842489cffd",
+      "reason": "Verified CFB 27 November 19 native relocation and unchanged ownership boundaries across BTF, GDA, settings and practice"
+    },
+    {
+      "path": "Modules/GamedayAtmosphere/Tests/StadiumOccupancyTests.cpp",
+      "sha256": "4f521317e56d0653feb52427d26379e84c29db52ab92c8052d8ca75358a89d15",
+      "reason": "Verified CFB 27 November 19 native relocation and unchanged ownership boundaries across BTF, GDA, settings and practice"
+    },
+    {
+      "path": "Modules/GamedayAtmosphere/Tests/StadiumSilenceTests.cpp",
+      "sha256": "47085c418444cb07ebc40201fe08229da8b2afea8c6652c5882bda6e52d72c68",
+      "reason": "Verified CFB 27 November 19 native relocation and unchanged ownership boundaries across BTF, GDA, settings and practice"
     },
     {
       "path": "Modules/GamedayAtmosphere/Tests/StartingAttendanceLaunchHookTests.cpp",
@@ -2640,6 +2725,11 @@
       "path": "Modules/GamedayAtmosphere/Tests/SustainedCrowdTests.cpp",
       "sha256": "6d544ec18ba6bb04cb609201c59cc5a4f00a93ce4d1ea441c839124f45dc6091",
       "reason": "Approved integrated release-readiness fixes; native contracts and saved data preserved"
+    },
+    {
+      "path": "Modules/GamedayAtmosphere/Tests/SwellRuntimeTests.cpp",
+      "sha256": "7b3eaa1d7497ff30dc551a163686d683e1d8ce90c6c522a1d7fd9d695eedb4e5",
+      "reason": "Verified CFB 27 November 19 native relocation and unchanged ownership boundaries across BTF, GDA, settings and practice"
     },
     {
       "path": "Modules/GamedayAtmosphere/Tests/Tuning2020Tests.cpp",

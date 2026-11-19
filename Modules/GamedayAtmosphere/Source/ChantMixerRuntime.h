@@ -31,8 +31,8 @@ class Runtime {
     Address ref(Address p){return at<Address>(p)&~Address(4);}
     bool named(Address p,const char* name){char text[128]{};size_t n=std::strlen(name)+1;return n<=sizeof(text)&&copy(p,text,n)&&!std::memcmp(text,name,n);}
     bool borrowedOwner(Address owner){
-        return owner>=0x10040&&at<Address>(owner-0x40)==image_+0xb227098&&
-            at<Address>(owner)==image_+0xb227178&&at<Address>(owner+8)==image_+0xb227188;
+        return owner>=0x10040&&at<Address>(owner-0x40)==image_+0xb227038&&
+            at<Address>(owner)==image_+0xb227118&&at<Address>(owner+8)==image_+0xb227128;
     }
     static bool tryLock(CRITICAL_SECTION* cs){
         __try {return TryEnterCriticalSection(cs)!=0;}
@@ -47,7 +47,7 @@ class Runtime {
         Address begin=at<Address>(manager+0xc0),end=at<Address>(manager+0xc8);
         if(begin>=0x10000&&end>=begin&&end-begin<=32*512&&(end-begin)%32==0){
             for(Address p=begin;p<end&&!result;p+=32){
-                Address handle=at<Address>(p);if(at<Address>(handle)!=image_+0xaf01718)continue;
+                Address handle=at<Address>(p);if(at<Address>(handle)!=image_+0xaf01738)continue;
                 Address asset=ref(handle+8);
                 Address name=at<Address>(asset+0x18);
                 if(!named(name,"Sound/CFB/CoreAudio/Utility/Mixers/VolumeSettings_MXR")&&!named(name,"Sound/CFB/CoreAudio/Utility/Mixers/MasterMixer_MXR"))continue;
@@ -126,7 +126,7 @@ public:
         if(handle_&&(group==9||group==13||group==15||group==18)&&selectedGroup_==group&&desired>0&&db_>0&&wanted&&mute==muted_&&
            std::fabs(desired-db_.load())>=0.125f&&time-lastPositiveChange_<300&&!(group!=9&&desired<db_)&&!(immediateReduction&&desired<db_))return;
         if(handle_&&(!wanted||std::fabs(desired-db_.load())>=0.125f||group!=selectedGroup_||mute!=muted_)){
-            if(at<Address>(handle_)!=image_+0xaf01718||ref(handle_+8)!=asset_||!guardedRelease(manager,handle_)){fault();return;}
+            if(at<Address>(handle_)!=image_+0xaf01738||ref(handle_+8)!=asset_||!guardedRelease(manager,handle_)){fault();return;}
             ++releases_;handle_=asset_=0;db_=0;
         }
         if(group!=selectedGroup_){selectedGroup_=group;haveTemplates_=false;}
@@ -136,7 +136,7 @@ public:
         if(found==presets_.end())found=presets_.emplace(key,std::make_unique<Preset>(templates_,desired,uint64_t(key)+0x10000,mute)).first;
         Address asset=found->second->asset.address(),handle=0;
         if(!guardedCreate(manager,asset,handle)){fault();return;}
-        if(at<Address>(handle)!=image_+0xaf01718||ref(handle+8)!=asset){fault();return;}
+        if(at<Address>(handle)!=image_+0xaf01738||ref(handle+8)!=asset){fault();return;}
         handle_=handle;asset_=asset;db_=desired;muted_=mute;++creations_;
         if((group==9||group==13||group==15||group==18)&&desired>0)lastPositiveChange_=time;
         if(note_)note_("group-mixer: owned layer created for the selected group only");

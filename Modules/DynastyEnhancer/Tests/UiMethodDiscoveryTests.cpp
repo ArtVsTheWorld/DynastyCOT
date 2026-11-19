@@ -24,7 +24,7 @@ struct Fixture {
         const auto bytes=binary(file);auto memory=arena.allocate(8*1024*1024);memcpy(memory,bytes.data(),bytes.size());asset=reinterpret_cast<uintptr_t>(memory);
         for(const auto& row:rows){const auto at=row.at("offset").get<size_t>();definitions.push_back(asset+at);
             const auto pool=row.at("pool").get<std::vector<std::string>>();auto values=reinterpret_cast<uintptr_t*>(arena.allocate(pool.size()*8));
-            for(size_t i=0;i<pool.size();++i){auto value=arena.allocate(24);auto text=arena.allocate(pool[i].size()+13);const auto vtable=game+0xbc41750;
+            for(size_t i=0;i<pool.size();++i){auto value=arena.allocate(24);auto text=arena.allocate(pool[i].size()+13);const auto vtable=game+0xbc416f0;
                 memcpy(value,&vtable,8);const auto ptr=reinterpret_cast<uintptr_t>(text);memcpy(value+16,&ptr,8);
                 const auto length=static_cast<unsigned short>(pool[i].size());memcpy(text+4,&length,2);memcpy(text+6,&length,2);memcpy(text+12,pool[i].c_str(),pool[i].size()+1);values[i]=reinterpret_cast<uintptr_t>(value);
             }

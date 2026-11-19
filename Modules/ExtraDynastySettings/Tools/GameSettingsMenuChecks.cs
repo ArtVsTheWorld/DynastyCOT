@@ -41,17 +41,17 @@ class GameSettingsMenuChecks
             remote = VirtualAlloc(IntPtr.Zero, new UIntPtr(0x5000), 0x3000, 0x40).ToInt64();
             capture = Marshal.AllocHGlobal(8).ToInt64();
             if (image == 0 || remote == 0) throw new Exception("allocation failed");
-            foreach (long rva in new long[] { 0xf63f9f0, 0xf55c998, 0xf905618, 0x2e94d0a, 0x799fa10, 0x7997998, 0x7997950, 0xad960e0, 0x79a847d, 0x79a5cd1, 0xd9eb808, 0xf3fddbc, 0xdaa6758, 0xdb06d40, 0x27a8710, 0x8459ff0 })
+            foreach (long rva in new long[] { 0xf63f9f0, 0xf55c998, 0xf905618, 0x2e94d0a, 0x799faa0, 0x7997a28, 0x79979e0, 0xad960f0, 0x79a850d, 0x79a5d61, 0xd9eb808, 0xf3fddbc, 0xdaa6758, 0xdb06d40, 0x27a8710, 0x845a050 })
                 if (VirtualAlloc(new IntPtr(image + (rva & ~4095L)), new UIntPtr(4096), 0x1000, 0x40) == IntPtr.Zero) throw new Exception("page commit failed");
-            Code(image+0x8459ff0,Hex("33c0c3"));
+            Code(image+0x845a050,Hex("33c0c3"));
             Code(image + 0x2e94d0a, Hex("418901c3"));
-            Code(image + 0xad960e0, System.Text.Encoding.ASCII.GetBytes("value\0"));
-            Code(image + 0x799fa10, Jump(Marshal.GetFunctionPointerForDelegate(serialize).ToInt64()));
-            Code(image + 0x7997998, Concat(MovR10(capture), Hex("41891a4883c4205b5f5ec3")));
-            Code(image + 0x7997950, Concat(MovR10(capture), Hex("41c702630000004883c4205b5f5ec3")));
-            Code(image + 0x79a847d, Hex("4883c428415f5ec3"));
-            Code(image + 0x79a5cd1, Concat(MovR10(capture), Hex("418902"), Jump(image + 0x79a847d)));
-            Code(remote + 0x1400, Concat(MovR10(capture), Hex("418902"), Jump(image + 0x79a847d)));
+            Code(image + 0xad960f0, System.Text.Encoding.ASCII.GetBytes("value\0"));
+            Code(image + 0x799faa0, Jump(Marshal.GetFunctionPointerForDelegate(serialize).ToInt64()));
+            Code(image + 0x7997a28, Concat(MovR10(capture), Hex("41891a4883c4205b5f5ec3")));
+            Code(image + 0x79979e0, Concat(MovR10(capture), Hex("41c702630000004883c4205b5f5ec3")));
+            Code(image + 0x79a850d, Hex("4883c428415f5ec3"));
+            Code(image + 0x79a5d61, Concat(MovR10(capture), Hex("418902"), Jump(image + 0x79a850d)));
+            Code(remote + 0x1400, Concat(MovR10(capture), Hex("418902"), Jump(image + 0x79a850d)));
             clockData=Allocate(0x4000);Marshal.WriteInt64(clockData,0x10,Marshal.StringToHGlobalAnsi("Offensive Play Clock").ToInt64());
             dll.GetType("DynastyPlayClock.DynastyPlayClockAction").GetField("dataAddress",BindingFlags.NonPublic|BindingFlags.Static).SetValue(null,clockData.ToInt64());
             IntPtr profile=Allocate(8),profileVt=Allocate(0x18);Marshal.WriteInt64(profile,profileVt.ToInt64());
@@ -72,7 +72,7 @@ class GameSettingsMenuChecks
             Marshal.WriteInt32(info, 0xd10, 8); Marshal.WriteInt32(info, 0xd14, 7);
             IntPtr adapter = Allocate(0x430), response = Allocate(0x150), vt = Allocate(0xa18);
             Marshal.WriteInt64(adapter, 0x418, response.ToInt64()); Marshal.WriteInt64(response, vt.ToInt64());
-            Marshal.WriteInt64(vt, 0xa10, image + 0x8459ff0);
+            Marshal.WriteInt64(vt, 0xa10, image + 0x845a050);
             Marshal.WriteInt64(new IntPtr(image + 0xf905618), adapter.ToInt64());
             Getter getter = (Getter)Marshal.GetDelegateForFunctionPointer(new IntPtr(remote + 0x900), typeof(Getter));
             getter(info, 1, outCd, outLimit); Check(Marshal.ReadInt32(outCd) == 2 && Marshal.ReadInt32(outLimit) == 3, "defense cooldown and limit override together");
@@ -230,7 +230,7 @@ class GameSettingsMenuChecks
         byte[] code = (byte[])dll.GetType("OfflinePlaycall.SplitHookCode").GetMethod("Create", BindingFlags.Static | BindingFlags.NonPublic).Invoke(null, new object[] { image, remote, prior });
         Code(remote, code);
         Code(remote+0x1700,Hex("b801000000c3"));
-        Code(remote + 0x1400, Concat(MovR10(capture), Hex("418902"), Jump(image + 0x79a847d)));
+        Code(remote + 0x1400, Concat(MovR10(capture), Hex("418902"), Jump(image + 0x79a850d)));
         Code(remote + 0x1600, Concat(Hex("5641574883ec284889ce4189d74489c0"), Jump(remote + 0x600)));
     }
     static void SetId(int id) { Marshal.WriteInt32(new IntPtr(image + 0xf55c998), id); }

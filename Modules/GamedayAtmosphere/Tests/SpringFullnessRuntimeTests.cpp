@@ -21,10 +21,10 @@ struct Scene {
         }
         tagHolder={n,reinterpret_cast<A>(raw.data())};pointHolder={n,reinterpret_cast<A>(coordinates.data())};
         tagValue={0,reinterpret_cast<A>(tagHolder.data())};pointValue={0,reinterpret_cast<A>(pointHolder.data())};
-        entries={image+0xb486033,reinterpret_cast<A>(tagValue.data()),image+attendance::bindings::CrowdPositionKey,reinterpret_cast<A>(pointValue.data())};
+        entries={image+0xb485fd3,reinterpret_cast<A>(tagValue.data()),image+attendance::bindings::CrowdPositionKey,reinterpret_cast<A>(pointValue.data())};
         map={reinterpret_cast<A>(entries.data()),reinterpret_cast<A>(entries.data()+4)};
         put(address(),image+attendance::bindings::SceneCrowdVtable);put(address()+0x908,parts());put(address()+0x9f0,render());put(address()+0x9f8,reinterpret_cast<A>(map.data()));
-        put(parts(),image+0xb484f98);put(parts()+0x48,reinterpret_cast<A>(map.data()));
+        put(parts(),image+0xb484f38);put(parts()+0x48,reinterpret_cast<A>(map.data()));
         put(render(),image+attendance::bindings::CrowdRendererVtable);put(render()+0x188,reinterpret_cast<A>(masks.data()));put(render()+0x190,reinterpret_cast<A>(masks.data()+n));
     }
     A address()const{return reinterpret_cast<A>(object.data());}A render()const{return reinterpret_cast<A>(renderer.data());}A parts()const{return reinterpret_cast<A>(component.data());}

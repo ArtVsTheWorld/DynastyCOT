@@ -18,7 +18,7 @@ void __fastcall faultPost(Address,const Parameter*){++faultCalls;RaiseException(
 template<class T>void put(Address address,T value){memcpy(reinterpret_cast<void*>(address),&value,sizeof(value));}
 Address make(){
     auto p=reinterpret_cast<Address>(VirtualAlloc(nullptr,0x1000,MEM_COMMIT|MEM_RESERVE,PAGE_READWRITE));assert(p);
-    put(p,base+0xb227098);put(p+0x40,base+0xb227178);put(p+0x48,base+0xb227188);put<int>(p+0x1f4,100);return p;
+    put(p,base+0xb227038);put(p+0x40,base+0xb227118);put(p+0x48,base+0xb227128);put<int>(p+0x1f4,100);return p;
 }
 void expectClose(float a,float b){assert(std::fabs(a-b)<0.00001f);}
 int main(){
@@ -59,7 +59,7 @@ int main(){
     count=messages.size();put(next+0x48,Address(0));tick(next);assert(messages.size()==count); // Bad owner is ignored.
     assert(originalCalls==runtime.callbacks());
     Runtime gentle;gentle.configure(base,original,request,nullptr,post,clockValue,true);
-    put(next+0x48,base+0xb227188);wanted={7890,3,true,0.39f,0.35f};
+    put(next+0x48,base+0xb227128);wanted={7890,3,true,0.39f,0.35f};
     gentle.tick(next+0x40,11,22,33);expectClose(messages.back().value,0.820625f);
     wanted.remaining=0.8f;timeValue+=100;gentle.tick(next+0x40,11,22,33);
     expectClose(messages.back().value,0.820625f);
@@ -88,7 +88,7 @@ int main(){
     wanted.remaining=1;for(int i=0;i<80;i++){timeValue+=100;gentle.tick(next+0x40,11,22,33);}
     expectClose(messages.back().value,0.478125f); // Permanent loss still wins.
     Runtime failed;failed.configure(base,original,request,nullptr,faultPost,clockValue,true);
-    put(next+0x48,base+0xb227188);wanted={5678,2,true,0.4f,.2f};
+    put(next+0x48,base+0xb227128);wanted={5678,2,true,0.4f,.2f};
     failed.tick(next+0x40,11,22,33);assert(!failed.healthy()&&faultCalls==1);
     failed.tick(next+0x40,11,22,33);assert(faultCalls==1); // Never retry a failed native queue.
     Runtime legacy;legacy.configure(base,original,productionRequest,nullptr,post,clockValue,true);

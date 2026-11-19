@@ -56,7 +56,8 @@ ConversionStats convertRecruitingResponse(View& view,uintptr_t root,StringSetter
         if(!view.members(recruit,record)||!record.count("ScoutingAttributes")||!record.count("PercentageScouted")||!view.number(record.at("PercentageScouted"),percent)||percent<0||percent>100){++stats.unsupported;continue;}
         std::vector<uintptr_t> attributes;if(!view.array(record.at("ScoutingAttributes"),attributes,32)){++stats.unsupported;continue;}++stats.recruits;
         std::map<std::string,double> revealed;
-        const auto selected=enhancements::options();const auto identity=measurables::identity(view,record);
+        const auto selected=enhancements::options();
+        const bool showMeasurements=selected.measurables&&(!selected.recruiting||selected.recruitingScale!=enhancements::GradeScale::Blind);
         struct Attribute {uintptr_t at=0;std::map<std::string,uintptr_t> fields;std::string key;bool slider=false;double low=0,high=0;};
         std::vector<Attribute> rows;rows.reserve(attributes.size());
         // Gather the native reveal state once. In particular the dash must
@@ -67,13 +68,16 @@ ConversionStats convertRecruitingResponse(View& view,uintptr_t root,StringSetter
             if(!row.slider&&(row.low>0||percent==100)&&row.low>=0&&row.low<=100&&measurables::physical(row.key))revealed[row.key]=row.low;
             rows.push_back(std::move(row));
         }
-        if(percent==100&&selected.measurables&&(!revealed.count("speed")||!revealed.count("acceleration"))){std::map<std::string,double> extra;supplement(view,record,extra);for(const auto& value:extra){bool present=false;for(const auto& row:rows)present|=row.key==value.first;if(!present)revealed.insert(value);}}
+        if(percent==100&&showMeasurements&&(!revealed.count("speed")||!revealed.count("acceleration"))){std::map<std::string,double> extra;supplement(view,record,extra);for(const auto& value:extra){bool present=false;for(const auto& row:rows)present|=row.key==value.first;if(!present)revealed.insert(value);}}
+        const auto inputs=showMeasurements?measurables::revealedInputs(revealed):measurables::Inputs{};
+        const auto identity=showMeasurements?measurables::seedIdentity(enhancements::currentOptionsLeague.load(),measurables::identity(view,record)):std::string();
         for(const auto& row:rows){const auto attribute=row.at;const auto slider=row.slider;const auto low=row.low,high=row.high;const auto& key=row.key;
             // This is the native incognito case. Do not turn its sentinel 0
             // into an F, and retain the original hidden-widget behavior.
             if(!slider&&low==0&&percent<100){++stats.unknown;continue;}
-            if(selected.measurables&&measurables::physical(key)&&(!selected.recruiting||selected.recruitingScale!=enhancements::GradeScale::Blind)){
-                auto e=measurables::estimate(key,revealed,identity,percent==100);
+            const auto event=showMeasurements?measurables::eventFor(key):std::nullopt;
+            if(event){
+                auto e=measurables::estimate(*event,inputs,identity,percent==100);
                 const auto label=e.value.empty()?std::string("?"):e.value;
                 if(!e.label.empty())setString(attribute,"Name",e.label.c_str());
                 setString(attribute,"SliderStart",label.c_str());setString(attribute,"SliderEnd",label.c_str());setBool(attribute,"HaveSlider",false);++stats.attributes;continue;

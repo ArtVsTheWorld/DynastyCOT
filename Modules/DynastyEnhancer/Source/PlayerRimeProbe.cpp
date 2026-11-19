@@ -24,7 +24,7 @@ Json snap(uintptr_t at,size_t n=128){return {{"at",at},{"bytes",bytes(at,n)}};}
 void note(Json j){std::lock_guard<std::mutex> g(lock);if(queue.size()<128)queue.push_back(std::move(j));}
 void observe(void* object,const void* notification){
     if(disabled)return;const auto at=reinterpret_cast<uintptr_t>(object),data=value<uintptr_t>(at+0x38);
-    if(value<uintptr_t>(at)!=base+0xb519b10||value<uintptr_t>(data)!=base+0xb511708)return;
+    if(value<uintptr_t>(at)!=base+0xb519ab0||value<uintptr_t>(data)!=base+0xb5116a8)return;
     // Asset-field candidates narrow diagnostic logging only; they do not prove
     // that this live converter owns a rating. Never use this as a production gate.
     const auto flags=value<unsigned>(data+0x18);const bool target=flags==161576263||flags==157174688||flags==142592301;
@@ -44,7 +44,7 @@ void observe(void* object,const void* notification){
 }
 void __fastcall onChanged(void* object,const void* notification){++inflight;observe(object,notification);changed(object,notification);--inflight;}
 void __fastcall onInit(void* object){++inflight;observe(object,nullptr);originalInitial(object);--inflight;}
-bool swap(uintptr_t off,void* old,void* next){auto p=reinterpret_cast<PVOID volatile*>(base+0xb519b10+off);DWORD before=0,tmp=0;if(!VirtualProtect(const_cast<PVOID*>(p),8,PAGE_READWRITE,&before))return false;const auto previous=InterlockedCompareExchangePointer(p,next,old);VirtualProtect(const_cast<PVOID*>(p),8,before,&tmp);return previous==old;}
+bool swap(uintptr_t off,void* old,void* next){auto p=reinterpret_cast<PVOID volatile*>(base+0xb519ab0+off);DWORD before=0,tmp=0;if(!VirtualProtect(const_cast<PVOID*>(p),8,PAGE_READWRITE,&before))return false;const auto previous=InterlockedCompareExchangePointer(p,next,old);VirtualProtect(const_cast<PVOID*>(p),8,before,&tmp);return previous==old;}
 DWORD stop(){bool okay=true;{std::lock_guard<std::mutex> g(life);disabled=true;
     if(hasChanged){if(swap(0x18,reinterpret_cast<void*>(onChanged),reinterpret_cast<void*>(changed)))hasChanged=false;else okay=false;}
     if(hasInit){if(swap(0x88,reinterpret_cast<void*>(onInit),reinterpret_cast<void*>(originalInitial)))hasInit=false;else okay=false;}}
@@ -53,9 +53,9 @@ DWORD stop(){bool okay=true;{std::lock_guard<std::mutex> g(life);disabled=true;
 DWORD WINAPI worker(void*){
     base=reinterpret_cast<uintptr_t>(GetModuleHandleW(nullptr));wchar_t path[32768]{};GetModuleFileNameW(self,path,32768);const auto file=std::filesystem::path(path).parent_path()/L"player-rime-probe.jsonl";
     {std::lock_guard<std::mutex> g(life);if(disabled)return 1;
-        if(value<uintptr_t>(base+0xb519b10+0x18)!=base+0x3abc230||value<uintptr_t>(base+0xb519b10+0x88)!=base+0x3abb5e0)return 2;
+        if(value<uintptr_t>(base+0xb519ab0+0x18)!=base+0x3abc2c0||value<uintptr_t>(base+0xb519ab0+0x88)!=base+0x3abb670)return 2;
         HMODULE pin=nullptr;if(!GetModuleHandleExW(GET_MODULE_HANDLE_EX_FLAG_FROM_ADDRESS|GET_MODULE_HANDLE_EX_FLAG_PIN,reinterpret_cast<LPCWSTR>(&worker),&pin))return 3;
-        changed=reinterpret_cast<Changed>(base+0x3abc230);originalInitial=reinterpret_cast<Init>(base+0x3abb5e0);
+        changed=reinterpret_cast<Changed>(base+0x3abc2c0);originalInitial=reinterpret_cast<Init>(base+0x3abb670);
         if(!swap(0x18,reinterpret_cast<void*>(changed),reinterpret_cast<void*>(onChanged)))return 4;hasChanged=true;
         if(!swap(0x88,reinterpret_cast<void*>(originalInitial),reinterpret_cast<void*>(onInit))){disabled=true;if(swap(0x18,reinterpret_cast<void*>(onChanged),reinterpret_cast<void*>(changed)))hasChanged=false;return 5;}hasInit=true;
     }

@@ -7,7 +7,7 @@ struct Sample {uintptr_t object=0;bool valid=false;double deflection=0;int side=
 inline Sample snapshot(uintptr_t image,skills::Read read,double seen=0){
     auto number=[&](uintptr_t p,auto& value){return p>=0x10000&&read(p,&value,sizeof(value));};
     uintptr_t root=0,vt=0,again=0;std::array<unsigned char,45*32> raw{};
-    if(!number(image+skills::EventRoot,root)||!number(root,vt)||vt!=image+0xbc90128||!read(root+0x10,raw.data(),raw.size()))return {};
+    if(!number(image+skills::EventRoot,root)||!number(root,vt)||vt!=image+0xbc900c8||!read(root+0x10,raw.data(),raw.size()))return {};
     Sample out{root,true,0,-1};skills::View actors(image,read);
     for(unsigned n=0;n<45;++n){const auto* entry=raw.data()+n*32;int type=-1;double time=0;uint32_t actor=0;
         std::memcpy(&type,entry+24,4);std::memcpy(&time,entry+16,8);std::memcpy(&actor,entry+28,4);

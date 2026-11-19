@@ -10,18 +10,18 @@ assert k.VirtualAlloc(B,0x10000000,0x2000,4)==B
 assert k.VirtualAlloc(R,8192,0x3000,0x40)==R
 assert k.VirtualAlloc(D,0x4000,0x3000,4)==D
 pages=set()
-for rva in [0xd9eb808,0xf3fddbc,0xf63f9f0,0xf54fa00,0x91364c0,0xfa5b900,0xf85f120]:
+for rva in [0xd9eb808,0xf3fddbc,0xf63f9f0,0xf54fa00,0x9136520,0xfa5b900,0xf85f120]:
  page=(B+rva)&~4095
  if page not in pages:assert k.VirtualAlloc(page,4096,0x1000,0x40)==page;pages.add(page)
 def put(a,b):C.memmove(a,b,len(b))
 def n(a,v):put(a,struct.pack('<i',v))
 def q(a,v):put(a,struct.pack('<Q',v))
 # Same output-variant contract as the native bool constructor, independent of game process.
-put(B+0x91364c0,bytes.fromhex('8811c7410804000000488bc1c3'))
+put(B+0x9136520,bytes.fromhex('8811c7410804000000488bc1c3'))
 put(R+0xe00,bytes.fromhex('c60100c7410804000000488bc1c3'))
 put(R,build(B,R,R+0xe00));k.VirtualProtect.argtypes=[C.c_void_p,C.c_size_t,C.c_uint32,C.POINTER(C.c_uint32)];old=C.c_uint32();assert k.VirtualProtect(R,4096,0x20,C.byref(old));callback=C.WINFUNCTYPE(C.c_void_p,C.c_void_p,C.c_void_p)(R)
 q(B+0xf63f9f0,D+0x100);q(B+0xf54fa00,D+0x200);n(B+0xd9eb808,14);n(B+0xf3fddbc,3);put(D+0x200,b'\1')
-q(B+0xfa5b900,D+0x1000);q(B+0xf85f120,D+0x2000);q(D+0x2000,B+0xb32a410)
+q(B+0xfa5b900,D+0x1000);q(B+0xf85f120,D+0x2000);q(D+0x2000,B+0xb32a3b0)
 for j in range(1,6):n(D+0x15f8+j*4,2 if j==5 else -1)
 n(D+0x2148,0);n(D+0x215c,35);n(D+0x2174,-1)
 

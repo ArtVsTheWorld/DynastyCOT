@@ -34,12 +34,12 @@ template<class Read> Tags readScene(Read read,uintptr_t image,uintptr_t scene,si
     auto q=[&](uintptr_t p){uintptr_t v=0;return read(p,&v,sizeof(v))?v:uintptr_t(0);};
     if(count<512||count>200000||q(scene)!=image+bindings::SceneCrowdVtable)return {};
     uintptr_t component=q(scene+0x908),map=q(scene+0x9f8);
-    if(q(component)!=image+0xb484f98||q(component+0x48)!=map)return {};
+    if(q(component)!=image+0xb484f38||q(component+0x48)!=map)return {};
     uintptr_t begin=q(map),end=q(map+8),value=0;
     if(begin<0x10000||end<=begin||(end-begin)%16||end-begin>128*16)return {};
     struct Entry {uintptr_t key,value;};std::vector<Entry> entries((end-begin)/16);
     if(!read(begin,entries.data(),entries.size()*sizeof(Entry)))return {};
-    for(const auto& e:entries)if(e.key==image+0xb486033){if(value)return {};value=e.value;}
+    for(const auto& e:entries)if(e.key==image+0xb485fd3){if(value)return {};value=e.value;}
     uintptr_t holder=q(value+8),data=q(holder+8);
     if(!value||q(holder)!=count||data<0x10000)return {};
     std::vector<unsigned char> records(count*10);

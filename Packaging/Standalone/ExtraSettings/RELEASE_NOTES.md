@@ -1,9 +1,13 @@
-# Ace’s Extra Settings 0.2.12
+# **November 17 Update**
 
-Changes since public release 0.2.10.
+## **Update 1**
 
-- Your Windows user folder now holds the settings and reports. Copies of MMC on the same account can share your choices, including when the MMC program folder has limited write access.
-- The report now tells you whether Extra Settings is waiting for an offline Dynasty, which controls are ready and where a setting could not be saved. It is easier to tell a startup problem from a saving problem.
-- The league-specific clocks from 0.2.10 carry forward. Fresh leagues still start with the offensive clock On, the defensive clock at 15 seconds and the four playcall restrictions off.
+**Game Update Compatibility**
+- Restored the extra Dynasty settings rows, play clocks, playcall rules and offline Controller Select for the November 17 game update. Existing league settings carry forward.
 
-Download the standalone ZIP, close MMC and the game, and copy **ExtraSettings.dll** into MMC’s **Plugins** folder. The ZIP includes a full feature list and an illustrated player guide.
+**Special Teams Formation Subs**
+- Added optional **Kickoff** and **Kickoff Return** entries under **Special Teams** on the offense and defense tabs, respectively. The return preview fits the full unit on the field.
+- To turn them on, create **FormationSubs.ini** in `%LOCALAPPDATA%\Ace\DynastyCOT\ExtraSettings` with one line, `KickoffAndKickReturn=On`, before launching the game. The option starts off.
+
+**Install**
+- Close MMC and the game, then update to **0.2.21** in Dynasty COT or replace **ExtraSettings.dll** in your usual MMC **Plugins** folder.

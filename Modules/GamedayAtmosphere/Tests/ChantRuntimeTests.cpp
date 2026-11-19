@@ -13,7 +13,7 @@ Address alloc(){auto p=reinterpret_cast<Address>(VirtualAlloc(nullptr,0x1000,MEM
 Address source(){return currentManager;}
 Address __fastcall create(Address manager,Address asset){
     assert(manager==currentManager);++created;if(failCreate)return 0;
-    currentHandle=alloc();put(currentHandle,image+0xaf01718);put(currentHandle+8,asset);
+    currentHandle=alloc();put(currentHandle,image+0xaf01738);put(currentHandle+8,asset);
     Address preset=get<Address>(asset+0x20),groupEntries=get<Address>(preset+0x28);
     assert(get<unsigned>(groupEntries-4)==1);
     Address props=get<Address>(groupEntries+8);assert(get<unsigned>(props-4)==1&&get<unsigned>(props)==static_cast<unsigned>(MixProperty::Gain));
@@ -30,9 +30,9 @@ struct Fixture {
         const char* name="Sound/CFB/CoreAudio/Utility/Mixers/VolumeSettings_MXR";
         stock.asset.put(0x18,reinterpret_cast<Address>(name));stock.properties.count=2;
         put(stock.properties.address(),unsigned(0));put(stock.properties.address()+12,unsigned(3));
-        put(manager+0x200,image+0xaf01718);put(manager+0x208,stock.asset.address());
+        put(manager+0x200,image+0xaf01738);put(manager+0x208,stock.asset.address());
         put(manager+0x300,manager+0x200);put(manager+0xc0,manager+0x300);put(manager+0xc8,manager+0x320);
-        put(owner,image+0xb227098);put(owner+0x40,image+0xb227178);put(owner+0x48,image+0xb227188);
+        put(owner,image+0xb227038);put(owner+0x40,image+0xb227118);put(owner+0x48,image+0xb227128);
     }
     ~Fixture(){DeleteCriticalSection(reinterpret_cast<CRITICAL_SECTION*>(manager+0x30));VirtualFree(reinterpret_cast<void*>(manager),0,MEM_RELEASE);VirtualFree(reinterpret_cast<void*>(owner),0,MEM_RELEASE);}
 };
@@ -51,7 +51,7 @@ int main(){
     // Keep the following ownership checks' counters independent of this mute pass.
     --created;--released;
     runtime.tick(first.owner+0x40,true,0,true);assert(created==3);runtime.tick(first.owner+0x40,false,0);assert(released==3);
-    put(first.owner+0x48,Address(0));runtime.tick(first.owner+0x40,true,-6);assert(created==3);put(first.owner+0x48,image+0xb227188);
+    put(first.owner+0x48,Address(0));runtime.tick(first.owner+0x40,true,-6);assert(created==3);put(first.owner+0x48,image+0xb227128);
     runtime.tick(first.owner+0x40,true,-6);assert(created==4);
     // Simulate destruction of an entire manager and its owned mixer. The next
     // callback must not inspect or release the retired handle through a new manager.

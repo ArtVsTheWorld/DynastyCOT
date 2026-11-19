@@ -8,8 +8,8 @@
 namespace recruitingfog::presentation {
 // Football SystemMuse's TextVariable stores rendered text separately from
 // its child expression. Never change the query/evaluator's numeric value.
-constexpr uintptr_t textTable=0xbc82c08,queryTable=0xbc82ae8;
-constexpr uintptr_t formatSlot=0x40,formatRva=0x7d79160;
+constexpr uintptr_t textTable=0xbc82ba8,queryTable=0xbc82a88;
+constexpr uintptr_t formatSlot=0x40,formatRva=0x7d791f0;
 constexpr uint32_t fourcc(const char* s){return (uint32_t(uint8_t(s[0]))<<24)|(uint32_t(uint8_t(s[1]))<<16)|(uint32_t(uint8_t(s[2]))<<8)|uint8_t(s[3]);}
 // Exact player-rating columns found in the installed broadcast definitions.
 // AGLP only: statistical QB rating and every team/stat table are excluded.

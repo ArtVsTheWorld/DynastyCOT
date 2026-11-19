@@ -7,16 +7,16 @@ namespace DynastyPlayClock
 {
     public sealed partial class DynastyPlayClockAction
     {
-        private const long ControllerEligibilityRva=0x7fae660, ControllerPhaseRva=0x5d12420;
-        private const long ControllerCommitSlotRva=0xbaced38, ControllerCommitRva=0x7a9abf0;
+        private const long ControllerEligibilityRva=0x7fae6c0, ControllerPhaseRva=0x5d124b0;
+        private const long ControllerCommitSlotRva=0xbacecd8, ControllerCommitRva=0x7a9ac80;
         private static readonly byte[] ControllerEligibilityOriginal=Hex("488bc455574156488bec4881ec80000000");
         private static readonly byte[] ControllerPhaseOriginal=Hex("48895c241048896c24184889742420");
         private static readonly Region[] ControllerRegions={
-            new Region("Controller eligibility", 0x7fae660, 0x20c, "40e887bd7a7da7f7e6679dca3cf537f39f139405e5f3e92db8e265126b5634da"),
-            new Region("Controller native commit", 0x7a9abf0, 0x180, "ac6c73fb53d7303e0de1bdc5c894c32e7062b671e4d01975a8c277fa4c09d2ae"),
-            new Region("Controller input setter", 0x2eb4c30, 0xa1, "218cebdf7ed7de7d51b2dff2c901179c5dce90a8f3024b231a34b88fb592f69c"),
-            new Region("Controller Bool result", 0x91364c0, 0xd, "07fa584adb72c5b00661c65a636c474ab356ea437a9ba959f898f2419318e09c"),
-            new Region("Controller play phase", 0x5d12420, 0x40, "a401f3b455e87a7d5dfda810c8d34c1ba3a3de7fcfe0d0319702f7118dfc13bc"),
+            new Region("Controller eligibility", 0x7fae6c0, 0x20c, "2b7ad4681a78c2a100a3cbdb95df0c3b814e936f22b1293454db915b16728827"),
+            new Region("Controller native commit", 0x7a9ac80, 0x180, "24acb820c17b999db69f2aff390d4d0d6ca904f258cc6b99dc40b6a9f2758c4e"),
+            new Region("Controller input setter", 0x2eb4c30, 0xa1, "f7381aac3a0b88bb1f271a650e5246111b1327001959b3b73e95fa93432b6bf9"),
+            new Region("Controller Bool result", 0x9136520, 0xd, "07fa584adb72c5b00661c65a636c474ab356ea437a9ba959f898f2419318e09c"),
+            new Region("Controller play phase", 0x5d124b0, 0x40, "3ed713c696078864a9eb75a5b1476e0cb9233561033d977b593f4f1a1879351a"),
         };
         private static long controllerStart,controllerDisabledStart;
         private static List<OfflineDynastySettings.MemoryCheck> controllerChecks;

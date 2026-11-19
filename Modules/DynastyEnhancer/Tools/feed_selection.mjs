@@ -2,6 +2,7 @@ import {editionSidebar} from './edition_sidebar.mjs';
 import {discoveryViews} from './social_discovery.mjs';
 import {visibleEdition,comparePublication,publicationLabel} from './publication_timeline.mjs';
 import {bodyKey,deduplicateConversations} from './conversation_topics.mjs';
+import {recruitPortraitForDisplay} from './story_avatars.mjs';
 export const SCOPES=['all','national','conference','team'];
 const order=(a,b)=>b.priority-a.priority||a.id.localeCompare(b.id);
 // Editorial order is independent of flavor engagement. Rotate categories and
@@ -113,7 +114,18 @@ export function buildCatalog(active,history=[]){
     if(!f.publication||f.publication.key!==f.key||f.publication.week!==f.week)throw Error('Invalid publication-week archive');
     const old=byWeek.get(f.key);if(!old||f===active||(f.sourceModifiedMs??0)>(old.sourceModifiedMs??0))byWeek.set(f.key,f);
   }
-  const displayKeys=['id','author','handle','body','stamp','category','voice','replyTo','imageLibrary','imageValue','uniformTeamLogo','likes','transaction','draftPick','draftRound','publication','priority','essentialNews','coverageExempt','budgetProtected'];
-  const weeks=[...byWeek.values()].sort(comparePublication).map(f=>({publicationLabel:publicationLabel(f),...Object.fromEntries(['format','engineVersion','key','leagueId','userTeamIndex','season','phase','week','conference','publication','reconstructed'].map(k=>[k,f[k]])),stories:f.stories.map(p=>Object.fromEntries(displayKeys.filter(k=>p[k]!==undefined).map(k=>[k,p[k]]))),sidebar:editionSidebar(f),views:f.editorialVersion===1&&f.views?f.views:{...scopeViews(f.stories,f),...(f.scopeOptions?discoveryViews(conversationOrder(f.stories),f.scopeOptions):{})}}));
+  const displayKeys=['id','author','handle','body','stamp','category','voice','replyTo','imageLibrary','imageValue','uniformTeamLogo','defaultRecruitJersey','likes','transaction','draftPick','draftRound','publication','priority','essentialNews','coverageExempt','budgetProtected'];
+  const weeks=[...byWeek.values()].sort(comparePublication).map(f=>{
+    let events;
+    const eventFor=id=>{
+      events??=new Map((f.events??[]).map(e=>[e.id,e]));
+      return events.get(id);
+    };
+    const stories=f.stories.map(post=>{
+      const p=recruitPortraitForDisplay(post,eventFor);
+      return Object.fromEntries(displayKeys.filter(k=>p[k]!==undefined).map(k=>[k,p[k]]));
+    });
+    return {publicationLabel:publicationLabel(f),...Object.fromEntries(['format','engineVersion','key','leagueId','userTeamIndex','season','phase','week','conference','publication','reconstructed'].map(k=>[k,f[k]])),stories,sidebar:editionSidebar(f),views:f.editorialVersion===1&&f.views?f.views:{...scopeViews(f.stories,f),...(f.scopeOptions?discoveryViews(conversationOrder(f.stories),f.scopeOptions):{})}};
+  });
   return {...active,catalogVersion:2,activeWeekKey:active.key,weeks};
 }

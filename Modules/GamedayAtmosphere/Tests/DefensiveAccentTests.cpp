@@ -25,14 +25,14 @@ int main(){
     // Independent layout from the captured third-and-20 swat: type 39,
     // actor 0x80004, home defender; the knockout byte was zero throughout.
     constexpr A image=0x140000000,root=0x100000,actors=0x110000,buckets=0x120000,node=0x130000,array=0x140000,actor=0x150000,data=0x160000;
-    put(image+skills::EventRoot,root);put(root,image+0xbc90128);for(unsigned n=0;n<45*32;++n)put(root+0x10+n,(unsigned char)0);
+    put(image+skills::EventRoot,root);put(root,image+0xbc900c8);for(unsigned n=0;n<45*32;++n)put(root+0x10+n,(unsigned char)0);
     put(root+0x10+16,412.8999753892422);put(root+0x10+24,39);put(root+0x10+28,0x80004u);
     put(image+skills::ActorRoot,actors);put(actors+0x170,buckets);put(actors+0x178,1u);put(actors+0x28,array);put(actors+0x30,array+8);
     put(buckets,node);put(node,0x80004u);put(node+4,0);put(array,actor);put(actor+0x18,data);put(data+0x44,(unsigned char)1);
     put(data+0x304,0);put(data+0x308,8);put(data+0x310,100);
     auto native=defense::snapshot(image,read);assert(native.valid&&native.object==root&&native.side==0&&native.deflection>412);
     assert(defense::snapshot(image,read,413).side==-1);put(data+0x304,1);assert(defense::snapshot(image,read).side==-1);put(data+0x304,0);
-    put(root,A(0));assert(!defense::snapshot(image,read).valid);put(root,image+0xbc90128);
+    put(root,A(0));assert(!defense::snapshot(image,read).valid);put(root,image+0xbc900c8);
     torn=true;assert(!defense::snapshot(image,read).valid);torn=false;
     put(root+0x10+16,std::numeric_limits<double>::quiet_NaN());assert(defense::snapshot(image,read).deflection==0);put(root+0x10+16,412.8999753892422);
     // Confirm the actual stop, not just a tip while the pass is still live.

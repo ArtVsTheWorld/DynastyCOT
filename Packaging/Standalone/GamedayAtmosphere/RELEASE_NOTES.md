@@ -1,11 +1,10 @@
-# **Update 5 Hotfix 2**
+# **November 17 Update**
 
-**Startup & Saved Crowds**
-- Improved startup when runtime files are stored in long folder paths
-- Fixed long-path handling for settings, logs and saved crowd files
-- Keeps existing settings, crowd history, palettes and replay fixes
-- Includes the earlier startup protection while Windows updates the game's loaded-file list
+## **Update 5 Hotfix 3**
+
+**Game Update Compatibility**
+- Restored Gameday Atmosphere's crowd and presentation features for the November 17 game update in supported offline Dynasty and Play Now games.
+- Updated crowd seating, attendance, audio, camera, replay and settings support for the new game build. Existing crowd plans and settings carry forward.
 
 **Install**
-- Close MMC and the game, then replace **GamedayAtmosphere.dll** in your usual **Plugins** folder, or select **2.1.40** in the COT installer
-- Keep your existing settings and History folders. No crowd regeneration is required for this hotfix
+- Close MMC and the game, then update to **2.1.41** in Dynasty COT or replace **GamedayAtmosphere.dll** in your usual MMC **Plugins** folder.

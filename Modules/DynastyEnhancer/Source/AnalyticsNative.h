@@ -11,7 +11,7 @@ void* aliasVtable[]={nullptr,nullptr,nullptr,nullptr,nullptr,nullptr,reinterpret
 std::string argument(void* p){
     uintptr_t vt=0,method=0;if(!read(reinterpret_cast<uintptr_t>(p),&vt,8))return {};
     if(vt==reinterpret_cast<uintptr_t>(aliasVtable))return static_cast<AliasArgument*>(p)->text;
-    if(vt!=base+0xb575928||!read(vt+0x30,&method,8)||method!=base+0x3f07c50)return {};
+    if(vt!=base+0xb5758c8||!read(vt+0x30,&method,8)||method!=base+0x3f07ce0)return {};
     char text[128]{};reinterpret_cast<void(__fastcall*)(void*,char*,unsigned)>(method)(p,text,128);text[127]=0;return text;
 }
 
@@ -42,7 +42,7 @@ void invalidatePreviewLocked(){
 }
 void capturePreviewSource(void* object,int id,int type)noexcept{
     if(disabled||!opened||id!=0||type!=27)return;
-    uintptr_t vt=0;if(!read(reinterpret_cast<uintptr_t>(object),&vt,8)||vt!=base+0xbacd668)return;
+    uintptr_t vt=0;if(!read(reinterpret_cast<uintptr_t>(object),&vt,8)||vt!=base+0xbacd608)return;
     std::lock_guard<std::mutex> lock(viewMutex);preview.provider=object;
 }
 void ensurePreview(void* rosterObject,void* argument)noexcept;
@@ -450,7 +450,7 @@ bool dispatchFilters(Filter native,void* object,int id,void* f){
     if(!ownsFilters(id))return native(object,id,f);
     try{
         auto request=applyFilters(f);if(!request.custom)return native(object,id,f);
-        // Verified native 0x7ab0230 consumes slot1/slot6 synchronously; neither
+        // Verified native 0x7ab02c0 consumes slot1/slot6 synchronously; neither
         // sync nor async entry retains this alias or its backing strings.
         FilterAlias alias{filterAliasVt,&request.keys};return native(object,id,&alias);
     }catch(const std::exception& error){filterFailure(id,error.what());return false;}
@@ -464,9 +464,9 @@ bool previewReady(void* rosterObject,std::optional<unsigned> reference)noexcept{
     if(!lookupPlayer||!currentProfile())return false;
     try{
         uintptr_t vt=0,flow=0,flowVt=0,contextVt=0,getContext=0,metadata=0;unsigned char ready=0;int loaded=0,pendingNative=0;
-        const bool valid=read(reinterpret_cast<uintptr_t>(rosterObject),&vt,8)&&vt==base+0xbab18c0&&
-            read(reinterpret_cast<uintptr_t>(rosterObject)+0x418,&flow,8)&&flow&&read(flow,&flowVt,8)&&flowVt==base+0xbd872e0&&
-            read(flow+8,&contextVt,8)&&contextVt==base+0xbd873b0&&read(contextVt+8,&getContext,8)&&getContext==base+0x381b250&&
+        const bool valid=read(reinterpret_cast<uintptr_t>(rosterObject),&vt,8)&&vt==base+0xbab1860&&
+            read(reinterpret_cast<uintptr_t>(rosterObject)+0x418,&flow,8)&&flow&&read(flow,&flowVt,8)&&flowVt==base+0xbd87260&&
+            read(flow+8,&contextVt,8)&&contextVt==base+0xbd87330&&read(contextVt+8,&getContext,8)&&getContext==base+0x381b2e0&&
             read(flow+0xb1,&ready,1)&&ready&&read(flow+0xb4,&loaded,4)&&loaded>0&&read(flow+0xc4,&pendingNative,4)&&pendingNative<=0&&
             read(flow+0x140,&metadata,8)&&metadata;
         const bool present=valid&&(!reference||lookupPlayer(reinterpret_cast<void*>(flow),*reference)!=nullptr);
@@ -497,7 +497,7 @@ void ensurePreview(void* rosterObject,void* arg)noexcept{
             if(preview.lastRef!=decoded){preview.lastRef=decoded;preview.failedRef.reset();}
             if(preview.failedRef==decoded||previewReady(rosterObject,decoded))return;
             uintptr_t vt=0;provider=preview.provider;
-            if(!provider||!read(reinterpret_cast<uintptr_t>(provider),&vt,8)||vt!=base+0xbacd668)return;
+            if(!provider||!read(reinterpret_cast<uintptr_t>(provider),&vt,8)||vt!=base+0xbacd608)return;
             keys={nativeTeam->second,nativeWeekDefault};
             preview.pending=true;preview.cancelled=false;preview.requestRef=decoded;preview.latestRef.reset();preview.requestTeam=team;preview.loadedTeam.reset();preview.requestId=requestId=++previewSequence;
         }
@@ -518,20 +518,20 @@ void ensurePreview(void* rosterObject,void* arg)noexcept{
 void __fastcall infoHook(void* object,void* out){CallGuard cotCall;info(object,out);if(!disabled&&opened){std::lock_guard<std::mutex> lock(viewMutex);objectText(out,"Title","Player Analytics");}}
 struct Binding{uintptr_t vt,offset,rva;void* hook;void** slot=nullptr;};
 Binding bindings[]={
- {0xbaa78b8,0x38,0x78edb60,reinterpret_cast<void*>(infoHook)},
- {0xbaa78b8,0x98,0x78f0a50,reinterpret_cast<void*>(disabledRowHook)},
- {0xbacd668,0xb0,0x7a89b50,reinterpret_cast<void*>(countHook)},
- {0xbacd668,0x78,0x7a89180,reinterpret_cast<void*>(keyHook)},
- {0xbacd668,0x80,0x7a892d0,reinterpret_cast<void*>(rowIndexHook)},
- {0xbacd668,0xa0,0x7a89880,reinterpret_cast<void*>(sortHook)},
- {0xbacd668,0xa8,0x7a899d0,reinterpret_cast<void*>(sortInfoHook)},
- {0xbacd668,0x58,0x7a88bd0,reinterpret_cast<void*>(initHook)},
- {0xbacd668,0x50,0x7a88b70,reinterpret_cast<void*>(syncHook)},
- {0xbacd668,0x38,0x7a88a60,reinterpret_cast<void*>(beginHook)},
- {0xbacd668,0x70,0x7a88e90,reinterpret_cast<void*>(colHook)},
- {0xbacd668,0x90,0x7a896a0,reinterpret_cast<void*>(filterHook)},
- {0xbacd668,0x98,0x7a89770,reinterpret_cast<void*>(asyncFilterHook)},
- {0xbacd668,0x88,0x7a89420,reinterpret_cast<void*>(sourceColumnHook)},};
+ {0xbaa7858,0x38,0x78edbf0,reinterpret_cast<void*>(infoHook)},
+ {0xbaa7858,0x98,0x78f0ae0,reinterpret_cast<void*>(disabledRowHook)},
+ {0xbacd608,0xb0,0x7a89be0,reinterpret_cast<void*>(countHook)},
+ {0xbacd608,0x78,0x7a89210,reinterpret_cast<void*>(keyHook)},
+ {0xbacd608,0x80,0x7a89360,reinterpret_cast<void*>(rowIndexHook)},
+ {0xbacd608,0xa0,0x7a89910,reinterpret_cast<void*>(sortHook)},
+ {0xbacd608,0xa8,0x7a89a60,reinterpret_cast<void*>(sortInfoHook)},
+ {0xbacd608,0x58,0x7a88c60,reinterpret_cast<void*>(initHook)},
+ {0xbacd608,0x50,0x7a88c00,reinterpret_cast<void*>(syncHook)},
+ {0xbacd608,0x38,0x7a88af0,reinterpret_cast<void*>(beginHook)},
+ {0xbacd608,0x70,0x7a88f20,reinterpret_cast<void*>(colHook)},
+ {0xbacd608,0x90,0x7a89730,reinterpret_cast<void*>(filterHook)},
+ {0xbacd608,0x98,0x7a89800,reinterpret_cast<void*>(asyncFilterHook)},
+ {0xbacd608,0x88,0x7a894b0,reinterpret_cast<void*>(sourceColumnHook)},};
 bool stop(){
     nativeReady=false;bool ok=true;
     for(auto& x:bindings)if(x.slot){if(replace(x.hook,reinterpret_cast<void*>(base+x.rva),x.vt,x.offset))x.slot=nullptr;else ok=false;}
@@ -547,13 +547,13 @@ template<class Read>void validateContract(uintptr_t b,Read query){
 }
 void install(uintptr_t b){
     validateContract(b,read);
-    columns=reinterpret_cast<Columns>(b+0x78ef740);sourceColumns=reinterpret_cast<Columns>(b+0x7a89420);info=reinterpret_cast<Info>(b+0x78edb60);rows=reinterpret_cast<Rows>(b+0x7a88cd0);count=reinterpret_cast<Count>(b+0x7a89b50);key=reinterpret_cast<Key>(b+0x7a89180);init=reinterpret_cast<Init>(b+0x7a88bd0);close=reinterpret_cast<Close>(b+0x7a88c90);
-    syncInit=reinterpret_cast<SyncInit>(b+0x7a88b70);beginUpdate=reinterpret_cast<SyncInit>(b+0x7a88a60);colData=reinterpret_cast<ColData>(b+0x7a88e90);filter=reinterpret_cast<Filter>(b+0x7a896a0);asyncFilter=reinterpret_cast<Filter>(b+0x7a89770);
-    nativeSort=reinterpret_cast<Sort>(b+0x7a89880);nativeSortInfo=reinterpret_cast<SortInfo>(b+0x7a899d0);nativeRowIndex=reinterpret_cast<RowIndex>(b+0x7a892d0);
-    encodePrefix=reinterpret_cast<Encode>(b+analyticsPrefixRva);encodeValue=reinterpret_cast<Encode>(b+0x8076180);encodeSuffix=reinterpret_cast<Encode>(b+0x8079e70);
-    disabledRow=reinterpret_cast<DisabledRow>(b+0x78f0a50);decodeReference=reinterpret_cast<DecodeReference>(b+0x376f6d0);
-    lookupPlayer=reinterpret_cast<LookupPlayer>(b+0x822c030);
-    cardFactory=reinterpret_cast<CardFactory>(b+0x3f0a1d0);cardObject=reinterpret_cast<CardObject>(b+0x8aec980);
+    columns=reinterpret_cast<Columns>(b+0x78ef7d0);sourceColumns=reinterpret_cast<Columns>(b+0x7a894b0);info=reinterpret_cast<Info>(b+0x78edbf0);rows=reinterpret_cast<Rows>(b+0x7a88d60);count=reinterpret_cast<Count>(b+0x7a89be0);key=reinterpret_cast<Key>(b+0x7a89210);init=reinterpret_cast<Init>(b+0x7a88c60);close=reinterpret_cast<Close>(b+0x7a88d20);
+    syncInit=reinterpret_cast<SyncInit>(b+0x7a88c00);beginUpdate=reinterpret_cast<SyncInit>(b+0x7a88af0);colData=reinterpret_cast<ColData>(b+0x7a88f20);filter=reinterpret_cast<Filter>(b+0x7a89730);asyncFilter=reinterpret_cast<Filter>(b+0x7a89800);
+    nativeSort=reinterpret_cast<Sort>(b+0x7a89910);nativeSortInfo=reinterpret_cast<SortInfo>(b+0x7a89a60);nativeRowIndex=reinterpret_cast<RowIndex>(b+0x7a89360);
+    encodePrefix=reinterpret_cast<Encode>(b+analyticsPrefixRva);encodeValue=reinterpret_cast<Encode>(b+0x80761e0);encodeSuffix=reinterpret_cast<Encode>(b+0x8079ed0);
+    disabledRow=reinterpret_cast<DisabledRow>(b+0x78f0ae0);decodeReference=reinterpret_cast<DecodeReference>(b+0x376f760);
+    lookupPlayer=reinterpret_cast<LookupPlayer>(b+0x822c090);
+    cardFactory=reinterpret_cast<CardFactory>(b+0x3f0a260);cardObject=reinterpret_cast<CardObject>(b+0x8aec9e0);
     cardBool=reinterpret_cast<CardBool>(b+0x2b07670);cardInt=reinterpret_cast<CardInt>(b+0x2b075c0);cardText=reinterpret_cast<CardText>(b+0x25a3e60);
     try{for(auto& x:bindings){if(!replace(reinterpret_cast<void*>(b+x.rva),x.hook,x.vt,x.offset))throw std::runtime_error("Native analytics ownership changed");x.slot=reinterpret_cast<void**>(b+x.vt+x.offset);}}
     catch(...){stop();throw;}

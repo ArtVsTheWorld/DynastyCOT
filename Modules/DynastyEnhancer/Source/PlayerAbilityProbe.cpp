@@ -43,13 +43,13 @@ void* __fastcall hook(void* object,void** out,bool mentals){
     }catch(...){note({{"event","ability_probe_read_failed"}});}
     --inflight;return result;
 }
-bool swap(void* before,void* after){auto at=reinterpret_cast<PVOID volatile*>(base+0xbab1b28+0xa0);DWORD old=0,unused=0;if(!VirtualProtect(const_cast<PVOID*>(at),8,PAGE_READWRITE,&old))return false;auto prior=InterlockedCompareExchangePointer(at,after,before);VirtualProtect(const_cast<PVOID*>(at),8,old,&unused);return prior==before;}
+bool swap(void* before,void* after){auto at=reinterpret_cast<PVOID volatile*>(base+0xbab1ac8+0xa0);DWORD old=0,unused=0;if(!VirtualProtect(const_cast<PVOID*>(at),8,PAGE_READWRITE,&old))return false;auto prior=InterlockedCompareExchangePointer(at,after,before);VirtualProtect(const_cast<PVOID*>(at),8,old,&unused);return prior==before;}
 DWORD stop(){disabled=true;if(original&&!swap(reinterpret_cast<void*>(hook),reinterpret_cast<void*>(original)))return 2;const auto deadline=GetTickCount64()+5000;while(inflight&&GetTickCount64()<deadline)Sleep(1);return inflight?3:0;}
 DWORD WINAPI worker(void*){
     base=reinterpret_cast<uintptr_t>(GetModuleHandleW(nullptr));wchar_t path[32768]{};GetModuleFileNameW(self,path,32768);const auto file=std::filesystem::path(path).parent_path()/L"player-ability-probe.jsonl";
     constexpr unsigned char prefix[]={0x44,0x88,0x44,0x24,0x18,0x48,0x89,0x54,0x24,0x10,0x48,0x89,0x4c,0x24,0x08,0x55,0x53,0x56,0x41,0x54,0x41,0x56,0x41,0x57,0x48,0x8d,0x6c,0x24,0x88,0x48,0x81,0xec};
-    const auto current=*reinterpret_cast<uintptr_t*>(base+0xbab1b28+0xa0);
-    if(current!=base+0x794d200||memcmp(reinterpret_cast<void*>(current),prefix,sizeof(prefix)))return 1;
+    const auto current=*reinterpret_cast<uintptr_t*>(base+0xbab1ac8+0xa0);
+    if(current!=base+0x794d290||memcmp(reinterpret_cast<void*>(current),prefix,sizeof(prefix)))return 1;
     HMODULE pin=nullptr;if(!GetModuleHandleExW(GET_MODULE_HANDLE_EX_FLAG_FROM_ADDRESS|GET_MODULE_HANDLE_EX_FLAG_PIN,reinterpret_cast<LPCWSTR>(&worker),&pin))return 2;
     original=reinterpret_cast<Getter>(current);if(!swap(reinterpret_cast<void*>(original),reinterpret_cast<void*>(hook))){original=nullptr;return 3;}
     note({{"event","ability_probe_active"},{"pid",GetCurrentProcessId()}});const auto deadline=GetTickCount64()+120000;

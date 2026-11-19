@@ -25,7 +25,7 @@ class CompatibilityChecks
     static byte[] ReadCoexist(long address,int length,long image,Dictionary<long,byte[]> memory)
     {
         long rva=address-image;
-        foreach(long gap in new[]{0x3601e2fL,0x7b82504L})
+        foreach(long gap in new[]{0x3601ebfL,0x7b82594L})
             Check(rva+length<=gap || rva>=gap+5,"Verifier read a third-party call instruction");
         foreach(var block in memory){
             if(rva<block.Key || rva+length>block.Key+block.Value.Length)continue;
@@ -37,7 +37,7 @@ class CompatibilityChecks
     {
         byte[] calls=File.ReadAllBytes("Tools/callsheet-call-reference.bin");
         Check(calls.Length==10 && calls[0]==0xe8 && calls[5]==0xe8,"Expected complete native CALL instructions");
-        long[] starts={0x3601860,0x7b82380},gaps={0x3601e2f,0x7b82504};
+        long[] starts={0x36018f0,0x7b82410},gaps={0x3601ebf,0x7b82594};
         int[] totals={1978,437};
         // A compatible reference capture may already contain Call Sheet's
         // redirects. These two displacements are deliberately outside our
@@ -128,25 +128,25 @@ class CompatibilityChecks
         foreach(long image in new[]{0x140000000L,0x7ff600000000L,0x180000000L}) {
             long remote=image+0x20000000;
             var memory=new Dictionary<long,byte[]>();
-            byte[] phase=(byte[])reference[0x5d12420].Clone();
+            byte[] phase=(byte[])reference[0x5d124b0].Clone();
             Array.Copy(DynastyControllerCompatibility.Entry(remote+0x400,15),phase,15);
-            memory.Add(0x5d12420,phase);
-            memory.Add(0xbaced38,BitConverter.GetBytes(remote));
-            memory.Add(0x7fae660,DynastyControllerCompatibility.Entry(remote+0xc00,17));
+            memory.Add(0x5d124b0,phase);
+            memory.Add(0xbacecd8,BitConverter.GetBytes(remote));
+            memory.Add(0x7fae6c0,DynastyControllerCompatibility.Entry(remote+0xc00,17));
             byte[][] blocks=DynastyControllerCompatibility.Blocks(image,remote);
             for(int i=0;i<blocks.Length;i++)memory.Add(remote-image+i*1024,blocks[i]);
             NativeCompatibility.Verify((address,length)=>ReadCoexist(address,length,image,memory),image);
             Check(true,"Exact ODS controller bridges coexist with practice");
             foreach(byte[] block in blocks)foreach(int offset in new[]{0,block.Length/2,block.Length-1}) {
                 block[offset]^=1;
-                Reject((address,length)=>ReadCoexist(address,length,image,memory),image,"5d12420");
+                Reject((address,length)=>ReadCoexist(address,length,image,memory),image,"5d124b0");
                 block[offset]^=1;
             }
             phase[15]^=1;
-            Reject((address,length)=>ReadCoexist(address,length,image,memory),image,"5d12420");
+            Reject((address,length)=>ReadCoexist(address,length,image,memory),image,"5d124b0");
             phase[15]^=1;
-            memory[0xbaced38][0]^=1;
-            Reject((address,length)=>ReadCoexist(address,length,image,memory),image,"5d12420");
+            memory[0xbacecd8][0]^=1;
+            Reject((address,length)=>ReadCoexist(address,length,image,memory),image,"5d124b0");
         }
     }
 }

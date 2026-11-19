@@ -15,10 +15,12 @@ inline std::string renderResume(const Json& v,bool showSecondary=true){
     std::string out=evidence::naturalNotesText(v.value("heading",std::string("Previous High School Season")));for(auto& c:out)c=static_cast<char>(std::toupper(static_cast<unsigned char>(c)));out+='\n';
     out+=v.value("hometown","")+", "+stateLabel(v.value("state",""))+" | "+v.at("competitionClass").get<std::string>();
     if(!v.value("collegeSchool",std::string()).empty())out+=" ("+v.at("collegeSchool").get<std::string>()+")";
-    if(v.contains("gpa")){std::ostringstream gpa;gpa<<std::fixed<<std::setprecision(2)<<v.at("gpa").get<double>();out+=" | GPA: "+gpa.str();}out+='\n';
+    const bool twoWay=showSecondary&&v.contains("modeledSecondary");
+    if(v.contains("gpa")){std::ostringstream gpa;gpa<<std::fixed<<std::setprecision(2)<<v.at("gpa").get<double>();out+=" | GPA: "+gpa.str();}
+    out+=twoWay?" | ":"\n";
     out+=std::to_string(v.at("games").get<int>())+" appearances | "+std::to_string(v.at("starts").get<int>())+" starts\n";
     if(s.contains("passAttempts"))out+="Passing: "+n("passCompletions")+"/"+n("passAttempts")+" ("+rate("completionPercent")+"), "+n("passingYards")+" yards, "+n("passingTD")+" TD, "+n("interceptionsThrown")+" INT\n";
-    if(s.contains("carries"))out+="Rushing: "+n("carries")+" carries, "+n("rushingYards")+" yards, "+n("rushingTD")+" TD\n";
+    if(s.contains("carries"))out+="Rushing: "+n("carries")+" carries, "+n("rushingYards")+" yards, "+n("rushingTD")+" TD"+(twoWay&&s.contains("receptions")?" | ":"\n");
     if(s.contains("receptions"))out+="Receiving: "+n("receptions")+" catches, "+n("receivingYards")+" yards, "+n("receivingTD")+" TD\n";
     if(s.contains("passProtectionSnaps")){
         out+="Pass protection: "+n("sacksAllowed")+" sacks allowed / "+n("passProtectionSnaps")+" snaps ("+rate("sacksAllowedPercent")+")\n";
@@ -31,10 +33,13 @@ inline std::string renderResume(const Json& v,bool showSecondary=true){
     if(s.contains("fieldGoalAttempts"))out+="Kicking: "+n("fieldGoalsMade")+"/"+n("fieldGoalAttempts")+" FG, long "+n("longestFieldGoal")+"; "+n("extraPointsMade")+"/"+n("extraPointAttempts")+" XP\n";
     if(s.contains("punts")){const auto punts=s.at("punts").get<int>();std::ostringstream avg;avg<<std::fixed<<std::setprecision(1)<<(punts?s.at("puntingYards").get<double>()/punts:0.);out+="Punting: "+n("punts")+" punts, "+avg.str()+" average, "+n("puntsInside20")+" inside the 20\n";}
     if(s.contains("specialTeamsSnaps"))out+="Long snapping: "+n("badSnaps")+" off-target snaps / "+n("specialTeamsSnaps")+" snaps\n";
-    if(showSecondary&&v.contains("modeledSecondary")){const auto& secondary=v.at("modeledSecondary");const auto& stats=secondary.at("stats");out+="Also played: "+secondary.at("position").get<std::string>()+"\n";
+    if(twoWay){const auto& secondary=v.at("modeledSecondary");const auto& stats=secondary.at("stats");out+="Also played: "+secondary.at("position").get<std::string>()+" | ";
         if(stats.contains("defensiveSnaps"))out+="Defense: "+std::to_string(stats.at("tackles").get<int>())+" tackles, "+std::to_string(stats.at("interceptions").get<int>())+" INT, "+std::to_string(stats.at("passesDefended").get<int>())+" breakups\n";
         else out+=std::to_string(stats.at("touches").get<int>())+" touches, "+std::to_string(stats.at("yards").get<int>())+" yards\n";}
-    return out+"\n"+(!showSecondary&&v.contains("modeledSecondary")?std::string("Shared reps last season."):evidence::naturalNotesText(v.at("background").get<std::string>()));
+    // The Notes card shows the season record and positions played. Keep
+    // the narrative in the saved profile for other consumers.
+    if(out.back()=='\n')out.pop_back();
+    return out;
 }
 inline const char* awarenessFamily(const std::string& position){
     if(position=="QB")return "awareness qb";
@@ -48,7 +53,7 @@ inline const char* awarenessFamily(const std::string& position){
 }
 inline std::string scoutingSection(const NotesProspect& p){
     const auto progress=std::isfinite(p.progress)&&p.progress>=0&&p.progress<=100?p.progress:0;
-    if(progress<25)return "SCOUTING NOTES\nSpecific film observations are not yet available.";
+    if(progress<25)return "SCOUTING NOTES\n- Specific film observations are not yet available.";
     struct Pick{uint64_t order;std::string text;};std::vector<Pick> bands[3];std::set<std::string> seen;
     for(const auto& o:p.observations){
         if(!std::isfinite(o.low)||!std::isfinite(o.high)||o.low<0||o.high>100||o.low>o.high)continue;
@@ -61,8 +66,8 @@ inline std::string scoutingSection(const NotesProspect& p){
     std::string out="SCOUTING NOTES";unsigned used=0;const unsigned limit=progress>=75?4:progress>=50?3:2;
     // Take a balanced first observation from each supported band; additional
     // scouting adds to the report without rewriting already-selected phrases.
-    for(size_t round=0;round<4&&used<limit;++round)for(auto& b:bands)if(round<b.size()&&used<limit){out+="\n"+b[round].text;++used;}
-    if(!used)out+="\nThe available scouting still leaves too wide a range for a firm observation.";
+    for(size_t round=0;round<4&&used<limit;++round)for(auto& b:bands)if(round<b.size()&&used<limit){out+="\n- "+b[round].text;++used;}
+    if(!used)out+="\n- The available scouting still leaves too wide a range for a firm observation.";
     return out;
 }
 inline std::string composeNotes(const Json& saved,const NotesProspect& p){return renderResume(saved)+"\n\n"+scoutingSection(p);}

@@ -9,7 +9,7 @@ inline int carrierSide(uintptr_t image,skills::Read read){
     auto field=[&](uintptr_t p,auto& v){return p>=0x10000&&read(p,&v,sizeof(v));};
     uintptr_t root=0,control=0,vt=0,carrier=0,again=0;int ball=-1,side=-1,slot=-1;uint32_t actor=0;
     if(!field(image+bindings::BallControl,root)||!field(root+0x10,control)||
-       !field(control,vt)||vt!=image+0xb47bb10||!field(control+0x168,ball)||
+       !field(control,vt)||vt!=image+0xb47bab0||!field(control+0x168,ball)||
        (ball!=2&&ball!=3&&ball!=4&&ball!=9)||!field(control+0x1a0,carrier)||
        !field(carrier,vt)||vt!=image+bindings::ShowboatPlayerVtable||
        !field(carrier+0x138,side)||!field(carrier+0x13c,slot)||!field(carrier+0x64,actor)||
@@ -22,7 +22,7 @@ inline Sample snapshot(uintptr_t image,skills::Read read){
     constexpr unsigned char signature[]{0xb8,0x1f,0,0x40,0,0xc3};unsigned char code[sizeof(signature)]{};
     if(!read(image+bindings::ShowboatPlayerType,code,sizeof(code))||std::memcmp(code,signature,sizeof(code)))return {};
     uintptr_t root=0,control=0,vt=0,again=0;Sample out;int slot=-1,ball=-1;
-    if(!field(image+bindings::BallControl,root)||!field(root+0x10,control)||!field(control,vt)||vt!=image+0xb47bb10||
+    if(!field(image+bindings::BallControl,root)||!field(root+0x10,control)||!field(control,vt)||vt!=image+0xb47bab0||
        !field(control+0x168,ball)||(ball!=2&&ball!=3&&ball!=4&&ball!=9)||
        !field(control+0x1a0,out.carrier)||!field(out.carrier,vt)||vt!=image+bindings::ShowboatPlayerVtable||
        !field(out.carrier+0x64,out.actor)||!field(out.carrier+0x138,out.side)||!field(out.carrier+0x13c,slot)||

@@ -67,11 +67,11 @@ int main(){
     assert(!std::isfinite(reader.stateCenter(address(&hc),24,8).latitude));
     put<unsigned>(address(fields)+24*0x58+0x40,2);assert(!std::isfinite(reader.stateCenter(address(&hc),24,43).latitude));
     put<unsigned>(address(fields)+24*0x58+0x40,3);
-    page(image+0xbde66a0);page(image+0xbdd20b0);
-    put<int>(image+0xbde66a0,17);put(image+0xbde66a8,reinterpret_cast<A>("Latitude"));
-    put<int>(image+0xbde66b0,18);put(image+0xbde66b8,reinterpret_cast<A>("Longitude"));
-    put<int>(image+0xbdd20b0,0x84);put(image+0xbdd20b8,reinterpret_cast<A>("IsMilitary"));
-    put<int>(image+0xbdd3070,0x180);put(image+0xbdd3078,reinterpret_cast<A>("TeamPrestige"));
+    page(image+0xbde6620);page(image+0xbdd2030);
+    put<int>(image+0xbde6620,17);put(image+0xbde6628,reinterpret_cast<A>("Latitude"));
+    put<int>(image+0xbde6630,18);put(image+0xbde6638,reinterpret_cast<A>("Longitude"));
+    put<int>(image+0xbdd2030,0x84);put(image+0xbdd2038,reinterpret_cast<A>("IsMilitary"));
+    put<int>(image+0xbdd2ff0,0x180);put(image+0xbdd2ff8,reinterpret_cast<A>("TeamPrestige"));
     put(tableVt+0x110,reinterpret_cast<A>(realNumber));hct.reals={{17,41.4f},{18,-74.f}};act.reals={{17,37.8f},{18,-122.3f}};ht.ints[0x84]=1;
     Api api{count,same,set};Seed seed;
     std::vector<Table> memberTables(137),schoolTables(138);std::vector<Row> memberRows(137),schoolRows(138);
@@ -112,8 +112,8 @@ int main(){
     for(int i=0;i<512;++i)gameFields[i*0x58+15]=15;
     std::memcpy(gameFields.data()+5*0x58,"SeasonGameNum",13);gameFields[5*0x58+15]=2;put<unsigned>(gf+5*0x58+0x40,2);
     put(address(gt.schema)+0x40,gf);put(address(gt.schema)+0x48,gf+gameFields.size());gt.ints[5]=4;gt.ints[0x3e]=0;
-    put<int>(image+0xbdd9e50,0x3c);put(image+0xbdd9e58,reinterpret_cast<A>("SeasonGameNum"));
-    put<int>(image+0xbdd1960,0xf);put(image+0xbdd1968,reinterpret_cast<A>("BlacklistUserIdLower"));
+    put<int>(image+0xbdd9dd0,0x3c);put(image+0xbdd9dd8,reinterpret_cast<A>("SeasonGameNum"));
+    put<int>(image+0xbdd18e0,0xf);put(image+0xbdd18e8,reinterpret_cast<A>("BlacklistUserIdLower"));
     gt.columns[0x3c]=5; // native game class key60 maps to database column5
     gt.columns[5]=6;gt.ints[6]=250; // class-key map intentionally differs from the named database column
     schoolTables[1].ints[34]=13; // actual school grades are not ready in spring
@@ -135,15 +135,15 @@ int main(){
     }
     gt.ints[0x3e]=0;
     for(int stamp:{0,1099999,1100001,1199999,1200001}){ht.ints[0xf]=stamp;assert(capture(image,address(manager),address(&reference),45000,seed,&api)&&!seed.spring);noLeaks();}
-    ht.ints[0xf]=1200000;put(image+0xbdd1968,reinterpret_cast<A>("OtherField"));assert(capture(image,address(manager),address(&reference),45000,seed,&api)&&!seed.spring);noLeaks();
-    put(image+0xbdd1968,reinterpret_cast<A>("BlacklistUserIdLower"));put<int>(image+0xbdd9e50,59);assert(capture(image,address(manager),address(&reference),45000,seed,&api)&&!seed.spring);noLeaks();
-    put<int>(image+0xbdd9e50,60);ht.ints[0xf]=0;
+    ht.ints[0xf]=1200000;put(image+0xbdd18e8,reinterpret_cast<A>("OtherField"));assert(capture(image,address(manager),address(&reference),45000,seed,&api)&&!seed.spring);noLeaks();
+    put(image+0xbdd18e8,reinterpret_cast<A>("BlacklistUserIdLower"));put<int>(image+0xbdd9dd0,59);assert(capture(image,address(manager),address(&reference),45000,seed,&api)&&!seed.spring);noLeaks();
+    put<int>(image+0xbdd9dd0,60);ht.ints[0xf]=0;
     gt.ints[5]=4;gt.ints[0x33]=1;assert(capture(image,address(manager),address(&reference),45000,seed,&api)&&!seed.spring);gt.ints[0x33]=0;
     ht.ints[0xd1]=1153;ht.related[0xa5]=&schoolRows[0];gt.ints[0x3e]=1;
     assert(capture(image,address(manager),address(&reference),45000,seed,&api)&&seed.regular&&!seed.spring);noLeaks();
     // Real descriptor layout and typed setter contract; no writes to native records.
     for(A p:{image+OptionService,image+OptionType,image+OptionVtable,image+0xd9eb808,image+0xf63f9f0})page(p);
-    unsigned char options[0x200]{},config[0x100]{};put(image+OptionService,address(options));put(address(options),image+OptionVtable);put(image+OptionVtable+0x80,image+0x90a1670);
+    unsigned char options[0x200]{},config[0x100]{};put(image+OptionService,address(options));put(address(options),image+OptionVtable);put(image+OptionVtable+0x80,image+0x90a16d0);
     put<int>(image+0xd9eb808,14);put(image+0xf63f9f0,address(config));
     const char* names[]={"gameHomeTeamId","gameAwayTeamId","gameStadiumId","gameAttendance","gameTimeOfDay","gameWeatherPrecipitation","gameRivalryId","gameBowlId","gameFlagIsSeniorDay","gameWeatherDynamicEnabled"};
     unsigned keys[]={0x9e8d2700,0x9e1d2700,0xce7a6400,0x9e1d2500,0x9f4be400,0x9f7c2700,0x9f2e6900,0x9e2b2900,0x9e6ce400,0x9f793700};

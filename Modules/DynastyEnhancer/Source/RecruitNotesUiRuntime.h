@@ -96,7 +96,16 @@ public:
     }
     bool prepared=false;
     const std::vector<Program>& discoveryPrograms()const{return code;}
-    bool admitted(uintptr_t definition,const std::array<unsigned char,48>& header){std::lock_guard<std::mutex> lock(bankMutex);for(const auto& bank:banks)for(size_t i=0;i<bank.definitions.size();++i)if(bank.definitions[i].original==definition&&bank.headers[i]==header)return true;return false;}
+    bool admitted(uintptr_t definition,const std::array<unsigned char,48>& header,bool includeOwned=false){
+        std::lock_guard<std::mutex> lock(bankMutex);
+        for(const auto& bank:banks)for(size_t i=0;i<bank.definitions.size();++i){
+            const auto& entry=bank.definitions[i];if(entry.original==definition&&bank.headers[i]==header)return true;
+            if(includeOwned)for(const auto& variant:entry.variants)if(variant.second==definition){
+                auto expected=bank.headers[i];const auto registers=static_cast<unsigned short>(code[i].newRegisters);const auto size=static_cast<unsigned>(code[i].code.size());
+                memcpy(expected.data()+12,&registers,2);memcpy(expected.data()+24,&size,4);if(expected==header)return true;
+            }
+        }return false;
+    }
     size_t displayCacheBytes()const{return sizeof(cacheModes)+size_t(cacheModeCount)*sizeof(CacheRow);}
     void prepare(){prepared=true;}
     void configureDiscovery(std::vector<Program> annotated,std::vector<Validator> validators){

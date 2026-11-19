@@ -4,7 +4,7 @@
 #include <type_traits>
 namespace social::native {
 // Map insertion returns a two-word iterator AND an insertion flag. Native
-// 0x8aeba90 writes the flag at output+0x10; two pointers alone underallocate it.
+// 0x8aebaf0 writes the flag at output+0x10; two pointers alone underallocate it.
 // This contract is shared by the existing-key and inserted-key paths.
 struct InsertResult {
     void* node=nullptr;

@@ -1,28 +1,28 @@
 {
-  "pluginVersion": "0.8.21",
-  "layout": "October 29, 2026",
+  "pluginVersion": "0.8.24",
+  "layout": "November 19, 2026",
   "wholeExeHashGate": false,
   "regions": [
     {
       "name": "NativeCompatibility",
       "source": "Plugin/NativeCompatibility.cs",
-      "rva": "0x7b836b0",
+      "rva": "0x7b83740",
       "length": 40,
       "sha256": "83d0b35ff29d488d4dba4324f735f2abbdf5f25d711aeaadd062d122fff833ed"
     },
     {
       "name": "NativeCompatibility",
       "source": "Plugin/NativeCompatibility.cs",
-      "rva": "0x35c24b0",
+      "rva": "0x35c2540",
       "length": 514,
-      "sha256": "917b60c8b6b3f6bf22d8ec15f3ead404f4523e9a6290dbb2a7f7bf97de3a30f0"
+      "sha256": "e6fd8dc69e969f0a46f9a582d286dd6690535b3b813e0698647733f9c16983d8"
     },
     {
       "name": "NativeCompatibility",
       "source": "Plugin/NativeCompatibility.cs",
-      "rva": "0x5fe1bd0",
+      "rva": "0x5fe1c60",
       "length": 232,
-      "sha256": "48df33cbf4b296ba01a977a4537df3200d9a4611e06d3bbbb2f464e7b6ad5b72"
+      "sha256": "7271d1b51b7e82027ee9905c6e49c4bb78ef13eaf29333121270c2e11844005a"
     },
     {
       "name": "NativeCompatibility",
@@ -34,587 +34,587 @@
     {
       "name": "NativeCompatibility",
       "source": "Plugin/NativeCompatibility.cs",
-      "rva": "0x34875e0",
+      "rva": "0x3487670",
       "length": 86,
       "sha256": "40fcfa2d50110b60c6d554ec26abbf9d25820ed360b81c54f492ae7c0928adfd"
     },
     {
       "name": "NativeCompatibility",
       "source": "Plugin/NativeCompatibility.cs",
-      "rva": "0x35e3330",
+      "rva": "0x35e33c0",
       "length": 445,
-      "sha256": "274d26d97b136ef7f555c8540978c0863ca9d3d879513d2fcd62436a0ccc3087"
+      "sha256": "0396bde8258fd2ec5f472088a6de181c37229f82e92a2ed91424a80cf8763ba3"
     },
     {
       "name": "NativeCompatibility",
       "source": "Plugin/NativeCompatibility.cs",
-      "rva": "0x35e4850",
+      "rva": "0x35e48e0",
       "length": 368,
-      "sha256": "fa3ee8d6e4e77029f23e1b5560852ae6a4daf9987a7b761f7a2602ab7ad1c909"
+      "sha256": "9511b69eb70bcfb5dc3d9cae2528bd5b86e3e80242e11e01cf9285a4995b4fb2"
     },
     {
       "name": "NativeCompatibility",
       "source": "Plugin/NativeCompatibility.cs",
-      "rva": "0x35ff940",
+      "rva": "0x35ff9d0",
       "length": 3356,
-      "sha256": "0d81a9a969cbcce0a673fe1cc3eab4cf7334acfeb171d9bc22e892e58e84db0e"
+      "sha256": "d75c44781e6c75231581af2cba186f3f2cb93191a155d669db25055a67d997a3"
     },
     {
       "name": "NativeCompatibility",
       "source": "Plugin/NativeCompatibility.cs",
-      "rva": "0x3601240",
+      "rva": "0x36012d0",
       "length": 1561,
-      "sha256": "f4b9e86fc67ecf26702a8098a54af15f5f680be842c6c7a297967bd297fe121e"
+      "sha256": "c7ff6aa0bf9cc1e5473bab8b8ec50f530042982820ab4c0633d5a325ebeab02b"
     },
     {
       "name": "NativeCompatibility",
       "source": "Plugin/NativeCompatibility.cs",
-      "rva": "0x3601860",
+      "rva": "0x36018f0",
       "length": 1487,
-      "sha256": "bc8f225aaceb454dbe417f10f05f0e413a9c36eb90793812af6c062896f86daa"
+      "sha256": "02d393ce65fc2fcacad0adef3229cd67925a3cc6c3faf4d4340bb99291f1282f"
     },
     {
       "name": "NativeCompatibility",
       "source": "Plugin/NativeCompatibility.cs",
-      "rva": "0x3601e34",
+      "rva": "0x3601ec4",
       "length": 486,
-      "sha256": "4127a282d9d904bcdac574a39a02e90f7a2055c0aef219a1844b20cccb8cba03"
+      "sha256": "b40dfb016491cdd2a898a0587f9598d1176535180542f96bb456da32218d12aa"
     },
     {
       "name": "NativeCompatibility",
       "source": "Plugin/NativeCompatibility.cs",
-      "rva": "0x36a1450",
+      "rva": "0x36a14e0",
       "length": 1211,
-      "sha256": "1fc0e1558f537fd762ecbf32e95d188188c9f78e3f6c33227a80f644164f74a7"
+      "sha256": "1d864976752789fa7afc8f52f208ccaf53e5fea1f1d86b3a44faccb20af0d208"
     },
     {
       "name": "NativeCompatibility",
       "source": "Plugin/NativeCompatibility.cs",
-      "rva": "0x377e340",
+      "rva": "0x377e3d0",
       "length": 136,
-      "sha256": "3f56c3b2bcd0d5bd6cba8f602c80356094b300ff1c376762a68017369f4f9c0f"
+      "sha256": "60f383104c6080705dd93efb156c32ba9703e023b100e7d570977ce202c1d1e2"
     },
     {
       "name": "NativeCompatibility",
       "source": "Plugin/NativeCompatibility.cs",
-      "rva": "0x3f0a300",
+      "rva": "0x3f0a390",
       "length": 8,
-      "sha256": "6dd01991fadf6f57785ac911ed232130421e67baf1c8524a86b3f716e6c8beb8"
+      "sha256": "514867708172d5de356d4fc10e810c2b5fd7c13eda8535def41949abb4a9a30a"
     },
     {
       "name": "NativeCompatibility",
       "source": "Plugin/NativeCompatibility.cs",
-      "rva": "0x4ff6fc0",
+      "rva": "0x4ff7050",
       "length": 1063,
-      "sha256": "37612e52c7247126114b553fb299d33d7993c14f9bd988d9ca26c021dcd8a7d9"
+      "sha256": "46fd61b8bab989df450afd60156db7ac84bfdeaf88f0939447864a56f4134712"
     },
     {
       "name": "NativeCompatibility",
       "source": "Plugin/NativeCompatibility.cs",
-      "rva": "0x4ff7400",
+      "rva": "0x4ff7490",
       "length": 262,
-      "sha256": "9652ed5cfe52a4ecf9cc3c83baef6f3afd18a8c9f4289723abcd495c9d262512"
+      "sha256": "fadc8c2e119da0a50352a0458b906ba0bf06b33a2de66e8d6c3c23553bdbf871"
     },
     {
       "name": "NativeCompatibility",
       "source": "Plugin/NativeCompatibility.cs",
-      "rva": "0x4ff76e0",
+      "rva": "0x4ff7770",
       "length": 783,
-      "sha256": "6c6acfe612bce7bbb7fdd06c9733b297053e79ad38d959613a36e020baf73c56"
+      "sha256": "bc115b2929d61e1944e9f2d36f9f17b3227e02ea0ebdac4a53996076aaf6ec94"
     },
     {
       "name": "NativeCompatibility",
       "source": "Plugin/NativeCompatibility.cs",
-      "rva": "0x4ff8c10",
+      "rva": "0x4ff8ca0",
       "length": 89,
-      "sha256": "5512402dec41f3e9dac2e2d469d82636aad556906937d29d21ad118f15d989f2"
+      "sha256": "a8aa006db06380209437b2de7527c6511047128ed39afa4fa12b15e7f806a0fb"
     },
     {
       "name": "NativeCompatibility",
       "source": "Plugin/NativeCompatibility.cs",
-      "rva": "0x5d12420",
+      "rva": "0x5d124b0",
       "length": 271,
-      "sha256": "938744e5509d3b476f1ccfd80740fcce961c2e3940ddac1230dd74c949478774"
+      "sha256": "260e8b3c8d8ed4cb19ae57a407fc375e12d94aef6614c49205a071dae4cda419"
     },
     {
       "name": "NativeCompatibility",
       "source": "Plugin/NativeCompatibility.cs",
-      "rva": "0x5d4d900",
+      "rva": "0x5d4d990",
       "length": 516,
-      "sha256": "ad65b803b3ee886cb75549039de0096d9a26b10f6dab6f365c7b723ac7221ae6"
-    },
-    {
-      "name": "NativeCompatibility",
-      "source": "Plugin/NativeCompatibility.cs",
-      "rva": "0x5d5d000",
-      "length": 62,
-      "sha256": "a197bbdfaaa5600b15535647e1f21decc7eba8c988b1c3b0ffa4e65f956eb554"
-    },
-    {
-      "name": "NativeCompatibility",
-      "source": "Plugin/NativeCompatibility.cs",
-      "rva": "0x5d5d040",
-      "length": 79,
-      "sha256": "0ef5dbb7f79e6ac8a51e38282734b68e6932a99ab978830736f51ad5bba4bc04"
+      "sha256": "541d2c09a208cadc3298c967be0e858c26818fd106914b50c3c1c7bf7f59913a"
     },
     {
       "name": "NativeCompatibility",
       "source": "Plugin/NativeCompatibility.cs",
       "rva": "0x5d5d090",
+      "length": 62,
+      "sha256": "ae8a2874c93cbd6bd4a35de91dcbc9da9018b75885492cd73baca841b05b4525"
+    },
+    {
+      "name": "NativeCompatibility",
+      "source": "Plugin/NativeCompatibility.cs",
+      "rva": "0x5d5d0d0",
+      "length": 79,
+      "sha256": "b25c226300e5935e50f1bff7a53349be213c3bc7ecdad9f2ac14851dd0727cfd"
+    },
+    {
+      "name": "NativeCompatibility",
+      "source": "Plugin/NativeCompatibility.cs",
+      "rva": "0x5d5d120",
       "length": 1156,
-      "sha256": "23b7e404b2b9a4377732df9f04b7c0a018a65d8f2a403472b4628d725630ae70"
+      "sha256": "645ef8ba8b1962ea12aba789730179b3a62e3a2eae2dd124b1bc5a4fcc2818f5"
     },
     {
       "name": "NativeCompatibility",
       "source": "Plugin/NativeCompatibility.cs",
-      "rva": "0x5d5e570",
+      "rva": "0x5d5e600",
       "length": 1053,
-      "sha256": "fac2d4ec406b868650d8233c4a2ea93fc9434c7706bda95eed80d86710d26655"
+      "sha256": "c73cc7000f5d1333cdfe1f87f358ea7ec428a314a03ad4177076c108e001720e"
     },
     {
       "name": "NativeCompatibility",
       "source": "Plugin/NativeCompatibility.cs",
-      "rva": "0x5d70550",
+      "rva": "0x5d705e0",
       "length": 2019,
-      "sha256": "7cef7aa1fea5362637c03a1eacea529207f4e401a64c04b320325adc945bc47c"
+      "sha256": "4f27a4942f6eb7ee37a7ec2b7d8ab2c2e7cbd3a8f9bc9f6b2f2fdac04ceedd99"
     },
     {
       "name": "NativeCompatibility",
       "source": "Plugin/NativeCompatibility.cs",
-      "rva": "0x5d74320",
+      "rva": "0x5d743b0",
       "length": 7044,
-      "sha256": "53f660da6e71d2ee3a81df2282ca8d4a80dfb618ed05a34fa4f34a81920af851"
+      "sha256": "99898522833edab44b4370fb6780a90e640c8dc8cb67b79d70adecb07973a19f"
     },
     {
       "name": "NativeCompatibility",
       "source": "Plugin/NativeCompatibility.cs",
-      "rva": "0x5f0d5c0",
+      "rva": "0x5f0d650",
       "length": 690,
-      "sha256": "ac873634d791e9aeae6ea34021e730f7a82192992842e2b64051edf70b1e14a1"
+      "sha256": "60017636e9eb50c55b2cbc6ec8b72ed978180204eccdc56cdd15f29e820e5cc5"
     },
     {
       "name": "NativeCompatibility",
       "source": "Plugin/NativeCompatibility.cs",
-      "rva": "0x7b82380",
+      "rva": "0x7b82410",
       "length": 388,
-      "sha256": "84849acc2335d10ff0eef36eddf3281b2051fa5d32416001c75e4720bc1c11c7"
+      "sha256": "207b953483d0ba2d8674f9f969b7956002ba6fd38ef20f3c5a9e7f5dfeb9c1a7"
     },
     {
       "name": "NativeCompatibility",
       "source": "Plugin/NativeCompatibility.cs",
-      "rva": "0x7b82509",
+      "rva": "0x7b82599",
       "length": 44,
       "sha256": "4303b38a74a0bea03a4ff9ddb9aee117771868dfdd67d70cd59c9fb46fecfddb"
     },
     {
       "name": "NativeCompatibility",
       "source": "Plugin/NativeCompatibility.cs",
-      "rva": "0x7b9d930",
+      "rva": "0x7b9d9c0",
       "length": 561,
-      "sha256": "9a64e3c3e93ae5691323e4337dc697af5caabd090aa92fbb5bd5e4837af2db83"
+      "sha256": "1a5dbcba7a6cfc5e900786ea0a12e4fe4070b00224a5b06551b37bf09ed250d0"
     },
     {
       "name": "NativeCompatibility",
       "source": "Plugin/NativeCompatibility.cs",
-      "rva": "0x7baf6d0",
+      "rva": "0x7baf760",
       "length": 168,
-      "sha256": "cf2ccaf8f011f8a9e4771c68ff28faa8814be5b0c3a77bae3fc979d80fec298d"
+      "sha256": "f8fb51b9bf915cc19b4025ede5d84957a56860765d8cba83888dee2070187dfe"
     },
     {
       "name": "NativeCompatibility",
       "source": "Plugin/NativeCompatibility.cs",
-      "rva": "0x7baf940",
+      "rva": "0x7baf9d0",
       "length": 103,
-      "sha256": "b0c02742cb9f74fe00ea029aaea8afe15f336e260dd0c50209ecf44ce8c009f3"
+      "sha256": "bb71ac726bbe8f76606b6eb4a83441248e05c990dc446d81bdcdabed7c1b3310"
     },
     {
       "name": "NativeCompatibility",
       "source": "Plugin/NativeCompatibility.cs",
-      "rva": "0xae3a190",
+      "rva": "0xae3a1b0",
       "length": 16,
       "sha256": "231f5cecc61699ca90f5e9acdbc4c47552f66daeb7ef55327cb7574cda9f29e5"
     },
     {
       "name": "NativeCompatibility",
       "source": "Plugin/NativeCompatibility.cs",
-      "rva": "0xbab7020",
+      "rva": "0xbab6fc0",
       "length": 16,
       "sha256": "0f023d55ec1805f2c2fbbc1debe1075cfc153ebb81b7814f6f5b9bf7d613146b"
     },
     {
       "name": "NativeCompatibility",
       "source": "Plugin/NativeCompatibility.cs",
-      "rva": "0xbab7030",
+      "rva": "0xbab6fd0",
       "length": 16,
       "sha256": "50ec86dca0a9e4d7818f30e38545007351cfd8c06883650b09d93f2789a41c3c"
     },
     {
       "name": "NativeCompatibility",
       "source": "Plugin/NativeCompatibility.cs",
-      "rva": "0xbab7040",
+      "rva": "0xbab6fe0",
       "length": 16,
       "sha256": "27d6d18d488331575c4684105e46a16e69d9aa9c7b503590130d7081ec229bae"
     },
     {
       "name": "NativeCompatibility",
       "source": "Plugin/NativeCompatibility.cs",
-      "rva": "0xbab7050",
+      "rva": "0xbab6ff0",
       "length": 16,
       "sha256": "c8a6e2851fe308ff9d0e7ce942774e14ca5d4f0655acf8167eae615207bae265"
     },
     {
       "name": "NativeCompatibility",
       "source": "Plugin/NativeCompatibility.cs",
-      "rva": "0x5d5d9f0",
+      "rva": "0x5d5da80",
       "length": 63,
-      "sha256": "32077d3f7b44fdc7a18800dcbba2bffa94a37e11bb1f581f5badecd62a8a0a90"
+      "sha256": "0f3a5262b29f65e49dc2f63509d46030a33e08dbd9d730e6cf590927cdf8851e"
     },
     {
       "name": "NativeCompatibility",
       "source": "Plugin/NativeCompatibility.cs",
-      "rva": "0x7bce8f0",
+      "rva": "0x7bce980",
       "length": 72,
-      "sha256": "96b0fe3e0c1ab4f1090ffbd8ac49c1ceb9e71a529035eaefe848f7663003d96a"
+      "sha256": "47a76d24b63bf1c073b399cf6b7ab668ea018d3d78af592c90563bebdf137cf4"
     },
     {
       "name": "NativeCompatibility",
       "source": "Plugin/NativeCompatibility.cs",
-      "rva": "0x7c1b8c0",
+      "rva": "0x7c1b950",
       "length": 8,
-      "sha256": "0114f7b6fcd000b5da40a5c37b9d506e68f1cdf1c2833b4d71ee5dfc6a46b008"
+      "sha256": "1ee1e834dd285bc898bd18a11d0cb3a15a32fc6a428ac30311bb9cffb382515d"
     },
     {
       "name": "NativeCompatibility",
       "source": "Plugin/NativeCompatibility.cs",
       "rva": "0x25a3e60",
       "length": 168,
-      "sha256": "3b8537229ab2aeee3325e5057944c424b3864ef14094bae8da1e0bd2bd142645"
+      "sha256": "3f023cf3603a4fe524f9c29f83d600946bd86791aa0cf882b12e3824c9c1baa7"
     },
     {
       "name": "NativeCompatibility",
       "source": "Plugin/NativeCompatibility.cs",
-      "rva": "0x5d4e130",
+      "rva": "0x5d4e1c0",
       "length": 596,
-      "sha256": "af69acf3614208e7d1d0bc794c6b9891518848a4d3c8a6286f886ad9acf8acf5"
+      "sha256": "bdafb3670a5522e5bc124110c514f58de7aa012362ead22c0e71e8fb7382e2ba"
     }
   ],
   "references": {
     "0x100001": [
-      "Plugin/NativeRuntime.cs:1042"
+      "Plugin/NativeRuntime.cs:1056"
     ],
     "0x25a3e60": [
-      "Plugin/NativeCompatibility.cs:66",
+      "Plugin/NativeCompatibility.cs:67",
       "Plugin/NativeRuntime.cs:96"
     ],
     "0x2ad9200": [
-      "Plugin/NativeCompatibility.cs:29",
-      "Plugin/NativeRuntime.cs:674"
+      "Plugin/NativeCompatibility.cs:30",
+      "Plugin/NativeRuntime.cs:688"
     ],
     "0x2eb4c30": [
       "Plugin/DynastyControllerCompatibility.cs:45"
     ],
-    "0x34875e0": [
-      "Plugin/NativeCompatibility.cs:30"
-    ],
-    "0x35c24b0": [
-      "Plugin/NativeCompatibility.cs:27"
-    ],
-    "0x35e3330": [
+    "0x3487670": [
       "Plugin/NativeCompatibility.cs:31"
     ],
-    "0x35e33f2": [
-      "Plugin/PracticeRunner.cs:216"
-    ],
-    "0x35e4850": [
-      "Plugin/NativeCompatibility.cs:32",
-      "Plugin/NativeRuntime.cs:895",
-      "Plugin/NativeRuntime.cs:896",
-      "Plugin/NativeRuntime.cs:948",
-      "Plugin/NativeRuntime.cs:949"
-    ],
-    "0x35ff940": [
-      "Plugin/NativeCompatibility.cs:33",
-      "Plugin/NativeRuntime.cs:96"
-    ],
-    "0x3601240": [
-      "Plugin/NativeCompatibility.cs:34",
-      "Plugin/NativeCompatibility.cs:75",
-      "Plugin/NativeRuntime.cs:96"
-    ],
-    "0x360128b": [
-      "Plugin/NativeCompatibility.cs:101"
-    ],
-    "0x3601860": [
-      "Plugin/NativeCompatibility.cs:35",
-      "Plugin/NativeRuntime.cs:96"
-    ],
-    "0x3601e2f": [
-      "Plugin/NativeCompatibility.cs:22"
-    ],
-    "0x3601e34": [
-      "Plugin/NativeCompatibility.cs:36"
-    ],
-    "0x36a1450": [
-      "Plugin/NativeCompatibility.cs:37",
-      "Plugin/NativeRuntime.cs:96",
-      "Plugin/NativeRuntime.cs:851",
-      "Plugin/NativeRuntime.cs:955"
-    ],
-    "0x377e340": [
-      "Plugin/NativeCompatibility.cs:38",
-      "Plugin/NativeRuntime.cs:96"
-    ],
-    "0x3f0a300": [
-      "Plugin/NativeCompatibility.cs:39",
-      "Plugin/NativeRuntime.cs:597"
-    ],
-    "0x4ff6fc0": [
-      "Plugin/NativeCompatibility.cs:40"
-    ],
-    "0x4ff70be": [
-      "Plugin/NativeRuntime.cs:96"
-    ],
-    "0x4ff70eb": [
-      "Plugin/NativeRuntime.cs:96",
-      "Plugin/NativeRuntime.cs:98"
-    ],
-    "0x4ff7187": [
-      "Plugin/NativeRuntime.cs:98"
-    ],
-    "0x4ff7400": [
-      "Plugin/NativeCompatibility.cs:41"
-    ],
-    "0x4ff7456": [
-      "Plugin/NativeRuntime.cs:96"
-    ],
-    "0x4ff74f3": [
-      "Plugin/NativeRuntime.cs:98"
-    ],
-    "0x4ff76e0": [
-      "Plugin/NativeCompatibility.cs:42"
-    ],
-    "0x4ff7823": [
-      "Plugin/NativeRuntime.cs:542"
-    ],
-    "0x4ff8c10": [
-      "Plugin/NativeCompatibility.cs:43",
-      "Plugin/NativeRuntime.cs:683"
-    ],
-    "0x5d12420": [
-      "Plugin/NativeCompatibility.cs:44",
-      "Plugin/NativeCompatibility.cs:76",
-      "Plugin/NativeRuntime.cs:719",
-      "Plugin/NativeRuntime.cs:749",
-      "Plugin/NativeRuntime.cs:856"
-    ],
-    "0x5d1242f": [
-      "Plugin/DynastyControllerCompatibility.cs:33"
-    ],
-    "0x5d4d900": [
-      "Plugin/NativeCompatibility.cs:45",
-      "Plugin/NativeRuntime.cs:96"
-    ],
-    "0x5d4daff": [
-      "Plugin/NativeRuntime.cs:580"
-    ],
-    "0x5d4e130": [
-      "Plugin/NativeCompatibility.cs:67",
-      "Plugin/NativeRuntime.cs:96"
-    ],
-    "0x5d5d000": [
-      "Plugin/NativeCompatibility.cs:46",
-      "Plugin/NativeRuntime.cs:764",
-      "Plugin/NativeRuntime.cs:837",
-      "Plugin/NativeRuntime.cs:944"
-    ],
-    "0x5d5d040": [
-      "Plugin/NativeCompatibility.cs:47",
-      "Plugin/NativeRuntime.cs:96",
-      "Plugin/NativeRuntime.cs:765",
-      "Plugin/NativeRuntime.cs:838",
-      "Plugin/NativeRuntime.cs:945"
-    ],
-    "0x5d5d090": [
-      "Plugin/NativeCompatibility.cs:48",
-      "Plugin/NativeRuntime.cs:96",
-      "Plugin/NativeRuntime.cs:766",
-      "Plugin/NativeRuntime.cs:839",
-      "Plugin/NativeRuntime.cs:946"
-    ],
-    "0x5d5d9f0": [
-      "Plugin/NativeCompatibility.cs:63",
-      "Plugin/NativeRuntime.cs:888"
-    ],
-    "0x5d5e570": [
-      "Plugin/NativeCompatibility.cs:49"
-    ],
-    "0x5d5e7e6": [
-      "Plugin/NativeRuntime.cs:572"
-    ],
-    "0x5d70550": [
-      "Plugin/NativeCompatibility.cs:50"
-    ],
-    "0x5d707a1": [
-      "Plugin/PracticeRunner.cs:215"
-    ],
-    "0x5d74320": [
-      "Plugin/NativeCompatibility.cs:51"
-    ],
-    "0x5d75e26": [
-      "Plugin/NativeRuntime.cs:573"
-    ],
-    "0x5f0d5c0": [
-      "Plugin/NativeCompatibility.cs:52",
-      "Plugin/NativeRuntime.cs:686"
-    ],
-    "0x5fe1bd0": [
+    "0x35c2540": [
       "Plugin/NativeCompatibility.cs:28"
     ],
-    "0x7a9abf0": [
+    "0x35e33c0": [
+      "Plugin/NativeCompatibility.cs:32"
+    ],
+    "0x35e3482": [
+      "Plugin/PracticeRunner.cs:224"
+    ],
+    "0x35e48e0": [
+      "Plugin/NativeCompatibility.cs:33",
+      "Plugin/NativeRuntime.cs:909",
+      "Plugin/NativeRuntime.cs:910",
+      "Plugin/NativeRuntime.cs:962",
+      "Plugin/NativeRuntime.cs:963"
+    ],
+    "0x35ff9d0": [
+      "Plugin/NativeCompatibility.cs:34",
+      "Plugin/NativeRuntime.cs:96"
+    ],
+    "0x36012d0": [
+      "Plugin/NativeCompatibility.cs:35",
+      "Plugin/NativeCompatibility.cs:76",
+      "Plugin/NativeRuntime.cs:96"
+    ],
+    "0x360131b": [
+      "Plugin/NativeCompatibility.cs:102"
+    ],
+    "0x36018f0": [
+      "Plugin/NativeCompatibility.cs:36",
+      "Plugin/NativeRuntime.cs:96"
+    ],
+    "0x3601ebf": [
+      "Plugin/NativeCompatibility.cs:23"
+    ],
+    "0x3601ec4": [
+      "Plugin/NativeCompatibility.cs:37"
+    ],
+    "0x36a14e0": [
+      "Plugin/NativeCompatibility.cs:38",
+      "Plugin/NativeRuntime.cs:96",
+      "Plugin/NativeRuntime.cs:865",
+      "Plugin/NativeRuntime.cs:969"
+    ],
+    "0x377e3d0": [
+      "Plugin/NativeCompatibility.cs:39",
+      "Plugin/NativeRuntime.cs:96"
+    ],
+    "0x3f0a390": [
+      "Plugin/NativeCompatibility.cs:40",
+      "Plugin/NativeRuntime.cs:611"
+    ],
+    "0x4ff7050": [
+      "Plugin/NativeCompatibility.cs:41"
+    ],
+    "0x4ff714e": [
+      "Plugin/NativeRuntime.cs:96"
+    ],
+    "0x4ff717b": [
+      "Plugin/NativeRuntime.cs:96",
+      "Plugin/NativeRuntime.cs:98"
+    ],
+    "0x4ff7217": [
+      "Plugin/NativeRuntime.cs:98"
+    ],
+    "0x4ff7490": [
+      "Plugin/NativeCompatibility.cs:42"
+    ],
+    "0x4ff74e6": [
+      "Plugin/NativeRuntime.cs:96"
+    ],
+    "0x4ff7583": [
+      "Plugin/NativeRuntime.cs:98"
+    ],
+    "0x4ff7770": [
+      "Plugin/NativeCompatibility.cs:43"
+    ],
+    "0x4ff78b3": [
+      "Plugin/NativeRuntime.cs:556"
+    ],
+    "0x4ff8ca0": [
+      "Plugin/NativeCompatibility.cs:44",
+      "Plugin/NativeRuntime.cs:697"
+    ],
+    "0x5d124b0": [
+      "Plugin/NativeCompatibility.cs:45",
+      "Plugin/NativeCompatibility.cs:77",
+      "Plugin/NativeRuntime.cs:733",
+      "Plugin/NativeRuntime.cs:763",
+      "Plugin/NativeRuntime.cs:870"
+    ],
+    "0x5d124bf": [
+      "Plugin/DynastyControllerCompatibility.cs:33"
+    ],
+    "0x5d4d990": [
+      "Plugin/NativeCompatibility.cs:46",
+      "Plugin/NativeRuntime.cs:96"
+    ],
+    "0x5d4db8f": [
+      "Plugin/NativeRuntime.cs:594"
+    ],
+    "0x5d4e1c0": [
+      "Plugin/NativeCompatibility.cs:68",
+      "Plugin/NativeRuntime.cs:96"
+    ],
+    "0x5d5d090": [
+      "Plugin/NativeCompatibility.cs:47",
+      "Plugin/NativeRuntime.cs:778",
+      "Plugin/NativeRuntime.cs:851",
+      "Plugin/NativeRuntime.cs:958"
+    ],
+    "0x5d5d0d0": [
+      "Plugin/NativeCompatibility.cs:48",
+      "Plugin/NativeRuntime.cs:96",
+      "Plugin/NativeRuntime.cs:779",
+      "Plugin/NativeRuntime.cs:852",
+      "Plugin/NativeRuntime.cs:959"
+    ],
+    "0x5d5d120": [
+      "Plugin/NativeCompatibility.cs:49",
+      "Plugin/NativeRuntime.cs:96",
+      "Plugin/NativeRuntime.cs:780",
+      "Plugin/NativeRuntime.cs:853",
+      "Plugin/NativeRuntime.cs:960"
+    ],
+    "0x5d5da80": [
+      "Plugin/NativeCompatibility.cs:64",
+      "Plugin/NativeRuntime.cs:902"
+    ],
+    "0x5d5e600": [
+      "Plugin/NativeCompatibility.cs:50"
+    ],
+    "0x5d5e876": [
+      "Plugin/NativeRuntime.cs:586"
+    ],
+    "0x5d705e0": [
+      "Plugin/NativeCompatibility.cs:51"
+    ],
+    "0x5d70831": [
+      "Plugin/PracticeRunner.cs:223"
+    ],
+    "0x5d743b0": [
+      "Plugin/NativeCompatibility.cs:52"
+    ],
+    "0x5d75eb6": [
+      "Plugin/NativeRuntime.cs:587"
+    ],
+    "0x5f0d650": [
+      "Plugin/NativeCompatibility.cs:53",
+      "Plugin/NativeRuntime.cs:700"
+    ],
+    "0x5fe1c60": [
+      "Plugin/NativeCompatibility.cs:29"
+    ],
+    "0x7a9ac80": [
       "Plugin/DynastyControllerCompatibility.cs:66",
       "Plugin/DynastyControllerCompatibility.cs:66"
     ],
-    "0x7b82380": [
-      "Plugin/NativeCompatibility.cs:53",
-      "Plugin/NativeRuntime.cs:114",
-      "Plugin/NativeRuntime.cs:665"
+    "0x7b82410": [
+      "Plugin/NativeCompatibility.cs:54",
+      "Plugin/NativeRuntime.cs:116",
+      "Plugin/NativeRuntime.cs:679"
     ],
-    "0x7b82504": [
-      "Plugin/NativeCompatibility.cs:22"
+    "0x7b82594": [
+      "Plugin/NativeCompatibility.cs:23"
     ],
-    "0x7b82509": [
-      "Plugin/NativeCompatibility.cs:54"
+    "0x7b82599": [
+      "Plugin/NativeCompatibility.cs:55"
     ],
-    "0x7b836b0": [
-      "Plugin/NativeCompatibility.cs:26"
+    "0x7b83740": [
+      "Plugin/NativeCompatibility.cs:27"
     ],
-    "0x7b9d930": [
-      "Plugin/NativeCompatibility.cs:55",
-      "Plugin/NativeRuntime.cs:96"
-    ],
-    "0x7baf6d0": [
+    "0x7b9d9c0": [
       "Plugin/NativeCompatibility.cs:56",
-      "Plugin/NativeRuntime.cs:593",
-      "Plugin/NativeRuntime.cs:695",
-      "Plugin/NativeRuntime.cs:724",
-      "Plugin/NativeRuntime.cs:754",
-      "Plugin/NativeRuntime.cs:876"
-    ],
-    "0x7baf940": [
-      "Plugin/NativeCompatibility.cs:57"
-    ],
-    "0x7baf970": [
-      "Plugin/NativeRuntime.cs:96",
-      "Plugin/NativeRuntime.cs:875"
-    ],
-    "0x7bce8f0": [
-      "Plugin/NativeCompatibility.cs:64",
       "Plugin/NativeRuntime.cs:96"
     ],
-    "0x7c1b8c0": [
-      "Plugin/NativeCompatibility.cs:65",
-      "Plugin/NativeRuntime.cs:792"
+    "0x7baf760": [
+      "Plugin/NativeCompatibility.cs:57",
+      "Plugin/NativeRuntime.cs:607",
+      "Plugin/NativeRuntime.cs:709",
+      "Plugin/NativeRuntime.cs:738",
+      "Plugin/NativeRuntime.cs:768",
+      "Plugin/NativeRuntime.cs:890"
     ],
-    "0x7fae660": [
+    "0x7baf9d0": [
+      "Plugin/NativeCompatibility.cs:58"
+    ],
+    "0x7bafa00": [
+      "Plugin/NativeRuntime.cs:96",
+      "Plugin/NativeRuntime.cs:889"
+    ],
+    "0x7bce980": [
+      "Plugin/NativeCompatibility.cs:65",
+      "Plugin/NativeRuntime.cs:96"
+    ],
+    "0x7c1b950": [
+      "Plugin/NativeCompatibility.cs:66",
+      "Plugin/NativeRuntime.cs:806"
+    ],
+    "0x7fae6c0": [
       "Plugin/DynastyControllerCompatibility.cs:75"
     ],
-    "0x91364c0": [
+    "0x9136520": [
       "Plugin/DynastyControllerCompatibility.cs:59"
     ],
-    "0xae3a190": [
-      "Plugin/NativeCompatibility.cs:58",
-      "Plugin/NativeRuntime.cs:684"
+    "0xae3a1b0": [
+      "Plugin/NativeCompatibility.cs:59",
+      "Plugin/NativeRuntime.cs:698"
     ],
-    "0xb32a410": [
+    "0xb32a3b0": [
       "Plugin/DynastyControllerCompatibility.cs:13",
       "Plugin/DynastyControllerCompatibility.cs:43",
       "Plugin/DynastyControllerCompatibility.cs:57"
     ],
-    "0xb47b048": [
-      "Plugin/NativeRuntime.cs:1082"
+    "0xb47afe8": [
+      "Plugin/NativeRuntime.cs:1097"
     ],
-    "0xb47e908": [
-      "Plugin/NativeRuntime.cs:111"
+    "0xb47e8a8": [
+      "Plugin/NativeRuntime.cs:113"
     ],
-    "0xb47f790": [
-      "Plugin/NativeRuntime.cs:111"
+    "0xb47f730": [
+      "Plugin/NativeRuntime.cs:113"
     ],
-    "0xb64ca78": [
-      "Plugin/NativeRuntime.cs:317"
+    "0xb64ca18": [
+      "Plugin/NativeRuntime.cs:331"
     ],
-    "0xb64cba0": [
-      "Plugin/NativeRuntime.cs:244",
-      "Plugin/NativeRuntime.cs:312",
-      "Plugin/NativeRuntime.cs:338"
+    "0xb64cb40": [
+      "Plugin/NativeRuntime.cs:258",
+      "Plugin/NativeRuntime.cs:326",
+      "Plugin/NativeRuntime.cs:352"
     ],
-    "0xb64ccf8": [
-      "Plugin/NativeRuntime.cs:325",
-      "Plugin/NativeRuntime.cs:325",
-      "Plugin/NativeRuntime.cs:345",
-      "Plugin/NativeRuntime.cs:345"
+    "0xb64cc98": [
+      "Plugin/NativeRuntime.cs:339",
+      "Plugin/NativeRuntime.cs:339",
+      "Plugin/NativeRuntime.cs:359",
+      "Plugin/NativeRuntime.cs:359"
     ],
-    "0xb64cd00": [
-      "Plugin/NativeRuntime.cs:320",
-      "Plugin/NativeRuntime.cs:328"
+    "0xb64cca0": [
+      "Plugin/NativeRuntime.cs:334",
+      "Plugin/NativeRuntime.cs:342"
     ],
-    "0xb64cf30": [
-      "Plugin/NativeRuntime.cs:241",
-      "Plugin/NativeRuntime.cs:307"
+    "0xb64ced0": [
+      "Plugin/NativeRuntime.cs:255",
+      "Plugin/NativeRuntime.cs:321"
     ],
-    "0xbab7020": [
-      "Plugin/NativeCompatibility.cs:59",
-      "Plugin/NativeRuntime.cs:907"
-    ],
-    "0xbab7030": [
+    "0xbab6fc0": [
       "Plugin/NativeCompatibility.cs:60",
-      "Plugin/NativeRuntime.cs:907"
+      "Plugin/NativeRuntime.cs:921"
     ],
-    "0xbab7040": [
+    "0xbab6fd0": [
       "Plugin/NativeCompatibility.cs:61",
-      "Plugin/NativeRuntime.cs:907"
+      "Plugin/NativeRuntime.cs:921"
     ],
-    "0xbab7050": [
+    "0xbab6fe0": [
       "Plugin/NativeCompatibility.cs:62",
-      "Plugin/NativeRuntime.cs:910"
+      "Plugin/NativeRuntime.cs:921"
     ],
-    "0xbaced38": [
+    "0xbab6ff0": [
+      "Plugin/NativeCompatibility.cs:63",
+      "Plugin/NativeRuntime.cs:924"
+    ],
+    "0xbacecd8": [
       "Plugin/DynastyControllerCompatibility.cs:74"
     ],
-    "0xbaebe78": [
-      "Plugin/NativeRuntime.cs:794"
+    "0xbaebe18": [
+      "Plugin/NativeRuntime.cs:808"
     ],
     "0xd9eb808": [
       "Plugin/DynastyControllerCompatibility.cs:8",
       "Plugin/DynastyControllerCompatibility.cs:24",
       "Plugin/DynastyControllerCompatibility.cs:39",
       "Plugin/DynastyControllerCompatibility.cs:51",
-      "Plugin/NativeRuntime.cs:188",
-      "Plugin/NativeRuntime.cs:199"
+      "Plugin/NativeRuntime.cs:197",
+      "Plugin/NativeRuntime.cs:207"
     ],
     "0xdae5480": [
-      "Plugin/NativeRuntime.cs:585",
-      "Plugin/NativeRuntime.cs:695",
-      "Plugin/NativeRuntime.cs:724",
-      "Plugin/NativeRuntime.cs:754",
-      "Plugin/NativeRuntime.cs:875",
-      "Plugin/NativeRuntime.cs:876"
+      "Plugin/NativeRuntime.cs:599",
+      "Plugin/NativeRuntime.cs:709",
+      "Plugin/NativeRuntime.cs:738",
+      "Plugin/NativeRuntime.cs:768",
+      "Plugin/NativeRuntime.cs:889",
+      "Plugin/NativeRuntime.cs:890"
     ],
     "0xdae5a21": [
-      "Plugin/NativeRuntime.cs:498",
-      "Plugin/NativeRuntime.cs:499",
-      "Plugin/NativeRuntime.cs:509",
-      "Plugin/NativeRuntime.cs:509"
+      "Plugin/NativeRuntime.cs:512",
+      "Plugin/NativeRuntime.cs:513",
+      "Plugin/NativeRuntime.cs:523",
+      "Plugin/NativeRuntime.cs:523"
     ],
     "0xdae5a24": [
-      "Plugin/NativeRuntime.cs:498",
-      "Plugin/NativeRuntime.cs:499",
-      "Plugin/NativeRuntime.cs:510",
-      "Plugin/NativeRuntime.cs:510"
+      "Plugin/NativeRuntime.cs:512",
+      "Plugin/NativeRuntime.cs:513",
+      "Plugin/NativeRuntime.cs:524",
+      "Plugin/NativeRuntime.cs:524"
     ],
     "0xe2d3918": [
-      "Plugin/NativeRuntime.cs:424",
-      "Plugin/NativeRuntime.cs:685",
-      "Plugin/NativeRuntime.cs:685"
+      "Plugin/NativeRuntime.cs:438",
+      "Plugin/NativeRuntime.cs:699",
+      "Plugin/NativeRuntime.cs:699"
     ],
     "0xf3da7d0": [
       "Plugin/DynastyControllerCompatibility.cs:18",
@@ -625,25 +625,25 @@
       "Plugin/DynastyControllerCompatibility.cs:25",
       "Plugin/DynastyControllerCompatibility.cs:40",
       "Plugin/DynastyControllerCompatibility.cs:52",
-      "Plugin/NativeRuntime.cs:190",
-      "Plugin/NativeRuntime.cs:199"
+      "Plugin/NativeRuntime.cs:199",
+      "Plugin/NativeRuntime.cs:207"
     ],
     "0xf54f540": [
-      "Plugin/NativeRuntime.cs:850",
-      "Plugin/NativeRuntime.cs:954"
+      "Plugin/NativeRuntime.cs:864",
+      "Plugin/NativeRuntime.cs:968"
     ],
     "0xf54fa00": [
       "Plugin/DynastyControllerCompatibility.cs:11",
       "Plugin/DynastyControllerCompatibility.cs:54",
       "Plugin/NativeRuntime.cs:71",
-      "Plugin/NativeRuntime.cs:523",
-      "Plugin/NativeRuntime.cs:708",
-      "Plugin/NativeRuntime.cs:735",
-      "Plugin/NativeRuntime.cs:822"
+      "Plugin/NativeRuntime.cs:537",
+      "Plugin/NativeRuntime.cs:722",
+      "Plugin/NativeRuntime.cs:749",
+      "Plugin/NativeRuntime.cs:836"
     ],
     "0xf55bbb0": [
-      "Plugin/NativeRuntime.cs:239",
-      "Plugin/NativeRuntime.cs:306"
+      "Plugin/NativeRuntime.cs:253",
+      "Plugin/NativeRuntime.cs:320"
     ],
     "0xf63f9f0": [
       "Plugin/DynastyControllerCompatibility.cs:10",
@@ -651,13 +651,13 @@
       "Plugin/DynastyControllerCompatibility.cs:41",
       "Plugin/DynastyControllerCompatibility.cs:53",
       "Plugin/NativeRuntime.cs:93",
-      "Plugin/NativeRuntime.cs:192",
-      "Plugin/NativeRuntime.cs:198",
-      "Plugin/NativeRuntime.cs:383",
-      "Plugin/NativeRuntime.cs:683"
+      "Plugin/NativeRuntime.cs:201",
+      "Plugin/NativeRuntime.cs:208",
+      "Plugin/NativeRuntime.cs:397",
+      "Plugin/NativeRuntime.cs:697"
     ],
     "0xf85ef48": [
-      "Plugin/NativeRuntime.cs:213"
+      "Plugin/NativeRuntime.cs:227"
     ],
     "0xf85f120": [
       "Plugin/DynastyControllerCompatibility.cs:12",
@@ -667,41 +667,41 @@
     "0xf85f5f0": [
       "Plugin/DynastyControllerCompatibility.cs:17",
       "Plugin/DynastyControllerCompatibility.cs:27",
-      "Plugin/NativeRuntime.cs:201",
-      "Plugin/NativeRuntime.cs:525",
-      "Plugin/NativeRuntime.cs:568",
-      "Plugin/NativeRuntime.cs:570",
-      "Plugin/NativeRuntime.cs:586",
-      "Plugin/NativeRuntime.cs:612",
-      "Plugin/NativeRuntime.cs:706",
-      "Plugin/NativeRuntime.cs:719",
+      "Plugin/NativeRuntime.cs:215",
+      "Plugin/NativeRuntime.cs:539",
+      "Plugin/NativeRuntime.cs:582",
+      "Plugin/NativeRuntime.cs:584",
+      "Plugin/NativeRuntime.cs:600",
+      "Plugin/NativeRuntime.cs:626",
+      "Plugin/NativeRuntime.cs:720",
       "Plugin/NativeRuntime.cs:733",
-      "Plugin/NativeRuntime.cs:749",
-      "Plugin/NativeRuntime.cs:818",
-      "Plugin/NativeRuntime.cs:847",
-      "Plugin/NativeRuntime.cs:856",
-      "Plugin/NativeRuntime.cs:864",
-      "Plugin/NativeRuntime.cs:962",
-      "Plugin/NativeRuntime.cs:983"
+      "Plugin/NativeRuntime.cs:747",
+      "Plugin/NativeRuntime.cs:763",
+      "Plugin/NativeRuntime.cs:832",
+      "Plugin/NativeRuntime.cs:861",
+      "Plugin/NativeRuntime.cs:870",
+      "Plugin/NativeRuntime.cs:878",
+      "Plugin/NativeRuntime.cs:976",
+      "Plugin/NativeRuntime.cs:997"
     ],
     "0xf85f700": [
       "Plugin/DynastyControllerCompatibility.cs:14",
       "Plugin/DynastyControllerCompatibility.cs:29",
-      "Plugin/NativeRuntime.cs:201",
-      "Plugin/NativeRuntime.cs:520",
-      "Plugin/NativeRuntime.cs:559",
-      "Plugin/NativeRuntime.cs:936",
-      "Plugin/NativeRuntime.cs:973"
+      "Plugin/NativeRuntime.cs:215",
+      "Plugin/NativeRuntime.cs:534",
+      "Plugin/NativeRuntime.cs:573",
+      "Plugin/NativeRuntime.cs:950",
+      "Plugin/NativeRuntime.cs:987"
     ],
     "0xf8b3ba0": [
       "Plugin/NativeRuntime.cs:80",
-      "Plugin/NativeRuntime.cs:424",
-      "Plugin/NativeRuntime.cs:637",
-      "Plugin/NativeRuntime.cs:652",
-      "Plugin/NativeRuntime.cs:686"
+      "Plugin/NativeRuntime.cs:438",
+      "Plugin/NativeRuntime.cs:651",
+      "Plugin/NativeRuntime.cs:666",
+      "Plugin/NativeRuntime.cs:700"
     ],
     "0xf8b3fd0": [
-      "Plugin/NativeRuntime.cs:1080"
+      "Plugin/NativeRuntime.cs:1095"
     ],
     "0xfa5b900": [
       "Plugin/DynastyControllerCompatibility.cs:31",
@@ -709,13 +709,13 @@
     ],
     "0xfa602a0": [
       "Plugin/NativeRuntime.cs:80",
-      "Plugin/NativeRuntime.cs:113",
-      "Plugin/NativeRuntime.cs:424",
-      "Plugin/NativeRuntime.cs:644",
+      "Plugin/NativeRuntime.cs:115",
+      "Plugin/NativeRuntime.cs:438",
       "Plugin/NativeRuntime.cs:658",
-      "Plugin/NativeRuntime.cs:713",
-      "Plugin/NativeRuntime.cs:743",
-      "Plugin/NativeRuntime.cs:868"
+      "Plugin/NativeRuntime.cs:672",
+      "Plugin/NativeRuntime.cs:727",
+      "Plugin/NativeRuntime.cs:757",
+      "Plugin/NativeRuntime.cs:882"
     ]
   }
 }

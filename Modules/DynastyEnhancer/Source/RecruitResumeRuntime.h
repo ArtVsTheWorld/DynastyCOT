@@ -5,15 +5,62 @@
 #include "RecruitResumeSource.h"
 #include <atomic>
 #include <array>
+#include <chrono>
 #include <mutex>
 #include "ScoutingEvidence.h"
 namespace recruitingfog::resume {
 struct Published {dynasty::live::SessionBinding binding;NativeClass data;uint64_t capturedAt=0;dynasty::live::PackedChangeWatch annualIdentity;bool transfers=false,backgroundReady=true;evidence::Context staff;Json reports=Json::object();};
+
+inline measurables::Inputs notesMeasurementInputs(const NotesProspect& prospect,const NativeEntry* verifiedEntry){
+    using namespace measurables;
+    Inputs inputs;
+    std::array<bool,InputCount> concealed{};
+    for(const auto& observation:prospect.observations){
+        const auto name=notesKey(observation.name);
+        const auto input=std::find(inputNames.begin(),inputNames.end(),name);
+        if(input==inputNames.end())continue;
+        const auto index=static_cast<size_t>(input-inputNames.begin());
+        if(!observation.exact)concealed[index]=true;
+        else if(observation.low>=1&&valid(observation.low))inputs[index]=observation.low;
+    }
+    // Full scouting unlocks measurements from verified typed ratings. This is
+    // Notes-only: do not add archetype omissions to the Scouting DTO or report.
+    if(prospect.progress==100&&verifiedEntry){
+        for(size_t index=0;index<inputs.size();++index){
+            if(inputs[index]||concealed[index])continue;
+            const auto rating=verifiedEntry->prospect.ratings.find(nativeFields[index]);
+            if(rating!=verifiedEntry->prospect.ratings.end()&&rating->second>=1&&valid(rating->second)&&std::floor(rating->second)==rating->second)
+                inputs[index]=rating->second;
+        }
+    }
+    return inputs;
+}
+
+inline void appendMeasurements(std::string& text,const NotesProspect& prospect,uint32_t league,const NativeEntry* verifiedEntry=nullptr){
+    using namespace measurables;
+    const auto inputs=notesMeasurementInputs(prospect,verifiedEntry);
+    const auto identity=seedIdentity(league,prospect.measurementIdentity);
+    bool started=false;
+    for(Event event:{Event::Dash,Event::Split,Event::Bench,Event::Cone,Event::Shuttle,Event::Vertical}){
+        if(!ratingFor(event,inputs))continue;
+        if(!started){
+            if(!text.empty())text+="\n\n";
+            text+="ATHLETIC MEASURABLES";
+            started=true;
+        }
+        const auto result=estimate(event,inputs,identity);
+        text+="\n"+result.label+": "+result.value;
+    }
+}
 class Cache {
     friend struct CacheTestAccess;
     std::shared_ptr<const Published> published;std::atomic<bool> requested{true};uint64_t nextAttempt=0;
-    struct ReportEdition {std::string league;int season=0;evidence::Context staff;Json reports=Json::object();std::map<std::string,std::array<std::string,3>> views,transferViews;};
-    static void prepareView(ReportEdition& edition,const std::string& identity){const auto& value=edition.reports.at(identity);edition.views[identity]={evidence::render(value,25,false),evidence::render(value,50,false),evidence::render(value,75,false)};edition.transferViews[identity]={evidence::render(value,25,false,true),evidence::render(value,50,false,true),evidence::render(value,75,false,true)};}
+    struct ReportView {std::array<std::string,3> scouting;std::string background;};
+    struct ReportEdition {std::string league;int season=0;evidence::Context staff;Json reports=Json::object();std::map<std::string,ReportView> views;};
+    static void prepareView(ReportEdition& edition,const std::string& identity){
+        const auto& value=edition.reports.at(identity);
+        edition.views[identity]={{evidence::render(value,25,false),evidence::render(value,50,false),evidence::render(value,75,false)},evidence::storedBackground(value)};
+    }
     std::shared_ptr<const ReportEdition> reportEdition;
     std::mutex reportMutex;std::map<std::string,NotesProspect> pendingReports;
     struct Wait {uint64_t first=0,last=0;};std::map<std::string,Wait> waitingReports;
@@ -22,7 +69,7 @@ class Cache {
     template<class Read>Json reportTick(const std::shared_ptr<const Published>& prior,const std::filesystem::path& folder,uintptr_t image,Read read){
         std::map<std::string,NotesProspect> pending;{std::lock_guard<std::mutex> lock(reportMutex);pending.swap(pendingReports);}
         if(pending.empty()||!prior)return nullptr;
-        auto oldReports=std::atomic_load(&reportEdition);auto next=std::make_shared<ReportEdition>();next->league=prior->data.league;next->season=prior->data.season;if(oldReports&&oldReports->league==next->league&&oldReports->season==next->season){next->reports=oldReports->reports;next->views=oldReports->views;next->transferViews=oldReports->transferViews;}bool changed=false;
+        auto oldReports=std::atomic_load(&reportEdition);auto next=std::make_shared<ReportEdition>();next->league=prior->data.league;next->season=prior->data.season;if(oldReports&&oldReports->league==next->league&&oldReports->season==next->season){next->reports=oldReports->reports;next->views=oldReports->views;}bool changed=false;
         // Small staff/pipeline capture only when new evidence was requested.
         // Existing reports are immutable; idle menus never poll talent tables.
         Json raw;bool pipelineUnavailable=false;
@@ -57,11 +104,34 @@ class Cache {
         for(auto i=waitingReports.begin();i!=waitingReports.end();){if(now-i->second.last>=8000&&!pendingReports.count(i->first))i=waitingReports.erase(i);else ++i;}
         if(waitingReports.size()>=64)return false;
     }auto& wait=waitingReports[p.identity];if(!wait.first||now-wait.last>2000)wait.first=now;wait.last=now;if(pendingReports.size()<64||pendingReports.count(p.identity))pendingReports[p.identity]=p;return now-wait.first<8000;}
-    std::string report(const std::shared_ptr<const Published>& cache,const NotesProspect& p,bool& loading){
-        auto reports=std::atomic_load(&reportEdition);if(reports&&(!cache||reports->league!=cache->data.league||reports->season!=cache->data.season))reports.reset();const auto saved=reports?reports->reports.find(p.identity):Json::const_iterator{};bool obtain=!reports||saved==reports->reports.end()||!saved->contains("displayOrder")||(!p.activeTransfer&&p.progress>=50&&!saved->contains("athleticBackgroundChecked"));if(!obtain&&p.progress>=25)for(const auto& o:p.observations)if(evidence::band(o)>=0&&evidence::relevant(p.position,evidence::family(p,o))&&!saved->at("claims").contains(evidence::family(p,o))){obtain=true;break;}if(obtain)loading=queue(p)&&!reportFailed.load();const Json empty;const Json& reportValue=!reports||saved==reports->reports.end()?empty:*saved;const auto* views=reports?&(p.activeTransfer?reports->transferViews:reports->views):nullptr;const auto view=views?views->find(p.identity):std::map<std::string,std::array<std::string,3>>::const_iterator{};std::string text=reports&&p.progress>=25&&view!=views->end()?view->second[p.progress>=75?2:p.progress>=50?1:0]:evidence::render(Json(),p.progress,false);if(obtain&&p.progress>=25&&!reportValue.is_object())text="SCOUTING NOTES\n"+std::string(!loading?"Observations unavailable or delayed. Reopen Notes to retry.":"Preparing scouting observations...");if(obtain&&reportFailed.load())text+="\nNew observations are temporarily unavailable. Reopen Notes to retry.";
-        if(enhancements::options().measurables&&(!enhancements::options().recruiting||enhancements::options().recruitingScale!=enhancements::GradeScale::Blind)){std::map<std::string,double> revealed;for(const auto& o:p.observations)if(o.exact&&(o.low>0||p.progress==100)&&o.low>=0&&o.low<=100)revealed[notesKey(o.name)]=o.low;
-            std::set<std::string> shown;for(const auto& [name,value]:revealed){(void)value;const auto e=measurables::estimate(name,revealed,p.measurementIdentity,p.progress==100);if(!e.value.empty()&&shown.insert(e.label).second)text+="\n"+e.label+": "+e.value;}
-        }return text;
+    std::string report(const std::shared_ptr<const Published>& cache,const NotesProspect& p,bool& loading,const NativeEntry* entry=nullptr){
+        auto reports=std::atomic_load(&reportEdition);
+        if(reports&&(!cache||reports->league!=cache->data.league||reports->season!=cache->data.season))reports.reset();
+        const auto saved=reports?reports->reports.find(p.identity):Json::const_iterator{};
+        const Json empty;
+        const Json& reportValue=!reports||saved==reports->reports.end()?empty:*saved;
+        const auto view=reports?reports->views.find(p.identity):std::map<std::string,ReportView>::const_iterator{};
+        const auto* prepared=reports&&view!=reports->views.end()?&view->second:nullptr;
+        const auto showBackground=evidence::revealBackground(p);
+        const auto hasBackground=prepared&&!prepared->background.empty();
+        const bool obtain=!reportValue.is_object()||!reportValue.contains("displayOrder")||
+            (showBackground&&!hasBackground)||evidence::hasNewEvidence(reportValue,p);
+        if(obtain)loading=queue(p)&&!reportFailed.load();
+        std::string text=prepared&&p.progress>=25?prepared->scouting[p.progress>=75?2:p.progress>=50?1:0]:evidence::render(Json(),p.progress,false);
+        if(obtain&&p.progress>=25&&!reportValue.is_object())
+            text="SCOUTING NOTES\n- "+std::string(!loading?"Observations unavailable or delayed. Reopen Notes to retry.":"Preparing scouting observations...");
+        if(obtain&&reportFailed.load())text+="\n- New observations are temporarily unavailable. Reopen Notes to retry.";
+        if(showBackground){
+            text+="\n\nBACKGROUND";
+            evidence::appendNoteBullets(text,hasBackground?std::string_view(prepared->background):evidence::newBackground(p));
+        }
+        const auto selected=enhancements::options();
+        if(selected.measurables&&(!selected.recruiting||selected.recruitingScale!=enhancements::GradeScale::Blind)){
+            const auto league=enhancements::currentOptionsLeague.load();
+            const auto* verifiedEntry=cache&&cache->data.league==std::to_string(league)?entry:nullptr;
+            appendMeasurements(text,p,league,verifiedEntry);
+        }
+        return text;
     }
 public:
     template<class View>void completeMeasurements(View& view,const std::map<std::string,uintptr_t>& fields,std::map<std::string,double>& revealed){
@@ -100,7 +170,10 @@ public:
         try{
         // Explicit selectors are independent of include order with Analytics.
         auto roots=[](const std::string& name){return name=="SeasonInfo"||name=="Franchise"||name=="FranchiseServer_CareerFlow"||name=="Recruit"||name=="Team"||name=="FranchiseUser";};
-        dynasty::live::Capture capture(image,GetCurrentProcess(),dynasty::live::resumeBackgroundFields,roots);auto raw=capture.run();auto data=parseNativeClass(raw);
+        const auto captureBegan=std::chrono::steady_clock::now();
+        dynasty::live::Capture capture(image,GetCurrentProcess(),dynasty::live::resumeBackgroundFields,roots);auto raw=capture.run();
+        const auto captureEnded=std::chrono::steady_clock::now();
+        auto data=parseNativeClass(raw);
         if(!(dynasty::live::activeSession(image,q)==binding))throw std::runtime_error("Dynasty changed while preparing resume cache");
         persistClass(data,folder);
         auto value=std::make_shared<Published>();value->binding=binding;
@@ -124,7 +197,8 @@ public:
         auto reports=std::make_shared<ReportEdition>();reports->league=value->data.league;reports->season=value->data.season;reports->staff=value->staff;reports->reports=std::move(value->reports);for(const auto& entry:reports->reports.items())prepareView(*reports,entry.key());std::atomic_store(&reportEdition,std::shared_ptr<const ReportEdition>(reports));
         std::atomic_store(&published,std::shared_ptr<const Published>(value));requested=false;
         lastFailure.clear();failures=0;backgroundFailed=false;waitingSince=0;
-        return {{"event","recruit_resume_cache_ready"},{"highSchoolProspects",hs},{"unavailableProspects",value->data.unavailable.size()},{"records",raw.at("records").size()},{"ms",GetTickCount64()-began},{"league",value->data.league},{"season",value->data.season}};
+        return {{"event","recruit_resume_cache_ready"},{"highSchoolProspects",hs},{"unavailableProspects",value->data.unavailable.size()},{"records",raw.at("records").size()},{"ms",GetTickCount64()-began},{"league",value->data.league},{"season",value->data.season},
+            {"captureUs",std::chrono::duration_cast<std::chrono::microseconds>(captureEnded-captureBegan).count()}};
         }catch(const std::exception& error){
             backgroundFailed=true;
             // A failed background graph must not block revealed scouting evidence.
@@ -152,18 +226,29 @@ public:
         if(cache&&rawId>=0&&rawId<=4294967295.0&&std::floor(rawId)==rawId){auto it=cache->data.entries.find(static_cast<uint32_t>(rawId));if(it!=cache->data.entries.end()&&it->second.first==first&&it->second.last==last)found=&it->second;}
         if(!found){
             if(cache&&rawId>=0&&rawId<=4294967295.0&&std::floor(rawId)==rawId){const auto missing=cache->data.unavailable.find(static_cast<uint32_t>(rawId));
-                if(missing!=cache->data.unavailable.end()&&missing->second==std::make_pair(first,last)){auto notes=publicNotes;notes.activeTransfer=cache->data.unavailableTransfers.count(static_cast<uint32_t>(rawId))!=0;notes.identity="ui|"+cache->data.league+"|"+publicNotes.identity;return "RECRUIT BACKGROUND\nBackground information unavailable.\n\n"+report(cache,notes,loading);}}
+                if(missing!=cache->data.unavailable.end()&&missing->second==std::make_pair(first,last)){auto notes=publicNotes;notes.activeTransfer=cache->data.unavailableTransfers.count(static_cast<uint32_t>(rawId))!=0;notes.schoolBackgroundEligible=cache->data.unavailableSchoolRecruits.count(static_cast<uint32_t>(rawId))!=0;notes.identity="ui|"+cache->data.league+"|"+publicNotes.identity;return "RECRUIT BACKGROUND\nBackground information unavailable.\n\n"+report(cache,notes,loading);}}
             request();const bool pending=!backgroundFailed.load()&&GetTickCount64()-waitingSince.load()<8000;loading=pending;
             std::string scouting=evidence::render(Json(),publicNotes.progress,false);
             if(cache){auto notes=publicNotes;notes.identity="ui|"+cache->data.league+"|"+publicNotes.identity;scouting=report(cache,notes,loading);}
             return std::string("RECRUIT BACKGROUND\n")+(pending?"Preparing background report...":"Background information is temporarily unavailable. Reopen Notes to retry.")+"\n\n"+scouting;
         }
-        auto notes=publicNotes;notes.activeTransfer=!found->highSchool&&!found->juniorCollege;
+        auto notes=publicNotes;
+        notes.schoolBackgroundEligible=found->highSchool||found->juniorCollege;
+        notes.activeTransfer=!notes.schoolBackgroundEligible;
+        if(notes.schoolBackgroundEligible)notes.backgroundDevelopment=found->prospect.development;
         notes.identity=found->identity;const auto priorReports=std::atomic_load(&reportEdition);const auto uiIdentity="ui|"+cache->data.league+"|"+publicNotes.identity;if(priorReports&&priorReports->league==cache->data.league&&priorReports->season==cache->data.season&&priorReports->reports.contains(uiIdentity))notes.identity=uiIdentity;
         if(found->juniorCollege&&!found->classYear.empty())publicNotes.classification=found->saved.at("competitionClass").get<std::string>()+" "+found->classYear;
         else if(const auto classification=nativeTransferClass(*found);!classification.empty())publicNotes.classification=classification;
-        if(publicNotes.progress==100){std::map<std::string,double> values;complete(*found,values);for(const auto& pair:values){bool present=false;for(const auto& o:notes.observations)present|=notesKey(o.name)==pair.first;if(!present)notes.observations.push_back({pair.first,pair.second,pair.second,true});}}
-        if(found->highSchool||found->juniorCollege)return renderResume(found->saved,publicNotes.progress>=50&&(!enhancements::options().recruiting||enhancements::options().recruitingScale!=enhancements::GradeScale::Blind))+"\n\n"+report(cache,notes,loading);
+        if(evidence::noteRole(notes.position)==evidence::NR::Unknown&&evidence::noteRole(found->prospect.position)!=evidence::NR::Unknown)notes.position=found->prospect.position;
+        if(publicNotes.progress==100){
+            std::map<std::string,double> values;complete(*found,values);
+            if(notes.position=="LS"&&found->prospect.position=="LS"){
+                const auto rating=found->prospect.ratings.find("LongSnapRating");
+                if(rating!=found->prospect.ratings.end()&&std::isfinite(rating->second)&&rating->second>=1&&rating->second<=100)values.emplace("long snap",rating->second);
+            }
+            for(const auto& pair:values){bool present=false;for(const auto& o:notes.observations){const auto key=notesKey(o.name);present|=key==pair.first||(pair.first=="long snap"&&key=="long snapping");}if(!present)notes.observations.push_back({pair.first,pair.second,pair.second,true});}
+        }
+        if(found->highSchool||found->juniorCollege)return renderResume(found->saved,publicNotes.progress>=50&&(!enhancements::options().recruiting||enhancements::options().recruitingScale!=enhancements::GradeScale::Blind))+"\n\n"+report(cache,notes,loading,found);
         loading=GetTickCount64()-cache->capturedAt>=15000;
         return renderTransfer(found->actual,found->saved.at("gpa"),cache->data.season,cache->data.relativeYear)+"\n"+report(cache,notes,loading);
     }

@@ -39,10 +39,10 @@ void __fastcall rowsHook(void* object,void* target,int form,int row,void* column
     Sink sink{sinkTable,target};originalRows(object,&sink,form,row,columns);
     auto** vt=*reinterpret_cast<void***>(columns);const auto count=reinterpret_cast<int(__fastcall*)(void*)>(vt[1])(columns);Json ids=Json::array();
     if(count>=0&&count<=90)for(int i=0;i<count;++i)ids.push_back(reinterpret_cast<int(__fastcall*)(void*,int)>(vt[2])(columns,i));
-    KeySink key{keyTable,{}};reinterpret_cast<void(__fastcall*)(void*,void*,int,int)>(base+0x7a89180)(object,&key,form,row);const auto& record=key.value;
+    KeySink key{keyTable,{}};reinterpret_cast<void(__fastcall*)(void*,void*,int,int)>(base+0x7a89210)(object,&key,form,row);const auto& record=key.value;
     std::array<unsigned char,32> bytes{};if(record.size()<bytes.size())memcpy(bytes.data(),record.data(),record.size());
     struct Blob{unsigned size;unsigned pad;const unsigned char* bytes;bool owned;};Blob blob{32,0,bytes.data(),false};
-    const auto nativeKey=reinterpret_cast<unsigned(__fastcall*)(void*)>(base+0x376f6d0)(&blob);
+    const auto nativeKey=reinterpret_cast<unsigned(__fastcall*)(void*)>(base+0x376f760)(&blob);
     note({{"event","row"},{"record",record},{"nativeKey",nativeKey},{"form",form},{"row",row},{"columns",ids},{"values",sink.values}});
 }
 bool readUi(uintptr_t address,void* out,size_t n){SIZE_T got=0;return ReadProcessMemory(GetCurrentProcess(),reinterpret_cast<void*>(address),out,n,&got)&&got==n;}
@@ -54,17 +54,17 @@ template<class View>Json uiJson(View& view,uintptr_t at,unsigned depth=0){
 }
 void* __fastcall entryHook(void* object,void** out,void* argument){auto result=originalEntry(object,out,argument);if(!disabled&&entryCalls.fetch_add(1)<4&&out&&*out){try{recruitingfog::UiResponse view(readUi);note({{"event","entry"},{"value",uiJson(view,reinterpret_cast<uintptr_t>(*out))}});}catch(...){}}return result;}
 bool swap(uintptr_t table,uintptr_t slot,void* from,void* to){auto* p=reinterpret_cast<PVOID volatile*>(base+table+slot);DWORD old=0,unused=0;if(!VirtualProtect(const_cast<PVOID*>(p),8,PAGE_READWRITE,&old))return false;auto* before=InterlockedCompareExchangePointer(p,to,from);VirtualProtect(const_cast<PVOID*>(p),8,old,&unused);return before==from;}
-DWORD stop(){disabled=true;if(originalEntry)swap(0xc752560,0x40,reinterpret_cast<void*>(entryHook),reinterpret_cast<void*>(originalEntry));bool okay=true;if(originalColumns)okay=swap(0xbaa78b8,0x70,reinterpret_cast<void*>(columnsHook),reinterpret_cast<void*>(originalColumns))&&okay;if(originalRows)okay=swap(0xbacd668,0x68,reinterpret_cast<void*>(rowsHook),reinterpret_cast<void*>(originalRows))&&okay;return okay?0:2;}
+DWORD stop(){disabled=true;if(originalEntry)swap(0xc752560,0x40,reinterpret_cast<void*>(entryHook),reinterpret_cast<void*>(originalEntry));bool okay=true;if(originalColumns)okay=swap(0xbaa7858,0x70,reinterpret_cast<void*>(columnsHook),reinterpret_cast<void*>(originalColumns))&&okay;if(originalRows)okay=swap(0xbacd608,0x68,reinterpret_cast<void*>(rowsHook),reinterpret_cast<void*>(originalRows))&&okay;return okay?0:2;}
 DWORD WINAPI worker(void*){
     wchar_t path[32768]{};GetModuleFileNameW(self,path,32768);logFile=std::filesystem::path(path).parent_path()/L"recruit-list-probe.jsonl";base=reinterpret_cast<uintptr_t>(GetModuleHandleW(nullptr));
-    originalColumns=reinterpret_cast<Columns>(base+0x78ef740);originalRows=reinterpret_cast<Rows>(base+0x7a88cd0);
+    originalColumns=reinterpret_cast<Columns>(base+0x78ef7d0);originalRows=reinterpret_cast<Rows>(base+0x7a88d60);
     constexpr unsigned char columnsPrefix[]={0x48,0x8b,0xc4,0x55,0x48,0x8b,0xec,0x48,0x81,0xec,0x80,0,0,0};
     constexpr unsigned char rowsPrefix[]={0x40,0x53,0x55,0x56,0x41,0x56,0x41,0x57,0x48,0x81,0xec,0x70,0x01,0,0};
-    if(memcmp(reinterpret_cast<void*>(base+0x78ef740),columnsPrefix,sizeof(columnsPrefix))||memcmp(reinterpret_cast<void*>(base+0x7a88cd0),rowsPrefix,sizeof(rowsPrefix))||*reinterpret_cast<uintptr_t*>(base+0xbaa78b8+0x70)!=base+0x78ef740||*reinterpret_cast<uintptr_t*>(base+0xbacd668+0x68)!=base+0x7a88cd0){originalColumns=nullptr;originalRows=nullptr;note({{"event","rejected"}});return 1;}
+    if(memcmp(reinterpret_cast<void*>(base+0x78ef7d0),columnsPrefix,sizeof(columnsPrefix))||memcmp(reinterpret_cast<void*>(base+0x7a88d60),rowsPrefix,sizeof(rowsPrefix))||*reinterpret_cast<uintptr_t*>(base+0xbaa7858+0x70)!=base+0x78ef7d0||*reinterpret_cast<uintptr_t*>(base+0xbacd608+0x68)!=base+0x7a88d60){originalColumns=nullptr;originalRows=nullptr;note({{"event","rejected"}});return 1;}
     HMODULE pinned=nullptr;GetModuleHandleExW(GET_MODULE_HANDLE_EX_FLAG_FROM_ADDRESS|GET_MODULE_HANDLE_EX_FLAG_PIN,reinterpret_cast<LPCWSTR>(&worker),&pinned);
-    if(!swap(0xbaa78b8,0x70,reinterpret_cast<void*>(originalColumns),reinterpret_cast<void*>(columnsHook))||!swap(0xbacd668,0x68,reinterpret_cast<void*>(originalRows),reinterpret_cast<void*>(rowsHook))){stop();return 2;}
-    originalEntry=reinterpret_cast<Entry>(base+0xa0e0cc0);
-    if(*reinterpret_cast<uintptr_t*>(base+0xc752560+0x40)!=base+0xa0e0cc0||!swap(0xc752560,0x40,reinterpret_cast<void*>(originalEntry),reinterpret_cast<void*>(entryHook))){originalEntry=nullptr;stop();return 3;}
+    if(!swap(0xbaa7858,0x70,reinterpret_cast<void*>(originalColumns),reinterpret_cast<void*>(columnsHook))||!swap(0xbacd608,0x68,reinterpret_cast<void*>(originalRows),reinterpret_cast<void*>(rowsHook))){stop();return 2;}
+    originalEntry=reinterpret_cast<Entry>(base+0xa0e0d20);
+    if(*reinterpret_cast<uintptr_t*>(base+0xc752560+0x40)!=base+0xa0e0d20||!swap(0xc752560,0x40,reinterpret_cast<void*>(originalEntry),reinterpret_cast<void*>(entryHook))){originalEntry=nullptr;stop();return 3;}
     note({{"event","active"},{"mode","synchronous pass-through; no display edits"}});return 0;
 }
 }

@@ -264,7 +264,7 @@ def draw_notes(a):
     # These native widgets use stage coordinates, not coordinates relative to
     # their visible panel. Anchor to their original positions and lift them
     # into the now-empty body, preserving the game's resolution/safe-zone work.
-    for name, lift in [('mcTitle', 140), ('mcDescription', 154)]:
+    for name, lift in [('mcTitle', 188), ('mcDescription', 202)]:
         a.reg(4); a.member(name); a.store(6)
         for axis in ('_x', '_y'):
             a.reg(6); a.string(axis); a.reg(4); a.member('mDENotesSaved'); a.member(name+axis)

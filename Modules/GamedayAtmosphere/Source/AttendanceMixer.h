@@ -28,7 +28,7 @@ class Runtime {
 public:
  void configure(Address image,Create make=nullptr,Release end=nullptr,Manager source=nullptr,Clock clock=nullptr){image_=image;create_=make?make:reinterpret_cast<Create>(image+bindings::MixerCreate);release_=end?end:reinterpret_cast<Release>(image+bindings::MixerRelease);source_=source;clock_=clock;reader_.configure(image);}
  void tick(Address owner,bool active,const Mix& proposed){
-  if(owner<0x10040||sustained::at<Address>(owner-0x40)!=image_+0xb227098||sustained::at<Address>(owner)!=image_+0xb227178||sustained::at<Address>(owner+8)!=image_+0xb227188)return;
+  if(owner<0x10040||sustained::at<Address>(owner-0x40)!=image_+0xb227038||sustained::at<Address>(owner)!=image_+0xb227118||sustained::at<Address>(owner+8)!=image_+0xb227128)return;
   std::lock_guard<std::mutex> guard(mutex_);Address manager=source_?source_():sustained::at<Address>(image_+bindings::MixerManager);
   if(manager!=manager_){manager_=manager;handle_=asset_=0;clear();templates_=false;changed_=0;}
   if(!manager_)return;Mix wanted=healthy_&&active&&proposed.valid?proposed:Mix{};bool needed=wanted.needed();
@@ -37,12 +37,12 @@ public:
   // Zero mute and context loss retire immediately. Other level changes do
   // not replace a preset while its quarter-second transition is running.
   if(handle_&&needed&&!wanted.mute&&now>=changed_&&now-changed_<300)return;
-  if(handle_){if(sustained::at<Address>(handle_)!=image_+0xaf01718||(sustained::at<Address>(handle_+8)&~Address(4))!=asset_||!release()){healthy_=false;return;}++releases_;handle_=asset_=0;clear();}
+  if(handle_){if(sustained::at<Address>(handle_)!=image_+0xaf01738||(sustained::at<Address>(handle_+8)&~Address(4))!=asset_||!release()){healthy_=false;return;}++releases_;handle_=asset_=0;clear();}
   if(!needed)return;
   if(!templates_){for(unsigned i=0;i<8;++i){if(!reader_.snapshot(manager_,Groups[i],templatesData_[i]))return;if(templatesData_[i].parent!=(i?9:2)||std::strcmp(templatesData_[i].name,Names[i]))return;}templates_=true;}
   auto found=presets_.find(wanted.key);if(found==presets_.end())found=presets_.emplace(wanted.key,std::make_unique<Preset>(templatesData_,wanted,static_cast<uint64_t>(presets_.size()+1))).first;
   Address asset=found->second->address(),handle=0;
-  if(!create(asset,handle)||sustained::at<Address>(handle)!=image_+0xaf01718||(sustained::at<Address>(handle+8)&~Address(4))!=asset){healthy_=false;return;}
+  if(!create(asset,handle)||sustained::at<Address>(handle)!=image_+0xaf01738||(sustained::at<Address>(handle+8)&~Address(4))!=asset){healthy_=false;return;}
   handle_=handle;asset_=asset;current_=wanted;parent_=wanted.gain[0];muted_=wanted.mute;
   for(unsigned i=0;i<7;++i)net_[i]=wanted.net(i);changed_=now;++creates_;
  }

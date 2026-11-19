@@ -60,7 +60,7 @@ public:
     Endpoint(const Endpoint&)=delete;Endpoint& operator=(const Endpoint&)=delete;
     ~Endpoint(){if(weak_)invoke(api_.weakRelease,weak_,&weak_);if(queryReady_)invoke(api_.queryDestroy,reinterpret_cast<Address>(query_));}
     bool resolve(Address image,Address owner){
-        if(owner<0x10040||at<Address>(owner-0x40)!=image+0xb227098||at<Address>(owner)!=image+0xb227178||at<Address>(owner+8)!=image+0xb227188)return false;
+        if(owner<0x10040||at<Address>(owner-0x40)!=image+0xb227038||at<Address>(owner)!=image+0xb227118||at<Address>(owner+8)!=image+0xb227128)return false;
         Address entity=owner-0x40,allocator=at<Address>(image+bindings::SwellAllocator);
         world=at<Address>(entity+0x30);asset=at<Address>(entity+0x38);if(!allocator||!world||!asset)return false;
         struct Target {Address asset;unsigned hash;unsigned char flag,padding[3];} target{asset,0x243a8b25,0,{}};

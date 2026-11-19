@@ -12,7 +12,7 @@ assert k.VirtualAlloc(B,0x10000000,0x2000,4)==B
 assert k.VirtualAlloc(R,8192,0x3000,0x40)==R
 assert k.VirtualAlloc(D,0x4000,0x3000,4)==D
 pages=set()
-for rva in [0xd9eb808,0xf3fddbc,0xf63f9f0,0xf54fa00,0xf85f120,0xf3da7d0,0x2eb4c30,0x4ff5b90,0xf85f5f0,0xf85f700,0xfa5b900,0x5d12420]:
+for rva in [0xd9eb808,0xf3fddbc,0xf63f9f0,0xf54fa00,0xf85f120,0xf3da7d0,0x2eb4c30,0x4ff5b90,0xf85f5f0,0xf85f700,0xfa5b900,0x5d124b0]:
  page=(B+rva)&~4095
  if page not in pages:assert k.VirtualAlloc(page,4096,0x1000,0x40)==page;pages.add(page)
 def put(a,b):C.memmove(a,b,len(b))
@@ -23,7 +23,7 @@ adapter=D;manager=D+0x1000;config=D+0x2000;pause=D+0x2300
 put(R+0xc00,bytes.fromhex('ff8190070000488bc1c3'))
 put(B+0x2eb4c30,bytes.fromhex('ff810802000089910002000044898104020000c3'))
 put(B+0x4ff5b90,bytes.fromhex('ff8190000000c3'))
-q(B+0xf63f9f0,config);q(B+0xf54fa00,pause);q(B+0xf85f120,manager);q(manager,B+0xb32a410)
+q(B+0xf63f9f0,config);q(B+0xf54fa00,pause);q(B+0xf85f120,manager);q(manager,B+0xb32a3b0)
 n(B+0xd9eb808,14);n(B+0xf3fddbc,3);put(pause,b'\1')
 for j in range(1,6):n(adapter+0x5f8+j*4,2 if j==5 else -1)
 # Role fields beyond the current-side word must remain byte-identical.
@@ -32,7 +32,7 @@ empty=bytearray([0xff]*44);struct.pack_into('<ii',empty,0,-1,255)
 put(manager+0x148,bytes(empty)+bytes(active));n(adapter+0x5f8,0);put(B+0xf3da7d0,struct.pack('<ii',0,0))
 
 q(B+0xf85f5f0,D+0x3000);q(B+0xf85f700,D+0x2800);q(D+0x2810,D+0x2a00);q(B+0xfa5b900,adapter)
-put(B+0x5d1242f,bytes.fromhex('8991a0000000c3'))
+put(B+0x5d124bf,bytes.fromhex('8991a0000000c3'))
 # Begin controlling side 0 with its existing role unchanged.
 struct.pack_into('<i',active,4,0);put(manager+0x148,bytes(active)+bytes(empty));n(adapter+0x5f8,0);n(D+0x30a0,1)
 put(R,queue(B,R,R+0x900));put(R+0x400,boundary(B,R,R+0x800));put(R+0x800,apply(B,R,R+0x900))

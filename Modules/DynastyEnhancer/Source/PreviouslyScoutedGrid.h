@@ -20,7 +20,7 @@ inline void gridFlush(GridSink& sink,uintptr_t image,void* source,int form,int r
  if(sink.text.empty())return;std::optional<unsigned> record;auto data=std::atomic_load(&published);auto fresh=std::atomic_load(&freshScouting);const bool rendererReady=targetUi.retainedDefinitionCount()!=0;
  if(enhancements::presentationAllowed()&&data&&data->userTeam>=0&&!failed[6]&&rowKeyAddress&&rowKeyTableAddress&&*reinterpret_cast<const uintptr_t*>(rowKeyTableAddress)==rowKeyAddress){
   ClassKeySink key{classKeyTable,{}};reinterpret_cast<void(__fastcall*)(void*,void*,int,int)>(rowKeyAddress)(source,&key,form,row);
-  if(!key.value.empty()&&key.value.size()<32){std::array<unsigned char,32> bytes{};memcpy(bytes.data(),key.value.data(),key.value.size());ClassKeyBlob blob{32,0,bytes.data(),false};record=reinterpret_cast<unsigned(__fastcall*)(void*)>(image+0x376f6d0)(&blob);}
+  if(!key.value.empty()&&key.value.size()<32){std::array<unsigned char,32> bytes{};memcpy(bytes.data(),key.value.data(),key.value.size());ClassKeyBlob blob{32,0,bytes.data(),false};record=reinterpret_cast<unsigned(__fastcall*)(void*)>(image+0x376f760)(&blob);}
  }
  for(const auto& item:sink.text){const auto percent=record?interest::currentScouting(*data,fresh,enhancements::currentOptionsLeague.load(),*record,data->userTeam,item.value):std::nullopt;
   // Native TargetNone safely ignores this suffix even before the renderer's

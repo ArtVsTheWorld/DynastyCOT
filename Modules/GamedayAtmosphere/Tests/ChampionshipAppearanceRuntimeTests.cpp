@@ -16,8 +16,8 @@ int main(){
  for(unsigned i=0;i<n;++i){unsigned row=i/32,col=i%32;points[i]={35.f+float(row)*.9f,float(row)*.7f,float(col)*.65f-10.4f,0};raw[10*i]=static_cast<unsigned char>(0x80u|unsigned(col>=16));raw[10*i+6]=i<16?1:0;}
  const auto original=raw;auto address=[](auto* p){return reinterpret_cast<A>(p);};
  std::array<A,2> tags{n,address(raw.data())},coords{n,address(points.data())},tagValue{0,address(tags.data())},pointValue{0,address(coords.data())};
- std::array<A,4> entries{image+0xb486033,address(tagValue.data()),image+attendance::bindings::CrowdPositionKey,address(pointValue.data())};
- std::array<A,2> map{address(entries.data()),address(entries.data()+4)};auto c=address(component.data());put(c,image+0xb484f98);put(c+0x48,address(map.data()));
+ std::array<A,4> entries{image+0xb485fd3,address(tagValue.data()),image+attendance::bindings::CrowdPositionKey,address(pointValue.data())};
+ std::array<A,2> map{address(entries.data()),address(entries.data()+4)};auto c=address(component.data());put(c,image+0xb484f38);put(c+0x48,address(map.data()));
  enabled=true;emptyMode2020=false;dynamicAwayFans=true;originalAppearanceGenerate=nativeGenerate;
  using namespace attendance;using namespace attendance::visitors;
  // A callback before publication is forwarded untouched and diagnosed, never
