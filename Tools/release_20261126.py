@@ -89,13 +89,13 @@ def prepare():
   public=dict(format=2,name=name,version=version,gameUpdate='November 17 Update',sourceRepository='ArtVsTheWorld/DynastyCOT',sourceRevision=None,publicBaseline=prior,publicBaselineSourceRevision=old['sourceRevision'],publicBaselineDllSha256=old['dllSha256'],candidateDllUnchanged=True,fourFileZip=True,archiveSha256=sha(archive),dllSha256=expected,playerGuideSha256=sha(guide),supportFiles={},files=[dict(path=n,bytes=p.stat().st_size,sha256=sha(p)) for n,p in files.items()],verification=verification,sourceHashes=hashes,sourceHashNormalization='UTF-8 BOM removed; CRLF converted to LF',standaloneSourceTransforms=transforms,generatedInputSha256=generated,payload=payload,releaseNoteEvidence=claims)
   put(folder/(stem+'-verification.json'),public)
   item=next(m for m in catalog['Modules'] if m['Id']==name);base=f'https://github.com/{repo}/releases/download/v{version}/'
-  item['Current'].update(Version=version,Tag='v'+version,ArchiveName=archive.name,ArchiveUrl=base+archive.name,ArchiveSha256=sha(archive),ArchiveBytes=archive.stat().st_size,DllSha256=expected,ProofUrl=base+stem+'-verification.json',PageUrl=f'https://github.com/{repo}/releases/tag/v{version}',Notes=(doc/'RELEASE_NOTES.md').read_text(),Prerelease=False)
+  item['Current'].update(Version=version,Tag='v'+version,ArchiveName=archive.name,ArchiveUrl=base+archive.name,ArchiveSha256=sha(archive),ArchiveBytes=archive.stat().st_size,DllSha256=expected,ProofUrl=base+stem+'-verification.json',PageUrl=f'https://github.com/{repo}/releases/tag/v{version}',Notes=(doc/'RELEASE_NOTES.md').read_text(encoding='utf-8'),Prerelease=False)
   catalog['KnownPlugins'].append(dict(Path='Plugins/'+name+'.dll',Module=name,Sha256=expected))
   for path,digest in payload.items():
    if path.endswith(('.exe','.dll')):catalog['Programs'].append(dict(Path=path,Module=name,Sha256=digest))
   print('Prepared',name,version,'against public',prior,'sources',len(hashes),'DLL',expected,flush=True)
  for key in ['KnownPlugins','Programs']:catalog[key]=list({(x['Path'],x['Module'],x['Sha256']):x for x in catalog[key]}.values())
- practice=next(m for m in catalog['Modules'] if m['Id']=='ExpandedPractice');practice['Current']['Notes']=(R/'Packaging/Standalone/ExpandedPractice/RELEASE_NOTES.md').read_text()
+ practice=next(m for m in catalog['Modules'] if m['Id']=='ExpandedPractice');practice['Current']['Notes']=(R/'Packaging/Standalone/ExpandedPractice/RELEASE_NOTES.md').read_text(encoding='utf-8')
  put(R/'Packaging/Collection/catalog.json',catalog)
  (W/'source-paths.txt').write_text('\n'.join(sorted(paths))+'\n')
 def finalize():
@@ -118,12 +118,12 @@ def draft():
   if not clone.exists():run(['git','clone','--quiet','--depth','1','https://github.com/'+repo+'.git',clone])
   assert not run(['git','status','--porcelain'],clone)
   pin=load(clone/'source-release.json');assert pin['version']==prior
-  readme=(clone/'README.md').read_text().replace('/v'+prior+'/', '/v'+version+'/').replace(stem.replace(version,prior)+'.zip',stem+'.zip').replace('Download '+prior+' ZIP','Download '+version+' ZIP').replace(pin['revision'],rev)
+  readme=(clone/'README.md').read_text(encoding='utf-8').replace('/v'+prior+'/', '/v'+version+'/').replace(stem.replace(version,prior)+'.zip',stem+'.zip').replace('Download '+prior+' ZIP','Download '+version+' ZIP').replace(pin['revision'],rev)
   (clone/'README.md').write_text(readme,encoding='utf-8');doc=R/'Packaging/Standalone'/name
   shutil.copyfile(doc/'FEATURES.md',clone/'FEATURES.md')
-  previous=(clone/'RELEASES.md').read_text()
+  previous=(clone/'RELEASES.md').read_text(encoding='utf-8')
   if name=='ExtraSettings':previous=strip_update(previous,first=True)
-  (clone/'RELEASES.md').write_text((doc/'RELEASE_NOTES.md').read_text()+'\n---\n\n'+previous,encoding='utf-8')
+  (clone/'RELEASES.md').write_text((doc/'RELEASE_NOTES.md').read_text(encoding='utf-8')+'\n---\n\n'+previous,encoding='utf-8')
   pin.update(version=version,revision=rev,archive=stem+'.zip',archiveSha256=proof['archiveSha256'],dllSha256=proof['dllSha256'],playerGuideSha256=proof['playerGuideSha256'],publicBaseline=prior);put(clone/'source-release.json',pin)
   for key in ['user.name','user.email']:run(['git','config',key,run(['git','config',key]).strip()],clone)
   run(['git','add','README.md','FEATURES.md','RELEASES.md','source-release.json'],clone);run(['git','commit','-m',title+': source-backed release'],clone)
@@ -153,13 +153,13 @@ def headings():
   assert before['id']==old['id']
   notes=W/(name+'-previous-clean-notes.md');notes.write_text(strip_update(old['body']),encoding='utf-8')
   run([GH,'release','edit','v'+version,'--repo',repo,'--title',title,'--notes-file',notes])
-  after=json.loads(run([GH,'api',f'repos/{repo}/releases/tags/v{version}']));assert after['body']==notes.read_text()
+  after=json.loads(run([GH,'api',f'repos/{repo}/releases/tags/v{version}']));assert after['body']==notes.read_text(encoding='utf-8')
   assert [(x['id'],x['digest']) for x in before['assets']]==[(x['id'],x['digest']) for x in after['assets']]
   if name=='ExpandedPractice':
    clone=W/'Distribution'/name
    if not clone.exists():run(['git','clone','--quiet','--depth','1','https://github.com/'+repo+'.git',clone])
    assert not run(['git','status','--porcelain'],clone)
-   p=clone/'RELEASES.md';p.write_text(strip_update(p.read_text(),first=True),encoding='utf-8')
+   p=clone/'RELEASES.md';p.write_text(strip_update(p.read_text(encoding='utf-8'),first=True),encoding='utf-8')
    for key in ['user.name','user.email']:run(['git','config',key,run(['git','config',key]).strip()],clone)
    run(['git','add','RELEASES.md'],clone);run(['git','commit','-m','Remove numbered Update heading from latest Expanded Practice notes'],clone);run(['git','push','origin','HEAD:main'],clone)
   print('Cleaned heading without asset changes:',repo,'v'+version,flush=True)
