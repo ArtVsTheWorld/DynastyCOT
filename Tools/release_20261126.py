@@ -153,7 +153,7 @@ def headings():
   assert before['id']==old['id']
   notes=W/(name+'-previous-clean-notes.md');notes.write_text(strip_update(old['body']),encoding='utf-8')
   run([GH,'release','edit','v'+version,'--repo',repo,'--title',title,'--notes-file',notes])
-  after=json.loads(run([GH,'api',f'repos/{repo}/releases/tags/v{version}']));assert after['body']==notes.read_text(encoding='utf-8')
+  after=json.loads(run([GH,'api',f'repos/{repo}/releases/tags/v{version}']));assert after['body'].replace('\r','')==notes.read_text(encoding='utf-8')
   assert [(x['id'],x['digest']) for x in before['assets']]==[(x['id'],x['digest']) for x in after['assets']]
   if name=='ExpandedPractice':
    clone=W/'Distribution'/name
