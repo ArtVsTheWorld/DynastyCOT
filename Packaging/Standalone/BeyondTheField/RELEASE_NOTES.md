@@ -1,19 +1,17 @@
 # **November 17 Update**
 
-## **Update 2 Hotfix 4**
+## **Update 2 Hotfix 5**
 
-**Game Update Compatibility**
-- Restored Beyond the Field on the November 17 game update, including Social Media, recruiting, roster grades and GPI.
+**Recruiting Cards**
+- Corrected Recruit Feedback labels on full recruit cards to use the full interest values, including the darker bar segment.
+- Added the total scholarship-offer count beside the Offer heading. Blind keeps that count hidden.
+- Corrected the Locked Out divider and row shading to follow your school's actual lockout flag, even when its interest rank falls outside the stage cutoff. Feedback sorting keeps the other schools' original cutoff membership. Recruiting rules and actions stay unchanged.
 
-**Recruit Notes**
-- Moved Notes higher on the card and split the write-up into bulleted Background and Scouting Notes sections. Previous-season stats and position history stay on the card.
-- A fully scouted high school or JUCO recruit gets one background note. The note stays the same when you reopen the card. Transfers skip this section.
-- Athletic Measurables now appear in their own section as plain estimates. Added the 10-yard split and made room for all seven measurements at 100% scouting when the ratings needed to calculate them can be verified. Partial scouting and Blind rules still apply.
+**In-Game Ratings**
+- Fixed Attributes card ratings that stayed numeric for WRs, linemen and other positions with shortened or different attribute names. Roster Fog now follows the verified rating fields when you change players or flip card pages; the statistics table stays numeric.
 
-**Ratings & Social Media**
-- Fixed numeric ratings in the Attributes panel of the in-game Player Stats card. The stats table still shows its original numbers.
-- Improved GPI roster navigation matching for supported menu layouts and input variants.
-- Uncommitted recruits now use the default jersey in new Social Media portraits. Previously published posts and saved scouting reports stay intact.
+**Testing**
+- Automated regressions passed for the display fixes, existing Notes, grades, currency and menu discovery. The new lockout-divider behavior still needs an installed-game visual check.
 
 **Install**
-- Close MMC and the game, then update to **1.0.43** in Dynasty COT or replace **BeyondTheField.dll** in your usual MMC **Plugins** folder.
+- Close MMC and the game, then update to **1.0.46** in Dynasty COT or replace **BeyondTheField.dll** in your usual MMC **Plugins** folder. Settings, saved Notes, accounts and published history carry forward.

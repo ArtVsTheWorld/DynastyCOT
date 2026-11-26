@@ -117,7 +117,7 @@ namespace OfflineDynastySettings
             uint after=BitConverter.ToUInt32(Read(handle,context.ClockData+DynastyClockProfiles.SequenceOffset,4),0);
             if(before!=after || (after&1)!=0)return;
             DynastyClockProfiles.Save(context.PluginFolder,DynastyClockProfiles.Decode(table));
-            saved=after;Log("Saved per-Dynasty offensive and defensive clock choices; revision "+after+".");
+            saved=after;Log("Saved per-Dynasty clock and practice-injury choices; revision "+after+".");
         }
         private static void SavePreference(IntPtr handle, ref bool saved)
         {

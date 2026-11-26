@@ -214,6 +214,41 @@
       "sha256": "1e477eb1226883ce1b4b1cda55b245cce519d6ca0e6db6c460c91e1da6bdec5e"
     },
     {
+      "name": "Practice injury generation",
+      "source": "Plugin/PracticeInjuryBindings.cs",
+      "rva": "0x828edf0",
+      "length": 1386,
+      "sha256": "1261140c4aabf4e937e10e9cd4087ff787aa6bf86771866c13db570df794ef2f"
+    },
+    {
+      "name": "Practice injury risk preview",
+      "source": "Plugin/PracticeInjuryBindings.cs",
+      "rva": "0x828ddb0",
+      "length": 569,
+      "sha256": "d0280c525251389c76af405c6e2dacacc73846e8576af09a3026c2a9732774d1"
+    },
+    {
+      "name": "Weekly practice application",
+      "source": "Plugin/PracticeInjuryBindings.cs",
+      "rva": "0x8152320",
+      "length": 2176,
+      "sha256": "115187e03df8a22d3cb3f12a71d5b33b219045929165eaccbcb06ace95c8cec6"
+    },
+    {
+      "name": "Practice risk player-position capture",
+      "source": "Plugin/PracticeInjuryBindings.cs",
+      "rva": "0x887b329",
+      "length": 42,
+      "sha256": "febd3167587024ff3e75f12ce4c7c4510d6fa42486e4cda9c6d4d89a0038bbce"
+    },
+    {
+      "name": "Practice risk call",
+      "source": "Plugin/PracticeInjuryBindings.cs",
+      "rva": "0x887b6bd",
+      "length": 113,
+      "sha256": "b6fabb381c710eb2d8745acc2745d8826439f81cda2212e5b97b2662b06dc82d"
+    },
+    {
       "name": "Clock list",
       "source": "Shared/Clock/GameLayouts.cs",
       "rva": "0x79976d0",
@@ -462,7 +497,7 @@
     ],
     "0x27ac630": [
       "Shared/Clock/DynastyPlayClockAction.cs:29",
-      "Shared/Clock/DynastyPlayClockAction.cs:267",
+      "Shared/Clock/DynastyPlayClockAction.cs:268",
       "Shared/Clock/GameLayouts.cs:37"
     ],
     "0x27ae830": [
@@ -478,8 +513,8 @@
       "Plugin/FormationSubsBindings.cs:27",
       "Plugin/FormationSubsNames.cs:11",
       "Plugin/FormationSubsNames.cs:23",
-      "Plugin/FormationSubsNative.cs:38",
-      "Plugin/FormationSubsNative.cs:82"
+      "Plugin/FormationSubsNative.cs:35",
+      "Plugin/FormationSubsNative.cs:79"
     ],
     "0x2e8d030": [
       "Shared/Playcall/SplitSettingsAction.cs:115"
@@ -491,8 +526,8 @@
       "Shared/Playcall/SplitSettingsAction.cs:147"
     ],
     "0x2e94d0a": [
-      "Plugin/GameSettingsMenuRows.cs:43",
-      "Plugin/GameSettingsMenuRows.cs:44",
+      "Plugin/GameSettingsMenuRows.cs:46",
+      "Plugin/GameSettingsMenuRows.cs:47",
       "Shared/Playcall/SplitHookCode.cs:293",
       "Shared/Playcall/SplitHookCode.cs:294"
     ],
@@ -503,13 +538,13 @@
     "0x2f24d50": [
       "Plugin/FormationSubsBindings.cs:12",
       "Plugin/FormationSubsCode.cs:75",
-      "Plugin/FormationSubsNative.cs:43",
-      "Plugin/FormationSubsNative.cs:110"
+      "Plugin/FormationSubsNative.cs:40",
+      "Plugin/FormationSubsNative.cs:107"
     ],
     "0x2f25700": [
       "Plugin/FormationSubsBindings.cs:24",
-      "Plugin/FormationSubsNative.cs:44",
-      "Plugin/FormationSubsNative.cs:111"
+      "Plugin/FormationSubsNative.cs:41",
+      "Plugin/FormationSubsNative.cs:108"
     ],
     "0x3002a30": [
       "Shared/Clock/GameLayouts.cs:28",
@@ -537,9 +572,9 @@
       "Plugin/FormationSubsCode.cs:10",
       "Plugin/FormationSubsCode.cs:198",
       "Plugin/FormationSubsCode.cs:205",
-      "Plugin/FormationSubsNative.cs:62",
-      "Plugin/FormationSubsNative.cs:89",
-      "Plugin/FormationSubsNative.cs:107"
+      "Plugin/FormationSubsNative.cs:59",
+      "Plugin/FormationSubsNative.cs:86",
+      "Plugin/FormationSubsNative.cs:104"
     ],
     "0x34797f0": [
       "Plugin/FormationSubsBindings.cs:13",
@@ -567,7 +602,7 @@
       "Plugin/FormationSubsCode.cs:10",
       "Plugin/FormationSubsCode.cs:114",
       "Plugin/FormationSubsCode.cs:195",
-      "Plugin/FormationSubsNative.cs:56"
+      "Plugin/FormationSubsNative.cs:53"
     ],
     "0x3489030": [
       "Plugin/FormationSubsBindings.cs:10",
@@ -636,7 +671,7 @@
       "Plugin/FormationSubsBindings.cs:5"
     ],
     "0x3760774": [
-      "Plugin/FormationSubsNative.cs:45"
+      "Plugin/FormationSubsNative.cs:42"
     ],
     "0x3760779": [
       "Plugin/FormationSubsCode.cs:21"
@@ -693,7 +728,7 @@
       "Shared/Clock/DynastyPlayClockAction.cs:191",
       "Shared/Clock/DynastyPlayClockAction.cs:200",
       "Shared/Clock/DynastyPlayClockAction.cs:211",
-      "Shared/Clock/DynastyPlayClockAction.cs:315",
+      "Shared/Clock/DynastyPlayClockAction.cs:319",
       "Shared/Clock/GameLayouts.cs:48"
     ],
     "0x5d056d0": [
@@ -824,6 +859,7 @@
       "Plugin/GameSettingsMenuRows.cs:24",
       "Plugin/GameSettingsMenuRows.cs:25",
       "Plugin/GameSettingsMenuRows.cs:26",
+      "Plugin/PracticeInjuries.cs:89",
       "Shared/Clock/GameLayouts.cs:13",
       "Shared/Clock/GameLayouts.cs:36",
       "Shared/Playcall/SplitHookCode.cs:273",
@@ -861,6 +897,7 @@
       "Shared/Clock/GameLayouts.cs:33"
     ],
     "0x79a850d": [
+      "Plugin/PracticeInjuries.cs:102",
       "Shared/Clock/GameLayouts.cs:35",
       "Shared/Playcall/SplitHookCode.cs:286",
       "Shared/Playcall/SplitHookCode.cs:288"
@@ -868,7 +905,7 @@
     "0x79afaa0": [
       "Plugin/CombinedClockRuntime.cs:22",
       "Shared/Clock/DynastyPlayClockAction.cs:28",
-      "Shared/Clock/DynastyPlayClockAction.cs:274",
+      "Shared/Clock/DynastyPlayClockAction.cs:275",
       "Shared/Clock/GameLayouts.cs:36"
     ],
     "0x79b5cc0": [
@@ -879,7 +916,7 @@
       "Shared/Clock/GameLayouts.cs:34"
     ],
     "0x79b850d": [
-      "Shared/Clock/DynastyPlayClockAction.cs:296",
+      "Shared/Clock/DynastyPlayClockAction.cs:300",
       "Shared/Clock/GameLayouts.cs:35"
     ],
     "0x7a9ac80": [
@@ -897,8 +934,8 @@
     ],
     "0x7b5f6a0": [
       "Plugin/FormationSubsBindings.cs:28",
-      "Plugin/FormationSubsNative.cs:39",
-      "Plugin/FormationSubsNative.cs:83",
+      "Plugin/FormationSubsNative.cs:36",
+      "Plugin/FormationSubsNative.cs:80",
       "Plugin/FormationSubsPreview.cs:26",
       "Plugin/FormationSubsPreview.cs:44"
     ],
@@ -954,22 +991,51 @@
       "Plugin/PersistenceController.cs:76",
       "Plugin/PersistenceController.cs:83"
     ],
+    "0x8152320": [
+      "Plugin/PracticeInjuryBindings.cs:11"
+    ],
+    "0x8152926": [
+      "Plugin/PracticeInjuryBindings.cs:4"
+    ],
+    "0x828ddb0": [
+      "Plugin/PracticeInjuryBindings.cs:5",
+      "Plugin/PracticeInjuryBindings.cs:10"
+    ],
+    "0x828edf0": [
+      "Plugin/PracticeInjuryBindings.cs:9"
+    ],
+    "0x828f0e3": [
+      "Plugin/PracticeInjuryBindings.cs:4"
+    ],
+    "0x828f2ef": [
+      "Plugin/PracticeInjuryBindings.cs:4"
+    ],
     "0x845a050": [
       "Shared/Playcall/SplitSettingsAction.cs:116"
     ],
     "0x86b5cd0": [
       "Shared/Playcall/SplitSettingsAction.cs:111"
     ],
+    "0x887b329": [
+      "Plugin/PracticeInjuryBindings.cs:12"
+    ],
+    "0x887b6bd": [
+      "Plugin/PracticeInjuryBindings.cs:13"
+    ],
+    "0x887b700": [
+      "Plugin/PracticeInjuryBindings.cs:5"
+    ],
     "0x9136520": [
       "Plugin/ControllerSelect.cs:18",
       "Plugin/ControllerSelectCode.cs:58"
     ],
     "0xac9aed0": [
-      "Shared/Clock/DynastyPlayClockAction.cs:292",
-      "Shared/Clock/DynastyPlayClockAction.cs:300",
+      "Shared/Clock/DynastyPlayClockAction.cs:296",
+      "Shared/Clock/DynastyPlayClockAction.cs:304",
       "Shared/Clock/GameLayouts.cs:38"
     ],
     "0xad960f0": [
+      "Plugin/PracticeInjuries.cs:100",
       "Shared/Clock/GameLayouts.cs:38",
       "Shared/Playcall/SplitHookCode.cs:279",
       "Shared/Playcall/SplitHookCode.cs:282"
@@ -984,8 +1050,8 @@
     "0xb2e82e0": [
       "Plugin/FormationSubsNames.cs:9",
       "Plugin/FormationSubsNames.cs:40",
-      "Plugin/FormationSubsNative.cs:38",
-      "Plugin/FormationSubsNative.cs:82",
+      "Plugin/FormationSubsNative.cs:35",
+      "Plugin/FormationSubsNative.cs:79",
       "Plugin/FormationSubsPreview.cs:89"
     ],
     "0xb32a3b0": [
@@ -994,21 +1060,22 @@
       "Plugin/ControllerSelectCode.cs:56"
     ],
     "0xb3324d0": [
-      "Plugin/FormationSubsNative.cs:42",
-      "Plugin/FormationSubsNative.cs:43",
-      "Plugin/FormationSubsNative.cs:44",
-      "Plugin/FormationSubsNative.cs:84",
-      "Plugin/FormationSubsNative.cs:110",
-      "Plugin/FormationSubsNative.cs:111",
+      "Plugin/FormationSubsNative.cs:39",
+      "Plugin/FormationSubsNative.cs:40",
+      "Plugin/FormationSubsNative.cs:41",
+      "Plugin/FormationSubsNative.cs:81",
+      "Plugin/FormationSubsNative.cs:107",
+      "Plugin/FormationSubsNative.cs:108",
       "Plugin/FormationSubsPreview.cs:71"
     ],
     "0xb4dbab8": [
       "Plugin/FormationSubsCode.cs:52",
-      "Plugin/FormationSubsPreview.cs:60"
+      "Plugin/FormationSubsPreview.cs:60",
+      "Plugin/PracticeInjuries.cs:40"
     ],
     "0xb5757a8": [
-      "Plugin/FormationSubsNative.cs:40",
-      "Plugin/FormationSubsNative.cs:112"
+      "Plugin/FormationSubsNative.cs:37",
+      "Plugin/FormationSubsNative.cs:109"
     ],
     "0xb67e30c": [
       "Shared/Clock/DynastyPlayClockAction.cs:133",
@@ -1019,19 +1086,21 @@
     ],
     "0xbaa8938": [
       "Plugin/FormationSubsCode.cs:47",
-      "Plugin/FormationSubsPreview.cs:55"
+      "Plugin/FormationSubsPreview.cs:55",
+      "Plugin/PracticeInjuries.cs:35"
     ],
     "0xbacecd8": [
       "Plugin/ControllerSelect.cs:11"
     ],
     "0xbae21b8": [
-      "Plugin/FormationSubsNative.cs:39",
-      "Plugin/FormationSubsNative.cs:83",
+      "Plugin/FormationSubsNative.cs:36",
+      "Plugin/FormationSubsNative.cs:80",
       "Plugin/FormationSubsPreview.cs:16"
     ],
     "0xbce9a78": [
       "Plugin/FormationSubsCode.cs:50",
-      "Plugin/FormationSubsPreview.cs:58"
+      "Plugin/FormationSubsPreview.cs:58",
+      "Plugin/PracticeInjuries.cs:38"
     ],
     "0xbd0d258": [
       "Plugin/FormationSubsCode.cs:59",
@@ -1042,8 +1111,8 @@
       "Plugin/FormationSubsPreview.cs:64"
     ],
     "0xd8b4808": [
-      "Shared/Clock/DynastyPlayClockAction.cs:322",
-      "Shared/Clock/DynastyPlayClockAction.cs:348",
+      "Shared/Clock/DynastyPlayClockAction.cs:326",
+      "Shared/Clock/DynastyPlayClockAction.cs:352",
       "Shared/Clock/ExtendedClock.cs:70",
       "Shared/Clock/ExtendedClock.cs:101",
       "Shared/Clock/ExtendedClock.cs:134",
@@ -1062,13 +1131,14 @@
       "Plugin/DynastyClockNative.cs:75",
       "Plugin/FormationSubsCode.cs:39",
       "Plugin/FormationSubsPreview.cs:50",
-      "Plugin/GameSettingsMenuRows.cs:40",
+      "Plugin/GameSettingsMenuRows.cs:43",
+      "Plugin/PracticeInjuries.cs:31",
       "Shared/Clock/GameLayouts.cs:49",
       "Shared/Playcall/SplitHookCode.cs:290"
     ],
     "0xda1dda0": [
-      "Plugin/FormationSubsNative.cs:40",
-      "Plugin/FormationSubsNative.cs:112",
+      "Plugin/FormationSubsNative.cs:37",
+      "Plugin/FormationSubsNative.cs:109",
       "Plugin/FormationSubsPreview.cs:14"
     ],
     "0xdaa6758": [
@@ -1084,7 +1154,7 @@
       "Plugin/GameSettingsMenuRows.cs:11"
     ],
     "0xe1963d0": [
-      "Shared/Clock/DynastyPlayClockAction.cs:350",
+      "Shared/Clock/DynastyPlayClockAction.cs:354",
       "Shared/Clock/ExtendedClock.cs:73",
       "Shared/Clock/ExtendedClock.cs:106",
       "Shared/Clock/ExtendedClock.cs:139",
@@ -1092,7 +1162,7 @@
       "Shared/Clock/GameLayouts.cs:51"
     ],
     "0xe1963d8": [
-      "Shared/Clock/DynastyPlayClockAction.cs:351",
+      "Shared/Clock/DynastyPlayClockAction.cs:355",
       "Shared/Clock/ExtendedClock.cs:74",
       "Shared/Clock/ExtendedClock.cs:107",
       "Shared/Clock/ExtendedClock.cs:140",
@@ -1101,8 +1171,8 @@
     ],
     "0xe1963e0": [
       "Shared/Clock/DynastyPlayClockAction.cs:211",
-      "Shared/Clock/DynastyPlayClockAction.cs:314",
-      "Shared/Clock/DynastyPlayClockAction.cs:347",
+      "Shared/Clock/DynastyPlayClockAction.cs:318",
+      "Shared/Clock/DynastyPlayClockAction.cs:351",
       "Shared/Clock/GameLayouts.cs:40"
     ],
     "0xe2cf3e0": [
@@ -1121,8 +1191,8 @@
       "Plugin/FormationSubsPreview.cs:70"
     ],
     "0xf2c4d48": [
-      "Shared/Clock/DynastyPlayClockAction.cs:323",
-      "Shared/Clock/DynastyPlayClockAction.cs:349",
+      "Shared/Clock/DynastyPlayClockAction.cs:327",
+      "Shared/Clock/DynastyPlayClockAction.cs:353",
       "Shared/Clock/ExtendedClock.cs:71",
       "Shared/Clock/ExtendedClock.cs:102",
       "Shared/Clock/ExtendedClock.cs:135",
@@ -1144,7 +1214,8 @@
       "Plugin/DynastyClockNative.cs:47",
       "Plugin/FormationSubsCode.cs:42",
       "Plugin/FormationSubsPreview.cs:53",
-      "Plugin/GameSettingsMenuRows.cs:41",
+      "Plugin/GameSettingsMenuRows.cs:44",
+      "Plugin/PracticeInjuries.cs:33",
       "Shared/Clock/GameLayouts.cs:50",
       "Shared/Playcall/SplitHookCode.cs:291"
     ],
@@ -1159,7 +1230,7 @@
       "Plugin/FormationSubsCode.cs:40",
       "Plugin/FormationSubsPreview.cs:51",
       "Plugin/GameSettingsMenuRows.cs:22",
-      "Plugin/GameSettingsMenuRows.cs:42",
+      "Plugin/GameSettingsMenuRows.cs:45",
       "Shared/Playcall/SplitHookCode.cs:272",
       "Shared/Playcall/SplitHookCode.cs:280",
       "Shared/Playcall/SplitHookCode.cs:283",
@@ -1205,7 +1276,8 @@
     ],
     "0xfa519b8": [
       "Plugin/FormationSubsCode.cs:46",
-      "Plugin/FormationSubsPreview.cs:54"
+      "Plugin/FormationSubsPreview.cs:54",
+      "Plugin/PracticeInjuries.cs:34"
     ],
     "0xfa5b900": [
       "Plugin/ControllerSelectCode.cs:30",

@@ -1,4 +1,4 @@
-Ace’s Beyond the Field 1.0.43 — November 17 Update
+Ace’s Beyond the Field 1.0.46 — November 17 Update
 
 Install or update
 Close MMC and the game. Find your usual MMC shortcut, right-click it and open Properties. Follow Target to MMCModManager.exe. Open the Plugins folder beside that file. Back up your old BeyondTheField.dll outside Plugins, then copy BeyondTheField.dll from this ZIP into Plugins. Replace the old copy.

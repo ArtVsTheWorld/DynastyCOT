@@ -3,6 +3,7 @@
 #include <cstdint>
 #include <cstring>
 #include <map>
+#include <optional>
 #include <set>
 #include <vector>
 #include <string>
@@ -45,6 +46,28 @@ inline int64_t decodedIntegerArray(uint32_t raw,unsigned width,int minimum){
 }
 struct Table {Address address=0,context=0,dataAddress=0,stringBase=0;uint32_t id=0,rows=0,words=0,first=0;bool array=false;Schema* schema=nullptr;std::vector<unsigned char> data,watchMask;std::set<uint32_t> free;};
 inline bool supportedRecordLayout(bool array,uint32_t rows,uint32_t words,uint32_t first){return rows<=131072&&words<=(array?16384u:4096u)&&first<=0x10000;}
+// Pack the authoritative six-bit total and its native player reference into
+// the existing worker's read proof. The UI never scans teams or offers.
+struct RecruitOfferTable {
+    Address owner=0,descriptor=0,data=0,context=0;
+    uint32_t first=0,words=0,rows=0,freeHead=0,playerSlot=0,offerSlot=0,playerBits=0,offerBits=0;
+    std::vector<uint32_t> players;
+    template<class Read>bool current(uintptr_t image,Read read)const{
+        auto matches=[&](Address at,auto expected){
+            decltype(expected) actual{};return read(at,&actual,sizeof(actual))&&actual==expected;
+        };
+        return matches(owner,image+0xbd0deb8)&&matches(owner+8,descriptor)&&matches(owner+0x10,context)&&matches(owner+0x38,data)&&
+            matches(data+0xc,words)&&matches(data+0x10,rows)&&matches(data+0x18,first)&&matches(data+0x1c,freeHead)&&
+            matches(data+playerSlot,playerBits)&&matches(data+offerSlot,offerBits);
+    }
+    template<class Read>std::optional<unsigned> count(uint32_t row,Read read)const{
+        if(row>=players.size()||!players[row])return {};
+        const auto record=data+(uint64_t(first)+uint64_t(row)*words)*4;
+        uint32_t player=0,packed=0;
+        if(!read(record+playerBits/32*4,&player,4)||player!=players[row]||!read(record+offerBits/32*4,&packed,4))return {};
+        return (packed>>(offerBits%32))&63u;
+    }
+};
 struct SessionBinding {Address service=0,career=0,database=0;bool operator==(const SessionBinding& b)const{return service==b.service&&career==b.career&&database==b.database;}};
 struct SessionContextHint {Address career=0,database=0,context=0;};
 inline SessionContextHint& sessionContextHint(){static SessionContextHint hint;return hint;}
@@ -261,6 +284,27 @@ public:
             }catch(const std::exception& e){throw std::runtime_error("Career status table="+std::to_string(id)+" name="+name+" at="+std::to_string(a)+": "+e.what());}
         }
         if(!season||!flow||!league)throw std::runtime_error("Active Dynasty identity is incomplete");
+        return result;
+    }
+    std::map<uint32_t,RecruitOfferTable> recruitOfferTables(){
+        std::map<uint32_t,RecruitOfferTable> result;
+        for(const auto& [address,t]:tables){
+            if(t.array||t.schema->name!="Recruit")continue;
+            if(result.size()>=32||result.count(t.id))return {};
+            const auto& fields=t.schema->fields;
+            auto player=std::find_if(fields.begin(),fields.end(),[](const Field& f){return f.name=="Player"&&f.kind==7&&f.width==32;});
+            auto offer=std::find_if(fields.begin(),fields.end(),[](const Field& f){return f.name=="TotalScholarshipOffers"&&f.kind==2&&f.width==6&&!f.minimum;});
+            if(player==fields.end()||offer==fields.end())continue;
+            RecruitOfferTable proof;
+            proof.owner=address;proof.descriptor=memory.at<Address>(address+8);proof.data=t.dataAddress;proof.context=t.context;
+            proof.first=t.first;proof.rows=t.rows;proof.words=t.words;proof.freeHead=value<uint32_t>(t.data,0x1c);
+            proof.playerSlot=0x20+player->id*4;proof.offerSlot=0x20+offer->id*4;
+            proof.playerBits=value<uint32_t>(t.data,proof.playerSlot);proof.offerBits=value<uint32_t>(t.data,proof.offerSlot);
+            if(proof.playerBits%32||proof.offerBits%32+6>32||uint64_t(proof.playerBits)+32>uint64_t(t.words)*32||uint64_t(proof.offerBits)+6>uint64_t(t.words)*32)continue;
+            proof.players.resize(t.rows);
+            for(uint32_t row=0;row<t.rows;++row)if(!t.free.count(row))proof.players[row]=bits(t.data,t.words,t.first,row,proof.playerBits,32);
+            result.emplace(t.id,std::move(proof));
+        }
         return result;
     }
     Json observedTables()const{Json out=Json::array();for(const auto& [a,t]:tables)out.push_back({{"table",a},{"name",t.schema->name},{"data",t.dataAddress},{"size",t.data.size()},{"words",t.words},{"first",t.first},{"rows",t.rows}});return out;}

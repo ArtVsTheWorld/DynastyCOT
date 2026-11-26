@@ -11,9 +11,11 @@ namespace OfflineDynastySettings {
     internal sealed class DynastyClockValue {
         public int OffensiveMode { get; private set; }
         public int DefensiveSeconds { get; private set; }
-        internal DynastyClockValue(int offense,int defense) {
-            if(offense<0 || offense>3 || !ClockPreferences.Valid(defense))throw new InvalidDataException("Invalid Dynasty clock choice.");
-            OffensiveMode=offense;DefensiveSeconds=defense;
+        public int PracticeInjuryMode { get; private set; }
+        internal DynastyClockValue(int offense,int defense):this(offense,defense,0) { }
+        internal DynastyClockValue(int offense,int defense,int practiceInjuries) {
+            if(offense<0 || offense>3 || !ClockPreferences.Valid(defense) || practiceInjuries<0 || practiceInjuries>2)throw new InvalidDataException("Invalid Dynasty settings choice.");
+            OffensiveMode=offense;DefensiveSeconds=defense;PracticeInjuryMode=practiceInjuries;
         }
     }
     // Persistent keys use the same normalized unsigned LeagueID as playcall settings.
@@ -44,7 +46,9 @@ namespace OfflineDynastySettings {
                 if(!UInt32.TryParse(item.Key,NumberStyles.None,CultureInfo.InvariantCulture,out league) || !ValidLeague(league)
                     || league.ToString(CultureInfo.InvariantCulture)!=item.Key || fields==null)
                     throw new InvalidDataException("Invalid Dynasty clock identity; file preserved.");
-                result.Add(league,new DynastyClockValue(Integer(fields,"offensiveMode"),Integer(fields,"defensiveSeconds")));
+                // Older profiles keep native practice injuries and explicit clocks.
+                int practice=fields.ContainsKey("practiceInjuryMode")?Integer(fields,"practiceInjuryMode"):0;
+                result.Add(league,new DynastyClockValue(Integer(fields,"offensiveMode"),Integer(fields,"defensiveSeconds"),practice));
             }
             return result;
         }
@@ -55,9 +59,9 @@ namespace OfflineDynastySettings {
                 ulong record=BitConverter.ToUInt64(bytes,i*8);
                 if(record==0){empty=true;continue;}
                 uint league=(uint)record;
-                if(empty || !ValidLeague(league) || record>>48!=0 || result.ContainsKey(league))
+                if(empty || !ValidLeague(league) || record>>56!=0 || result.ContainsKey(league))
                     throw new InvalidDataException("Invalid or changing Dynasty clock table; saved profiles preserved.");
-                result.Add(league,new DynastyClockValue((int)((record>>32)&255),(int)((record>>40)&255)));
+                result.Add(league,new DynastyClockValue((int)((record>>32)&255),(int)((record>>40)&255),(int)((record>>48)&255)));
             }
             return result;
         }
@@ -66,8 +70,8 @@ namespace OfflineDynastySettings {
             var bytes=new byte[Capacity*8];var keys=new List<uint>(values.Keys);keys.Sort();int index=0;
             foreach(uint league in keys) {
                 if(!ValidLeague(league) || values[league]==null)throw new InvalidDataException("Invalid clock identity.");
-                var choice=values[league];new DynastyClockValue(choice.OffensiveMode,choice.DefensiveSeconds);
-                ulong packed=league|((ulong)choice.OffensiveMode<<32)|((ulong)choice.DefensiveSeconds<<40);
+                var choice=values[league];new DynastyClockValue(choice.OffensiveMode,choice.DefensiveSeconds,choice.PracticeInjuryMode);
+                ulong packed=league|((ulong)choice.OffensiveMode<<32)|((ulong)choice.DefensiveSeconds<<40)|((ulong)choice.PracticeInjuryMode<<48);
                 Array.Copy(BitConverter.GetBytes(packed),0,bytes,index++*8,8);
             }
             return bytes;
@@ -77,7 +81,7 @@ namespace OfflineDynastySettings {
             Encode(values);
             var records=new SortedDictionary<string,object>(StringComparer.Ordinal);
             foreach(var item in values)records.Add(item.Key.ToString(CultureInfo.InvariantCulture),
-                new Dictionary<string,object>{{"offensiveMode",item.Value.OffensiveMode},{"defensiveSeconds",item.Value.DefensiveSeconds}});
+                new Dictionary<string,object>{{"offensiveMode",item.Value.OffensiveMode},{"defensiveSeconds",item.Value.DefensiveSeconds},{"practiceInjuryMode",item.Value.PracticeInjuryMode}});
             string path=FilePath(plugins),temp=path+"."+Guid.NewGuid().ToString("N")+".tmp";
             Directory.CreateDirectory(Path.GetDirectoryName(path));
             try {

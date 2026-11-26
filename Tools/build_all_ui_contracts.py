@@ -30,6 +30,18 @@ def main():
      at=n['params']+16*k;reg=struct.unpack_from('<I',apt.data,at)[0];ptr=struct.unpack_from('<Q',apt.data,at+8)[0];args.append('{'+str(reg)+','+json.dumps(text(ptr))+'}')
     lines.append('for(auto& q:programs.at('+str(i)+').nestedDefinitions)if(q.offset=='+str(n['offset'])+'){q.semantic=true;q.nameText='+json.dumps(text(n['name']))+';q.arguments={'+','.join(args)+'};}')
   lines.append('}')
+ # Stats owns its typed active-player skills after native capture. Its own
+ # isolated bank preserves every unrelated in-game adapter on incompatibility.
+ from build_ui_method_contracts import contract
+ from build_player_ingame_ui import STATS_SPECS
+ stats=load(R/'Modules/DynastyEnhancer/Evidence/PlayerFog/Stats/playergamestats.ast')
+ lines.append('if(bank=="card.66"){contracts={'+','.join(cpp(contract(stats,s[0])) for s in STATS_SPECS)+'};}')
+ if not any(b['bank']=='recruiting.8' and b['methods'] for b in doc['banks']):
+  # This small header bank was added after the original private audit.
+  from build_ui_method_contracts import contract
+  from build_recruit_interest_ui import FULL_OFFER_HEADER_BODY
+  vanilla=load(R/'Build/Followup-20261112/DynastyEnhancer/Evidence/RecruitingFog/Assets/common__ui__node_cfm__recruitinghub__corenode.ast')
+  lines.append('if(bank=="recruiting.8"){contracts={'+cpp(contract(vanilla,FULL_OFFER_HEADER_BODY-48))+'};}')
  lines+=['if(contracts.size()!=programs.size())throw std::runtime_error("Missing universal UI contracts for "+bank);', 'using Validator=std::function<bool(uintptr_t,const Header&,const notesui::GuardedRead&)>;std::vector<Validator> validators;', 'for(const auto& contract:contracts)validators.emplace_back(dependency?Validator{}:Validator([contract](uintptr_t definition,const Header& header,const notesui::GuardedRead& read){return declarationMatches(definition,contract,read)&&prefixMatches(contract,header,read,reinterpret_cast<uintptr_t>(GetModuleHandleW(nullptr)))&&poolMatches(contract,header,read,reinterpret_cast<uintptr_t>(GetModuleHandleW(nullptr)));}));','runtime.configureDiscovery(std::move(programs),std::move(validators));return contracts;','}','}']
  target=R/'Modules/DynastyEnhancer/Source/UiAdapterContracts.generated.h';target.write_text('\n'.join(lines)+'\n');print('Generated contracts for all non-Notes banks; Notes remains an atomic dependency group.')
 if __name__=='__main__':main()

@@ -15,9 +15,9 @@
 
 ## Release-note style
 
-- All four COT standalone modules use Ace's approved Update-style notes: an `Update N` heading, bold feature-category headings and short bullets focused on what players notice.
+- Beyond the Field and Gameday Atmosphere use Ace's approved `Update N`/Hotfix headings. Extra Settings and Expanded Practice use module/version release titles without `Update N` headings (confirmed November 26). All use bold feature-category headings and short bullets focused on what players notice.
 - Use simple, natural language. Group related changes; use nested bullets for choices, ranges or reveal stages. Describe important changes since the last public release, rather than pasting the full feature guide or leading with implementation details.
-- User reaffirmed this style for every future release. Continue Hotfix numbering within the existing Update heading (for example, `Update 2 Hotfix 2` and `Update 5 Hotfix 2`); keep bold categories and short player-facing bullets.
+- Continue Hotfix numbering within the existing BTF/GDA Update heading (for example, `Update 2 Hotfix 2` and `Update 5 Hotfix 2`); keep bold categories and short player-facing bullets. Omit numbered Update headings for Extra Settings and Expanded Practice.
 - Check claims against the code and distinguish unconfirmed live behavior. Use the user-authored Beyond the Field Update 2 and Gameday Atmosphere Update 5 GitHub release descriptions as style references.
 
 ## Private test handoffs

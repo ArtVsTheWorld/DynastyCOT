@@ -9,7 +9,7 @@
 #include <mutex>
 #include "ScoutingEvidence.h"
 namespace recruitingfog::resume {
-struct Published {dynasty::live::SessionBinding binding;NativeClass data;uint64_t capturedAt=0;dynasty::live::PackedChangeWatch annualIdentity;bool transfers=false,backgroundReady=true;evidence::Context staff;Json reports=Json::object();};
+struct Published {dynasty::live::SessionBinding binding;NativeClass data;std::map<uint32_t,dynasty::live::RecruitOfferTable> offers;uint64_t capturedAt=0;dynasty::live::PackedChangeWatch annualIdentity;bool transfers=false,backgroundReady=true;evidence::Context staff;Json reports=Json::object();};
 
 inline measurables::Inputs notesMeasurementInputs(const NotesProspect& prospect,const NativeEntry* verifiedEntry){
     using namespace measurables;
@@ -177,6 +177,7 @@ public:
         if(!(dynasty::live::activeSession(image,q)==binding))throw std::runtime_error("Dynasty changed while preparing resume cache");
         persistClass(data,folder);
         auto value=std::make_shared<Published>();value->binding=binding;
+        try{value->offers=capture.recruitOfferTables();}catch(const std::exception&){/* The optional offer badge can be unavailable independently of Notes. */}
         for(const auto& item:capture.identityProof(true))for(const auto& check:item.at("checks")){const auto size=check.at("size").get<unsigned>();auto expected=check.at("expected").get<uint64_t>(),mask=check.at("mask").get<uint64_t>();if(!size||size>8)throw std::runtime_error("Invalid Notes identity proof");std::vector<unsigned char> bytes(size),masks(size);memcpy(bytes.data(),&expected,size);memcpy(masks.data(),&mask,size);value->annualIdentity.recordMasked(check.at("address").get<uintptr_t>(),bytes,masks);}
         value->data=std::move(data);value->capturedAt=GetTickCount64();value->staff=evidence::context(raw);if(existing&&existing->data.league==value->data.league&&existing->data.season==value->data.season){auto reports=std::atomic_load(&reportEdition);if(reports&&reports->league==value->data.league&&reports->season==value->data.season)value->reports=reports->reports;}else {
             const auto path=folder/L"ScoutingReports"/value->data.league/(std::to_string(value->data.season)+".json");if(aceio::exists(path)){if(aceio::file_size(path)>64u*1024*1024)throw std::runtime_error("Scouting reports exceed read bounds");aceio::ifstream input(path);Json saved;input>>saved;if(saved.at("format")!=1||saved.at("league")!=value->data.league||saved.at("season")!=value->data.season||!saved.at("reports").is_object()||saved.at("reports").size()>16000)throw std::runtime_error("Scouting report identity differs");value->reports=saved.at("reports");}}
@@ -197,7 +198,7 @@ public:
         auto reports=std::make_shared<ReportEdition>();reports->league=value->data.league;reports->season=value->data.season;reports->staff=value->staff;reports->reports=std::move(value->reports);for(const auto& entry:reports->reports.items())prepareView(*reports,entry.key());std::atomic_store(&reportEdition,std::shared_ptr<const ReportEdition>(reports));
         std::atomic_store(&published,std::shared_ptr<const Published>(value));requested=false;
         lastFailure.clear();failures=0;backgroundFailed=false;waitingSince=0;
-        return {{"event","recruit_resume_cache_ready"},{"highSchoolProspects",hs},{"unavailableProspects",value->data.unavailable.size()},{"records",raw.at("records").size()},{"ms",GetTickCount64()-began},{"league",value->data.league},{"season",value->data.season},
+        return {{"event","recruit_resume_cache_ready"},{"highSchoolProspects",hs},{"unavailableProspects",value->data.unavailable.size()},{"offerTables",value->offers.size()},{"records",raw.at("records").size()},{"ms",GetTickCount64()-began},{"league",value->data.league},{"season",value->data.season},
             {"captureUs",std::chrono::duration_cast<std::chrono::microseconds>(captureEnded-captureBegan).count()}};
         }catch(const std::exception& error){
             backgroundFailed=true;

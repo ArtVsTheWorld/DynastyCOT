@@ -111,6 +111,7 @@ namespace OfflineDynastySettings
                 if (playcall == null) playcall = OfflinePlaycall.SplitSettingsAction.TryInstallCombined(game, environment.Log);
                 if (playcall != null) DynastyPlayClock.DynastyPlayClockAction.InstallControllerSelect(game.Id);
                 if (playcall != null) DynastyPlayClock.DynastyPlayClockAction.InstallFormationSubs(game.Id);
+                if (playcall != null) DynastyPlayClock.DynastyPlayClockAction.InstallPracticeInjuries(game.Id);
                 return playcall != null;
             }
             public void Poll()
@@ -128,6 +129,7 @@ namespace OfflineDynastySettings
                 if (playcall != null) playcall.VerifyCombined();
                 if (playcall != null) DynastyPlayClock.DynastyPlayClockAction.VerifyControllerSelect(game.Id);
                 if (playcall != null) DynastyPlayClock.DynastyPlayClockAction.VerifyFormationSubs(game.Id);
+                if (playcall != null) DynastyPlayClock.DynastyPlayClockAction.VerifyPracticeInjuries(game.Id);
                 if (playcall != null) DynastyPlayClock.DynastyPlayClockAction.VerifyCombinedDefensiveClock(game.Id);
                 if (playcall != null) {
                     if (persistence == null) {
@@ -140,6 +142,7 @@ namespace OfflineDynastySettings
                         };
                         context.Checks.AddRange(DynastyPlayClock.DynastyPlayClockAction.ControllerChecks());
                         context.Checks.AddRange(DynastyPlayClock.DynastyPlayClockAction.FormationSubsChecks());
+                        context.Checks.AddRange(DynastyPlayClock.DynastyPlayClockAction.PracticeInjuryChecks());
                         context.Checks.AddRange(playcall.CombinedChecks(DynastyPlayClock.DynastyPlayClockAction.CombinedWriter));
                         DiagnosticLog.Hooks(context);
                         persistence=new PersistenceController(context,environment.Log);

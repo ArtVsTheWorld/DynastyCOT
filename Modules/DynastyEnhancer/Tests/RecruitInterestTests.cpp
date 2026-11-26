@@ -30,8 +30,9 @@ int main(){using namespace recruitingfog::interest;unsigned checks=0;
  {View v;const auto root=v.add(Json::array({recruit}));
   auto apply=[&](Mode mode){return transform(v,root,mode,&k,123,[&](A at,const char* key,const char* text){reinterpret_cast<Node*>(at)->object[key]=v.add(text);},[&](A at,const char* key,bool b){reinterpret_cast<Node*>(at)->object[key]=v.add(b);},[&](A at,double n){reinterpret_cast<Node*>(at)->value=n;},[&](A at,const std::vector<A>& values){reinterpret_cast<Node*>(at)->array=values;});};
   apply(Mode::Feedback);const auto first=v.dump(root);for(int n=0;n<50;++n){apply(Mode::Feedback);assert(v.dump(root)==first);++checks;}
-  apply(Mode::Blind);apply(Mode::RankOnly);auto restored=v.dump(root)[0]["TopSchools"];for(auto& school:restored){school.erase("BTFInterestOriginal");school.erase("BTFStanding");}assert(restored==recruit["TopSchools"]);++checks;
-  apply(Mode::Feedback);apply(Mode::Native);restored=v.dump(root)[0]["TopSchools"];for(auto& school:restored){school.erase("BTFInterestOriginal");school.erase("BTFStanding");}assert(restored==recruit["TopSchools"]);++checks;
+  for(const auto& school:first[0]["TopSchools"]){assert(school["BTFNativeSchoolOrder"]==(school["TeamId"]==7?"0":"1"));++checks;}
+  apply(Mode::Blind);apply(Mode::RankOnly);auto restored=v.dump(root)[0]["TopSchools"];for(auto& school:restored){school.erase("BTFInterestOriginal");school.erase("BTFStanding");school.erase("BTFNativeSchoolOrder");}assert(restored==recruit["TopSchools"]);++checks;
+  apply(Mode::Feedback);apply(Mode::Native);restored=v.dump(root)[0]["TopSchools"];for(auto& school:restored){school.erase("BTFInterestOriginal");school.erase("BTFStanding");school.erase("BTFNativeSchoolOrder");}assert(restored==recruit["TopSchools"]);++checks;
  }
  {View v;auto sparse=recruit;sparse.erase("TopSchools");const auto root=v.add(Json::array({sparse}));auto result=transform(v,root,Mode::Feedback,&k,123,[&](A at,const char* key,const char* text){reinterpret_cast<Node*>(at)->object[key]=v.add(text);},[&](A at,const char* key,bool b){reinterpret_cast<Node*>(at)->object[key]=v.add(b);},[](A,double){assert(false);},[](A,const std::vector<A>&){assert(false);});assert(result.scouted==1&&result.unsupported==1&&v.dump(root)[0]["BTFPreviouslyScouted"]==true);++checks;}
 
@@ -61,7 +62,7 @@ int main(){using namespace recruitingfog::interest;unsigned checks=0;
   assert(displayed["commitScore"]==700);for(const auto& school:displayed["topSchoolsSubpanelInfo"]){assert(school["infuenceThisWeek"]==school["influenceTotal"]);++checks;}
   apply(Mode::Feedback);assert(v.dump(root)==displayed);++checks;
   apply(Mode::Blind);assert(v.dump(root)["topSchoolsSubpanelInfo"][0]["influenceTotal"]==0);++checks;
-  apply(Mode::Native);auto restored=v.dump(root)["topSchoolsSubpanelInfo"];for(auto& school:restored){school.erase("BTFStanding");school.erase("BTFInterestOriginal");}assert(restored==native["topSchoolsSubpanelInfo"]&&v.dump(root)["commitScore"]==700);++checks;
+  apply(Mode::Native);auto restored=v.dump(root)["topSchoolsSubpanelInfo"];for(auto& school:restored){school.erase("BTFStanding");school.erase("BTFInterestOriginal");school.erase("BTFNativeSchoolOrder");}assert(restored==native["topSchoolsSubpanelInfo"]&&v.dump(root)["commitScore"]==700);++checks;
  }
  std::cout<<"PASS: "<<checks<<" interest/response checks: defaults and Blind precedence, multiple favorites, deterministic boundary uncertainty, alphabetical ties, native/rank-only passthrough, untouched budgets/hours/scouting, native arrows/visits and Dynasty-isolated prior scouting.\n";
 }

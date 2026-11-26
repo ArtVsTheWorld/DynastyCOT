@@ -18,12 +18,12 @@ def interest_row(a):
  a.label('savedRank');path(a,1,'mcTopSlider');a.store(3);a.missing(3,'done')
  a.reg(2);a.string('_x');a.reg(3);a.member('_x');a.raw(0x4F);a.set_field(2,'_visible',True)
  a.empty_object(3);a.set_field(3,'resizeWidth',310);a.reg(3);a.string('hAlign');a.global_object('art_styleguide','Font','HALIGN_LEFT');a.raw(0x4F);a.reg(3);a.number(1);a.reg(2);a.call('SetExtraInfo')
- path(a,1,'mData','ExtraInfo','SliderValue');a.store(3)
- a.reg(3);a.raw(0x44);a.string('number');a.raw(0x66);a.branch('unknown',0xB8)
- for threshold,label in [(79,'FAVORITE'),(59,'CONTENDER'),(39,'IN THE MIX'),(19,'OUTSIDE LOOKING IN'),(0,'LONG SHOT')]:
-  a.reg(3);a.number(threshold);a.raw(0x67);a.branch('tier'+str(threshold))
- a.label('unknown');a.string('INTEREST UNKNOWN');a.store(3);a.branch('setTier',0x99)
- for threshold,label in [(79,'FAVORITE'),(59,'CONTENDER'),(39,'IN THE MIX'),(19,'OUTSIDE LOOKING IN'),(0,'LONG SHOT')]:a.label('tier'+str(threshold));a.string(label);a.store(3);a.branch('setTier',0x99)
+ path(a,1,'mData');a.store(3);a.missing(3,'unknown')
+ path(a,3,'ExtraInfo');a.store(3);a.missing(3,'unknown')
+ path(a,3,'BTFFullStanding');a.store(3)
+ a.reg(3);a.raw(0x44);a.string('string');a.raw(0x66);a.branch('unknown',0xB8)
+ a.reg(3);a.string('');a.raw(0x66);a.branch('setTier',0xB8)
+ a.label('unknown');a.string('INTEREST UNKNOWN');a.store(3)
  a.label('setTier');a.reg(3);a.number(1);a.reg(2);a.call('SetLabel');visible(a,'mcTopSlider',False,'hideFeedbackBar');a.branch('done',0x99)
  a.label('blind');visible(a,'mcPosition',False,'hideBlindRank');visible(a,'mcTopSlider',False,'hideBlindBar');visible(a,'mcUpArrow',False,'hideUp');visible(a,'mcDownArrow',False,'hideDown');a.branch('done',0x99)
  for mode in [0,2]:
@@ -203,6 +203,197 @@ def cutoff(a):
  a.reg(3);a.number(1);a.reg(2);a.call('RemoveItem');a.branch('next',0x99)
  a.label('done');a.ret()
 
+def lockout_row(a):
+ # Native registers 8/3 are the stage cutoff and current row ordinal. Keep
+ # the native stage decision; undo only presentation reordering. Locked is
+ # the actual native current-school gate, independent of its position.
+ path(a,6,'ExtraInfo');a.store(15);a.missing(15,'lockRowDone')
+ path(a,1,'mCurrentRecruit');a.store(18);a.missing(18,'lockRowUnknown')
+ path(a,15,'TeamId');path(a,2,'TeamId');a.raw(0x66);a.branch('lockRowUnknown',0xB8)
+ path(a,18,'RecruitStage');a.raw(0x44);a.string('number');a.raw(0x66);a.branch('lockRowUnknown',0xB8)
+ a.reg(8);a.raw(0x44);a.string('number');a.raw(0x66);a.branch('lockRowUnknown',0xB8)
+ a.reg(3);a.store(16)
+ a.grade_scale();a.store(17)
+ for mode in [1,3]:a.reg(17);a.number(mode);a.raw(0x66);a.branch('lockReadOrder')
+ a.branch('lockOrderReady',0x99)
+ a.label('lockReadOrder');path(a,2,'BTFNativeSchoolOrder');a.store(16)
+ a.reg(16);a.raw(0x44);a.string('undefined');a.raw(0x66);a.branch('lockHasOrder',0xB8)
+ # Some native entry routes reach this method without the optional DTO
+ # transform. Their list is still native. Only allow that fallback when
+ # neither of our reordering markers exists; never guess a lost ordinal.
+ for marker in ['BTFStanding','BTFInterestOriginal']:
+  path(a,2,marker);a.raw(0x44);a.string('undefined');a.raw(0x66);a.branch('lockRowUnknown',0xB8)
+ a.reg(3);a.store(16);a.branch('lockOrderReady',0x99)
+ a.label('lockHasOrder')
+ a.reg(16);a.raw(0x44);a.string('string');a.raw(0x66);a.branch('lockRowUnknown',0xB8)
+ a.reg(16);a.raw(0x4A);a.store(16)
+ a.reg(16);a.reg(16);a.raw(0x66);a.branch('lockRowUnknown',0xB8)
+ a.reg(16);a.raw(0x18);a.reg(16);a.raw(0x66);a.branch('lockRowUnknown',0xB8)
+ a.reg(16);a.number(0);a.raw(0x48);a.branch('lockRowUnknown')
+ a.reg(16);a.reg(26);a.raw(0x48);a.branch('lockRowUnknown',0xB8)
+ a.label('lockOrderReady');a.set_field(15,'IsBelowCutoff',False)
+ path(a,18,'RecruitStage');a.global_object('adapterenum_cfb_dynasty','RecruitingBoardFlow','CFME_RECRUITSTAGE_TOP10');a.raw(0x67);a.branch('lockRowKnown',0xB8)
+ a.reg(16);a.reg(8);a.raw(0x48);a.branch('lockCheckOwner')
+ a.set_field(15,'IsBelowCutoff',True)
+ a.label('lockCheckOwner');path(a,15,'IsCurrentUserTeam');a.raw(0x73,0x66);a.branch('lockRowKnown',0xB8)
+ path(a,18,'Locked');a.store(17)
+ a.reg(17);a.raw(0x44);a.string('boolean');a.raw(0x66);a.branch('lockRowUnknown',0xB8)
+ a.reg(15);a.string('IsBelowCutoff');a.reg(17);a.raw(0x4F)
+ a.label('lockRowKnown');a.set_field(15,'BTFNativeCutoffKnown',True);a.branch('lockRowDone',0x99)
+ a.label('lockRowUnknown');a.set_field(15,'BTFNativeCutoffKnown',False)
+ a.label('lockRowDone')
+
+def lockout_divider(a):
+ # This runs only during list population, before it is published to the view.
+ # Retain row/header objects and order within each eligibility group. No Draw
+ # scanning, DB reads, action changes, rank-derived current-school lockout or
+ # new headers in stages where the native screen did not supply one.
+ path(a,1,'mTopSchoolItemProvider');a.store(2);a.missing(2,'lockDone')
+ a.number(0);a.reg(2);a.string('GetNumItems');a.raw(0x52);a.store(3)
+ a.reg(3);a.raw(0x44);a.string('number');a.raw(0x66);a.branch('lockDone',0xB8)
+ a.reg(3);a.number(0);a.raw(0x67);a.branch('lockDone',0xB8)
+ a.reg(3);a.number(32);a.raw(0x67);a.branch('lockDone')
+ for reg in [5,6]:a.number(0);a.raw(0x42);a.store(reg)
+ a.raw(0x76);a.store(7);a.number(0);a.store(8);a.number(0);a.store(9);a.raw(0x74);a.store(12)
+ a.label('lockGather');a.reg(9);a.reg(3);a.raw(0x48);a.branch('lockGathered',0xB8)
+ a.reg(9);a.number(1);a.reg(2);a.string('GetItemData');a.raw(0x52);a.store(4);a.missing(4,'lockDone')
+ path(a,4,'display');a.global_object('loc','career','Recruiting','LOCKED_OUT');a.raw(0x66);a.branch('lockHeader')
+ path(a,4,'ExtraInfo');a.store(10);a.missing(10,'lockDone')
+ path(a,10,'BTFNativeCutoffKnown');a.raw(0x73,0x66);a.branch('lockDone',0xB8)
+ path(a,10,'IsBelowCutoff');a.store(11)
+ a.reg(11);a.raw(0x44);a.string('boolean');a.raw(0x66);a.branch('lockDone',0xB8)
+ a.reg(11);a.branch('lockBelow')
+ a.reg(7);a.raw(0x76,0x49);a.branch('lockEligiblePlaced')
+ a.raw(0x73);a.store(12);a.label('lockEligiblePlaced')
+ a.reg(4);a.number(1);a.reg(5);a.call('push');a.branch('lockNext',0x99)
+ a.label('lockBelow');a.reg(7);a.raw(0x76,0x49);a.branch('lockBelowPlaced',0xB8)
+ a.raw(0x73);a.store(12);a.label('lockBelowPlaced')
+ a.reg(4);a.number(1);a.reg(6);a.call('push');a.branch('lockNext',0x99)
+ a.label('lockHeader');a.reg(7);a.raw(0x76,0x49);a.branch('lockDone',0xB8)
+ a.reg(4);a.store(7);a.reg(9);a.store(8)
+ a.label('lockNext');a.reg(9);a.raw(0x50);a.store(9);a.branch('lockGather',0x99)
+ a.label('lockGathered');a.reg(7);a.raw(0x76,0x49);a.branch('lockDone')
+ # Unchanged native groups need no provider invalidation or redraw.
+ a.reg(12);a.branch('lockCompare')
+ path(a,5,'length');a.reg(8);a.raw(0x66);a.branch('lockCompare',0xB8)
+ path(a,6,'length');a.number(0);a.raw(0x67);a.branch('lockCompare',0xB8)
+ a.branch('lockDone',0x99)
+ a.label('lockCompare');a.reg(3);a.store(9)
+ a.label('lockClear');a.reg(9);a.number(1);a.raw(0x0B);a.store(9)
+ a.reg(9);a.number(0);a.raw(0x48);a.branch('lockAddEligible')
+ a.reg(9);a.number(1);a.reg(2);a.call('RemoveItem');a.branch('lockClear',0x99)
+ a.label('lockAddEligible');a.number(0);a.store(9)
+ for reg,tag in [(5,'Eligible'),(6,'Below')]:
+  a.label('lockAdd'+tag+'Loop');a.reg(9);path(a,reg,'length');a.raw(0x48);a.branch('lockAdd'+tag+'Done',0xB8)
+  a.reg(reg);a.reg(9);a.raw(0x4E);a.number(1);a.reg(2);a.call('AddItem')
+  a.reg(9);a.raw(0x50);a.store(9);a.branch('lockAdd'+tag+'Loop',0x99)
+  a.label('lockAdd'+tag+'Done')
+  if reg==5:
+   path(a,6,'length');a.number(0);a.raw(0x67);a.branch('lockDone',0xB8)
+   a.reg(7);a.number(1);a.reg(2);a.call('AddItem');a.number(0);a.store(9)
+ a.label('lockDone');a.ret()
+
+# Offsets in the verified Overview._PopulateTopSchoolsList body. Keep the
+# native loop and its branch targets, including the exact 748-byte exit.
+FULL_OVERVIEW_BODY=0x9a38
+FULL_OVERVIEW_SIZE=748
+FULL_OVERVIEW_ADD_ROW=0x9d04-FULL_OVERVIEW_BODY
+FULL_OVERVIEW_NEXT_ROW=0x9aed-FULL_OVERVIEW_BODY
+
+def valid_school(a,school,value,invalid,team=None):
+ # Require a real school identity and a finite, nonnegative total. The source
+ # is the input to BOTH native bar segments, before the stage clip is applied.
+ a.missing(school,invalid)
+ path(a,school,'TeamId');a.store(value)
+ a.reg(value);a.raw(0x44);a.string('number');a.raw(0x66);a.branch(invalid,0xB8)
+ a.reg(value);a.reg(value);a.raw(0x66);a.branch(invalid,0xB8)
+ a.reg(value);a.number(0);a.raw(0x48);a.branch(invalid)
+ a.reg(value);a.number(65534);a.raw(0x67);a.branch(invalid)
+ a.reg(value);a.number(255);a.raw(0x66);a.branch(invalid)
+ if team is not None:
+  path(a,team,'TeamId');a.reg(value);a.raw(0x66);a.branch(invalid,0xB8)
+ path(a,school,'influenceTotal');a.store(value)
+ a.reg(value);a.raw(0x44);a.string('number');a.raw(0x66);a.branch(invalid,0xB8)
+ a.reg(value);a.reg(value);a.raw(0x66);a.branch(invalid,0xB8)
+ a.reg(value);a.number(0);a.raw(0x48);a.branch(invalid)
+ a.reg(value);a.number(1000000);a.raw(0x67);a.branch(invalid)
+
+def full_school(a):
+ # Native registers 24/26 hold the active recruit's TopSchools array/count.
+ # Register 2 is this exact school, 6 is its newly built provider row, and 3
+ # is the loop index. Scratch registers 9--14 are unused by this native body.
+ lockout_row(a)
+ a.grade_scale();a.number(1);a.raw(0x66);a.branch('addNativeSchool',0xB8)
+ a.reg(3);a.number(0);a.raw(0x66);a.branch('fullTier',0xB8)
+ a.number(0);a.store(9)
+ a.reg(26);a.number(32);a.raw(0x67);a.branch('fullTier')
+ a.number(0);a.store(10)
+ a.label('fullLeaderLoop')
+ a.reg(10);a.reg(26);a.raw(0x48);a.branch('fullTier',0xB8)
+ a.reg(24);a.reg(10);a.raw(0x4E);a.store(11)
+ valid_school(a,11,12,'fullNextLeader')
+ a.reg(12);a.reg(9);a.raw(0x67);a.branch('fullNextLeader',0xB8)
+ a.reg(12);a.store(9)
+ a.label('fullNextLeader');a.reg(10);a.raw(0x50);a.store(10);a.branch('fullLeaderLoop',0x99)
+ a.label('fullTier')
+ path(a,6,'ExtraInfo');a.store(13);a.missing(13,'addNativeSchool')
+ a.reg(9);a.number(0);a.raw(0x67);a.branch('fullUnknown',0xB8)
+ valid_school(a,2,12,'fullUnknown',team=13)
+ # Relative gap to the strongest projected total. No stage minimum, clipping
+ # or projected-cutoff inference enters these broad display tiers.
+ a.reg(9);a.reg(12);a.raw(0x0B);a.number(100);a.raw(0x0C);a.reg(9);a.raw(0x0D);a.store(14)
+ for edge in (10,25,50,80):
+  a.reg(14);a.number(edge);a.raw(0x67);a.branch('fullGap'+str(edge),0xB8)
+ a.string('LONG SHOT');a.branch('fullWrite',0x99)
+ a.label('fullUnknown');a.string('INTEREST UNKNOWN');a.branch('fullWrite',0x99)
+ for edge,label in ((10,'FAVORITE'),(25,'CONTENDER'),(50,'IN THE MIX'),(80,'OUTSIDE LOOKING IN')):
+  a.label('fullGap'+str(edge));a.string(label);a.branch('fullWrite',0x99)
+ a.label('fullWrite');a.store(14)
+ a.reg(13);a.string('BTFFullStanding');a.reg(14);a.raw(0x4F)
+ a.label('addNativeSchool')
+ # The verified native epilogue adds the row, increments its native index and
+ # jumps back. Run it here so even synchronous first Draw sees the label.
+ a.reg(6);a.number(1);path(a,1,'mTopSchoolItemProvider');a.call('AddItem')
+ a.reg(3);a.raw(0x50);a.store(3);a.branch('nextNativeSchool',0x99)
+
+def full_overview(a):
+ a.code.extend(bytes(FULL_OVERVIEW_ADD_ROW))
+ a.branch('fullSchool',0x99)
+ a.code.extend(bytes(FULL_OVERVIEW_SIZE-len(a.code)))
+ # The existing filter returns; embed it as a function-local suffix with its
+ # return removed, then repair the remaining native Locked Out header.
+ cutoff(a);assert a.code[-2:]==bytes((0x76,0x3e))
+ a.code[-2:]=bytes((0x76,0x17));lockout_divider(a)
+ a.label('fullSchool')
+ a.labels['nextNativeSchool']=FULL_OVERVIEW_NEXT_ROW
+ full_school(a)
+
+
+FULL_OFFER_HEADER_BODY=0xaae0
+FULL_OFFER_HEADER_SIZE=437
+
+def offer_header(a):
+ # The verified Overview body already submitted HeaderStrings and
+ # ColumnXOffsets to its native widget. Reuse that exact layout, including
+ # commitment stage icons. Index four is the existing Offer heading.
+ a.grade_scale();a.number(3);a.raw(0x66);a.branch('noOfferTotal')
+ path(a,1,'mCurrentRecruit');a.store(0);a.missing(0,'noOfferTotal')
+ path(a,0,'BTFOfferTotalCaption');a.store(0)
+ a.reg(0);a.raw(0x44);a.string('string');a.raw(0x66);a.branch('noOfferTotal',0xB8)
+ path(a,0,'length');a.number(4);a.raw(0x48);a.branch('noOfferTotal')
+ path(a,0,'length');a.number(5);a.raw(0x67);a.branch('noOfferTotal')
+ path(a,1,'mTopSchoolsListHeaders');a.store(2);a.missing(2,'noOfferTotal')
+ path(a,2,'mData');a.store(3);a.missing(3,'noOfferTotal')
+ path(a,3,'ExtraInfo');a.store(3);a.missing(3,'noOfferTotal')
+ path(a,3,'HeaderStrings');a.reg(5);a.raw(0x66);a.branch('noOfferTotal',0xB8)
+ a.reg(5);a.number(4);a.raw(0x4E);a.store(1)
+ a.reg(1);a.raw(0x44);a.string('string');a.raw(0x66);a.branch('noOfferTotal',0xB8)
+ path(a,1,'length');a.number(6);a.raw(0x67);a.branch('noOfferTotal')
+ a.reg(5);a.number(4);a.reg(1);a.reg(0);a.raw(0x47,0x4F)
+ a.reg(3);a.number(1);a.reg(2);a.call('SetExtraInfo')
+ a.label('noOfferTotal');a.ret()
+
+
 def coarse_sort(a):
  a.grade_scale();a.number(1);a.raw(0x66);a.branch('coarse')
  a.grade_scale();a.number(3);a.raw(0x66);a.branch('fallback')
@@ -222,9 +413,15 @@ def emit(lines,p,offset,argc,regs,flags,size,digest,copyat,copybytes):
 def generate(asset,output):
  sys.path.insert(0,r'C:/Apps/CFB 27/Working/Teambuilder Import Plugin/Tools');from inspect_tb_ast import load
  apt=load(asset);lines=['// Generated custom recruiting presentation only; native bodies stay external.','#pragma once','#include "RecruitNotesUiPrograms.h"','#include "CurrencyTopbarUiPrograms.h"','namespace recruitingfog::interestui {']
- for name,body,size,argc,regs,flags,builder,prefix in [('rows',0x36c78,1036,0,4,25,interest_row,False),('progress',0x32f98,2540,0,20,25,progress,False),('cutoff',0x9a38,748,0,27,41,cutoff,False),('rankSort',0x7c18,14,2,3,42,coarse_sort,True),('interestSort',0x7d30,50,2,3,42,coarse_sort,True)]:
+ for name,body,size,argc,regs,flags,builder,prefix in [('rows',0x36c78,1036,0,4,25,interest_row,False),('progress',0x32f98,2540,0,20,25,progress,False),('cutoff',FULL_OVERVIEW_BODY,FULL_OVERVIEW_SIZE,0,27,41,full_overview,False),('offerHeader',FULL_OFFER_HEADER_BODY,FULL_OFFER_HEADER_SIZE,0,6,41,offer_header,False),('rankSort',0x7c18,14,2,3,42,coarse_sort,True),('interestSort',0x7d30,50,2,3,42,coarse_sort,True)]:
   original=apt.data[body:body+size];a=Assembler()
   if prefix:builder(a);copyat=len(a.code);a.code.extend(bytes(size));copybytes=size
+  elif name=='cutoff':
+   # Verify the exact old tail/exit before rebuilding this small epilogue.
+   assert fnv(original)==13559666481607729469
+   assert original[FULL_OVERVIEW_ADD_ROW:FULL_OVERVIEW_ADD_ROW+3]==bytes((0xb9,6,0x5a))
+   assert FULL_OVERVIEW_SIZE+struct.unpack_from('<i',original,FULL_OVERVIEW_SIZE-4)[0]==FULL_OVERVIEW_NEXT_ROW
+   copyat=0;copybytes=FULL_OVERVIEW_ADD_ROW;builder(a)
   else:copyat=0;copybytes=size;a.code.extend(bytes(size));builder(a)
   p=a.finish();lines.append(f'inline std::vector<notesui::Program> {name}(){{std::vector<notesui::Program> result;');emit(lines,p,body-48,argc,regs,flags,size,fnv(original),copyat,copybytes)
   if name=='progress':
@@ -259,6 +456,6 @@ def generate(asset,output):
  a=Assembler();a.code.extend(bytes(size));target_cell(a);p=a.finish();lines.append('inline std::vector<notesui::Program> targets(){std::vector<notesui::Program> result;');emit(lines,p,body-48,argc,regs,flags,size,fnv(target.data[body:body+size]),0,size);lines.append('return result;}')
  body,size,argc,regs,flags=0x3bbd0,2241,0,27,25
  a=Assembler();a.code.extend(bytes(size));small_card(a);p=a.finish();lines.append('inline std::vector<notesui::Program> smallCards(){std::vector<notesui::Program> result;');emit(lines,p,body-48,argc,regs,flags,size,fnv(target.data[body:body+size]),0,size);lines.append('return result;}')
- lines.append('}');output.write_text('\n'.join(lines)+'\n',encoding='utf-8');print('Generated 8 isolated recruiting UI banks; existing currency behavior composed.')
+ lines.append('}');output.write_text('\n'.join(lines)+'\n',encoding='utf-8');print('Generated 9 isolated recruiting UI banks; existing currency behavior composed.')
 if __name__=='__main__':
  p=argparse.ArgumentParser();p.add_argument('--asset',type=Path,required=True);p.add_argument('--output',type=Path,required=True);a=p.parse_args();generate(a.asset,a.output)

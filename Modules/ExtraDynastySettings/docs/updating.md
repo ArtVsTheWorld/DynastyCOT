@@ -1,6 +1,6 @@
 # After an EA update
 
-The current code targets the October 29, 2026 native layout. A game update can move
+The current code targets the November 2026 native layout. A game update can move
 functions, globals, vtables and jump tables by different amounts. A single address
 offset is not enough.
 
@@ -47,6 +47,8 @@ ignored by Git. Python inspection tools use `requirements-dev.txt` (Capstone).
   deferred controller confirmation and next-play assignment. Generate the code
   with `python Tools/build_controller_select.py`.
 - `Plugin/GameSettingsMenuRows.cs`: generated GAME SETTINGS layout.
+- `Plugin/PracticeInjuries.cs`, `PracticeInjuryBindings.cs`: per-Dynasty practice
+  injury policy, native weekly decision and preview contracts. See `practice-injuries.txt`.
 - `Plugin/ClockPreferences.cs`, persistence files: saved choices and detached helper.
 
 The defensive gate currently reads the offensive clock enum from a call returning

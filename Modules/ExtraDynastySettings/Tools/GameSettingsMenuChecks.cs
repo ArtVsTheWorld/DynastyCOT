@@ -37,6 +37,8 @@ class GameSettingsMenuChecks
             mmc = args[1]; AppDomain.CurrentDomain.AssemblyResolve += Resolve;
             dll = Assembly.LoadFrom(Path.GetFullPath(args[0]));
             Directory.CreateDirectory(args[2]);
+            dll.GetType("Ace.DynastyCOT.UserStorage").GetField("current",BindingFlags.NonPublic|BindingFlags.Static).SetValue(null,
+                Activator.CreateInstance(dll.GetType("Ace.DynastyCOT.UserStore"),new object[]{Path.GetFullPath(Path.Combine(args[2],"UserData"))}));
             image = VirtualAlloc(IntPtr.Zero, new UIntPtr(0x10000000), 0x2000, 4).ToInt64();
             remote = VirtualAlloc(IntPtr.Zero, new UIntPtr(0x5000), 0x3000, 0x40).ToInt64();
             capture = Marshal.AllocHGlobal(8).ToInt64();
@@ -162,6 +164,29 @@ class GameSettingsMenuChecks
             Marshal.WriteInt32(new IntPtr(image+0xd9eb808),14);
             Marshal.WriteInt32(new IntPtr(image+0xf3fddbc),3);
             SetId(101);
+            // Real seventh row and complete Split -> Clock -> Practice writer.
+            Type clockType=dll.GetType("DynastyPlayClock.DynastyPlayClockAction");
+            BindingFlags hidden=BindingFlags.Static|BindingFlags.NonPublic;
+            long practiceCode=VirtualAlloc(IntPtr.Zero,new UIntPtr(0x2000),0x3000,0x40).ToInt64();
+            byte[] practiceRow=(byte[])clockType.GetMethod("BuildPracticeMenuRow",hidden).Invoke(null,new object[]{image,clockData.ToInt64()});
+            byte[] practiceWriter=(byte[])clockType.GetMethod("BuildPracticeWriter",hidden).Invoke(null,new object[]{image,clockData.ToInt64()});
+            Check(clockWriterBytes.Length<1024&&practiceRow.Length<0x400&&practiceWriter.Length<0x800,"Clock and practice functions fit their owned slots");
+            Code(practiceCode,practiceRow);Code(practiceCode+0x800,practiceWriter);
+            Marshal.WriteInt64(clockData,0x3210,Marshal.StringToHGlobalAnsi("Practice Injuries").ToInt64());
+            Marshal.WriteInt64(clockData,0x3780,practiceCode);Marshal.WriteInt64(clockData,0x3788,practiceCode+0x800);
+            for(int mode=0;mode<=2;mode++){
+                selected=mode;chained(source,7,0x1003);rows.Clear();labels.Clear();ui(adapter,menuWriter,5,0);
+                Check(rows.Count==7&&rows[6][0]==0x1003&&rows[6][1]==12&&rows[6][2]==mode&&labels[6]=="Practice Injuries","Practice row and native writer choice "+mode);
+                Check(rows[2][2]==3&&rows[5][2]==60,"Practice choice preserves explicit clock pair");
+            }
+            SetId(202);rows.Clear();labels.Clear();ui(adapter,menuWriter,5,0);
+            Check(rows[6][2]==0&&rows[2][2]==2&&rows[5][2]==0,"Dynasty B retains native practice and its own clocks");
+            SetId(101);selected=3;chained(source,7,0x1003);rows.Clear();labels.Clear();ui(adapter,menuWriter,5,0);
+            Check(rows[6][2]==2,"Out-of-range practice choice rejected");
+            selected=-1;chained(source,7,0x1003);rows.Clear();labels.Clear();ui(adapter,menuWriter,5,0);Check(rows[6][2]==2,"Negative practice choice rejected");
+            selected=1;chained(source,7,0x1000);selected=15;chained(source,7,0x1002);
+            rows.Clear();labels.Clear();ui(adapter,menuWriter,5,0);Check(rows[6][2]==2&&rows[2][2]==1&&rows[5][2]==15,"Clock writes preserve practice preference");
+            Marshal.WriteInt64(clockData,0x3780,0);Marshal.WriteInt64(clockData,0x3788,0);
             for (int i = 0; i < 1024; i++) SetEntry(i, i + 1000, 1, 2);
             SetId(9999); selected = 3; writer(source, 7, 0xf1); Check(ReadEntry(9999, 8) == -1 && ReadEntry(1000, 8) == 2 && Marshal.ReadInt32(new IntPtr(remote + 0x1800)) == 0, "full table refuses an extra dynasty without corrupting existing settings");
             InstallCode(0);

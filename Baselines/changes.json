@@ -448,8 +448,8 @@
     },
     {
       "path": "Modules/DynastyEnhancer/Source/LiveTables.h",
-      "sha256": "5af5b3c19f47ae57d8392abe62826a9d8cd9d555c0339f51c45da72578426e8b",
-      "reason": "Verified CFB 27 November 19 native relocation and unchanged ownership boundaries across BTF, GDA, settings and practice"
+      "sha256": "183f848daace3fffa6131ffcd0681497ea7c7bff328399ab6185b6bcd93d2861",
+      "reason": "Use verified full-card projected school totals for Recruit Feedback, and display the authoritative scholarship total under the native Offer heading where supported."
     },
     {
       "path": "Modules/DynastyEnhancer/Source/LoadRuntime.cpp",
@@ -568,8 +568,8 @@
     },
     {
       "path": "Modules/DynastyEnhancer/Source/PlayerCardUiPrograms.h",
-      "sha256": "d960713bebf7b42349ace30701bf27c9e63f274e41a6a222da1b0e57399cf061",
-      "reason": "Final live-confirmed 1-based Stats skill records, native three-register page publication and regression VM locals."
+      "sha256": "481e9e18e61bfd2dc9de1912d7a46ac8f159e53a6e5251c93933b4d1fb04d9c4",
+      "reason": "Private Stats Attributes position-leak fix: verified native skill producer, player/source-bound presentation ownership, position-independent captions, bounded six-slot checks and exact source contracts; existing Feedback/offer work preserved."
     },
     {
       "path": "Modules/DynastyEnhancer/Source/PlayerDepthProbe.cpp",
@@ -598,8 +598,8 @@
     },
     {
       "path": "Modules/DynastyEnhancer/Source/PlayerInGameUiPrograms.h",
-      "sha256": "390ec99eca209c8eea877426ebfdf4b075ba8c43490ce286e94c6aebac9b80fa",
-      "reason": "Verified class/method discovery across ratings, currency, recruiting and GPI adapters; preserve native frames and scopes; first-visit Notes and real Practice Plan banner coverage."
+      "sha256": "c8d79e1ce6166d1d15887b6ffff2ec313379dea69fa215c1eff0646dcb0a37e9",
+      "reason": "Private Stats Attributes position-leak fix: verified native skill producer, player/source-bound presentation ownership, position-independent captions, bounded six-slot checks and exact source contracts; existing Feedback/offer work preserved."
     },
     {
       "path": "Modules/DynastyEnhancer/Source/PlayerNilUiPrograms.h",
@@ -687,14 +687,24 @@
       "reason": "Approved integrated release-readiness fixes; native contracts and saved data preserved"
     },
     {
+      "path": "Modules/DynastyEnhancer/Source/RecruitInterestResponse.h",
+      "sha256": "e045a4ea595eab7322abbeecc93dac2bbe7f00ccfa6c18a2af6b88467f101888",
+      "reason": "Private native-lockout divider correction: preserve native rule/flag ownership and original school membership; bounded population-only repair, missing-data guards and isolated regressions. Native current-school flag verified read-only; candidate visual acceptance pending."
+    },
+    {
+      "path": "Modules/DynastyEnhancer/Source/RecruitInterestUiPrograms.h",
+      "sha256": "0e940daf9ffe2fa0f1a845bbe9dd2754e3b2289741872ce40d4c60cf4a0d017b",
+      "reason": "Private native-lockout divider correction: preserve native rule/flag ownership and original school membership; bounded population-only repair, missing-data guards and isolated regressions. Native current-school flag verified read-only; candidate visual acceptance pending."
+    },
+    {
       "path": "Modules/DynastyEnhancer/Source/RecruitListProbe.cpp",
       "sha256": "b630b7b981ff561a7dc907e971502e0d3e401923afe7cd394d65e13bbec4bea7",
       "reason": "Verified CFB 27 November 19 native relocation and unchanged ownership boundaries across BTF, GDA, settings and practice"
     },
     {
       "path": "Modules/DynastyEnhancer/Source/RecruitNotes.h",
-      "sha256": "3f4b77675b4ce36aeba718385c01dea590d22bc033ad041b424a4f70933fbed7",
-      "reason": "BTF 1.0.41: full-scout Background note library, preserved legacy wording, and display bullets"
+      "sha256": "97725a2abd66458998006383a4925033ac61d3295c61151d0819b9adfb9d2797",
+      "reason": "Use verified full-card projected school totals for Recruit Feedback, and display the authoritative scholarship total under the native Offer heading where supported."
     },
     {
       "path": "Modules/DynastyEnhancer/Source/RecruitNotesProse.h",
@@ -728,8 +738,8 @@
     },
     {
       "path": "Modules/DynastyEnhancer/Source/RecruitResumeCaptureFields.h",
-      "sha256": "397b13e6e97d595b953d992b6ee4b23568d49ca922218c8e03d9c1ea084c0c97",
-      "reason": "Lift the Notes card, separate saved background prose, and show plain verified full-scout measurables without a class cutoff calculation."
+      "sha256": "1ca85ad1e1a28a8643f7269bd86b2ce3e1ffb826ecd28dc3c913311e73e0e168",
+      "reason": "Use verified full-card projected school totals for Recruit Feedback, and display the authoritative scholarship total under the native Offer heading where supported."
     },
     {
       "path": "Modules/DynastyEnhancer/Source/RecruitResumeMinimal.cpp",
@@ -743,8 +753,8 @@
     },
     {
       "path": "Modules/DynastyEnhancer/Source/RecruitResumeRuntime.h",
-      "sha256": "c2493416a3d6244bafeb0f11c8f57cb14ca18ce33021272eee1b89f5689d46cf",
-      "reason": "BTF 1.0.41: full-scout Background note library, preserved legacy wording, and display bullets"
+      "sha256": "83104fee33bfaba1f5b0783c549201cfe808b2e11594fe8e8c2b7ec7753da0ab",
+      "reason": "Use verified full-card projected school totals for Recruit Feedback, and display the authoritative scholarship total under the native Offer heading where supported."
     },
     {
       "path": "Modules/DynastyEnhancer/Source/RecruitResumeSource.h",
@@ -767,9 +777,14 @@
       "reason": "Approved integrated release-readiness fixes; native contracts and saved data preserved"
     },
     {
+      "path": "Modules/DynastyEnhancer/Source/RecruitingFeaturesRuntime.h",
+      "sha256": "53e0cd68769d41b11702415310b1d91cd20f252273c8366f77ac66b9621e6248",
+      "reason": "Use verified full-card projected school totals for Recruit Feedback, and display the authoritative scholarship total under the native Offer heading where supported."
+    },
+    {
       "path": "Modules/DynastyEnhancer/Source/RecruitingFog.cpp",
-      "sha256": "be930a032a5f79f5a60455590fd9475094b4bc128ab6e202e1d8f4c1f7286257",
-      "reason": "Update exact relocated player and card-map provider fingerprints proven by live native-slot readback"
+      "sha256": "3b7937bdc01e833ea79fca2ecc00e6fb794bd2def925f9c0b050aced526fcba0",
+      "reason": "Private Stats Attributes position-leak fix: verified native skill producer, player/source-bound presentation ownership, position-independent captions, bounded six-slot checks and exact source contracts; existing Feedback/offer work preserved."
     },
     {
       "path": "Modules/DynastyEnhancer/Source/RecruitingGradePolicy.h",
@@ -800,6 +815,11 @@
       "path": "Modules/DynastyEnhancer/Source/Startup.h",
       "sha256": "de5819a907989f822aa97f5c1ec6df18ca5bb720a26e87ab0c525ddc5826c18b",
       "reason": "Approved integrated release-readiness fixes; native contracts and saved data preserved"
+    },
+    {
+      "path": "Modules/DynastyEnhancer/Source/UiAdapterContracts.generated.h",
+      "sha256": "20a2f2ace4cbc1ae620a10eb84144d8325e444ec3aa7063c16900d0c55064471",
+      "reason": "Private Stats Attributes position-leak fix: verified native skill producer, player/source-bound presentation ownership, position-independent captions, bounded six-slot checks and exact source contracts; existing Feedback/offer work preserved."
     },
     {
       "path": "Modules/DynastyEnhancer/Source/analytics-baselines.json",
@@ -857,6 +877,11 @@
       "reason": "Verified CFB 27 November 19 native relocation and unchanged ownership boundaries across BTF, GDA, settings and practice"
     },
     {
+      "path": "Modules/DynastyEnhancer/Tests/RecruitInterestTests.cpp",
+      "sha256": "b8822f701e63a7e96a985391e52260b967e3c16fa66b72791fbe529679412a4f",
+      "reason": "Private native-lockout divider correction: preserve native rule/flag ownership and original school membership; bounded population-only repair, missing-data guards and isolated regressions. Native current-school flag verified read-only; candidate visual acceptance pending."
+    },
+    {
       "path": "Modules/DynastyEnhancer/Tests/RecruitResumeExpansionTests.h",
       "sha256": "e0e48144e497dd41e4ace9f746c652e7b21be29baea73115e0dc7baddca119cd",
       "reason": "Approved integrated release-readiness fixes; native contracts and saved data preserved"
@@ -870,6 +895,11 @@
       "path": "Modules/DynastyEnhancer/Tests/RecruitingFogTests.cpp",
       "sha256": "0b369bbdb8f64454e8ab07e1f4f414422b548f926a1c7ad63c43a74750efb5e8",
       "reason": "Approved integrated release-readiness fixes; native contracts and saved data preserved"
+    },
+    {
+      "path": "Modules/DynastyEnhancer/Tests/UniversalUiBindingsTests.cpp",
+      "sha256": "5795d91c94ca3777483a34d7b4422211e3f575a2ee28c970ba2faab386c32c14",
+      "reason": "Private Stats Attributes position-leak fix: verified native skill producer, player/source-bound presentation ownership, position-independent captions, bounded six-slot checks and exact source contracts; existing Feedback/offer work preserved."
     },
     {
       "path": "Modules/DynastyEnhancer/Tests/account_refresh.test.mjs",
@@ -1012,6 +1042,11 @@
       "reason": "Release-readiness provenance and approved integrated regression coverage"
     },
     {
+      "path": "Modules/DynastyEnhancer/Tests/recruit_lockout_ui_test.py",
+      "sha256": "6defd1f5d1bff666cf93aa4b2b796d49effb753ef7575aca7c87aa3d870a6eff",
+      "reason": "Private native-lockout divider correction: preserve native rule/flag ownership and original school membership; bounded population-only repair, missing-data guards and isolated regressions. Native current-school flag verified read-only; candidate visual acceptance pending."
+    },
+    {
       "path": "Modules/DynastyEnhancer/Tests/recruit_notes_ui_test.py",
       "sha256": "151942221c0f1cf6e82e01bd2ab94c18ee7a46824dee21266c463dd2327ae97d",
       "reason": "Lift the Notes card, separate saved background prose, and show plain verified full-scout measurables without a class cutoff calculation."
@@ -1030,6 +1065,11 @@
       "path": "Modules/DynastyEnhancer/Tests/social_discovery.test.mjs",
       "sha256": "f607142e41df904f8389bf699ac90d132a2778dca64de7364b86c3869d4fb90a",
       "reason": "Use compact second units in all timed measurables, add position articles and display-only scouting bullets, and route neutral Social Media jerseys to the verified default texture."
+    },
+    {
+      "path": "Modules/DynastyEnhancer/Tests/stats_card_positions_test.py",
+      "sha256": "ba4a567852733b61a1b7a953de1f7d2fca3c41f1a000e38c9dcbaab4784ff5be",
+      "reason": "Private Stats Attributes position-leak fix: verified native skill producer, player/source-bound presentation ownership, position-independent captions, bounded six-slot checks and exact source contracts; existing Feedback/offer work preserved."
     },
     {
       "path": "Modules/DynastyEnhancer/Tests/story_generation.test.mjs",
@@ -1123,8 +1163,8 @@
     },
     {
       "path": "Modules/DynastyEnhancer/Tools/build_player_card_ui.py",
-      "sha256": "bc093ce99d4a0b12fdf811543b90fe3c068ff3a686102aef66a4ded37c09a3fb",
-      "reason": "Final live-confirmed 1-based Stats skill records, native three-register page publication and regression VM locals."
+      "sha256": "aa4bd7223c960d18dde2d888fe5d609ca4211253816571cd9fc6d9d96a567970",
+      "reason": "Private Stats Attributes position-leak fix: verified native skill producer, player/source-bound presentation ownership, position-independent captions, bounded six-slot checks and exact source contracts; existing Feedback/offer work preserved."
     },
     {
       "path": "Modules/DynastyEnhancer/Tools/build_player_hub_ui.py",
@@ -1133,13 +1173,18 @@
     },
     {
       "path": "Modules/DynastyEnhancer/Tools/build_player_ingame_ui.py",
-      "sha256": "15ab4824ae3bdc744ba88ddf3add0a7280fb4f4157780b7a94e18ae13306d218",
-      "reason": "Verified class/method discovery across ratings, currency, recruiting and GPI adapters; preserve native frames and scopes; first-visit Notes and real Practice Plan banner coverage."
+      "sha256": "035b06ffe84667bd2fbdef917493ff100f77ca37d6635e9f537dab3083a60afc",
+      "reason": "Private Stats Attributes position-leak fix: verified native skill producer, player/source-bound presentation ownership, position-independent captions, bounded six-slot checks and exact source contracts; existing Feedback/offer work preserved."
     },
     {
       "path": "Modules/DynastyEnhancer/Tools/build_player_nil_ui.py",
       "sha256": "e1e72a8d1b71c67290ef39f1997598c88ea2f831b2257b0ed5a834da6b48553b",
       "reason": "Preserve verified universal UI discovery and apply hub-audit NIL/interest display fixes, native visibility restoration, and bounded callback fast paths."
+    },
+    {
+      "path": "Modules/DynastyEnhancer/Tools/build_recruit_interest_ui.py",
+      "sha256": "01e3d86e142829cb450e350091b07da3966a20a36805a1caacff2afdb39c87b6",
+      "reason": "Private native-lockout divider correction: preserve native rule/flag ownership and original school membership; bounded population-only repair, missing-data guards and isolated regressions. Native current-school flag verified read-only; candidate visual acceptance pending."
     },
     {
       "path": "Modules/DynastyEnhancer/Tools/build_recruit_notes_ui.py",
@@ -1388,8 +1433,8 @@
     },
     {
       "path": "Modules/DynastyEnhancer/Tools/recruit_notes_vm.py",
-      "sha256": "2436c1931e9daf97350a3b3fc6e7ef4a5b801813c582b5e99f7491f5c32e75ca",
-      "reason": "Final live-confirmed 1-based Stats skill records, native three-register page publication and regression VM locals."
+      "sha256": "c2290c4622dfd61fff947b9fda25cd9a7e58648e6f65ee1d9d4cbdb802631a4f",
+      "reason": "Private native-lockout divider correction: preserve native rule/flag ownership and original school membership; bounded population-only repair, missing-data guards and isolated regressions. Native current-school flag verified read-only; candidate visual acceptance pending."
     },
     {
       "path": "Modules/DynastyEnhancer/Tools/recruit_ranks.mjs",
@@ -1568,8 +1613,8 @@
     },
     {
       "path": "Modules/ExtraDynastySettings/Plugin/CombinedSettingsAction.cs",
-      "sha256": "e0b1ade360f173a46c80d9f495ddf88e1b09ff2a117df5ab7c373efa4e3b785d",
-      "reason": "Private kickoff/return extension: verified native ownership, display-only fit/offset and bounded grouping under existing native Special Teams filters without changing saved IDs."
+      "sha256": "7a76a6bab1512a8b4aaae35aa6ab064f00256fc469ee86baa9b36b5b3678887d",
+      "reason": "Private practice-injury selector with per-Dynasty migration, verified weekly decision and risk preview, transactional ownership/rollback, synchronized menu generation and isolated regression coverage; live acceptance pending."
     },
     {
       "path": "Modules/ExtraDynastySettings/Plugin/ControllerSelect.cs",
@@ -1592,14 +1637,24 @@
       "reason": "Verified CFB 27 November 19 native relocation and unchanged ownership boundaries across BTF, GDA, settings and practice"
     },
     {
+      "path": "Modules/ExtraDynastySettings/Plugin/DynastyClockNative.cs",
+      "sha256": "506394630cbf0aa82d2027e8757eb38bdac767b3b1c387610597d0b6f79ef479",
+      "reason": "Private practice-injury selector with per-Dynasty migration, verified weekly decision and risk preview, transactional ownership/rollback, synchronized menu generation and isolated regression coverage; live acceptance pending."
+    },
+    {
+      "path": "Modules/ExtraDynastySettings/Plugin/DynastyClockProfiles.cs",
+      "sha256": "67d4e77fac37be827de4154c161620ec87c131882a554b76fe43795734d70354",
+      "reason": "Private practice-injury selector with per-Dynasty migration, verified weekly decision and risk preview, transactional ownership/rollback, synchronized menu generation and isolated regression coverage; live acceptance pending."
+    },
+    {
       "path": "Modules/ExtraDynastySettings/Plugin/FormationSubsNative.cs",
       "sha256": "b6ee99c190fd816cfba45daafd9c617e4198c624802f8b39fbd2c81bd0a68648",
       "reason": "Enable Kickoff and Kickoff Return Formation Subs automatically in supported offline Dynasty. Ignore legacy preferences without modifying them."
     },
     {
       "path": "Modules/ExtraDynastySettings/Plugin/GameSettingsMenuRows.cs",
-      "sha256": "41f42afb3d38686dc57b9b03e1bcd6776f3921f7fee9155754640362898cf26f",
-      "reason": "Verified CFB 27 November 19 native relocation and unchanged ownership boundaries across BTF, GDA, settings and practice"
+      "sha256": "fb852731d2579d2a9319f0977ea532ad7997dfcd2339f5ee337cb4ae17940458",
+      "reason": "Private practice-injury selector with per-Dynasty migration, verified weekly decision and risk preview, transactional ownership/rollback, synchronized menu generation and isolated regression coverage; live acceptance pending."
     },
     {
       "path": "Modules/ExtraDynastySettings/Plugin/LaunchCoordinator.cs",
@@ -1618,8 +1673,18 @@
     },
     {
       "path": "Modules/ExtraDynastySettings/Plugin/PersistenceHelper.cs",
-      "sha256": "9c133be05bdfcd0b68167e6cb5a8f58feece57873477da9fa4ed2864aba2dd12",
-      "reason": "Bounded long-path I/O audit: preserve logical identities, verified helper leases, atomic persistence, native ownership and fixture-only tests."
+      "sha256": "74a1c81ec51241a440bd34431326478653691672e41a57085d7df22b65fa4c26",
+      "reason": "Private practice-injury selector with per-Dynasty migration, verified weekly decision and risk preview, transactional ownership/rollback, synchronized menu generation and isolated regression coverage; live acceptance pending."
+    },
+    {
+      "path": "Modules/ExtraDynastySettings/Plugin/PracticeInjuries.cs",
+      "sha256": "c9cdaf45df48e0623e5f76833873d4bf0e0d02337ee48639fed9627cfe02f78b",
+      "reason": "Private practice-injury selector with per-Dynasty migration, verified weekly decision and risk preview, transactional ownership/rollback, synchronized menu generation and isolated regression coverage; live acceptance pending."
+    },
+    {
+      "path": "Modules/ExtraDynastySettings/Plugin/PracticeInjuryBindings.cs",
+      "sha256": "0a84a4c15f6d2787985f5ec1f75807937eb9a4cc92ab354b975f8e63e66263e3",
+      "reason": "Private practice-injury selector with per-Dynasty migration, verified weekly decision and risk preview, transactional ownership/rollback, synchronized menu generation and isolated regression coverage; live acceptance pending."
     },
     {
       "path": "Modules/ExtraDynastySettings/Plugin/RuntimeFiles.cs",
@@ -1628,13 +1693,13 @@
     },
     {
       "path": "Modules/ExtraDynastySettings/Plugin/build.ps1",
-      "sha256": "f3c0b54e4dcfa6f39dc04ee3425cbf40b1ae1dac0354ce30fc8937e7e5022145",
-      "reason": "Compile the verified Formation Subs source alongside the other Extra Settings features."
+      "sha256": "c8559b4a18b3f844163755c31b617d15437f84bc72f7780aa1045e1acd877ccf",
+      "reason": "Private practice-injury selector with per-Dynasty migration, verified weekly decision and risk preview, transactional ownership/rollback, synchronized menu generation and isolated regression coverage; live acceptance pending."
     },
     {
       "path": "Modules/ExtraDynastySettings/Shared/Clock/DynastyPlayClockAction.cs",
-      "sha256": "c024bff6d648194637b76d277a2bc62cf3228a06bda068373670adce80951665",
-      "reason": "Verified CFB 27 November 19 native relocation and unchanged ownership boundaries across BTF, GDA, settings and practice"
+      "sha256": "538e0e1a1f1d1a5ca7d3b70c88dd1fe90c553598b1b4eb9d9359f41410adeeb6",
+      "reason": "Private practice-injury selector with per-Dynasty migration, verified weekly decision and risk preview, transactional ownership/rollback, synchronized menu generation and isolated regression coverage; live acceptance pending."
     },
     {
       "path": "Modules/ExtraDynastySettings/Shared/Clock/ExtendedClock.cs",
@@ -1668,13 +1733,33 @@
     },
     {
       "path": "Modules/ExtraDynastySettings/Tools/GameSettingsMenuChecks.cs",
-      "sha256": "25c07154764d88ce1e714e87089d22cb28f6c4a81addd8d83bc369a60ff6ee25",
-      "reason": "Verified CFB 27 November 19 native relocation and unchanged ownership boundaries across BTF, GDA, settings and practice"
+      "sha256": "1ad1a04d5aa3a7aaa1d16c23bddb0eb445dff00bd7a4a6a4c1f6294933514e9a",
+      "reason": "Private practice-injury selector with per-Dynasty migration, verified weekly decision and risk preview, transactional ownership/rollback, synchronized menu generation and isolated regression coverage; live acceptance pending."
+    },
+    {
+      "path": "Modules/ExtraDynastySettings/Tools/IntegrationChecks.cs",
+      "sha256": "b855f79513e4c5e4206d0c6c267a43ffb7c81dd22b0e021c537344533ebeb94b",
+      "reason": "Private practice-injury selector with per-Dynasty migration, verified weekly decision and risk preview, transactional ownership/rollback, synchronized menu generation and isolated regression coverage; live acceptance pending."
     },
     {
       "path": "Modules/ExtraDynastySettings/Tools/LaunchChecks.cs",
       "sha256": "60c2ed11ca16df9ac134b366f1162f8950cc4e7f717b65abcdd49bfcc401e3b4",
       "reason": "Verify detached persistence ownership and absence of global clock writes"
+    },
+    {
+      "path": "Modules/ExtraDynastySettings/Tools/MmcHostChecks.cs",
+      "sha256": "0d7db43cc439265d1019f7865dbd7a887c5b67d4b0a666a97e8f3315c840c81c",
+      "reason": "Private practice-injury selector with per-Dynasty migration, verified weekly decision and risk preview, transactional ownership/rollback, synchronized menu generation and isolated regression coverage; live acceptance pending."
+    },
+    {
+      "path": "Modules/ExtraDynastySettings/Tools/PracticeInjuryChecks.cs",
+      "sha256": "562c8ddd97a362bf65133c73d4fe0aa8fdbe4008a03369652b111021036a8a35",
+      "reason": "Private practice-injury selector with per-Dynasty migration, verified weekly decision and risk preview, transactional ownership/rollback, synchronized menu generation and isolated regression coverage; live acceptance pending."
+    },
+    {
+      "path": "Modules/ExtraDynastySettings/Tools/build_game_settings_menu.py",
+      "sha256": "b80501b9bb6cc01504778be2b5c2b153f79028004b0d8d394df999f6b2ba8b2c",
+      "reason": "Private practice-injury selector with per-Dynasty migration, verified weekly decision and risk preview, transactional ownership/rollback, synchronized menu generation and isolated regression coverage; live acceptance pending."
     },
     {
       "path": "Modules/ExtraDynastySettings/Tools/export_layout.py",
@@ -1692,9 +1777,24 @@
       "reason": "Verified CFB 27 November 19 native relocation and unchanged ownership boundaries across BTF, GDA, settings and practice"
     },
     {
+      "path": "Modules/ExtraDynastySettings/Tools/test_practice_injuries.py",
+      "sha256": "1e57a1cfd63b419a51deea2ac68dbb71b446896287ecaec604bedf3d13b56a3b",
+      "reason": "Private practice-injury selector with per-Dynasty migration, verified weekly decision and risk preview, transactional ownership/rollback, synchronized menu generation and isolated regression coverage; live acceptance pending."
+    },
+    {
       "path": "Modules/ExtraDynastySettings/docs/native-layout.json",
-      "sha256": "de06683e7f7d2dea312b187a07d829b1c700ef433d7362a8705a3b46898f7fda",
-      "reason": "Verified CFB 27 November 19 native relocation and unchanged ownership boundaries across BTF, GDA, settings and practice"
+      "sha256": "a1f32a58f186308c3d90cc7039497b2a624ae49427a7f68fb04fbe6d0bb53c59",
+      "reason": "Private practice-injury selector with per-Dynasty migration, verified weekly decision and risk preview, transactional ownership/rollback, synchronized menu generation and isolated regression coverage; live acceptance pending."
+    },
+    {
+      "path": "Modules/ExtraDynastySettings/docs/practice-injuries.txt",
+      "sha256": "3952a9bddf5f752a61103d6296970a386ad12c0829a37b29ce2721f4aa71ad64",
+      "reason": "Private practice-injury selector with per-Dynasty migration, verified weekly decision and risk preview, transactional ownership/rollback, synchronized menu generation and isolated regression coverage; live acceptance pending."
+    },
+    {
+      "path": "Modules/ExtraDynastySettings/docs/updating.md",
+      "sha256": "9be4499890200ca64071688534474f8723c19b04e490edf40510b303bffcd0ea",
+      "reason": "Private practice-injury selector with per-Dynasty migration, verified weekly decision and risk preview, transactional ownership/rollback, synchronized menu generation and isolated regression coverage; live acceptance pending."
     },
     {
       "path": "Modules/GamedayAtmosphere/.gitattributes",
@@ -2750,6 +2850,16 @@
       "path": "Modules/GamedayAtmosphere/Tests/test_settings_menu_catalog.py",
       "sha256": "5e79f217605af12c924c1e461f4be208f4dbed728ca33f8a7018aa005c56f93c",
       "reason": "Reviewed public releases: retain readiness fixes; MMC display branding, complete guides and exact archive compatibility; test catalog reflects current 12-yard default and one-shot action"
+    },
+    {
+      "path": "Tools/build_all_ui_contracts.py",
+      "sha256": "7e3363ee6669708138653c27fbb27773d06458ecb375053352b463400d8027ac",
+      "reason": "Private Stats Attributes position-leak fix: verified native skill producer, player/source-bound presentation ownership, position-independent captions, bounded six-slot checks and exact source contracts; existing Feedback/offer work preserved."
+    },
+    {
+      "path": "docs/recruit-lockout-private.md",
+      "sha256": "d79144b47b9e480dd0468e6b8929a541e7f060bbe06d6045b367999cf968ea28",
+      "reason": "Private native-lockout divider correction: preserve native rule/flag ownership and original school membership; bounded population-only repair, missing-data guards and isolated regressions. Native current-school flag verified read-only; candidate visual acceptance pending."
     }
   ]
 }

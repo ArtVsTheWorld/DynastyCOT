@@ -80,7 +80,11 @@ TransformStats transform(View& view,uintptr_t root,Mode mode,const Knowledge* kn
   unsigned userStanding=5;for(const auto& school:schools)if(school.team==ownerTeam)userStanding=unsigned(school.standing);text(recruit,"BTFStandingSort",std::to_string(userStanding).c_str());
   std::vector<uintptr_t> sorted;for(const auto& school:schools){auto at=byId.at(school.team);std::map<std::string,uintptr_t> s;view.members(at,s);text(at,"BTFStanding",label(school.standing));
    std::map<std::string,double> projected;for(const auto& [key,value]:originals.at(school.team).values){(void)value;const double shown=key=="InfluenceMaxDisplayValue"?presentationMax:mode==Mode::Blind?0:(key=="InfluenceTotal"||key=="InfluenceNextTotal")?band(school.standing):0;projected[key]=shown;number(s.at(key),shown);}
-   const auto& original=originals.at(school.team);text(at,"BTFInterestOriginal",nlohmann::json({{"version",1},{"order",original.order},{"original",original.values},{"projected",projected}}).dump().c_str());
+   const auto& original=originals.at(school.team);
+   // The Overview's native divider uses an ordinal, not this presentation's
+   // grouped order. Carry its original ordinal alongside the same school.
+   text(at,"BTFNativeSchoolOrder",std::to_string(original.order).c_str());
+   text(at,"BTFInterestOriginal",nlohmann::json({{"version",1},{"order",original.order},{"original",original.values},{"projected",projected}}).dump().c_str());
    sorted.push_back(at);++stats.schools;
   }
   reorder(f.at("TopSchools"),sorted);

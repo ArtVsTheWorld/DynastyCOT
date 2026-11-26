@@ -35,6 +35,8 @@ $sources = @(
     (Join-Path $here 'FormationSubsGrouping.cs'),
     (Join-Path $here 'FormationSubsNames.cs'),
     (Join-Path $here 'FormationSubsBindings.cs'),
+    (Join-Path $here 'PracticeInjuries.cs'),
+    (Join-Path $here 'PracticeInjuryBindings.cs'),
     (Join-Path $here 'ClockPreferences.cs'),
     (Join-Path $here 'DiagnosticLog.cs'),
     (Join-Path $here 'PersistenceContracts.cs'),

@@ -40,6 +40,29 @@ int main(int argc,char** argv){try{
             }
         }
         auto read=[&](uintptr_t p,void* out,size_t n){return reader(p,out,n);};
+        if(name=="card.66"){
+            check(defs.size()==1,"Stats producer must be an isolated one-method surface");
+            const auto& program=rt.discoveryPrograms().front();
+            check(program.size==452&&program.hash==0x0A5512E1CF3D4E6Eull&&program.newRegisters==program.registers,"Stats producer contract changed");
+            // A changed body or a different native skill provider must not gain
+            // rating permission merely by retaining the same callback frame.
+            auto reject=[&](){
+                notesui::Runtime isolated(playeringameui::statsPrograms());
+                uidiscovery::configureAdapter("card.66",isolated);isolated.prepare();
+                std::array<unsigned char,0x60> object{};memcpy(object.data()+0x58,&defs.front(),8);
+                try{isolated.beforeInvoke(object.data(),read,false,true,0,true,true,true,false,0);}catch(const std::exception&){}
+                check(notesui::field<uintptr_t>(object.data(),0x58)==defs.front(),"Unsupported Stats producer attached");
+            };
+            auto body=reinterpret_cast<unsigned char*>(defs.front())+48;const auto original=body[0];body[0]^=1;reject();body[0]=original;
+            const auto values=reinterpret_cast<uintptr_t*>(notesui::field<uintptr_t>(reinterpret_cast<const unsigned char*>(defs.front()),40));
+            bool checkedProvider=false;
+            for(unsigned i=0;i<notesui::field<unsigned>(reinterpret_cast<const unsigned char*>(defs.front()),32);++i){
+                auto text=reinterpret_cast<char*>(notesui::field<uintptr_t>(reinterpret_cast<const unsigned char*>(values[i]),16))+12;
+                if(strcmp(text,"GetRelevantSkillsFromPlayer"))continue;
+                text[0]='X';reject();text[0]='G';checkedProvider=true;break;
+            }
+            check(checkedProvider,"Stats fixture lacks the verified native skill provider");
+        }
         // Navigation callbacks remain an all-or-nothing dependency group.
         if(name=="card.47"||name=="card.48")check(rt.admit(defs,read,0),"GPI dependency group rejected");
         for(size_t i=0;i<defs.size();++i){

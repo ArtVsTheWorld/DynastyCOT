@@ -1,13 +1,15 @@
 # **November 17 Update**
 
-## **Update 1**
+**Practice Injuries**
+- Added **Practice Injuries** under **League Settings > Game Settings**:
+  - **Default** keeps the game's normal practice-injury rules.
+  - **Off for QBs** prevents new weekly-practice injuries for quarterbacks on every team.
+  - **Off** prevents new weekly-practice injuries for everyone.
+- Each Dynasty keeps its own choice. Existing and new profiles start on **Default**; your clocks and other settings carry forward.
+- The Weekly Practice Plan injury-risk preview follows the selected protection. Existing injuries, game injuries, reps, XP and fatigue stay unchanged.
 
-**Game Update Compatibility**
-- Restored the extra Dynasty settings rows, play clocks, playcall rules and offline Controller Select for the November 17 game update. Existing league settings carry forward.
-
-**Special Teams Formation Subs**
-- **Kickoff** and **Kickoff Return** now appear automatically under **Special Teams** in supported offline Dynasty Formation Subs. Kickoff is on offense and Kickoff Return is on defense. The return preview fits the full unit on the field.
-- If you downloaded the first 0.2.21 build, download it again or run **Install / Update** in Dynasty COT. The revised build ignores any old FormationSubs.ini and leaves it on disk.
+**Testing**
+- Automated checks passed for all 21 positions, the risk preview, saving/reloading, menu choices and existing formation substitutions. Actual weekly-advance and installed-menu acceptance for this feature remain pending.
 
 **Install**
-- Close MMC and the game, then update to **0.2.21** in Dynasty COT or replace **ExtraSettings.dll** in your usual MMC **Plugins** folder.
+- Close MMC and the game, then update to **0.2.22** in Dynasty COT or replace **ExtraSettings.dll** in your usual MMC **Plugins** folder. Keep the other standalone modules and your existing user data.

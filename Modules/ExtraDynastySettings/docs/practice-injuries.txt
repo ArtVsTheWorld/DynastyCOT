@@ -1,0 +1,61 @@
+Practice Injuries - private 0.2.22
+
+GAME SETTINGS adds one selector:
+- Default: leave the game's current practice-injury rules alone.
+- Off for QBs: suppress new weekly-practice injuries for quarterbacks on every team.
+- Off: suppress new weekly-practice injuries for every position on every team.
+
+This is saved per validated offline Dynasty LeagueID. It does not heal existing
+injuries, enable a native rule that was disabled, or affect on-field practice/game
+injuries. Reps, practice plans, fatigue, XP and non-injury development stay native.
+
+Storage
+The existing AppData ExtraSettings/DynastyClocks.json format-1 records gain an
+optional practiceInjuryMode (0, 1, 2). An absent field means Default. Loading an
+old profile does not rewrite it. Clock choices are preserved. The existing atomic
+aligned record uses bits 48..55 for this choice; bits 56..63 remain reserved.
+The matching verified read-only persistence helper saves changes with the same
+sequence checks and atomic backup/replace mechanism as the clock settings.
+No save editing, crowd/Notes/post history migration or account changes are needed.
+
+Native scope
+The weekly practice application reads Player.Position through native schema
+field 3. That value supplies position*4 in its own frame; QB is native position 0.
+The practice risk preview independently captures the same field. PracticePlan,
+InjuryStatus and InjuryType are native fields 227, 155 and 156 in the reviewed
+schema. Exact complete instruction regions and caller relationships are verified.
+
+The injury bridge runs after the native chance computation and first RNG draw,
+before the new-injury path writes a player record. It redirects a protected
+decision to the existing no-injury cleanup. It preserves the native comparison
+and XMM6 restore. Default/other callers take the exact native conditional path.
+It does not call the injury creator and subsequently undo the injury.
+
+The preview uses the same disabled result as the native practice-injury flag.
+Permission requires the exact caller, supported menu/Dynasty mode, offline state,
+valid LeagueID and verified local-career/database ownership. No cached Dynasty
+identity, inferred filename, coach slot, rating value or position caption is used.
+Unknown code remains native and hides this selector without disabling other settings.
+
+Installation safety
+Publish both hooks and the optional menu/writer bindings transactionally while
+native threads are outside changed instructions. Verify every write and rollback.
+An incomplete rollback stops activation with an explicit restart requirement.
+Keep published code allocated until exit and include bodies, entries, native
+tails and callback bindings in the existing helper ownership manifest.
+
+After an update
+Review generation, weekly caller, preview, position capture, stack offsets,
+native branch destinations and all full fingerprints. Do not copy a single
+address delta, relax the scopes or use the whole EXE hash as authorization.
+Regenerate Tools/export_layout.py. Keep the menu generator's native serializer
+and exit addresses synchronized with the reviewed generated GameSettingsMenuRows.
+
+Automated checks
+PracticeInjuryChecks.cs: preferences, old profiles, corruption, backups, code/data
+bounds and interrupted four-part transactions/rollback. test_practice_injuries.py
+executes the exported DLL instructions on isolated fake objects for all position
+IDs, scopes, callers, choices, Dynasty switches, locks and native roll outcomes.
+GameSettingsMenuChecks.cs exercises the real seven-row menu and full writer chain.
+These checks never install into or patch the game. Live menu and weekly-advance
+acceptance remain separate, preferably using a disposable Dynasty copy.

@@ -2,7 +2,7 @@
 from pathlib import Path
 import sys,copy
 sys.path.insert(0,str(Path(__file__).resolve().parents[1]/'Tools'))
-from build_recruit_interest_ui import Assembler,interest_row,progress,cutoff,scout_row,target_cell,small_card
+from build_recruit_interest_ui import Assembler,interest_row,progress,cutoff,full_school,offer_header,scout_row,target_cell,small_card
 from recruit_notes_vm import Machine
 checks=0
 styles={"art_styleguide":{"Font":{"HALIGN_LEFT":"left","HALIGN_CENTER":"center","RESIZE_SCALEDOWN":"scale","RESIZE_NONE":"none"}}}
@@ -20,14 +20,64 @@ def widget(text='',x=10,width=30,visible=True):
   if 'resizeWidth' in e:w['_width']=e['resizeWidth']
  w['SetExtraInfo']=extra;return w
 for mode in range(4):
- for value,label in [(90,'FAVORITE'),(70,'CONTENDER'),(50,'IN THE MIX'),(30,'OUTSIDE LOOKING IN'),(10,'LONG SHOT'),(0,'INTEREST UNKNOWN')]:
-  r={'mcPosition':widget('3'),'mcTopSlider':widget(x=100),'mcUpArrow':widget(),'mcDownArrow':widget(visible=False),'mData':{'ExtraInfo':{'SliderValue':value}}}
+ for value,label in [(38,'FAVORITE'),(41,'CONTENDER'),(20,'IN THE MIX'),(49,'OUTSIDE LOOKING IN'),(0,'LONG SHOT'),(80,'INTEREST UNKNOWN')]:
+  r={'mcPosition':widget('3'),'mcTopSlider':widget(x=100),'mcUpArrow':widget(),'mcDownArrow':widget(visible=False),'mData':{'ExtraInfo':{'SliderValue':value,'BTFFullStanding':label}}}
   Machine(styles,[]).run(program(interest_row,mode),{1:r})
   assert r['mcTopSlider']['_visible']==(mode==0)
   assert r['mcPosition']['_visible']==(mode!=3)
   if mode==1:assert r['mcPosition']['mData']['display']==label and r['mcPosition']['_x']==100 and r['mcPosition']['mData']['ExtraInfo']['hAlign']=='left'
   if mode==3:assert not r['mcUpArrow']['_visible'] and not r['mcDownArrow']['_visible']
   checks+=3
+# Execute the row-add epilogue against the verified native frame shape. The
+# mock provider draws synchronously at AddItem to catch labels arriving late.
+def add_school(a):
+ full_school(a);a.label('nextNativeSchool');a.ret()
+def draw_school(source,labels,mode,slider_values=None):
+ programs=[program(add_school,mode),program(interest_row,mode)]
+ def added(data):
+  i=len(rendered)
+  row={'mcPosition':widget(str(i+1)),'mcTopSlider':widget(x=100),'mcUpArrow':widget(),
+       'mcDownArrow':widget(visible=False),'mData':data}
+  before=copy.deepcopy(data)
+  Machine(styles,[]).run(programs[1],{1:row})
+  assert before==data
+  rendered.append((row['mcPosition']['mData']['display'],row['mcTopSlider']['_visible'],data['ExtraInfo']))
+ rendered=[]
+ regs={1:{'mTopSchoolItemProvider':{'AddItem':added}},3:0,24:source,26:len(source)}
+ for i, school in enumerate(source):
+  info={'TeamId':school.get('TeamId',255),'SliderValue':slider_values[i] if slider_values else 33,'SliderExtraValue':41,
+        'IsChecked':i==0,'RankChange':1,'IsBelowCutoff':i>=5,'VisitValue':'---'}
+  regs.update({2:school,6:{'ExtraInfo':info}})
+  Machine(styles,[]).run(programs[0],regs)
+  assert regs[3]==i+1
+  assert info['SliderExtraValue']==41 and info['RankChange']==1 and info['IsChecked']==(i==0) and info['IsBelowCutoff']==(i>=5)
+ assert [entry[0] for entry in rendered]==labels
+ assert [entry[2]['TeamId'] for entry in rendered]==[school.get('TeamId',255) for school in source]
+ assert all(entry[1]==(mode==0) for entry in rendered)
+
+# Idaho's full bar was longest despite a shorter bright segment. The second
+# capture had similarly short bright segments for every school. Synthesized
+# totals model the visible examples without treating screenshots as DB facts.
+def sources(values):
+ return [{'TeamId':i+1,'influenceTotal':v,'influenceDelta':34} for i,v in enumerate(values)]
+rows=sources([870,760,470,440,410,12,0,None,-1,float('nan'),float('inf'),10**8])
+rows[-2]['TeamId']=255
+rows.append({'TeamId':14})
+unknown='INTEREST UNKNOWN'
+mix='IN THE MIX'
+draw_school(rows,['FAVORITE','CONTENDER',mix,mix,'OUTSIDE LOOKING IN','LONG SHOT','LONG SHOT']+[unknown]*6,
+            1,[38,41,39,37,41,39,38,37,40,36,40,43,37])
+draw_school(sources([515,500,475,416,100]),['FAVORITE','FAVORITE','FAVORITE','CONTENDER','LONG SHOT'],1)
+draw_school(sources([0,0,-1,None]),[unknown]*4,1)
+draw_school(sources([1e6+1,-1]),[unknown]*2,1)
+draw_school(sources([1]*33),[unknown]*33,1)
+draw_school(sources([100,90,75,50,20]),['FAVORITE','FAVORITE','CONTENDER',mix,'OUTSIDE LOOKING IN'],1)
+for mode in (0,2,3):
+ draw_school(sources([100,87,62]),['1','2','3'],mode)
+checks+=9
+# The row must fail closed if a UI variant failed to attach the provider side.
+r={'mcPosition':widget('3'),'mcTopSlider':widget(),'mData':{'ExtraInfo':{'SliderValue':0}}}
+Machine(styles,[]).run(program(interest_row,1),{1:r});assert r['mcPosition']['mData']['display']==unknown;checks+=1
 r={'mcPosition':widget('3'),'mcTopSlider':widget(x=100),'mcUpArrow':widget(),'mcDownArrow':widget(visible=False),'mData':{'ExtraInfo':{'SliderValue':90}}}
 Machine(styles,[]).run(program(interest_row,1),{1:r});r['mcPosition']['SetLabel']('3');Machine(styles,[]).run(program(interest_row,0),{1:r});assert r['mcPosition']['_x']==10 and r['mcPosition']['_width']==30 and r['mcPosition']['mData']['display']=='3';checks+=1
 r={'mcTopSlider':widget(),'mcTopSliderMask':widget(visible=False)}
@@ -53,6 +103,26 @@ for mode in range(4):
 for invalid in [-1,33,'10',float('nan')]:
  called=[];provider={'GetNumItems':lambda:invalid,'GetItemData':lambda i:called.append(i),'RemoveItem':lambda i:called.append(i)}
  Machine(loc,[]).run(program(cutoff,1),{1:{'mTopSchoolItemProvider':provider}});assert not called;checks+=1
+# Native header arrays use the existing Offer column. No geometry or tab
+# components are touched, even with a stage icon in the adjacent column.
+for mode in range(4):
+ for caption in [None,'',' (0)',' (1)',' (4)',' (63)',' (999)']:
+  header=['#','SCHOOL','INFLUENCE','TOP 5','OFFER','VISIT','P TIER','MULT']
+  extra={'HeaderStrings':header,'ColumnXOffsets':[0,62,132,350,450,532,623,693],
+         'ImageID':70,'LibraryId':40,'ImageX':320}
+  original=extra.copy()
+  updates=[]
+  tab={'label':'Notes','width':130}
+  card={'mCurrentRecruit':{'BTFOfferTotalCaption':caption},'notes':tab,
+        'mTopSchoolsListHeaders':{'mData':{'ExtraInfo':extra},'SetExtraInfo':updates.append}}
+  Machine({},[]).run(program(offer_header,mode),{1:card,5:header})
+  visible=mode!=3 and isinstance(caption,str) and 4<=len(caption)<=5
+  assert header[4]==('OFFER'+caption if visible else 'OFFER')
+  assert extra==original and tab=={'label':'Notes','width':130}
+  assert len(updates)==int(visible)
+  assert all(x==y for i,(x,y) in enumerate(zip(header,['#','SCHOOL','INFLUENCE','TOP 5','OFFER','VISIT','P TIER','MULT'])) if i!=4)
+  checks+=4
+
 for mode_index,mode in enumerate(['Native','Feedback','RankOnly','Blind']):
  r={'mData':{'ExtraInfo':{'BTFPreviouslyScouted':True,'BTFInterestMode':mode}},'mcName':widget('S. Edwards'),'mcUserRanking':widget('3'),'mcInterestedStatus':widget('Int: 1st'),'mcUpArrow':widget(),'mcDownArrow':widget()}
  for i in range(4):Machine(styles,[]).run(program(scout_row,mode_index),{1:r});assert r['mcName']['mData']['display']=='S. Edwards';checks+=1

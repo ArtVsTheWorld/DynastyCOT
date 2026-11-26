@@ -109,6 +109,36 @@ def depth_module_suffix(a):
     a.label(done);a.ret()
 
 
+def stats_module_suffix(a):
+    # Run only after PlayerGameStats._UpdatePlayerId's complete verified body:
+    # GetRelevantSkillsFromPlayer(mCurrentPlayerKey) -> attributesSubpanelInfo.
+    # This typed producer owns skill semantics, independently of position or
+    # localized captions. No stats-table values or native ratings are changed.
+    done='statsModuleDone'
+    path(a,1,'mcPlayerModule');a.store(0);a.missing(0,done)
+    path(a,0,'mData');a.raw(0x76,0x49);a.branch(done)
+    path(a,0,'mData','ExtraInfo');a.store(2);a.missing(2,done)
+    a.reg(2);a.string('DEStatsPlayerSkillRatings');a.raw(0x74,0x4F)
+    path(a,0,'_visible');a.raw(0x73,0x66);a.branch(done,0xB8)
+    path(a,2,'PlayerId');a.store(3);a.missing(3,done)
+    path(a,1,'mCurrentPlayerKey');a.store(4);a.missing(4,done)
+    a.reg(3);a.reg(4);a.raw(0x66);a.branch(done,0xB8)
+    path(a,2,'attributesSubpanelInfo');a.store(4);a.missing(4,done)
+    a.number(1);a.store(5)
+    a.label('statsModuleLoop');a.reg(5);a.number(6);a.raw(0x67);a.branch('statsModuleOwn')
+    a.reg(4);a.reg(5);a.raw(0x4E);a.store(6);a.missing(6,done)
+    path(a,6,'skillLabel');a.store(7)
+    a.reg(7);a.raw(0x44);a.string('string');a.raw(0x66);a.branch(done,0xB8)
+    path(a,7,'length');a.number(0);a.raw(0x67);a.branch(done,0xB8)
+    path(a,6,'skillValue');a.store(7);a.missing(7,done)
+    a.reg(5);a.raw(0x50);a.store(5);a.branch('statsModuleLoop',0x99)
+    a.label('statsModuleOwn')
+    a.reg(2);a.string('DEStatsSkillPlayerId');a.reg(3);a.raw(0x4F)
+    a.reg(2);a.string('DEStatsSkillSource');a.reg(4);a.raw(0x4F)
+    a.reg(2);a.string('DEStatsPlayerSkillRatings');a.raw(0x73,0x4F)
+    a.label(done);a.ret()
+
+
 SPECS=[(0x37FE8,0,7,25,674,0xA570B1AFB77C6507,13,player_ratings_suffix),
        (0x2EB18,0,4,25,384,0xA4ED8C8AB9298E2B,4,key_player_suffix),
        (0x32720,0,13,41,3669,0xBDCD7B378AF81866,13,playcall_player_suffix),
@@ -120,6 +150,7 @@ KICKER_SPECS=[(0x11F0,1,13,41,679,0x73D8E5A514962C4A,13,kicker_range_suffix),
               (0x14D0,2,7,41,381,0xB737A3A22902C70B,7,kicker_range_suffix)]
 INJURY_SPECS=[(0x1F48,0,7,41,484,0x595EFEA5CE60D248,7,injury_module_suffix)]
 DEPTH_SPECS=[(0x2940,1,21,297,625,0x4FDDCD76B6D37672,21,depth_module_suffix)]
+STATS_SPECS=[(0x2060,0,17,297,452,0x0A5512E1CF3D4E6E,17,stats_module_suffix)]
 
 
 def generate(destination):
@@ -133,7 +164,8 @@ def generate(destination):
     for name,asset,specs in [('programs','node-ig-scriptpod.ast',SPECS),
                              ('kickerPrograms','Presentations/common__ui__art_screen__playcall__panel__kickerrange.ast',KICKER_SPECS),
                              ('injuryPrograms','Lineup/madden_scrinjuryreport.ast',INJURY_SPECS),
-                             ('depthPrograms','madden_scrdepthchartselectplayer.ast',DEPTH_SPECS)]:
+                             ('depthPrograms','madden_scrdepthchartselectplayer.ast',DEPTH_SPECS),
+                             ('statsPrograms','Stats/playergamestats.ast',STATS_SPECS)]:
         apt=load(Path('Evidence/PlayerFog')/asset)
         lines.append(f'inline std::vector<notesui::Program> {name}(){{std::vector<notesui::Program> result;')
         for offset,argc,regs,flags,size,expected,newregs,suffix in specs:

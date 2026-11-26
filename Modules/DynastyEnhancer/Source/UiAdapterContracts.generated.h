@@ -835,6 +835,8 @@ if(bank=="recruiting.6"){contracts={{"SetData",{"_global","madden","Object","com
 }
 if(bank=="recruiting.7"){contracts={{"Draw",{"_global","art_control","Object","module","spreadsheet","TopSchoolsInfoSlot","cafe","enum"},261,9533686984918159506ull,213}};
 }
+if(bank=="card.66"){contracts={{"_UpdatePlayerId",{"_global","madden","Object","screen","ingame","PlayerGameStats","BaseScreen","prototype"},209,16861531409577161431ull,121}};}
+if(bank=="recruiting.8"){contracts={{"_PopulateTopSchoolsHeaders",{"_global","logic_cfm","Object","model","recruitinghub","board","Overview","fb_logic_com"},347,4887646166224038371ull,134}};}
 if(contracts.size()!=programs.size())throw std::runtime_error("Missing universal UI contracts for "+bank);
 using Validator=std::function<bool(uintptr_t,const Header&,const notesui::GuardedRead&)>;std::vector<Validator> validators;
 for(const auto& contract:contracts)validators.emplace_back(dependency?Validator{}:Validator([contract](uintptr_t definition,const Header& header,const notesui::GuardedRead& read){return declarationMatches(definition,contract,read)&&prefixMatches(contract,header,read,reinterpret_cast<uintptr_t>(GetModuleHandleW(nullptr)))&&poolMatches(contract,header,read,reinterpret_cast<uintptr_t>(GetModuleHandleW(nullptr)));}));

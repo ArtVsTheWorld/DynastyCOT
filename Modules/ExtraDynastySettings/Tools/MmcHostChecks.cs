@@ -33,10 +33,14 @@ class MmcHostChecks
                 // ABI inspection must not start a production watcher against a live game.
                 Console.WriteLine("PASS " + property + " resolves with host ABI");
             }
-            bool registered = false;
+            // Packaged COT standalones register their independent wrapper.
+            // Inspect ABI only; never invoke its production game watcher.
+            Type registeredAction=plugin.GetType("DynastyCOTStandalone.Entry",false)??action;
+            if(!execution.IsAssignableFrom(registeredAction))throw new Exception("Registered ExecutionAction ABI mismatch.");
+            bool registered = false;int registrations=0;
             foreach (CustomAttributeData attr in plugin.GetCustomAttributesData())
-                if (attr.AttributeType.Name.StartsWith("RegisterExecutionAction") && (Type)attr.ConstructorArguments[0].Value == action) registered = true;
-            if (!registered) throw new Exception("Registration did not resolve.");
+                if (attr.AttributeType.Name.StartsWith("RegisterExecutionAction")){registrations++;registered=(Type)attr.ConstructorArguments[0].Value==registeredAction;}
+            if (!registered||registrations!=1) throw new Exception("Registration did not resolve.");
             Console.WriteLine("PASS execution registration resolves");
             if (args.Length > 2) {
                 Assembly stadium = Assembly.LoadFrom(Path.GetFullPath(args[2]));

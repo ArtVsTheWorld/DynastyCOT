@@ -123,6 +123,7 @@ notesui::Runtime playerLineupPanelUi(playerplaycallui::lineupPrograms());
 notesui::Runtime playerTrenchPanelUi(playerplaycallui::trenchPrograms());
 notesui::Runtime playerInjuryScreenUi(playeringameui::injuryPrograms());
 notesui::Runtime playerDepthScreenUi(playeringameui::depthPrograms());
+notesui::Runtime playerStatsScreenUi(playeringameui::statsPrograms());
 notesui::Runtime currencyIconUi(currencyui::iconPrograms()),currencySlotUi(currencyui::slotPrograms()),currencyCellUi(currencyui::cellPrograms());
 notesui::Runtime currencyTopbarUi(currencytopbarui::programs());
 notesui::Runtime currencyRecruitingUi(currencyclassui::recruitingPrograms(0));
@@ -142,7 +143,7 @@ notesui::Runtime aioNotesUi(aiorecruitnotesui::programs());
 std::unique_ptr<uidiscovery::Service> symbolicUi;
 notesui::Runtime analyticsRowUi(analyticsactions::hubRowPrograms()),analyticsCurrentRowUi(analyticsactions::currentRowPrograms());
 notesui::Runtime positionChangesUi(positionchangesui::programs());
-const std::array<notesui::Runtime*,66> cardUiBanks={&playerControlUi,&playerCardUi,&playerTemplateUi,&playerSkillUi,&playerHubUi,&playerSliderUi,&playerInGameUi,&playerRecruitUi,&playerFormationUi,&playerLegacyOvrUi,&playerNilUi,&playerBlueprintUi,&playerPracticeUi,&playerNilEmbeddedUi,&playerKickerUi,&playerIndividualPanelUi,&playerComparisonPanelUi,&playerImpactPanelUi,&playerLineupPanelUi,&playerTrenchPanelUi,&playerInjuryScreenUi,&currencyIconUi,&currencySlotUi,&currencyCellUi,&gapCoreUi,&gapHubUi,&gapRecruitUi,&gapTeamSelectUi,&draftOvrStrategyUi,&draftOvrCurrentStrategyUi,&draftOvrRowsUi,&currencyTopbarUi,&currencyRecruitingUi,&currencyBudgetUi,&currencyAnimationUi,&currencyBudgetArtUi,&currencyRecruitDetailUi,&currencyRecruitEditorUi,&aioCurrency0,&aioCurrency1,&aioCurrency2,&aioCurrency3,&playerBlueprintAioUi,&gapWeeklyUi,&gapTopPlayersUi,&gapAioTopPlayersUi,&aioNotesUi,&analyticsMainUi,&analyticsCurrentUi,&analyticsCleanupUi,&analyticsCurrentCleanupUi,&analyticsHintsUi,&playerTeamModuleUi,&analyticsRefreshUi,&analyticsCurrentRefreshUi,&analyticsCurrentHintsUi,&analyticsRowUi,&analyticsCurrentRowUi,&nilToggleUi,&currencyRecruitingOfferUi,&currencyRecruitingHoursUi,&positionChangesUi,&playerDepthScreenUi,&weeklyReportUi,&weeklyProfileUi,&weeklyPickerUi};
+const std::array<notesui::Runtime*,67> cardUiBanks={&playerControlUi,&playerCardUi,&playerTemplateUi,&playerSkillUi,&playerHubUi,&playerSliderUi,&playerInGameUi,&playerRecruitUi,&playerFormationUi,&playerLegacyOvrUi,&playerNilUi,&playerBlueprintUi,&playerPracticeUi,&playerNilEmbeddedUi,&playerKickerUi,&playerIndividualPanelUi,&playerComparisonPanelUi,&playerImpactPanelUi,&playerLineupPanelUi,&playerTrenchPanelUi,&playerInjuryScreenUi,&currencyIconUi,&currencySlotUi,&currencyCellUi,&gapCoreUi,&gapHubUi,&gapRecruitUi,&gapTeamSelectUi,&draftOvrStrategyUi,&draftOvrCurrentStrategyUi,&draftOvrRowsUi,&currencyTopbarUi,&currencyRecruitingUi,&currencyBudgetUi,&currencyAnimationUi,&currencyBudgetArtUi,&currencyRecruitDetailUi,&currencyRecruitEditorUi,&aioCurrency0,&aioCurrency1,&aioCurrency2,&aioCurrency3,&playerBlueprintAioUi,&gapWeeklyUi,&gapTopPlayersUi,&gapAioTopPlayersUi,&aioNotesUi,&analyticsMainUi,&analyticsCurrentUi,&analyticsCleanupUi,&analyticsCurrentCleanupUi,&analyticsHintsUi,&playerTeamModuleUi,&analyticsRefreshUi,&analyticsCurrentRefreshUi,&analyticsCurrentHintsUi,&analyticsRowUi,&analyticsCurrentRowUi,&nilToggleUi,&currencyRecruitingOfferUi,&currencyRecruitingHoursUi,&positionChangesUi,&playerDepthScreenUi,&weeklyReportUi,&weeklyProfileUi,&weeklyPickerUi,&playerStatsScreenUi};
 std::array<std::vector<uidiscovery::Contract>,2> analyticsUiContracts;
 void configureUniversalUi(){
     for(size_t i=0;i<cardUiBanks.size();++i){const bool dependency=i==47||i==48;auto contracts=uidiscovery::configureAdapter("card."+std::to_string(i),*cardUiBanks[i],dependency);if(dependency)analyticsUiContracts[i-47]=std::move(contracts);}
@@ -693,10 +694,30 @@ void* __fastcall getterHook(void* object,void** out){
                 [](uintptr_t at,double number){recruitingfog::features::writeUiNumber(at,number);},
                 [&](uintptr_t at,const std::vector<uintptr_t>& order){recruitingfog::features::reorderUi(at,order,read);});
             const auto cached=resumeCache.current(base,read);bool notesLoading=false;
+            const auto selected=enhancements::options();
+            const auto offerLeague=enhancements::currentOptionsLeague.load();
+            const bool showOffers=cached&&enhancements::presentationAllowed()&&cached->data.league==std::to_string(offerLeague)&&
+                interest::effective(selected.recruiting,unsigned(selected.recruitingScale),unsigned(selected.interest))!=unsigned(interest::Mode::Blind);
+            std::map<uint32_t,bool> checkedOfferTables;
             const auto notesCount=appendRecruitNotes(view,value,[&](uintptr_t at,const char* key,const char* text){
                 reinterpret_cast<void(__fastcall*)(void*,const char*,const char*)>(base+0x25a3e60)(reinterpret_cast<void*>(at),key,text);
                 reinterpret_cast<void(__fastcall*)(void*,const char*,bool)>(base+0x2bf6720)(reinterpret_cast<void*>(at),"DENotesLoading",notesLoading);
-            },[&](NotesProspect& p,double id,const std::string& first,const std::string& last){try{return resumeCache.compose(cached,p,id,first,last,notesLoading);}catch(...){notesLoading=false;return std::string("SCOUTING NOTES\n- Report unavailable. Rating concealment remains active.");}});
+            },[&](NotesProspect& p,double id,const std::string& first,const std::string& last){try{return resumeCache.compose(cached,p,id,first,last,notesLoading);}catch(...){notesLoading=false;return std::string("SCOUTING NOTES\n- Report unavailable. Rating concealment remains active.");}},[&](uintptr_t at,const auto& fields,double id,const std::string& first,const std::string& last){
+                std::string caption;
+                if(showOffers&&fields.count("RecordId")&&id>0&&id<=UINT32_MAX&&std::floor(id)==id){
+                    const auto key=static_cast<uint32_t>(id),tableId=(key>>17)&0x3fffu;
+                    const auto entry=cached->data.entries.find(key);
+                    const auto table=cached->offers.find(tableId);
+                    if(entry!=cached->data.entries.end()&&entry->second.first==first&&entry->second.last==last&&table!=cached->offers.end()){
+                        auto [checked,fresh]=checkedOfferTables.try_emplace(tableId,false);
+                        if(fresh){checked->second=table->second.current(base,read);if(!checked->second)resumeCache.request();}
+                        if(checked->second)if(const auto count=table->second.count(key&0x1ffffu,read))caption=" ("+std::to_string(*count)+")";
+                    }
+                }
+                std::string previous;
+                if(const auto old=fields.find("BTFOfferTotalCaption");old!=fields.end())view.string(old->second,previous);
+                if(caption!=previous)reinterpret_cast<void(__fastcall*)(void*,const char*,const char*)>(base+0x25a3e60)(reinterpret_cast<void*>(at),"BTFOfferTotalCaption",caption.c_str());
+            });
             if(call<=5)note({{"event","recruit_notes_prepared"},{"recruits",notesCount},{"resumes",bool(cached)}});
 #elif defined(RECRUIT_NOTES_PROBE)
             const auto notesCount=appendRecruitNotes(view,value,[&](uintptr_t at,const char* key,const char* text){reinterpret_cast<void(__fastcall*)(void*,const char*,const char*)>(base+0x25a3e60)(reinterpret_cast<void*>(at),key,text);});

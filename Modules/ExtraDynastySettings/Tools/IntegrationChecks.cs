@@ -21,16 +21,17 @@ class IntegrationChecks
                 return File.Exists(path)?Assembly.LoadFrom(path):null;
             };
             Assembly assembly=Assembly.LoadFrom(Path.GetFullPath(args[1]));
+            Type registered=assembly.GetType("DynastyCOTStandalone.Entry",false)??assembly.GetType("OfflineDynastySettings.CombinedSettingsAction",true);
             int registrations=0;
             foreach(CustomAttributeData a in assembly.GetCustomAttributesData())if(a.AttributeType.Name.StartsWith("RegisterExecutionAction")) {
                 registrations++;
-                if(((Type)a.ConstructorArguments[0].Value).FullName!="OfflineDynastySettings.CombinedSettingsAction")throw new Exception("Unexpected standalone action registration");
+                if((Type)a.ConstructorArguments[0].Value!=registered)throw new Exception("Unexpected standalone action registration");
             }
             if(registrations!=1)throw new Exception("Expected exactly one MMC execution action");
             Type split=assembly.GetType("OfflinePlaycall.SplitSettingsAction",true), clock=assembly.GetType("DynastyPlayClock.DynastyPlayClockAction",true);
             BindingFlags flags=BindingFlags.NonPublic|BindingFlags.Static;
             if(!(bool)split.GetMethod("ClockAssemblyLoaded",flags).Invoke(null,null))throw new Exception("Merged worker would install before Clock");
-            long image=0x140000000, code=0x50000000, data=0x200000000, list=image+0x7997a0c, writer=image+0x79a5cc3;
+            long image=0x140000000, code=0x50000000, data=0x200000000, list=image+0x7997a9c, writer=image+0x79a5d53;
             Allocate(list&~0xffffL);Allocate(writer&~0xffffL);Allocate(code);
             byte[] originalList=Hex("488b8f18040000ffc3488b01ff9010050000"), originalWriter=Hex("83c0fe3ddb0000000f87ac270000");
             MethodInfo check=split.GetMethod("CheckClockHooks",flags);

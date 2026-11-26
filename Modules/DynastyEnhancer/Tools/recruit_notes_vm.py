@@ -174,6 +174,9 @@ class Machine:
                     right,left=stack.pop(),stack.pop();stack.append(left/right)
                 elif op==0x0C:
                     right,left=stack.pop(),stack.pop();stack.append(left*right)
+                elif op==0x18:
+                    value=stack.pop()
+                    stack.append(int(value) if isinstance(value,(int,float)) and math.isfinite(value) else 0)
                 elif op==0x4B:
                     value=stack.pop();stack.append(str(int(value)) if isinstance(value,(int,float)) and math.isfinite(value) and value==int(value) else 'NaN' if isinstance(value,float) and math.isnan(value) else str(value))
                 elif op==0x4A:

@@ -103,7 +103,7 @@ inline std::string makeRecruitNotes(const NotesProspect& prospect){
     if(result.size()>1500)result.resize(1500);
     return result;
 }
-template<class View,class StringSetter,class Composer>unsigned appendRecruitNotes(View& view,uintptr_t root,StringSetter setter,Composer composer){
+template<class View,class StringSetter,class Composer,class Decorate>unsigned appendRecruitNotes(View& view,uintptr_t root,StringSetter setter,Composer composer,Decorate decorate){
     std::vector<uintptr_t> recruits;if(!view.array(root,recruits,512))return 0;unsigned count=0;
     for(auto at:recruits){
         std::map<std::string,uintptr_t> fields;if(!view.members(at,fields))continue;
@@ -120,10 +120,15 @@ template<class View,class StringSetter,class Composer>unsigned appendRecruitNote
             observation.exact=!slider;prospect.observations.push_back(std::move(observation));
         }
         const auto originalClass=prospect.classification;
-        const auto body=composer(prospect,id,text("FirstName"),text("LastName"));setter(at,"DENotesBody",body.c_str());
+        const auto first=text("FirstName"),last=text("LastName");
+        const auto body=composer(prospect,id,first,last);setter(at,"DENotesBody",body.c_str());
+        decorate(at,fields,id,first,last);
         if(prospect.classification!=originalClass)setter(at,"ClassAbbreviation",prospect.classification.c_str());++count;
     }
     return count;
+}
+template<class View,class StringSetter,class Composer>unsigned appendRecruitNotes(View& view,uintptr_t root,StringSetter setter,Composer composer){
+    return appendRecruitNotes(view,root,setter,composer,[](auto&&...){});
 }
 template<class View,class StringSetter>unsigned appendRecruitNotes(View& view,uintptr_t root,StringSetter setter){
     return appendRecruitNotes(view,root,setter,[](const NotesProspect& p,double,const std::string&,const std::string&){return makeRecruitNotes(p);});

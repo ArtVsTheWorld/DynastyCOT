@@ -249,6 +249,7 @@ namespace DynastyPlayClock
             PutString(bytes,0x420,"On: normal countdown. Off At Playcall: pauses during play selection. Off: disables the countdown and delay-of-game penalties. 60 Seconds: extended countdown. Saved separately for this Dynasty.");
             BuildCombinedDefensiveClockData(bytes,d);
             SeedDynastyClocks(bytes);
+            BuildPracticeInjuryData(bytes,d);
 #endif
             return bytes;
         }
@@ -282,6 +283,9 @@ namespace DynastyPlayClock
         {
             Code c = new Code();
 #if COMBINED_DYNASTY_SETTINGS
+            c.Hex("3d03100000");c.Branch("0f85","practiceWriterNext");
+            c.MovR10(d+PracticeWriterPointer);c.Hex("4d8b124d85d2");c.Branch("0f84","end");c.Hex("41ffe2");
+            c.Label("practiceWriterNext");
             c.Hex("3d02100000");c.Branch("0f84","defensiveClock");
 #endif
             c.Hex("3d"); c.Int(Key); c.Branch("0f84", "custom");

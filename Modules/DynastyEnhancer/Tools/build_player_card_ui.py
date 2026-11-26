@@ -363,7 +363,7 @@ def formation_parent_suffix(a):
 LEGACY_SKILL_LABELS=('speed','acceleration','agility','awareness','strength',
     'carrying','trucking','change of direction','jumping','break tackle','stiff arm',
     'spin move','juke move','ball carrier vision','catching','catch in traffic',
-    'catch in traff','spectacular catch','release','short route running','medium route running',
+    'catch in traff','spectacular catch','spec catch','medium route','release','short route running','medium route running',
     'deep route running','throw power','throw accuracy short','throw accuracy mid',
     'throw accuracy deep','throw on the run','throw under pressure','play action',
     'pass block','pass block power','pass block finesse','run block','run block power',
@@ -386,6 +386,16 @@ def legacy_skill_owner_suffix(a):
     path(a,1,'mData','ExtraInfo');a.raw(0x76,0x49);a.branch(done)
     path(a,1,'mData','ExtraInfo','PlayerId');a.store(17);a.missing(17,done)
     path(a,1,'mData','ExtraInfo','attributesSubpanelInfo');a.store(18);a.missing(18,done)
+    # Stats' fully verified native producer establishes semantics before this
+    # shared Draw/page callback. Bind that permission to both player and source
+    # container; a recycled card cannot inherit it. Captions are localized and
+    # shortened by position, so they are not the identity of these native skills.
+    a.raw(0x74);a.store(17)
+    path(a,1,'mData','ExtraInfo','DEStatsPlayerSkillRatings');a.raw(0x73,0x66);a.branch('legacySkillsUnmarked',0xB8)
+    path(a,1,'mData','ExtraInfo','DEStatsSkillPlayerId');path(a,1,'mData','ExtraInfo','PlayerId');a.raw(0x66);a.branch('legacySkillsUnmarked',0xB8)
+    path(a,1,'mData','ExtraInfo','DEStatsSkillSource');a.reg(18);a.raw(0x66);a.branch('legacySkillsUnmarked',0xB8)
+    a.raw(0x73);a.store(17)
+    a.label('legacySkillsUnmarked')
     # Native GetRelevantSkillsFromPlayer supplies an indexed native container,
     # not necessarily an AS2 Array with a length property. Validate exactly
     # the six records consumed by the verified Attributes renderer below.
@@ -396,6 +406,8 @@ def legacy_skill_owner_suffix(a):
     a.reg(18);a.reg(22);a.number(1);a.raw(0x47,0x4E);a.store(19);a.missing(19,done)
     path(a,19,'skillLabel');a.store(20)
     a.reg(20);a.raw(0x44);a.string('string');a.raw(0x66);a.branch(done,0xB8)
+    path(a,20,'length');a.number(0);a.raw(0x67);a.branch(done,0xB8)
+    a.reg(17);a.raw(0x73,0x66);a.branch('legacySkillsKnown')
     a.number(0);a.reg(20);a.string('toLowerCase');a.raw(0x52);a.store(20)
     # Reuse the existing verified full-position rating identities as aliases.
     from build_player_hub_ui import ATTRIBUTE_NAMES
